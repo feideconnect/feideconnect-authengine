@@ -1,0 +1,19 @@
+{
+	"name": "andreassolberg/feide-connect-auth-engine",
+	"description": "Feide Connect Auth Engine.",
+	"type": "project",
+	"keywords": [ "saml2", "authentication", "oauth", "openidconnect" ],
+	"homepage": "http://feideconnect.no",
+	"license": "LGPL-2.1",
+	"authors": [
+		{
+			"name": "Andreas Åkre Solberg",
+			"email": "andreas.solberg@uninett.no"
+		}
+	],
+	"require": {
+		"php": ">=5.4",
+		"evseevnn/php-cassandra-binary": "dev-master#31fa28eb756e5d06470a1e4ae4698d44250231b8",
+		"nategood/commando": "*"
+	}
+}
