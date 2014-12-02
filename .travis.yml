@@ -1,11 +1,13 @@
 language: php
 php:
   - 5.5
-  # - 5.4
-  # - hhvm
+# - 5.4
+# - hhvm
 services:
   - cassandra
 install:
   - composer install
+before_script:
+	- cqlsh 127.0.0.1 -f etc/bootstrap.sql
 script: 
   - phpunit --bootstrap autoload.php tests

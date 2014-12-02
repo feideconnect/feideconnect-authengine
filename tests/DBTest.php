@@ -14,7 +14,8 @@ class DBTest extends \PHPUnit_Framework_TestCase {
 
 	function __construct() {
 
-		$config = json_decode(file_get_contents(__DIR__ . '/../etc/config.json'), true);
+		$config = json_decode(file_get_contents(__DIR__ . '/../etc/config.travis.json'), true);
+
 		$this->db = new Repositories\Cassandra($config);
 
 	}
