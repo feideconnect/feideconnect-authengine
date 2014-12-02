@@ -6,6 +6,7 @@ php:
 services:
   - cassandra
 install:
+  - composer self-update
   - composer install
 before_script:
   - cqlsh 127.0.0.1 -f etc/bootstrap.sql
