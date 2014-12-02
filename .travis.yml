@@ -8,4 +8,4 @@ services:
 install:
   - composer install
 script: 
-  - phpunit --configuration $DB.phpunit.xml
+  - phpunit --bootstrap autoload.php tests
