@@ -2,16 +2,15 @@
 
 CREATE KEYSPACE 
 	IF NOT EXISTS 
-	andreastest
+	feideconnect
 	WITH REPLICATION = { 'class' : 'SimpleStrategy', 'replication_factor' : 3 };
 
-USE andreastest;
+USE feideconnect;
 
 
 DROP TABLE IF EXISTS clients;
 DROP INDEX IF EXISTS clients_owner_idx;
-DROP INDEX IF EXISTS clients_scopes_idx;
-DROP INDEX IF EXISTS clients_scopes_requested_idx;
+
 
 DROP TABLE IF EXISTS users;
 DROP TABLE IF EXISTS userid_sec;
@@ -23,7 +22,7 @@ DROP INDEX IF EXISTS oauth_tokens_userid_idx;
 DROP INDEX IF EXISTS oauth_tokens_clientid_idx;
 
 DROP TABLE IF EXISTS oauth_authorizations;
-DROP INDEX IF EXISTS oauth_authorizations_scopes_idx;
+
 /* DROP INDEX IF EXISTS oauth_authorizations_userid_idx; */
 DROP INDEX IF EXISTS oauth_authorizations_clientid_idx;
 
@@ -43,8 +42,7 @@ CREATE TABLE clients (
 	updated timestamp
 );
 CREATE INDEX clients_owner_idx 				ON clients(owner);
-CREATE INDEX clients_scopes_idx 			ON clients(scopes);
-CREATE INDEX clients_scopes_requested_idx 	ON clients(scopes_requested);
+
 
 
 CREATE TABLE users (
@@ -110,7 +108,7 @@ CREATE TABLE oauth_authorizations (
 	scopes set<text>,
 	PRIMARY KEY (userid, clientid)
 );
-CREATE INDEX oauth_authorizations_scopes_idx ON oauth_authorizations (scopes);
+
 /* CREATE INDEX oauth_authorizations_userid_idx ON oauth_authorizations (userid); */
 CREATE INDEX oauth_authorizations_clientid_idx ON oauth_authorizations (clientid); 
 
