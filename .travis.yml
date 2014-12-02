@@ -6,10 +6,10 @@ php:
 services:
   - cassandra
 install:
-  - composer self-update
+# - composer self-update
   - composer install
 before_script:
-  - sleep 3
+# - sleep 3
   - cqlsh 127.0.0.1 -f etc/bootstrap.sql
 script: 
   - phpunit --bootstrap autoload.php tests
