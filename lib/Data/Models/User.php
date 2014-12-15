@@ -24,9 +24,9 @@ class User extends \FeideConnect\Data\Model {
 	 */
 	public function setUserInfo($sourceID, $name = null, $email = null, $profilephoto = null) {
 
-		if (empty($this->name)) $this->_properties['name'] = [];
-		if (empty($this->email)) $this->_properties['email'] = [];
-		if (empty($this->profilephoto)) $this->_properties['profilephoto'] = [];
+		if (empty($this->name)) $this->name = [];
+		if (empty($this->email)) $this->email = [];
+		if (empty($this->profilephoto)) $this->profilephoto = [];
 
 		if (empty($sourceID)) throw new \Exception('Cannot set userinfo to a user without a sourceid.');
 
