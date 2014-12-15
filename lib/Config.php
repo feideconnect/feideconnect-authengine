@@ -51,9 +51,12 @@ class Config {
 			return self::$instance;
 		}
 
-		// $BASE = dirname(dirname(__DIR__));
-		// $configFilename = $BASE . '/etc/config.json';
-		$configFilename = self::dir('etc/', 'config.json');
+
+		$file = 'config.json';
+		if (getenv('ci')) {
+			$file = 'config.travis.json';
+		}
+		$configFilename = self::dir('etc/', $file);
 		// echo "Looking for " . $configFilename;
 		if (!file_exists($configFilename)) {
 			throw new \Exception('Could not find config file ' . $configFilename);
