@@ -25,8 +25,6 @@ class Logger {
 
 
 
-
-
 	public function log($level, $str, $data = array()) {
 
 		if (isset($_SERVER['REQUEST_URI'])) {

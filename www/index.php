@@ -79,9 +79,70 @@ try {
 
 
 
+	} else if  (Router::route('get', '^/poc/client/([a-z0-9\-]+)$', $parameters)) {
 
 
-	} else if  (Router::route('get', '^/cassandra$', $parameters)) {
+
+		$auth = new Authentication\Authenticator();
+		$auth->req(false, true); // require($isPassive = false, $allowRedirect = false, $return = null
+		$account = $auth->getAccount();
+		$c = new Data\Repositories\Cassandra();
+		$usermapper = new Authentication\UserMapper($c);
+		$user = $usermapper->getUser($account, false, true, false);
+
+
+		// 
+
+
+		$c = new \FeideConnect\Data\Repositories\Cassandra();
+
+		// $data = $c->getAccessToken();
+
+		// echo "looking up token " . $parameters[1];
+
+		$clientid = $parameters[1];
+		$client = $c->getClient($clientid);
+		// if ($client !== null) {
+		// 	$client->debug();
+		// }
+
+		if ($client === null) {
+			throw new \Exception('Client not found');
+		}
+
+
+		$token = new \FeideConnect\Data\Models\AccessToken($c);
+		$token->access_token = \FeideConnect\Data\Model::genUUID();
+		$token->clientid = $client->id;
+		$token->userid = $user->userid;
+		$token->scope = $client->scopes;
+		$token->token_type = 'bearer';
+		$token->validuntil = time() + 3600;
+		$token->issued = time();
+
+		$c->saveToken($token);
+
+		
+		header('Content-Type: text/plain; charset=utf-8');
+		echo "You are authenticated as user: \n\n";
+		print_r($user->getUserInfo());
+		echo "\n\n";
+		echo "And you are about to generate a token for the following client \n";
+		print_r($client->getAsArray());
+		echo "\n\n";
+		echo "And finally, here is the token: \n\n";
+
+		print_r($token->getAsArray());
+
+		echo "\n\n";
+		echo "you can use this token like this: \n";
+		echo 'curl -H "Authorization: Bearer ' . $token->access_token . '" https://api.feideconnect.no/test/user ';
+		echo "\n\n";
+		exit;
+
+
+
+	} else if  (Router::route('get', '^/poc/client/([a-z0-9\-]+)/token$', $parameters)) {
 
 		header('Content-Type: text/plain; charset=utf-8');
 
@@ -146,6 +207,7 @@ try {
 		// print_r($user); exit;
 		if (isset($user)) {
 			$response['user'] = $user->getAsArray();	
+			$response['userinfo'] = $user->getUserInfo();
 		}
 		
 
