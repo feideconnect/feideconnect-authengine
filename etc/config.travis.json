@@ -1,4 +1,7 @@
 {
-	"keyspace": "feideconnect",
-	"nodes": ["127.0.0.1"]
+	"idp": "https://idp-test.feide.no",
+	"storage": {
+		"keyspace": "feideconnect",
+		"nodes": ["127.0.0.1"]
+	}
 }
