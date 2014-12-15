@@ -79,27 +79,27 @@ class Logger {
 
 	}
 
-	public static function alert($str, $data) {
+	public static function alert($str, $data = array()) {
 		$l = self::getInstance();
 		$l->log('alert', $str, $data);
 	}
 
-	public static function error($str, $data) {
+	public static function error($str, $data = array()) {
 		$l = self::getInstance();
 		$l->log('error', $str, $data);
 	}
 
-	public static function warning($str, $data) {
+	public static function warning($str, $data = array()) {
 		$l = self::getInstance();
 		$l->log('warning', $str, $data);
 	}
 
-	public static function info($str, $data) {
+	public static function info($str, $data = array()) {
 		$l = self::getInstance();
 		$l->log('info', $str, $data);
 	}
 
-	public static function debug($str, $data) {
+	public static function debug($str, $data = array()) {
 		$l = self::getInstance();
 		$l->log('debug', $str, $data);
 	}
