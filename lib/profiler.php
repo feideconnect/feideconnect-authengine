@@ -15,7 +15,10 @@ $rustart = getrusage();
 function profiler_status() {
 	global $rustart;
 	$ru = getrusage();
-	echo "---------- Profiler stats --------- \n";
-	echo "Computation  : " . rutime($ru, $rustart, "utime") . " ms\n";
-	echo "System calls : " . rutime($ru, $rustart, "stime") . " ms\n";
+	
+	\FeideConnect\Logger::info('Profiler stats', array(
+		'Computation  (ms)' => rutime($ru, $rustart, "utime"),
+		'System calls (ms)' => rutime($ru, $rustart, "stime"),
+	));
+	
 }

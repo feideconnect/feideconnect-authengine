@@ -3,11 +3,18 @@
 
 namespace FeideConnect\Data\Repositories;
 
+use FeideConnect\Logger;
+
 class Cassandra extends \FeideConnect\Data\Repository {
 
 	protected $db;
 
-	function __construct($config) {
+	function __construct() {
+
+		$config = \FeideConnect\Config::getValue('storage');
+		
+		if (empty($config['keyspace'])) throw new Exception('Required config not set');
+		if (empty($config['nodes'])) throw new Exception('Required config not set');
 
 		$this->db = new \evseevnn\Cassandra\Database($config['nodes'], $config['keyspace']);
 		$this->db->connect();
@@ -143,11 +150,62 @@ class Cassandra extends \FeideConnect\Data\Repository {
 		return new \FeideConnect\Data\Models\User($this, $data[0]);
 	}
 
+
+
+
 	function getUserByUserIDsec($useridsec) {
 		$data = $this->db->query('SELECT * FROM "userid_sec" WHERE "userid_sec" = :userid_sec', 
 			['userid_sec' => $useridsec]);
 		if (empty($data)) return null;
 		return $this->getUserByUserID($data[0]['userid']);
+	}
+
+
+	/**
+	 * Lookup a list of secondary userids, and get returned a list of users.
+	 * Zero, one or multiple users.
+	 * If no users found, returns null.
+	 * If one or more users, returns an array.
+	 * 
+	 * @param  [type] $useridsec [description]
+	 * @return [type]            [description]
+	 */
+	function getUserByUserIDsecList($useridsec) {
+		// print_r($useridsec); exit;
+		$data = $this->db->query('SELECT * FROM "userid_sec" WHERE "userid_sec" IN :userid_sec', 
+			['userid_sec' => $useridsec]);
+
+
+
+		if (empty($data)) return null;
+
+		$func = function ($a) {
+			// echo "picking user id " . var_export($a, true);
+			return $a['userid'];
+		};
+		$userids = array_unique(array_map($func, $data));
+
+		// header('content-type: text/plain');
+		// echo "query multiple" ; print_r($useridsec); 
+		// echo "\n\nresult is \n\n"; print_r($data);
+		// echo "\n\nresult is \n\n"; print_r($userids);
+		// exit;
+
+		$users = array();
+		foreach($userids AS $userid) {
+			$user = $this->getUserByUserID($userid);
+			if ($user !== null) {
+				$users[] = $user;
+			}
+		}
+		if (empty($users)) {
+			Logger::warning('Did get a match on secondary userids, but none of them resolved to real user objects', array(
+				'useridsec' => $useridsec,
+				'userids' => $userids
+			));
+			return null;
+		}
+		return $users;
 	}
 
 	function getUsers($count = 100) {
