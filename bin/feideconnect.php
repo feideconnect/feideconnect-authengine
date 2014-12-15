@@ -139,10 +139,23 @@ if ($command[0] === 'generate') {
 
 			$user = new \FeideConnect\Data\Models\User($c);
 			$user->userid = \FeideConnect\Data\Model::genUUID();
-			$user->name = $full;
-			$user->email = $email;
+			// $user->name = $full;
+			// $user->email = $email;
+			// $user->userid_sec = ['feide:' . $feideid];
+
+			$user->created = time();
+
 			$user->userid_sec = ['feide:' . $feideid];
+			$user->setUserInfo('feide:' . $navn['realm'][$rx], $full, $email);
+			$user->selectedsource ='feide:' . $navn['realm'][$rx];
+
+			$user->userid_sec_seen = array();
+			foreach($user->userid_sec AS $u) {
+				$user->userid_sec_seen[$u] = time();
+			}
+
 			$user->debug();
+			// exit;
 
 			$c->saveUser($user);
 
