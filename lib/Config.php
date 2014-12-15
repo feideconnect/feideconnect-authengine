@@ -53,7 +53,7 @@ class Config {
 
 
 		$file = 'config.json';
-		if (getenv('ci')) {
+		if (getenv('CI')) {
 			$file = 'config.travis.json';
 		}
 		$configFilename = self::dir('etc/', $file);
