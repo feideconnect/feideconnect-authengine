@@ -1,3 +1,4 @@
 etc/config.json
 vendor
 composer.lock
+www/static/components
