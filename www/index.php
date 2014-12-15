@@ -79,32 +79,72 @@ try {
 
 
 
-	} else if  (Router::route('get', '^/poc/client/([a-z0-9\-]+)$', $parameters)) {
+	} else if  (Router::route('get', '^/poc/([@a-z0-9\-]+)/([@a-z0-9\-]+)$', $parameters)) {
 
 
+		$user = null;
+		$client = null;
 
-		$auth = new Authentication\Authenticator();
-		$auth->req(false, true); // require($isPassive = false, $allowRedirect = false, $return = null
-		$account = $auth->getAccount();
 		$c = new Data\Repositories\Cassandra();
-		$usermapper = new Authentication\UserMapper($c);
-		$user = $usermapper->getUser($account, false, true, false);
 
 
-		// 
+		if ($parameters[1] === '@me') {
+
+			$auth = new Authentication\Authenticator();
+			$auth->req(false, true); // require($isPassive = false, $allowRedirect = false, $return = null
+			$account = $auth->getAccount();
+			
+			$usermapper = new Authentication\UserMapper($c);
+			$user = $usermapper->getUser($account, false, true, false);
+
+		} else if ($parameters[1] === '@random') {
 
 
-		$c = new \FeideConnect\Data\Repositories\Cassandra();
+			$userlist = $c->getUsers();
+			function pickUser($userlist) {
+				if (count($userlist) <1) throw new Exception('Cannot generate before we got a list of users generated.');
+				$k = array_rand($userlist);
+				return $userlist[$k];
+			}
+			$user = pickUser($userlist);
+		
 
-		// $data = $c->getAccessToken();
+		} else {
 
-		// echo "looking up token " . $parameters[1];
+			$user = $c->getUserByID($parameters[1]);
 
-		$clientid = $parameters[1];
-		$client = $c->getClient($clientid);
-		// if ($client !== null) {
-		// 	$client->debug();
-		// }
+		}
+
+
+
+
+		if ($user === null) {
+			throw new \Exception('User not found');
+		}
+
+
+		if ($parameters[2] === '@random') {
+
+			$clientlist = $c->getClients();
+			function pickClient($clientlist) {
+				if (count($clientlist) <1) throw new Exception('Cannot generate before we got a list of client generated.');
+				$k = array_rand($clientlist);
+				return $clientlist[$k];
+			}
+			$client = pickClient($clientlist);
+
+
+
+		} else {
+
+
+			$client = $c->getClient($parameters[2]);
+
+
+		}
+
+
+
 
 		if ($client === null) {
 			throw new \Exception('Client not found');
