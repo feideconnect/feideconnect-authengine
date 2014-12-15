@@ -35,8 +35,8 @@ abstract class Model {
 	public function debug() {
 
 		echo "Debug object " . get_class($this) . "\n";
-		print_r($this->getAsArray());
-
+		// print_r($this->getAsArray());
+		echo json_encode($this->getAsArray(), JSON_PRETTY_PRINT) . "\n";
 
 	}
 

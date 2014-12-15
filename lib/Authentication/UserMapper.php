@@ -33,9 +33,16 @@ class UserMapper {
 		$user = new Models\User($this->repo);
 		$user->userid = $uuid;
 
-		$user->name = $account->getName();
-		$user->email = $account->getMail();
+		$user->created = time();
+
 		$user->userid_sec = $account->getUserIDs();
+		$user->setUserInfo($account->getSourceID(), $account->getName(), $account->getMail());
+		$user->selectedsource = $account->getSourceID();
+
+		$user->userid_sec_seen = array();
+		foreach($user->userid_sec AS $u) {
+			$user->userid_sec_seen[$u] = time();
+		}
 
 		$this->repo->saveUser($user);
 
@@ -82,9 +89,13 @@ class UserMapper {
 
 		if (count($existingUser) === 1) {
 			if ($update) {
-				$this->updateUser($account, $existingUser);
+				$this->updateUser($account, $existingUser[0]);
 			}
-			return $existingUser;
+			// header('content-type: text/plain');
+			// echo "poot";
+			// print_r($existingUser); exit;
+
+			return $existingUser[0];
 		}
 
 		if (count($existingUser) > 1) {

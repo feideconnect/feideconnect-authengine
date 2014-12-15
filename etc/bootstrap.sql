@@ -1,4 +1,4 @@
-/* cqlsh 158.38.213.74 -f etc/bootstrap.sql */
+/* cqlsh 127.0.0.1 -f etc/bootstrap.sql */
 
 CREATE KEYSPACE 
 	IF NOT EXISTS 
@@ -27,6 +27,7 @@ DROP TABLE IF EXISTS oauth_authorizations;
 DROP INDEX IF EXISTS oauth_authorizations_clientid_idx;
 
 
+/* Clients */
 CREATE TABLE clients (
 	id uuid PRIMARY KEY,
 	client_secret text,
@@ -44,15 +45,19 @@ CREATE TABLE clients (
 CREATE INDEX clients_owner_idx 				ON clients(owner);
 
 
-
+/* Users */
 CREATE TABLE users (
 	userid uuid PRIMARY KEY,
 	created timestamp,
-	email text,
-	name text,
-	profilephoto blob,
 
-	userid_sec set<text>
+	name map<text, text>,
+	email map<text, text>,
+	profilephoto map<text, blob>,
+
+	selectedsource text,
+
+	userid_sec set<text>,
+	userid_sec_seen map<text, timestamp>
 );
 CREATE TABLE userid_sec (
 	userid_sec text,
@@ -61,7 +66,7 @@ CREATE TABLE userid_sec (
 );
 
 
-
+/* Ad-hoc groups */
 CREATE TABLE groups (
 	id text PRIMARY KEY,
 	admins set<uuid>,

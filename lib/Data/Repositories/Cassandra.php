@@ -68,6 +68,7 @@ class Cassandra extends \FeideConnect\Data\Repository {
 		$data = $user->getAsArray();
 		$query = self::generateInsert('users', $data);
 
+		// print_r($data);
 		// echo $query; exit;
 
 		// echo "ABOUT TO INSERT DATA\n" . var_export($data, true) . "\n\n" . $query . "\n-------\n"; return;
@@ -145,8 +146,18 @@ class Cassandra extends \FeideConnect\Data\Repository {
 	}
 
 	function getUserByUserID($userid) {
-		// $data = $this->db->query('SELECT userid, created, email, name, userid_sec FROM "users" WHERE "userid" = :userid', ['userid' => $userid]);
-		$data = $this->db->query('SELECT * FROM "users" WHERE "userid" = :userid', ['userid' => $userid]);
+
+		//$query = 'SELECT userid, created, email, name, profilephoto, userid_sec, userid_sec_seen, selectedsource FROM "users" WHERE "userid" = :userid';
+		$query = 'SELECT * FROM "users" WHERE "userid" = :userid';
+		$params = ['userid' => $userid];
+
+		Logger::debug('Query cassandra getUserByUserID()', array(
+			'query' => $query,
+			'params' => $params
+		));
+
+		$data = $this->db->query($query, $params);
+		Logger::debug('Query ----');
 		if (empty($data)) return null;
 		return new \FeideConnect\Data\Models\User($this, $data[0]);
 	}
@@ -155,8 +166,19 @@ class Cassandra extends \FeideConnect\Data\Repository {
 
 
 	function getUserByUserIDsec($useridsec) {
-		$data = $this->db->query('SELECT * FROM "userid_sec" WHERE "userid_sec" = :userid_sec', 
-			['userid_sec' => $useridsec]);
+
+		$query = 'SELECT * FROM "userid_sec" WHERE "userid_sec" = :userid_sec';
+		$params = ['userid_sec' => $useridsec];
+
+		Logger::debug('Query cassandra getUserByUserIDsec()', array(
+			'query' => $query,
+			'params' => $params
+		));
+
+
+		$data = $this->db->query($query, $params);
+		Logger::debug('Query ----');
+
 		if (empty($data)) return null;
 		return $this->getUserByUserID($data[0]['userid']);
 	}
@@ -172,10 +194,17 @@ class Cassandra extends \FeideConnect\Data\Repository {
 	 * @return [type]            [description]
 	 */
 	function getUserByUserIDsecList($useridsec) {
-		// print_r($useridsec); exit;
-		$data = $this->db->query('SELECT * FROM "userid_sec" WHERE "userid_sec" IN :userid_sec', 
-			['userid_sec' => $useridsec]);
 
+		$query = 'SELECT * FROM "userid_sec" WHERE "userid_sec" IN :userid_sec';
+		$params = ['userid_sec' => $useridsec];
+
+		Logger::debug('Query cassandra getUserByUserIDsecList()', array(
+			'query' => $query,
+			'params' => $params
+		));
+
+		$data = $this->db->query($query, $params);
+		Logger::debug('Query ----');
 
 
 		if (empty($data)) return null;
@@ -277,3 +306,9 @@ class Cassandra extends \FeideConnect\Data\Repository {
 
 
 }
+
+
+
+
+
+

@@ -130,18 +130,24 @@ try {
 		// 
 		// $response = array('account' => $account->getAccountID());
 		$response = [
-			"userids" => $account->getUserIDs(),
-			"sourceID" => $account->getSourceID(),
-			"name" => $account->getName(),
-			"mail" => $account->getMail()
+			"account" => [
+				"userids" => $account->getUserIDs(),
+				"sourceID" => $account->getSourceID(),
+				"name" => $account->getName(),
+				"mail" => $account->getMail()
+			]
 		];
 
 		$c = new Data\Repositories\Cassandra();
 		$usermapper = new Authentication\UserMapper($c);
 
 		$user = $usermapper->getUser($account, false, true, false);
-
-		$response['user'] = $user;
+		// header('Content-type: text/plain');
+		// print_r($user); exit;
+		if (isset($user)) {
+			$response['user'] = $user->getAsArray();	
+		}
+		
 
 
 

@@ -30,8 +30,10 @@ class DBTest extends \PHPUnit_Framework_TestCase {
         $mail = 'mail:andreas.solberg@uninett.no';
 
 		$user->userid = $uuid;
-		$user->name = 'Andreas Åkre Solberg';
-		$user->email = 'andreas.solberg@uninett.no';
+
+		$user->setUserInfo('feide:uninett.no','Andreas Åkre Solberg', 'andreas.solberg@uninett.no');
+		$user->selectedsource = 'feide:uninett.no';
+
 		$user->userid_sec = [$feideid, $mail];
 		
 		$this->assertTrue($user->userid === $uuid, 'UUID is set and kept');
@@ -47,7 +49,8 @@ class DBTest extends \PHPUnit_Framework_TestCase {
 		$this->assertEquals($user->userid, $u2->userid, 'UserID should match in returning entry');
 		$this->assertTrue(count($u2->userid_sec) === 2, 'User db entry should contain 2 userid sec keys');
 
-		// $u2->debug();
+		$u2->debug();
+		print_r(json_encode($u2->getUserInfo(), JSON_PRETTY_PRINT));
 
 		$u3 = $this->db->getUserByUserIDsec($feideid);
 		$u4 = $this->db->getUserByUserIDsec($mail);
