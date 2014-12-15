@@ -29,8 +29,12 @@ class Logger {
 
 	public function log($level, $str, $data = array()) {
 
-		$data['path'] = $_SERVER['REQUEST_URI'];
-		$data['client'] = $_SERVER['REMOTE_ADDR'];
+		if (isset($_SERVER['REQUEST_URI'])) {
+			$data['path'] = $_SERVER['REQUEST_URI'];	
+		}
+		if (isset($_SERVER['REMOTE_ADDR'])) {
+			$data['client'] = $_SERVER['REMOTE_ADDR'];	
+		}
 
 		switch ($level) {
 
