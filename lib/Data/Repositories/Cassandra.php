@@ -4,6 +4,7 @@
 namespace FeideConnect\Data\Repositories;
 
 use FeideConnect\Logger;
+use \Exception;
 
 class Cassandra extends \FeideConnect\Data\Repository {
 
