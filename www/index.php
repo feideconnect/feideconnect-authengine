@@ -96,6 +96,9 @@ try {
 			
 			$usermapper = new Authentication\UserMapper($c);
 			$user = $usermapper->getUser($account, false, true, false);
+			if ($user === null) {
+				throw new \Exception('User not found');
+			}
 
 		} else if ($parameters[1] === '@random') {
 
@@ -107,20 +110,25 @@ try {
 				return $userlist[$k];
 			}
 			$user = pickUser($userlist);
-		
+
+
+
+		} else if ($parameters[1] === '@none') {
+
 
 		} else {
 
 			$user = $c->getUserByID($parameters[1]);
+			if ($user === null) {
+				throw new \Exception('User not found');
+			}
 
 		}
 
 
 
 
-		if ($user === null) {
-			throw new \Exception('User not found');
-		}
+
 
 
 		if ($parameters[2] === '@random') {
@@ -132,7 +140,6 @@ try {
 				return $clientlist[$k];
 			}
 			$client = pickClient($clientlist);
-
 
 
 		} else {
@@ -154,7 +161,10 @@ try {
 		$token = new \FeideConnect\Data\Models\AccessToken($c);
 		$token->access_token = \FeideConnect\Data\Model::genUUID();
 		$token->clientid = $client->id;
-		$token->userid = $user->userid;
+		if ($user !== null) {
+			$token->userid = $user->userid;	
+		}
+		
 		$token->scope = $client->scopes;
 		$token->token_type = 'bearer';
 		$token->validuntil = time() + 3600;
@@ -164,9 +174,20 @@ try {
 
 		
 		header('Content-Type: text/plain; charset=utf-8');
-		echo "You are authenticated as user: \n\n";
-		print_r($user->getUserInfo());
-		echo "\n\n";
+
+		if ($user !== null) {
+
+			echo "You are about to get a token associated with this user: \n\n";
+			print_r($user->getUserInfo());
+			echo "\n\n";
+
+
+		} else {
+
+			echo "You are about to get a token that are not associated with any users. \n\n";
+
+		}
+
 		echo "And you are about to generate a token for the following client \n";
 		print_r($client->getAsArray());
 		echo "\n\n";
