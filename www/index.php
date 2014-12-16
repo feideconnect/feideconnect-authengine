@@ -118,7 +118,7 @@ try {
 
 		} else {
 
-			$user = $c->getUserByID($parameters[1]);
+			$user = $c->getUserByUserID($parameters[1]);
 			if ($user === null) {
 				throw new \Exception('User not found');
 			}
