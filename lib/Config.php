@@ -2,6 +2,12 @@
 
 namespace FeideConnect;
 
+
+class ArrIndexNotFoundException extends \Exception {
+
+}
+
+
 /**
  * Config
  */
@@ -18,10 +24,36 @@ class Config {
 
 	// ------ ------ ------ ------ Object methods
 
+
+	protected static function arrayPick($arr, $pick) {
+
+		// echo "about to pick "; print_r($arr); print_r($pick);
+		$ref =& $arr;
+		for($i = 0; $i < count($pick); $i++) {
+			if (array_key_exists($pick[$i], $ref)) {
+				// echo "picking " . $pick[$i] . "\n"; print_r($ref); print_r($ref[$pick[$i]]);
+				$ref =& $ref[$pick[$i]];
+			} else {
+				throw new ArrIndexNotFoundException();
+			}
+		}
+		return $ref;
+	}
+
 	public function get($key, $default = null, $required = false) {
-		if (isset($this->properties[$key])) return $this->properties[$key];
-		if ($required === true) throw new Exception('Missing required global configuration property [' . $key . ']');
-		return $default;
+
+		try {
+
+			return self::arrayPick($this->properties, explode('.',$key));
+
+		} catch (ArrIndexNotFoundException $e) {
+
+			if ($required === true) throw new \Exception('Missing required global configuration property [' . $key . ']');
+			return $default;
+
+		}
+
+
 	}
 
 	public function getConfig() {
