@@ -18,7 +18,11 @@ class Logger {
 
 	function __construct() {
 		$this->log = new \Monolog\Logger('feideconnect');
-		// $this->log->pushHandler(new StreamHandler('/var/log/feideconnect.log', \Monolog\Logger::DEBUG));
+
+		$filename = Config::getValue('logging.filename', '/var/log/feideconnect-authengine.log');
+		if (Config::getValue('logging.file', false) && file_exists($filename) && is_writable($filename)) {
+			$this->log->pushHandler(new StreamHandler($filename, \Monolog\Logger::DEBUG));
+		}
 		$this->log->pushHandler(new ErrorLogHandler());
 		
 	}
@@ -31,7 +35,7 @@ class Logger {
 			$data['path'] = $_SERVER['REQUEST_URI'];	
 		}
 		if (isset($_SERVER['REMOTE_ADDR'])) {
-			$data['client'] = $_SERVER['REMOTE_ADDR'];	
+			$data['src_ip'] = $_SERVER['REMOTE_ADDR'];	
 		}
 
 		switch ($level) {
