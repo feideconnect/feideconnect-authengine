@@ -37,7 +37,6 @@ try {
 	$response = null;
 
 
-
 	/**
 	 *  The OAuth endpoints on core, typically the OAuth Server endpoints for communication with clients
 	 *  using the API.
