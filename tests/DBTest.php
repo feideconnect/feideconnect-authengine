@@ -76,7 +76,9 @@ class DBTest extends \PHPUnit_Framework_TestCase {
 
 
 
-
+		/*
+		 * TODO: Fix. deleteUser does not work. Probably some issues with cassandra v2.0.11 running in CI
+		 */
 		$this->db->deleteUser($user);
 
 
@@ -84,7 +86,6 @@ class DBTest extends \PHPUnit_Framework_TestCase {
 		$this->assertTrue($u7 === null, 'Should not find user after user is deleted by userid');
 
 
-		return;
 
 
 
