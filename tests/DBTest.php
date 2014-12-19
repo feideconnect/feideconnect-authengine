@@ -58,8 +58,6 @@ class DBTest extends \PHPUnit_Framework_TestCase {
 		$u3 = $this->db->getUserByUserIDsec($feideid);
 		$u4 = $this->db->getUserByUserIDsec($mail);
 
-		return;
-
 
 		$this->assertTrue($u3 !== null, 'Should return match when looking up by usersecid ' . $feideid);
 		$this->assertInstanceOf('FeideConnect\Data\Models\User', $u3, 'Should return an user object of correct object type');
@@ -68,6 +66,10 @@ class DBTest extends \PHPUnit_Framework_TestCase {
 
 		$this->assertEquals($user->userid, $u3->userid, 'UserID should match in returning entry');
 		$this->assertEquals($user->userid, $u4->userid, 'UserID should match in returning entry');
+
+		return;
+
+
 
 		$u5 = $this->db->getUserByUserID('919d0c79-c294-46df-83d3-1416dedab56b');
 		$u6 = $this->db->getUserByUserIDsec('dummy:919d0c79-c294-46df-83d3-1416dedab56b');
