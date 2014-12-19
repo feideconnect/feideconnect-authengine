@@ -76,9 +76,6 @@ class DBTest extends \PHPUnit_Framework_TestCase {
 
 
 
-		return;
-
-
 
 		$this->db->deleteUser($user);
 
@@ -86,8 +83,14 @@ class DBTest extends \PHPUnit_Framework_TestCase {
 		$u7 = $this->db->getUserByUserID($uuid);
 		$this->assertTrue($u7 === null, 'Should not find user after user is deleted by userid');
 
+
+		return;
+
+
+
 		$u8 = $this->db->getUserByUserIDsec($feideid);
 		$u9 = $this->db->getUserByUserIDsec($mail);
+
 		$this->assertTrue($u8 === null, 'Should not find user after user is deleted by feideid');
 		$this->assertTrue($u9 === null, 'Should not find user after user is deleted by mail');
 
