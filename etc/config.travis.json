@@ -5,6 +5,10 @@
 		"nodes": ["127.0.0.1"]
 	},
 
+	"logging": {
+		"file": false
+	},
+
 	"test": {
 		"foo": {
 			"la": "ba",
