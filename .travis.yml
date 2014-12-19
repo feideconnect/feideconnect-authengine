@@ -19,10 +19,8 @@ addons:
   code_climate:
     repo_token: 2028e8e05748387cc629c99a404d3bf86d1a6a874f3f45e7af7660bb3bc8a835
 after_script:
-# - vendor/bin/test-reporter
-# Fix for the TLS issue, as described here: https://github.com/codeclimate/php-test-reporter
   - CODECLIMATE_REPO_TOKEN="2028e8e05748387cc629c99a404d3bf86d1a6a874f3f45e7af7660bb3bc8a835" bin/test-reporter --stdout > codeclimate.json
-  - curl -X POST -d @codeclimate.json -H 'Content-Type: application/json' -H 'User-Agent: Code Climate (PHP Test Reporter v0.1.1)' https://codeclimate.com/test_reports
+  - curl -X POST -d @codeclimate.json https://codeclimate.com/test_reports
 cache:
   directories:
     - node_modules
