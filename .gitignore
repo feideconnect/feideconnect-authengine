@@ -5,4 +5,4 @@ etc/apache.conf
 vendor
 composer.lock
 www/static/components
-node_modules
+node_modulescache.properties
