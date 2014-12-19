@@ -12,7 +12,7 @@ before_script:
 # - sleep 3
   - cqlsh 127.0.0.1 -f etc/bootstrap.sql
 script: 
-  - phpunit --bootstrap autoload.php tests
+  - phpunit --coverage-clover build/logs/clover.xml --bootstrap autoload.php tests
 notifications:
   slack: uninett:5CpnkrlaqOLKLXDttDzpTqqU
 addons:
