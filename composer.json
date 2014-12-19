@@ -25,5 +25,8 @@
 		"nategood/commando": "*",
         "firebase/php-jwt": "*",
         "monolog/monolog": "~1.11.0"
+	},
+	"require-dev": {
+		"pdepend/pdepend" : "~2.0.4"
 	}
 }
