@@ -49,8 +49,8 @@ class DBTest extends \PHPUnit_Framework_TestCase {
 		$this->assertEquals($user->userid, $u2->userid, 'UserID should match in returning entry');
 		$this->assertTrue(count($u2->userid_sec) === 2, 'User db entry should contain 2 userid sec keys');
 
-		$u2->debug();
-		print_r(json_encode($u2->getUserInfo(), JSON_PRETTY_PRINT));
+		// $u2->debug();
+		// print_r(json_encode($u2->getUserInfo(), JSON_PRETTY_PRINT));
 
 		$u3 = $this->db->getUserByUserIDsec($feideid);
 		$u4 = $this->db->getUserByUserIDsec($mail);
