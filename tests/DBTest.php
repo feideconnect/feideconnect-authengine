@@ -52,12 +52,13 @@ class DBTest extends \PHPUnit_Framework_TestCase {
 		// $u2->debug();
 		// print_r(json_encode($u2->getUserInfo(), JSON_PRETTY_PRINT));
 
-		return;
 
 
 
 		$u3 = $this->db->getUserByUserIDsec($feideid);
 		$u4 = $this->db->getUserByUserIDsec($mail);
+
+		return;
 
 
 		$this->assertTrue($u3 !== null, 'Should return match when looking up by usersecid ' . $feideid);
