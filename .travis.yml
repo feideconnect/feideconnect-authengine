@@ -7,7 +7,7 @@ services:
   - cassandra
 install:
 # - composer self-update
-  - composer install
+  - composer install --dev
 before_script:
 # - sleep 3
   - cqlsh 127.0.0.1 -f etc/bootstrap.sql
@@ -15,3 +15,8 @@ script:
   - phpunit --bootstrap autoload.php tests
 notifications:
   slack: uninett:5CpnkrlaqOLKLXDttDzpTqqU
+addons:
+  code_climate:
+  	repo_token: 2028e8e05748387cc629c99a404d3bf86d1a6a874f3f45e7af7660bb3bc8a835
+after_script:
+  - vendor/bin/test-reporter
