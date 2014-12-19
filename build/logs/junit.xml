@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuites>
+  <testsuite name="tests" tests="2" assertions="19" failures="0" errors="0" time="0.402282">
+    <testsuite name="tests\ConfigTest" file="/var/www/feideconnect-authengine/tests/ConfigTest.php" namespace="tests" fullPackage="tests" tests="1" assertions="3" failures="0" errors="0" time="0.003721">
+      <testcase name="testConfig" class="tests\ConfigTest" file="/var/www/feideconnect-authengine/tests/ConfigTest.php" line="32" assertions="3" time="0.003721"/>
+    </testsuite>
+    <testsuite name="tests\DBTest" file="/var/www/feideconnect-authengine/tests/DBTest.php" namespace="tests" fullPackage="tests" tests="1" assertions="16" failures="0" errors="0" time="0.398561">
+      <testcase name="testUsers" class="tests\DBTest" file="/var/www/feideconnect-authengine/tests/DBTest.php" line="24" assertions="16" time="0.398561"/>
+    </testsuite>
+  </testsuite>
+</testsuites>

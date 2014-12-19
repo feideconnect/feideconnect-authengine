@@ -77,26 +77,8 @@
       <arg path="${basedir}/lib,${basedir}/templates,${basedir}/tests,${basedir}/themes,${basedir}/www" />
     </exec>
   </target>
-<!--
-  <target name="phpmd"
-          description="Perform project mess detection using PHPMD and print human readable output. Intended for usage on the command line before committing.">
-    <exec executable="phpmd">
-      <arg path="${basedir}/lib,${basedir}/templates,${basedir}/tests,${basedir}/themes,${basedir}/www" />
-      <arg value="text" />
-      <arg value="${basedir}/build/phpmd.xml" />
-    </exec>
-  </target>
 
-  <target name="phpmd-ci" description="Perform project mess detection using PHPMD creating a log file for the continuous integration server">
-    <exec executable="phpmd">
-      <arg path="${basedir}/lib,${basedir}/templates,${basedir}/tests,${basedir}/themes,${basedir}/www" />
-      <arg value="xml" />
-      <arg value="${basedir}/build/phpmd.xml" />
-      <arg value="--reportfile" />
-      <arg value="${basedir}/build/logs/pmd.xml" />
-    </exec>
-  </target>
--->
+
   <target name="phpcs"
           description="Find coding standard violations using PHP_CodeSniffer and print human readable output. Intended for usage on the command line before committing.">
     <exec executable="phpcs">
@@ -142,4 +124,4 @@
     <exec executable="phpdox"/>
   </target>
 
-</project>
+</pr
