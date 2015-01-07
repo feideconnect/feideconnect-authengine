@@ -23,6 +23,12 @@ header("Access-Control-Expose-Headers: Authorization, X-Requested-With, Origin, 
 use FeideConnect\Utils\Router;
 
 
+
+class  NotFoundException extends \Exception {
+
+
+}
+
 try {
 
 	// $config = \FeideConnect\Config::getInstance();
@@ -44,7 +50,7 @@ try {
 	if (Router::route(false, '^/oauth', $parameters)) {
 
 
-		$oauth = new OAuth();
+		$oauth = new OAuth\Server();
 
 		if (Router::route('post','^/oauth/authorization$', $parameters)) {
 			$oauth->processAuthorizationResponse();
@@ -57,7 +63,7 @@ try {
 			$oauth->token();
 
 		} else {
-			throw new Exception('Invalid request');
+			throw new \Exception('Invalid request');
 		}
 
 
@@ -75,8 +81,9 @@ try {
 		$response = $providerconfig;
 
 
+	} else if  (Router::route('get', '^/favicon.ico$', $parameters)) {
 
-
+		throw new NotFoundException();
 
 	} else if  (Router::route('get', '^/poc/([@a-z0-9\-]+)/([@a-z0-9\-]+)$', $parameters)) {
 
@@ -292,6 +299,26 @@ try {
 // 	echo "Error stack trace: \n";
 // 	print_r($e);
 
+} catch(NotFoundException $e) {
+
+	header("HTTP/1.0 404 Not Found");
+	header('Content-Type: text/html; charset: utf-8');
+
+	$data = array();
+	$data['code'] = '404';
+	$data['head'] = 'Not Found';
+	$data['message'] = $e->getMessage();
+
+	$templateDir = Config::dir('templates');
+	$mustache = new \Mustache_Engine(array(
+		// 'cache' => '/tmp/uwap-mustache',
+		'loader' => new \Mustache_Loader_FilesystemLoader($templateDir),
+		// 'partials_loader' => new Mustache_Loader_FilesystemLoader(dirname(__FILE__).'/views/partials'),
+	));
+	$tpl = $mustache->loadTemplate('exception');
+	echo $tpl->render($data);
+
+
 
 } catch(\Exception $e) {
 
@@ -303,6 +330,8 @@ try {
 
 
 	$data = array();
+	$data['code'] = '500';
+	$data['head'] = 'Something wrong happened';
 	$data['message'] = $e->getMessage();
 	// if ($globalconfig->getValue('debug', false)) {
 	// 	$data['error'] = array(
