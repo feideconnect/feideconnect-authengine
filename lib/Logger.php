@@ -31,6 +31,9 @@ class Logger {
 
 	public function log($level, $str, $data = array()) {
 
+		// Fix easier parsing by the monolog laas parser.
+		$str = str_replace(['{', '}'], ['[', ']'], $str);
+
 		if (isset($_SERVER['REQUEST_URI'])) {
 			$data['path'] = $_SERVER['REQUEST_URI'];	
 		}
