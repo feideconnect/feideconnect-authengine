@@ -95,7 +95,6 @@ if ($command[0] === 'generate') {
 
 
 
-
 	$userlist = $c->getUsers();
 	$clientlist = $c->getClients();
 

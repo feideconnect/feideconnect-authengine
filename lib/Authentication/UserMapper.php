@@ -107,9 +107,16 @@ class UserMapper {
 				}
 				return $user;
 			}
+
+			// For debugging creae a list of users
+			$userlist = [];
+			foreach($existingUser AS $u) {
+				$userlist[] = $u->getAsArray();
+			}
+
 			Logger::warning('Found more than one user (from seckeys), without merging. Returns first match.', array(
-				'useridsec' => $useridsec,
-				'userids' => $userids
+				'useridsec' => $userIDs,
+				'users' => $userlist
 			));
 			return $existingUser[0];
 
