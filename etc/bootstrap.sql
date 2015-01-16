@@ -26,6 +26,8 @@ DROP TABLE IF EXISTS oauth_authorizations;
 /* DROP INDEX IF EXISTS oauth_authorizations_userid_idx; */
 DROP INDEX IF EXISTS oauth_authorizations_clientid_idx;
 
+DROP TABLE IF EXISTS apigk;
+DROP INDEX IF EXISTS apigk_owner_idx;
 
 /* Clients */
 CREATE TABLE clients (
@@ -118,3 +120,24 @@ CREATE TABLE oauth_authorizations (
 CREATE INDEX oauth_authorizations_clientid_idx ON oauth_authorizations (clientid); 
 
 
+CREATE TABLE apigk (
+	id text PRIMARY KEY,
+
+	name text,
+	descr text,
+
+	endpoints list<text>,
+
+	trust text, 		-- JSON Structure
+	expose text,		-- JSON Structure
+	scopedef text, 		-- JSON Structure
+	requireuser boolean,
+	httpscertpinned text, 	-- X509 Certificate
+
+	status set<text>,
+
+	owner uuid,
+	created timestamp,
+	updated timestamp
+);
+CREATE INDEX apigk_owner_idx ON apigk(owner);
