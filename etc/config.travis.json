@@ -1,13 +1,14 @@
 {
 	"idp": "https://idp-test.feide.no",
 	"storage": {
+		"type": "cassandra",
 		"keyspace": "feideconnect",
 		"nodes": ["127.0.0.1"]
 	},
-
 	"logging": {
 		"file": false
 	},
+	"salt": "73d9c77b-951f-4a29-9113-3e72405cfa1a",
 
 	"test": {
 		"foo": {
