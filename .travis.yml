@@ -17,9 +17,9 @@ notifications:
   slack: uninett:5CpnkrlaqOLKLXDttDzpTqqU
 addons:
   code_climate:
-    repo_token: 2028e8e05748387cc629c99a404d3bf86d1a6a874f3f45e7af7660bb3bc8a835
+    repo_token: 2aad4fd8a7ffbcc2f41f88c69c93c6b0a8abed2c01f14f0f50dc81ef6184e8d8
 after_script:
-  - CODECLIMATE_REPO_TOKEN="2028e8e05748387cc629c99a404d3bf86d1a6a874f3f45e7af7660bb3bc8a835" vendor/bin/test-reporter --stdout > codeclimate.json
+  - CODECLIMATE_REPO_TOKEN="2aad4fd8a7ffbcc2f41f88c69c93c6b0a8abed2c01f14f0f50dc81ef6184e8d8" vendor/bin/test-reporter --stdout > codeclimate.json
   - "curl --verbose -X POST -d @codeclimate.json -H 'Content-Type: application/json' -H 'User-Agent: Code Climate (PHP Test Reporter v0.1.1)' https://codeclimate.com/test_reports"
 cache:
   directories:
