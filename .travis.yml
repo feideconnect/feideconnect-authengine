@@ -10,6 +10,7 @@ install:
   - composer install --dev
 before_script:
 # - sleep 3
+  - cqlsh 127.0.0.1 -f etc/bootstrap.init-keyspace-ci.sql
   - cqlsh 127.0.0.1 -f etc/bootstrap.sql
 script: 
   - phpunit --coverage-clover build/logs/clover.xml --bootstrap autoload.php tests

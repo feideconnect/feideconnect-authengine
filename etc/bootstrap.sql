@@ -1,9 +1,5 @@
 /* cqlsh 127.0.0.1 -f etc/bootstrap.sql */
 
-CREATE KEYSPACE 
-	IF NOT EXISTS 
-	feideconnect
-	WITH REPLICATION = { 'class' : 'SimpleStrategy', 'replication_factor' : 3 };
 
 USE feideconnect;
 
