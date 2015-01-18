@@ -31,6 +31,7 @@ script:
   - phpunit --coverage-clover build/logs/clover.xml --bootstrap autoload.php tests
   - phantomjs tests-phantomjs/main.js
   - cat logs/error.log
+  - cat logs/access.log
 notifications:
   slack: uninett:5CpnkrlaqOLKLXDttDzpTqqU
 addons:
