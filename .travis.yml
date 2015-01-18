@@ -24,11 +24,13 @@ before_script:
   # configure apache virtual hosts
   - sudo cp -f etc/ci/apache.conf /etc/apache2/sites-available/default
   - sudo sed -e "s?%TRAVIS_BUILD_DIR%?$(pwd)?g" --in-place /etc/apache2/sites-available/default
+  - mkdir logs
   - sudo service apache2 restart
   # --------------------
 script: 
   - phpunit --coverage-clover build/logs/clover.xml --bootstrap autoload.php tests
   - phantomjs tests-phantomjs/main.js
+  - cat logs/error.log
 notifications:
   slack: uninett:5CpnkrlaqOLKLXDttDzpTqqU
 addons:
