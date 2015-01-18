@@ -3,7 +3,7 @@
 
 
 var config = {
-	"url": "https://127.0.0.1/"
+	"url": "http://127.0.0.1/"
 };
 var page = require('webpage').create();
 
