@@ -18,7 +18,7 @@ class Logger {
 
 	function __construct() {
 		$this->log = new \Monolog\Logger('feideconnect');
-		// $this->log->pushHandler(new StreamHandler('/var/log/feideconnect.log', \Monolog\Logger::DEBUG));
+		$this->log->pushHandler(new StreamHandler('/var/log/feideconnect-authengine.log', \Monolog\Logger::DEBUG));
 		$this->log->pushHandler(new ErrorLogHandler());
 		
 	}
