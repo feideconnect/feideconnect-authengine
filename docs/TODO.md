@@ -3,6 +3,8 @@
 
 # TODO
 
+* [ ] Lage oppdatert doc for oauth.
+* [ ] phantomjs docs
 
 * OAuth
 	* [x] Implcit grant flow
