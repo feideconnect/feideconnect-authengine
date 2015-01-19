@@ -1,7 +1,10 @@
 etc/config.json
 etc/simplesamlphp-config
 etc/simplesamlphp-metadata
+etc/apache.conf
 vendor
 composer.lock
 www/static/components
 node_modules
+cache.properties
+build

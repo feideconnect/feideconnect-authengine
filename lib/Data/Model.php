@@ -1,6 +1,7 @@
 <?php
 
 namespace FeideConnect\Data;
+use FeideConnect\Data\StorageProvider;
 
 abstract class Model {
 
@@ -8,7 +9,7 @@ abstract class Model {
 	protected static $_properties = array();
 
 	function __construct(\FeideConnect\Data\Repository $repo, $props = array()) {
-		$this->_repo = $repo;
+		$this->_repo = StorageProvider::getStorage();
 
 		foreach($props AS $k => $v) {
 			if (!in_array($k, static::$_properties)) {
@@ -20,6 +21,10 @@ abstract class Model {
 
 	}
 
+
+	public function has($attrname) {
+		return (!empty($this->{$attrname}));
+	}
 
 	public function getAsArray() {
 		$a = array();

@@ -1,7 +1,8 @@
 <?php
 
 namespace FeideConnect\Data\Models;
-
+use FeideConnect\Logger;
+use FeideConnect\Config;
 
 /**
  * User 
@@ -51,6 +52,19 @@ class User extends \FeideConnect\Data\Model {
 		return null;
 	}
 
+	public function getVerifier() {
+		
+		$salt = Config::getValue('salt', null, true);
+		$rawstr = 'consent' . '|' . $salt . '|' . $this->userid;
+
+		Logger::info('Calculating verifier from this string', array(
+			'rawstring' => 'consent' . '|{salt:hidden}|' . $this->userid
+		));
+		return sha1($rawstr);
+	}
+
+
+
 	/**
 	 * [getUserInfo description]
 	 * @param  [type] $sourceID [description]
@@ -76,8 +90,10 @@ class User extends \FeideConnect\Data\Model {
 		$res['profilephoto'] = $this->getSourcedProperty('profilephoto', $src);
 		return $res;
 
-
 	}
+
+
+
 
 
 }

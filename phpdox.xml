@@ -1,0 +1,21 @@
+<phpdox xmlns="http://phpdox.net/config">
+ <project name="feideconnect-authengine" source="." workdir="phpdox">
+  <collector publiconly="false">
+   <include mask="*.php" />
+  </collector>
+
+  <generator output="build">
+   <enrich base="build/logs">
+    <source type="build" />
+    <source type="git" />
+    <source type="phploc" />
+    <source type="checkstyle" />
+    <source type="pmd" />
+   </enrich>
+
+   <build engine="html" enabled="true" output="api">
+    <file extension="html" />
+   </build>
+  </generator>
+ </project>
+</phpdox>

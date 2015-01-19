@@ -1,7 +1,12 @@
 {
 	"idp": "https://idp-test.feide.no",
 	"storage": {
+		"type": "cassandra",
 		"keyspace": "feideconnect",
-		"nodes": ["158.38.1.5", "158.38.1.6", "158.38.1.7"]		
-	}
+		"nodes": ["158.38.213.74", "158.38.213.91", "158.38.213.87"]		
+	},
+	"logging": {
+		"file": true
+	},
+	"salt": null
 }

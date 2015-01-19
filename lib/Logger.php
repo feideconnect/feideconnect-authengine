@@ -18,7 +18,15 @@ class Logger {
 
 	function __construct() {
 		$this->log = new \Monolog\Logger('feideconnect');
+<<<<<<< HEAD
 		$this->log->pushHandler(new StreamHandler('/var/log/feideconnect-authengine.log', \Monolog\Logger::DEBUG));
+=======
+
+		$filename = Config::getValue('logging.filename', '/var/log/feideconnect-authengine.log');
+		if (Config::getValue('logging.file', false) && file_exists($filename) && is_writable($filename)) {
+			$this->log->pushHandler(new StreamHandler($filename, \Monolog\Logger::DEBUG));
+		}
+>>>>>>> 4cee3c95d8f8b08fc7ba57680ef2c2290d7c5937
 		$this->log->pushHandler(new ErrorLogHandler());
 		
 	}
@@ -27,11 +35,14 @@ class Logger {
 
 	public function log($level, $str, $data = array()) {
 
+		// Fix easier parsing by the monolog laas parser.
+		$str = str_replace(['{', '}'], ['[', ']'], $str);
+
 		if (isset($_SERVER['REQUEST_URI'])) {
 			$data['path'] = $_SERVER['REQUEST_URI'];	
 		}
 		if (isset($_SERVER['REMOTE_ADDR'])) {
-			$data['client'] = $_SERVER['REMOTE_ADDR'];	
+			$data['src_ip'] = $_SERVER['REMOTE_ADDR'];	
 		}
 
 		switch ($level) {

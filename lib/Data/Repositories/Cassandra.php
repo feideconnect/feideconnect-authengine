@@ -4,7 +4,10 @@
 namespace FeideConnect\Data\Repositories;
 
 use FeideConnect\Logger;
-use \Exception;
+use FeideConnect\Data\Models;
+use FeideConnect\Exceptions\Exception;
+use FeideConnect\Exceptions\StorageException;
+// use \Exception;
 
 class Cassandra extends \FeideConnect\Data\Repository {
 
@@ -14,15 +17,25 @@ class Cassandra extends \FeideConnect\Data\Repository {
 
 		$config = \FeideConnect\Config::getValue('storage');
 		
-		if (empty($config['keyspace'])) throw new Exception('Required config not set');
-		if (empty($config['nodes'])) throw new Exception('Required config not set');
+		if (empty($config['keyspace'])) throw new FeideConnectException('Required config not set');
+		if (empty($config['nodes'])) throw new FeideConnectException('Required config not set');
 
 		$this->db = new \evseevnn\Cassandra\Database($config['nodes'], $config['keyspace']);
 		$this->db->connect();
 
 	}
 
-	protected static function generateInsert($table, $data) {
+	protected function getTTLskew($validuntil) {
+		$now = time();
+		if (!is_int($validuntil)) throw new StorageException('Invalid timestamp for expiration provided');
+		if ($validuntil < $now) throw new StorageException('Invalid timestamp (in the past) for expiration provided');
+
+		$ttl = $validuntil - $now;
+		$skew = \FeideConnect\Config::getValue('storage.ttlskew', 60); 
+		return ($ttl + $skew);
+	}
+
+	protected static function generateInsert($table, $data, $ttl = null) {
 
 		$keys = array_keys($data);
 
@@ -32,87 +45,162 @@ class Cassandra extends \FeideConnect\Data\Repository {
 		$keyval = join(', ', array_map(function($a) {
 			return ':' . $a . '';
 		}, $keys));
-		$query = 'INSERT INTO "' . $table . '" (' . $keystr . ') VALUES (' . $keyval . ')' . "\n\n";
+
+		$ttltext = '';
+		if ($ttl !== null && is_int($ttl)) {
+			$ttltext = ' USING TTL ' . $ttl;
+		}
+		
+
+
+		$query = 'INSERT INTO "' . $table . '" (' . $keystr . ') VALUES (' . $keyval . ')' . $ttltext . "\n\n";
 
 		return $query;
 	}
 
 
-	/* 
-	 * --- Database handling of the 'accesstoken' column family
+	/**
+	 * Insert data into cassandra with wrapper
+	 * 
+	 * @param  [type] $query [description]
+	 * @param  [type] $data  [description]
+	 * @param  string $title [description]
+	 * @return [type]        [description]
 	 */
-	function getAccessToken($accesstoken) {
-		$data = $this->db->query('SELECT * FROM "accesstoken" WHERE "accesstoken" = :accesstoken', 
-			['accesstoken' => $accesstoken]);
-		if (empty($data)) return null;
-		return new \FeideConnect\Data\Models\AccessToken($this, $data[0]);
+	protected function execute($query, $data, $title = '') {
+
+
+		Logger::debug('Cassandra insert (' . $title . ')', array(
+			'query' => $query,
+			'params' => $data
+		));
+
+		try {
+
+			// $this->db->beginBatch();
+			$this->db->query($query, $data);
+			// $result = $this->db->applyBatch();
+
+
+		} catch (StorageException $e) {
+			// TODO catch only Cassandras own exception type
+
+			
+			Logger::error('Cassandra insert (' . $title . ') FAILED ' . $e->getMessage(), array(
+				'query' => $query,
+				'params' => $data,
+				// 'message' => $e->getMessage(),
+			));
+
+			// print_r($e); 
+
+			throw new StorageException('Error quering storage: ' . $title);
+
+		}
+
+
+
 	}
 
-	function saveToken(\FeideConnect\Data\Models\AccessToken $token) {
 
-		$data = $token->getAsArray();
-		$query = self::generateInsert('oauth_tokens', $data);
-		$this->db->beginBatch();
-		$this->db->query($query, $data);
-		$result = $this->db->applyBatch();
-		
+	/**
+	 * Query data from cassandra, within wrapper. This function deals with errors, etc.
+	 * 
+	 * @param  [type]  $query    [description]
+	 * @param  [type]  $params   [description]
+	 * @param  string  $title    [description]
+	 * @param  [type]  $model    [description]
+	 * @param  boolean $multiple [description]
+	 * @return [type]            [description]
+	 */
+	protected function query($query, $params, $title = '', $model = null, $multiple = false) {
+
+		Logger::debug('Cassandra query (' . $title . ')', array(
+			'query' => $query,
+			'params' => $params
+		));
+
+		$data = null;
+
+		try {
+
+			$data = $this->db->query($query, $params);
+
+		} catch (\Exception $e) {
+			// TODO catch only Cassandras own exception type
+
+			Logger::error('Cassandra insert (' . $title . ') FAILED ' . $e->getMessage(), array(
+				'query' => $query,
+				'params' => $data,
+				// 'message' => $e->getMessage(),
+			));
+			throw new StorageException('Error quering storage: ' . $title);
+		}
+
+		if ($data === null) {
+			return null;
+		}
+
+		if ($multiple) {
+
+			$res = [];
+			foreach($data AS $i) {
+				if ($model !== null) {
+					$res[] = new $model($this, $i);
+				} else {
+					$res[] = $i;
+				}
+			}
+			return $res;
+
+		} else {
+
+			if (empty($data)) return null;
+			if ($model !== null) {
+				return new $model($this, $data[0]);
+			} else {
+				return $data[0];
+			}
+		}
+
 	}
-	
+
+
+
+
+
 
 	/* 
 	 * --- Database handling of the 'users' and 'userid_sec' column family
 	 */
-	function saveUser(\FeideConnect\Data\Models\User $user) {
-
-
+	function saveUser(Models\User $user) {
 		$data = $user->getAsArray();
 		$query = self::generateInsert('users', $data);
+		$this->execute($query, $data, __FUNCTION__);
 
-		// print_r($data);
-		// echo $query; exit;
-
-		// echo "ABOUT TO INSERT DATA\n" . var_export($data, true) . "\n\n" . $query . "\n-------\n"; return;
-		// $this->db->beginBatch();
-		// echo "about to insert user";
-		$this->db->query($query, $data);
-
+		// We also need to populate the userid_sec table with the corresponding secondary keys.
+		// TODO; Make this a transaction
 		if (is_array($user->userid_sec)) {
 			foreach($user->userid_sec AS $sec) {
-				// echo "adding userid sec " . $user->userid . " " . $sec . "\n";
 				$this->addUserIDsec($user->userid, $sec);
 			}
 		}
-		
-		// $result = $this->db->applyBatch();
-
-		// print_r($result);
 	}
 
 
 	function addUserIDsec($userid, $userid_sec) {
-
-
 		$query  = 'UPDATE "users" SET userid_sec = userid_sec + :useridsec  WHERE userid = :userid';
 		$query2 = 'INSERT INTO "userid_sec" (userid_sec, userid) VALUES (:useridsec, :userid)';
 
-		// $this->db->beginBatch();
-		$this->db->query($query, array(
+		$this->execute($query, [
 			'userid' => $userid,
-			'useridsec' => array($userid_sec)
-		));
-		$this->db->query($query2, array(
+			'useridsec' => [$userid_sec]
+		], __FUNCTION__);
+
+		$this->execute($query2, [
 			'useridsec' => $userid_sec,
 			'userid' => $userid,
-		));
-
-		// print_r(array(
-		// 	'useridsec' => $userid_sec,
-		// 	'userid' => $userid,
-		// ));
-		// $result = $this->db->applyBatch();
-
-		// echo "Done. Results are "; print_r($result); echo "\n\n";
-
+		], __FUNCTION__);
 	}
 
 	function removeUserIDsec($userid, $userid_sec) {
@@ -120,67 +208,48 @@ class Cassandra extends \FeideConnect\Data\Repository {
 		$query  = 'UPDATE "users" SET userid_sec = userid_sec - :useridsec  WHERE userid = :userid';
 		$query2 = 'DELETE FROM "userid_sec" WHERE (userid_sec = :useridsec)';
 
-		$this->db->beginBatch();
-		$this->db->query($query, array(
+		$this->execute($query, [
 			'userid' => $userid,
-			'useridsec' => array($userid_sec)
-		));
-		$this->db->query($query2, array(
+			'useridsec' => [$userid_sec]
+		], __FUNCTION__);
+
+		$this->execute($query2, [
 			'useridsec' => $userid_sec,
-			// 'userid' => $userid,
-		));
-		$result = $this->db->applyBatch();
+			'userid' => $userid,
+		], __FUNCTION__);
+
+		// TODO use Batch for trasaction
+
 	}
 
-	function deleteUser(\FeideConnect\Data\Models\User $user) {
+	function deleteUser(Models\User $user) {
 		$query1 = 'DELETE FROM "users" WHERE (userid = :userid)';
 		$query2 = 'DELETE FROM "userid_sec" WHERE (userid_sec IN :userid_secs) ';
 
-		// $this->db->beginBatch();
-		$this->db->query($query1, ['userid' => $user->userid]);
+		$this->execute($query1, ['userid' => $user->userid], __FUNCTION__);
 		if (!empty($user->userid_sec)) {
-			$this->db->query($query2, ['useridsec' => $user->userid_sec]);
+			$this->execute($query2, ['useridsec' => $user->userid_sec], __FUNCTION__);
 		}
-		// $result = $this->db->applyBatch();
 
 	}
 
 	function getUserByUserID($userid) {
-
 		//$query = 'SELECT userid, created, email, name, profilephoto, userid_sec, userid_sec_seen, selectedsource FROM "users" WHERE "userid" = :userid';
 		$query = 'SELECT * FROM "users" WHERE "userid" = :userid';
 		$params = ['userid' => $userid];
-
-		Logger::debug('Query cassandra getUserByUserID()', array(
-			'query' => $query,
-			'params' => $params
-		));
-
-		$data = $this->db->query($query, $params);
-		Logger::debug('Query ----');
-		if (empty($data)) return null;
-		return new \FeideConnect\Data\Models\User($this, $data[0]);
+		return $this->query($query, $params, __FUNCTION__, 'FeideConnect\Data\Models\User', false);
 	}
 
 
 
 
 	function getUserByUserIDsec($useridsec) {
-
 		$query = 'SELECT * FROM "userid_sec" WHERE "userid_sec" = :userid_sec';
 		$params = ['userid_sec' => $useridsec];
+		$result = $this->query($query, $params, __FUNCTION__, null, false);
+		if ($result === null) return null;
 
-		Logger::debug('Query cassandra getUserByUserIDsec()', array(
-			'query' => $query,
-			'params' => $params
-		));
-
-
-		$data = $this->db->query($query, $params);
-		Logger::debug('Query ----');
-
-		if (empty($data)) return null;
-		return $this->getUserByUserID($data[0]['userid']);
+		return $this->getUserByUserID($result['userid']);
 	}
 
 
@@ -197,58 +266,33 @@ class Cassandra extends \FeideConnect\Data\Repository {
 
 		$query = 'SELECT * FROM "userid_sec" WHERE "userid_sec" IN :userid_sec';
 		$params = ['userid_sec' => $useridsec];
-
-		Logger::debug('Query cassandra getUserByUserIDsecList()', array(
-			'query' => $query,
-			'params' => $params
-		));
-
-		$data = $this->db->query($query, $params);
-		Logger::debug('Query ----');
-
-
+		$data = $this->query($query, $params, __FUNCTION__, null, true);
 		if (empty($data)) return null;
 
+
+		// Helper function to get an array with a list of userids
 		$func = function ($a) {
 			// echo "picking user id " . var_export($a, true);
 			return $a['userid'];
 		};
 		$userids = array_unique(array_map($func, $data));
 
-		// header('content-type: text/plain');
-		// echo "query multiple" ; print_r($useridsec); 
-		// echo "\n\nresult is \n\n"; print_r($data);
-		// echo "\n\nresult is \n\n"; print_r($userids);
-		// exit;
+		// echo '<pre>About to lookup userids';
+		// print_r($userids);
 
-		$users = array();
-		foreach($userids AS $userid) {
-			$user = $this->getUserByUserID($userid);
-			if ($user !== null) {
-				$users[] = $user;
-			}
-		}
-		if (empty($users)) {
-			Logger::warning('Did get a match on secondary userids, but none of them resolved to real user objects', array(
-				'useridsec' => $useridsec,
-				'userids' => $userids
-			));
-			return null;
-		}
-		return $users;
+		// Retrieve the userids from the user table...
+		$query2 = 'SELECT * FROM "users" WHERE ("userid" IN :userids)';
+		$params2 = ['userids' => $userids];
+		$res = $this->query($query2, $params2, __FUNCTION__, 'FeideConnect\Data\Models\User', true);
+		// echo "FInal user list";
+		// print_r($res); exit;
+		return $res;
 	}
 
 	function getUsers($count = 100) {
-
-		$users = array();
-
-		$data = $this->db->query('SELECT * FROM "users" LIMIT :count', ['count' => $count]);
-		if (empty($data)) return null;
-
-		foreach($data AS $u) {
-			$users[] = new \FeideConnect\Data\Models\User($this, $u);
-		}
-		return $users;
+		$query = 'SELECT * FROM "users" LIMIT :count';
+		$params = ['count' => $count];
+		return $this->query($query, $params, __FUNCTION__, 'FeideConnect\Data\Models\User', true);
 	}
 
 
@@ -257,52 +301,110 @@ class Cassandra extends \FeideConnect\Data\Repository {
 	 * --- Database handling of the 'client' column family
 	 */
 	function getClient( $id) {
-		$data = $this->db->query('SELECT * FROM "clients" WHERE "id" = :id', 
-			['id' => $id]);
-		if (empty($data)) return null;
-		return new \FeideConnect\Data\Models\Client($this, $data[0]);
+		$query = 'SELECT * FROM "clients" WHERE "id" = :id';
+		$params = ['id' => $id];
+		return $this->query($query, $params, __FUNCTION__, 'FeideConnect\Data\Models\Client', false);
 	}
 
-	function saveClient(\FeideConnect\Data\Models\Client $client) {
-
-
+	function saveClient(Models\Client $client) {
 		$data = $client->getAsArray();
 		$query = self::generateInsert('clients', $data);
-
-		// echo $query; exit;
-
-		$this->db->beginBatch();
-		$this->db->query($query, $data);
-		$result = $this->db->applyBatch();
-
-		// print_r($result);
+		$this->execute($query, $data, __FUNCTION__);
 	}
 
 	function getClients($count = 100) {
+		$query = 'SELECT * FROM "clients" LIMIT :count';
+		$params = ['count' => $count];
+		return $this->query($query, $params, __FUNCTION__, 'FeideConnect\Data\Models\Client', true);
+	}
 
-		$clients = array();
+	function removeClient(Models\Client $client) {
+		$query = 'DELETE FROM "clients" WHERE "id" = :id';
+		$params = ['id' => $client->id];
+		$this->execute($query, $params, __FUNCTION__);
+	}
 
-		$data = $this->db->query('SELECT * FROM "clients" LIMIT :count', ['count' => $count]);
-		if (empty($data)) return null;
-
-		foreach($data AS $u) {
-			$clients[] = new \FeideConnect\Data\Models\Client($this, $u);
-		}
-		return $clients;
+	function getClientsByOwner(Models\User $owner) {
+		$query = 'SELECT * FROM "clients" WHERE "owner" = :owner';
+		$params = ['owner' => $owner->userid];
+		return $this->query($query, $params, __FUNCTION__, 'FeideConnect\Data\Models\Client', true);
 	}
 
 
 
-	function getClientsByOwner( $owner) {
-		$data = $this->db->query('SELECT * FROM "clients" WHERE "owner" = :owner', 
-			['owner' => $owner]);
-		if (empty($data)) return array();
-		$a = array();
-		foreach($data AS $item) {
-			$a[] = new \FeideConnect\Data\Models\Client($this, $item);
-		}
-		return $a;
+
+
+
+	/* 
+	 * --- Database handling of the 'accesstoken' column family
+	 */
+	function getAccessToken($accesstoken) {
+		$query = 'SELECT * FROM "oauth_tokens" WHERE "access_token" = :access_token';
+		$params = ['access_token' => $accesstoken];
+		return $this->query($query, $params, __FUNCTION__, 'FeideConnect\Data\Models\AccessToken', false);
 	}
+
+	function getAccessTokens($userid, $clientid) {
+
+		$query = 'SELECT * FROM "oauth_tokens" WHERE "userid" = :userid AND "clientid" = :clientid ALLOW FILTERING';
+		$params = ['userid' => $userid, 'clientid' => $clientid];
+		return $this->query($query, $params, __FUNCTION__, 'FeideConnect\Data\Models\AccessToken', true);
+	}
+
+
+	function saveToken(Models\AccessToken $token) {
+		$data = $token->getAsArray();
+		if (!isset($token->validuntil) || !(is_int($token->validuntil))  ) {
+			throw new StorageException('Could not store an authorization code without a properly set valid until timestamp.');
+		}
+		$query = self::generateInsert('oauth_tokens', $data, $this->getTTLskew($token->validuntil));
+		$this->execute($query, $data, __FUNCTION__);
+	}
+	
+
+
+	/* 
+	 * --- Database handling of the 'accesstoken' column family
+	 */
+	function getAuthorization($userid, $clientid) {
+		$query = 'SELECT * FROM "oauth_authorizations" WHERE "userid" = :userid AND "clientid" = :clientid';
+		$params = ['userid' => $userid, 'clientid' => $clientid];
+		return $this->query($query, $params, __FUNCTION__, 'FeideConnect\Data\Models\Authorization', false);
+	}
+
+	function saveAuthorization(Models\Authorization $authorization) {
+		$data = $authorization->getAsArray();
+		$query = self::generateInsert('oauth_authorizations', $data);
+		$this->execute($query, $data, __FUNCTION__);
+	}
+	
+
+	/* 
+	 * --- Database handling of the 'oauth_codes' column family
+	 */
+	function getAuthorizationCode($code) {
+		$query = 'SELECT * FROM "oauth_codes" WHERE "code" = :code';
+		$params = ['code' => $code];
+		return $this->query($query, $params, __FUNCTION__, 'FeideConnect\Data\Models\AuthorizationCode', false);
+	}
+
+	function saveAuthorizationCode(Models\AuthorizationCode $code) {
+		$data = $code->getAsArray();
+		if (!isset($code->validuntil) || !(is_int($code->validuntil))  ) {
+			throw new StorageException('Could not store an authorization code without a properly set valid until timestamp.');
+		}
+		$query = self::generateInsert('oauth_codes', $data, $this->getTTLskew($code->validuntil));
+		$this->execute($query, $data, __FUNCTION__);
+	}
+
+	function removeAuthorizationCode(Models\AuthorizationCode $code) {
+		$query = 'DELETE FROM "oauth_codes" WHERE "code" = :code';
+		$params = ['code' => $code->code];
+		$this->execute($query, $params, __FUNCTION__);
+	}
+
+
+
 
 
 }

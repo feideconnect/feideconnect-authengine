@@ -1,9 +1,5 @@
 /* cqlsh 127.0.0.1 -f etc/bootstrap.sql */
 
-CREATE KEYSPACE 
-	IF NOT EXISTS 
-	feideconnect
-	WITH REPLICATION = { 'class' : 'SimpleStrategy', 'replication_factor' : 1 };
 
 USE feideconnect;
 
@@ -17,6 +13,8 @@ DROP TABLE IF EXISTS userid_sec;
 DROP TABLE IF EXISTS groups;
 DROP TABLE IF EXISTS groupmember;
 
+DROP TABLE IF EXISTS oauth_codes;
+
 DROP TABLE IF EXISTS oauth_tokens;
 DROP INDEX IF EXISTS oauth_tokens_userid_idx;
 DROP INDEX IF EXISTS oauth_tokens_clientid_idx;
@@ -26,6 +24,8 @@ DROP TABLE IF EXISTS oauth_authorizations;
 /* DROP INDEX IF EXISTS oauth_authorizations_userid_idx; */
 DROP INDEX IF EXISTS oauth_authorizations_clientid_idx;
 
+DROP TABLE IF EXISTS apigk;
+DROP INDEX IF EXISTS apigk_owner_idx;
 
 /* Clients */
 CREATE TABLE clients (
@@ -43,6 +43,12 @@ CREATE TABLE clients (
 	updated timestamp
 );
 CREATE INDEX clients_owner_idx 				ON clients(owner);
+
+
+
+
+
+
 
 
 /* Users */
@@ -106,6 +112,29 @@ CREATE TABLE oauth_tokens (
 CREATE INDEX oauth_tokens_userid_idx ON oauth_tokens (userid);
 CREATE INDEX oauth_tokens_clientid_idx ON oauth_tokens (clientid);
 
+
+
+CREATE TABLE oauth_codes (
+	code uuid,
+
+	clientid uuid,
+	userid uuid,
+
+	scope set<text>,
+	token_type text,
+
+	redirect_uri text,
+
+	issued timestamp,
+	validuntil timestamp,
+
+	PRIMARY KEY(code)
+);
+
+
+
+
+
 CREATE TABLE oauth_authorizations (
 	userid uuid,
 	clientid uuid,
@@ -116,5 +145,29 @@ CREATE TABLE oauth_authorizations (
 
 /* CREATE INDEX oauth_authorizations_userid_idx ON oauth_authorizations (userid); */
 CREATE INDEX oauth_authorizations_clientid_idx ON oauth_authorizations (clientid); 
+
+
+
+CREATE TABLE apigk (
+	id text PRIMARY KEY,
+
+	name text,
+	descr text,
+
+	endpoints list<text>,
+
+	trust text, 		-- JSON Structure
+	expose text,		-- JSON Structure
+	scopedef text, 		-- JSON Structure
+	requireuser boolean,
+	httpscertpinned text, 	-- X509 Certificate
+
+	status set<text>,
+
+	owner uuid,
+	created timestamp,
+	updated timestamp
+);
+CREATE INDEX apigk_owner_idx ON apigk(owner);
 
 

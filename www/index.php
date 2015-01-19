@@ -8,26 +8,33 @@
  */
 
 namespace FeideConnect;
+
+
+use FeideConnect\Utils\Router;
+use FeideConnect\OAuth\Exceptions\OAuthException;
+use FeideConnect\OAuth\Exceptions\APIAuthorizationException;
+use FeideConnect\Exceptions\Exception;
+use FeideConnect\Exceptions\NotFoundException;
+
 require_once(dirname(dirname(__FILE__)) . '/lib/_autoload.php');
 
 header("Cache-Control: no-cache, must-revalidate"); // HTTP/1.1
-header("Expires: Sat, 26 Jul 1997 05:00:00 GMT"); // Date in the past
+header("Expires: Fri, 10 Oct 1980 04:00:00 GMT"); // Date in the past
 header("Access-Control-Allow-Origin: *"); // CORS
 
+
+// TODO : Verify the CORS header.
 header("Access-Control-Allow-Credentials: true");
 header("Access-Control-Allow-Methods: HEAD, GET, OPTIONS, POST");
 header("Access-Control-Allow-Headers: Authorization, X-Requested-With, Origin, Accept, Content-Type");
 header("Access-Control-Expose-Headers: Authorization, X-Requested-With, Origin, Accept, Content-Type");
 
 
-use FeideConnect\Utils\Router;
 
 
 try {
 
-	// $config = \FeideConnect\Config::getInstance();
-	// print_r($config->getValue('storage'));
-	// exit;
+
 
 	if (Router::route('options', '.*', $parameters)) {
 		header('Content-Type: application/json; charset=utf-8');
@@ -37,7 +44,6 @@ try {
 	$response = null;
 
 
-
 	/**
 	 *  The OAuth endpoints on core, typically the OAuth Server endpoints for communication with clients
 	 *  using the API.
@@ -45,20 +51,20 @@ try {
 	if (Router::route(false, '^/oauth', $parameters)) {
 
 
-		$oauth = new OAuth();
+		$oauth = new OAuth\Server();
 
 		if (Router::route('post','^/oauth/authorization$', $parameters)) {
-			$oauth->processAuthorizationResponse();
-			// $oauth->authorization();
+			// $oauth->processAuthorizationResponse();
+			$oauth->authorizationEndpoint();
 
 		} else if (Router::route('get', '^/oauth/authorization$', $parameters)) {
-			$oauth->authorization();
+			$oauth->authorizationEndpoint();
 
 		} else if (Router::route(false, '^/oauth/token$', $parameters)) {
 			$oauth->token();
 
 		} else {
-			throw new Exception('Invalid request');
+			throw new \Exception('Invalid request');
 		}
 
 
@@ -77,6 +83,9 @@ try {
 
 
 
+	} else if  (Router::route('get', '^/favicon.ico$', $parameters)) {
+
+		throw new NotFoundException();
 
 
 	} else if  (Router::route('get', '^/poc/([@a-z0-9\-]+)/([@a-z0-9\-]+)$', $parameters)) {
@@ -178,6 +187,7 @@ try {
 		if ($user !== null) {
 
 			echo "You are about to get a token associated with this user: \n\n";
+			// print_r($user);
 			print_r($user->getUserInfo());
 			echo "\n\n";
 
@@ -203,24 +213,6 @@ try {
 
 
 
-	} else if  (Router::route('get', '^/poc/client/([a-z0-9\-]+)/token$', $parameters)) {
-
-		header('Content-Type: text/plain; charset=utf-8');
-
-
-		$c = new \FeideConnect\Data\Repositories\Cassandra();
-
-		// $data = $c->getAccessToken();
-
-
-		$client = $c->getClient('a5b9491e-372d-49d9-943c-63d40dcb67f4');
-		if ($client !== null) {
-			$client->debug();
-		}
-
-
-
-
 
 	// OpenID Connect Discovery 1.0
 	// http://openid.net/specs/openid-connect-discovery-1_0.html
@@ -236,6 +228,30 @@ try {
 			'userinfo_endpoint' =>  $base . 'userinfo',
 		);
 		$response = $providerconfig;
+
+
+	/*
+	 *	Testing authentication using the auth libs
+	 *	Both API auth and 
+	 */
+	} else if  (Router::route('get', '^/userinfo$', $parameters)) {
+
+
+
+		$apiprotector = new OAuth\APIProtector();
+		$user = $apiprotector
+			->requireClient()->requireUser()->requireScopes(['userinfo'])
+			->getUser();
+		$client = $apiprotector->getClient();
+
+		$response = [
+			'user' => $user->getUserInfo(),
+			'audience' => $client->id,
+		];
+		
+
+
+
 
 	/*
 	 *	Testing authentication using the auth libs
@@ -293,33 +309,54 @@ try {
 // 	echo "Error stack trace: \n";
 // 	print_r($e);
 
+} catch(NotFoundException $e) {
 
-} catch(\Exception $e) {
-
-	// TODO: Catch OAuth token expiration etc.! return correct error code.
-
-
-	header("HTTP/1.0 500 Internal Server Error");
+	header("HTTP/1.0 404 Not Found");
 	header('Content-Type: text/html; charset: utf-8');
 
-
 	$data = array();
+	$data['code'] = '404';
+	$data['head'] = 'Not Found';
 	$data['message'] = $e->getMessage();
-	// if ($globalconfig->getValue('debug', false)) {
-	// 	$data['error'] = array(
-	// 		'trace' => $e->getTraceAsString(),
-	// 		'line' => $e->getLine(),
-	// 		'file' => $e->getFile()
-	// 	);
-	// }
 
-	
-	Logger::error($e->getMessage(), array(
-			'trace' => $e->getTraceAsString(),
-			'line' => $e->getLine(),
-			'file' => $e->getFile()
+	$templateDir = Config::dir('templates');
+	$mustache = new \Mustache_Engine(array(
+		// 'cache' => '/tmp/uwap-mustache',
+		'loader' => new \Mustache_Loader_FilesystemLoader($templateDir),
+		// 'partials_loader' => new Mustache_Loader_FilesystemLoader(dirname(__FILE__).'/views/partials'),
 	));
+	$tpl = $mustache->loadTemplate('exception');
 
+	echo $tpl->render($data);
+
+
+} catch(APIAuthorizationException $e) {
+
+
+	Logger::error('Error processing request: ' . $e->getMessage(), array(
+		// 'message' => $e->getMessage(),
+		'stacktrace' => $e->getTrace(),
+		'errordetails' => $data,
+	));
+	$e->showJSON();
+
+
+
+
+
+} catch(Exception $e) {
+
+
+
+
+
+	$data = $e->prepareErrorMessage();
+
+	Logger::error('Error processing request: ' . $e->getMessage(), array(
+		// 'message' => $e->getMessage(),
+		'stacktrace' => $e->getTrace(),
+		'errordetails' => $data,
+	));
 
 
 	$templateDir = Config::dir('templates');
@@ -329,11 +366,44 @@ try {
 		// 'partials_loader' => new Mustache_Loader_FilesystemLoader(dirname(__FILE__).'/views/partials'),
 	));
 	$tpl = $mustache->loadTemplate('exception');
+
 	echo $tpl->render($data);
 
 
-}
 
+
+} catch(\Exception $e) {
+
+	header("HTTP/1.0 500 Internal Error");
+	header('Content-Type: text/html; charset: utf-8');
+
+
+
+	Logger::error('Error processing request: ' . $e->getMessage(), array(
+		// 'message' => $e->getMessage(),
+		'stacktrace' => $e->getTrace(),
+		'e' => var_export($e, true)
+	));
+
+
+	$data = array();
+	$data['code'] = '500';
+	$data['head'] = 'Internal Error';
+	$data['message'] = $e->getMessage();
+
+	$templateDir = Config::dir('templates');
+	$mustache = new \Mustache_Engine(array(
+		// 'cache' => '/tmp/uwap-mustache',
+		'loader' => new \Mustache_Loader_FilesystemLoader($templateDir),
+		// 'partials_loader' => new Mustache_Loader_FilesystemLoader(dirname(__FILE__).'/views/partials'),
+	));
+	$tpl = $mustache->loadTemplate('exception');
+
+	echo $tpl->render($data);
+}
 profiler_status();
+
+
+
 
 

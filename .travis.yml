@@ -1,17 +1,28 @@
 language: php
 php:
   - 5.5
-# - 5.4
+#  - 5.4
 # - hhvm
 services:
   - cassandra
 install:
 # - composer self-update
-  - composer install
+  - composer install --dev
 before_script:
 # - sleep 3
+  - cqlsh 127.0.0.1 -f etc/bootstrap.init-keyspace-ci.sql
   - cqlsh 127.0.0.1 -f etc/bootstrap.sql
 script: 
-  - phpunit --bootstrap autoload.php tests
+  - phpunit --coverage-clover build/logs/clover.xml --bootstrap autoload.php tests
 notifications:
   slack: uninett:5CpnkrlaqOLKLXDttDzpTqqU
+addons:
+  code_climate:
+    repo_token: 2aad4fd8a7ffbcc2f41f88c69c93c6b0a8abed2c01f14f0f50dc81ef6184e8d8
+after_script:
+  - CODECLIMATE_REPO_TOKEN="2aad4fd8a7ffbcc2f41f88c69c93c6b0a8abed2c01f14f0f50dc81ef6184e8d8" vendor/bin/test-reporter --stdout > codeclimate.json
+  - "curl --verbose -X POST -d @codeclimate.json -H 'Content-Type: application/json' -H 'User-Agent: Code Climate (PHP Test Reporter v0.1.1)' https://codeclimate.com/test_reports"
+cache:
+  directories:
+    - node_modules
+    - vendor
