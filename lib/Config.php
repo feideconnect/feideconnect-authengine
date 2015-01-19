@@ -86,7 +86,7 @@ class Config {
 
 		$file = 'config.json';
 		if (getenv('CI')) {
-			$file = 'config.travis.json';
+			$file = 'ci/config.json';
 		}
 		$configFilename = self::dir('etc/', $file);
 		// echo "Looking for " . $configFilename;
