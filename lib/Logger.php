@@ -18,15 +18,10 @@ class Logger {
 
 	function __construct() {
 		$this->log = new \Monolog\Logger('feideconnect');
-<<<<<<< HEAD
-		$this->log->pushHandler(new StreamHandler('/var/log/feideconnect-authengine.log', \Monolog\Logger::DEBUG));
-=======
-
 		$filename = Config::getValue('logging.filename', '/var/log/feideconnect-authengine.log');
 		if (Config::getValue('logging.file', false) && file_exists($filename) && is_writable($filename)) {
 			$this->log->pushHandler(new StreamHandler($filename, \Monolog\Logger::DEBUG));
 		}
->>>>>>> 4cee3c95d8f8b08fc7ba57680ef2c2290d7c5937
 		$this->log->pushHandler(new ErrorLogHandler());
 		
 	}
