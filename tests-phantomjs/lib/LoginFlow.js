@@ -17,6 +17,12 @@ var config = {
 };
 
 
+if (system.env.ci) {
+
+	config.url = 'http://127.0.0.1/';
+
+}
+
 
 function buildUrl(url, parameters){
 	var qs = "";
