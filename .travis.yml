@@ -8,6 +8,7 @@ install:
 before_script:
 - cqlsh 127.0.0.1 -f etc/bootstrap.init-keyspace-ci.sql
 - cqlsh 127.0.0.1 -f etc/bootstrap.sql
+- cqlsh 127.0.0.1 -f etc/ci/testdata.sql
 - sudo apt-get update > /dev/null
 - sudo apt-get install apache2 libapache2-mod-fastcgi
 - sudo cp ~/.phpenv/versions/$(phpenv version-name)/etc/php-fpm.conf.default ~/.phpenv/versions/$(phpenv
