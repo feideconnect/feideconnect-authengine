@@ -9,7 +9,7 @@ install:
 # - composer self-update
   - composer install --dev
 before_script:
-# - sleep 3
+  # - sleep 3
   - cqlsh 127.0.0.1 -f etc/bootstrap.init-keyspace-ci.sql
   - cqlsh 127.0.0.1 -f etc/bootstrap.sql
   - sudo apt-get update > /dev/null
