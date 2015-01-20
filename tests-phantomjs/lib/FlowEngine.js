@@ -92,6 +92,9 @@ FlowEngine.prototype.addState = function(id, detect, run, nextStates)  {
 
 FlowEngine.prototype.go = function(url, nextStates) {
 
+
+	console.log("Started a flowengine by going to [" + url + "]. Next states is " + nextStates.join(', '));
+
 	this.nextCandidates = nextStates;
 	this.page.open(url);
 
