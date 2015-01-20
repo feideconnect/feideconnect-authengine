@@ -17,7 +17,7 @@ var config = {
 };
 
 
-if (system.env.ci) {
+if (system.env.CI) {
 
 	config.url = 'http://127.0.0.1/';
 
@@ -214,7 +214,8 @@ var LoginFlow = function(page) {
 
 
 	var ar = new CodeFlowAuthorizationRequest(config);
-	this.fe.go(ar.getURL(), ["select_org", "login"]);
+	var url = ar.getURL();
+	this.fe.go(url, ["select_org", "login"]);
 
 
 };
