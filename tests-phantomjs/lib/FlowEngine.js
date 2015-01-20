@@ -8,12 +8,15 @@ var _ =   function(func, wrapper) {
   };
 
 
-var FlowEngine = function(page) {
+var FlowEngine = function(page, completed, error) {
 
 	var that = this;
 	this.page = page;
 	this.states = {};
 	this.current = '_init_';
+
+	this.completed = completed;
+	this.error = error;
 
 	this.nextCandidates = [];
 
@@ -29,7 +32,6 @@ var FlowEngine = function(page) {
 		};
 	})(that);
 
-
 };
 
 FlowEngine.prototype.pageLoaded = function() {
@@ -39,14 +41,13 @@ FlowEngine.prototype.pageLoaded = function() {
 	console.log("-------------  ------------- ------------- -------------");
 
 	// if (this.nextCandidates === false) {
-
 	// 	console.log("Bypassing this step.");
-
 	// }
 
-
+	var ns;
 	console.log("Page loaded from [" +  this.current + "] [" + this.page.url.substr(0, 160) + "]");
-	console.log("About to process " + JSON.stringify(this.nextCandidates, undefined, 2));
+	// console.log("About to process " + JSON.stringify(this.nextCandidates, undefined, 2));
+
 	for(i = 0; i < this.nextCandidates.length; i++) {
 		test = this.states[this.nextCandidates[i]].detect(this.page);
 		if (!test) {
@@ -55,19 +56,27 @@ FlowEngine.prototype.pageLoaded = function() {
 			next = this.states[this.nextCandidates[i]];
 			this.current = this.nextCandidates[i];
 			
-
 			console.log(" [X] State did match [" + this.nextCandidates[i] + "]");
-			console.log("     Setting next candidates to " + next.nextStates.join(','));
+
+			ns = (next.nextStates ? next.nextStates.join(',') : 'null');
+			console.log("     Setting next candidates to " + ns);
 			console.log("     ------> Execute [" + this.nextCandidates[i] + "] <------");
 			console.log("");
 
 			this.nextCandidates = next.nextStates;
-			return next.run(this.page);
+			next.run(this.page);
+
+			if (next.nextStates === null) {
+				return this.completed();
+			}
+
+			return;
 		}
 	}
 	console.error("No states detected. Dumping output");
 	console.log("----- --- --- -- -- - - .");
 	console.log(this.page.content);
+	return this.error();
 
 };
 

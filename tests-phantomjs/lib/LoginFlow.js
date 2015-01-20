@@ -61,7 +61,15 @@ var LoginFlow = function(page) {
 
 	console.log("Initializing LoginFlow");
 
-	this.fe = new FlowEngine(page);
+	this.fe = new FlowEngine(page, function(data) {
+		console.log("Login completed successfully.");
+		console.log(data);
+		phantom.exit();
+
+	}, function() {
+		console.log("Error");
+		phantom.exit(1);
+	});
 
 	this.fe.addState('select_org', function(page) {
 		// Detect script for select_org
@@ -84,13 +92,11 @@ var LoginFlow = function(page) {
 	this.fe.addState('login', function(page) {
 		// Detect script for login
 		return page.evaluate(function() {
-			// return (document.getElementById('loginhelpframe') !==  null);
-			return document.title === 'Enter your username and password';
-
+			return (document.getElementById('username') !==  null);
 		});
 	}, function(page) {
 
-		console.log('Logging in using user: ' + config.username);
+		console.log('Logging in using user: ' + config.username + "  " + config.password);
 		page.evaluate(function(username, password) {
 			$('#username').val(username);
 			$('#password').val(password);
@@ -178,15 +184,16 @@ var LoginFlow = function(page) {
 
 	this.fe.addState('service', function(page) {
 		// Detect script for login
-		return page.evaluate(function() {
-			return (page.url.indexOf('127.0.0.1') !== -1);
-		});
+		return (page.url.indexOf('127.0.0.1') !== -1);
+		// return page.evaluate(function() {
+			
+		// });
 
 	}, function(page) {
 
 
 		console.log("Page done");
-		console.log(page.content);
+		console.log(page.url);
 
 		// page.includeJs("https://ajax.googleapis.com/ajax/libs/jquery/1.6.1/jquery.min.js", function() {
 		// 	page.evaluate(function() {
