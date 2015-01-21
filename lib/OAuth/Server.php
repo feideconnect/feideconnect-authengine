@@ -114,9 +114,10 @@ class Server {
 
 		$this->auth->req(false, true); // require($isPassive = false, $allowRedirect = false, $return = null
 		$account = $this->auth->getAccount();
+
 		
 		$usermapper = new UserMapper($this->storage);
-		$user = $usermapper->getUser($account, false, true, false);
+		$user = $usermapper->getUser($account, true, true, false);
 
 		Logger::info('OAuth authorization() User is now authenticationed. Next is authorization.', array(
 			'user' => $user->getAsArray()
@@ -264,6 +265,7 @@ class Server {
 
 		$u = $user->getUserInfo();
 		$u['userid'] = $user->userid;
+		$u['p'] = $user->getProfileAccess();
 
 		$data = [
 			'perms' => $si->getInfo(),
@@ -288,6 +290,7 @@ class Server {
 			$owner = $this->storage->getUserByUserID($client->owner);
 			if ($owner !== null) {
 				$oinfo = $owner->getUserInfo();
+				$oinfo['p'] = $owner->getProfileAccess();
 				$data['owner'] = $oinfo;
 			}
 			

@@ -7,7 +7,7 @@
 ## Preparations
 
 	# Runtime environemnt
-	apt-get install apache2 php5 php5-cli php5-mcrypt 
+	apt-get install apache2 php5 php5-cli php5-mcrypt php5-imagick
 
 	# building environment. Using node.js package manager npm.
 	apt-get install nodejs nodejs-legacy

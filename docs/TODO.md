@@ -3,9 +3,9 @@
 
 # TODO
 
-* [ ] Lage oppdatert doc for oauth.
-* [ ] phantomjs tests..
-* [ ] Legg til 'a' og profile photo i cassandra.
+* [x] Lage oppdatert doc for oauth.
+* [x] phantomjs tests..
+* [x] Legg til 'a' og profile photo i cassandra.
 * [ ] Bli kvitt Model sin referanse til db. Sjekk at Cassandra aldri instansieres utenfor StorageProvider.
 
 * OAuth
@@ -17,5 +17,7 @@
 * [ ] Koble SimpleSAMLphp til LaaS
 * [ ] Create issues in tracker for all todos in code.
 
+
+* [ ] Logo for clients and apigk
 
 

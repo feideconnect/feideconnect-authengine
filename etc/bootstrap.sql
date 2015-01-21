@@ -55,10 +55,12 @@ CREATE INDEX clients_owner_idx 				ON clients(owner);
 CREATE TABLE users (
 	userid uuid PRIMARY KEY,
 	created timestamp,
+	updated timestamp,
 
 	name map<text, text>,
 	email map<text, text>,
 	profilephoto map<text, blob>,
+	profilephotohash map<text, text>,
 
 	selectedsource text,
 
@@ -70,6 +72,8 @@ CREATE TABLE userid_sec (
 	userid uuid,
 	PRIMARY KEY(userid_sec)
 );
+
+
 
 
 /* Ad-hoc groups */

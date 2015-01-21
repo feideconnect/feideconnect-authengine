@@ -12,6 +12,9 @@ class Account {
 	// 
 	// Will depend on both idp and authsource or one of them.
 
+	public $realm, $name, $mail;
+	public $photo = null;
+
 	public $attributes;
 
 	function __construct($attributes) {
@@ -23,7 +26,12 @@ class Account {
 		];
 		$this->realm = "eduPersonPrincipalName";
 		$this->name = "displayName";
-		$this->mail = "mail";
+		$this->mail = "mail"; 
+
+		if (isset($this->attributes['jpegPhoto']) && is_array($this->attributes['jpegPhoto'])) {
+			$this->photo = new AccountPhoto($this->attributes['jpegPhoto'][0]);
+		}
+
 	}
 
 	function getUserIDs() {
@@ -46,6 +54,11 @@ class Account {
 			}
 		}
 		throw new Exception('Could not obtain the realm part of this authenticated account.');
+	}
+
+	function getPhoto() {
+		if ($this->photo === null) return null;
+		return $this->photo->getPhoto();
 	}
 
 	function getSourceID() {

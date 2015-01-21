@@ -53,8 +53,8 @@
 							<div class="panel-body" style="">
 								<div class="media">
 									<a class="pull-left" href="#">
-										<img style="width: 64px; height: 64px; border: 1px solid #aaa; border-radius: 3px" 
-											src="//api.{{HOST}}/media/user/{{user.a}}">
+										<img style="max-width: 64px; max-height: 64px; border: 1px solid #aaa; border-radius: 3px" 
+											src="/user/media/{{user.p}}">
 									</a>
 									<div class="media-body">
 										<h4 class="media-heading">
@@ -304,8 +304,9 @@
 							    
 									<div class="media">
 										<a class="pull-left" href="#">
-											<img style="width: 64px; height: 64px; border: 1px solid #aaa; border-radius: 3px" 
-												src="//api.{{HOST}}/media/user/{{owner.a}}">
+											<img style="max-width: 64px; max-height: 64px; border: 1px solid #aaa; border-radius: 3px" 
+												src="/user/media/{{user.p}}">
+											
 										</a>
 										<div class="media-body">
 											<h4 class="media-heading">
@@ -316,9 +317,9 @@
 											
 											<p style="margin: 0px">
 												<span class="glyphicon glyphicon-envelope"></span> 
-												{{owner.mail}}</p>
+
+												{{owner.email}}</p>
 											<p style="margin: 0px">
-												
 												<a href="mailto:{{owner.mail}}">Send e-mail</a></p>
 
 

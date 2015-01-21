@@ -38,8 +38,9 @@ if ($command[0] === 'termcolor') {
 
 
 $dbConfig = json_decode(file_get_contents(__DIR__ . '/../etc/config.json'), true);
-$c = new \FeideConnect\Data\Repositories\Cassandra($dbConfig);
+// $c = new \FeideConnect\Data\Repositories\Cassandra($dbConfig);
 
+$c = FeideConnect\Data\StorageProvider::getStorage();
 
 
 
@@ -86,9 +87,56 @@ if (!empty($command['client'])) {
 
 }
 
+ if ($command[0] === 'consistency') {
 
 
-if ($command[0] === 'generate') {
+ 	$users = $c->getUsers();
+ 	
+	$cql = '';
+
+	foreach($users AS $u) {
+
+
+		$userinfo = $u->getUserInfo();
+		echo "[" . $userinfo['name'] . "] is having these secondary keys " . json_encode($u->userid_sec) . "\n";
+
+		$keys = $u->userid_sec;
+		foreach($keys AS $key) {
+			$check = $c->getUserByUserIDsec($key);
+			if (isset($check) && $check->userid === $u->userid) {
+				echo " OK    " . $key . " \n";
+			} else {
+				echo " ERROR " . $key . " \n";
+				$cql .= " INSERT INTO userid_sec (userid, userid_sec) VALUES (" . $u->userid . ", '" . $key . "');\n";
+			}
+		}
+
+	}
+	echo " ------ \n" . $cql;
+
+
+} else if ($command[0] === 'setprofile') {
+
+	$userid = $command[1];
+	$file = $command[2];
+
+	echo "About to set a new profile photo for user [" . $userid . "] from file [" . $file . "]\n";
+
+	$user = $c->getUserByUserID($userid);
+	$userinfo = $user->getUserInfo();
+	$sourceID = $user->selectedsource;
+
+
+	$photo = file_get_contents($file);
+	$hash = sha1($photo);
+
+	$user->setUserInfo($sourceID, null, null, $photo, $hash );
+	$c->updateProfilePhoto($user, $sourceID);
+
+
+
+
+} else if ($command[0] === 'generate') {
 
 
 	$navn = json_decode(file_get_contents(__DIR__ . '/../etc/navn.json'), true);

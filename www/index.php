@@ -13,8 +13,11 @@ namespace FeideConnect;
 use FeideConnect\Utils\Router;
 use FeideConnect\OAuth\Exceptions\OAuthException;
 use FeideConnect\OAuth\Exceptions\APIAuthorizationException;
+use FeideConnect\Authentication\UserID;
 use FeideConnect\Exceptions\Exception;
 use FeideConnect\Exceptions\NotFoundException;
+use FeideConnect\Data\StorageProvider;
+
 
 require_once(dirname(dirname(__FILE__)) . '/lib/_autoload.php');
 
@@ -34,7 +37,7 @@ header("Access-Control-Expose-Headers: Authorization, X-Requested-With, Origin, 
 
 try {
 
-
+	$storage = StorageProvider::getStorage();
 
 	if (Router::route('options', '.*', $parameters)) {
 		header('Content-Type: application/json; charset=utf-8');
@@ -64,7 +67,7 @@ try {
 			$oauth->token();
 
 		} else {
-			throw new \Exception('Invalid request');
+			throw new Exception('Invalid request');
 		}
 
 
@@ -85,7 +88,7 @@ try {
 
 	} else if  (Router::route('get', '^/favicon.ico$', $parameters)) {
 
-		throw new NotFoundException();
+		throw new NotFoundException('Favicon not found');
 
 
 	} else if  (Router::route('get', '^/poc/([@a-z0-9\-]+)/([@a-z0-9\-]+)$', $parameters)) {
@@ -94,7 +97,7 @@ try {
 		$user = null;
 		$client = null;
 
-		$c = new Data\Repositories\Cassandra();
+		
 
 
 		if ($parameters[1] === '@me') {
@@ -103,10 +106,10 @@ try {
 			$auth->req(false, true); // require($isPassive = false, $allowRedirect = false, $return = null
 			$account = $auth->getAccount();
 			
-			$usermapper = new Authentication\UserMapper($c);
+			$usermapper = new Authentication\UserMapper($storage);
 			$user = $usermapper->getUser($account, false, true, false);
 			if ($user === null) {
-				throw new \Exception('User not found');
+				throw new Exception('User not found');
 			}
 
 		} else if ($parameters[1] === '@random') {
@@ -129,7 +132,7 @@ try {
 
 			$user = $c->getUserByUserID($parameters[1]);
 			if ($user === null) {
-				throw new \Exception('User not found');
+				throw new Exception('User not found');
 			}
 
 		}
@@ -250,6 +253,56 @@ try {
 		];
 		
 
+	/*
+	 *	Testing authentication using the auth libs
+	 *	Both API auth and 
+	 */
+	} else if  (Router::route('get', '^/user/media/([a-zA-Z0-9\-:]+)$', $parameters)) {
+
+		
+		// TODO Set cache headers
+		// echo "USer id is ";
+
+		header('Content-Type: image/jpeg');
+		$userid = new UserID($parameters[1]);
+
+		if ($userid->prefix !== 'p') {
+			throw new Exception('You may only lookup users by primary keys');
+		}
+
+		// $user = $storage->getUserByUserID($userid->local);
+		// $userinfo = $user->getUserInfo();
+
+		$user = $storage->getUserByUserIDsec($parameters[1]);
+		$userinfo = $user->getUserInfo();
+
+
+
+		// echo '<pre>';
+		// print_r($user); exit;
+		if (!empty($userinfo['profilephoto'])) {
+			echo $userinfo['profilephoto'];
+			// echo "foo";
+
+		} else {
+			$f = file_get_contents(dirname(__DIR__) . '/www/static/media/default-profile.jpg');
+			echo $f;
+		}
+		
+
+		exit;
+		// $apiprotector = new OAuth\APIProtector();
+		// $user = $apiprotector
+		// 	->requireClient()->requireUser()->requireScopes(['userinfo'])
+		// 	->getUser();
+		// $client = $apiprotector->getClient();
+
+		// $response = [
+		// 	'user' => $user->getUserInfo(),
+		// 	'audience' => $client->id,
+		// ];
+		
+
 
 
 
@@ -276,8 +329,8 @@ try {
 			]
 		];
 
-		$c = new Data\Repositories\Cassandra();
-		$usermapper = new Authentication\UserMapper($c);
+		
+		$usermapper = new Authentication\UserMapper($storage);
 
 		$user = $usermapper->getUser($account, false, true, false);
 		// header('Content-type: text/plain');

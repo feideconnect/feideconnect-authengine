@@ -3,6 +3,8 @@
 namespace FeideConnect\Data\Models;
 use FeideConnect\Logger;
 use FeideConnect\Config;
+use FeideConnect\Authentication\Account;
+use FeideConnect\Data\Model;
 
 /**
  * User 
@@ -11,8 +13,10 @@ class User extends \FeideConnect\Data\Model {
 
 
 	protected static $_properties = array(
-		"userid", "created", "email", "name", 
-		"profilephoto", "userid_sec", "userid_sec_seen", "selectedsource"
+		"userid", "email", "name", 
+		"profilephoto", "profilephotohash", 
+		"userid_sec", "userid_sec_seen", "selectedsource",
+		"created", "updated"
 	);
 
 
@@ -23,7 +27,7 @@ class User extends \FeideConnect\Data\Model {
 	 * @param [type] $email        [description]
 	 * @param [type] $profilephoto [description]
 	 */
-	public function setUserInfo($sourceID, $name = null, $email = null, $profilephoto = null) {
+	public function setUserInfo($sourceID, $name = null, $email = null, $profilephoto = null, $profilephotohash = null) {
 
 		if (empty($this->name)) $this->name = [];
 		if (empty($this->email)) $this->email = [];
@@ -32,16 +36,75 @@ class User extends \FeideConnect\Data\Model {
 		if (empty($sourceID)) throw new \Exception('Cannot set userinfo to a user without a sourceid.');
 
 		if (!empty($name)) {
+			if (empty($this->name)) $this->name = [];
 			$this->name[$sourceID] = $name;
 		}
 		if (!empty($email)) {
+			if (empty($this->email)) $this->email = [];
 			$this->email[$sourceID] = $email;
 		}
 		if (!empty($profilephoto)) {
+			if (empty($this->profilephoto)) $this->profilephoto = [];
 			$this->profilephoto[$sourceID] = $profilephoto;
+		}
+		if (!empty($profilephotohash)) {
+			if (empty($this->profilephotohash)) $this->profilephotohash = [];
+			$this->profilephotohash[$sourceID] = $profilephotohash;
 		}
 
 	}
+
+
+	public static function startsWith($haystack, $needle) {
+		$length = strlen($needle);
+		return (substr($haystack, 0, $length) === $needle);
+	}
+
+
+
+	public function getUserIDsecPrefixed($prefix) {
+		$res = [];
+		if (empty($this->userid_sec)) {
+			$this->userid_sec = [];
+			return $res;
+		}
+		foreach($this->userid_sec AS $k) {
+			if (self::startsWith($k, $prefix)) {
+				$res[] = $k;
+			}
+		}
+		return $res;
+	}
+
+	public function ensureProfileAccess($save = false) {
+
+
+		$res = $this->getUserIDsecPrefixed('p:');
+
+		if (count($res) < 1) {
+
+			$profilePhotoAccess =  'p:' . Model::genUUID();
+			$user->userid_sec[] = $profilePhotoAccess;
+
+			if ($save) {
+				$this->_repo->addUserIDsec($this->userid, $profilePhotoAccess);
+			}
+
+			return true;
+
+		}
+		return false;
+	}
+
+	public function getProfileAccess() {
+		$res = $this->getUserIDsecPrefixed('p:');
+		if (count($res) > 0) {
+			return $res[0];
+		}
+		return null;
+	}
+
+
 
 	public function getSourcedProperty($name, $sourceID) {
 		if (isset($this->{$name}) && is_array($this->name)) {
@@ -63,6 +126,27 @@ class User extends \FeideConnect\Data\Model {
 		return sha1($rawstr);
 	}
 
+
+	public function debug() {
+
+		echo "Debug object " . get_class($this) . "\n";
+		// print_r($this->getAsArray());
+
+		$a = $this->getAsArray();
+
+		if (!empty($this->profilephoto)) {
+			$f = $this->profilephoto;
+			// unset($this->profilephoto);
+			$a['profilephoto'] = [];
+			foreach($f AS $k => $p) {
+				$a['profilephoto'][$k] = base64_encode($p);
+			}
+		}
+
+		
+		echo json_encode($a, JSON_PRETTY_PRINT) . "\n";
+
+	}
 
 
 	/**
@@ -88,7 +172,83 @@ class User extends \FeideConnect\Data\Model {
 		$res['name'] = $this->getSourcedProperty('name', $src);
 		$res['email'] = $this->getSourcedProperty('email', $src);
 		$res['profilephoto'] = $this->getSourcedProperty('profilephoto', $src);
+		$res['profilephotohash'] = $this->getSourcedProperty('profilephotohash', $src);
 		return $res;
+
+	}
+
+	public function updateFromAccount(Account $a) {
+
+		$sourceID = $a->getSourceID();
+		$existing = $this->getUserInfo($sourceID);
+
+
+		/*
+		 * ----- SECTION Check if userinfo name and email needs to be updated
+		 * 
+		 */
+
+		$modified = false;
+		if ($a->getName() !== $existing['name']) $modified = true;
+		if ($a->getMail() !== $existing['email']) $modified = true;
+
+		if ($modified) {
+
+			Logger::info('Updating userinfo', [
+				'userid' => $this->userid,
+				'sourceID' => $sourceID,
+				'name' => [
+					'from' => $existing['name'],
+					'to' => $a->getName()
+				],
+				'email' => [
+					'from' => $existing['email'],
+					'to' => $a->getMail(),
+				],
+			]);
+
+			$this->setUserInfo($sourceID, $a->getName(), $a->getMail() );
+			$this->_repo->updateUserInfo($this, $sourceID, ["name", "email"]);
+
+		}
+
+
+
+
+		/*
+		 * ----- SECTION Check if profile photo needs to be updated
+		 * 
+		 */
+
+		$modified = false;
+		if ($a->photo !== null) {
+
+			if ($existing['profilephotohash'] === null) {
+				$modified = true;
+			} else {
+				if ($a->photo->getHash() !== $existing['profilephotohash']) {
+					$modified = true;
+				}
+			}
+		}	
+
+
+		if ($modified) {
+			$this->setUserInfo($sourceID, null, null, $a->photo->getPhoto(), $a->photo->getHash() );
+
+			Logger::info('Updating profile photo for user', [
+				'userid' => $this->userid,
+				'sourceID' => $sourceID,
+				'profilephotohash' => [
+					'from' => $existing['profilephotohash'],
+					'to' => $a->photo->getHash()
+				]
+			]);
+
+			$this->_repo->updateProfilePhoto($this, $sourceID);
+
+		}
+
 
 	}
 

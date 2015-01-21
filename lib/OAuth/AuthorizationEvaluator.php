@@ -15,13 +15,9 @@ use FeideConnect\Data\Models\Authorization;
 class AuthorizationEvaluator {
 	
 	protected $storage, $client, $request, $user;
-
 	protected $authorization = null;
-
 	protected $scopesInQuestion = null;
 	protected $scopesRemaining = null;
-
-
 
 	function __construct($storage, $client, $request, $user = null) {
 		$this->storage = $storage;
@@ -34,9 +30,7 @@ class AuthorizationEvaluator {
 			$this->authorization = $this->storage->getAuthorization($this->user->userid, $this->client->id);	
 		}
 
-
 		$this->evaluateScopes();
-
 	}
 
 	public function getUpdatedAuthorization() {
