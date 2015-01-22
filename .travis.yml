@@ -12,8 +12,9 @@ before_script:
 - cqlsh 127.0.0.1 -f etc/ci/testdata.sql
 - sudo apt-get update > /dev/null
 - sudo apt-get install apache2 libapache2-mod-fastcgi
-- sudo ln -s etc/ci/simplesamlphp-metadata vendor/andreassolberg/simplesamlphp/metadata
-- sudo ln -s etc/ci/simplesamlphp-config vendor/andreassolberg/simplesamlphp/config
+- sudo ln -s ../../../etc/ci/simplesamlphp-metadata vendor/andreassolberg/simplesamlphp/metadata
+- sudo ln -s ../../../etc/ci/simplesamlphp-config vendor/andreassolberg/simplesamlphp/config
+- ls -la vendor/andreassolberg/simplesamlphp/config
 - sudo cp ~/.phpenv/versions/$(phpenv version-name)/etc/php-fpm.conf.default ~/.phpenv/versions/$(phpenv version-name)/etc/php-fpm.conf
 # Not permissions to do that....
 # - sudo cat etc/ci/php-fpm.conf >> ~/.phpenv/versions/$(phpenv version-name)/etc/php-fpm.conf
