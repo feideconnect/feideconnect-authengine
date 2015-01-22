@@ -84,6 +84,11 @@ try {
 		);
 		$response = $providerconfig;
 
+	} else if  (Router::route('get', '^/phpinfo$', $parameters)) {
+
+		phpinfo();
+		exit;
+
 
 
 	} else if  (Router::route('get', '^/favicon.ico$', $parameters)) {

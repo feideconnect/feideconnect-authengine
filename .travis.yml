@@ -12,7 +12,8 @@ before_script:
 - sudo apt-get update > /dev/null
 - sudo apt-get install apache2 libapache2-mod-fastcgi
 - sudo cp ~/.phpenv/versions/$(phpenv version-name)/etc/php-fpm.conf.default ~/.phpenv/versions/$(phpenv version-name)/etc/php-fpm.conf
-- sudo cat etc/ci/php-fpm.conf >> ~/.phpenv/versions/$(phpenv version-name)/etc/php-fpm.conf
+# Not permissions to do that....
+# - sudo cat etc/ci/php-fpm.conf >> ~/.phpenv/versions/$(phpenv version-name)/etc/php-fpm.conf
 - sudo a2enmod rewrite actions fastcgi alias env
 - echo "cgi.fix_pathinfo = 1" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
 - ~/.phpenv/versions/$(phpenv version-name)/sbin/php-fpm
@@ -23,6 +24,7 @@ before_script:
 script:
 - phpunit --coverage-clover build/logs/clover.xml --bootstrap autoload.php tests
 - phantomjs tests-phantomjs/main.js
+- curl http://127.0.0.1/phpinfo
 - cat logs/error.log
 - cat logs/access.log
 notifications:
