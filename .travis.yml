@@ -11,7 +11,8 @@ before_script:
 - cqlsh 127.0.0.1 -f etc/bootstrap.sql
 - cqlsh 127.0.0.1 -f etc/ci/testdata.sql
 - sudo apt-get update > /dev/null
-- sudo apt-get install apache2 libapache2-mod-fastcgi php5-mcrypt php5-imagick
+- sudo apt-get install apache2 libapache2-mod-fastcgi 
+# Should also install php5-mcrypt php5-imagick...
 - sudo ln -s ../../../etc/ci/simplesamlphp-metadata vendor/andreassolberg/simplesamlphp/metadata
 - sudo ln -s ../../../etc/ci/simplesamlphp-config vendor/andreassolberg/simplesamlphp/config
 - sudo cp ~/.phpenv/versions/$(phpenv version-name)/etc/php-fpm.conf.default ~/.phpenv/versions/$(phpenv version-name)/etc/php-fpm.conf
