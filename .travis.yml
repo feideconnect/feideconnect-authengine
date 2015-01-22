@@ -6,7 +6,7 @@ services:
 before_install:
 - sudo apt-get update -q
 - sudo apt-get install apache2 libapache2-mod-fastcgi 
-- pecl install imagick
+- printf "\n" | pecl install imagick
 # Should also install php5-mcrypt php5-imagick
 - composer self-update
 install:
