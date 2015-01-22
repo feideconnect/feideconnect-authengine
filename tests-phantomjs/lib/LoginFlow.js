@@ -102,7 +102,7 @@ var LoginFlow = function(page) {
 		});
 	}, function(page) {
 
-		console.log('Logging in using user: ' + config.username + "  " + config.password);
+		console.log('Logging in using user [' + config.username + "] as password [" + (config.password ? 'is set' : 'is not set') + "]");
 		page.evaluate(function(username, password) {
 			$('#username').val(username);
 			$('#password').val(password);
@@ -143,7 +143,7 @@ var LoginFlow = function(page) {
 			document.getElementById('yesbutton').click();
 		}, config.username, config.password);
 
-	}, ["postpage", "grant"]);
+	}, ["postpage"]);
 
 
 
@@ -165,7 +165,7 @@ var LoginFlow = function(page) {
 		console.log('Got post data page.');
 		// console.log(page.content);
 
-	}, ["service"]);
+	}, ["service", "grant"]);
 
 
 	this.fe.addState('grant', function(page) {
@@ -190,7 +190,7 @@ var LoginFlow = function(page) {
 
 	this.fe.addState('service', function(page) {
 		// Detect script for login
-		return (page.url.indexOf('127.0.0.1') !== -1);
+		return (page.url.startsWith('http://127.0.0.1/ci/callback'));
 		// return page.evaluate(function() {
 			
 		// });
@@ -220,6 +220,17 @@ var LoginFlow = function(page) {
 
 };
 
+if (!String.prototype.startsWith) {
+  Object.defineProperty(String.prototype, 'startsWith', {
+    enumerable: false,
+    configurable: false,
+    writable: false,
+    value: function(searchString, position) {
+      position = position || 0;
+      return this.lastIndexOf(searchString, position) === position;
+    }
+  });
+}
 
 exports.LoginFlow = LoginFlow;
 
