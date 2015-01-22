@@ -19,7 +19,7 @@ class StorageProvider {
 			self::$storage = new Cassandra();
 
 		} else {
-			throw new \Exception('Trying to initialize unsupported storage type in StorageProvider.');
+			throw new \Exception('Trying to initialize unsupported storage type [' . $storageType . '] in StorageProvider.');
 		}
 
 	}
