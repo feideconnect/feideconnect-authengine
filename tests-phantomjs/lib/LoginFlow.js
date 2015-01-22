@@ -184,7 +184,7 @@ var LoginFlow = function(page) {
 		});
 		
 
-	}, ["login"]);
+	}, ["service"]);
 
 
 
