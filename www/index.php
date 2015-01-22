@@ -27,7 +27,7 @@ header("Access-Control-Allow-Origin: *"); // CORS
 
 
 // TODO : Verify the CORS header.
-header("Access-Control-Allow-Credentials: true");
+// header("Access-Control-Allow-Credentials: true");
 header("Access-Control-Allow-Methods: HEAD, GET, OPTIONS, POST");
 header("Access-Control-Allow-Headers: Authorization, X-Requested-With, Origin, Accept, Content-Type");
 header("Access-Control-Expose-Headers: Authorization, X-Requested-With, Origin, Accept, Content-Type");
