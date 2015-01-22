@@ -4,8 +4,7 @@ php:
 services:
 - cassandra
 before_install:
-- apt-get update -q
-- sudo apt-get update > /dev/null
+- sudo apt-get update -q
 - sudo apt-get install apache2 libapache2-mod-fastcgi php5-mcrypt php5-imagick
 # Should also install ...
 - composer self-update
