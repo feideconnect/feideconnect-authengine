@@ -25,7 +25,8 @@ before_script:
 script:
 - phpunit --coverage-clover build/logs/clover.xml --bootstrap autoload.php tests
 - phantomjs tests-phantomjs/main.js
-- curl http://127.0.0.1/phpinfo
+# Run PHPinfo
+# - curl http://127.0.0.1/phpinfo
 - cat logs/error.log
 - cat logs/access.log
 notifications:
