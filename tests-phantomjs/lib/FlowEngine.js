@@ -20,6 +20,9 @@ var FlowEngine = function(page, completed, error) {
 
 	this.nextCandidates = [];
 
+	page.onUrlChanged = function(url) {
+		console.log('URL change [' + url + ']');
+	}
 	page.onConsoleMessage = function(msg) {
 		console.log('[' + that.current + '] ›' + msg);
 	};
@@ -67,6 +70,7 @@ FlowEngine.prototype.pageLoaded = function() {
 			next.run(this.page);
 
 			if (next.nextStates === null) {
+				console.log(this.page);
 				return this.completed();
 			}
 
