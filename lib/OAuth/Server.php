@@ -270,7 +270,8 @@ class Server {
 		$data = [
 			'perms' => $si->getInfo(),
 			'user' => $u,
-			'posturl' => Utils\URL::selfURLNoQuery(),
+			'posturl_' => Utils\URL::selfURLNoQuery(), // Did not work with php-fpm, needs to check out.
+			'posturl' => Utils\URL::selfURLhost() . '/oauth/authorization',
 			'postdata' => $postdata,
 			'client' => $client->getAsArray(),
 			'HOST' => Utils\URL::selfURLhost(),
