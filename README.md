@@ -42,6 +42,14 @@ Bower
 	node_modules/bower/bin/bower install --allow-root
 
 
+Initalize Cassandra schema
+
+	cqlsh $HOST -f etc/bootstrap.init-keyspace.sql
+	cqlsh $HOST -f etc/bootstrap.sql
+	cqlsh $HOST -f etc/bootstrap.2_1.sql
+
+
+
 ## CLI
 
 	bin/feideconnect.php --help
