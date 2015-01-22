@@ -251,8 +251,15 @@ try {
 			->getUser();
 		$client = $apiprotector->getClient();
 
+
+		$allowseckeys = ['userid'];
+		$allowseckeys[] = 'p';
+		$allowseckeys[] = 'feide';
+
+		$includeEmail = true;
+
 		$response = [
-			'user' => $user->getUserInfo(),
+			'user' => $user->getBasicUserInfo($includeEmail, $allowseckeys),
 			'audience' => $client->id,
 		];
 		

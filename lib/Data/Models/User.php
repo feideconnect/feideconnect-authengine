@@ -177,6 +177,41 @@ class User extends \FeideConnect\Data\Model {
 
 	}
 
+
+	public function getBasicUserInfo($includeEmail = false, $allowseckeys = ['userid']) {
+
+		$ui = $this->getUserInfo();
+		$userinfo = [
+			'userid' => $this->userid,
+			'userid_sec' => [],
+			'name' => $ui['name'],
+		];
+		if ($includeEmail) {
+			$userinfo['email'] = $ui['email'];
+		}
+
+		if (!empty($allowseckeys)) {
+			foreach($allowseckeys AS $key) {
+				$nc = $this->getUserIDsecPrefixed($key);
+
+				if ($key === 'p' && count($nc) > 0) {
+					$userinfo['profilephoto'] = $nc[0];
+					continue;
+				}
+
+				foreach($nc AS $nk) {
+					$userinfo['userid_sec'][] = $nk;
+				}
+			}
+		}
+
+		return $userinfo;
+
+
+	}
+
+
+
 	public function updateFromAccount(Account $a) {
 
 		$sourceID = $a->getSourceID();
