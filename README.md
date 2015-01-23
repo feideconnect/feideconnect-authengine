@@ -7,7 +7,7 @@
 ## Preparations
 
 	# Runtime environemnt
-	apt-get install apache2 php5 php5-cli php5-mcrypt 
+	apt-get install apache2 php5 php5-cli php5-mcrypt php5-imagick
 
 	# building environment. Using node.js package manager npm.
 	apt-get install nodejs nodejs-legacy
@@ -40,6 +40,14 @@ installs: bower and grunt
 Bower
 
 	node_modules/bower/bin/bower install --allow-root
+
+
+Initalize Cassandra schema
+
+	cqlsh $HOST -f etc/bootstrap.init-keyspace.sql
+	cqlsh $HOST -f etc/bootstrap.sql
+	cqlsh $HOST -f etc/bootstrap.2_1.sql
+
 
 
 ## CLI

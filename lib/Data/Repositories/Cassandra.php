@@ -187,6 +187,81 @@ class Cassandra extends \FeideConnect\Data\Repository {
 		}
 	}
 
+	function updateUserInfo(Models\User $user, $sourceID, $props = []) {
+
+
+		$assignments = [];
+		$assignments[] = 'updated = :updated';
+
+		$userinfo = $user->getUserInfo($sourceID);
+		$params = [
+			'updated' => time(),
+			'userid' => $user->userid,
+			'name' => $userinfo['name'],
+			'email' => $userinfo['email'],
+		];
+
+
+		foreach($props AS $key) {
+
+			if ($userinfo[$key] !== null) {
+				$assignments[] = $key . '[\'' . $sourceID .'\'] = :' . $key; 
+			}
+
+		}
+
+		$query = 'UPDATE "users" SET ' . join(', ', $assignments) . " WHERE userid = :userid";
+		// echo "QUERY IS " . $query; 
+		// print_r($params);
+
+		// exit;
+
+
+		$this->execute($query, $params, __FUNCTION__);
+		// exit;
+	}
+
+	function updateProfilePhoto(Models\User $user, $sourceID) {
+
+
+
+
+		$userinfo = $user->getUserInfo($sourceID);
+
+		if (empty($userinfo['profilephoto'])) throw new Exception('Missing profilephoto');
+		if (empty($userinfo['profilephotohash'])) throw new Exception('Missing profilephotohash');
+
+		$query = 'UPDATE "users" SET updated = :updated, ' . 
+			'profilephoto[\'' . $sourceID  . '\'] = :profilephoto, ' . 
+			'profilephotohash[\'' . $sourceID  . '\'] = :profilephotohash ' . 
+			'WHERE userid = :userid';
+		$params = [
+			'updated' => time(),
+			'userid' => $user->userid,
+			'profilephoto' => $userinfo['profilephoto'],
+			'profilephotohash' => $userinfo['profilephotohash'],
+		];
+		$this->execute($query, $params, __FUNCTION__);
+
+	}
+
+
+
+	function updateClientLogo(Models\Client $client, $logo) {
+
+		$query = 'UPDATE "clients" SET logo = :logo, updated = :updated ' . 
+			'WHERE id = :id';
+
+		$params = [
+			'id' => $client->id,
+			'logo' => $logo,
+			'updated' => time(),
+		];
+		$this->execute($query, $params, __FUNCTION__);
+
+	}
+
+
 
 	function addUserIDsec($userid, $userid_sec) {
 		$query  = 'UPDATE "users" SET userid_sec = userid_sec + :useridsec  WHERE userid = :userid';
@@ -281,11 +356,11 @@ class Cassandra extends \FeideConnect\Data\Repository {
 		// print_r($userids);
 
 		// Retrieve the userids from the user table...
-		$query2 = 'SELECT * FROM "users" WHERE ("userid" IN :userids)';
+		$query2 = 'SELECT userid,created,email,name,profilephoto,profilephotohash,userid_sec,userid_sec_seen,selectedsource FROM "users" WHERE ("userid" IN :userids)';
 		$params2 = ['userids' => $userids];
 		$res = $this->query($query2, $params2, __FUNCTION__, 'FeideConnect\Data\Models\User', true);
-		// echo "FInal user list";
-		// print_r($res); exit;
+		
+		if (empty($res)) return null;
 		return $res;
 	}
 
@@ -364,12 +439,18 @@ class Cassandra extends \FeideConnect\Data\Repository {
 
 
 	/* 
-	 * --- Database handling of the 'accesstoken' column family
+	 * --- Database handling of the 'oauth_authorizations' column family
 	 */
 	function getAuthorization($userid, $clientid) {
 		$query = 'SELECT * FROM "oauth_authorizations" WHERE "userid" = :userid AND "clientid" = :clientid';
 		$params = ['userid' => $userid, 'clientid' => $clientid];
 		return $this->query($query, $params, __FUNCTION__, 'FeideConnect\Data\Models\Authorization', false);
+	}
+
+	function getAuthorizationsByUser(Models\User $user) {
+		$query = 'SELECT * FROM "oauth_authorizations" WHERE "userid" = :userid';
+		$params = ['userid' => $user->userid];
+		return $this->query($query, $params, __FUNCTION__, 'FeideConnect\Data\Models\Authorization', true);
 	}
 
 	function saveAuthorization(Models\Authorization $authorization) {

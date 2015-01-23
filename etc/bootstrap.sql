@@ -31,15 +31,19 @@ DROP INDEX IF EXISTS apigk_owner_idx;
 CREATE TABLE clients (
 	id uuid PRIMARY KEY,
 	client_secret text,
-	created timestamp,
-	descr text,
+
 	name text,
-	owner uuid,
+	descr text,
+	logo blob,
+	type text,
+
 	redirect_uri list<text>,
 	scopes set<text>,
 	scopes_requested set<text>,
 	status set<text>,
-	type text,
+
+	owner uuid,
+	created timestamp,
 	updated timestamp
 );
 CREATE INDEX clients_owner_idx 				ON clients(owner);
@@ -55,10 +59,12 @@ CREATE INDEX clients_owner_idx 				ON clients(owner);
 CREATE TABLE users (
 	userid uuid PRIMARY KEY,
 	created timestamp,
+	updated timestamp,
 
 	name map<text, text>,
 	email map<text, text>,
 	profilephoto map<text, blob>,
+	profilephotohash map<text, text>,
 
 	selectedsource text,
 
@@ -70,6 +76,8 @@ CREATE TABLE userid_sec (
 	userid uuid,
 	PRIMARY KEY(userid_sec)
 );
+
+
 
 
 /* Ad-hoc groups */
@@ -153,6 +161,7 @@ CREATE TABLE apigk (
 
 	name text,
 	descr text,
+	logo blob,
 
 	endpoints list<text>,
 

@@ -53,8 +53,8 @@
 							<div class="panel-body" style="">
 								<div class="media">
 									<a class="pull-left" href="#">
-										<img style="width: 64px; height: 64px; border: 1px solid #aaa; border-radius: 3px" 
-											src="//api.{{HOST}}/media/user/{{user.a}}">
+										<img style="max-width: 64px; max-height: 64px; border: 1px solid #aaa; border-radius: 3px" 
+											src="/user/media/{{user.p}}">
 									</a>
 									<div class="media-body">
 										<h4 class="media-heading">
@@ -219,7 +219,7 @@
 							
 							<!-- <input tabindex="1" type="submit" id="submit" class="btn btn-lg btn-success" value="Allow"> -->
 							
-							<button type="submit" id="submit" tabindex="1" class="btn btn-lg btn-success">
+							<button type="submit" id="submit" tabindex="1" class="btn btn-success">
 								<span class="glyphicon glyphicon-ok"></span>
 								Allow
 							</button>
@@ -231,7 +231,7 @@
 							</a> 
 						-->
 
-							<a tabindex="2" class="btn btn-danger" href="http://feideconnect.no/reject">
+							<a tabindex="2" class="btn btn-inverse" href="http://feideconnect.no/reject">
 								<span class="glyphicon glyphicon-remove"></span>
 								Reject
 							</a>
@@ -268,9 +268,9 @@
 					<div class="well">
 
 						<div class="media" style="margin: 2em; 0px">
-							<a class="pull-left" href="#">
-								<img class="media-object" src="//api.{{HOST}}/media/logo/app/{{client.id}}" alt="...">
-							</a>
+							<div class="media-left">
+								<img class="media-object" style="max-height: 64px; max-width: 64px; border: 0px solid #ccc; border-radius: 0px " src="/client/media/{{client.id}}" alt="...">
+							</div>
 							<div class="media-body">
 
 								<h2 class="media-heading">{{client.name}}</h2>
@@ -287,8 +287,6 @@
 
 								<p><a target="_blank" href="#">Read more about this application</a></p>
 
-
-
 							</div><!-- media body -->
 						</div><!-- media -->
 
@@ -304,8 +302,9 @@
 							    
 									<div class="media">
 										<a class="pull-left" href="#">
-											<img style="width: 64px; height: 64px; border: 1px solid #aaa; border-radius: 3px" 
-												src="//api.{{HOST}}/media/user/{{owner.a}}">
+											<img style="max-width: 64px; max-height: 64px; border: 1px solid #aaa; border-radius: 3px" 
+												src="/user/media/{{user.p}}">
+											
 										</a>
 										<div class="media-body">
 											<h4 class="media-heading">
@@ -316,9 +315,9 @@
 											
 											<p style="margin: 0px">
 												<span class="glyphicon glyphicon-envelope"></span> 
-												{{owner.mail}}</p>
+
+												{{owner.email}}</p>
 											<p style="margin: 0px">
-												
 												<a href="mailto:{{owner.mail}}">Send e-mail</a></p>
 
 

@@ -4,6 +4,8 @@ namespace FeideConnect\Authentication;
 
 use FeideConnect\Logger;
 use FeideConnect\Data\Models;
+use FeideConnect\Data\Models\User;
+use FeideConnect\Data\Model;
 
 /**
  * This class handles
@@ -13,7 +15,7 @@ use FeideConnect\Data\Models;
  *	* Update user objects
  *	* Create user objects
  *
- * Activity is initiated by user authentication of one account.
+ * Activity is initiated by user authentication of one account.	
  * 
  */
 
@@ -29,14 +31,24 @@ class UserMapper {
 
 	protected function createUser(Account $account) {
 
-		$uuid = \FeideConnect\Data\Model::genUUID();
+		$uuid = Model::genUUID();
 		$user = new Models\User($this->repo);
 		$user->userid = $uuid;
+
 
 		$user->created = time();
 
 		$user->userid_sec = $account->getUserIDs();
-		$user->setUserInfo($account->getSourceID(), $account->getName(), $account->getMail());
+
+
+		$changed = $user->ensureProfileAccess(false);
+
+		if (isset($account->photo)) {
+			$user->setUserInfo($account->getSourceID(), $account->getName(), $account->getMail(), $account->getPhoto(), $account->photo->getHash());
+		} else {
+			$user->setUserInfo($account->getSourceID(), $account->getName(), $account->getMail());
+		}
+
 		$user->selectedsource = $account->getSourceID();
 
 		$user->userid_sec_seen = array();
@@ -45,6 +57,11 @@ class UserMapper {
 		}
 
 		$this->repo->saveUser($user);
+
+
+		// echo "about to create a new user";
+		// $user->debug();
+		// exit;
 
 		// TODO add source id. userid-sec-seen and more.
 
@@ -56,12 +73,31 @@ class UserMapper {
 
 	}
 
-	protected function updateUser(Account $account) {
+
+
+
+
+	protected function updateUser(Account $account, User $user) {
+
+
+		$user->updateFromAccount($account);
+
+
+		$user->ensureProfileAccess(true);
+		
+		// echo "Newq account info";
+		// print_r($account);
+
+		// echo "about to update an existing user";
+		// $user->debug();
+		// exit;
+
+
 
 	}
 
 	protected function mergeUsers(array $users) {
-
+		throw new \Exception('User merge not implemented (yet)');
 
 	}
 
@@ -79,6 +115,34 @@ class UserMapper {
 		$userIDs = $account->getUserIDs();
 		$existingUser = $this->repo->getUserByUserIDsecList($userIDs);
 
+		// header('Content-Type: text/plain; charset=utf-8');
+		// echo "About to get user with this account\n ";
+
+
+		// print_r($existingUser);
+		// exit;
+		
+		// if ($update) {echo "UPDATE "; } else { echo "update "; }
+		// if ($create) {echo "CREATE "; } else { echo "create "; }
+		// if ($merge) {echo "MERGE "; } else { echo "merge "; }
+		// echo "\n\n";
+
+		// echo "UserIDs\n"; print_r($account->getUserIDs()); echo "\n ";
+		// echo "getSourceID\n"; print_r($account->getSourceID()); echo "\n ";
+		// echo "getName\n"; print_r($account->getName()); echo "\n ";
+		// echo "getMail\n"; print_r($account->getMail()); echo "\n ";
+
+		// if ($account->photo) {
+		// 	echo "Photo hash: \n"; print_r($account->photo->getHash());
+		// 	$photo = $account->getPhoto();
+		// 	// echo "<img style='display:block; ' id='base64image' src='data:image/jpeg;charset=utf-8;base64, " . base64_encode($photo) . "' />";
+		// }
+		// echo "\n\n";
+
+
+
+		// print_r($account);
+		// exit;
 
 		if ($existingUser === null) {
 			if ($create) {
@@ -87,7 +151,14 @@ class UserMapper {
 			return null;
 		}
 
+
+
 		if (count($existingUser) === 1) {
+			
+
+			// $existingUser[0]->debug(); exit;
+
+
 			if ($update) {
 				$this->updateUser($account, $existingUser[0]);
 			}
@@ -97,6 +168,7 @@ class UserMapper {
 
 			return $existingUser[0];
 		}
+
 
 		if (count($existingUser) > 1) {
 
