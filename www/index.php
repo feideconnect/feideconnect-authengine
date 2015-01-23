@@ -195,7 +195,7 @@ try {
 
 			echo "You are about to get a token associated with this user: \n\n";
 			// print_r($user);
-			print_r($user->getUserInfo());
+			print_r($user->getBasicUserInfo());
 			echo "\n\n";
 
 
@@ -206,7 +206,12 @@ try {
 		}
 
 		echo "And you are about to generate a token for the following client \n";
-		print_r($client->getAsArray());
+
+		$cinfo = $client->getAsArray();
+		$cinfo['logo'] = '...';
+
+		print_r($cinfo);
+
 		echo "\n\n";
 		echo "And finally, here is the token: \n\n";
 
