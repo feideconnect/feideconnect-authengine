@@ -119,7 +119,7 @@ try {
 		} else if ($parameters[1] === '@random') {
 
 
-			$userlist = $c->getUsers();
+			$userlist = $storage->getUsers();
 			function pickUser($userlist) {
 				if (count($userlist) <1) throw new Exception('Cannot generate before we got a list of users generated.');
 				$k = array_rand($userlist);
@@ -134,7 +134,7 @@ try {
 
 		} else {
 
-			$user = $c->getUserByUserID($parameters[1]);
+			$user = $storage->getUserByUserID($parameters[1]);
 			if ($user === null) {
 				throw new Exception('User not found');
 			}
@@ -149,7 +149,7 @@ try {
 
 		if ($parameters[2] === '@random') {
 
-			$clientlist = $c->getClients();
+			$clientlist = $storage->getClients();
 			function pickClient($clientlist) {
 				if (count($clientlist) <1) throw new Exception('Cannot generate before we got a list of client generated.');
 				$k = array_rand($clientlist);
@@ -161,7 +161,7 @@ try {
 		} else {
 
 
-			$client = $c->getClient($parameters[2]);
+			$client = $storage->getClient($parameters[2]);
 
 
 		}
@@ -174,7 +174,7 @@ try {
 		}
 
 
-		$token = new \FeideConnect\Data\Models\AccessToken($c);
+		$token = new \FeideConnect\Data\Models\AccessToken($storage);
 		$token->access_token = \FeideConnect\Data\Model::genUUID();
 		$token->clientid = $client->id;
 		if ($user !== null) {
@@ -186,7 +186,7 @@ try {
 		$token->validuntil = time() + 3600;
 		$token->issued = time();
 
-		$c->saveToken($token);
+		$storage->saveToken($token);
 
 		
 		header('Content-Type: text/plain; charset=utf-8');
@@ -271,13 +271,11 @@ try {
 	} else if  (Router::route('get', '^/userinfo/authinfo$', $parameters)) {
 
 
-
 		$apiprotector = new OAuth\APIProtector();
 		$user = $apiprotector
 			->requireClient()->requireUser()->requireScopes(['userinfo'])
 			->getUser();
 		$client = $apiprotector->getClient();
-
 
 		$allowseckeys = ['userid'];
 		$allowseckeys[] = 'p';
@@ -292,7 +290,7 @@ try {
 			"tokens" => [],
 		];
 		foreach($authorizations AS $auth) {
-			$res["authorizations"][] = $auth->getAsArray();
+			$response["authorizations"][] = $auth->getAsArray();
 		}
 
 
