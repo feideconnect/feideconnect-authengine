@@ -271,13 +271,11 @@ try {
 	} else if  (Router::route('get', '^/userinfo/authinfo$', $parameters)) {
 
 
-
 		$apiprotector = new OAuth\APIProtector();
 		$user = $apiprotector
 			->requireClient()->requireUser()->requireScopes(['userinfo'])
 			->getUser();
 		$client = $apiprotector->getClient();
-
 
 		$allowseckeys = ['userid'];
 		$allowseckeys[] = 'p';
@@ -292,7 +290,7 @@ try {
 			"tokens" => [],
 		];
 		foreach($authorizations AS $auth) {
-			$res["authorizations"][] = $auth->getAsArray();
+			$response["authorizations"][] = $auth->getAsArray();
 		}
 
 
