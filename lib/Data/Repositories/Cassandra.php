@@ -245,6 +245,24 @@ class Cassandra extends \FeideConnect\Data\Repository {
 
 	}
 
+
+
+	function updateClientLogo(Models\Client $client, $logo) {
+
+		$query = 'UPDATE "clients" SET logo = :logo, updated = :updated ' . 
+			'WHERE id = :id';
+
+		$params = [
+			'id' => $client->id,
+			'logo' => $logo,
+			'updated' => time(),
+		];
+		$this->execute($query, $params, __FUNCTION__);
+
+	}
+
+
+
 	function addUserIDsec($userid, $userid_sec) {
 		$query  = 'UPDATE "users" SET userid_sec = userid_sec + :useridsec  WHERE userid = :userid';
 		$query2 = 'INSERT INTO "userid_sec" (userid_sec, userid) VALUES (:useridsec, :userid)';
@@ -421,12 +439,18 @@ class Cassandra extends \FeideConnect\Data\Repository {
 
 
 	/* 
-	 * --- Database handling of the 'accesstoken' column family
+	 * --- Database handling of the 'oauth_authorizations' column family
 	 */
 	function getAuthorization($userid, $clientid) {
 		$query = 'SELECT * FROM "oauth_authorizations" WHERE "userid" = :userid AND "clientid" = :clientid';
 		$params = ['userid' => $userid, 'clientid' => $clientid];
 		return $this->query($query, $params, __FUNCTION__, 'FeideConnect\Data\Models\Authorization', false);
+	}
+
+	function getAuthorizationsByUser(Models\User $user) {
+		$query = 'SELECT * FROM "oauth_authorizations" WHERE "userid" = :userid';
+		$params = ['userid' => $user->userid];
+		return $this->query($query, $params, __FUNCTION__, 'FeideConnect\Data\Models\Authorization', true);
 	}
 
 	function saveAuthorization(Models\Authorization $authorization) {

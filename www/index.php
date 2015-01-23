@@ -262,17 +262,53 @@ try {
 			'user' => $user->getBasicUserInfo($includeEmail, $allowseckeys),
 			'audience' => $client->id,
 		];
+
+
+	/*
+	 *	Testing authentication using the auth libs
+	 *	Both API auth and 
+	 */
+	} else if  (Router::route('get', '^/userinfo/authinfo$', $parameters)) {
+
+
+
+		$apiprotector = new OAuth\APIProtector();
+		$user = $apiprotector
+			->requireClient()->requireUser()->requireScopes(['userinfo'])
+			->getUser();
+		$client = $apiprotector->getClient();
+
+
+		$allowseckeys = ['userid'];
+		$allowseckeys[] = 'p';
+		$allowseckeys[] = 'feide';
+
+		$includeEmail = true;
+
+		$authorizations = $storage->getAuthorizationsByUser($user);
+
+		$response = [
+			"authorizations" => [],
+			"tokens" => [],
+		];
+		foreach($authorizations AS $auth) {
+			$res["authorizations"][] = $auth->getAsArray();
+		}
+
+
+		// $response = [
+		// 	'user' => $user->getBasicUserInfo($includeEmail, $allowseckeys),
+		// 	'audience' => $client->id,
+		// ];
 		
+
+
 
 	/*
 	 *	Testing authentication using the auth libs
 	 *	Both API auth and 
 	 */
 	} else if  (Router::route('get', '^/user/media/([a-zA-Z0-9\-:]+)$', $parameters)) {
-
-		
-		// TODO Set cache headers
-		// echo "USer id is ";
 
 		header('Content-Type: image/jpeg');
 		$userid = new UserID($parameters[1]);
@@ -293,26 +329,32 @@ try {
 		// print_r($user); exit;
 		if (!empty($userinfo['profilephoto'])) {
 			echo $userinfo['profilephoto'];
-			// echo "foo";
-
 		} else {
 			$f = file_get_contents(dirname(__DIR__) . '/www/static/media/default-profile.jpg');
 			echo $f;
 		}
-		
-
+	
 		exit;
-		// $apiprotector = new OAuth\APIProtector();
-		// $user = $apiprotector
-		// 	->requireClient()->requireUser()->requireScopes(['userinfo'])
-		// 	->getUser();
-		// $client = $apiprotector->getClient();
 
-		// $response = [
-		// 	'user' => $user->getUserInfo(),
-		// 	'audience' => $client->id,
-		// ];
-		
+
+	/*
+	 *	Testing authentication using the auth libs
+	 *	Both API auth and 
+	 */
+	} else if  (Router::route('get', '^/client/media/([a-zA-Z0-9\-:]+)$', $parameters)) {
+
+		header('Content-Type: image/jpeg');
+		$clientid = $parameters[1];
+		$client = $storage->getClient($clientid);
+
+		if (!empty($client->logo)) {
+			echo $client->logo;
+		} else {
+			$f = file_get_contents(dirname(__DIR__) . '/www/static/media/default-client.jpg');
+			echo $f;
+		}
+	
+		exit;
 
 
 

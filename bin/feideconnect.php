@@ -87,7 +87,23 @@ if (!empty($command['client'])) {
 
 }
 
- if ($command[0] === 'consistency') {
+ if ($command[0] === 'authinfo') {
+
+ 	$user = $c->getUserByUserID($command[1]);
+	$authorizations = $c->getAuthorizationsByUser($user);
+
+	foreach($authorizations AS $a) {
+		echo "------------\n";
+		echo json_encode($a->getAsArray(), JSON_PRETTY_PRINT);
+		echo "\n";
+	}
+
+	// print_r($authorizations);
+
+
+
+
+ } else if ($command[0] === 'consistency') {
 
 
  	$users = $c->getUsers();
@@ -113,6 +129,32 @@ if (!empty($command['client'])) {
 
 	}
 	echo " ------ \n" . $cql;
+
+
+} else if ($command[0] === 'setlogo' && $command[1] === 'client') {
+
+	$clientid = $command[2];
+	$file = $command[3];
+
+	echo "About to set a new profile photo for client [" . $clientid . "] from file [" . $file . "]\n";
+
+	$client = $c->getClient($clientid);
+
+	if ($client === null) {
+		throw new Exception('Client not found');
+	}
+
+	// $userinfo = $user->getUserInfo();
+	// $sourceID = $user->selectedsource;
+
+	$logo = file_get_contents($file);
+
+	if (empty($logo)) {
+		throw new Exception('Logo was not found');
+	}
+	echo "Logo was " . sha1($logo) . "\n";
+
+	$c->updateClientLogo($client, $logo);
 
 
 } else if ($command[0] === 'setprofile') {
