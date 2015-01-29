@@ -27,6 +27,9 @@ DROP INDEX IF EXISTS oauth_authorizations_clientid_idx;
 DROP TABLE IF EXISTS apigk;
 DROP INDEX IF EXISTS apigk_owner_idx;
 
+DROP TABLE IF EXISTS group_members;
+DROP INDEX IF EXISTS group_members_groupid_idx;
+
 /* Clients */
 CREATE TABLE clients (
 	id uuid PRIMARY KEY,
@@ -82,17 +85,29 @@ CREATE TABLE userid_sec (
 
 /* Ad-hoc groups */
 CREATE TABLE groups (
-	id text PRIMARY KEY,
-	admins set<uuid>,
-	created timestamp,
-	description text,
-	displayname text,
-	members set<uuid>,
-	owner uuid,
+	id uuid PRIMARY KEY,
+
+	name text,
+	descr text,
+	logo blob,
 	public boolean,
-	type text,
+
+	owner uuid,
+	created timestamp,
 	updated timestamp
 );
+CREATE INDEX groups_owner_idx ON groups(owner);
+
+
+CREATE TABLE group_members (
+    userid uuid,
+    groupid uuid,
+    type text,
+    status text,
+    added timestamp,
+    PRIMARY KEY (userid, groupid)
+);
+CREATE INDEX group_members_groupid_idx ON group_members(groupid);
 
 
 CREATE TABLE groupmember (
