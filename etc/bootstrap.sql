@@ -29,6 +29,8 @@ DROP INDEX IF EXISTS apigk_owner_idx;
 
 DROP TABLE IF EXISTS group_members;
 DROP INDEX IF EXISTS group_members_groupid_idx;
+DROP INDEX IF EXISTS group_members_status_idx;
+DROP INDEX IF EXISTS group_members_type_idx;
 
 /* Clients */
 CREATE TABLE clients (
@@ -108,6 +110,8 @@ CREATE TABLE group_members (
     PRIMARY KEY (userid, groupid)
 );
 CREATE INDEX group_members_groupid_idx ON group_members(groupid);
+CREATE INDEX group_members_status_idx ON group_members(status);
+CREATE INDEX group_members_type_idx ON group_members(type);
 
 
 CREATE TABLE groupmember (
