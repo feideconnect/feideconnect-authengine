@@ -11,7 +11,8 @@ DROP INDEX IF EXISTS clients_owner_idx;
 DROP TABLE IF EXISTS users;
 DROP TABLE IF EXISTS userid_sec;
 DROP TABLE IF EXISTS groups;
-DROP TABLE IF EXISTS groupmember;
+DROP INDEX IF EXISTS groups_owner_idx;
+DROP INDEX IF EXISTS groups_public_idx;
 
 DROP TABLE IF EXISTS oauth_codes;
 
@@ -99,6 +100,7 @@ CREATE TABLE groups (
 	updated timestamp
 );
 CREATE INDEX groups_owner_idx ON groups(owner);
+CREATE INDEX groups_public_idx ON groups(public);
 
 
 CREATE TABLE group_members (
