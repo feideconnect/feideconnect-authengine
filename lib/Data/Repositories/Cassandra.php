@@ -376,7 +376,7 @@ class Cassandra extends \FeideConnect\Data\Repository {
 	 * --- Database handling of the 'client' column family
 	 */
 	function getClient( $id) {
-		$query = 'SELECT * FROM "clients" WHERE "id" = :id';
+		$query = 'SELECT id, client_secret, created, descr, name, owner, logo, redirect_uri, scopes, scopes_requested, status, type, updated FROM "clients" WHERE "id" = :id';
 		$params = ['id' => $id];
 		return $this->query($query, $params, __FUNCTION__, 'FeideConnect\Data\Models\Client', false);
 	}
