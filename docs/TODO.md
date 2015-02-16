@@ -21,3 +21,7 @@
 * [ ] Logo for clients and apigk
 
 
+
+
+* [ ] Privacy policy url for client and apigk
+* [ ] Mark clients that are obligatoric.
