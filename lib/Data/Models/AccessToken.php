@@ -63,8 +63,7 @@ class AccessToken extends \FeideConnect\Data\Model {
 		// $expires_in = \FeideConnect\Config::getValue('oauth.token.lifetime', 3600);
 
 
-		$storage = StorageProvider::getStorage();
-		$n = new self($storage);
+		$n = new self();
 
 		$n->clientid = $client->id;
 

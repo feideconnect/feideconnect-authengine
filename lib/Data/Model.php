@@ -8,7 +8,7 @@ abstract class Model {
 	protected $_repo;
 	protected static $_properties = array();
 
-	function __construct(\FeideConnect\Data\Repository $repo, $props = array()) {
+	function __construct($props = array()) {
 		$this->_repo = StorageProvider::getStorage();
 
 		foreach($props AS $k => $v) {

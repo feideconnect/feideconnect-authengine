@@ -146,7 +146,7 @@ class Cassandra extends \FeideConnect\Data\Repository {
 			$res = [];
 			foreach($data AS $i) {
 				if ($model !== null) {
-					$res[] = new $model($this, $i);
+					$res[] = new $model($i);
 				} else {
 					$res[] = $i;
 				}
@@ -157,7 +157,7 @@ class Cassandra extends \FeideConnect\Data\Repository {
 
 			if (empty($data)) return null;
 			if ($model !== null) {
-				return new $model($this, $data[0]);
+				return new $model($data[0]);
 			} else {
 				return $data[0];
 			}
