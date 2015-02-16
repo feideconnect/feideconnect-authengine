@@ -20,7 +20,7 @@ class ScopesInspector {
 
 	protected $storage;
 
-	protected $apis;
+	protected $apis = [], $owners = [];
 
 	public function __construct($client, $scopes) {
 		$this->client = $client;
@@ -32,6 +32,14 @@ class ScopesInspector {
 		$this->apis = [];
 	}
 
+	public function getOwner($ownerid) {
+		if (isset($this->owners[$ownerid])) {
+			return $this->owners[$ownerid];
+		}
+		$this->owners[$ownerid] = $this->storage->getUserByUserID($ownerid);
+		return $this->owners[$ownerid];
+	}
+
 	public function getAPI($apigkid) {
 
 		if (isset($this->apis[$apigkid])) {
@@ -40,6 +48,7 @@ class ScopesInspector {
 			}
 			return $this->apis[$apigkid];
 		}
+
 		$this->apis[$apigkid] = $this->storage->getAPIGK($apigkid);
 
 		if ($this->apis[$apigkid] === null) {
@@ -88,6 +97,13 @@ class ScopesInspector {
 					if (!isset($apis[$apigkid]["info"])) {
 						$apis[$apigkid]["apigk"] = $apigk;
 					}
+					if (!isset($apis[$apigkid]["ownerObj"] )) {
+						$apis[$apigkid]["ownerObj"] = $this->getOwner($apigk->owner);
+						if ($apis[$apigkid]["ownerObj"] !== null) {
+							$apis[$apigkid]["ownerInfo"] = $apis[$apigkid]["ownerObj"]->getBasicUserInfo(true, ["userid", "p"]);
+						}
+						
+					}
 
 				} catch (\Exception $e) {
 
@@ -124,6 +140,7 @@ class ScopesInspector {
 
 			$apiEntry = [
 				"info" => $api["apigk"]->getAsArray(),
+				"owner" => $api["ownerInfo"],
 				"scopes" => []
 			];
 
