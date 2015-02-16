@@ -190,20 +190,29 @@ class User extends \FeideConnect\Data\Model {
 			$userinfo['email'] = $ui['email'];
 		}
 
-		if (!empty($allowseckeys)) {
-			foreach($allowseckeys AS $key) {
-				$nc = $this->getUserIDsecPrefixed($key);
+		if ($allowseckeys === true) {
 
-				if ($key === 'p' && count($nc) > 0) {
-					$userinfo['profilephoto'] = $nc[0];
-					continue;
-				}
+			$userinfo["userid_sec"] = $this->userid_sec;
 
-				foreach($nc AS $nk) {
-					$userinfo['userid_sec'][] = $nk;
+		} else if (is_array($allowseckeys)) {
+			if (!empty($allowseckeys)) {
+				foreach($allowseckeys AS $key) {
+					$nc = $this->getUserIDsecPrefixed($key);
+
+					if ($key === 'p' && count($nc) > 0) {
+						$userinfo['profilephoto'] = $nc[0];
+						continue;
+					}
+
+					foreach($nc AS $nk) {
+						$userinfo['userid_sec'][] = $nk;
+					}
 				}
 			}
 		}
+
+
+
 
 		return $userinfo;
 
