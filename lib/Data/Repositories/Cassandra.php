@@ -373,6 +373,31 @@ class Cassandra extends \FeideConnect\Data\Repository {
 
 
 	/* 
+	 * --- Database handling of the 'apigk' column family
+	 * 
+	 * TABLE feideconnect.apigk :
+     *   id text PRIMARY KEY,
+     *   created timestamp,
+     *   descr text,
+     *   endpoints list<text>,
+     *   expose text,
+     *   httpscertpinned text,
+     *   logo blob,
+     *   name text,
+     *   owner uuid,
+     *   requireuser boolean,
+     *   scopedef text,
+     *   status set<text>,
+     *   trust text,
+     *   updated timestamp
+	 */
+	function getAPIGK( $id) {
+		$query = 'SELECT id, descr, endpoints, expose, httpscertpinned, name, owner, requireuser, scopedef, status, created, updated FROM "apigk" WHERE "id" = :id';
+		$params = ['id' => $id];
+		return $this->query($query, $params, __FUNCTION__, 'FeideConnect\Data\Models\APIGK', false);
+	}
+
+	/* 
 	 * --- Database handling of the 'client' column family
 	 */
 	function getClient( $id) {
