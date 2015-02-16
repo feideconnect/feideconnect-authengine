@@ -152,6 +152,11 @@ class Server {
 				}
 
 				$authorization = $ae->getUpdatedAuthorization();
+
+				// echo "<pre>";
+				// print_r($user->getBasicUserInfo());
+				// print_r($authorization->getAsArray()); exit;
+
 				$this->storage->saveAuthorization($authorization);
 
 
