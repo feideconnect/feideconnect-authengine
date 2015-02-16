@@ -32,7 +32,7 @@
 		}
 	},
 	"longterm": {
-		"title": "Longterm",
+		"title": "Longterm access",
 		"descr": "Langvarig tilgang. Tilgang inntil brukeren trekker rettighetene tilbake.",
 		"public": true
 	},
