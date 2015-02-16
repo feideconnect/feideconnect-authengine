@@ -102,6 +102,22 @@ if (!empty($command['client'])) {
 
 
 
+ } else if ($command[0] === 'clients') {
+
+
+	$clientlist = $c->getClients();
+
+	echo "\nListing clients\n";
+	foreach($clientlist AS $client) {
+		echo " " 
+			. sprintf("%30s", $client->name) . "  " 
+			. sprintf("%30s", $client->id)
+			. " \n";
+	}
+
+	echo "\n Found " . count($clientlist) . " clients \n\n";
+
+
 
  } else if ($command[0] === 'consistency') {
 
