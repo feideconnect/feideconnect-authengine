@@ -80,7 +80,18 @@ class UserMapper {
 	protected function updateUser(Account $account, User $user) {
 
 
+
+
+
 		$user->updateFromAccount($account);
+
+
+		// header('Content-Type: text/plain; charset=utf-8');
+		// echo "ABOUT TO UPDATE\n\n";
+		// $user->debug(); 
+		// print_r($account->attributes);
+		// exit;
+
 
 
 		$user->ensureProfileAccess(true);
@@ -115,11 +126,13 @@ class UserMapper {
 		$userIDs = $account->getUserIDs();
 		$existingUser = $this->repo->getUserByUserIDsecList($userIDs);
 
+
+
+
+
 		// header('Content-Type: text/plain; charset=utf-8');
 		// echo "About to get user with this account\n ";
-
-
-		// print_r($existingUser);
+		// print_r($existingUser[0]->debug());
 		// exit;
 		
 		// if ($update) {echo "UPDATE "; } else { echo "update "; }
@@ -156,12 +169,15 @@ class UserMapper {
 		if (count($existingUser) === 1) {
 			
 
-			// $existingUser[0]->debug(); exit;
+
 
 
 			if ($update) {
 				$this->updateUser($account, $existingUser[0]);
 			}
+
+
+
 			// header('content-type: text/plain');
 			// echo "poot";
 			// print_r($existingUser); exit;
