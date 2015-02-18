@@ -25,7 +25,7 @@ class Account {
 			"mail" => "mail",
 		];
 		$this->realm = "eduPersonPrincipalName";
-		$this->name = "displayName";
+		$this->name = ["displayName", "cn"];
 		$this->mail = "mail"; 
 
 		if (isset($this->attributes['jpegPhoto']) && is_array($this->attributes['jpegPhoto'])) {
@@ -66,17 +66,19 @@ class Account {
 	}
 
 	function getName() {
-		if (isset($this->attributes[$this->name])) {
-			return $this->attributes[$this->name][0];
+		foreach($this->name AS $nattr) {
+			if (isset($this->attributes[$nattr])) {
+				return $this->attributes[$nattr][0];
+			}			
 		}
-		return null;
+		throw new \Exception('Could not get a name for the authenticated user');
 	}
 
 	function getMail() {
 		if (isset($this->attributes[$this->mail])) {
 			return $this->attributes[$this->mail][0];
 		}
-		return null;
+		return '';
 	}
 
 }
