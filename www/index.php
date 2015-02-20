@@ -85,8 +85,8 @@ try {
 		$response = $providerconfig;
 
 	// } else if  (Router::route('get', '^/phpinfo$', $parameters)) {
-		// phpinfo();
-		// exit;
+	// 	phpinfo();
+	// 	exit;
 
 
 
@@ -350,6 +350,9 @@ try {
 		$clientid = $parameters[1];
 		$client = $storage->getClient($clientid);
 
+// 		echo '<pre>';
+// print_r($client); exit;
+
 		if (!empty($client->logo)) {
 			echo $client->logo;
 		} else {
@@ -359,6 +362,36 @@ try {
 	
 		exit;
 
+
+	/*
+	 *	Testing authentication using the auth libs
+	 *	Both API auth and 
+	 */
+	} else if  (Router::route('get', '^/disco$', $parameters)) {
+
+
+
+		// echo '<pre>'; print_r($_REQUEST); exit;
+
+
+		header('Content-Type: text/html; charset: utf-8');
+
+		$data = array();
+		$data["disco"] = Config::readJSONfile("disco.json");
+		$data["return"] = $_REQUEST["return"];
+		$data["returnIDParam"] = $_REQUEST["returnIDParam"];
+
+		$templateDir = Config::dir('templates');
+		$mustache = new \Mustache_Engine(array(
+			// 'cache' => '/tmp/uwap-mustache',
+			'loader' => new \Mustache_Loader_FilesystemLoader($templateDir),
+			// 'partials_loader' => new Mustache_Loader_FilesystemLoader(dirname(__FILE__).'/views/partials'),
+		));
+		$tpl = $mustache->loadTemplate('disco');
+
+		echo $tpl->render($data);
+
+		exit;
 
 
 
@@ -454,8 +487,6 @@ try {
 
 
 } catch(Exception $e) {
-
-
 
 
 

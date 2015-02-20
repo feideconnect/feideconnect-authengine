@@ -1,0 +1,26 @@
+[
+	{
+		"id": "https://idp-test.feide.no",
+		"title": "Feide (test)",
+		"descr": "Brukere i utdanningssektoren i Norge",
+		"icon": "feide.png"
+	},
+	{
+		"id": "https://idporte",
+		"title": "IDporten",
+		"descr": "Alle norske borgere skal kunne logge inn med IDporten.",
+		"icon": "idporten.png"
+	},
+	{
+		"id": "https://openidp.feide.no",
+		"title": "OpenIdP",
+		"descr": "Gjestebrukere. Brukere som ikke har feidekonto kan registrere seg her.",
+		"icon": "openidp.png"
+	},
+	{
+		"id": "surfnet",
+		"title": "SurfNet",
+		"descr": "Brukere i utdanningssektoren i Nederland.",
+		"icon": "surfnet.png"
+	}
+]
