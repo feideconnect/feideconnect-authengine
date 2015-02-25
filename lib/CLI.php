@@ -69,6 +69,33 @@ class CLI {
 	}
 
 
+	function getAPIGK($apigkid) {
+
+		$this->header("Fetch information about API Gatekeeper " . $apigkid);
+		$apigk = $this->storage->getAPIGK($apigkid);
+		$this->oneEntry($apigk);
+
+
+	}
+
+	function getClient($clientid) {
+
+		$this->header("Fetch information about client " . $clientid);
+		$client = $this->storage->getClient($clientid);
+		$this->oneEntry($client);
+
+	}
+
+	function getToken($token) {
+
+		$this->header("Fetch information about token " . $token);
+
+		$token = $this->storage->getAccessToken($token);
+		$this->oneEntry($token);
+
+	}
+
+
 	function deleteUser($user) {
 		$this->header("Deleting user " . $user->userid);
 		$this->storage->deleteUser($user);

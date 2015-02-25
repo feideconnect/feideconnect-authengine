@@ -28,6 +28,20 @@ if ($command[0] === 'user') {
 
 	$cli->getUsers();
 
+} else if ($command[0] === 'apigk') {
+
+	$cli->getAPIGK($command[1]);
+	
+
+} else if ($command[0] === 'apigks') {
+
+	// $cli->getClients();
+
+} else if ($command[0] === 'client') {
+
+	$cli->getClient($command[1]);
+
+
 } else if ($command[0] === 'clients') {
 
 	$cli->getClients();
@@ -43,6 +57,13 @@ if ($command[0] === 'user') {
 	// }
 
 	// echo "\n Found " . count($clientlist) . " clients \n\n";
+
+
+
+
+ } else if ($command[0] === 'token') {
+
+ 	$cli->getToken($command[1]);
 
 
 
