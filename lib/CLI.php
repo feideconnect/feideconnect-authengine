@@ -83,7 +83,13 @@ class CLI {
 		$this->header("Fetch information about client " . $clientid);
 		$client = $this->storage->getClient($clientid);
 		$this->oneEntry($client);
+		return $client;
 
+	}
+
+	function setScopes($client, $scopes_requested, $scopes) {
+		$this->storage->updateClientScopes($client, $scopes_requested, $scopes );
+		return $this->getClient($client->id);
 	}
 
 	function getToken($token) {

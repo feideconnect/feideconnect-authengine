@@ -39,7 +39,46 @@ if ($command[0] === 'user') {
 
 } else if ($command[0] === 'client') {
 
-	$cli->getClient($command[1]);
+	$client = $cli->getClient($command[1]);
+
+
+	if (isset($command[2]) && $command[2] === "scopes") {
+
+
+		$scopes = [];
+		$c = $command->getArgumentValues();
+		// for($i = 0; $i < count($c); $i++) {
+		// 	// if ($i > 2) $scopes[] = $c[$i]->value();
+		// }
+		// print_r($c);
+		// echo "Count " . count($command) . "\n";
+		$scopeitems = array_slice($c, 3);
+		$scopes = [];
+		foreach($scopeitems AS $si) {
+			$scopes[substr($si, 1)] = substr($si, 0, 1);
+		}
+
+		$s = [];
+		$sr = [];
+
+		foreach($scopes AS $scope => $mod) {
+			if ($mod === '+') {
+				$sr[] = $scope;
+				$s[] = $scope;
+			}
+			if ($mod === '_') {
+				$sr[] = $scope;
+			}
+		}
+		// print_r($s);
+		// print_r($sr);
+		// exit;
+
+		$cli->info("Dealing with scopes for " . $client->id);
+		// $cli->infi("Setting scopes to " . $scopestr);
+		$cli->setScopes($client, $sr, $s);
+
+	}
 
 
 } else if ($command[0] === 'clients') {
