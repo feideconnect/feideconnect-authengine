@@ -133,6 +133,9 @@ class ScopesInspector {
 
 			}
 
+
+			
+
 		}
 
 
@@ -154,7 +157,7 @@ class ScopesInspector {
 
 		}
 
-		// $data['apis_'] = $apis;
+		$data["hasAPIs"] = (count($data["apis"]) > 0);
 
 		return $data;
 

@@ -306,8 +306,9 @@
 
 
 
-					{{#perm.unknown}}
+					<!-- TODO This is not in use currently. Fix or remove -->
 
+					{{#perm.unknown}}
 						<div class="panel panel-default">
 							<div class="panel-body" style="">
 
@@ -322,7 +323,6 @@
 									</ul>
 							</div>
 						</div>
-
 					{{/perm.unknown}}
 
 
@@ -332,8 +332,11 @@
 
 
 
-				<p>In addition, the application requests access to the following third party services:</p>
+				{{#perms.hasAPIs}}
 
+					<p>In addition, the application requests access to the following third party services:</p>
+
+				{{/perms.hasAPIs}}
 
 
 

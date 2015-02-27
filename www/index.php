@@ -101,17 +101,15 @@ try {
 			"head" => "You are now logged out"
 		];
 
-
 		$templateDir = Config::dir('templates');
 		$mustache = new \Mustache_Engine(array(
-			// 'cache' => '/tmp/uwap-mustache',
 			'loader' => new \Mustache_Loader_FilesystemLoader($templateDir),
+			// 'cache' => '/tmp/uwap-mustache',
 			// 'partials_loader' => new Mustache_Loader_FilesystemLoader(dirname(__FILE__).'/views/partials'),
 		));
 		$tpl = $mustache->loadTemplate('loggedout');
 		echo $tpl->render($data);
 		exit;
-
 
 
 	} else if  (Router::route('get', '^/favicon.ico$', $parameters)) {
@@ -124,9 +122,6 @@ try {
 
 		$user = null;
 		$client = null;
-
-		
-
 
 		if ($parameters[1] === '@me') {
 
@@ -542,7 +537,6 @@ try {
 	header('Content-Type: text/html; charset: utf-8');
 
 
-
 	Logger::error('Error processing request: ' . $e->getMessage(), array(
 		// 'message' => $e->getMessage(),
 		'stacktrace' => $e->getTrace(),
@@ -565,6 +559,7 @@ try {
 
 	echo $tpl->render($data);
 }
+
 profiler_status();
 
 
