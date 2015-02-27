@@ -82,6 +82,10 @@ class Authenticator {
 		throw new Exception('User is not authenticated. Authentication is required for this operation.');
 	}
 
+	public function logout() {
+		$this->as->logout('/loggedout');
+	}
+
 
 
 	public function getAccount() {

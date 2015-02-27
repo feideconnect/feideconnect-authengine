@@ -34,7 +34,6 @@ header("Access-Control-Expose-Headers: Authorization, X-Requested-With, Origin, 
 
 
 
-
 try {
 
 	$storage = StorageProvider::getStorage();
@@ -84,9 +83,34 @@ try {
 		);
 		$response = $providerconfig;
 
-	// } else if  (Router::route('get', '^/phpinfo$', $parameters)) {
-	// 	phpinfo();
-	// 	exit;
+
+
+	} else if (Router::route('get', '^/logout$', $parameters)) {
+
+
+
+		$auth = new Authentication\Authenticator();
+		$auth->logout();
+		exit;
+
+
+	} else if (Router::route('get', '^/loggedout$', $parameters)) {
+
+
+		$data = [
+			"head" => "You are now logged out"
+		];
+
+
+		$templateDir = Config::dir('templates');
+		$mustache = new \Mustache_Engine(array(
+			// 'cache' => '/tmp/uwap-mustache',
+			'loader' => new \Mustache_Loader_FilesystemLoader($templateDir),
+			// 'partials_loader' => new Mustache_Loader_FilesystemLoader(dirname(__FILE__).'/views/partials'),
+		));
+		$tpl = $mustache->loadTemplate('loggedout');
+		echo $tpl->render($data);
+		exit;
 
 
 
