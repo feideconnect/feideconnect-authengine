@@ -127,6 +127,29 @@ class Config {
 	}
 
 
+	/**
+	 * A helper function to read a JSON syntax file in the etc directory.
+	 * @param  [type] $file [description]
+	 * @return [type]       [description]
+	 */
+	public static function readJSONfile($file) {
+
+		$configFilename = self::dir('etc/', $file);
+		if (!file_exists($configFilename)) {
+			throw new \Exception('Could not find JSON file ' . $configFilename);
+		}
+		$data = file_get_contents($configFilename);
+		if ($data === false) {
+			throw new \Exception('Error reading JSON file ' . $configFilename);
+		}
+
+		$dataParsed = json_decode($data, true);
+		if ($dataParsed === false) {
+			throw new \Exception('Error parsing JSON file ' . $configFilename);
+		}
+
+		return $dataParsed;
+	}
 
 
 	

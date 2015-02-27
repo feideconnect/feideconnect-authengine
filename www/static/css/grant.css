@@ -1,0 +1,17 @@
+
+
+.grantEntry .grantDetails { display: none }
+.grantEntry .grantDetailsHide { display: block }
+
+.grantEntry.grantEntryActive .grantDetails { display: block }
+.grantEntry.grantEntryActive .grantDetailsHide { display: none }
+
+
+
+.grantEntry .grantEntryContent {
+	margin-top: 0px; padding: 8px 16px
+}
+
+.selectIndicator {
+	color: #ddd;
+}

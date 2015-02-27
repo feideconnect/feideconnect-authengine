@@ -19,7 +19,7 @@ class AuthorizationEvaluator {
 	protected $scopesInQuestion = null;
 	protected $scopesRemaining = null;
 
-	function __construct($storage, $client, $request, $user = null) {
+	function __construct($storage, $client, $request, $user) {
 		$this->storage = $storage;
 		$this->client = $client;
 		$this->request = $request;
@@ -36,7 +36,7 @@ class AuthorizationEvaluator {
 	public function getUpdatedAuthorization() {
 		$a = $this->authorization;
 		if ($a === null) {
-			$a = new Authorization($this->storage, [
+			$a = new Authorization([
 				"clientid" => $this->client->id,
 				"userid" => $this->user->userid,
 				"issued" => time(),

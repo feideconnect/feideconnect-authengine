@@ -34,7 +34,6 @@ header("Access-Control-Expose-Headers: Authorization, X-Requested-With, Origin, 
 
 
 
-
 try {
 
 	$storage = StorageProvider::getStorage();
@@ -84,9 +83,51 @@ try {
 		);
 		$response = $providerconfig;
 
-	// } else if  (Router::route('get', '^/phpinfo$', $parameters)) {
-		// phpinfo();
-		// exit;
+
+
+	} else if (Router::route('get', '^/logout$', $parameters)) {
+
+
+
+		$auth = new Authentication\Authenticator();
+		$auth->logout();
+		exit;
+
+
+	} else if (Router::route('get', '^/loggedout$', $parameters)) {
+
+
+		$data = [
+			"head" => "You are now logged out"
+		];
+
+		$templateDir = Config::dir('templates');
+		$mustache = new \Mustache_Engine(array(
+			'loader' => new \Mustache_Loader_FilesystemLoader($templateDir),
+			// 'cache' => '/tmp/uwap-mustache',
+			// 'partials_loader' => new Mustache_Loader_FilesystemLoader(dirname(__FILE__).'/views/partials'),
+		));
+		$tpl = $mustache->loadTemplate('loggedout');
+		echo $tpl->render($data);
+		exit;
+
+
+	} else if (Router::route('get', '^/reject$', $parameters)) {
+
+
+		$data = [
+			"head" => "You rejected the authorization request for an application"
+		];
+
+		$templateDir = Config::dir('templates');
+		$mustache = new \Mustache_Engine(array(
+			'loader' => new \Mustache_Loader_FilesystemLoader($templateDir),
+			// 'cache' => '/tmp/uwap-mustache',
+			// 'partials_loader' => new Mustache_Loader_FilesystemLoader(dirname(__FILE__).'/views/partials'),
+		));
+		$tpl = $mustache->loadTemplate('reject');
+		echo $tpl->render($data);
+		exit;
 
 
 
@@ -100,9 +141,6 @@ try {
 
 		$user = null;
 		$client = null;
-
-		
-
 
 		if ($parameters[1] === '@me') {
 
@@ -350,6 +388,9 @@ try {
 		$clientid = $parameters[1];
 		$client = $storage->getClient($clientid);
 
+// 		echo '<pre>';
+// print_r($client); exit;
+
 		if (!empty($client->logo)) {
 			echo $client->logo;
 		} else {
@@ -359,6 +400,36 @@ try {
 	
 		exit;
 
+
+	/*
+	 *	Testing authentication using the auth libs
+	 *	Both API auth and 
+	 */
+	} else if  (Router::route('get', '^/disco$', $parameters)) {
+
+
+
+		// echo '<pre>'; print_r($_REQUEST); exit;
+
+
+		header('Content-Type: text/html; charset: utf-8');
+
+		$data = array();
+		$data["disco"] = Config::readJSONfile("disco.json");
+		$data["return"] = $_REQUEST["return"];
+		$data["returnIDParam"] = $_REQUEST["returnIDParam"];
+
+		$templateDir = Config::dir('templates');
+		$mustache = new \Mustache_Engine(array(
+			// 'cache' => '/tmp/uwap-mustache',
+			'loader' => new \Mustache_Loader_FilesystemLoader($templateDir),
+			// 'partials_loader' => new Mustache_Loader_FilesystemLoader(dirname(__FILE__).'/views/partials'),
+		));
+		$tpl = $mustache->loadTemplate('disco');
+
+		echo $tpl->render($data);
+
+		exit;
 
 
 
@@ -457,8 +528,6 @@ try {
 
 
 
-
-
 	$data = $e->prepareErrorMessage();
 
 	Logger::error('Error processing request: ' . $e->getMessage(), array(
@@ -487,7 +556,6 @@ try {
 	header('Content-Type: text/html; charset: utf-8');
 
 
-
 	Logger::error('Error processing request: ' . $e->getMessage(), array(
 		// 'message' => $e->getMessage(),
 		'stacktrace' => $e->getTrace(),
@@ -510,6 +578,7 @@ try {
 
 	echo $tpl->render($data);
 }
+
 profiler_status();
 
 

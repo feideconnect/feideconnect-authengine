@@ -3,10 +3,14 @@
 
 namespace FeideConnect\OAuth;
 
+use FeideConnect\Config;
+use FeideConnect\Data\StorageProvider;
+use FeideConnect\Logger;
+
 /**
-*
-* ScopesInspector
-*/
+ *
+ * ScopesInspector
+ */
 class ScopesInspector {
 	
 	protected $client;
@@ -14,84 +18,146 @@ class ScopesInspector {
 
 	protected $globalScopes;
 
+	protected $storage;
+
+	protected $apis = [], $owners = [];
+
 	public function __construct($client, $scopes) {
 		$this->client = $client;
 		$this->scopes = $scopes;
+		$this->globalScopes = Config::readJSONfile('scopedef.json');
 
-		$this->globalScopes = array(
-			'userinfo' => array(
-				'type' => 'userinfo'
-			),
-			'longterm' => array(
-				'type' => ''
-			)
-		);
+		$this->storage = StorageProvider::getStorage();
+
+		$this->apis = [];
+	}
+
+	public function getOwner($ownerid) {
+		if (isset($this->owners[$ownerid])) {
+			return $this->owners[$ownerid];
+		}
+		$this->owners[$ownerid] = $this->storage->getUserByUserID($ownerid);
+		return $this->owners[$ownerid];
+	}
+
+	public function getAPI($apigkid) {
+
+		if (isset($this->apis[$apigkid])) {
+			if ($this->apis[$apigkid] === null) {
+				throw new \Exception("APIGK not found " . $apigkid);
+			}
+			return $this->apis[$apigkid];
+		}
+
+		$this->apis[$apigkid] = $this->storage->getAPIGK($apigkid);
+
+		if ($this->apis[$apigkid] === null) {
+			throw new \Exception("APIGK not found " . $apigkid);
+		}
+		return $this->apis[$apigkid];
 	}
 
 
 	public function getInfo() {
 
 
-		$apps = [];
+		$apis = [];
 		$data = [
-			"globale" => [],
-			"apps" => []
+			"global" => [],
+			"apis" => [],
+			"unknown" => [],
+			"allScopes" => $this->scopes
 		];
 
 		foreach($this->scopes AS $scope) {
 
 
-			if (preg_match('/gk_([a-z0-9\-]+)(_([a-z0-9\-]+))?/', $scope, $matches)) {
 
-				$appid = $matches[1];
+			// Basic and subscopes scopes for an APIGK
+			if (preg_match('/^gk_([a-z0-9\-]+)(_([a-z0-9\-]+))?$/', $scope, $matches)) {
+
+				$apigkid = $matches[1];
 				// Utils::validateID($appid);
+				
 
-				if (!isset($data['apps'][$appid])) {
-					$apps[$appid] = array('localScopes' => array());
+				try {
+
+					$apigk = $this->getAPI($apigkid);
+
+					if (!isset($apis[$apigkid])) {
+						$apis[$apigkid] = ['localScopes' => [] ];
+					}
+
+					if (isset($matches[3])) {
+						$apis[$apigkid]['localScopes'][] = $matches[3];
+					} else {
+						$apis[$apigkid]["basic"] = true;
+					}
+
+					if (!isset($apis[$apigkid]["info"])) {
+						$apis[$apigkid]["apigk"] = $apigk;
+					}
+					if (!isset($apis[$apigkid]["ownerObj"] )) {
+						$apis[$apigkid]["ownerObj"] = $this->getOwner($apigk->owner);
+						if ($apis[$apigkid]["ownerObj"] !== null) {
+							$apis[$apigkid]["ownerInfo"] = $apis[$apigkid]["ownerObj"]->getBasicUserInfo(true, ["userid", "p"]);
+						}
+						
+					}
+
+				} catch (\Exception $e) {
+
+					Logger::error('Unable to retrieve scope information for an APIGK: ' . $e->getMessage(), [
+						'apigkid' => $apigkid
+					]);
+					$data["unknown"][] = $scope;
 				}
-
-				if (isset($matches[2])) {
-					$apps[$appid]['localScopes'][] = $matches[2];
-				}
-
-				// $proxy = APIProxy::getByID($appid);
-				// $localScope = (isset($matches[2]) ? $matches[2] : null);
 
 
 			} else {
 
-				$data['global'][$scope] = 1; 
+
+				if (isset($this->globalScopes[$scope])) {
+
+					$ne = $this->globalScopes[$scope];
+					$ne["scope"] = $scope;
+					$data['global'][$scope] = $ne;
+
+
+				} else {
+
+					$data["unknown"][] = $scope;
+
+				}
+
 
 			}
 
-		}
 
-
-		foreach($apps AS $appid => $v) {
-
-
-			throw new \Exception('Not yet implemented support for getting information about scopes for gatekeeper apis');
-
-			// Utils::validateID($appid);
-			// $proxy = APIProxy::getByID($appid);
-			// $proxy = [];
-			// $ainfo = array(
-			// 	'id' => $appid,
-			// 	// 'title' => $proxy->get('name'),
-			// 	// 'descr' => $proxy->get('descr'),
-			// 	// 'perms'	=> $proxy->getScopeInfo()
-			// );
-
-			// if ($proxy->has('owner-descr')) {
-			// 	$ainfo['owner-descr'] = $proxy->get('owner-descr');
-			// } else {
-			// 	$owner = User::getByID($proxy->get('uwap-userid'));
-			// 	$ainfo['owner'] = $owner->getJSON(array('type' => 'basic'));
-			// }
-
-			// $data['apps'][] = $ainfo;
+			
 
 		}
+
+
+		foreach($apis AS $apigkid => $api) {
+
+			$apiEntry = [
+				"info" => $api["apigk"]->getAsArray(),
+				"owner" => $api["ownerInfo"],
+				"scopes" => []
+			];
+
+			$apiEntry["scopes"][] = $api["apigk"]->getBasicScopeView();
+			foreach($api["localScopes"] AS $ls) {
+				$apiEntry["scopes"][] = $api["apigk"]->getSubScopeView($ls);
+			}
+
+			$data["apis"][] = $apiEntry;
+
+
+		}
+
+		$data["hasAPIs"] = (count($data["apis"]) > 0);
 
 		return $data;
 
@@ -99,4 +165,4 @@ class ScopesInspector {
 
 
 
-}
+} 

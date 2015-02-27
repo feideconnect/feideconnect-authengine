@@ -12,7 +12,6 @@ class UserID {
 
 		if (preg_match('/^(.*):(.*?)$/', $in, $matches)) {
 
-
 			$this->prefix = $matches[1];
 			$this->local = $matches[2];
 

@@ -2,9 +2,9 @@
 <html lang="en">
 	<head>
 		<meta charset="utf-8">
-		<title>Authorization Required - UWAP</title>
+		<title>Authorization Required</title>
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-		<meta name="description" content="UNINETT WebApp Park" />
+		<meta name="description" content="Feide Connect Grant" />
 		<meta name="author" content="Andreas Åkre Solberg" />
 
 		<style type="text/css">
@@ -12,16 +12,42 @@
 		</style>
 
 
-		<link rel="shortcut icon" href="/static/components/uninett-theme/ico/favicon.ico">
+		<link rel="shortcut icon" href="/static/components/uninett-theme/ico/favicon.ico" />
 
 
 		<!-- Bootstrap core CSS -->
-		<link href="/static/components/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+		<link href="/static/components/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet" />
 
 		<!-- Custom styles for this template -->
-		<link href="/static/components/uninett-theme/css/uninett.css" rel="stylesheet">
+		<link href="/static/components/uninett-theme/css/uninett.css" rel="stylesheet" />
+		<link href="/static/components/font-awsome/css/font-awesome.min.css" rel="stylesheet"  />
+
+		<link href="/static/css/grant.css" rel="stylesheet" />
+
+		<script type="text/javascript" src="/static/components/jquery/dist/jquery.min.js"></script>
 
 
+		<style>
+		.grantEntry {
+			cursor: pointer;
+		}
+		</style>
+
+		<script type="text/javascript">
+
+
+			$(document).ready(function() {
+
+				$(".grantEntry").on("click", function(item) {
+					console.log("Click");
+					$(item.currentTarget).toggleClass("grantEntryActive");
+				});
+
+			})
+				
+
+
+		</script>
 
 		<!-- <script type="text/javascript" src="/_/js/require.js"></script> -->
 		<!-- <script type="text/javascript" src="/static/oauthgrant/main.js"></script> -->
@@ -34,192 +60,414 @@
 		<div class="container" style="margin-top: 4em;" >
 			<div class="row">
 
-				<div class="col-md-6" style=" border-right: 3px solid #eee">
-
-
-				<!-- <pre>{{raw}}</pre> -->
+				<div class="col-md-12" style=" ">
 
 
 
-					<p><strong>{{client.name}}</strong> requests the following permissions:</p>
+				<p>The following application, </p>
+
+
+
+				<div class="panel grantEntry ">
+
+
+					<div class="pull-right grantDetails selectIndicator" style="font-size: 200%"><i class="glyphicon glyphicon-chevron-down "></i></div>
+					<div class="pull-right grantDetailsHide selectIndicator" style="font-size: 200%"><i class="glyphicon glyphicon-chevron-left "></i></div>
+
+
+					<div class="media grantEntryContent" style="">
+						<div class="media-left ">
+							<img class="media-object grantDetails" style="max-height: 64px; max-width: 64px" src="/client/media/{{client.id}}" alt="...">
+							<img class="media-object grantDetailsHide" style="max-height: 32px; max-width: 32px" src="/client/media/{{client.id}}" alt="...">
+						</div>
+
+						<div class="media-body">
+
+							<h3 class="media-heading" style="padding: 0px">{{client.name}}</h3>
+
+
+							<div class="grantDetails">
+
+							{{#client.descr}}
+								<p style="margin: 0px">{{.}}</p>
+							{{/client.descr}}
+
+							<p style=""><code>{{client.host}}</code></p>
+
+							{{^client.isSecure}}
+								{{! <p><span class="label label-danger">Warning: Application is insucure</span></p> }}
+							{{/client.isSecure}}
+
+
+
+							{{#owner}}
+
+								<div style="" class="panel panel-default">
+									<div class="panel-heading">Application owner</div>
+								  
+									<div class="panel-body" style="">
+								    
+										<div class="media">
+											<a class="pull-left" href="#">
+												<img style="max-width: 48px; max-height: 48px; border: 1px solid #aaa; border-radius: 3px" 
+													src="/user/media/{{owner.p}}">
+											</a>
+
+											<div class="media-body">
+												<h4 class="media-heading">
+													<!-- <span class="glyphicon glyphicon-user"></span> -->
+													{{owner.name}}
+												</h4>
+
+												
+												<p style="margin: 0px">
+													<span class="glyphicon glyphicon-envelope"></span> 
+
+													<a href="mailto:{{owner.mail}}">{{owner.email}}</p></a>
+
+											</div><!-- media body -->
+										</div><!--  media -->
+
+								  </div><!-- panel body -->
+								</div><!-- panel -->
+
+							{{/owner}}
+
+							<p><a target="_blank" href="#">Read more about this application</a></p>
+
+							</div>
+
+
+
+						</div><!-- media body -->
+					</div><!-- media -->
+
+
+
+				</div><!-- Panel -->
+
+
+
+
+
+
+
+
+				<p>requests the following Feide Connect permissions:</p>
+
+
+
+				<div class="list-group">
+
 
 
 					{{#perms.global.userinfo}}
-						<div class="panel panel-default">
-							<div class="panel-heading">
-								<span style="font-size: 150%" class="glyphicon glyphicon-user"></span> Access to information about who you are
-							</div>
+						<div class="list-group-item  grantEntry grantEntryActive">
 
-							<div class="panel-body" style="">
-								<div class="media">
-									<a class="pull-left" href="#">
-										<img style="max-width: 64px; max-height: 64px; border: 1px solid #aaa; border-radius: 3px" 
-											src="/user/media/{{user.p}}">
-									</a>
-									<div class="media-body">
-										<h4 class="media-heading">
-											<!-- <span class="glyphicon glyphicon-user"></span> -->
-											{{user.name}}
-										</h4>
+
+							<div class="pull-right grantDetails selectIndicator" style="font-size: 150%"><i class="glyphicon glyphicon-chevron-down "></i></div>
+							<div class="pull-right grantDetailsHide selectIndicator" style="font-size: 150%"><i class="glyphicon glyphicon-chevron-left "></i></div>
+
+							<p class="" style="margin-bottom: 0px">
+								<span style="" class="glyphicon glyphicon-user"></span> Access to information about who you are</p>
+
+							<div class="media  grantDetails">
+								<a class="pull-left" href="#">
+									<img style="max-width: 64px; max-height: 64px; border: 1px solid #aaa; border-radius: 3px" 
+										src="/user/media/{{user.p}}">
+								</a>
+								<div class="media-body">
+									<h4 class="media-heading">
+										<!-- <span class="glyphicon glyphicon-user"></span> -->
+										{{user.name}}
+									</h4>
+
+
+
 
 										<p style="color: #bbb; margin:0px">
-											<span  class="glyphicon glyphicon-user"></span> 
-												<span style="">{{user.userid}}</span>
+
+											<span class="fa fa-user"></span> 
+												<abbr title="{{user.userid}}">User ID</abbr> &nbsp; &nbsp;
+
+											{{#perms.global.userinfo-feide}}
+												<span  class="fa fa-user"></span> 
+													<span style="">Feide ID</span> &nbsp; &nbsp;
+											{{/perms.global.userinfo-feide}}
+
+
+
+											{{#perms.global.userinfo-mail}}
+												<span  class="fa fa-envelope-o"></span> 
+													<span style="">{{user.email}}</span>
+											{{/perms.global.userinfo-mail}}
+
+
 										</p>
 
-										{{# user.groups }}
-											<p style="margin:0px">Member of these groups - <a data-toggle="collapse" data-target="#grouplist" href="#">view list of groups</a></p>
-											<ul id="grouplist" class="collapse" style="margin: 0px">
-												<li>{{.}}</li>
-											</ul>
-										{{/ user.groups}}
+										{{#perms.global.openid}}
+											<p style="color: #888"><i class="fa fa-openid" style="color: #800"></i> OpenID Connect</p>
+										{{/perms.global.openid}}
 
-									</div><!-- media-body -->
-								</div><!-- media -->
-							</div><!-- panel body -->
+
+
+										<p class="clearfix"></p>
+
+
+								</div><!-- media-body -->
+							</div><!-- media -->
+
 						</div><!-- panel -->
 					{{/perms.global.userinfo}}
 
 
 
 
-					{{#perms.apps}}
 
-						<div class="panel panel-default" id="perms_{{id}}">
-							<div class="panel-heading">
-								<span style="font-size: 150%" class="glyphicon glyphicon-transfer"></span> 
-								{{! <span style="color: #777">Access to on your behalf</span>  }}
-								{{title}}</div>
-							<div class="panel-body" style="padding-bottom: 0px; padding-top: 6px">
-								{{#descr}}
-									<p style="margin: 7px 0px">{{.}}</p>
-								{{/descr}}
 
-								{{#owner-descr}}
-									<p style=" color: #060; font-size: 90%; text-align: right">
-										<span style="font-size: 100%" class="glyphicon glyphicon-briefcase"></span> 
-										{{.}}</p>
-								{{/owner-descr}}
-		
-							</div>
+<!--
+					{{#perms.global.openid}}
+						<div class="list-group-item grantEntry ">
+							<div class="pull-right grantDetails selectIndicator" style="font-size: 150%"><i class="glyphicon glyphicon-chevron-down "></i></div>
+							<div class="pull-right grantDetailsHide selectIndicator" style="font-size: 150%"><i class="glyphicon glyphicon-chevron-left "></i></div>
+							<p class="" style="margin-bottom: 0px">
+								<span style="" class="fa fa-openid"></span> 
+								<b>{{title}}</b>
+							</p>
+							<p class="grantDetails " style="margin-top: 0px">{{descr}}</p>
 						</div>
-
-
-					{{/perms.apps}}
-
-
-
-					{{#perms.global.appconfig}}
-
-						<div class="panel panel-default">
-							<!-- <div class="panel-heading">Long term access</div> -->
-							<div class="panel-body" style="">
-								<p>
-									<span style="font-size: 150%" class="glyphicon glyphicon-cog"></span> 
-									<b>Manage your Feide Connect applications</b>. 
-										The application may register new and manage your existing applications.
-								</p>
-							</div>
+					{{/perms.global.openid}}
+-->
+					{{#perms.global.groups}}
+						<div class="list-group-item grantEntry ">
+							<div class="pull-right grantDetails selectIndicator" style="font-size: 150%"><i class="glyphicon glyphicon-chevron-down "></i></div>
+							<div class="pull-right grantDetailsHide selectIndicator" style="font-size: 150%"><i class="glyphicon glyphicon-chevron-left "></i></div>
+							<p class="" style="margin-bottom: 0px">
+								<span style="" class="fa fa-group"></span> 
+								<b>{{title}}</b>
+							</p>
+							<p class="grantDetails " style="margin-top: 0px">{{descr}}</p>
 						</div>
+					{{/perms.global.groups}}
 
-					{{/perms.global.appconfig}}
 
 
+					{{#perms.global.clientadmin}}
+						<div class="list-group-item grantEntry ">
+							<div class="pull-right grantDetails selectIndicator" style="font-size: 150%"><i class="glyphicon glyphicon-chevron-down "></i></div>
+							<div class="pull-right grantDetailsHide selectIndicator" style="font-size: 150%"><i class="glyphicon glyphicon-chevron-left "></i></div>
+							<p class="" style="margin-bottom: 0px">
+								<span style="" class="fa fa-cog"></span> 
+								<b>{{title}}</b>
+							</p>
+							<p class="grantDetails " style="margin-top: 0px">{{descr}}</p>
+						</div>
+					{{/perms.global.clientadmin}}
+
+					{{#perms.global.apigkadmin}}
+						<div class="list-group-item grantEntry ">
+							<div class="pull-right grantDetails selectIndicator" style="font-size: 150%"><i class="glyphicon glyphicon-chevron-down "></i></div>
+							<div class="pull-right grantDetailsHide selectIndicator" style="font-size: 150%"><i class="glyphicon glyphicon-chevron-left "></i></div>
+							<p class="" style="margin-bottom: 0px">
+								<span style="" class="fa fa-cog"></span> 
+								<b>{{title}}</b>
+							</p>
+							<p class="grantDetails " style="margin-top: 0px">{{descr}}</p>
+						</div>
+					{{/perms.global.apigkadmin}}
+
+
+					{{#perms.global.peoplesearch}}
+						<div class="list-group-item grantEntry ">
+							<div class="pull-right grantDetails selectIndicator" style="font-size: 150%"><i class="glyphicon glyphicon-chevron-down "></i></div>
+							<div class="pull-right grantDetailsHide selectIndicator" style="font-size: 150%"><i class="glyphicon glyphicon-chevron-left "></i></div>
+							<p class="" style="margin-bottom: 0px">
+								<span style="" class="fa fa-search"></span> 
+								<b>{{title}}</b>
+							</p>
+							<p class="grantDetails " style="margin-top: 0px">{{descr}}</p>
+						</div>
+					{{/perms.global.peoplesearch}}
 
 
 
 					{{#perms.global.longterm}}
-
-						<div class="panel panel-default">
-							<!-- <div class="panel-heading">Long term access</div> -->
-							<div class="panel-body" style="">
-								<p>
-									<span style="font-size: 150%" class="glyphicon glyphicon-time"></span> 
-									<b>Long term access</b>. The client may access your data until you explicitly revoke the access.
-								</p>
-							</div>
+						<div class="list-group-item grantEntry ">
+							<div class="pull-right grantDetails selectIndicator" style="font-size: 150%"><i class="glyphicon glyphicon-chevron-down "></i></div>
+							<div class="pull-right grantDetailsHide selectIndicator" style="font-size: 150%"><i class="glyphicon glyphicon-chevron-left "></i></div>
+							<p class="" style="margin-bottom: 0px">
+								<span style="" class="fa fa-clock-o"></span> 
+								<b>{{title}}</b>
+							</p>
+							<p class="grantDetails " style="margin-top: 0px">{{descr}}</p>
 						</div>
-
 					{{/perms.global.longterm}}
 
 
 
 
-				<!--
+					<!-- TODO This is not in use currently. Fix or remove -->
 
+					{{#perm.unknown}}
 						<div class="panel panel-default">
 							<div class="panel-body" style="">
+
 								<p>
-									<span style="font-size: 150%" class="glyphicon glyphicon-align-justify"></span> 
+									<span style="font-size: 150%" class="glyphicon glyphicon-time"></span> 
+									<b>There is a number of unknown permissions that you are requested to accept:</b></p>
 
-
-									{{#both}}
-										Access to both <span class="label label-success">read</span> and <span class="label label-danger">write</span> to your eduFeed.
-									{{/both}}
-									{{#read}}
-										Access to <span class="label label-success">read</span> your eduFeed.
-									{{/read}}
-									{{#write}}
-										Access to <span class="label label-danger">write</span> your eduFeed.
-									{{/write}}
-
-								</p>
+									<ul>
+									{{#items}}
+										<li>{{.}}</li>
+									{{/items}}
+									</ul>
 							</div>
 						</div>
-
-				-->
-
+					{{/perm.unknown}}
 
 
-
+				</div><!-- End of list-group -->
 
 
 
 
 
+				{{#perms.hasAPIs}}
+
+					<p>In addition, the application requests access to the following third party services:</p>
+
+				{{/perms.hasAPIs}}
 
 
 
-			{{#perm.unknown}}
-
-				<div class="panel panel-default">
-					<!-- <div class="panel-heading">Long term access</div> -->
-					<div class="panel-body" style="">
-
-						<p>
-							<span style="font-size: 150%" class="glyphicon glyphicon-time"></span> 
-							<b>There is a number of unknown permissions that you are requested to accept:</b></p>
-
-							<ul>
-							{{#items}}
-								<li>{{.}}</li>
-							{{/items}}
-							</ul>
-					</div>
-				</div>
-
-
-			{{/perm.unknown}}
+				{{#perms.apis}}
 
 
 
+					<div class="panel grantEntry ">
+						<div class="pull-right grantDetails selectIndicator" style="font-size: 200%"><i class="glyphicon glyphicon-chevron-down "></i></div>
+						<div class="pull-right grantDetailsHide selectIndicator" style="font-size: 200%"><i class="glyphicon glyphicon-chevron-left "></i></div>
+
+						<div class="media grantEntryContent" style="">
+							<div class="media-left ">
+								<img class="media-object grantDetails" style="max-height: 64px; max-width: 64px" src="http://api.dev.feideconnect.no:6543/apigkadm/apigks/{{info.id}}/logo" alt="...">
+								<img class="media-object grantDetailsHide" style="max-height: 32px; max-width: 32px" src="http://api.dev.feideconnect.no:6543/apigkadm/apigks/{{info.id}}/logo" alt="...">
+							</div>
+
+							<div class="media-body">
+
+
+								<h3 class="media-heading" style="padding: 0px">{{info.name}}
+								</h3>
+								<p class="grantDetailsHide" style="color: #555; font-size: 75%">
+									{{#scopes}}
+										<i class="fa fa-square-o"></i>&nbsp;{{title}}&nbsp; 
+									{{/scopes}}
+								</p>
 
 
 
 
-				<div>
+								<div class="grantDetails">
 
-					<form id="login" method="post" action="{{posturl}}">
+								{{#info.descr}}
+									<p style="margin: 0px">{{.}}</p>
+								{{/info.descr}}
+
+
+
+
+
+								
+								<ul class="uninett-ul">
+								{{#scopes}}
+
+									<li class="uninett-ul-li">{{title}} – <span style="color: #555;">{{descr}}</span></li>
+
+								{{/scopes}}
+								</ul>
+							
+
+
+								{{#owner}}
+
+									<div style="" class="panel panel-default">
+										<div class="panel-heading">Application owner</div>
+									  
+										<div class="panel-body" style="">
+									    
+											<div class="media">
+												<a class="pull-left" href="#">
+													<img style="max-width: 48px; max-height: 48px; border: 1px solid #aaa; border-radius: 3px" 
+														src="/user/media/{{owner.profilephoto}}">
+												</a>
+
+												<div class="media-body">
+													<h4 class="media-heading">
+														<!-- <span class="glyphicon glyphicon-user"></span> -->
+														{{owner.name}}
+													</h4>
+
+													
+													<p style="margin: 0px">
+														<span class="glyphicon glyphicon-envelope"></span> 
+
+														<a href="mailto:{{owner.mail}}">{{owner.email}}</p></a>
+
+												</div><!-- media body -->
+											</div><!--  media -->
+
+									  </div><!-- panel body -->
+									</div><!-- panel -->
+
+								{{/owner}}
+
+								<p><a target="_blank" href="#">Read more about this application</a></p>
+
+								</div>
+
+
+
+							</div><!-- media body -->
+						</div><!-- media -->
+
+
+
+					</div><!-- Panel -->
+
+
+
+
+
+
+
+
+
+
+
+				{{/perms.apis}}
+
+
+
+
+
+
+
+				<div class="center-block" >
+
+					<form  id="login" method="post" action="{{posturl}}">
+
+						<p>Would you like to allow this client to obtain these permissions on behalf of you?</p>
 
 						{{#postdata}}
 							<input type="hidden" name="{{key}}" value="{{value}}" />
 						{{/postdata}}
 
-						<fieldset id="actions" style="text-align: right">
+						<fieldset id="actions" style=" text-align: center ">
 							
 							<!-- <input tabindex="1" type="submit" id="submit" class="btn btn-lg btn-success" value="Allow"> -->
 							
-							<button type="submit" id="submit" tabindex="1" class="btn btn-success">
+							<button type="submit" id="submit" tabindex="1" class="btn btn-primary">
 								<span class="glyphicon glyphicon-ok"></span>
 								Allow
 							</button>
@@ -231,7 +479,7 @@
 							</a> 
 						-->
 
-							<a tabindex="2" class="btn btn-inverse" href="http://feideconnect.no/reject">
+							<a tabindex="2" class="btn btn-default" href="/reject">
 								<span class="glyphicon glyphicon-remove"></span>
 								Reject
 							</a>
@@ -248,93 +496,26 @@
 
 
 
-
+<!--
 				<div class="col-md-1">
 
 					<svg xmlns="http://www.w3.org/2000/svg" xmlns:xl="http://www.w3.org/1999/xlink" 
 						style="margin-left: -28px; margin-top: 0px" height="165pt" width="70pt" 
 						version="1.1" viewBox="154 100 70 165" 
 						>
-						<!-- <g fill="none" fill-opacity="1" stroke="none" stroke-dasharray="none" stroke-opacity="1"> -->
+						
 							<path d="M 163 109 L 215 182.5 L 163 256 Z" fill="#f58220"/>
-						<!-- </g> -->
+						
 					</svg>
 
 				</div>
 
 
-				<div class="col-md-5">
+				<div class="col-md-5"></div>
 
-					<div class="well">
+	
 
-						<div class="media" style="margin: 2em; 0px">
-							<div class="media-left">
-								<img class="media-object" style="max-height: 64px; max-width: 64px; border: 0px solid #ccc; border-radius: 0px " src="/client/media/{{client.id}}" alt="...">
-							</div>
-							<div class="media-body">
-
-								<h2 class="media-heading">{{client.name}}</h2>
-								{{#client.descr}}
-									<p>{{.}}</p>
-								{{/client.descr}}
-
-								<p>The application is using the domain <code>{{client.host}}</code></p>
-
-								{{^client.isSecure}}
-									<p><span class="label label-danger">Warning: Application is insucure</span></p>
-								{{/client.isSecure}}
-
-
-								<p><a target="_blank" href="#">Read more about this application</a></p>
-
-							</div><!-- media body -->
-						</div><!-- media -->
-
-
-
-
-						{{#owner}}
-
-							<div style="" class="panel panel-default">
-								<div class="panel-heading">Application owner</div>
-							  
-								<div class="panel-body" style="">
-							    
-									<div class="media">
-										<a class="pull-left" href="#">
-											<img style="max-width: 64px; max-height: 64px; border: 1px solid #aaa; border-radius: 3px" 
-												src="/user/media/{{owner.p}}">
-											
-										</a>
-										<div class="media-body">
-											<h4 class="media-heading">
-												<!-- <span class="glyphicon glyphicon-user"></span> -->
-												{{owner.name}}
-											</h4>
-
-											
-											<p style="margin: 0px">
-												<span class="glyphicon glyphicon-envelope"></span> 
-
-												{{owner.email}}</p>
-											<p style="margin: 0px">
-												<a href="mailto:{{owner.mail}}">Send e-mail</a></p>
-
-
-										</div><!-- media body -->
-									</div><!--  media -->
-
-							  </div><!-- panel body -->
-							</div><!-- panel -->
-
-						{{/owner}}
-
-
-
-
-					</div><!-- well -->
-
-
+-->
 
 
 

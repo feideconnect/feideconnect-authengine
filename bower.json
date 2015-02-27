@@ -3,6 +3,8 @@
 	"private": true,
 	"dependencies": {
 		"requirejs": "~2.1.15",
-		"uninett-theme": "git@scm.uninett.no:system/uninett-theme.git"
+		"uninett-theme": "git@scm.uninett.no:system/uninett-theme.git",
+		"font-awsome": "~4.3.0",
+		"jquery": "~1.11.1"
 	}
 }

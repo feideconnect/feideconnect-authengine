@@ -24,8 +24,7 @@ class AuthorizationCode extends \FeideConnect\Data\Model {
 
 		$expires_in = \FeideConnect\Config::getValue('oauth.code.lifetime', 5*60);
 
-		$storage = StorageProvider::getStorage();
-		$n = new self($storage);
+		$n = new self();
 
 		$n->code = self::genUUID();
 		

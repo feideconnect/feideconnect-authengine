@@ -146,7 +146,7 @@ class Cassandra extends \FeideConnect\Data\Repository {
 			$res = [];
 			foreach($data AS $i) {
 				if ($model !== null) {
-					$res[] = new $model($this, $i);
+					$res[] = new $model($i);
 				} else {
 					$res[] = $i;
 				}
@@ -157,7 +157,7 @@ class Cassandra extends \FeideConnect\Data\Repository {
 
 			if (empty($data)) return null;
 			if ($model !== null) {
-				return new $model($this, $data[0]);
+				return new $model($data[0]);
 			} else {
 				return $data[0];
 			}
@@ -261,6 +261,22 @@ class Cassandra extends \FeideConnect\Data\Repository {
 
 	}
 
+
+	function updateClientScopes(Models\Client $client, $scopes_requested, $scopes) {
+
+		$query = 'UPDATE "clients" SET ' . 
+			'scopes = :scopes, scopes_requested = :scopes_requested, updated = :updated ' . 
+			'WHERE id = :id';
+
+		$params = [
+			'id' => $client->id,
+			'scopes' => $scopes,
+			'scopes_requested' => $scopes_requested,
+			'updated' => time(),
+		];
+		$this->execute($query, $params, __FUNCTION__);
+
+	}
 
 
 	function addUserIDsec($userid, $userid_sec) {
@@ -373,10 +389,35 @@ class Cassandra extends \FeideConnect\Data\Repository {
 
 
 	/* 
+	 * --- Database handling of the 'apigk' column family
+	 * 
+	 * TABLE feideconnect.apigk :
+     *   id text PRIMARY KEY,
+     *   created timestamp,
+     *   descr text,
+     *   endpoints list<text>,
+     *   expose text,
+     *   httpscertpinned text,
+     *   logo blob,
+     *   name text,
+     *   owner uuid,
+     *   requireuser boolean,
+     *   scopedef text,
+     *   status set<text>,
+     *   trust text,
+     *   updated timestamp
+	 */
+	function getAPIGK( $id) {
+		$query = 'SELECT id, descr, endpoints, expose, httpscertpinned, name, owner, requireuser, scopedef, status, created, updated FROM "apigk" WHERE "id" = :id';
+		$params = ['id' => $id];
+		return $this->query($query, $params, __FUNCTION__, 'FeideConnect\Data\Models\APIGK', false);
+	}
+
+	/* 
 	 * --- Database handling of the 'client' column family
 	 */
 	function getClient( $id) {
-		$query = 'SELECT * FROM "clients" WHERE "id" = :id';
+		$query = 'SELECT id, client_secret, created, descr, name, owner, logo, redirect_uri, scopes, scopes_requested, status, type, updated FROM "clients" WHERE "id" = :id';
 		$params = ['id' => $id];
 		return $this->query($query, $params, __FUNCTION__, 'FeideConnect\Data\Models\Client', false);
 	}

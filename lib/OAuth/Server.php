@@ -152,6 +152,11 @@ class Server {
 				}
 
 				$authorization = $ae->getUpdatedAuthorization();
+
+				// echo "<pre>";
+				// print_r($user->getBasicUserInfo());
+				// print_r($authorization->getAsArray()); exit;
+
 				$this->storage->saveAuthorization($authorization);
 
 
@@ -263,7 +268,7 @@ class Server {
 
 
 
-		$u = $user->getUserInfo();
+		$u = $user->getBasicUserInfo(true);
 		$u['userid'] = $user->userid;
 		$u['p'] = $user->getProfileAccess();
 
@@ -290,7 +295,7 @@ class Server {
 
 			$owner = $this->storage->getUserByUserID($client->owner);
 			if ($owner !== null) {
-				$oinfo = $owner->getUserInfo();
+				$oinfo = $owner->getBasicUserInfo(true);
 				$oinfo['p'] = $owner->getProfileAccess();
 				$data['owner'] = $oinfo;
 			}
