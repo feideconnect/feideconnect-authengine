@@ -112,6 +112,25 @@ try {
 		exit;
 
 
+	} else if (Router::route('get', '^/reject$', $parameters)) {
+
+
+		$data = [
+			"head" => "You rejected the authorization request for an application"
+		];
+
+		$templateDir = Config::dir('templates');
+		$mustache = new \Mustache_Engine(array(
+			'loader' => new \Mustache_Loader_FilesystemLoader($templateDir),
+			// 'cache' => '/tmp/uwap-mustache',
+			// 'partials_loader' => new Mustache_Loader_FilesystemLoader(dirname(__FILE__).'/views/partials'),
+		));
+		$tpl = $mustache->loadTemplate('reject');
+		echo $tpl->render($data);
+		exit;
+
+
+
 	} else if  (Router::route('get', '^/favicon.ico$', $parameters)) {
 
 		throw new NotFoundException('Favicon not found');
