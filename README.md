@@ -7,8 +7,8 @@
 ## Preparations
 
 	# Runtime environemnt
-	apt-get install apache2 php5 php5-cli php5-mcrypt php5-imagick
-
+	apt-get install apache2 php5 php5-cli php5-mcrypt php5-imagick php5-curl
+ 
 	# building environment. Using node.js package manager npm.
 	apt-get install nodejs nodejs-legacy
 	curl https://www.npmjs.com/install.sh | sh
@@ -58,6 +58,9 @@ Initalize Cassandra schema
 ## Test
 
 	phpunit --bootstrap autoload.php tests 
+
+
+
 
 
 
