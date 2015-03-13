@@ -141,7 +141,7 @@ class CLI {
 			$cinfo = $client->getAsArray();
 			$cinfo["c"] = ++$c;
 
-			$this->oneEntry($c);
+			// $this->oneEntry($cinfo);
 
 			echo $this->l($cinfo, [
 				"c" => ["%3d", "red"],
