@@ -18,7 +18,7 @@ class Exception extends \Exception {
 
 	function prepareErrorMessage() {
 
-		http_response_code($this->httpcode);
+		// http_response_code($this->httpcode);
 
 		$data = array();
 		$data['code'] = $this->httpcode;

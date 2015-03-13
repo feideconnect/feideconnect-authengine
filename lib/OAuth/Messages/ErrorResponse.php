@@ -3,6 +3,8 @@
 
 namespace FeideConnect\OAuth\Messages;
 
+use FeideConnect\HTTP\JSONResponse;
+
 
 class ErrorResponse extends Message {
 	
@@ -20,20 +22,21 @@ class ErrorResponse extends Message {
 
 	public function sendBodyJSON() {
 
-
-		if($this->error === 'invalid_client') {
-
-			http_response_code(401);
-			header('WWW-Authenticate: Bearer realm="feideconnect", error="' . $this->error . '", error_description="' . urlencode($this->error_description) . '"');
-
-		// } else if ($this->error === 'invalid_client') {
-		// 	http_response_code(401);
-
-		} else {
-			http_response_code(400);
+		$body = array();
+		foreach($this AS $key => $value) {
+			if (empty($value)) continue;
+			$body[$key] = $value;
 		}
 
-		parent::sendBodyJSON();
+		$response = new JSONResponse($body);
+		$response->setHeader("WWW-Authenticate", 'Bearer realm="feideconnect", error="' . $this->error . '", error_description="' . urlencode($this->error_description));
+		if($this->error === 'invalid_client') {
+			$response->setStatus(401);
+		} else {
+			$response->setStatus(400);
+		}
+		
+		return $response;
 
 	}
 

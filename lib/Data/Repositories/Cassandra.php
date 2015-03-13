@@ -362,9 +362,9 @@ class Cassandra extends \FeideConnect\Data\Repository {
 
 
 		// Helper function to get an array with a list of userids
-		$func = function ($a) {
+		$func = function ($item) {
 			// echo "picking user id " . var_export($a, true);
-			return $a['userid'];
+			return $item['userid'];
 		};
 		$userids = array_unique(array_map($func, $data));
 

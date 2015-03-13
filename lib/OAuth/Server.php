@@ -8,6 +8,9 @@ use FeideConnect\OAuth\Exceptions\OAuthException;
 use FeideConnect\Authentication\Authenticator;
 use FeideConnect\Authentication\UserMapper;
 
+use FeideConnect\HTTP\TemplatedHTMLResponse;
+use FeideConnect\HTTP\JSONResponse;
+
 use FeideConnect\Logger;
 use FeideConnect\Data\Models;
 use FeideConnect\Data\StorageProvider;
@@ -18,7 +21,6 @@ use FeideConnect\Utils\Validator;
 /**
  * Implementation of an OAuth Server
  */
-
 class Server {
 
 	protected $storage;
@@ -28,10 +30,6 @@ class Server {
 	function __construct() {
 
 		$this->storage = StorageProvider::getStorage();
-
-		// $this->server  = new So_Server($this->storage);
-		// $this->auth = new Authenticator();
-
 		$this->auth = new Authenticator();
 
 	}
@@ -61,179 +59,201 @@ class Server {
 	public function authorizationEndpoint() {
 
 
-		// If SimpleSAML_Auth_State_exceptionId query parameter is set, then something failed 
-		// while performing authentication.
-		if (!empty($_REQUEST['SimpleSAML_Auth_State_exceptionId'])) {
-
-			// The most likely error is that we are not able to perform passive authentication.
-			throw new OAuthException('access_denied', 'Unable to perform passive authentication [1]');
-
-		} else if (isset($_REQUEST['error']) && $_REQUEST['error'] === '1') {
-
-			// The most likely error is that we are not able to perform passive authentication.
-			throw new OAuthException('access_denied', 'Unable to perform passive authentication [2]');
-		}
-
-		/**
-		 * --- We've now dealted with all error responses that is returned from other systems..
-		 * Lets move on to processing the OAuth authorization request.
-		 * 
-		 */
+		try {
 
 
-		// Decide whether to run in passive mode. In passive mode no UI is displayed to the enduser.
-		$passive = false;
-		if (isset($_REQUEST["passive"]) && $_REQUEST["passive"] === 'true') $passive = true;
+			// If SimpleSAML_Auth_State_exceptionId query parameter is set, then something failed 
+			// while performing authentication.
+			if (!empty($_REQUEST['SimpleSAML_Auth_State_exceptionId'])) {
 
+				// The most likely error is that we are not able to perform passive authentication.
+				throw new OAuthException('access_denied', 'Unable to perform passive authentication [1]');
 
+			} else if (isset($_REQUEST['error']) && $_REQUEST['error'] === '1') {
 
-
-
-		// Parse the incomming Authorization Request.
-		$request = new Messages\AuthorizationRequest($_REQUEST);
-		Logger::info('Successfully parsed OAuth Authorization Request. Next up: resolve client.', array(
-			'request' => $request->asArray(),
-			'passive' => $passive
-		));
-
-
-
-		$client = $this->storage->getClient($request->client_id);
-		if ($client === null) throw new OAuthException('invalid_client', 'Could not look up the specified client.');
-		// $this->authorizationFailed('unauthorized_client', 'https://docs.uwap.org', 'Could not find this client.');
-
-		Logger::info('Client resolved. Next up: authenticate user.', array(
-			'client' => $client->getAsArray()
-		));
-
-
-
-		/**
-		 * Ensure that the user is authenticated...
-		 */
-
-		$this->auth->req(false, true); // require($isPassive = false, $allowRedirect = false, $return = null
-		$account = $this->auth->getAccount();
-
-		
-		$usermapper = new UserMapper($this->storage);
-		$user = $usermapper->getUser($account, true, true, false);
-
-		Logger::info('OAuth authorization() User is now authenticationed. Next is authorization.', array(
-			'user' => $user->getAsArray()
-		));
-
-
-
-		// TODO: Do we need to suport passive requests?? 
-
-
-
-
-
-
-		$ae = new AuthorizationEvaluator($this->storage, $client, $request, $user);
-		$redirect_uri = $ae->getValidatedRedirectURI();
-		$scopesInQuestion = $ae->getScopesInQuestion();
-
-		
-		if ($ae->needsAuthorization() ) {
-
-			if ($passive) {
-				throw new OAuthException('access_denied', 'User has not authorized, and were unable to perform passive authorization');
+				// The most likely error is that we are not able to perform passive authentication.
+				throw new OAuthException('access_denied', 'Unable to perform passive authentication [2]');
 			}
 
-
-			if (isset($_REQUEST["verifier"])) {
-
-				$verifier = $user->getVerifier();
-				if ($verifier !== $_REQUEST["verifier"]) {
-					throw new \Exception("Invalid verifier code.");
-				}
-
-				$authorization = $ae->getUpdatedAuthorization();
-
-				// echo "<pre>";
-				// print_r($user->getBasicUserInfo());
-				// print_r($authorization->getAsArray()); exit;
-
-				$this->storage->saveAuthorization($authorization);
+			/**
+			 * --- We've now dealted with all error responses that is returned from other systems..
+			 * Lets move on to processing the OAuth authorization request.
+			 * 
+			 */
 
 
-			} else {
-				return $this->requestAuthorizationUI($client, $request, $user, $redirect_uri, $scopesInQuestion, $ae->getRemainingScopes()); 	
-			}
-
-		}
-
-
-		
+			// Decide whether to run in passive mode. In passive mode no UI is displayed to the enduser.
+			$passive = false;
+			if (isset($_REQUEST["passive"]) && $_REQUEST["passive"] === 'true') $passive = true;
 
 
 
 
 
+			// Parse the incomming Authorization Request.
+			$request = new Messages\AuthorizationRequest($_REQUEST);
+			Logger::info('Successfully parsed OAuth Authorization Request. Next up: resolve client.', array(
+				'request' => $request->asArray(),
+				'passive' => $passive
+			));
 
 
-		$expires_in = 3600*8; // 8 hours
-		if (in_array('longterm', $scopesInQuestion)) {
-			$expires_in = 3600*24*680; // 680 days
-		}
-		
+
+			$client = $this->storage->getClient($request->client_id);
+			if ($client === null) throw new OAuthException('invalid_client', 'Could not look up the specified client.');
+			// $this->authorizationFailed('unauthorized_client', 'https://docs.uwap.org', 'Could not find this client.');
+
+			Logger::info('Client resolved. Next up: authenticate user.', array(
+				'client' => $client->getAsArray()
+			));
 
 
-		// Handle the various response types. code or token
-		if ($request->response_type === 'token') {
+
+			/**
+			 * Ensure that the user is authenticated...
+			 */
+
+			$this->auth->req(false, true); // require($isPassive = false, $allowRedirect = false, $return = null
+			$account = $this->auth->getAccount();
 
 			
-			$pool = new AccessTokenPool($client, $user);
-			$accesstoken = $pool->getToken($scopesInQuestion, false, $expires_in);
+			$usermapper = new UserMapper($this->storage);
+			$user = $usermapper->getUser($account, true, true, false);
 
-			// $accesstoken = Models\AccessToken::generate($client, $user, $scopesInQuestion, false, $expires_in);
-			// 
-			// TODO Verify that this saveToken was successfull before continuing.
-
-
-			$tokenresponse = Messages\TokenResponse::generate($request, $accesstoken);
-
-			Logger::info('OAuth Access Token is now issued.', array(
-				'user' => $user->getAsArray(),
-				'client' => $client->getAsArray(),
-				'accesstoken' => $accesstoken->getAsArray(),
-				'tokenresponse' => $tokenresponse->getAsArray(),
+			Logger::info('OAuth authorization() User is now authenticationed. Next is authorization.', array(
+				'user' => $user->getAsArray()
 			));
 
-			return $tokenresponse->sendRedirect($redirect_uri, true);
 
 
-		} else if ($request->response_type === 'code') {
+			// TODO: Do we need to suport passive requests?? 
 
 
-			$r = null;
-			if (!empty($request->redirect_uri)) {
-				$r = $request->redirect_uri;
+
+
+
+
+			$ae = new AuthorizationEvaluator($this->storage, $client, $request, $user);
+			$redirect_uri = $ae->getValidatedRedirectURI();
+			$scopesInQuestion = $ae->getScopesInQuestion();
+
+			
+			if ($ae->needsAuthorization() ) {
+
+				if ($passive) {
+					throw new OAuthException('access_denied', 'User has not authorized, and were unable to perform passive authorization');
+				}
+
+
+				if (isset($_REQUEST["verifier"])) {
+
+					$verifier = $user->getVerifier();
+					if ($verifier !== $_REQUEST["verifier"]) {
+						throw new \Exception("Invalid verifier code.");
+					}
+
+					$authorization = $ae->getUpdatedAuthorization();
+
+					// echo "<pre>";
+					// print_r($user->getBasicUserInfo());
+					// print_r($authorization->getAsArray()); exit;
+
+					$this->storage->saveAuthorization($authorization);
+
+
+				} else {
+					return $this->requestAuthorizationUI($client, $request, $user, $redirect_uri, $scopesInQuestion, $ae->getRemainingScopes()); 	
+				}
+
 			}
 
-			$code = Models\AuthorizationCode::generate($client, $user, $r, $scopesInQuestion);
-			$this->storage->saveAuthorizationCode($code);
 
-			$tokenresponse = Messages\AuthorizationResponse::generate($request, $code);
+			
 
-			Logger::info('OAuth Authorization Code is now stored, and may be fetched via the token endpoint.', array(
-				'user' => $user->getAsArray(),
-				'client' => $client->getAsArray(),
-				'code' => $code->getAsArray(),
-				'tokenresponse' => $tokenresponse->getAsArray(),
-			));
 
-			$tokenresponse->sendRedirect($request->redirect_uri);
 
-		} else {
-			throw new Exception('Unsupported response_type in request. Only supported code and token.');
+
+
+
+
+			$expires_in = 3600*8; // 8 hours
+			if (in_array('longterm', $scopesInQuestion)) {
+				$expires_in = 3600*24*680; // 680 days
+			}
+			
+
+
+			// Handle the various response types. code or token
+			if ($request->response_type === 'token') {
+
+				
+				$pool = new AccessTokenPool($client, $user);
+				$accesstoken = $pool->getToken($scopesInQuestion, false, $expires_in);
+
+				// $accesstoken = Models\AccessToken::generate($client, $user, $scopesInQuestion, false, $expires_in);
+				// 
+				// TODO Verify that this saveToken was successfull before continuing.
+
+
+				$tokenresponse = Messages\TokenResponse::generate($request, $accesstoken);
+
+				Logger::info('OAuth Access Token is now issued.', array(
+					'user' => $user->getAsArray(),
+					'client' => $client->getAsArray(),
+					'accesstoken' => $accesstoken->getAsArray(),
+					'tokenresponse' => $tokenresponse->getAsArray(),
+				));
+
+				return $tokenresponse->sendRedirect($redirect_uri, true);
+
+
+			} else if ($request->response_type === 'code') {
+
+
+				$r = null;
+				if (!empty($request->redirect_uri)) {
+					$r = $request->redirect_uri;
+				}
+
+				$code = Models\AuthorizationCode::generate($client, $user, $r, $scopesInQuestion);
+				$this->storage->saveAuthorizationCode($code);
+
+				$tokenresponse = Messages\AuthorizationResponse::generate($request, $code);
+
+				Logger::info('OAuth Authorization Code is now stored, and may be fetched via the token endpoint.', array(
+					'user' => $user->getAsArray(),
+					'client' => $client->getAsArray(),
+					'code' => $code->getAsArray(),
+					'tokenresponse' => $tokenresponse->getAsArray(),
+				));
+
+				return $tokenresponse->sendRedirect($request->redirect_uri);
+
+			} else {
+				throw new Exception('Unsupported response_type in request. Only supported code and token.');
+			}
+
+
+
+
+		} catch (OAuthException $e) {
+
+			$msg = array(
+				'error' => $e->code,
+				'error_description' => $e->getMessage(),
+				'error_uri' => 'https://feideconnect.no',
+			);
+			Logger::error('OAuth Error Response at Token endpoint.', $msg);
+
+
+			// header("HTTP/1.1 " . $e->getHTTPcode() );
+			// header('Content-Type: application/json; charset: utf-8');
+
+			$response = new Messages\ErrorResponse($msg);
+			return $response->sendBodyJSON();
+
+			
 		}
-
-
-
 
 
 
@@ -265,7 +285,6 @@ class Server {
 
 
 		$si = new ScopesInspector($client, $scopesInQuestion);
-
 
 
 		$u = $user->getBasicUserInfo(true);
@@ -311,22 +330,12 @@ class Server {
 
 
 		if (isset($_REQUEST['debug'])) {
-			header('Content-Type: text/plain; charset=utf-8');
-			print_r($data); exit;	
+			return (new JSONResponse($data))->setCORS(false);
 		}
 		
-
-		header("Content-Type: text/html; charset: utf-8");
-
-		$mustache = new \Mustache_Engine(array(
-			// 'cache' => '/tmp/uwap-mustache',
-			'loader' => new \Mustache_Loader_FilesystemLoader(dirname(dirname(dirname(__FILE__))).'/templates'),
-			// 'partials_loader' => new Mustache_Loader_FilesystemLoader(dirname(__FILE__).'/views/partials'),
-		));
-		$tpl = $mustache->loadTemplate('oauthgrant');
-		echo $tpl->render($data);
-		exit;
-
+		$response = new TemplatedHTMLResponse('oauthgrant');
+		$response->setData($data);
+		return $response;
 
 	}
 
@@ -340,7 +349,7 @@ class Server {
 
 
 	/**
-	 * Impmentation of the OAuth 2.0 Token Endpoint.
+	 * Implementation of the OAuth 2.0 Token Endpoint.
 	 * @return [type] [description]
 	 */
 	public function token() {
@@ -452,7 +461,7 @@ class Server {
 					'tokenresponse' => $tokenresponse->getAsArray(),
 				));
 
-				$tokenresponse->sendBodyJSON();
+				return $tokenresponse->sendBodyJSON();
 
 
 				
@@ -500,7 +509,7 @@ class Server {
 				$accesstoken = $pool->getToken($requestedScopes, false, $expires_in);
 
 				$tokenresponse = Messages\TokenResponse::generateFromAccessToken($accesstoken);
-				$tokenresponse->sendBodyJSON();
+				return $tokenresponse->sendBodyJSON();
 
 
 
@@ -525,7 +534,7 @@ class Server {
 			// header('Content-Type: application/json; charset: utf-8');
 
 			$response = new Messages\ErrorResponse($msg);
-			$response->sendBodyJSON();
+			return $response->sendBodyJSON();
 
 			
 		}
