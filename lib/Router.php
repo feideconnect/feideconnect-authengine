@@ -66,8 +66,8 @@ class Router {
 		return $this->dispatcher->dispatch($_SERVER['REQUEST_METHOD'], parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH));
 	}
 
-	function dispatchCustom($method, $uri, $path) {
-		return $this->dispatcher->dispatch($method, $uri, $path);
+	function dispatchCustom($method, $path) {
+		return $this->dispatcher->dispatch($method, $path);
 	}
 
 
