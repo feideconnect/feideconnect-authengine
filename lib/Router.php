@@ -14,27 +14,19 @@ class Router {
 
 		$this->router = new Phroute\RouteCollector();
 
-		// TODO: Make sure not to send CORS headers on all pages. In particular the grant display page..
-		// May be never send CORS on all HTML and always on JSON...!
-
-
-		// $this->router->options('{a:.*}', function() {
-		// 	return new EmptyResponse();
-		// });
-
-		// Testing...
-		$this->router->get('/test', ['FeideConnect\Controllers\TestController', 'test']);
 
 
 		// Pages
 		$this->router->get('/reject', ['FeideConnect\Controllers\Pages', 'reject']);
 		$this->router->get('/loggedout', ['FeideConnect\Controllers\Pages', 'loggedout']);
 
+
 		// POC
 		$this->router->get('/poc/{user}/{client}', ['FeideConnect\Controllers\POC', 'process']);
+		$this->router->get('/test', ['FeideConnect\Controllers\TestController', 'test']);
+
 
 		// Data APIs
-
 		$this->router->get('/user/media/{userid:[a-zA-Z0-9_\-\.:]+ }', ['FeideConnect\Controllers\Data', 'getUserProfilephoto']);
 		$this->router->get('/client/media/{clientid:[a-fA-F0-9\-]+ }', ['FeideConnect\Controllers\Data', 'getClientLogo']);
 
@@ -46,18 +38,19 @@ class Router {
 		$this->router->any('/oauth/token', ['FeideConnect\Controllers\OAuth', 'token']);
 
 
+		// Informatio about authentication.
 		$this->router->get('/auth', ['FeideConnect\Controllers\Auth', 'userdebug']);
 		$this->router->get('/userinfo', ['FeideConnect\Controllers\Auth', 'userinfo']);
 		$this->router->get('/userinfo/authinfo', ['FeideConnect\Controllers\Auth', 'authinfo']);
 		$this->router->get('/logout', ['FeideConnect\Controllers\Auth', 'logout']);
 
 
+		// IdP Discovery page
 		$this->router->get('/disco', ['FeideConnect\Controllers\Disco', 'process']);
 
 
 		// OpenID Connect
 		$this->router->get('/.well-known/openid-configuration', ['FeideConnect\Controllers\OpenIDConnect', 'config']);
-
 
 
 		// NB. You can cache the return value from $router->getData() 
