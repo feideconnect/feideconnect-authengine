@@ -28,6 +28,9 @@ class JSONResponse extends HTTPResponse {
 		return $this;
 	}
 
+	public function getData() {
+		return $this->data;
+	}
 
 	protected function sendBody() {
 
