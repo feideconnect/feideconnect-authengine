@@ -24,6 +24,13 @@ if ($command[0] === 'user') {
 
 	}
 
+
+} else if ($command[0] === 't') {
+
+	$cli->t();
+
+
+
 } else if ($command[0] === 'users') {
 
 	$cli->getUsers();

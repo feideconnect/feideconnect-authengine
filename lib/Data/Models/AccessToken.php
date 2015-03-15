@@ -2,6 +2,12 @@
 
 namespace FeideConnect\Data\Models;
 use FeideConnect\Data\StorageProvider;
+use Cassandra\Type\Uuid;
+use Cassandra\Type\CollectionMap;
+use Cassandra\Type\CollectionSet;
+use Cassandra\Type\Base;
+use Cassandra\Type\Timestamp;
+
 
 class AccessToken extends \FeideConnect\Data\Model {
 
@@ -10,6 +16,34 @@ class AccessToken extends \FeideConnect\Data\Model {
 		"access_token", "clientid", "userid", "issued", 
 		"scope", "token_type", "validuntil", "lastuse"
 	);
+	protected static $_types = [
+		"issued" => "timestamp",
+		"validuntil" => "timestamp",
+		"lastuse" => "timestamp"
+	];
+
+
+	public function getStorableArray() {
+
+		$prepared = parent::getStorableArray();
+
+		if (isset($this->access_token)) {
+			$prepared["access_token"] = new Uuid($this->access_token);
+		}
+		if (isset($this->clientid)) {
+			$prepared["clientid"] = new Uuid($this->clientid);
+		}
+		if (isset($this->userid)) {
+			$prepared["userid"] = new Uuid($this->userid);
+		}
+		if (isset($this->scope)) {
+			$prepared["scope"] = new CollectionSet($this->scope, Base::ASCII);
+		}
+
+
+		return $prepared;
+	}
+
 
 
 	public static function generateFromCode(Models\AuthorizationCode $code) {
@@ -52,8 +86,7 @@ class AccessToken extends \FeideConnect\Data\Model {
 
 
 	public function stillValid() {
-		$now = time();
-		return ($this->validuntil > $now);
+		return (!($this->validuntil->inPast()));
 	}
 
 
@@ -71,16 +104,17 @@ class AccessToken extends \FeideConnect\Data\Model {
 		if ($user !== null) {
 			$n->userid = $user->userid;	
 		}
-	
-		$n->issued = time();
-		$n->validuntil = time() + $expires_in;
+
+		$n->issued = new \FeideConnect\Data\Types\Timestamp();
+		$n->validuntil = (new \FeideConnect\Data\Types\Timestamp())->addSeconds($expires_in);
+
 		$n->access_token = self::genUUID();
 
 		if ($refreshtoken) {
 			$n->refresh_token = self::genUUID();
 		}
 
-		$n->token_type = 'Bearer';
+		$n->token_type = 'bearer';
 		
 		if ($scope !== null) {
 			$n->scope = $scope;

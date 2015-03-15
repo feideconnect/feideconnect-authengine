@@ -93,8 +93,8 @@ class POC {
 		
 		$token->scope = $client->scopes;
 		$token->token_type = 'bearer';
-		$token->validuntil = time() + 3600;
-		$token->issued = time();
+		$token->validuntil = microtime(true) + (3600);
+		$token->issued = microtime(true);
 
 		$storage->saveToken($token);
 

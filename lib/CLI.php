@@ -5,6 +5,7 @@ namespace FeideConnect;
 
 use FeideConnect\Authentication\UserID;
 use FeideConnect\Data\StorageProvider;
+use FeideConnect\Data\Types\Timestamp;
 
 class CLI {
 
@@ -34,10 +35,16 @@ class CLI {
 			$this->info("No user found");
 		}
 
+		// echo "user is " . var_export($user, true);
+		// $user->get();
+
+
 		$info = $user->getAsArray();
 		$info["profilephoto"] = '----';
 
-		$this->oneEntry($info);
+		// echo var_export($info, true);
+
+		$this->oneEntry($user);
 
 		$this->info();
 		$this->info("looking up reverse entries");
@@ -82,6 +89,7 @@ class CLI {
 
 		$this->header("Fetch information about client " . $clientid);
 		$client = $this->storage->getClient($clientid);
+		$client->logo = '----';
 		$this->oneEntry($client);
 		return $client;
 
@@ -97,7 +105,20 @@ class CLI {
 		$this->header("Fetch information about token " . $token);
 
 		$token = $this->storage->getAccessToken($token);
+
+		// print_r($token); 
+
 		$this->oneEntry($token);
+
+
+		if (isset($token->userid)) {
+			$this->getUser('uuid:' . $token->userid);
+		}
+
+		if (isset($token->clientid)) {
+			$this->getClient($token->clientid);
+		}
+
 
 	}
 
@@ -157,6 +178,149 @@ class CLI {
 
 	}
 
+	public function t() {
+
+		$c1 = \FeideConnect\Data\Models\Client::genUUID();
+
+		$userid = \FeideConnect\Data\Models\Client::genUUID();
+
+		$user = new \FeideConnect\Data\Models\User();
+		$user->userid = $userid;
+
+		$client = new \FeideConnect\Data\Models\Client();
+		$client->id = $c1;
+		$client->client_secret = \FeideConnect\Data\Models\Client::genUUID();
+		$client->created = new \FeideConnect\Data\Types\Timestamp();
+		$client->name = 'name';
+		$client->descr = 'descr';
+		$client->owner = $userid;
+		$client->redirect_uri = ['http://example.org'];
+		$client->scopes = ['userinfo', 'groups'];
+
+		// echo var_export($client);
+
+		$this->storage->saveClient($client);
+
+		return;
+
+
+
+
+
+		$clientid = \FeideConnect\Data\Models\Client::genUUID();
+		$userid = \FeideConnect\Data\Models\User::genUUID();
+
+		$user = new \FeideConnect\Data\Models\User();
+		$user->userid = $userid;
+
+
+		
+		$token = new \FeideConnect\Data\Models\AccessToken();
+		$token->access_token = \FeideConnect\Data\Models\AccessToken::genUUID();
+		$token->clientid = $clientid;
+		$token->userid = $userid;
+		$token->scope = ['userinfo', 'groups'];
+		$token->token_type = 'Bearer';
+		$token->issued = new \FeideConnect\Data\Types\Timestamp();
+		$token->validuntil = (new \FeideConnect\Data\Types\Timestamp())->addSeconds(3600);
+		$token->lastuse = (new \FeideConnect\Data\Types\Timestamp())->addSeconds(5);
+
+		echo "-------\n";
+		echo var_export($token->getAsArray());
+		echo "-------\n";
+		echo var_export($token->getStorableArray());
+		echo "-------\n";
+
+		// return;
+
+		$this->storage->saveToken($token);
+
+
+
+
+
+		echo 'microtime(true)*1000' . "\n";
+		echo microtime(true)*1000 . "\n";
+
+
+		$token2 = $this->storage->getAccessToken($token->access_token);
+		echo var_export($token2->getAsArray());
+
+
+
+
+		echo "\n\nselect * from oauth_tokens where access_token = " . $token->access_token . "\n\n";
+
+		return;
+
+
+
+
+		$uuid = \FeideConnect\Data\Model::genUUID();
+		$feideid = 'feide:test@test.org';
+		$mail = 'mail:tester.test@test@org';
+
+
+		$photo = file_get_contents(dirname(dirname(__FILE__)) . '/www/static/media/default-profile.jpg');
+		$photohash = sha1($photo);
+		// echo $photo;
+		// echo $photohash;
+		// exit;
+
+		$user = new \FeideConnect\Data\Models\User();
+		$user->userid = $uuid;
+		$user->setUserInfo('test:test', 'Tester Test', $mail, $photo, $photohash);
+		$user->selectedsource = 'feide:uninett.no';
+		$user->ensureProfileAccess();
+
+		$this->storage->saveUser($user);
+
+		$this->storage->updateProfilePhoto($user, 'test:test');
+
+		$this->storage->updateUserInfo($user, 'test:test', ['name', 'email']);
+
+		$this->storage->deleteUser($user);
+
+
+
+	}
+
+
+
+	public function t2() {
+			// $ulist = $this->storage->getUserByUserIDsecList(['feide:andreas@uninett.no', 'mail:foo']);
+			// print_r($ulist);
+
+
+		$uuid = \FeideConnect\Data\Model::genUUID();
+		$feideid = 'feide:test@test.org';
+		$mail = 'mail:tester.test@test@org';
+
+
+		$photo = file_get_contents(dirname(dirname(__FILE__)) . '/www/static/media/default-profile.jpg');
+		$photohash = sha1($photo);
+		// echo $photo;
+		// echo $photohash;
+		// exit;
+
+		$user = new \FeideConnect\Data\Models\User();
+		$user->userid = $uuid;
+		$user->setUserInfo('test:test', 'Tester Test', $mail, $photo, $photohash);
+		$user->selectedsource = 'feide:uninett.no';
+		$user->ensureProfileAccess();
+
+		$this->storage->saveUser($user);
+
+		$this->storage->updateProfilePhoto($user, 'test:test');
+
+		$this->storage->updateUserInfo($user, 'test:test', ['name', 'email']);
+
+		$this->storage->deleteUser($user);
+
+
+
+	}
+
 
 	public function l($data, $fmt) {
 
@@ -179,7 +343,9 @@ class CLI {
 
 	}
 
-	function oneEntry($data) {
+	function oneEntry($object) {
+
+		$data = $object->getAsArray();
 
 		foreach($data AS $k => $v) {
 			if (!is_string($v)) {

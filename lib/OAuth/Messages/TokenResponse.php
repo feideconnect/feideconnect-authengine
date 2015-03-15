@@ -29,7 +29,7 @@ class TokenResponse extends Message {
 			"token_type" => $accesstoken->token_type,
 		];
 
-		if (isset($accesstoken->validuntil)) $a["expires_in"] = $accesstoken->validuntil - time();
+		if (isset($accesstoken->validuntil)) $a["expires_in"] = $accesstoken->validuntil->getInSeconds();
 		if (isset($accesstoken->refresh_token)) $a["refresh_token"] = $accesstoken->refresh_token;
 		if (isset($accesstoken->scope)) $a["scope"] = join(' ', $accesstoken->scope);
 
@@ -45,7 +45,7 @@ class TokenResponse extends Message {
 			"token_type" => $accesstoken->token_type,
 		];
 
-		if (isset($accesstoken->validuntil)) $a["expires_in"] = $accesstoken->validuntil - time();
+		if (isset($accesstoken->validuntil)) $a["expires_in"] = $accesstoken->validuntil->getInSeconds();
 		if (isset($accesstoken->refresh_token)) $a["refresh_token"] = $accesstoken->refresh_token;
 		if (isset($accesstoken->scope)) $a["scope"] = join(' ', $accesstoken->scope);
 

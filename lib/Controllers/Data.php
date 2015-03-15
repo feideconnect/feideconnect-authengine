@@ -28,7 +28,7 @@ class Data {
 		if (!empty($user)) {
 			$userinfo = $user->getUserInfo();
 			if (!empty($userinfo['profilephoto'])) {
-				$response->setImage($userinfo['profilephoto'], 'jpeg');
+				$response->setImage(substr($userinfo['profilephoto'], 4), 'jpeg');
 			} else {
 				$response->setImageFile('www/static/media/default-profile.jpg', 'jpeg');
 			}

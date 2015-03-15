@@ -36,7 +36,7 @@ class UserMapper {
 		$user->userid = $uuid;
 
 
-		$user->created = time();
+		$user->created = new \FeideConnect\Data\Types\Timestamp();
 
 		$user->userid_sec = $account->getUserIDs();
 
@@ -53,7 +53,7 @@ class UserMapper {
 
 		$user->userid_sec_seen = array();
 		foreach($user->userid_sec AS $u) {
-			$user->userid_sec_seen[$u] = time();
+			$user->userid_sec_seen[$u] = microtime(true)*1000.0;
 		}
 
 		$this->repo->saveUser($user);
