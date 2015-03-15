@@ -19,7 +19,6 @@ class OAuthTest extends \PHPUnit_Framework_TestCase {
 		// $config = json_decode(file_get_contents(__DIR__ . '/../etc/ci/config.json'), true);
 		$this->db = StorageProvider::getStorage();
 
-
 		$clientid = Models\Client::genUUID();
 	
 		$client = new Models\Client($this->db);
@@ -50,20 +49,29 @@ class OAuthTest extends \PHPUnit_Framework_TestCase {
 		$this->assertArrayHasKey('authorization', $data);
 		$this->assertArrayHasKey('token', $data);
 
+    }
 
+    public function testAuthorizationRequestImplicitGrant() {
 
-  //   	echo "oooooo";
-		// echo("........==> " . Config::getValue('test.foo.lo')); 
+		$router = new Router();
+		
+		$_REQUEST['response_type'] = 'token';
+		$_REQUEST['state'] = '06dad165-7d22-4dcf-bda9-38f4048b9e3d';
+		$_REQUEST['redirect_uri'] = 'http://developers.dev.feideconnect.no/index.dev.html';
+		$_REQUEST['client_id'] = 'e8160a77-58f8-4006-8ee5-ab64d17a5b1e';
 
-		// $this->assertTrue(Config::getValue('test.bar', true) === true, 'Config picking not existing prop should return default');
-		// $this->assertTrue(Config::getValue('test.foo.lo') === 3, 'Config read test.foo.lo === 3');
+		$response = $router->dispatchCustom('GET', '/oauth/authorization');
 
-		// $this->assertTrue(Config::getValue('test.foo.li', 3) === 3, 'Config read fall back to default param');
+		$this->assertInstanceOf('FeideConnect\HTTP\HTTPResponse', $response, 'Expected response to be an httpresponse');
 
-		// $this->assertTrue(Config::getValue('test.foo.li', null, true) === 3, 'should throw exceptoin');
+		$data = $response->getData();
 
+		$this->assertArrayHasKey('authorization', $data);
+		$this->assertArrayHasKey('token', $data);
 
     }
+
+
 
 
 }
