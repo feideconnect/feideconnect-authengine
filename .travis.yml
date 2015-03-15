@@ -29,7 +29,7 @@ before_script:
 - mkdir logs
 - sudo service apache2 restart
 script:
-- phpunit --coverage-clover build/logs/clover.xml --bootstrap autoload.php tests
+- phpunit --coverage-clover build/logs/clover.xml --bootstrap autoload.php tests/DBTest.php
 - phantomjs tests-phantomjs/main.js
 # Run PHPinfo
 # - curl http://127.0.0.1/phpinfo
