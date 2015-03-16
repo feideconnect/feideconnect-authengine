@@ -10,6 +10,10 @@
 	},
 	"salt": "73d9c77b-951f-4a29-9113-3e72405cfa1a",
 
+	"connect": {
+		"issuer": "connect"
+	},
+	
 	"test": {
 		"foo": {
 			"la": "ba",
