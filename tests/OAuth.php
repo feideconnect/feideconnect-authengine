@@ -43,6 +43,8 @@ class OAuthTest extends \PHPUnit_Framework_TestCase {
 
     public function testOAuthConfig() {
 
+		echo "testOAuthConfig\n";
+
 
 		$router = new Router();
 
@@ -57,6 +59,8 @@ class OAuthTest extends \PHPUnit_Framework_TestCase {
     }
 
     public function testAuthorizationRequestImplicitGrant() {
+
+		echo "testAuthorizationRequestImplicitGrant\n";
 
 		$router = new Router();
 		
