@@ -10,9 +10,9 @@ before_install:
 - sudo apt-get install apache2 libapache2-mod-fastcgi 
 - printf "\n" | pecl install imagick
 # Should also install php5-mcrypt php5-imagick
-- composer self-update
+- /home/travis/.phpenv/versions/5.5/bin/composer self-update
 install:
-- composer install --dev
+- composer install
 before_script:
 - cqlsh 127.0.0.1 -f etc/bootstrap.init-keyspace-ci.sql
 - cqlsh 127.0.0.1 -f etc/bootstrap.sql
@@ -31,7 +31,7 @@ before_script:
 - mkdir logs
 - sudo service apache2 restart
 script:
-#- phpunit --debug -v --coverage-clover build/logs/clover.xml --bootstrap autoload.php tests/DBTest.php
+#- phpunit --debug -v --coverage-clover build/logs/clover.xml --bootstrap lib/_autoload.php tests
 - phpunit --help
 - phpunit --version
 - phpunit --debug -v tests
