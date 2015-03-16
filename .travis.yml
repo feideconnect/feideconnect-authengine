@@ -32,10 +32,7 @@ before_script:
 - sudo service apache2 restart
 script:
 #- phpunit --debug -v --coverage-clover build/logs/clover.xml --bootstrap lib/_autoload.php tests
-- phpunit --help
-- phpunit --version
-- phpunit --debug -v tests
-- phpunit --debug -v --bootstrap lib/_autoload.php tests/OAuth.php
+# - phpunit --debug -v --bootstrap lib/_autoload.php tests/OAuth.php
 - phantomjs tests-phantomjs/main.js
 # Run PHPinfo
 # - curl http://127.0.0.1/phpinfo
