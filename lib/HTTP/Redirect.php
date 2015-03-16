@@ -42,14 +42,14 @@ class Redirect extends HTTPResponse {
 	protected function sendBody() {
 
 		// Copied from SimplesAMLphp::Utilties.
-		assert('is_string($url)');
-		assert('!empty($url)');
+		assert('is_string($this->url)');
+		assert('!empty($this->url)');
 		// assert('is_array($parameters)');
 		// if (!empty($parameters)) {
 		// 	$url = self::addURLparameter($url, $parameters);
 		// }
 
-		if (strlen($url) > 2048) {
+		if (strlen($this->url) > 2048) {
 			error_log('Redirecting to a URL longer than 2048 bytes.');
 		}
 
@@ -68,7 +68,7 @@ class Redirect extends HTTPResponse {
 		echo '<p>';
 		echo 'You were redirected to: ';
 		echo '<a id="redirlink" href="' .
-			htmlspecialchars($url) . '">' . htmlspecialchars($url) . '</a>';
+			htmlspecialchars($this->url) . '">' . htmlspecialchars($this->url) . '</a>';
 		echo '<script type="text/javascript">document.getElementById("redirlink").focus();</script>';
 		echo '</p>';
 		echo '</body>';
