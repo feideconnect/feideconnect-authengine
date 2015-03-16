@@ -32,6 +32,9 @@ before_script:
 - sudo service apache2 restart
 script:
 #- phpunit --debug -v --coverage-clover build/logs/clover.xml --bootstrap autoload.php tests/DBTest.php
+- phpunit --help
+- phpunit --version
+- phpunit --debug -v tests
 - phpunit --debug -v --bootstrap autoload.php tests
 - phantomjs tests-phantomjs/main.js
 # Run PHPinfo
