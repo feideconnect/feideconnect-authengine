@@ -12,7 +12,7 @@ use FeideConnect\Data\Models;
 class OAuthTest extends \PHPUnit_Framework_TestCase {
 
 
-	protected $db;
+	protected $db, $client;
 
 	function __construct() {
 
@@ -24,12 +24,14 @@ class OAuthTest extends \PHPUnit_Framework_TestCase {
 		$client = new Models\Client($this->db);
 		$client->id = $clientid;
 		$client->client_secret = Models\Client::genUUID();
-		$client->created = time();
+		$client->created = new \FeideConnect\Data\Types\Timestamp();
 		$client->name = 'name';
 		$client->descr = 'descr';
 		$client->owner = null;
 		$client->redirect_uri = ['http://example.org'];
 		$client->scopes = ['userinfo', 'groups'];
+
+		$this->client = $client;
 
 		$this->db->saveClient($client);
 
@@ -68,6 +70,14 @@ class OAuthTest extends \PHPUnit_Framework_TestCase {
 
 		$this->assertArrayHasKey('authorization', $data);
 		$this->assertArrayHasKey('token', $data);
+
+		$this->cleanup();
+
+    }
+
+    protected function cleanup() {
+
+    	$this->db->removeClient($this->client);
 
     }
 
