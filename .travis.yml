@@ -35,7 +35,7 @@ script:
 - phpunit --help
 - phpunit --version
 - phpunit --debug -v tests
-- phpunit --debug -v --bootstrap autoload.php tests
+- phpunit --debug -v --bootstrap lib/_autoload.php tests/OAuth.php
 - phantomjs tests-phantomjs/main.js
 # Run PHPinfo
 # - curl http://127.0.0.1/phpinfo
