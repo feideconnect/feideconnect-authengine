@@ -16,6 +16,9 @@ class OAuthTest extends \PHPUnit_Framework_TestCase {
 
 	function __construct() {
 
+		echo "OAuth test suite is about to start\n";
+
+
 		// $config = json_decode(file_get_contents(__DIR__ . '/../etc/ci/config.json'), true);
 		$this->db = StorageProvider::getStorage();
 
