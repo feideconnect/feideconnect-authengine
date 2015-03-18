@@ -149,7 +149,8 @@ class POC {
 
 		echo "\n\n";
 		echo "you can use this token like this: \n";
-		echo 'curl -H "Authorization: Bearer ' . $token->access_token . '" https://api.feideconnect.no/test/user ';
+		echo "export token=" . $token->access_token . "\n";
+		echo 'curl -H "Authorization: Bearer $token" https://api.feideconnect.no/test/user ';
 		echo "\n\n";
 		exit;
 
