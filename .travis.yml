@@ -39,7 +39,7 @@ script:
 - cat logs/error.log
 - cat logs/access.log
 notifications:
-  slack: uninett:5CpnkrlaqOLKLXDttDzpTqqU
+  # slack: uninett:5CpnkrlaqOLKLXDttDzpTqqU
 addons:
   code_climate:
     repo_token: 2aad4fd8a7ffbcc2f41f88c69c93c6b0a8abed2c01f14f0f50dc81ef6184e8d8
