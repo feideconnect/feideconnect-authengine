@@ -33,6 +33,8 @@ DROP INDEX IF EXISTS group_members_groupid_idx;
 DROP INDEX IF EXISTS group_members_status_idx;
 DROP INDEX IF EXISTS group_members_type_idx;
 
+DROP TABLE IF EXISTS grep_codes;
+
 /* Clients */
 CREATE TABLE clients (
 	id uuid PRIMARY KEY,
@@ -200,4 +202,9 @@ CREATE TABLE apigk (
 );
 CREATE INDEX apigk_owner_idx ON apigk(owner);
 
-
+CREATE TABLE grep_codes (
+	id text PRIMARY KEY,
+	title map<text, text>,
+	code text,
+	last_changed timestamp
+);
