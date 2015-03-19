@@ -16,8 +16,11 @@ class OAuthTest extends \PHPUnit_Framework_TestCase {
 
 	function __construct() {
 
-		echo "OAuth test suite is about to start\n";
 
+		$_SERVER['REMOTE_ADDR'] = '127.0.0.1';
+		$_SERVER['REQUEST_URI'] = '/foo';
+		$_SERVER['REQUEST_METHOD'] = 'GET';
+		$_SERVER['SERVER_PROTOCOL'] = 'https';
 
 		// $config = json_decode(file_get_contents(__DIR__ . '/../etc/ci/config.json'), true);
 		$this->db = StorageProvider::getStorage();
@@ -43,10 +46,6 @@ class OAuthTest extends \PHPUnit_Framework_TestCase {
 
     public function testOAuthConfig() {
 
-		echo "testOAuthConfig\n";
-		return;
-
-
 		$router = new Router();
 
 		$response = $router->dispatchCustom('GET', '/oauth/config');
@@ -60,9 +59,6 @@ class OAuthTest extends \PHPUnit_Framework_TestCase {
     }
 
     public function testAuthorizationRequestImplicitGrant() {
-
-		echo "testAuthorizationRequestImplicitGrant\n";
-		return;
 
 		$router = new Router();
 		
