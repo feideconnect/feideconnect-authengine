@@ -30,49 +30,12 @@ for(var key in http) {
 
 
 
-var post = function(host, data) {
-
-	var body = JSON.stringify(data, undefined, 1);
-	var bodylength = body.length;
-
-
-	// An object of options to indicate where to post to
-	var post_options = {
-		host: host,
-		port: '80',
-		path: '/compile',
-		method: 'POST',
-		headers: {
-				'Content-Type': 'application/json; charset=utf-8',
-				'Content-Length': bodylength
-		}
-	};
-
-	// Set up the request
-	var request = http.request(post_options, function(res) {
-		res.setEncoding('utf8');
-		res.on('data', function (chunk) {
-			console.log('Response: ' + chunk);
-		});
-	});
-
-	// post the data
-	request.write(body);
-	request.end();
-
-}
-
-post("6be.httpjs.net", {
-	"foo": "BAR"
-});
 
 
 
-
-
-// var o = new OAuth(config);
-// var collection = new FlowCollection(casper, o);
-// collection.run();
+var o = new OAuth(config);
+var collection = new FlowCollection(casper, o);
+collection.run();
 
 
 
