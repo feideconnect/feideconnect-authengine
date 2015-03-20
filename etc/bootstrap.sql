@@ -3,6 +3,7 @@ DROP TABLE IF EXISTS clients;
 DROP INDEX IF EXISTS clients_owner_idx;
 DROP INDEX IF EXISTS clients_scopes_idx;
 DROP INDEX IF EXISTS clients_scopes_requested_idx;
+DROP TABLE IF EXISTS clients_counters;
 
 
 DROP TABLE IF EXISTS users;
@@ -51,6 +52,8 @@ CREATE TABLE clients (
 	scopes_requested set<text>,
 	status set<text>,
 
+
+
 	owner uuid,
 	created timestamp,
 	updated timestamp
@@ -59,6 +62,12 @@ CREATE INDEX clients_owner_idx 				ON clients(owner);
 CREATE INDEX clients_scopes_idx 			ON clients(scopes);
 CREATE INDEX clients_scopes_requested_idx 	ON clients(scopes_requested);
 
+
+CREATE TABLE clients_counters (
+	id uuid PRIMARY KEY,
+	count_tokens counter,
+	count_users counter
+);
 
 
 
@@ -102,6 +111,7 @@ CREATE TABLE groups (
 	created timestamp,
 	updated timestamp
 );
+
 CREATE INDEX groups_owner_idx ON groups(owner);
 CREATE INDEX groups_public_idx ON groups(public);
 

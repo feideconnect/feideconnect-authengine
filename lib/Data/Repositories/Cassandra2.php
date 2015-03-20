@@ -535,9 +535,12 @@ class Cassandra2 extends \FeideConnect\Data\Repository {
 		if (!($token->validuntil instanceof \FeideConnect\Data\Types\Timestamp)) {
 			throw new StorageException('Could not store an access token without a properly set valid until timestamp.');
 		}
-		// echo '<pre>'; print_r($token); exit;
 		$query = self::generateInsert('oauth_tokens', $data, $this->getTTLskew($token->validuntil));
 		$this->execute($query, $data, __FUNCTION__);
+
+		$query = 'UPDATE "clients_counters" SET count_tokens = count_tokens + 1 WHERE "id" = :id';
+		$params = ['id' => new Uuid($token->clientid)];
+		$this->execute($query, $params, __FUNCTION__);
 	}
 	function removeAccessToken(Models\AccessToken $token) {
 		$query = 'DELETE FROM "oauth_tokens" WHERE "access_token" = :access_token';
@@ -566,6 +569,10 @@ class Cassandra2 extends \FeideConnect\Data\Repository {
 		$data = $authorization->getStorableArray();
 		$query = self::generateInsert('oauth_authorizations', $data);
 		$this->execute($query, $data, __FUNCTION__);
+
+		$query = 'UPDATE "clients_counters" SET count_users = count_users + 1 WHERE "id" = :id';
+		$params = ['id' => new Uuid($authorization->clientid)];
+		return $this->execute($query, $params, __FUNCTION__);
 	}
 
 	function removeAuthorizations($userid, $clientid) {
@@ -575,6 +582,11 @@ class Cassandra2 extends \FeideConnect\Data\Repository {
 			'clientid' => new Uuid($clientid)
 		];
 		$this->execute($query, $params, __FUNCTION__);
+
+		$query = 'UPDATE "clients_counters" SET count_users = count_users - 1 WHERE "id" = :id';
+		$params = ['id' => new Uuid($authorization->clientid)];
+		return $this->execute($query, $params, __FUNCTION__);
+
 	}
 
 	
