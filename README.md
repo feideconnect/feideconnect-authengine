@@ -56,7 +56,12 @@ Initalize Cassandra schema
 
 ## Test
 
-	phpunit --bootstrap autoload.php tests 
+
+	phpunit --bootstrap lib/_autoload.php tests
+	casperjs test tests-casperjs/index.js
+	phantomjs tests-phantomjs/main.js
+
+
 
 
 
