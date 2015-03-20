@@ -8,3 +8,5 @@ www/static/components
 node_modules
 cache.properties
 build
+etc/ci/simplesamlphp-config/simplesamlphp-config
+etc/ci/simplesamlphp-metadata/simplesamlphp-metadata
