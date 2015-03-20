@@ -33,10 +33,9 @@ class CLI {
 
 		if ($user === null) {
 			$this->info("No user found");
+			return null;
 		}
 
-		// echo "user is " . var_export($user, true);
-		// $user->get();
 
 
 		$info = $user->getAsArray();
@@ -50,6 +49,8 @@ class CLI {
 		$this->info("looking up reverse entries");
 
 		$cql = '';
+
+		echo var_export($info, true); exit;
 
 		foreach($user->userid_sec AS $k) {
 
@@ -129,9 +130,9 @@ class CLI {
 	}
 
 
-	function getUsers() {
+	function getUsers($count) {
 
-		$users = $this->storage->getUsers();
+		$users = $this->storage->getUsers($count);
 		$this->header("List users");
 		$c = 0;
 		foreach($users AS $user) {
@@ -151,6 +152,25 @@ class CLI {
 
 
 	}
+
+
+	public function getUserIDsec($count = 100) {
+		$users = $this->storage->getUserIDsecList($count);
+		$c = 0;
+		foreach($users AS $user) {
+
+			// $uinfo = $user->getBasicUserInfo(true, true);
+			$uinfo = $user;
+			$uinfo["c"] = ++$c;
+			echo $this->l($uinfo, [
+				"c" => ["%3d", "red"],
+				"userid" => ["%38s", "black", 38 ],
+				"userid_sec" => ["%-40s", "cyan", 40],
+			]);
+
+		}
+	}
+
 
 	public function getClients() {
 
@@ -346,6 +366,11 @@ class CLI {
 	function oneEntry($object) {
 
 		$data = $object->getAsArray();
+		if (isset($data['profilephoto'])) {
+			$data['profilephoto'] = '----';
+		}
+
+		// echo var_export($data, true);
 
 		foreach($data AS $k => $v) {
 			if (!is_string($v)) {

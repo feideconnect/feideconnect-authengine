@@ -4,7 +4,6 @@
 namespace FeideConnect;
 
 
-
 require(dirname(dirname(__FILE__)) . '/lib/_autoload.php');
 
 $command = new \Commando\Command();
@@ -24,16 +23,32 @@ if ($command[0] === 'user') {
 
 	}
 
-
 } else if ($command[0] === 't') {
 
 	$cli->t();
 
 
-
 } else if ($command[0] === 'users') {
 
-	$cli->getUsers();
+	// echo "command " . $command[1];
+
+	$count = 100;
+	if (isset($command[1])) {
+		$count = intval($command[1]);
+	}
+
+	$cli->getUsers($count);
+
+} else if ($command[0] === 'useridsec') {
+
+	// echo "command " . $command[1];
+
+	$count = 100;
+	if (isset($command[1])) {
+		$count = intval($command[1]);
+	}
+
+	$cli->getUserIDsec($count);
 
 } else if ($command[0] === 'apigk') {
 

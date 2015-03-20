@@ -198,6 +198,7 @@ class Cassandra2 extends \FeideConnect\Data\Repository {
 			}
 
 			if ($model !== null) {
+					// echo "Multiple objects first is " . var_export($data[0]); exit;
 				return $this->getObject($model, $data[0]);
 			} else {
 				return $data[0];
@@ -362,10 +363,10 @@ class Cassandra2 extends \FeideConnect\Data\Repository {
 		$this->execute($query1, ['userid' => new Uuid($user->userid)], __FUNCTION__);
 		if (!empty($user->userid_sec)) {
 			$this->execute($query2, [
-				'useridsec' => new CollectionSet([$user->userid_sec], Base::ASCII)
+				'useridsec' => new CollectionSet($user->userid_sec, Base::ASCII)
 			], __FUNCTION__);
 		}
-// 'useridsec' => new CollectionSet([$userid_sec], Base::ASCII)
+
 	}
 
 	function getUserByUserID($userid) {
@@ -435,6 +436,12 @@ class Cassandra2 extends \FeideConnect\Data\Repository {
 		$query = 'SELECT * FROM "users" LIMIT :count';
 		$params = ['count' => $count];
 		return $this->query($query, $params, __FUNCTION__, 'FeideConnect\Data\Models\User', true);
+	}
+
+	function getUserIDsecList($count = 100) {
+		$query = 'SELECT * FROM "userid_sec" LIMIT :count';
+		$params = ['count' => $count];
+		return $this->query($query, $params, __FUNCTION__, null, true);
 	}
 
 
