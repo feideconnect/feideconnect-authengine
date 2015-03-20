@@ -5,7 +5,7 @@ namespace FeideConnect;
 
 
 
-require(dirname(dirname(__FILE__)) . '/autoload.php');
+require(dirname(dirname(__FILE__)) . '/lib/_autoload.php');
 
 $command = new \Commando\Command();
 $cli = new CLI();
