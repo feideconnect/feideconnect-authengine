@@ -50,25 +50,29 @@ class CLI {
 
 		$cql = '';
 
-		echo var_export($info, true); exit;
+		// echo var_export($info, true); exit;
 
-		foreach($user->userid_sec AS $k) {
+		if (!empty($user->userid_sec)) {
+			foreach($user->userid_sec AS $k) {
 
-			$u = $this->storage->getUserByUserIDsec($k);
+				$u = $this->storage->getUserByUserIDsec($k);
 
-			if ($u === null) {
-				$this->info("No reverse lookup for " . $k);
+				if ($u === null) {
+					$this->info("No reverse lookup for " . $k);
 
-				$cql .= " INSERT INTO userid_sec (userid, userid_sec) VALUES (" . $user->userid . ", '" . $k . "');\n";
+					$cql .= " INSERT INTO userid_sec (userid, userid_sec) VALUES (" . $user->userid . ", '" . $k . "');\n";
 
-			} else if ($u->userid === $user->userid) {
-				$this->info("OK reverse for " . $k);
-			} else {
+				} else if ($u->userid === $user->userid) {
+					$this->info("OK reverse for " . $k);
+				} else {
 
-				$this->info("ERROR in reverse for " . $k . " userid found was " . $u->userid);
+					$this->info("ERROR in reverse for " . $k . " userid found was " . $u->userid);
+				}
+
 			}
-
 		}
+
+
 
 		echo "\n\n" . $cql . "\n\n";
 
@@ -149,7 +153,7 @@ class CLI {
 
 		}
 
-
+		return $users;
 
 	}
 
@@ -158,7 +162,6 @@ class CLI {
 		$users = $this->storage->getUserIDsecList($count);
 		$c = 0;
 		foreach($users AS $user) {
-
 			// $uinfo = $user->getBasicUserInfo(true, true);
 			$uinfo = $user;
 			$uinfo["c"] = ++$c;
@@ -169,6 +172,7 @@ class CLI {
 			]);
 
 		}
+		return $users;
 	}
 
 

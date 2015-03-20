@@ -2,6 +2,8 @@
 <?php
 
 namespace FeideConnect;
+use FeideConnect\Data\StorageProvider;
+
 
 
 require(dirname(dirname(__FILE__)) . '/lib/_autoload.php');
@@ -10,16 +12,25 @@ $command = new \Commando\Command();
 $cli = new CLI();
 
 
+
+$storage = StorageProvider::getStorage();
+
 if ($command[0] === 'user') {
 
 	$userid = $command[1];
+
 	$user = $cli->getUser($userid);
 
 
 	if (isset($command[2]) && $command[2] === "delete") {
 
-		$cli->info("Deleting user " . $user->userid);
-		$cli->deleteUser($user);
+
+		if ($user === null) {
+			$cli->info("Cannot delete a user that we cannot find ");			
+		} else {
+			$cli->info("Deleting user " . $user->userid);
+			$cli->deleteUser($user);			
+		}
 
 	}
 
@@ -131,7 +142,7 @@ if ($command[0] === 'user') {
  } else if ($command[0] === 'consistency') {
 
 
- 	$users = $c->getUsers();
+ 	$users = $cli->getUsers(10000);
  	
 	$cql = '';
 
@@ -143,7 +154,7 @@ if ($command[0] === 'user') {
 
 		$keys = $u->userid_sec;
 		foreach($keys AS $key) {
-			$check = $c->getUserByUserIDsec($key);
+			$check = $storage->getUserByUserIDsec($key);
 			if (isset($check) && $check->userid === $u->userid) {
 				echo " OK    " . $key . " \n";
 			} else {
@@ -153,7 +164,26 @@ if ($command[0] === 'user') {
 		}
 
 	}
+
+
+ 	$useridsec = $cli->getUserIDsec(10000);
+
+
+	foreach($useridsec AS $u) {
+
+		// echo "Looking up user id " . $u["userid"];
+		$user = $storage->getUserByUserID($u["userid"]);
+
+		if ($user === null) {
+			echo "[" . $u["userid_sec"] . "] is linked to [" . $u["userid"] . "] but user is missing \n";
+			$cql .= " DELETE FROM userid_sec WHERE (userid_sec = '" . $u["userid_sec"] . "');\n";
+		}
+
+
+	}
 	echo " ------ \n" . $cql;
+
+
 
 
 } else if ($command[0] === 'setlogo' && $command[1] === 'client') {
