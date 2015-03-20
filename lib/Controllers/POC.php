@@ -93,8 +93,9 @@ class POC {
 		
 		$token->scope = $client->scopes;
 		$token->token_type = 'bearer';
-		$token->validuntil = microtime(true) + (3600);
-		$token->issued = microtime(true);
+		
+		$token->issued = new \FeideConnect\Data\Types\Timestamp();
+		$token->validuntil = (new \FeideConnect\Data\Types\Timestamp())->addSeconds(3600);
 
 		$storage->saveToken($token);
 
@@ -102,14 +103,29 @@ class POC {
 
 
 		$data = [];
+		$rawdata = [];
 		if (!empty($user)) {
 			$data['user'] = json_encode($user, JSON_PRETTY_PRINT);
-		}
+			$rawdata["user"] = $user;
+ 		}
 		if (!empty($client)) {
 			$data['client'] = json_encode($client, JSON_PRETTY_PRINT);
+			$rawdata["client"] = $client;
 		}
 		if (!empty($token)) {
 			$data['token'] = json_encode($token, JSON_PRETTY_PRINT);
+			$rawdata["token"] = $token;
+		}
+
+
+		
+
+		if (isset($_REQUEST['output']) && $_REQUEST['output'] === 'json') {
+
+			header('Content-Type: application/json; charset=utf-8');
+			echo json_encode($rawdata, JSON_PRETTY_PRINT);
+			exit;
+
 		}
 
 
@@ -117,6 +133,10 @@ class POC {
 		$response->setData($data);
 		return $response;
 
+
+
 	}
+
+
 
 }
