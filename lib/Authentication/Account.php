@@ -2,6 +2,8 @@
 
 namespace FeideConnect\Authentication;
 
+use FeideConnect\Config;
+
 class Account {
 
 	// TODO All attribute names and things needs to be put into config object, 
@@ -20,13 +22,20 @@ class Account {
 	function __construct($attributes) {
 		$this->attributes = $attributes;
 
-		$this->accountmap = [
+
+		$this->accountmap = Config::getValue('account.useridmap', [
 			"feide" => "eduPersonPrincipalName",
 			"mail" => "mail",
-		];
-		$this->realm = "eduPersonPrincipalName";
-		$this->name = ["displayName", "cn"];
-		$this->mail = "mail"; 
+			"nin" => "norEduPersonNIN"
+		]);
+
+		$this->realm = Config::getValue('account.realm', "eduPersonPrincipalName");
+		$this->name = Config::getValue('account.name', ["displayName", "cn"]);
+		$this->mail = Config::getValue('account.mail', "mail");
+
+
+		echo '<pre>';
+		print_r($this); exit;
 
 		if (isset($this->attributes['jpegPhoto']) && is_array($this->attributes['jpegPhoto'])) {
 			$this->photo = new AccountPhoto($this->attributes['jpegPhoto'][0]);

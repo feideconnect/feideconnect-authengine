@@ -8,5 +8,11 @@
 	"logging": {
 		"file": true
 	},
-	"salt": null
+	"salt": null,
+
+	"account": {
+		"useridmap": {
+			"feide": "eduPersonPrincipalName"
+		}
+	},
 }
