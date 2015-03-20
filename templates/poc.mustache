@@ -38,6 +38,13 @@
 				<h1>Proof of Concept</h1>
 
 
+				{{#token}}
+				<pre>export token={{raw.token.access_token}};
+curl -H "Authorization: Bearer $token" https://api.feideconnect.no/...</pre>
+				{{/token}}
+
+
+
 				{{#user}}
 				<h2>User</h2>
 				<pre>{{.}}</pre>

@@ -118,7 +118,7 @@ class POC {
 		}
 
 
-		
+		$data['raw'] = $rawdata;
 
 		if (isset($_REQUEST['output']) && $_REQUEST['output'] === 'json') {
 
