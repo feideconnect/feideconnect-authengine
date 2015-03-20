@@ -33,10 +33,6 @@ class Account {
 		$this->name = Config::getValue('account.name', ["displayName", "cn"]);
 		$this->mail = Config::getValue('account.mail', "mail");
 
-
-		echo '<pre>';
-		print_r($this); exit;
-
 		if (isset($this->attributes['jpegPhoto']) && is_array($this->attributes['jpegPhoto'])) {
 			$this->photo = new AccountPhoto($this->attributes['jpegPhoto'][0]);
 		}
