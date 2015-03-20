@@ -1,15 +1,14 @@
-/* cqlsh 127.0.0.1 -f etc/bootstrap.sql */
-
-
-USE feideconnect;
-
 
 DROP TABLE IF EXISTS clients;
 DROP INDEX IF EXISTS clients_owner_idx;
+DROP INDEX IF EXISTS clients_scopes_idx;
+DROP INDEX IF EXISTS clients_scopes_requested_idx;
 
 
 DROP TABLE IF EXISTS users;
 DROP TABLE IF EXISTS userid_sec;
+DROP INDEX IF EXISTS INDEX user_userid_sec_idx
+
 DROP TABLE IF EXISTS groups;
 DROP INDEX IF EXISTS groups_owner_idx;
 DROP INDEX IF EXISTS groups_public_idx;
@@ -24,6 +23,8 @@ DROP TABLE IF EXISTS oauth_authorizations;
 
 /* DROP INDEX IF EXISTS oauth_authorizations_userid_idx; */
 DROP INDEX IF EXISTS oauth_authorizations_clientid_idx;
+DROP INDEX IF EXISTS oauth_authorizations_scopes_idx;
+
 
 DROP TABLE IF EXISTS apigk;
 DROP INDEX IF EXISTS apigk_owner_idx;
@@ -55,9 +56,8 @@ CREATE TABLE clients (
 	updated timestamp
 );
 CREATE INDEX clients_owner_idx 				ON clients(owner);
-
-
-
+CREATE INDEX clients_scopes_idx 			ON clients(scopes);
+CREATE INDEX clients_scopes_requested_idx 	ON clients(scopes_requested);
 
 
 
@@ -84,6 +84,7 @@ CREATE TABLE userid_sec (
 	userid uuid,
 	PRIMARY KEY(userid_sec)
 );
+CREATE INDEX user_userid_sec_idx ON users(userid_sec);
 
 
 
@@ -176,6 +177,8 @@ CREATE TABLE oauth_authorizations (
 
 /* CREATE INDEX oauth_authorizations_userid_idx ON oauth_authorizations (userid); */
 CREATE INDEX oauth_authorizations_clientid_idx ON oauth_authorizations (clientid); 
+CREATE INDEX oauth_authorizations_scopes_idx ON oauth_authorizations (scopes);
+
 
 
 
@@ -208,3 +211,10 @@ CREATE TABLE grep_codes (
 	code text,
 	last_changed timestamp
 );
+
+
+
+
+
+
+
