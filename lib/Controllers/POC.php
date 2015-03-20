@@ -117,51 +117,6 @@ class POC {
 		$response->setData($data);
 		return $response;
 
-
-		
-		header('Content-Type: text/plain; charset=utf-8');
-
-		if ($user !== null) {
-
-			echo "You are about to get a token associated with this user: \n\n";
-			// print_r($user);
-			print_r($user->getBasicUserInfo());
-			echo "\n\n";
-
-
-		} else {
-
-			echo "You are about to get a token that are not associated with any users. \n\n";
-
-		}
-
-		echo "And you are about to generate a token for the following client \n";
-
-		$cinfo = $client->getAsArray();
-		$cinfo['logo'] = '...';
-
-		print_r($cinfo);
-
-		echo "\n\n";
-		echo "And finally, here is the token: \n\n";
-
-		print_r($token->getAsArray());
-
-		echo "\n\n";
-		echo "you can use this token like this: \n";
-		echo "export token=" . $token->access_token . "\n";
-		echo 'curl -H "Authorization: Bearer $token" https://api.feideconnect.no/test/user ';
-		echo "\n\n";
-		exit;
-
-
-
-
-
-		return new TemplatedHTMLResponse('reject');
-
 	}
-
-
 
 }
