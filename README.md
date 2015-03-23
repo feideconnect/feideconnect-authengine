@@ -60,6 +60,7 @@ Initalize Cassandra schema
 	phpunit --bootstrap lib/_autoload.php tests
 	casperjs test tests-casperjs/index.js
 	phantomjs tests-phantomjs/main.js
+	mocha --no-timeouts  tests-phantomjs-node/index.js
 
 
 

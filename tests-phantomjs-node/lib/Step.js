@@ -1,7 +1,9 @@
 "use strict";
 
+var Promise = require('promise');
 
 var Class = require('./Class').Class;
+
 
 var Step = Class.extend({
 	"init": function(title, funcs) {
@@ -54,34 +56,24 @@ var Step = Class.extend({
 		}
 		console.log("------- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ");
 	},
+
+
 	"evaluate": function(callback) {
-		// console.log(" EVALUATE " + this.title );
-		var that = this;
-		describe("Evaluate " + this.title, function() {
-			that.funcs.evaluate.call(that, callback);
-		});
-		
+		this.funcs.evaluate.call(this, callback);	
 	},
-	"execute": function(callback) {
+
+	"execute": function() {
+		// console.log("   [EXECUTING] a step for " + this.title);
 		var that = this;
-		describe("Execute " + this.title, function() {
-			that.funcs.execute.call(that);
-		});
+		return that.funcs.execute.call(that)
+			.then(function() {
+				console.log (" ^ DONE with " + that.title);
+				console.log();
+			});
+
 	},
-	"setup": function(flow, page) {
-		var that = this;
+	"setup": function(page) {
 		this.page = page;
-		// this.casper.then(function() {
-		// 	if (that.debug) {
-		// 		that.showDebug(flow, this);
-		// 	}
-		// 	if (that.evaluate(this, flow)) {
-		// 		// console.log("Flow [" + flow.title  + "] Step [" + that.title + "] EXECUTE");
-		// 		that.execute(this);
-		// 	} else {
-		// 		// console.log("Flow [" + flow.title  + "] Step [" + that.title + "] SKIP");
-		// 	}
-		// });
 	}
 });
 

@@ -24,7 +24,8 @@
 		"grunt-cli": "*",
 		"grunt-contrib-jshint": "*",
 
-		"node-phantom-simple": "~1.2.0"
+		"node-phantom-simple": "~1.2.0",
+		"promise": "*"
 	},
 	"engines": {
 		"node": "~0.10.1"

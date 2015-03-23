@@ -1,7 +1,7 @@
 "use strict";
 var request = require('request');
 
-
+var Promise = require('promise');
 
 var Class = require('./Class').Class;
 
@@ -41,22 +41,55 @@ var OAuth = Class.extend({
 		return authorizationurl;
 	},
 
-	"resolveCode": function(code) {
+
+	"tokenRequest": function(req, auth) {
 		var tokenEndpoint = this.config.url + 'oauth/token';
+		var obj = {"form": req};
+		if (auth) {
+			obj.auth = auth;
+		}
+
+
+		return new Promise(function(resolve, reject) {
+			// console.log("----- ABOUT TO PERFORM A POST");
+			request.post(tokenEndpoint, obj, 
+				function (error, response, body) {
+					// console.log("PASSWED");
+					// console.log(error);
+					// console.log(response);
+					if (!error && response.statusCode === 200) {
+						var parsed = JSON.parse(body);
+						resolve(parsed);
+					} else {
+						reject(new Error("Error code " + response.statusCode + " " + error))
+					}
+				}
+			);			
+
+		});
+
+	},
+
+
+	"resolveCode": function(code, callback) {
+
 		var req = {
 			"grant_type": "authorization_code",
 			"code": code,
 			"redirect_uri": this.config.oauth.redirect_uri,
 			"client_id": this.config.oauth.client_id
 		};
-		request.post(tokenEndpoint, {"form": req, "auth": {"user": this.config.oauth.client_id, "pass": this.config.oauth.client_secret}}, function (error, response, body) {
-			if (!error && response.statusCode == 200) {
-				console.log(body) // Show the HTML for the Google homepage.
-			} else {
-				console.log("----- ERROR ----");
-				console.log("Error code " + response.statusCode + " " + error);
-			}
-		})
+		var authinfo = {
+			"user": this.config.oauth.client_id, 
+			"pass": this.config.oauth.client_secret
+		};
+		return this.tokenRequest(req, authinfo);
+
+		// console.log("Auth info is ");
+		// console.log(authinfo);
+		// console.log("Request is ");
+		// console.log(req);
+
 	}
 });
 
