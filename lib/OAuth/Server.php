@@ -388,27 +388,36 @@ class Server {
 					throw new OAuthException('invalid_request', 'Invalid client_id parameter');	
 				}
 
-				$client = $this->storage->getClient($tokenrequest->client_id);
+				$clientid = $tokenrequest->client_id;
+				$client = $this->storage->getClient($clientid);
 				if ($client === null) {
 					throw new OAuthException('invalid_client', 'Request was on behalf of a nonexisting client');
 				}
 
-				Logger::info('OAuth client identified.', array(
-					'client' => $client->getAsArray(),
-					'username' => $_SERVER['PHP_AUTH_USER'],
-					'password' => $_SERVER['PHP_AUTH_PW'],
-				));
+				$password = null;
+				if (!empty($_SERVER['PHP_AUTH_PW'])) {
+					$password = $_SERVER['PHP_AUTH_PW'];
+				} else if (isset($tokenrequest->client_secret)) {
+					$password = $tokenrequest->client_secret;
+				}
 
-				if (empty($_SERVER['PHP_AUTH_USER'])) 
-					throw new OAuthException('invalid_client', 'Unable to authenticate the request on behalf of a client (missing username)');
-				if (empty($_SERVER['PHP_AUTH_PW'])) 
-					throw new OAuthException('invalid_client', 'Unable to authenticate the request on behalf of a client (missing password)');
-
-				if ($client->id !== $_SERVER['PHP_AUTH_USER'])
+				if (isset($_SERVER['PHP_AUTH_USER']) && $_SERVER['PHP_AUTH_USER'] !== $clientid) {
 					throw new OAuthException('invalid_client', 'Wrong client credentials. Client id does not match the request.');
+				}
 
-				if ($client->client_secret !== $_SERVER['PHP_AUTH_PW'])
+				Logger::info('OAuth client identified.', [
+					'client' => $client->getAsArray(),
+					'username' => $clientid,
+					'password' => $password,
+				]);
+
+				if ($password === null) {
+					throw new OAuthException('invalid_client', 'Unable to authenticate the request on behalf of a client (missing password/client_secret)');
+				}
+
+				if ($client->client_secret !== $password) {
 					throw new OAuthException('invalid_client', 'Wrong client credentials. Incorrect client_secret.');
+				}
 
 
 
