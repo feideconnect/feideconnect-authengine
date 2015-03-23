@@ -5,7 +5,7 @@ var Class = require('./Class').Class;
 var assert = require("assert");
 
 // Flows
-var BaseOAuthFlow = require('./flows/BaseOAuthFlow').BaseOAuthFlow;
+var of = require('./flows/BaseOAuthFlow');
 // var BadRedirectURI = require('./flows/BadRedirectURI').BadRedirectURI;
 
 
@@ -35,7 +35,10 @@ var FlowCollection = Class.extend({
 		this.oauth = oauth;
 		this.flows = [];
 
-		this.flows.push(new BaseOAuthFlow(ph, oauth));
+
+		this.flows.push(new of.BaseOAuthFlow(ph, oauth));
+		this.flows.push(new of.OAuthFlowCodeAltAuth(ph, oauth));
+
 		// this.flows.push(new BadRedirectURI(oauth));
 		
 		this.completed = false;
@@ -63,19 +66,32 @@ var FlowCollection = Class.extend({
 
 		// });
 
+	
+		return that.flows[0].run()
+			.then(function() {
+				console.log("DONe with flow 1");
+			})
+			.then(function() {
+
+				// return that.flows[1].run();
+
+			});
 
 		
 
-		var waterfall = promiseWaterfall(
-			that.flows.map(function(cflow) {
-				return cflow.run();
-			})
-		);
+		// var waterfall = promiseWaterfall(
+		// 	that.flows.map(function(cflow) {
+		// 		return cflow.run()
+		// 			.then(function() {
+		// 				consoole.log(" ======== DONE");
+		// 			});
+		// 	})
+		// );
 
-		return waterfall
-			.then(function() {
-				console.log(" -- - - - - - - -  DONE with everything!!");
-			});
+		// return waterfall
+		// 	.then(function() {
+		// 		console.log(" -- - - - - - - -  DONE with everything!!");
+		// 	});
 
 
 

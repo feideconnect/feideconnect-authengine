@@ -250,7 +250,7 @@ var BaseFlow = Class.extend({
 				return that.executeSteps(); 
 			})
 			.then(function() { 
-				// console.log("  ----] ALL DONE IN THIS FLOW");
+				console.log("  ----] ALL DONE IN THIS FLOW");
 				// return that.executeSteps(); 
 			});
 			// .then(function() {that.waitforCompleted(); })

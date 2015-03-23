@@ -70,6 +70,19 @@ var OAuth = Class.extend({
 
 	},
 
+	"resolveCodeAltAuth": function(code, callback) {
+
+		var req = {
+			"grant_type": "authorization_code",
+			"code": code,
+			"redirect_uri": this.config.oauth.redirect_uri,
+			"client_id": this.config.oauth.client_id,
+			"client_secret": this.config.oauth.client_secret
+		};
+		return this.tokenRequest(req);
+
+	},
+
 
 	"resolveCode": function(code, callback) {
 

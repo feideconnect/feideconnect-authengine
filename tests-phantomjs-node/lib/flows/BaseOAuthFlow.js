@@ -327,6 +327,10 @@ var BaseOAuthFlow = BaseFlow.extend({
 	// 	});
 	// },
 
+	"resolveCode": function(code) {
+		return this.oauth.resolveCode(code);
+	},
+
 	"stepRedirectURIcode": function() {
 		var flow = this;
 		return new Step('Redirect URI Code Flow',{
@@ -350,6 +354,7 @@ var BaseOAuthFlow = BaseFlow.extend({
 					)
 				});
 			},
+
 			"execute": function() {
 				var step = this;
 				return new Promise(function(resolve, reject) {
@@ -379,24 +384,25 @@ var BaseOAuthFlow = BaseFlow.extend({
 								done();
 							});
 
-
-							flow.oauth.resolveCode(code)
-								.then(function(res) {
+						});
 
 
-									it('OAuth resolved Access Token', function(done) {
-										assert(typeof res.access_token === 'string', 'Access token is string');
-										done();
-									});
+						return flow.resolveCode(code)
+							.then(function(res) {
 
-									console.log("Received access token is [" + res.access_token + "]");
-									resolve(true);
-								})
-								.catch(function(err) {
-									console.log("error " + err);
+
+								it('OAuth resolved Access Token', function(done) {
+									assert(typeof res.access_token === 'string', 'Access token is string');
+									done();
 								});
 
-						});
+								console.log("Received access token is [" + res.access_token + "]");
+								resolve(true);
+							})
+							.catch(function(err) {
+								console.log("error " + err);
+							});
+
 
 
 
@@ -409,12 +415,21 @@ var BaseOAuthFlow = BaseFlow.extend({
 	}
 
 
+});
 
 
-
+var OAuthFlowCodeAltAuth = BaseOAuthFlow.extend({
+	"init": function(ph, oauth) {
+		this._super(ph, oauth);
+		this.title = 'Basic OAuth Authorization Code Flow with alternative authentication at token endpoint';
+	},
+	"resolveCode": function(code) {
+		return this.oauth.resolveCodeAltAuth(code);
+	}
 });
 
 
 
 exports.BaseOAuthFlow = BaseOAuthFlow;
+exports.OAuthFlowCodeAltAuth = OAuthFlowCodeAltAuth;
 
