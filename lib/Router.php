@@ -24,6 +24,7 @@ class Router {
 		// POC
 		$this->router->get('/poc/{user}/{client}', ['FeideConnect\Controllers\POC', 'process']);
 		$this->router->get('/test', ['FeideConnect\Controllers\TestController', 'test']);
+		$this->router->get('/poc-grant/{clientid:[a-fA-F0-9\-]+}/{userid:[a-zA-Z0-9_\-\.:]+ }', ['FeideConnect\Controllers\POCgrant', 'run']);
 
 
 		// Data APIs
@@ -43,6 +44,7 @@ class Router {
 		$this->router->get('/userinfo', ['FeideConnect\Controllers\Auth', 'userinfo']);
 		$this->router->get('/userinfo/authinfo', ['FeideConnect\Controllers\Auth', 'authinfo']);
 		$this->router->get('/logout', ['FeideConnect\Controllers\Auth', 'logout']);
+
 
 
 		// IdP Discovery page

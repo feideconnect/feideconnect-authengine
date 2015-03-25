@@ -43,8 +43,7 @@
 					$(item.currentTarget).toggleClass("grantEntryActive");
 				});
 
-			})
-				
+			});
 
 
 		</script>
@@ -64,7 +63,9 @@
 
 
 
-				<p>The following application, </p>
+				<h2>Samtykkeerklæring</h2>
+
+				<p>Denne tjenesten, </p>
 
 
 
@@ -153,7 +154,7 @@
 
 
 
-				<p>requests the following Feide Connect permissions:</p>
+				<p>etterspør følgende rettigheter på vegne av deg:</p>
 
 
 
@@ -457,7 +458,7 @@
 
 					<form  id="login" method="post" action="{{posturl}}">
 
-						<p>Would you like to allow this client to obtain these permissions on behalf of you?</p>
+						<p>Ønsker du å gi samtykke til ?</p>
 
 						{{#postdata}}
 							<input type="hidden" name="{{key}}" value="{{value}}" />
