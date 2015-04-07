@@ -100,6 +100,12 @@ class CLI {
 
 	}
 
+	function deleteClient($client) {
+		$this->header("Deleting client " . $client->id);
+		$this->storage->removeClient($client);
+	}
+
+
 	function setScopes($client, $scopes_requested, $scopes) {
 		$this->storage->updateClientScopes($client, $scopes_requested, $scopes );
 		return $this->getClient($client->id);
@@ -178,7 +184,7 @@ class CLI {
 
 	public function getClients() {
 
-		$clients = $this->storage->getClients();
+		$clients = $this->storage->getClients(200);
 		$this->header("List clients");
 		$c = 0;
 		foreach($clients AS $client) {
@@ -192,12 +198,43 @@ class CLI {
 				"c" => ["%3d", "red"],
 
 				"name" => ["%30s", "green", 30],
+				"owner" => ["%30s", "green", 30],
 				"id" => ["%38s", "black", 38 ],
 				"redirect_uri" => ["%-45s", "blue", 45],
 				"scopes" => ["%-90s", "purple", 90],
 			]);
 
 		}
+
+
+	}
+
+
+	public function getAPIGKs() {
+
+		$apigks = $this->storage->getAPIGKs(200);
+		$this->header("List APIGKs");
+		$c = 0;
+		foreach($apigks AS $apigk) {
+
+			$cinfo = $apigk->getAsArray();
+			$cinfo["c"] = ++$c;
+
+			// $this->oneEntry($cinfo);
+
+			echo $this->l($cinfo, [
+				"c" => ["%3d", "red"],
+				"id" => ["%38s", "black", 38 ],
+				"name" => ["%30s", "green", 30],
+				"owner" => ["%38s", "green", 38],
+				"created" => ["%-45s", "blue", 45],
+				// "scopes" => ["%-90s", "purple", 90],
+			]);
+
+		}
+
+
+
 
 
 	}

@@ -68,11 +68,21 @@ if ($command[0] === 'user') {
 
 } else if ($command[0] === 'apigks') {
 
-	// $cli->getClients();
+	$cli->getAPIGKs();
+
 
 } else if ($command[0] === 'client') {
 
 	$client = $cli->getClient($command[1]);
+
+
+	if (isset($command[2]) && $command[2] === "delete") {
+
+
+		$cli->info("Deleting client "); // . $client->id);
+		$cli->deleteClient($client);
+
+	}
 
 
 	if (isset($command[2]) && $command[2] === "scopes") {
@@ -112,6 +122,8 @@ if ($command[0] === 'user') {
 		$cli->setScopes($client, $sr, $s);
 
 	}
+
+
 
 
 } else if ($command[0] === 'clients') {

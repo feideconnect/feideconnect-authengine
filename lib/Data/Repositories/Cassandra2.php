@@ -496,6 +496,12 @@ class Cassandra2 extends \FeideConnect\Data\Repository {
 		return $this->query($query, $params, __FUNCTION__, 'FeideConnect\Data\Models\Client', true);
 	}
 
+	function getAPIGKs($count = 100) {
+		$query = 'SELECT * FROM "apigk" LIMIT :count';
+		$params = ['count' => $count];
+		return $this->query($query, $params, __FUNCTION__, 'FeideConnect\Data\Models\APIGK', true);
+	}
+
 	function removeClient(Models\Client $client) {
 		$query = 'DELETE FROM "clients" WHERE "id" = :id';
 		$params = ['id' => new Uuid($client->id)];
