@@ -86,7 +86,7 @@ class CLI {
 		$this->header("Fetch information about API Gatekeeper " . $apigkid);
 		$apigk = $this->storage->getAPIGK($apigkid);
 		$this->oneEntry($apigk);
-
+		return $apigk;
 
 	}
 
@@ -104,6 +104,12 @@ class CLI {
 		$this->header("Deleting client " . $client->id);
 		$this->storage->removeClient($client);
 	}
+
+	function deleteAPIGK($apigk) {
+		$this->header("Deleting apigk " . $apigk->id);
+		$this->storage->removeAPIGK($apigk);
+	}
+
 
 
 	function setScopes($client, $scopes_requested, $scopes) {

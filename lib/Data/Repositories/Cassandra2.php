@@ -470,7 +470,11 @@ class Cassandra2 extends \FeideConnect\Data\Repository {
 		$params = ['id' => $id];
 		return $this->query($query, $params, __FUNCTION__, 'FeideConnect\Data\Models\APIGK', false);
 	}
-
+	function removeAPIGK(Models\APIGK $apigk) {
+		$query = 'DELETE FROM "apigk" WHERE "id" = :id';
+		$params = ['id' => $apigk->id];
+		$this->execute($query, $params, __FUNCTION__);
+	}
 
 
 	/* 

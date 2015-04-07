@@ -63,7 +63,21 @@ if ($command[0] === 'user') {
 
 } else if ($command[0] === 'apigk') {
 
-	$cli->getAPIGK($command[1]);
+	$apigk = $cli->getAPIGK($command[1]);
+
+
+	if (isset($command[2]) && $command[2] === "delete") {
+
+
+		if ($apigk === null) {
+			$cli->info("Cannot delete a apigk that we cannot find ");			
+		} else {
+			$cli->info("Deleting apigk " . $apigk->id);
+			$cli->deleteAPIGK($apigk);			
+		}
+
+	}
+
 	
 
 } else if ($command[0] === 'apigks') {
