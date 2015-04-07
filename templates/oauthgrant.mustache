@@ -7,46 +7,20 @@
 		<meta name="description" content="Feide Connect Grant" />
 		<meta name="author" content="Andreas Åkre Solberg" />
 
-		<style type="text/css">
-
-		</style>
-
-
 		<link rel="shortcut icon" href="/static/components/uninett-theme/ico/favicon.ico" />
 
-
 		<!-- Bootstrap core CSS -->
-		<link href="/static/components/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet" />
+		<link type="text/css" href="/static/components/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet" />
+		<link type="text/css" href="/static/components/uninett-theme/css/uninett.css" rel="stylesheet" />
+		<link type="text/css" href="/static/components/font-awsome/css/font-awesome.min.css" rel="stylesheet"  />
 
-		<!-- Custom styles for this template -->
-		<link href="/static/components/uninett-theme/css/uninett.css" rel="stylesheet" />
-		<link href="/static/components/font-awsome/css/font-awesome.min.css" rel="stylesheet"  />
+		<!-- Custom styles for this page -->
+		<link type="text/css" href="/static/css/grant.css" rel="stylesheet" />
 
-		<link href="/static/css/grant.css" rel="stylesheet" />
-
+		<!-- Javascript libraries -->
 		<script type="text/javascript" src="/static/components/jquery/dist/jquery.min.js"></script>
-
-
-		<style>
-		.grantEntry {
-			cursor: pointer;
-		}
-		</style>
-
-		<script type="text/javascript">
-
-
-			$(document).ready(function() {
-
-				$(".grantEntry").on("click", function(item) {
-					console.log("Click");
-					$(item.currentTarget).toggleClass("grantEntryActive");
-				});
-
-			});
-
-
-		</script>
+		<script type="text/javascript" src="/static/js/grant.js"></script>
+		<script type="text/javascript" src="/static/components/bootstrap/dist/js/bootstrap.min.js"></script>
 
 		<!-- <script type="text/javascript" src="/_/js/require.js"></script> -->
 		<!-- <script type="text/javascript" src="/static/oauthgrant/main.js"></script> -->
@@ -56,400 +30,93 @@
 	<body>
 
 
-		<div class="container" style="margin-top: 4em;" >
-			<div class="row">
+		<div class="container mainContainer" >
 
+			<div class="row grantUserLine">
+
+				<div class="media grantDetails">
+					<div class="pull-right userExtraBox" >
+						<p><a href="http://min.feideconnect.no/#!/">
+							Kontakt support
+							<i class="fa fa-chevron-left"></i>
+						</a></p>
+						<p><a href="http://min.feideconnect.no/#!/">
+							Mine tjenester
+							<i class="fa fa-chevron-left"></i>
+						</a></p>
+						<p><a href="https://feideconnect.no/logout">
+							Logg ut
+							<i class="fa fa-chevron-left"></i>
+						</a></p>
+					</div>
+
+					<a class="media-left" href="#">
+						<img class="profileImage" src="/user/media/{{user.p}}" alt="User Profile photo" />
+					</a>
+					<div class="media-body" style="padding: 5px">
+						<h4 class="media-heading">
+							<!-- <span class="glyphicon glyphicon-user"></span> -->
+							{{user.name}}
+						</h4>
+
+						<p class="org">
+							UNINETT AS
+						</p>
+						<p class="userChange"><a href="#"><i class="fa fa-chevron-down"></i> Bytte bruker? </a></p>
+
+					</div><!-- media-body -->
+
+				</div><!-- media -->
+
+			</div>
+
+
+
+
+			<div class="row uninett-padded">
 				<div class="col-md-12" style=" ">
 
+					<p>Tjenesten </p>
 
+					{{> grant.service}}
 
-				<h2>Samtykkeerklæring</h2>
-
-				<p>Denne tjenesten, </p>
-
-
-
-				<div class="panel grantEntry ">
-
-
-					<div class="pull-right grantDetails selectIndicator" style="font-size: 200%"><i class="glyphicon glyphicon-chevron-down "></i></div>
-					<div class="pull-right grantDetailsHide selectIndicator" style="font-size: 200%"><i class="glyphicon glyphicon-chevron-left "></i></div>
-
-
-					<div class="media grantEntryContent" style="">
-						<div class="media-left ">
-							<img class="media-object grantDetails" style="max-height: 64px; max-width: 64px" src="/client/media/{{client.id}}" alt="...">
-							<img class="media-object grantDetailsHide" style="max-height: 32px; max-width: 32px" src="/client/media/{{client.id}}" alt="...">
-						</div>
-
-						<div class="media-body">
-
-							<h3 class="media-heading" style="padding: 0px">{{client.name}}</h3>
-
-
-							<div class="grantDetails">
-
-							{{#client.descr}}
-								<p style="margin: 0px">{{.}}</p>
-							{{/client.descr}}
-
-							<p style=""><code>{{client.host}}</code></p>
-
-							{{^client.isSecure}}
-								{{! <p><span class="label label-danger">Warning: Application is insucure</span></p> }}
-							{{/client.isSecure}}
-
-
-
-							{{#owner}}
-
-								<div style="" class="panel panel-default">
-									<div class="panel-heading">Application owner</div>
-								  
-									<div class="panel-body" style="">
-								    
-										<div class="media">
-											<a class="pull-left" href="#">
-												<img style="max-width: 48px; max-height: 48px; border: 1px solid #aaa; border-radius: 3px" 
-													src="/user/media/{{owner.p}}">
-											</a>
-
-											<div class="media-body">
-												<h4 class="media-heading">
-													<!-- <span class="glyphicon glyphicon-user"></span> -->
-													{{owner.name}}
-												</h4>
-
-												
-												<p style="margin: 0px">
-													<span class="glyphicon glyphicon-envelope"></span> 
-
-													<a href="mailto:{{owner.mail}}">{{owner.email}}</p></a>
-
-											</div><!-- media body -->
-										</div><!--  media -->
-
-								  </div><!-- panel body -->
-								</div><!-- panel -->
-
-							{{/owner}}
-
-							<p><a target="_blank" href="#">Read more about this application</a></p>
-
-							</div>
-
-
-
-						</div><!-- media body -->
-					</div><!-- media -->
-
-
-
-				</div><!-- Panel -->
-
-
-
-
-
-
-
-
-				<p>etterspør følgende rettigheter på vegne av deg:</p>
-
-
+					<p>etterspør følgende rettigheter på vegne av deg:</p>
 
 				<div class="list-group">
 
-
-
-					{{#perms.global.userinfo}}
-						<div class="list-group-item  grantEntry grantEntryActive">
-
-
-							<div class="pull-right grantDetails selectIndicator" style="font-size: 150%"><i class="glyphicon glyphicon-chevron-down "></i></div>
-							<div class="pull-right grantDetailsHide selectIndicator" style="font-size: 150%"><i class="glyphicon glyphicon-chevron-left "></i></div>
-
-							<p class="" style="margin-bottom: 0px">
-								<span style="" class="glyphicon glyphicon-user"></span> Access to information about who you are</p>
-
-							<div class="media  grantDetails">
-								<a class="pull-left" href="#">
-									<img style="max-width: 64px; max-height: 64px; border: 1px solid #aaa; border-radius: 3px" 
-										src="/user/media/{{user.p}}">
-								</a>
-								<div class="media-body">
-									<h4 class="media-heading">
-										<!-- <span class="glyphicon glyphicon-user"></span> -->
-										{{user.name}}
-									</h4>
-
-
-
-
-										<p style="color: #bbb; margin:0px">
-
-											<span class="fa fa-user"></span> 
-												<abbr title="{{user.userid}}">User ID</abbr> &nbsp; &nbsp;
-
-											{{#perms.global.userinfo-feide}}
-												<span  class="fa fa-user"></span> 
-													<span style="">Feide ID</span> &nbsp; &nbsp;
-											{{/perms.global.userinfo-feide}}
-
-
-
-											{{#perms.global.userinfo-mail}}
-												<span  class="fa fa-envelope-o"></span> 
-													<span style="">{{user.email}}</span>
-											{{/perms.global.userinfo-mail}}
-
-
-										</p>
-
-										{{#perms.global.openid}}
-											<p style="color: #888"><i class="fa fa-openid" style="color: #800"></i> OpenID Connect</p>
-										{{/perms.global.openid}}
-
-
-
-										<p class="clearfix"></p>
-
-
-								</div><!-- media-body -->
-							</div><!-- media -->
-
-						</div><!-- panel -->
-					{{/perms.global.userinfo}}
-
-
-
-
-
-
-<!--
-					{{#perms.global.openid}}
-						<div class="list-group-item grantEntry ">
-							<div class="pull-right grantDetails selectIndicator" style="font-size: 150%"><i class="glyphicon glyphicon-chevron-down "></i></div>
-							<div class="pull-right grantDetailsHide selectIndicator" style="font-size: 150%"><i class="glyphicon glyphicon-chevron-left "></i></div>
-							<p class="" style="margin-bottom: 0px">
-								<span style="" class="fa fa-openid"></span> 
-								<b>{{title}}</b>
-							</p>
-							<p class="grantDetails " style="margin-top: 0px">{{descr}}</p>
-						</div>
-					{{/perms.global.openid}}
--->
-					{{#perms.global.groups}}
-						<div class="list-group-item grantEntry ">
-							<div class="pull-right grantDetails selectIndicator" style="font-size: 150%"><i class="glyphicon glyphicon-chevron-down "></i></div>
-							<div class="pull-right grantDetailsHide selectIndicator" style="font-size: 150%"><i class="glyphicon glyphicon-chevron-left "></i></div>
-							<p class="" style="margin-bottom: 0px">
-								<span style="" class="fa fa-group"></span> 
-								<b>{{title}}</b>
-							</p>
-							<p class="grantDetails " style="margin-top: 0px">{{descr}}</p>
-						</div>
-					{{/perms.global.groups}}
-
-
-
-					{{#perms.global.clientadmin}}
-						<div class="list-group-item grantEntry ">
-							<div class="pull-right grantDetails selectIndicator" style="font-size: 150%"><i class="glyphicon glyphicon-chevron-down "></i></div>
-							<div class="pull-right grantDetailsHide selectIndicator" style="font-size: 150%"><i class="glyphicon glyphicon-chevron-left "></i></div>
-							<p class="" style="margin-bottom: 0px">
-								<span style="" class="fa fa-cog"></span> 
-								<b>{{title}}</b>
-							</p>
-							<p class="grantDetails " style="margin-top: 0px">{{descr}}</p>
-						</div>
-					{{/perms.global.clientadmin}}
-
-					{{#perms.global.apigkadmin}}
-						<div class="list-group-item grantEntry ">
-							<div class="pull-right grantDetails selectIndicator" style="font-size: 150%"><i class="glyphicon glyphicon-chevron-down "></i></div>
-							<div class="pull-right grantDetailsHide selectIndicator" style="font-size: 150%"><i class="glyphicon glyphicon-chevron-left "></i></div>
-							<p class="" style="margin-bottom: 0px">
-								<span style="" class="fa fa-cog"></span> 
-								<b>{{title}}</b>
-							</p>
-							<p class="grantDetails " style="margin-top: 0px">{{descr}}</p>
-						</div>
-					{{/perms.global.apigkadmin}}
-
-
-					{{#perms.global.peoplesearch}}
-						<div class="list-group-item grantEntry ">
-							<div class="pull-right grantDetails selectIndicator" style="font-size: 150%"><i class="glyphicon glyphicon-chevron-down "></i></div>
-							<div class="pull-right grantDetailsHide selectIndicator" style="font-size: 150%"><i class="glyphicon glyphicon-chevron-left "></i></div>
-							<p class="" style="margin-bottom: 0px">
-								<span style="" class="fa fa-search"></span> 
-								<b>{{title}}</b>
-							</p>
-							<p class="grantDetails " style="margin-top: 0px">{{descr}}</p>
-						</div>
-					{{/perms.global.peoplesearch}}
-
-
-
-					{{#perms.global.longterm}}
-						<div class="list-group-item grantEntry ">
-							<div class="pull-right grantDetails selectIndicator" style="font-size: 150%"><i class="glyphicon glyphicon-chevron-down "></i></div>
-							<div class="pull-right grantDetailsHide selectIndicator" style="font-size: 150%"><i class="glyphicon glyphicon-chevron-left "></i></div>
-							<p class="" style="margin-bottom: 0px">
-								<span style="" class="fa fa-clock-o"></span> 
-								<b>{{title}}</b>
-							</p>
-							<p class="grantDetails " style="margin-top: 0px">{{descr}}</p>
-						</div>
-					{{/perms.global.longterm}}
-
-
-
-
-					<!-- TODO This is not in use currently. Fix or remove -->
-
-					{{#perm.unknown}}
-						<div class="panel panel-default">
-							<div class="panel-body" style="">
-
-								<p>
-									<span style="font-size: 150%" class="glyphicon glyphicon-time"></span> 
-									<b>There is a number of unknown permissions that you are requested to accept:</b></p>
-
-									<ul>
-									{{#items}}
-										<li>{{.}}</li>
-									{{/items}}
-									</ul>
-							</div>
-						</div>
-					{{/perm.unknown}}
-
+					{{> grant.perms}}
 
 				</div><!-- End of list-group -->
 
 
 
-
-
 				{{#perms.hasAPIs}}
 
-					<p>In addition, the application requests access to the following third party services:</p>
+					<p>I tillegg ønsker tjenesten tilgang til følgende tredjepart tjenester på vegne av deg:</p>
 
 				{{/perms.hasAPIs}}
 
 
 
-				{{#perms.apis}}
+				<div class="list-group">
+
+					{{> grant.perms-apis}}
+
+				</div>
 
 
 
-					<div class="panel grantEntry ">
-						<div class="pull-right grantDetails selectIndicator" style="font-size: 200%"><i class="glyphicon glyphicon-chevron-down "></i></div>
-						<div class="pull-right grantDetailsHide selectIndicator" style="font-size: 200%"><i class="glyphicon glyphicon-chevron-left "></i></div>
-
-						<div class="media grantEntryContent" style="">
-							<div class="media-left ">
-								<img class="media-object grantDetails" style="max-height: 64px; max-width: 64px" src="http://api.dev.feideconnect.no:6543/apigkadm/apigks/{{info.id}}/logo" alt="...">
-								<img class="media-object grantDetailsHide" style="max-height: 32px; max-width: 32px" src="http://api.dev.feideconnect.no:6543/apigkadm/apigks/{{info.id}}/logo" alt="...">
-							</div>
-
-							<div class="media-body">
+				{{#firsttime}}
+				<div>
+					<p>Dette er første gang du logger på en tjeneste med Feide / Connect. For å komme videre må du godta Connect bruksvilkår.</p>
 
 
-								<h3 class="media-heading" style="padding: 0px">{{info.name}}
-								</h3>
-								<p class="grantDetailsHide" style="color: #555; font-size: 75%">
-									{{#scopes}}
-										<i class="fa fa-square-o"></i>&nbsp;{{title}}&nbsp; 
-									{{/scopes}}
-								</p>
-
-
-
-
-								<div class="grantDetails">
-
-								{{#info.descr}}
-									<p style="margin: 0px">{{.}}</p>
-								{{/info.descr}}
-
-
-
-
-
-								
-								<ul class="uninett-ul">
-								{{#scopes}}
-
-									<li class="uninett-ul-li">{{title}} – <span style="color: #555;">{{descr}}</span></li>
-
-								{{/scopes}}
-								</ul>
-							
-
-
-								{{#owner}}
-
-									<div style="" class="panel panel-default">
-										<div class="panel-heading">Application owner</div>
-									  
-										<div class="panel-body" style="">
-									    
-											<div class="media">
-												<a class="pull-left" href="#">
-													<img style="max-width: 48px; max-height: 48px; border: 1px solid #aaa; border-radius: 3px" 
-														src="/user/media/{{owner.profilephoto}}">
-												</a>
-
-												<div class="media-body">
-													<h4 class="media-heading">
-														<!-- <span class="glyphicon glyphicon-user"></span> -->
-														{{owner.name}}
-													</h4>
-
-													
-													<p style="margin: 0px">
-														<span class="glyphicon glyphicon-envelope"></span> 
-
-														<a href="mailto:{{owner.mail}}">{{owner.email}}</p></a>
-
-												</div><!-- media body -->
-											</div><!--  media -->
-
-									  </div><!-- panel body -->
-									</div><!-- panel -->
-
-								{{/owner}}
-
-								<p><a target="_blank" href="#">Read more about this application</a></p>
-
-								</div>
-
-
-
-							</div><!-- media body -->
-						</div><!-- media -->
-
-
-
-					</div><!-- Panel -->
-
-
-
-
-
-
-
-
-
-
-
-				{{/perms.apis}}
-
-
-
+					<p>
+						<input type="checkbox" id="bruksvilkar"/>	
+						<label for="bruksvilkar">Jeg godtar <a href="http://feideconnect.no/bruksvilkar" data-toggle="modal" data-target="#myModal">Connect Bruksvikår</a></p></label>
+						
+				</div>
+				{{/firsttime}}
 
 
 
@@ -458,7 +125,7 @@
 
 					<form  id="login" method="post" action="{{posturl}}">
 
-						<p>Ønsker du å gi samtykke til ?</p>
+						<p>Ønsker du å gi samtykke til dette ?</p>
 
 						{{#postdata}}
 							<input type="hidden" name="{{key}}" value="{{value}}" />
@@ -470,7 +137,7 @@
 							
 							<button type="submit" id="submit" tabindex="1" class="btn btn-primary">
 								<span class="glyphicon glyphicon-ok"></span>
-								Allow
+								Ja, jeg godtar dette
 							</button>
 
 						<!-- 							
@@ -482,7 +149,7 @@
 
 							<a tabindex="2" class="btn btn-default" href="/reject">
 								<span class="glyphicon glyphicon-remove"></span>
-								Reject
+								Nei
 							</a>
 
 						</fieldset>
@@ -493,30 +160,18 @@
 
 
 
+
+
+<!-- 				<div style="text-align: right; margin-top: 4em; font-size: 80%">
+					<p><a href="#">Personvererklæring for PHP Demo</a> – <a href="#">Personvererklæring for Feide Connect</a></p>
+				</div>
+
+ -->
+
+
 				</div><!-- column -->
 
 
-
-<!--
-				<div class="col-md-1">
-
-					<svg xmlns="http://www.w3.org/2000/svg" xmlns:xl="http://www.w3.org/1999/xlink" 
-						style="margin-left: -28px; margin-top: 0px" height="165pt" width="70pt" 
-						version="1.1" viewBox="154 100 70 165" 
-						>
-						
-							<path d="M 163 109 L 215 182.5 L 163 256 Z" fill="#f58220"/>
-						
-					</svg>
-
-				</div>
-
-
-				<div class="col-md-5"></div>
-
-	
-
--->
 
 
 
@@ -525,15 +180,49 @@
 		</div><!-- container -->
 
 
-<!--
+
 		<div class="container" style="color: #bba; margin-top: 4em;" >
 			
-			<p style="text-align: right; font-size: 80%">
-				<a href="">› More information about how Feide Connect interconnect services</a></p>
+			<p style="text-align: right; font-size: 80%; margin-bottom: 0px; padding-bottom: 0px">
+				<a target="_blank" href="http://feideconnect.no/sluttbrukere/">
+					Les mer om Feide og Connect
+					<i class="fa fa-chevron-left"></i>
+				</a>
+			</p>
+			<p style="text-align: right; font-size: 80%; margin-top: 0px; padding-top: 0px">
+				<a target="_blank" href="http://feideconnect.no/personvern/">
+					Connect personvernerklæring
+					<i class="fa fa-chevron-left"></i>
+				</a>
+			</p>
 
 
 		</div>
--->
+
+
+
+
+
+		<!-- Modal -->
+		<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+			<div class="modal-dialog modal-lg">
+				<div class="modal-content">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+						<h4 class="modal-title" id="myModalLabel">Connect Bruksvikår</h4>
+					</div>
+					<div class="modal-body">
+						{{> grant.bruksvilkar}}
+					</div>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-default" data-dismiss="modal">Lukk</button>
+						<button type="button" id="actAcceptBrVilk" class="btn btn-primary">Aksepter bruksvilkår</button>
+					</div>
+				</div>
+			</div>
+		</div>
+
+
 
 
 

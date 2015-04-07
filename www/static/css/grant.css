@@ -1,4 +1,41 @@
 
+body {
+	padding-top: 0px;
+}
+
+
+.container.mainContainer {
+	max-width: 860px;
+	margin-top: 0px;
+	border-radius: 5px;
+	background-color: white;
+}
+
+/* Small devices (tablets, 768px and up) */
+@media (min-width: 992px) {
+	.container.mainContainer {
+		margin-top: 7em;
+	}
+}
+
+
+
+/* Top user header */
+
+div.row.grantUserLine {
+	border-bottom: 2px solid #eeebe8
+}
+div.row.grantServiceLine {
+	/*border-bottom: 3px solid #eeebe8;*/
+	padding: 25px 5px 0px 5px;
+}
+
+
+
+
+
+
+/* Grant Entry */
 
 .grantEntry .grantDetails { display: none }
 .grantEntry .grantDetailsHide { display: block }
@@ -6,12 +43,107 @@
 .grantEntry.grantEntryActive .grantDetails { display: block }
 .grantEntry.grantEntryActive .grantDetailsHide { display: none }
 
-
-
 .grantEntry .grantEntryContent {
-	margin-top: 0px; padding: 8px 16px
+	margin-top: 0px; 
+	padding: 8px 16px;
+
+}
+
+.grantEntry {
+
 }
 
 .selectIndicator {
 	color: #ddd;
 }
+
+.grantEntry {
+	cursor: pointer;
+}
+
+
+.grantEntry.apiEntry {
+	padding: 0px;
+}
+
+.grantEntry .userInfoEntry {
+	margin: 0px 0px 0px 30px;
+	padding: 0px;
+	color: #353;
+
+}
+.grantEntry .openid {
+	color: #600;
+}
+
+.grantEntry .ownerbox {
+	text-align: right; 
+	color: #732;
+}
+.grantEntry .ownerbox p {
+	margin: 0px 5px 0px 5px;
+}
+.grantEntry .ownerbox .ownerMail {
+	font-size: 74%;
+}
+.grantEntry .ownerbox .ownerMail a {
+	color: inherit;
+}
+.grantEntry .ownerbox .ownerlogo img {
+	max-width: 48px; 
+	max-height: 48px; 
+	border: 1px solid #aaa; 
+	border-radius: 3px;
+	margin-left: 5px
+}
+
+
+.grantEntry .grantEntryContent.media .media-body {
+	width: 100%;
+}
+/*  */
+
+
+
+img.profileImage {
+	max-width: 96px; 
+	max-height: 94px; 
+	border: 0px solid #aaa; 
+	border-radius: 3px
+}
+.grantUserLine img.profileImage {
+	border-top-left-radius: 5px;
+	border-bottom-left-radius: 0px;
+	border-bottom-right-radius: 0px;
+	border-top-right-radius: 0px;
+	/*border: 1px solid red;*/
+}
+.grantUserLine h4 {
+	margin-bottom: 0px;
+	padding-bottom: 0px;	
+}
+.grantUserLine .org {
+	color: #444; 
+	margin:0px
+}
+.grantUserLine .userChange {
+	color: #444; 
+	font-size: 80%;
+	margin:0px
+}
+
+.userExtraBox {
+	
+	
+}
+.userExtraBox p {
+	margin: 0px;
+	font-size: 80%;
+	text-align: right;
+	padding-right: 5px;
+}
+
+a {
+	color: #228;	
+}
+

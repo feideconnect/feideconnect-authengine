@@ -1,0 +1,73 @@
+<div class="panel panel-default grantEntry grantEntryActive ">
+
+
+	<div class="pull-right grantDetails selectIndicator" style="font-size: 200%"><i class="glyphicon glyphicon-chevron-down "></i></div>
+	<div class="pull-right grantDetailsHide selectIndicator" style="font-size: 200%"><i class="glyphicon glyphicon-chevron-left "></i></div>
+
+
+	<div class="media grantEntryContent" style="">
+		<div class="media-left ">
+			<img class="media-object grantDetails" style="max-height: 64px; max-width: 64px" src="/client/media/{{client.id}}" alt="...">
+			<img class="media-object grantDetailsHide" style="max-height: 32px; max-width: 32px" src="/client/media/{{client.id}}" alt="...">
+		</div>
+
+		<div class="media-body" style="" >
+
+			<h3 class="media-heading" style="padding: 0px">{{client.name}}</h3>
+
+
+			<div class="grantDetails" style="">
+
+			
+				<div class="row" style="">
+						
+					<div class="col-md-6">
+
+						{{#client.descr}}
+							<p style="margin: 0px">{{.}}</p>
+						{{/client.descr}}
+
+						<p style=""><code>{{client.host}}</code></p>
+
+						{{^client.isSecure}}
+							{{! <p><span class="label label-danger">Warning: Application is insucure</span></p> }}
+						{{/client.isSecure}}
+
+					</div>
+					
+					<div class="col-md-6 ownerbox">
+
+						{{#owner}}
+							<div class="pull-right ownerlogo">
+								<img style="" 
+									src="/user/media/{{owner.p}}">
+							</div>
+							<p class="ownerName">{{owner.name}} </p>
+							<p class="ownerMail">
+								<a href="mailto:{{owner.mail}}">{{owner.email}}</a>
+							</p>
+						{{/owner}}
+
+					</div>
+
+				</div>
+				
+
+
+
+
+
+		
+
+				<p><a target="_blank" href="#">Read more about this application</a></p>
+
+			</div>
+
+
+
+		</div><!-- media body -->
+	</div><!-- media -->
+
+
+
+</div><!-- Panel -->

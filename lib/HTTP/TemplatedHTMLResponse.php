@@ -16,10 +16,11 @@ class TemplatedHTMLResponse extends HTTPResponse {
 		parent::__construct();
 
 		$templateDir = Config::dir('templates');
+		$partialsDir = Config::dir('templates/partials');
 		$mustache = new \Mustache_Engine(array(
 			'loader' => new \Mustache_Loader_FilesystemLoader($templateDir),
 			// 'cache' => '/tmp/uwap-mustache',
-			// 'partials_loader' => new Mustache_Loader_FilesystemLoader(dirname(__FILE__).'/views/partials'),
+			'partials_loader' => new \Mustache_Loader_FilesystemLoader($partialsDir),
 		));
 		$this->template = $mustache->loadTemplate($templateName);
 
@@ -43,3 +44,5 @@ class TemplatedHTMLResponse extends HTTPResponse {
 
 
 }
+
+

@@ -70,6 +70,8 @@ class POCgrant {
 		$data['client']['isSecure'] = URL::isSecure($redirect_uri); // $oauthclient->isRedirectURISecured();
 
 
+		$data['firsttime'] = true;
+
 
 
 		if ($client->has('owner')) {

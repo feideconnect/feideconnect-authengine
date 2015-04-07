@@ -1,0 +1,156 @@
+
+
+{{#perms.global.userinfo}}
+	<div class="list-group-item  grantEntry grantEntryActive">
+
+
+		<div class="pull-right grantDetails selectIndicator" style="font-size: 150%"><i class="glyphicon glyphicon-chevron-down "></i></div>
+		<div class="pull-right grantDetailsHide selectIndicator" style="font-size: 150%"><i class="glyphicon glyphicon-chevron-left "></i></div>
+
+		<p class="" style="margin-bottom: 0px">
+			<span style="" class="glyphicon glyphicon-user"></span> Tilgang til informasjon om hvem du er</p>
+	
+
+		<div class="grantDetails">
+
+
+			<p class="userInfoEntry">
+				<span class="fa fa-user"></span> 
+					<abbr title="{{user.userid}}">Bruker ID</abbr> &nbsp; &nbsp;
+			</p>
+
+			<p class="userInfoEntry">
+				{{#perms.global.userinfo-feide}}
+					<span  class="fa fa-user"></span> 
+						<span style="">Feide ID</span> &nbsp; &nbsp;
+				{{/perms.global.userinfo-feide}}
+			</p>
+
+			<p class="userInfoEntry">
+				{{#perms.global.userinfo-mail}}
+					<span  class="fa fa-envelope-o"></span> 
+						<span style="">{{user.email}}</span>
+				{{/perms.global.userinfo-mail}}
+			</p>
+
+			{{#perms.global.openid}}
+			<p class="userInfoEntry openid">
+				<i class="fa fa-openid" style="color: #800"></i> OpenID Connect
+			</p>
+
+			{{/perms.global.openid}}
+			
+
+		</div>
+
+
+
+
+
+	</div><!-- panel -->
+{{/perms.global.userinfo}}
+
+
+
+
+
+
+<!--
+{{#perms.global.openid}}
+	<div class="list-group-item grantEntry ">
+		<div class="pull-right grantDetails selectIndicator" style="font-size: 150%"><i class="glyphicon glyphicon-chevron-down "></i></div>
+		<div class="pull-right grantDetailsHide selectIndicator" style="font-size: 150%"><i class="glyphicon glyphicon-chevron-left "></i></div>
+		<p class="" style="margin-bottom: 0px">
+			<span style="" class="fa fa-openid"></span> 
+			<b>{{title}}</b>
+		</p>
+		<p class="grantDetails " style="margin-top: 0px">{{descr}}</p>
+	</div>
+{{/perms.global.openid}}
+-->
+{{#perms.global.groups}}
+	<div class="list-group-item grantEntry ">
+		<div class="pull-right grantDetails selectIndicator" style="font-size: 150%"><i class="glyphicon glyphicon-chevron-down "></i></div>
+		<div class="pull-right grantDetailsHide selectIndicator" style="font-size: 150%"><i class="glyphicon glyphicon-chevron-left "></i></div>
+		<p class="" style="margin-bottom: 0px">
+			<span style="" class="fa fa-group"></span> 
+			<b>{{title}}</b>
+		</p>
+		<p class="grantDetails " style="margin-top: 0px">{{descr}}</p>
+	</div>
+{{/perms.global.groups}}
+
+
+
+{{#perms.global.clientadmin}}
+	<div class="list-group-item grantEntry ">
+		<div class="pull-right grantDetails selectIndicator" style="font-size: 150%"><i class="glyphicon glyphicon-chevron-down "></i></div>
+		<div class="pull-right grantDetailsHide selectIndicator" style="font-size: 150%"><i class="glyphicon glyphicon-chevron-left "></i></div>
+		<p class="" style="margin-bottom: 0px">
+			<span style="" class="fa fa-cog"></span> 
+			<b>{{title}}</b>
+		</p>
+		<p class="grantDetails " style="margin-top: 0px">{{descr}}</p>
+	</div>
+{{/perms.global.clientadmin}}
+
+{{#perms.global.apigkadmin}}
+	<div class="list-group-item grantEntry ">
+		<div class="pull-right grantDetails selectIndicator" style="font-size: 150%"><i class="glyphicon glyphicon-chevron-down "></i></div>
+		<div class="pull-right grantDetailsHide selectIndicator" style="font-size: 150%"><i class="glyphicon glyphicon-chevron-left "></i></div>
+		<p class="" style="margin-bottom: 0px">
+			<span style="" class="fa fa-cog"></span> 
+			<b>{{title}}</b>
+		</p>
+		<p class="grantDetails " style="margin-top: 0px">{{descr}}</p>
+	</div>
+{{/perms.global.apigkadmin}}
+
+
+{{#perms.global.peoplesearch}}
+	<div class="list-group-item grantEntry ">
+		<div class="pull-right grantDetails selectIndicator" style="font-size: 150%"><i class="glyphicon glyphicon-chevron-down "></i></div>
+		<div class="pull-right grantDetailsHide selectIndicator" style="font-size: 150%"><i class="glyphicon glyphicon-chevron-left "></i></div>
+		<p class="" style="margin-bottom: 0px">
+			<span style="" class="fa fa-search"></span> 
+			<b>{{title}}</b>
+		</p>
+		<p class="grantDetails " style="margin-top: 0px">{{descr}}</p>
+	</div>
+{{/perms.global.peoplesearch}}
+
+
+
+{{#perms.global.longterm}}
+	<div class="list-group-item grantEntry ">
+		<div class="pull-right grantDetails selectIndicator" style="font-size: 150%"><i class="glyphicon glyphicon-chevron-down "></i></div>
+		<div class="pull-right grantDetailsHide selectIndicator" style="font-size: 150%"><i class="glyphicon glyphicon-chevron-left "></i></div>
+		<p class="" style="margin-bottom: 0px">
+			<span style="" class="fa fa-clock-o"></span> 
+			<b>{{title}}</b>
+		</p>
+		<p class="grantDetails " style="margin-top: 0px">{{descr}}</p>
+	</div>
+{{/perms.global.longterm}}
+
+
+
+
+<!-- TODO This is not in use currently. Fix or remove -->
+
+{{#perm.unknown}}
+	<div class="panel panel-default">
+		<div class="panel-body" style="">
+
+			<p>
+				<span style="font-size: 150%" class="glyphicon glyphicon-time"></span> 
+				<b>There is a number of unknown permissions that you are requested to accept:</b></p>
+
+				<ul>
+				{{#items}}
+					<li>{{.}}</li>
+				{{/items}}
+				</ul>
+		</div>
+	</div>
+{{/perm.unknown}}
