@@ -370,15 +370,14 @@ class Cassandra2 extends \FeideConnect\Data\Repository {
 		if (!empty($user->userid_sec)) {
 			$this->execute($query2, [
 				'useridsecs' => new CollectionSet($user->userid_sec, Base::ASCII)
-				// 'useridsec' => $user->userid_sec
 			], __FUNCTION__);
 		}
 
 	}
 
 	function getUserByUserID($userid) {
-		//$query = 'SELECT userid, created, email, name, profilephoto, userid_sec, userid_sec_seen, selectedsource FROM "users" WHERE "userid" = :userid';
-		$query = 'SELECT * FROM "users" WHERE "userid" = :userid';
+		$query = 'SELECT userid, created, updated, name, email, profilephoto, profilephotohash, selectedsource, aboveagelimit, usageterms, userid_sec, userid_sec_seen,  FROM "users" WHERE "userid" = :userid';
+		// $query = 'SELECT * FROM "users" WHERE "userid" = :userid';
 		$params = ['userid' => new Uuid($userid)];
 		return $this->query($query, $params, __FUNCTION__, 'FeideConnect\Data\Models\User', false);
 	}
