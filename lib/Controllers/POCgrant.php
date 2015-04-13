@@ -26,10 +26,17 @@ class POCgrant {
 		// // echo "clineet id ";
 		// // print_r($client);
 		// exit;
+		
+		$firsttime = true;
+
+
 
 		$postattrs = $_REQUEST;
 		$postattrs['client_id'] = $client->id;
 		$postattrs['verifier'] = $user->getVerifier();
+		if (!$firsttime) {
+			$postattrs['bruksvilkar'] = 'yes';
+		}
 
 		$postdata = array();
 		foreach($postattrs AS $k => $v) {
@@ -70,7 +77,7 @@ class POCgrant {
 		$data['client']['isSecure'] = URL::isSecure($redirect_uri); // $oauthclient->isRedirectURISecured();
 
 
-		$data['firsttime'] = true;
+		$data['firsttime'] = $firsttime;
 
 
 
