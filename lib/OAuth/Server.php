@@ -117,18 +117,19 @@ class Server {
 			$account = $this->auth->getAccount();
 
 			
+
+			
 			$usermapper = new UserMapper($this->storage);
 			$user = $usermapper->getUser($account, true, true, false);
+
+			// echo '<pre>'; print_r($user); exit;
 
 			Logger::info('OAuth authorization() User is now authenticationed. Next is authorization.', array(
 				'user' => $user->getAsArray()
 			));
 
 
-
 			// TODO: Do we need to suport passive requests?? 
-
-
 
 
 
@@ -152,11 +153,25 @@ class Server {
 						throw new \Exception("Invalid verifier code.");
 					}
 
+					// echo '<pre>'; print_r($_REQUEST); exit;
+
+					if (!isset($_REQUEST['bruksvilkar'])) {
+						throw new \Exception('Bruksvilkår not accepted.');
+					}
+					if ($_REQUEST['bruksvilkar'] !== 'yes') {
+						throw new \Exception('Bruksvilkår not accepted.');	
+					}
+
 					$authorization = $ae->getUpdatedAuthorization();
 
 					// echo "<pre>";
 					// print_r($user->getBasicUserInfo());
 					// print_r($authorization->getAsArray()); exit;
+
+					$user->usageterms = true;
+
+					$user->updateUserBasics($account);
+
 
 					$this->storage->saveAuthorization($authorization);
 
@@ -278,6 +293,12 @@ class Server {
 		// $postattrs['scopes'] = $scopestr;
 		// $postattrs['return'] = Utils\URL::selfURL();
 
+
+		$firsttime = !($user->usageterms);
+		if (!$firsttime) {
+			$postattrs['bruksvilkar'] = 'yes';
+		}
+
 		$postdata = array();
 		foreach($postattrs AS $k => $v) {
 			$postdata[] = array('key' => $k, 'value' => $v);
@@ -294,7 +315,7 @@ class Server {
 		$data = [
 			'perms' => $si->getInfo(),
 			'user' => $u,
-			'posturl_' => Utils\URL::selfURLNoQuery(), // Did not work with php-fpm, needs to check out.
+			// 'posturl_' => Utils\URL::selfURLNoQuery(), // Did not work with php-fpm, needs to check out.
 			'posturl' => Utils\URL::selfURLhost() . '/oauth/authorization',
 			'postdata' => $postdata,
 			'client' => $client->getAsArray(),
@@ -303,11 +324,10 @@ class Server {
 
 
 
-
 		$data['client']['host'] = Utils\URL::getURLhostPart($redirect_uri);
 		$data['client']['isSecure'] = Utils\URL::isSecure($redirect_uri); // $oauthclient->isRedirectURISecured();
 
-
+		$data['firsttime'] = $firsttime;
 
 
 		if ($client->has('owner')) {
