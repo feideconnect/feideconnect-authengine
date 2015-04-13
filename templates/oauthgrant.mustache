@@ -99,6 +99,25 @@
 
 
 
+
+				{{#perms.hasAPIs}}
+
+					<p class="simpleSkip">I tillegg ønsker tjenesten tilgang til følgende tredjepart tjenester på vegne av deg:</p>
+
+				{{/perms.hasAPIs}}
+
+
+
+				<div class="list-group simpleSkip">
+
+					{{> grant.perms-apis}}
+
+				</div>
+
+
+
+
+
 				{{#validated}}
 
 					<div class="simpleSkip">
@@ -117,22 +136,6 @@
 					</div>
 
 				{{/validated}}
-
-
-
-				{{#perms.hasAPIs}}
-
-					<p class="simpleSkip">I tillegg ønsker tjenesten tilgang til følgende tredjepart tjenester på vegne av deg:</p>
-
-				{{/perms.hasAPIs}}
-
-
-
-				<div class="list-group simpleSkip">
-
-					{{> grant.perms-apis}}
-
-				</div>
 
 
 
