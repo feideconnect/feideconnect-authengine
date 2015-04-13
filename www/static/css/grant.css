@@ -34,6 +34,22 @@ div.row.grantServiceLine {
 
 
 
+body.simpleGrant .simpleSkip {
+	display: none;
+}
+
+.simpleOnly {
+	display: none;
+}
+body.simpleGrant .simpleOnly {
+	display: block;
+}
+
+
+
+
+
+
 
 /* Grant Entry */
 

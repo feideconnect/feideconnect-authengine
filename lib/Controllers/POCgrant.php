@@ -56,7 +56,6 @@ class POCgrant {
 		$si = new ScopesInspector($client, $scopesInQuestion);
 
 
-
 		$u = $user->getBasicUserInfo(true);
 		$u['userid'] = $user->userid;
 		$u['p'] = $user->getProfileAccess();

@@ -13,5 +13,11 @@ $(document).ready(function() {
 		$('#bruksvilkar').prop('checked', true);
 	});
 
+	$("body").on("click", ".tglSimple", function(e) {
+		e.preventDefault();
+		$("body").toggleClass("simpleGrant");
+
+	});
+
 
 });

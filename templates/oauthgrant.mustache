@@ -27,10 +27,16 @@
 		
 	</head>
 
-	<body>
 
+
+	<body class="">
+
+	<!-- <button class="tglSimple">Toggle simple view</button> -->
 
 		<div class="container mainContainer" >
+
+
+
 
 			<div class="row grantUserLine">
 
@@ -44,7 +50,7 @@
 							Mine tjenester
 							<i class="fa fa-chevron-left"></i>
 						</a></p>
-						<p><a href="https://feideconnect.no/logout">
+						<p><a href="https://auth.feideconnect.no/logout">
 							Logg ut
 							<i class="fa fa-chevron-left"></i>
 						</a></p>
@@ -76,13 +82,16 @@
 			<div class="row uninett-padded">
 				<div class="col-md-12" style=" ">
 
-					<p>Tjenesten </p>
+
+					
+
+					<p class="simpleSkip">Tjenesten </p>
 
 					{{> grant.service}}
 
-					<p>etterspør følgende rettigheter på vegne av deg:</p>
+					<p class="simpleSkip">etterspør følgende rettigheter på vegne av deg:</p>
 
-				<div class="list-group">
+				<div class="list-group simpleSkip">
 
 					{{> grant.perms}}
 
@@ -92,13 +101,13 @@
 
 				{{#perms.hasAPIs}}
 
-					<p>I tillegg ønsker tjenesten tilgang til følgende tredjepart tjenester på vegne av deg:</p>
+					<p class="simpleSkip">I tillegg ønsker tjenesten tilgang til følgende tredjepart tjenester på vegne av deg:</p>
 
 				{{/perms.hasAPIs}}
 
 
 
-				<div class="list-group">
+				<div class="list-group simpleSkip">
 
 					{{> grant.perms-apis}}
 
@@ -114,40 +123,27 @@
 
 
 					<p>
-						<input type="checkbox" id="bruksvilkar" name="bruksvilkar" value="yes" />
+						<input type="checkbox" id="bruksvilkar" name="bruksvilkar" value="yes" checked="checked" />
 						<label for="bruksvilkar">Jeg godtar <a href="http://feideconnect.no/bruksvilkar" data-toggle="modal" data-target="#myModal">Connect Bruksvikår</a></p></label>
 						
 				</div>
 				{{/firsttime}}
 
+				{{#postdata}}
+					<input type="hidden" name="{{key}}" value="{{value}}" />
+				{{/postdata}}
 
 
-
-				<div class="center-block" >
-
-
+				<div class="center-block simpleSkip" >
 
 						<p>Ønsker du å gi samtykke til dette ?</p>
 
-						{{#postdata}}
-							<input type="hidden" name="{{key}}" value="{{value}}" />
-						{{/postdata}}
-
 						<fieldset id="actions" style=" text-align: center ">
-							
-							<!-- <input tabindex="1" type="submit" id="submit" class="btn btn-lg btn-success" value="Allow"> -->
-							
+
 							<button type="submit" id="submit" tabindex="1" class="btn btn-primary">
 								<span class="glyphicon glyphicon-ok"></span>
 								Ja, jeg godtar dette
 							</button>
-
-						<!-- 							
-							<a id="submit" tabindex="1" href="#" class="btn btn-lg btn-success">
-								<span class="glyphicon glyphicon-ok"></span>
-								Allow
-							</a> 
-						-->
 
 							<a tabindex="2" class="btn btn-default" href="/reject">
 								<span class="glyphicon glyphicon-remove"></span>
@@ -155,10 +151,31 @@
 							</a>
 
 						</fieldset>
-						
+					
+				</div>
 
+
+				<div class="center-block simpleOnly" style="margin-top: 2em" >
+
+						<fieldset id="actions" style=" text-align: right ">
+							
+
+
+							<a tabindex="2" class="btn btn-default tglSimple" href="#">
+								<span class="glyphicon glyphicon-chevron-down"></span>
+								Vis mer informasjon
+							</a>
+
+							<button type="submit" id="submit" tabindex="1" class="btn btn-success">
+								<span class="glyphicon glyphicon-chevron-right"></span>
+								Logg inn på denne tjenesten
+							</button>
+
+						</fieldset>
 				
 				</div>
+
+
 
 				</form>
 
