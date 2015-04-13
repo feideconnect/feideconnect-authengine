@@ -14,6 +14,10 @@ abstract class Model {
 	function __construct($props = array()) {
 		$this->_repo = StorageProvider::getStorage();
 
+		foreach (static::$_properties AS $k) {
+			$this->{$k} = null;
+		}
+
 		foreach($props AS $k => $v) {
 			if (!in_array($k, static::$_properties)) {
 				error_log("Trying to set a property [" . $k . "] that is not legal.");
