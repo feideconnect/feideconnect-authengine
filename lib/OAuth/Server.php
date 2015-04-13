@@ -329,6 +329,7 @@ class Server {
 
 		$data['firsttime'] = $firsttime;
 		$data['organization'] = $organization;
+		$data['validated'] = false;
 
 
 		if ($client->has('owner')) {

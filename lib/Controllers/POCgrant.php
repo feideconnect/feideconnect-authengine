@@ -77,6 +77,9 @@ class POCgrant {
 
 
 		$data['firsttime'] = $firsttime;
+		$data['validated'] = false;
+
+		$data['organization'] = "UNINETT AS";
 
 
 

@@ -99,6 +99,27 @@
 
 
 
+				{{#validated}}
+
+					<div class="simpleSkip">
+						<i style="color: #363" class="fa fa-check fa-3x pull-left"></i>
+						{{client.name}} er en offisiell tjeneste som benyttes hos {{organization}}. {{organization}} har godkjent tjenesten for sine brukere og har en avtale med leverandøren.
+					</div>
+
+				{{/validated}}
+				{{^validated}}
+
+
+					<div class="simpleSkip">
+						<i style="color: #643" class="fa fa-question fa-3x pull-left"></i>
+						Din organisation {{organization}} har ingen avtale med leverandøren, og har ikke tatt stilling til bruk av denne tjenesten for sine brukere. Du kan allikevel velge å benytte tjenesten på eget initiativ.
+
+					</div>
+
+				{{/validated}}
+
+
+
 				{{#perms.hasAPIs}}
 
 					<p class="simpleSkip">I tillegg ønsker tjenesten tilgang til følgende tredjepart tjenester på vegne av deg:</p>
