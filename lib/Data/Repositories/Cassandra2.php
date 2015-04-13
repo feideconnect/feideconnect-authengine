@@ -238,6 +238,28 @@ class Cassandra2 extends \FeideConnect\Data\Repository {
 		}
 	}
 
+	/**
+	 * Update basic information about the user that does not relate to userids or accountinformation.
+	 * @param  Models\User $user [description]
+	 * @return [type]            [description]
+	 */
+	function updateUserBasics(Models\User $user) {
+
+		$query = 'UPDATE "users" SET updated = :updated, ' . 
+			'aboveagelimit = :aboveagelimit, ' . 
+			'usageterms = :usageterms ' . 
+			'WHERE userid = :userid';
+		$params = [
+			'updated' => (new \FeideConnect\Data\Types\Timestamp())->getCassandraTimestamp(),
+			'userid' => new Uuid($user->userid),
+			'aboveagelimit' => $user->aboveagelimit,
+			'usageterms' => $user->usageterms
+		];
+		$this->execute($query, $params, __FUNCTION__);
+
+	}
+
+
 	function updateUserInfo(Models\User $user, $sourceID, $props = []) {
 
 
@@ -376,7 +398,7 @@ class Cassandra2 extends \FeideConnect\Data\Repository {
 	}
 
 	function getUserByUserID($userid) {
-		$query = 'SELECT userid, created, updated, name, email, profilephoto, profilephotohash, selectedsource, aboveagelimit, usageterms, userid_sec, userid_sec_seen,  FROM "users" WHERE "userid" = :userid';
+		$query = 'SELECT userid, created, updated, name, email, profilephoto, profilephotohash, selectedsource, aboveagelimit, usageterms, userid_sec, userid_sec_seen FROM "users" WHERE "userid" = :userid';
 		// $query = 'SELECT * FROM "users" WHERE "userid" = :userid';
 		$params = ['userid' => new Uuid($userid)];
 		return $this->query($query, $params, __FUNCTION__, 'FeideConnect\Data\Models\User', false);
@@ -429,7 +451,7 @@ class Cassandra2 extends \FeideConnect\Data\Repository {
 		// print_r($userids);
 
 		// Retrieve the userids from the user table...
-		$query2 = 'SELECT userid,created,email,name,profilephoto,profilephotohash,userid_sec,userid_sec_seen,selectedsource FROM "users" WHERE ("userid" IN :userids)';
+		$query2 = 'SELECT userid, created, updated, name, email, profilephoto, profilephotohash, selectedsource, aboveagelimit, usageterms, userid_sec, userid_sec_seen FROM "users" WHERE ("userid" IN :userids)';
 		$params2 = ['userids' => new CollectionSet($userids, Base::UUID)];
 		// echo var_export($params2, true);
 		$res = $this->query($query2, $params2, __FUNCTION__, 'FeideConnect\Data\Models\User', true);
