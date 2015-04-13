@@ -92,7 +92,7 @@ class Cassandra2 extends \FeideConnect\Data\Repository {
 	protected function execute($query, $data, $title = '') {
 
 
-		Logger::debug('Cassandra insert (' . $title . ')', array(
+		Logger::debug('Cassandra execute (' . $title . ')', array(
 			'query' => $query,
 			'params' => $data
 		));
@@ -112,7 +112,7 @@ class Cassandra2 extends \FeideConnect\Data\Repository {
 			// TODO catch only Cassandras own exception type
 
 			
-			Logger::error('Cassandra insert (' . $title . ') FAILED ' . $e->getMessage(), array(
+			Logger::error('Cassandra execute (' . $title . ') FAILED ' . $e->getMessage(), array(
 				'query' => $query,
 				'params' => $data,
 				// 'message' => $e->getMessage(),
@@ -357,13 +357,20 @@ class Cassandra2 extends \FeideConnect\Data\Repository {
 	}
 
 	function deleteUser(Models\User $user) {
-		$query1 = 'DELETE FROM "users" WHERE (userid = :userid)';
-		$query2 = 'DELETE FROM "userid_sec" WHERE (userid_sec IN :userid_secs) ';
+
+		// Logger::debug('DELETING USER ()', array(
+		// 	'userid' => $user->userid,
+		// 	'userid_sec' => $user->userid_sec
+		// ));
+
+		$query1 = 'DELETE FROM "users" WHERE ("userid" = :userid)';
+		$query2 = 'DELETE FROM "userid_sec" WHERE ("userid_sec" IN :useridsecs) ';
 
 		$this->execute($query1, ['userid' => new Uuid($user->userid)], __FUNCTION__);
 		if (!empty($user->userid_sec)) {
 			$this->execute($query2, [
-				'useridsec' => new CollectionSet($user->userid_sec, Base::ASCII)
+				'useridsecs' => new CollectionSet($user->userid_sec, Base::ASCII)
+				// 'useridsec' => $user->userid_sec
 			], __FUNCTION__);
 		}
 
