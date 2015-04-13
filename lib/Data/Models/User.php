@@ -22,6 +22,7 @@ class User extends \FeideConnect\Data\Model {
 		"userid", "email", "name", 
 		"profilephoto", "profilephotohash", 
 		"userid_sec", "userid_sec_seen", "selectedsource",
+		"aboveagelimit", "usageterms",
 		"created", "updated"
 	);
 	protected static $_types = [
@@ -261,6 +262,13 @@ class User extends \FeideConnect\Data\Model {
 	}
 
 
+	public function updateUserBasics(Account $a) {
+
+		$this->aboveagelimit = $a->aboveAgeLimit();
+		$this->_repo->updateUserBasics($this);
+
+	}
+
 
 	public function updateFromAccount(Account $a) {
 
@@ -296,6 +304,15 @@ class User extends \FeideConnect\Data\Model {
 			$this->_repo->updateUserInfo($this, $sourceID, ["name", "email"]);
 
 		}
+
+		if ($this->aboveagelimit !== $a->aboveAgeLimit()) {
+			$this->aboveagelimit = $a->aboveAgeLimit();
+
+			$this->updateUserBasics($a);
+
+		}
+
+
 
 
 

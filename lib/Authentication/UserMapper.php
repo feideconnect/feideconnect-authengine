@@ -35,10 +35,12 @@ class UserMapper {
 		$user = new Models\User($this->repo);
 		$user->userid = $uuid;
 
-
+		$user->usageterms = false;
 		$user->created = new \FeideConnect\Data\Types\Timestamp();
 
 		$user->userid_sec = $account->getUserIDs();
+
+		$user->aboveagelimit = $account->aboveAgeLimit();
 
 
 		$changed = $user->ensureProfileAccess(false);
@@ -128,8 +130,6 @@ class UserMapper {
 
 
 
-
-
 		// header('Content-Type: text/plain; charset=utf-8');
 		// echo "About to get user with this account\n ";
 		// print_r($existingUser[0]->debug());
@@ -154,7 +154,7 @@ class UserMapper {
 
 
 
-		// print_r($account);
+		// print_r($existingUser);
 		// exit;
 
 		if ($existingUser === null) {
