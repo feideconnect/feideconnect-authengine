@@ -9,7 +9,7 @@
 	"homepage": "http://feideconnect.no",
 	"author": "Andreas Åkre Solberg",
 	"scripts": {
-		"test": "phpunit --bootstrap autoload.php tests"
+		"test": "phpunit --bootstrap lib/_autoload.php tests"
 	},
 	"repository": {
 		"type": "git",
