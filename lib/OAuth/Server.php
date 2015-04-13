@@ -117,7 +117,7 @@ class Server {
 			$account = $this->auth->getAccount();
 
 			
-
+			$organization = $account->getOrg();
 			
 			$usermapper = new UserMapper($this->storage);
 			$user = $usermapper->getUser($account, true, true, false);
@@ -177,7 +177,7 @@ class Server {
 
 
 				} else {
-					return $this->requestAuthorizationUI($client, $request, $user, $redirect_uri, $scopesInQuestion, $ae->getRemainingScopes()); 	
+					return $this->requestAuthorizationUI($client, $request, $user, $redirect_uri, $scopesInQuestion, $ae->getRemainingScopes(), $organization); 	
 				}
 
 			}
@@ -281,7 +281,7 @@ class Server {
 
 
 
-	protected function requestAuthorizationUI($client, $request, $user, $redirect_uri, $scopesInQuestion, $remainingScopes) {
+	protected function requestAuthorizationUI($client, $request, $user, $redirect_uri, $scopesInQuestion, $remainingScopes, $organization) {
 
 
 		// $scopestr = join(',', $scopesInQuestion);
@@ -328,6 +328,7 @@ class Server {
 		$data['client']['isSecure'] = Utils\URL::isSecure($redirect_uri); // $oauthclient->isRedirectURISecured();
 
 		$data['firsttime'] = $firsttime;
+		$data['organization'] = $organization;
 
 
 		if ($client->has('owner')) {

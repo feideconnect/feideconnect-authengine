@@ -41,6 +41,16 @@ class Account {
 	}
 
 
+	public function getOrg() {
+		if (isset($this->attributes['o']) && 
+			is_array($this->attributes['o'])
+			) {
+			return $this->attributes['o'][0];
+		}
+		return null;
+	}
+
+
 	public function aboveAgeLimit() {
 
 		$res = true;
