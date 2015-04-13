@@ -85,6 +85,9 @@ CREATE TABLE users (
 
 	selectedsource text,
 
+	aboveagelimit boolean,
+	usageterms boolean,
+
 	userid_sec set<text>,
 	userid_sec_seen map<text, timestamp>
 );
