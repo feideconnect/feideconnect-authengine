@@ -39,6 +39,48 @@ class Account {
 
 	}
 
+
+	public function getOrg() {
+		if (isset($this->attributes['o']) && 
+			is_array($this->attributes['o'])
+			) {
+			return $this->attributes['o'][0];
+		}
+		return null;
+	}
+
+
+	public function aboveAgeLimit() {
+
+		$res = true;
+		if (isset($this->attributes['feideYearOfBirth']) && 
+			is_array($this->attributes['feideYearOfBirth'])
+			) {
+
+			$year = intval($this->attributes['feideYearOfBirth'][0]);
+			$dayofyear = date("z");
+			$thisyear = date("Y");
+
+			$requiredAge = 13;
+			if ($dayofyear < 175) {
+				$requiredAge = 14;
+			}
+			
+			$age = $thisyear - $year;
+			
+			// echo "Reqired age is  " . $requiredAge . " ";
+			// echo "Age is " . $age;
+			if ($age >= $requiredAge) {
+				$res = true;
+			} else {
+				$res = false;
+			}
+		
+		}
+		return $res;
+
+	}
+
 	function getUserIDs() {
 		$userids = array();
 		foreach($this->accountmap AS $prefix => $attrname) {

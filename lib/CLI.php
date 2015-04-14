@@ -5,6 +5,7 @@ namespace FeideConnect;
 
 use FeideConnect\Authentication\UserID;
 use FeideConnect\Data\StorageProvider;
+use FeideConnect\Data\Types\Timestamp;
 
 class CLI {
 
@@ -32,35 +33,46 @@ class CLI {
 
 		if ($user === null) {
 			$this->info("No user found");
+			return null;
 		}
+
+
 
 		$info = $user->getAsArray();
 		$info["profilephoto"] = '----';
 
-		$this->oneEntry($info);
+		// echo var_export($info, true);
+
+		$this->oneEntry($user);
 
 		$this->info();
 		$this->info("looking up reverse entries");
 
 		$cql = '';
 
-		foreach($user->userid_sec AS $k) {
+		// echo var_export($info, true); exit;
 
-			$u = $this->storage->getUserByUserIDsec($k);
+		if (!empty($user->userid_sec)) {
+			foreach($user->userid_sec AS $k) {
 
-			if ($u === null) {
-				$this->info("No reverse lookup for " . $k);
+				$u = $this->storage->getUserByUserIDsec($k);
 
-				$cql .= " INSERT INTO userid_sec (userid, userid_sec) VALUES (" . $user->userid . ", '" . $k . "');\n";
+				if ($u === null) {
+					$this->info("No reverse lookup for " . $k);
 
-			} else if ($u->userid === $user->userid) {
-				$this->info("OK reverse for " . $k);
-			} else {
+					$cql .= " INSERT INTO userid_sec (userid, userid_sec) VALUES (" . $user->userid . ", '" . $k . "');\n";
 
-				$this->info("ERROR in reverse for " . $k . " userid found was " . $u->userid);
+				} else if ($u->userid === $user->userid) {
+					$this->info("OK reverse for " . $k);
+				} else {
+
+					$this->info("ERROR in reverse for " . $k . " userid found was " . $u->userid);
+				}
+
 			}
-
 		}
+
+
 
 		echo "\n\n" . $cql . "\n\n";
 
@@ -74,7 +86,7 @@ class CLI {
 		$this->header("Fetch information about API Gatekeeper " . $apigkid);
 		$apigk = $this->storage->getAPIGK($apigkid);
 		$this->oneEntry($apigk);
-
+		return $apigk;
 
 	}
 
@@ -82,15 +94,20 @@ class CLI {
 
 		$this->header("Fetch information about client " . $clientid);
 		$client = $this->storage->getClient($clientid);
+		$client->logo = '----';
 		$this->oneEntry($client);
 		return $client;
 
 	}
 
-
 	function deleteClient($client) {
 		$this->header("Deleting client " . $client->id);
-		$this->storage->deleteClient($client);
+		$this->storage->removeClient($client);
+	}
+
+	function deleteAPIGK($apigk) {
+		$this->header("Deleting apigk " . $apigk->id);
+		$this->storage->removeAPIGK($apigk);
 	}
 
 
@@ -104,7 +121,20 @@ class CLI {
 		$this->header("Fetch information about token " . $token);
 
 		$token = $this->storage->getAccessToken($token);
+
+		// print_r($token); 
+
 		$this->oneEntry($token);
+
+
+		if (isset($token->userid)) {
+			$this->getUser('uuid:' . $token->userid);
+		}
+
+		if (isset($token->clientid)) {
+			$this->getClient($token->clientid);
+		}
+
 
 	}
 
@@ -115,9 +145,9 @@ class CLI {
 	}
 
 
-	function getUsers() {
+	function getUsers($count) {
 
-		$users = $this->storage->getUsers();
+		$users = $this->storage->getUsers($count);
 		$this->header("List users");
 		$c = 0;
 		foreach($users AS $user) {
@@ -134,13 +164,32 @@ class CLI {
 
 		}
 
-
+		return $users;
 
 	}
 
+
+	public function getUserIDsec($count = 100) {
+		$users = $this->storage->getUserIDsecList($count);
+		$c = 0;
+		foreach($users AS $user) {
+			// $uinfo = $user->getBasicUserInfo(true, true);
+			$uinfo = $user;
+			$uinfo["c"] = ++$c;
+			echo $this->l($uinfo, [
+				"c" => ["%3d", "red"],
+				"userid" => ["%38s", "black", 38 ],
+				"userid_sec" => ["%-40s", "cyan", 40],
+			]);
+
+		}
+		return $users;
+	}
+
+
 	public function getClients() {
 
-		$clients = $this->storage->getClients();
+		$clients = $this->storage->getClients(200);
 		$this->header("List clients");
 		$c = 0;
 		foreach($clients AS $client) {
@@ -148,18 +197,192 @@ class CLI {
 			$cinfo = $client->getAsArray();
 			$cinfo["c"] = ++$c;
 
-			$this->oneEntry($c);
+			// $this->oneEntry($cinfo);
 
 			echo $this->l($cinfo, [
 				"c" => ["%3d", "red"],
 
 				"name" => ["%30s", "green", 30],
+				"owner" => ["%30s", "green", 30],
 				"id" => ["%38s", "black", 38 ],
 				"redirect_uri" => ["%-45s", "blue", 45],
 				"scopes" => ["%-90s", "purple", 90],
 			]);
 
 		}
+
+
+	}
+
+
+	public function getAPIGKs() {
+
+		$apigks = $this->storage->getAPIGKs(200);
+		$this->header("List APIGKs");
+		$c = 0;
+		foreach($apigks AS $apigk) {
+
+			$cinfo = $apigk->getAsArray();
+			$cinfo["c"] = ++$c;
+
+			// $this->oneEntry($cinfo);
+
+			echo $this->l($cinfo, [
+				"c" => ["%3d", "red"],
+				"id" => ["%38s", "black", 38 ],
+				"name" => ["%30s", "green", 30],
+				"owner" => ["%38s", "green", 38],
+				"created" => ["%-45s", "blue", 45],
+				// "scopes" => ["%-90s", "purple", 90],
+			]);
+
+		}
+
+
+
+
+
+	}
+
+	public function t() {
+
+		$c1 = \FeideConnect\Data\Models\Client::genUUID();
+
+		$userid = \FeideConnect\Data\Models\Client::genUUID();
+
+		$user = new \FeideConnect\Data\Models\User();
+		$user->userid = $userid;
+
+		$client = new \FeideConnect\Data\Models\Client();
+		$client->id = $c1;
+		$client->client_secret = \FeideConnect\Data\Models\Client::genUUID();
+		$client->created = new \FeideConnect\Data\Types\Timestamp();
+		$client->name = 'name';
+		$client->descr = 'descr';
+		$client->owner = $userid;
+		$client->redirect_uri = ['http://example.org'];
+		$client->scopes = ['userinfo', 'groups'];
+
+		// echo var_export($client);
+
+		$this->storage->saveClient($client);
+
+		return;
+
+
+
+
+
+		$clientid = \FeideConnect\Data\Models\Client::genUUID();
+		$userid = \FeideConnect\Data\Models\User::genUUID();
+
+		$user = new \FeideConnect\Data\Models\User();
+		$user->userid = $userid;
+
+
+		
+		$token = new \FeideConnect\Data\Models\AccessToken();
+		$token->access_token = \FeideConnect\Data\Models\AccessToken::genUUID();
+		$token->clientid = $clientid;
+		$token->userid = $userid;
+		$token->scope = ['userinfo', 'groups'];
+		$token->token_type = 'Bearer';
+		$token->issued = new \FeideConnect\Data\Types\Timestamp();
+		$token->validuntil = (new \FeideConnect\Data\Types\Timestamp())->addSeconds(3600);
+		$token->lastuse = (new \FeideConnect\Data\Types\Timestamp())->addSeconds(5);
+
+		echo "-------\n";
+		echo var_export($token->getAsArray());
+		echo "-------\n";
+		echo var_export($token->getStorableArray());
+		echo "-------\n";
+
+		// return;
+
+		$this->storage->saveToken($token);
+
+
+
+
+
+		echo 'microtime(true)*1000' . "\n";
+		echo microtime(true)*1000 . "\n";
+
+
+		$token2 = $this->storage->getAccessToken($token->access_token);
+		echo var_export($token2->getAsArray());
+
+
+
+
+		echo "\n\nselect * from oauth_tokens where access_token = " . $token->access_token . "\n\n";
+
+		return;
+
+
+
+
+		$uuid = \FeideConnect\Data\Model::genUUID();
+		$feideid = 'feide:test@test.org';
+		$mail = 'mail:tester.test@test@org';
+
+
+		$photo = file_get_contents(dirname(dirname(__FILE__)) . '/www/static/media/default-profile.jpg');
+		$photohash = sha1($photo);
+		// echo $photo;
+		// echo $photohash;
+		// exit;
+
+		$user = new \FeideConnect\Data\Models\User();
+		$user->userid = $uuid;
+		$user->setUserInfo('test:test', 'Tester Test', $mail, $photo, $photohash);
+		$user->selectedsource = 'feide:uninett.no';
+		$user->ensureProfileAccess();
+
+		$this->storage->saveUser($user);
+
+		$this->storage->updateProfilePhoto($user, 'test:test');
+
+		$this->storage->updateUserInfo($user, 'test:test', ['name', 'email']);
+
+		$this->storage->deleteUser($user);
+
+
+
+	}
+
+
+
+	public function t2() {
+			// $ulist = $this->storage->getUserByUserIDsecList(['feide:andreas@uninett.no', 'mail:foo']);
+			// print_r($ulist);
+
+
+		$uuid = \FeideConnect\Data\Model::genUUID();
+		$feideid = 'feide:test@test.org';
+		$mail = 'mail:tester.test@test@org';
+
+
+		$photo = file_get_contents(dirname(dirname(__FILE__)) . '/www/static/media/default-profile.jpg');
+		$photohash = sha1($photo);
+		// echo $photo;
+		// echo $photohash;
+		// exit;
+
+		$user = new \FeideConnect\Data\Models\User();
+		$user->userid = $uuid;
+		$user->setUserInfo('test:test', 'Tester Test', $mail, $photo, $photohash);
+		$user->selectedsource = 'feide:uninett.no';
+		$user->ensureProfileAccess();
+
+		$this->storage->saveUser($user);
+
+		$this->storage->updateProfilePhoto($user, 'test:test');
+
+		$this->storage->updateUserInfo($user, 'test:test', ['name', 'email']);
+
+		$this->storage->deleteUser($user);
+
 
 
 	}
@@ -186,7 +409,14 @@ class CLI {
 
 	}
 
-	function oneEntry($data) {
+	function oneEntry($object) {
+
+		$data = $object->getAsArray();
+		if (isset($data['profilephoto'])) {
+			$data['profilephoto'] = '----';
+		}
+
+		// echo var_export($data, true);
 
 		foreach($data AS $k => $v) {
 			if (!is_string($v)) {

@@ -7,8 +7,8 @@
 ## Preparations
 
 	# Runtime environemnt
-	apt-get install apache2 php5 php5-cli php5-mcrypt php5-imagick
-
+	apt-get install apache2 php5 php5-cli php5-mcrypt php5-imagick php5-curl
+ 
 	# building environment. Using node.js package manager npm.
 	apt-get install nodejs nodejs-legacy
 	curl https://www.npmjs.com/install.sh | sh
@@ -46,7 +46,6 @@ Initalize Cassandra schema
 
 	cqlsh $HOST -f etc/bootstrap.init-keyspace.sql
 	cqlsh $HOST -f etc/bootstrap.sql
-	cqlsh $HOST -f etc/bootstrap.2_1.sql
 
 
 
@@ -57,7 +56,16 @@ Initalize Cassandra schema
 
 ## Test
 
-	phpunit --bootstrap autoload.php tests 
+
+	phpunit --bootstrap lib/_autoload.php tests
+	casperjs test tests-casperjs/index.js
+	phantomjs tests-phantomjs/main.js
+	mocha --no-timeouts  tests-phantomjs-node/index.js
+
+
+
+
+
 
 
 

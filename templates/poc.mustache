@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<title>Proof of concept</title>
+
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<meta name="description" content="Feide Connect Grant" />
+		<meta name="author" content="Andreas Åkre Solberg" />
+
+		<style type="text/css">
+
+		</style>
+
+
+		<link rel="shortcut icon" href="/static/components/uninett-theme/ico/favicon.ico" />
+
+
+		<!-- Bootstrap core CSS -->
+		<link href="/static/components/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet" />
+
+		<!-- Custom styles for this template -->
+		<link href="/static/components/uninett-theme/css/uninett.css" rel="stylesheet" />
+		<link href="/static/components/font-awsome/css/font-awesome.min.css" rel="stylesheet"  />
+
+
+
+	</head>
+
+	<body>
+
+
+		<div class="container" style="" >
+			<div class="row">
+
+				<div class="col-md-12" style=" ">
+
+				<h1>Proof of Concept</h1>
+
+
+				{{#token}}
+				<pre>export token={{raw.token.access_token}};
+curl -H "Authorization: Bearer $token" https://api.feideconnect.no/...</pre>
+				{{/token}}
+
+
+
+				{{#user}}
+				<h2>User</h2>
+				<pre>{{.}}</pre>
+				{{/user}}
+
+
+				{{#client}}
+				<h2>Client</h2>
+				<pre>{{.}}</pre>
+				{{/client}}
+
+
+				<h2>Token</h2>
+				{{#token}}
+				<pre>{{.}}</pre>
+				{{/token}}
+
+
+
+			</div><!-- row -->
+		</div><!-- container -->
+
+
+
+	</body>
+
+</html>
+
+
+
+

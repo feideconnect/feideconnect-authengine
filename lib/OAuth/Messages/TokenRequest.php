@@ -16,6 +16,7 @@ class TokenRequest extends Message {
 		$this->code 			= Message::optional($message, 'code');
 		$this->redirect_uri		= Message::optional($message, 'redirect_uri');
 		$this->client_id		= Message::optional($message, 'client_id');
+		$this->client_secret	= Message::optional($message, 'client_secret');
 
 		// Used in Client Credentials Grant flow.
 		$this->scope		= Message::optional($message, 'scope');

@@ -7,9 +7,13 @@ class APIGK extends \FeideConnect\Data\Model {
 
 	protected static $_properties = array(
 		"id", "name", "descr", 
-		"owner",  "endpoints", "expose", "httpscertpinned", "requireuser", "scopedef", 
+		"owner",  "endpoints", "expose", "httpscertpinned", "requireuser", "scopedef", "trust", "logo",
 		"status", "created", "updated"
 	);
+	protected static $_types = [
+		"created" => "timestamp",
+		"updated" => "timestamp"
+	];
 
 
 	function __construct($props) {

@@ -5,6 +5,12 @@ use FeideConnect\Logger;
 use FeideConnect\Config;
 use FeideConnect\Authentication\Account;
 use FeideConnect\Data\Model;
+use Cassandra\Type\Uuid;
+use Cassandra\Type\CollectionMap;
+use Cassandra\Type\CollectionSet;
+use Cassandra\Type\Base;
+use Cassandra\Type\Timestamp;
+
 
 /**
  * User 
@@ -16,8 +22,44 @@ class User extends \FeideConnect\Data\Model {
 		"userid", "email", "name", 
 		"profilephoto", "profilephotohash", 
 		"userid_sec", "userid_sec_seen", "selectedsource",
+		"aboveagelimit", "usageterms",
 		"created", "updated"
 	);
+	protected static $_types = [
+		"created" => "timestamp",
+		"updated" => "timestamp"
+	];
+
+	public function getStorableArray() {
+
+		$prepared = parent::getStorableArray();
+
+
+		if (isset($this->name)) {
+			$prepared["name"] =  new CollectionMap($this->name, Base::ASCII, Base::ASCII);	
+		}
+		if (isset($this->email)) {
+			$prepared["email"] =  new CollectionMap($this->email, Base::ASCII, Base::ASCII);
+		}
+		if (isset($this->profilephoto)) {
+			$prepared["profilephoto"] =  new CollectionMap($this->profilephoto, Base::ASCII, Base::BLOB);
+		}
+		if (isset($this->profilephotohash)) {
+			$prepared["profilephotohash"] =  new CollectionMap($this->profilephotohash, Base::ASCII, Base::ASCII);
+		}
+		if (isset($this->userid)) {
+			$prepared["userid"] = new Uuid($this->userid);
+		}
+		if (isset($this->userid_sec)) {
+			$prepared["userid_sec"] =  new CollectionSet($this->userid_sec, Base::ASCII);
+		}
+		if (isset($this->userid_sec_seen)) {
+			$prepared["userid_sec_seen"] =  new CollectionMap($this->userid_sec_seen, Base::ASCII, Base::TIMESTAMP);
+		}
+		
+
+		return $prepared;
+	}
 
 
 	/**
@@ -178,7 +220,7 @@ class User extends \FeideConnect\Data\Model {
 	}
 
 
-	public function getBasicUserInfo($includeEmail = false, $allowseckeys = ['userid']) {
+	public function getBasicUserInfo($includeEmail = false, $allowseckeys = ['uuid', 'p']) {
 
 		$ui = $this->getUserInfo();
 		$userinfo = [
@@ -220,6 +262,13 @@ class User extends \FeideConnect\Data\Model {
 	}
 
 
+	public function updateUserBasics(Account $a) {
+
+		$this->aboveagelimit = $a->aboveAgeLimit();
+		$this->_repo->updateUserBasics($this);
+
+	}
+
 
 	public function updateFromAccount(Account $a) {
 
@@ -255,6 +304,15 @@ class User extends \FeideConnect\Data\Model {
 			$this->_repo->updateUserInfo($this, $sourceID, ["name", "email"]);
 
 		}
+
+		if ($this->aboveagelimit !== $a->aboveAgeLimit()) {
+			$this->aboveagelimit = $a->aboveAgeLimit();
+
+			$this->updateUserBasics($a);
+
+		}
+
+
 
 
 

@@ -3,7 +3,7 @@
 
 namespace FeideConnect\Data;
 
-use FeideConnect\Data\Repositories\Cassandra;
+use FeideConnect\Data\Repositories\Cassandra2;
 
 class StorageProvider {
 
@@ -16,7 +16,8 @@ class StorageProvider {
 
 		if ($storageType === 'cassandra') {
 
-			self::$storage = new Cassandra();
+
+			self::$storage = new Cassandra2();
 
 		} else {
 			throw new \Exception('Trying to initialize unsupported storage type [' . $storageType . '] in StorageProvider.');

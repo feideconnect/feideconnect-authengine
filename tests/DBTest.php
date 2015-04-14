@@ -19,17 +19,121 @@ class DBTest extends \PHPUnit_Framework_TestCase {
 	}
 
 
+	/*
+
+	function getAuthorization($userid, $clientid) {
+	function getAuthorizationsByUser(Models\User $user) {
+	function saveAuthorization(Models\Authorization $authorization) {
+	function removeAuthorization($userid, $clientid) {
+	 */
+	public function testAuthorizations() {
+
+		$clientid = Models\Client::genUUID();
+		$userid = Models\User::genUUID();
+
+		$user = new Models\User();
+		$user->userid = $userid;
+
+
+		$authorization = new Models\Authorization();
+		$authorization->issued = new \FeideConnect\Data\Types\Timestamp();
+		
+		$authorization->clientid = $clientid;
+		$authorization->userid = $userid;
+		$authorization->scopes = ['userinfo', 'groups'];
+
+		$this->db->saveAuthorization($authorization);
+
+
+		$authorization2 = $this->db->getAuthorization($userid, $clientid);
+
+		$this->assertTrue($authorization2->includeScopes(['userinfo', 'groups']), 'Retrieved stored item, check scopes');
+		$this->assertFalse($authorization2->includeScopes(['xxxxx']), 'Retrieved stored item, check scopes');
+
+		
+
+		$authorization4 = $this->db->getAuthorizationsByUser($user);
+		$this->assertTrue(count($authorization4) === 1, 'Should find authorizations for this user');
+
+
+		$this->db->removeAuthorizations($userid, $clientid);
+
+		$authorization3 = $this->db->getAuthorization($userid, $clientid);
+		$this->assertNull($authorization3, 'Authorization should now have been deleted');
+
+
+
+
+
+	}
+
+
+	/*
+	
+	function getAccessToken($accesstoken) {
+	function getAccessTokens($userid, $clientid) {
+	function saveToken(Models\AccessToken $token) {
+	 */
+	public function testTokens() {
+
+		$clientid = Models\Client::genUUID();
+		$userid = Models\User::genUUID();
+
+		$user = new Models\User();
+		$user->userid = $userid;
+
+
+		$token = new Models\AccessToken();
+		$token->access_token = Models\AccessToken::genUUID();
+		$token->clientid = $clientid;
+		$token->userid = $userid;
+		$token->scope = ['userinfo', 'groups'];
+		$token->token_type = 'Bearer';
+
+		$token->issued = new \FeideConnect\Data\Types\Timestamp();
+		$token->validuntil = (new \FeideConnect\Data\Types\Timestamp())->addSeconds(3600);
+		$token->lastuse = (new \FeideConnect\Data\Types\Timestamp())->addSeconds(5);
+
+
+		$this->db->saveToken($token);
+
+
+		$token2 = $this->db->getAccessToken($token->access_token);
+		$this->assertTrue($token2->hasExactScopes(['userinfo', 'groups']), 'Retrieved stored item, check scopes');
+		$this->assertFalse($token2->hasExactScopes(['userinfo']), 'Retrieved stored item, check scopes');
+		$this->assertTrue($token2->hasScopes(['userinfo', 'groups']), 'Retrieved stored item, check scopes');
+		$this->assertTrue($token2->stillValid(), 'Retrieved stored item, check scopes');
+
+
+		$tokenSearched = $this->db->getAccessTokens($userid, $clientid);
+		$this->assertTrue(count($tokenSearched) === 1, 'Should find tokens for this user');
+
+
+		$this->db->removeAccessToken($token);
+		$token3 = $this->db->getAccessToken($token->access_token);
+		$this->assertNull($token3, 'Token should now have been deleted');
+
+
+	}
+
+
+	/*
+	function getAuthorizationCode($code) {
+	function saveAuthorizationCode(Models\AuthorizationCode $code) {
+	function removeAuthorizationCode(Models\AuthorizationCode $code) {
+	 */
 	public function testCodes() {
 
 		$cid = Models\AuthorizationCode::genUUID();
-		$code = new Models\AuthorizationCode($this->db);
+		$code = new Models\AuthorizationCode();
 
 		$code->code = $cid;
 		$code->clientid = Models\AuthorizationCode::genUUID();
 		$code->userid = Models\AuthorizationCode::genUUID();
 
-		$code->issued = time();
-		$code->validuntil = time() + 3600;
+		$code->issued = new \FeideConnect\Data\Types\Timestamp();
+		$code->validuntil = (new \FeideConnect\Data\Types\Timestamp())->addSeconds(3600);
+
 		$code->token_type = "Bearer";
 
 		$code->redirect_uri = 'http://example.org';
@@ -49,9 +153,6 @@ class DBTest extends \PHPUnit_Framework_TestCase {
 		$res = $this->db->getAuthorizationCode($cid);
 		$this->assertNull($res, 'Should not be able to retrieve authorizationcode that should have been deleted. Should return null.');
 
-
-
-
 	}
 
 
@@ -62,20 +163,20 @@ class DBTest extends \PHPUnit_Framework_TestCase {
 
 		$userid = Models\Client::genUUID();
 
-		$user = new Models\User($this->db);
+		$user = new Models\User();
 		$user->userid = $userid;
 
-		$client = new Models\Client($this->db);
+		$client = new Models\Client();
 		$client->id = $c1;
 		$client->client_secret = Models\Client::genUUID();
-		$client->created = time();
+		$client->created = new \FeideConnect\Data\Types\Timestamp();
 		$client->name = 'name';
 		$client->descr = 'descr';
 		$client->owner = $userid;
 		$client->redirect_uri = ['http://example.org'];
 		$client->scopes = ['userinfo', 'groups'];
 
-		$client2 = new Models\Client($this->db);
+		$client2 = new Models\Client();
 		$client2->id = $c2;
 		$client2->name = 'name2';
 
@@ -122,9 +223,60 @@ class DBTest extends \PHPUnit_Framework_TestCase {
 		
 	}
 
+
+
+	/*
+	 * Performs some tests on cassandra user related functions...
+	 */
+	public function testUsers2() {
+
+
+
+		$uuid = \FeideConnect\Data\Model::genUUID();
+		$feideid = 'feide:test@test.org';
+		$mail = 'tester.test@test@org';
+
+
+		$photo = file_get_contents(dirname(dirname(__FILE__)) . '/www/static/media/default-profile.jpg');
+		$photohash = sha1($photo);
+		// echo $photo;
+		// echo $photohash;
+		// exit;
+
+		$user = new \FeideConnect\Data\Models\User();
+		$user->userid = $uuid;
+		$user->setUserInfo('test:test', 'Tester Test', $mail, $photo, $photohash);
+		$user->selectedsource = 'test:test';
+		
+
+
+		$userinfo = $user->getBasicUserInfo(true);
+		// print_r($userinfo);
+		$this->assertTrue($userinfo['email'] === $mail, 'Check that mail is set correctly');
+
+		$this->db->saveUser($user);
+		$user->ensureProfileAccess(true);
+
+		$this->db->updateProfilePhoto($user, 'test:test');
+
+		$this->db->updateUserInfo($user, 'test:test', ['name', 'email']);
+
+		$this->db->addUserIDsec($uuid, $feideid);
+
+		// $this->db->deleteUser($user);
+
+
+
+
+	}
+
 	public function testUsers() {
 		// return;
-		$user = new Models\User($this->db);
+		$user = new Models\User();
+
+
+		// Test all cassandra db functions
+		// Test all Model\User functions.
 
 
 		$uuid = \FeideConnect\Data\Model::genUUID();
@@ -175,6 +327,13 @@ class DBTest extends \PHPUnit_Framework_TestCase {
 
 		$this->assertEquals($u5, null, 'Should return null when not finding user by key');
 		$this->assertEquals($u6, null, 'Should return null when not finding user by seckey');
+
+
+
+		$ulist = $this->db->getUserByUserIDsecList(['feide:andreas@uninett.no', 'mail:foo']);
+		$this->assertTrue(count($ulist) >= 1, 'Should return at least one result with getUserByUserIDsecList()');
+
+
 
 
 

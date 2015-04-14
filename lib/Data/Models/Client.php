@@ -2,6 +2,13 @@
 
 namespace FeideConnect\Data\Models;
 
+use Cassandra\Type\Uuid;
+use Cassandra\Type\CollectionList;
+use Cassandra\Type\CollectionSet;
+use Cassandra\Type\Base;
+use Cassandra\Type\Timestamp;
+use Cassandra\Type\Blob;
+
 class Client extends \FeideConnect\Data\Model {
 
 
@@ -10,6 +17,10 @@ class Client extends \FeideConnect\Data\Model {
 		"logo",
 		"redirect_uri", "scopes", "scopes_requested", "status", "type", "updated"
 	);
+	protected static $_types = [
+		"created" => "timestamp",
+		"updated" => "timestamp"
+	];
 
 
 	public function getScopeList() {
@@ -17,16 +28,41 @@ class Client extends \FeideConnect\Data\Model {
 		return $this->scopes;
 	}
 
-	// public function debug() {
+	public function getStorableArray() {
 
+		$prepared = parent::getStorableArray();
+
+
+		if (isset($this->id)) {
+			$prepared["id"] = new Uuid($this->id);
+		}
+		if (isset($this->logo)) {
+			$prepared["logo"] =  new Blob($this->logo);
+		}
+
+		if (isset($this->redirect_uri)) {
+			$prepared["redirect_uri"] =  new CollectionList($this->redirect_uri, Base::ASCII);
+		}
+		if (isset($this->scopes)) {
+			$prepared["scopes"] =  new CollectionSet($this->scopes, Base::ASCII);
+		}
+		if (isset($this->scopes_requested)) {
+			$prepared["scopes_requested"] =  new CollectionSet($this->scopes_requested, Base::ASCII);
+		}
+		if (isset($this->status)) {
+			$prepared["status"] =  new CollectionSet($this->status, Base::ASCII);
+		}
 		
-	// 	print_r(self::props($this));
+		if (isset($this->owner)) {
+			$prepared["owner"] =  new Uuid($this->owner);
+		}
 
-	// }
 
-	// protected static function props($a) {
-	// 	return get_object_vars($a);
-	// }
+		// echo var_export($prepared, true); 
+
+		return $prepared;
+	}
+
 
 
 }

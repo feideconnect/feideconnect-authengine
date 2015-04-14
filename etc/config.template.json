@@ -8,11 +8,16 @@
 	"logging": {
 		"file": true
 	},
+
+	"connect": {
+		"issuer": "connect"
+	},
+
 	"salt": null,
 
 	"account": {
 		"useridmap": {
 			"feide": "eduPersonPrincipalName"
 		}
-	},
+	}
 }

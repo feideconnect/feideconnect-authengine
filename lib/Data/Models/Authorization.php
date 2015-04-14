@@ -1,6 +1,11 @@
 <?php
 
 namespace FeideConnect\Data\Models;
+use Cassandra\Type\Uuid;
+use Cassandra\Type\CollectionMap;
+use Cassandra\Type\CollectionSet;
+use Cassandra\Type\Base;
+use Cassandra\Type\Timestamp;
 
 class Authorization extends \FeideConnect\Data\Model {
 
@@ -8,6 +13,30 @@ class Authorization extends \FeideConnect\Data\Model {
 	protected static $_properties = array(
 		"clientid", "userid", "scopes", "issued"
 	);
+	protected static $_types = [
+		"issued" => "timestamp"
+	];
+
+
+	public function getStorableArray() {
+
+		$prepared = parent::getStorableArray();
+
+
+
+
+		if (isset($this->scopes)) {
+			$prepared["scopes"] = new CollectionSet($this->scopes, Base::ASCII);
+		}
+		if (isset($this->clientid)) {
+			$prepared["clientid"] = new Uuid($this->clientid);
+		}
+		if (isset($this->userid)) {
+			$prepared["userid"] = new Uuid($this->userid);
+		}
+
+		return $prepared;
+	}
 
 	public function getScopeList() {
 		if (empty($this->scopes)) return [];

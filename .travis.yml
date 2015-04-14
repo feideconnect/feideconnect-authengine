@@ -1,6 +1,8 @@
 language: php
 php:
+# - 5.4
 - 5.5
+# - 5.6
 services:
 - cassandra
 before_install:
@@ -8,9 +10,9 @@ before_install:
 - sudo apt-get install apache2 libapache2-mod-fastcgi 
 - printf "\n" | pecl install imagick
 # Should also install php5-mcrypt php5-imagick
-- composer self-update
+- /home/travis/.phpenv/versions/5.5/bin/composer self-update
 install:
-- composer install --dev
+- composer install
 before_script:
 - cqlsh 127.0.0.1 -f etc/bootstrap.init-keyspace-ci.sql
 - cqlsh 127.0.0.1 -f etc/bootstrap.sql
@@ -29,14 +31,15 @@ before_script:
 - mkdir logs
 - sudo service apache2 restart
 script:
-- phpunit --coverage-clover build/logs/clover.xml --bootstrap autoload.php tests
+#- phpunit --debug -v --coverage-clover build/logs/clover.xml --bootstrap lib/_autoload.php tests
+# - phpunit --debug -v --bootstrap lib/_autoload.php tests/OAuth.php
 - phantomjs tests-phantomjs/main.js
 # Run PHPinfo
 # - curl http://127.0.0.1/phpinfo
 - cat logs/error.log
 - cat logs/access.log
 notifications:
-  slack: uninett:5CpnkrlaqOLKLXDttDzpTqqU
+  # slack: uninett:5CpnkrlaqOLKLXDttDzpTqqU
 addons:
   code_climate:
     repo_token: 2aad4fd8a7ffbcc2f41f88c69c93c6b0a8abed2c01f14f0f50dc81ef6184e8d8
@@ -44,6 +47,7 @@ after_script:
 - CODECLIMATE_REPO_TOKEN="2aad4fd8a7ffbcc2f41f88c69c93c6b0a8abed2c01f14f0f50dc81ef6184e8d8" vendor/bin/test-reporter --stdout > codeclimate.json
 - 'curl --verbose -X POST -d @codeclimate.json -H ''Content-Type: application/json'' -H ''User-Agent: Code Climate (PHP Test Reporter v0.1.1)'' https://codeclimate.com/test_reports'
 cache:
+  apt: true
   directories:
   - node_modules
   - vendor

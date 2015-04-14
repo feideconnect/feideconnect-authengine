@@ -1,0 +1,141 @@
+
+{{#perms.apis}}
+
+
+
+	<div class="list-group-item grantEntry apiEntry">
+		<div class="pull-right grantDetails selectIndicator" style="font-size: 200%"><i class="glyphicon glyphicon-chevron-down "></i></div>
+		<div class="pull-right grantDetailsHide selectIndicator" style="font-size: 200%"><i class="glyphicon glyphicon-chevron-left "></i></div>
+
+		<div class="media grantEntryContent" style="">
+			<div class="media-left ">
+				<img class="media-object grantDetails" style="max-height: 64px; max-width: 64px" src="http://api.dev.feideconnect.no:6543/apigkadm/apigks/{{info.id}}/logo" alt="...">
+				<img class="media-object grantDetailsHide" style="max-height: 32px; max-width: 32px" src="http://api.dev.feideconnect.no:6543/apigkadm/apigks/{{info.id}}/logo" alt="...">
+			</div>
+
+			<div class="media-body">
+
+
+				<h3 class="media-heading" style="padding: 0px">{{info.name}}
+				</h3>
+				<p class="grantDetailsHide" style="color: #555; font-size: 75%">
+					{{#scopes}}
+						<i class="fa fa-square-o"></i>&nbsp;{{title}}&nbsp; 
+					{{/scopes}}
+				</p>
+
+
+
+
+				<div class="grantDetails">
+
+
+			
+				<div class="row" style="">
+						
+					<div class="col-md-6">
+
+
+						{{#info.descr}}
+							<p style="margin: 0px">{{.}}</p>
+						{{/info.descr}}
+
+
+						
+						<ul class="uninett-ul">
+						{{#scopes}}
+
+							<li class="uninett-ul-li">{{title}} – <span style="color: #555;">{{descr}}</span></li>
+
+						{{/scopes}}
+						</ul>
+
+					</div>
+
+					<div class="col-md-6 ownerbox">
+
+						{{#owner}}
+							<div class="pull-right ownerlogo">
+								<img style="" 
+									src="/user/media/{{owner.profilephoto}}">
+							</div>
+							<p class="ownerName">{{owner.name}} </p>
+							<p class="ownerMail">
+								<a href="mailto:{{owner.mail}}">{{owner.email}}</a>
+							</p>
+						{{/owner}}
+
+					</div>
+<!--
+					<div class="col-md-6">
+
+						{{#owner}}
+
+							<div style="" class="panel panel-default">
+								<div class="panel-heading">Application owner</div>
+							  
+								<div class="panel-body" style="">
+							    
+									<div class="media">
+										<a class="pull-left" href="#">
+											<img style="max-width: 48px; max-height: 48px; border: 1px solid #aaa; border-radius: 3px" 
+												src="/user/media/{{owner.profilephoto}}">
+										</a>
+
+										<div class="media-body">
+											<h4 class="media-heading">
+												
+												{{owner.name}}
+											</h4>
+
+											
+											<p style="margin: 0px">
+												<span class="glyphicon glyphicon-envelope"></span> 
+
+												<a href="mailto:{{owner.mail}}">{{owner.email}}</p></a>
+
+										</div><
+									</div>
+
+							  </div>
+							</div>
+
+						{{/owner}}
+
+
+					</div>
+
+					-->
+				</div>
+
+
+
+			
+
+
+
+
+				<p><a target="_blank" href="#">Read more about this application</a></p>
+
+				</div>
+
+
+
+			</div><!-- media body -->
+		</div><!-- media -->
+
+
+
+	</div><!-- Panel -->
+
+
+
+
+
+
+
+
+
+
+
+{{/perms.apis}}

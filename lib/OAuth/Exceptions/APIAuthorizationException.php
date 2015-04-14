@@ -2,6 +2,7 @@
 
 namespace FeideConnect\OAuth\Exceptions;
 use FeideConnect\Exceptions;
+use FeideConnect\HTTP\JSONResponse;
 
 /**
 * 
@@ -40,21 +41,24 @@ class APIAuthorizationException extends Exceptions\Exception {
 		
 	}
 
-	function showJSON() {
-
-
-		http_response_code($this->httpcode);
-		if ($this->type !== null) {
-			header('WWW-Authenticate: Bearer realm="feideconnect", error="' . $this->type . '", error_description="' . urlencode($this->getMessage()) . '"');	
-		}
-		header('Content-Type: application/json; charset=utf-8');
+	function getData() {
 		$data = [
 			'error' => $this->head,
 			'message' => $this->getMessage(),
 		];
-		echo json_encode($data, JSON_PRETTY_PRINT);
-		exit;
+		return $data;
+	}
 
+	function getJSONResponse() {
+
+		$response = new JSONResponse($this->getData());
+		$response->setStatus($this->httpcode);
+		
+		if ($this->type !== null) {
+			$response->setHeader('WWW-Authenticate', 
+				'Bearer realm="feideconnect", error="' . $this->type . '", error_description="' . urlencode($this->getMessage()) . '"');
+		}
+		return $response;
 	}
 
 

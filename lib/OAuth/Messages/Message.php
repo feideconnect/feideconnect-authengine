@@ -3,15 +3,16 @@
 
 namespace FeideConnect\OAuth\Messages;
 use FeideConnect\OAuth\Exceptions;
+use FeideConnect\HTTP\Redirect;
+use FeideConnect\HTTP\JSONResponse;
 
 /**
 * 	
 */
 
-
 class Message {
 
-	function __construct($message) {	
+	function __construct() {	
 	}
 
 	public function asQS() {
@@ -34,13 +35,13 @@ class Message {
 
 
 	public function getAsArray() {
-		$a = array();
+		$arr = array();
 		foreach($this AS $k => $v) {
 			if (isset($this->{$k})) {
-				$a[$k] = $this->{$k};
+				$arr[$k] = $this->{$k};
 			}
 		}
-		return $a;
+		return $arr;
 	}
 
 	public function debug() {
@@ -69,39 +70,32 @@ class Message {
 	
 	public function sendRedirect($endpoint, $hash = false) {
 		$url = $this->getRedirectURL($endpoint, $hash);
-
-		\FeideConnect\Utils\URL::redirect($url);
-		exit;
+		return new Redirect($url);
 	}
 
 	public function sendBodyJSON() {
-		header('Content-Type: application/json;charset=UTF-8');
-
 		$body = array();
 		foreach($this AS $key => $value) {
 			if (empty($value)) continue;
 			$body[$key] = $value;
 		}
-
-		// echo json_encode($body);
-		echo json_encode($body, JSON_PRETTY_PRINT); 
-		exit;
+		return new JSONResponse($body);
 	}
 
-	public function sendBodyForm() {
-		// header('Content-Type: application/json; charset=utf-8');
-		header('Content-Type: application/x-www-form-urlencoded');
+	// public function sendBodyForm() {
+	// 	// header('Content-Type: application/json; charset=utf-8');
+	// 	header('Content-Type: application/x-www-form-urlencoded');
 
-		$body = array();
-		foreach($this AS $key => $value) {
-			if (empty($value)) continue;
-			$body[$key] = $value;
-		}
+	// 	$body = array();
+	// 	foreach($this AS $key => $value) {
+	// 		if (empty($value)) continue;
+	// 		$body[$key] = $value;
+	// 	}
 
-		// echo json_encode($body);
-		echo http_build_query($body);
-		exit;
-	}
+	// 	// echo json_encode($body);
+	// 	echo http_build_query($body);
+	// 	exit;
+	// }
 	
 
 	

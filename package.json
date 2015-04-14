@@ -1,49 +1,49 @@
 {
-  "name": "feideconnet",
-  "description": "Feide Connect Auth Engine",
-  "version": "0.1.0",
-  "keywords": [
-    "groups",
-    "authorization"
-  ],
-  "homepage": "http://feideconnect.no",
-  "author": "Andreas Åkre Solberg",
-  "scripts": {
-    "test": "grunt test"
-  },
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/andreassolberg/feideconnect-authengine.git"
-  },
-  "bugs": {
-    "url": "https://github.com/andreassolberg/feideconnect-authengine/issues"
-  },
-  "devDependencies": {
-    "bower": "*",
-    "grunt": "*",
-    "grunt-cli": "*",
-    "grunt-contrib-jshint": "*"
-  },
-  "engines": {
-    "node": "~0.10.1"
-  },
-  "scripts": {
-    "test": "grunt travis --verbose"
-  },
-  "jspm": {
-    "main": "js/bootstrap",
-    "directories": {
-      "example": "examples",
-      "lib": "dist"
-    },
-    "shim": {
-      "js/bootstrap": {
-        "imports": "jquery",
-        "exports": "$"
-      }
-    },
-    "buildConfig": {
-      "uglify": true
-    }
-  }
+	"name": "feideconnet",
+	"description": "Feide Connect Auth Engine",
+	"version": "0.1.0",
+	"keywords": [
+		"groups",
+		"authorization"
+	],
+	"homepage": "http://feideconnect.no",
+	"author": "Andreas Åkre Solberg",
+	"scripts": {
+		"test": "phpunit --bootstrap lib/_autoload.php tests"
+	},
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/andreassolberg/feideconnect-authengine.git"
+	},
+	"bugs": {
+		"url": "https://github.com/andreassolberg/feideconnect-authengine/issues"
+	},
+	"devDependencies": {
+		"bower": "*",
+		"grunt": "*",
+		"grunt-cli": "*",
+		"grunt-contrib-jshint": "*",
+
+		"node-phantom-simple": "~1.2.0",
+		"promise": "*"
+	},
+	"engines": {
+		"node": "~0.10.1"
+	},
+	"jspm": {
+		"main": "js/bootstrap",
+		"directories": {
+			"example": "examples",
+			"lib": "dist"
+		},
+		"shim": {
+			"js/bootstrap": {
+				"imports": "jquery",
+				"exports": "$"
+			}
+		},
+		"buildConfig": {
+			"uglify": true
+		}
+	}
 }
