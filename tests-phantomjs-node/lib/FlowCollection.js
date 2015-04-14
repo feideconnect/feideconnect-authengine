@@ -67,7 +67,7 @@ var FlowCollection = Class.extend({
 		// });
 
 	
-		return that.flows[0].run()
+		return that.flows[1].run()
 			.then(function() {
 				console.log("DONe with flow 1");
 			})
