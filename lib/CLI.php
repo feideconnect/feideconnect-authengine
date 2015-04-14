@@ -87,6 +87,13 @@ class CLI {
 
 	}
 
+
+	function deleteClient($client) {
+		$this->header("Deleting client " . $client->id);
+		$this->storage->deleteClient($client);
+	}
+
+
 	function setScopes($client, $scopes_requested, $scopes) {
 		$this->storage->updateClientScopes($client, $scopes_requested, $scopes );
 		return $this->getClient($client->id);
