@@ -67,16 +67,33 @@ class Auth {
 		$client = $apiprotector->getClient();
 
 
-		$allowseckeys = ['userid'];
-		$allowseckeys[] = 'p';
-		$allowseckeys[] = 'feide';
+		$hasScopes = $apiprotector->getScopes();
 
-		$includeEmail = true;
+
+		$allowseckeys = ['userid'];
+		$includeEmail = false;
+
+		foreach($hasScopes AS $scope) {
+			$data[$scope] = true;
+			if ($scope === 'userinfo-feide') {
+				$allowseckeys[] = 'feide';
+			}
+			if ($scope === 'userinfo-photo') {
+				$allowseckeys[] = 'p';
+			}
+			if ($scope === 'userinfo-mail') {
+				$includeEmail = true;
+			}
+		}
+
+		$userinfo = $user->getBasicUserInfo($includeEmail, $allowseckeys);
+
 
 		$data = [
-			'user' => $user->getBasicUserInfo($includeEmail, $allowseckeys),
+			'user' => $userinfo,
 			'audience' => $client->id,
 		];
+
 
 		return new JSONResponse($data);
 

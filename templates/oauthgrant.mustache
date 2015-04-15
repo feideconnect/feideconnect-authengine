@@ -120,7 +120,7 @@
 
 				{{#validated}}
 
-					<div class="simpleSkip">
+					<div class="simpleSkip" style="margin-bottom: 2em">
 						<i style="color: #363" class="fa fa-check fa-3x pull-left"></i>
 						{{client.name}} er en offisiell tjeneste som benyttes hos {{organization}}. {{organization}} har godkjent tjenesten for sine brukere og har en avtale med leverandøren.
 					</div>
@@ -128,8 +128,7 @@
 				{{/validated}}
 				{{^validated}}
 
-
-					<div class="simpleSkip">
+					<div class="simpleSkip" style="margin-bottom: 2em">
 						<i style="color: #643" class="fa fa-question fa-3x pull-left"></i>
 						Din organisation {{organization}} har ingen avtale med leverandøren, og har ikke tatt stilling til bruk av denne tjenesten for sine brukere. Du kan allikevel velge å benytte tjenesten på eget initiativ.
 
@@ -142,9 +141,8 @@
 				<form  id="login" method="post" action="{{posturl}}">
 
 				{{#firsttime}}
-				<div style="padding-left: .9em; margin-left: .9em; border-left: 5px solid #a55;">
+				<div style="padding-left: .9em; margin-left: .9em; border-left: 5px solid #a55; ">
 					<p>Dette er første gang du logger på en tjeneste med Feide / Connect. For å komme videre må du godta Connect bruksvilkår.</p>
-
 
 					<p>
 						<input type="checkbox" id="bruksvilkar" name="bruksvilkar" value="yes" checked="checked" />

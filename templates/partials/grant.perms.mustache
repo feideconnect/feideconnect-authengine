@@ -22,6 +22,15 @@
 			<p class="userInfoEntry">
 				{{#perms.global.userinfo-feide}}
 					<span  class="fa fa-user"></span> 
+						<span style="">Profile photo</span> &nbsp; &nbsp;
+				{{/perms.global.userinfo-feide}}
+			</p>
+
+
+
+			<p class="userInfoEntry">
+				{{#perms.global.userinfo-feide}}
+					<span  class="fa fa-user"></span> 
 						<span style="">Feide ID</span> &nbsp; &nbsp;
 				{{/perms.global.userinfo-feide}}
 			</p>
@@ -29,15 +38,15 @@
 			<p class="userInfoEntry">
 				{{#perms.global.userinfo-mail}}
 					<span  class="fa fa-envelope-o"></span> 
-						<span style="">{{user.email}}</span>
+						<span style="">Email address: <tt>{{user.email}}</tt></span>
 				{{/perms.global.userinfo-mail}}
 			</p>
+
 
 			{{#perms.global.openid}}
 			<p class="userInfoEntry openid">
 				<i class="fa fa-openid" style="color: #800"></i> OpenID Connect
 			</p>
-
 			{{/perms.global.openid}}
 			
 
