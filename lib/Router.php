@@ -53,6 +53,7 @@ class Router {
 
 		// OpenID Connect
 		$this->router->get('/.well-known/openid-configuration', ['FeideConnect\Controllers\OpenIDConnect', 'config']);
+		$this->router->get('/openid/jwks', ['FeideConnect\Controllers\OpenIDConnect', 'getJWKs']);
 
 
 		// NB. You can cache the return value from $router->getData() 

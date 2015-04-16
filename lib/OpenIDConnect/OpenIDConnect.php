@@ -36,13 +36,14 @@ class OpenIDConnect {
 
 	public function getJWKs() {
 
-		
+		return $this->trustStore->getJWKs();
 
 	}
 
 	public function getProviderConfiguration() {
 
 		$base = URL::getBaseURL() . 'oauth/';
+		$base2 = URL::getBaseURL() . 'openid/';
 		$config = [
 			'issuer' => Config::getValue('connect.issuer'),
 			'authorization_endpoint' => $base . 'authorization',
@@ -50,7 +51,9 @@ class OpenIDConnect {
 			'token_endpoint_auth_methods_supported' => ['client_secret_basic'],
 			'token_endpoint_auth_signing_alg_values_supported' => ['RS256'],
 			'userinfo_endpoint' =>  $base . 'userinfo',
-			// 'jwks_uri' => $base . 'jwks'
+			'ui_locales_supported' => ["en", "no", "nb", "nn"],
+			'service_documentation' => 'http://feideconnect.no/docs/gettingstarted/',
+			'jwks_uri' => $base2 . 'jwks'
 		];		
 		return $config;
 

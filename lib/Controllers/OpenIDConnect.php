@@ -20,5 +20,20 @@ class OpenIDConnect {
 
 	}
 
+	static function getJWKs() {
+
+		$openid = new \FeideConnect\OpenIDConnect\OpenIDConnect();
+		$jwks = $openid->getJWKs();
+
+		$data = [
+			"jwk" => $jwks
+		];
+
+
+		$response = new JSONResponse($data);
+		return $response;
+	}
+
+
 }
 
