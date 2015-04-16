@@ -101,6 +101,8 @@ class POC {
 
 
 
+		$openid = new \FeideConnect\OpenIDConnect\OpenIDConnect();
+
 
 		$data = [];
 		$rawdata = [];
@@ -115,6 +117,10 @@ class POC {
 		if (!empty($token)) {
 			$data['token'] = json_encode($token, JSON_PRETTY_PRINT);
 			$rawdata["token"] = $token;
+
+			$idtoken = $openid->getIDtoken($user->userid, $client->id);
+			$data['idtoken'] = json_encode($idtoken->getObject(), JSON_PRETTY_PRINT);
+			$data['idtokenstr'] = join('.<br /><br />', explode('.', $idtoken->getEncoded()));
 		}
 
 
