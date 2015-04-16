@@ -64,6 +64,16 @@ curl -H "Authorization: Bearer $token" https://api.feideconnect.no/...</pre>
 
 
 
+				<h2>OpenID Connect idtoken (JWT)</h2>
+
+				{{#idtoken}}
+				<pre>{{.}}</pre>
+				{{/idtoken}}
+
+				{{#idtokenstr}}
+				<pre>{{{.}}}</pre>
+				{{/idtokenstr}}
+
 			</div><!-- row -->
 		</div><!-- container -->
 
