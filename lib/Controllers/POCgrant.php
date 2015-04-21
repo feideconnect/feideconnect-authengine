@@ -14,15 +14,11 @@ class POCgrant {
 
 	static function run($clientid, $userid) {
 
-
 		$storage = StorageProvider::getStorage();
 		$user = $storage->getUserByUserID($userid);
 		$client = $storage->getClient($clientid);
 
-
 		$firsttime = true;
-
-
 
 		$postattrs = $_REQUEST;
 		$postattrs['client_id'] = $client->id;
@@ -45,23 +41,24 @@ class POCgrant {
 
 		$redirect_uri = 'https://sp.example.org';
 
+		$scopesInspector = new ScopesInspector($client, $scopesInQuestion);
 
-		$si = new ScopesInspector($client, $scopesInQuestion);
-
-		$u = $user->getBasicUserInfo(true);
-		$u['userid'] = $user->userid;
-		$u['p'] = $user->getProfileAccess();
+		$userinfo = $user->getBasicUserInfo(true);
+		$userinfo['userid'] = $user->userid;
+		$userinfo['p'] = $user->getProfileAccess();
 
 		$data = [
-			'perms' => $si->getInfo(),
-			'user' => $u,
-			'posturl_' => URL::selfURLNoQuery(), // Did not work with php-fpm, needs to check out.
+			'perms' => $scopesInspector->getInfo(),
+			'user' => $userinfo,
+			// 'posturl_' => URL::selfURLNoQuery(), // Did not work with php-fpm, needs to check out.
 			'posturl' => URL::selfURLhost() . '/oauth/authorization',
 			'postdata' => $postdata,
 			'client' => $client->getAsArray(),
 			'HOST' => URL::selfURLhost(),
 		];
 
+
+		// echo '<pre>'; print_r($data); exit;
 
 
 		$data['client']['host'] = URL::getURLhostPart($redirect_uri);

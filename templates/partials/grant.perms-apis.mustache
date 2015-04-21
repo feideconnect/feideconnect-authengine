@@ -54,6 +54,15 @@
 
 					<div class="col-md-6 ownerbox">
 
+						{{#org}}
+							<div class="pull-right ownerlogo">
+								<img style="" 
+									src="/org/media/{{org.id}}">
+							</div>
+							<p class="ownerName">{{org.name.nb}} </p>
+						{{/org}}
+
+
 						{{#owner}}
 							<div class="pull-right ownerlogo">
 								<img style="" 

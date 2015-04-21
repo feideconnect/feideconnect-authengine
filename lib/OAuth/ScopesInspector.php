@@ -20,7 +20,7 @@ class ScopesInspector {
 
 	protected $storage;
 
-	protected $apis = [], $owners = [];
+	protected $apis = [], $owners = [], $orgs = [];
 
 	public function __construct($client, $scopes) {
 		$this->client = $client;
@@ -38,6 +38,14 @@ class ScopesInspector {
 		}
 		$this->owners[$ownerid] = $this->storage->getUserByUserID($ownerid);
 		return $this->owners[$ownerid];
+	}
+
+	public function getOrg($orgid) {
+		if (isset($this->orgs[$orgid])) {
+			return $this->orgs[$orgid];
+		}
+		$this->orgs[$orgid] = $this->storage->getOrg($orgid);
+		return $this->orgs[$orgid];
 	}
 
 	public function getAPI($apigkid) {
@@ -97,13 +105,19 @@ class ScopesInspector {
 					if (!isset($apis[$apigkid]["info"])) {
 						$apis[$apigkid]["apigk"] = $apigk;
 					}
-					if (!isset($apis[$apigkid]["ownerObj"] )) {
+					if (!isset($apis[$apigkid]["orgObj"]) && $apigk->has('organization')) {
+						$apis[$apigkid]["orgObj"] = $this->getOrg($apigk->organization);
+						if ($apis[$apigkid]["orgObj"] !== null) {
+							$apis[$apigkid]["orgInfo"] = $apis[$apigkid]["orgObj"]->getAsArray();
+						}
+
+					} else if (!isset($apis[$apigkid]["ownerObj"] )) {
 						$apis[$apigkid]["ownerObj"] = $this->getOwner($apigk->owner);
 						if ($apis[$apigkid]["ownerObj"] !== null) {
 							$apis[$apigkid]["ownerInfo"] = $apis[$apigkid]["ownerObj"]->getBasicUserInfo(true, ["userid", "p"]);
 						}
-						
 					}
+
 
 				} catch (\Exception $e) {
 
@@ -146,6 +160,12 @@ class ScopesInspector {
 				"owner" => $api["ownerInfo"],
 				"scopes" => []
 			];
+			if (isset($api["ownerInfo"])) {
+				$apiEntry["owner"] = $api["ownerInfo"];
+			}
+			if (isset($api["orgInfo"])) {
+				$apiEntry["org"] = $api["orgInfo"];
+			}
 
 			$apiEntry["scopes"][] = $api["apigk"]->getBasicScopeView();
 			foreach($api["localScopes"] AS $ls) {

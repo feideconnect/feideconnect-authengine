@@ -305,16 +305,17 @@ class Server {
 		}
 
 
-		$si = new ScopesInspector($client, $scopesInQuestion);
+		$scopesInspector = new ScopesInspector($client, $scopesInQuestion);
 
 
-		$u = $user->getBasicUserInfo(true);
-		$u['userid'] = $user->userid;
-		$u['p'] = $user->getProfileAccess();
+
+		$userinfo = $user->getBasicUserInfo(true);
+		$userinfo['userid'] = $user->userid;
+		$userinfo['p'] = $user->getProfileAccess();
 
 		$data = [
-			'perms' => $si->getInfo(),
-			'user' => $u,
+			'perms' => $scopesInspector->getInfo(),
+			'user' => $userinfo,
 			// 'posturl_' => Utils\URL::selfURLNoQuery(), // Did not work with php-fpm, needs to check out.
 			'posturl' => Utils\URL::selfURLhost() . '/oauth/authorization',
 			'postdata' => $postdata,
@@ -332,7 +333,27 @@ class Server {
 		$data['validated'] = false;
 
 
-		if ($client->has('owner')) {
+		// if ($client->has('owner')) {
+
+		// 	$owner = $this->storage->getUserByUserID($client->owner);
+		// 	if ($owner !== null) {
+		// 		$oinfo = $owner->getBasicUserInfo(true);
+		// 		$oinfo['p'] = $owner->getProfileAccess();
+		// 		$data['owner'] = $oinfo;
+		// 	}
+			
+		// }
+
+		if ($client->has('organization')) {
+
+			$org = $this->storage->getOrg($client->organization);
+			if ($org !== null) {
+				$orginfo = $org->getAsArray();
+				$data['ownerOrg'] = true;
+				$data['org'] = $orginfo;
+			}
+
+		} else  if ($client->has('owner')) {
 
 			$owner = $this->storage->getUserByUserID($client->owner);
 			if ($owner !== null) {
@@ -342,6 +363,7 @@ class Server {
 			}
 			
 		}
+
 
 
 
