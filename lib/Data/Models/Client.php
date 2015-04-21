@@ -13,7 +13,7 @@ class Client extends \FeideConnect\Data\Model {
 
 
 	protected static $_properties = array(
-		"id", "client_secret", "created", "descr", "name", "owner", 
+		"id", "client_secret", "created", "descr", "name", "owner", "organization",
 		"logo",
 		"redirect_uri", "scopes", "scopes_requested", "status", "type", "updated"
 	);

@@ -493,8 +493,14 @@ class Cassandra2 extends \FeideConnect\Data\Repository {
      *   trust text,
      *   updated timestamp
 	 */
+	function getAPIGKs($count = 100) {
+		$query = 'SELECT * FROM "apigk" LIMIT :count';
+		$params = ['count' => $count];
+		return $this->query($query, $params, __FUNCTION__, 'FeideConnect\Data\Models\APIGK', true);
+	}
+
 	function getAPIGK( $id) {
-		$query = 'SELECT id, descr, endpoints, expose, httpscertpinned, name, owner, requireuser, scopedef, status, created, updated FROM "apigk" WHERE "id" = :id';
+		$query = 'SELECT id, descr, endpoints, expose, httpscertpinned, name, owner, organization, requireuser, scopedef, status, created, updated FROM "apigk" WHERE "id" = :id';
 		$params = ['id' => $id];
 		return $this->query($query, $params, __FUNCTION__, 'FeideConnect\Data\Models\APIGK', false);
 	}
@@ -509,7 +515,7 @@ class Cassandra2 extends \FeideConnect\Data\Repository {
 	 * --- Database handling of the 'client' column family
 	 */
 	function getClient( $id) {
-		$query = 'SELECT id, client_secret, created, descr, name, owner, logo, redirect_uri, scopes, scopes_requested, status, type, updated FROM "clients" WHERE "id" = :id';
+		$query = 'SELECT id, client_secret, created, descr, name, owner, organization, logo, redirect_uri, scopes, scopes_requested, status, type, updated FROM "clients" WHERE "id" = :id';
 		$params = ['id' => new Uuid($id)];
 		return $this->query($query, $params, __FUNCTION__, 'FeideConnect\Data\Models\Client', false);
 	}
@@ -526,12 +532,6 @@ class Cassandra2 extends \FeideConnect\Data\Repository {
 		$query = 'SELECT * FROM "clients" LIMIT :count';
 		$params = ['count' => $count];
 		return $this->query($query, $params, __FUNCTION__, 'FeideConnect\Data\Models\Client', true);
-	}
-
-	function getAPIGKs($count = 100) {
-		$query = 'SELECT * FROM "apigk" LIMIT :count';
-		$params = ['count' => $count];
-		return $this->query($query, $params, __FUNCTION__, 'FeideConnect\Data\Models\APIGK', true);
 	}
 
 	function removeClient(Models\Client $client) {
