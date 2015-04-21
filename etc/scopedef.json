@@ -25,7 +25,7 @@
 	},
 	"userinfo-photo": {
 		"title": "Profile Photo",
-		"descr": "Tthe profile photo of the user.",
+		"descr": "The profile photo of the user.",
 		"public": true,
 		"policy": {
 			"auto": true
