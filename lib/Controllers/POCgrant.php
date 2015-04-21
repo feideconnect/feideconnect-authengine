@@ -82,8 +82,20 @@ class POCgrant {
 		$data['organization'] = "UNINETT AS";
 
 
+		if ($client->has('organization')) {
 
-		if ($client->has('owner')) {
+			$org = $storage->getOrg($client->organization);
+
+			if ($org !== null) {
+
+				$orginfo = $org->getAsArray();
+
+				$data['ownerOrg'] = true;
+				$data['org'] = $orginfo;
+
+			}
+
+		} else  if ($client->has('owner')) {
 
 			$owner = $storage->getUserByUserID($client->owner);
 			if ($owner !== null) {
