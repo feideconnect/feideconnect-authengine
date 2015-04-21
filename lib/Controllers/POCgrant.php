@@ -15,18 +15,11 @@ class POCgrant {
 	static function run($clientid, $userid) {
 
 
-
-
 		$storage = StorageProvider::getStorage();
 		$user = $storage->getUserByUserID($userid);
 		$client = $storage->getClient($clientid);
 
-		// echo '<pre>';
-		// print_r($user);
-		// // echo "clineet id ";
-		// // print_r($client);
-		// exit;
-		
+
 		$firsttime = true;
 
 
@@ -54,7 +47,6 @@ class POCgrant {
 
 
 		$si = new ScopesInspector($client, $scopesInQuestion);
-
 
 		$u = $user->getBasicUserInfo(true);
 		$u['userid'] = $user->userid;
@@ -85,14 +77,10 @@ class POCgrant {
 		if ($client->has('organization')) {
 
 			$org = $storage->getOrg($client->organization);
-
 			if ($org !== null) {
-
 				$orginfo = $org->getAsArray();
-
 				$data['ownerOrg'] = true;
 				$data['org'] = $orginfo;
-
 			}
 
 		} else  if ($client->has('owner')) {
@@ -106,12 +94,9 @@ class POCgrant {
 			
 		}
 
-
-
 		Logger::info('OAuth About to present authorization dialog.', array(
 			'authorizationDialogData' => $data
 		));
-
 
 
 		$response = new TemplatedHTMLResponse('oauthgrant');
