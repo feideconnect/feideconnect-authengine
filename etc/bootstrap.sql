@@ -55,6 +55,7 @@ CREATE TABLE clients (
 
 
 	owner uuid,
+	organization text,
 	created timestamp,
 	updated timestamp
 );
@@ -213,6 +214,7 @@ CREATE TABLE apigk (
 	status set<text>,
 
 	owner uuid,
+	organization text,
 	created timestamp,
 	updated timestamp
 );
