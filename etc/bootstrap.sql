@@ -3,6 +3,7 @@ DROP TABLE IF EXISTS clients;
 DROP INDEX IF EXISTS clients_owner_idx;
 DROP INDEX IF EXISTS clients_scopes_idx;
 DROP INDEX IF EXISTS clients_scopes_requested_idx;
+DROP INDEX IF EXISTS clients_organization_idx;
 DROP TABLE IF EXISTS clients_counters;
 
 
@@ -29,6 +30,7 @@ DROP INDEX IF EXISTS oauth_authorizations_scopes_idx;
 
 DROP TABLE IF EXISTS apigk;
 DROP INDEX IF EXISTS apigk_owner_idx;
+DROP INDEX IF EXISTS apigk_organization_idx;
 
 DROP TABLE IF EXISTS group_members;
 DROP INDEX IF EXISTS group_members_groupid_idx;
@@ -62,7 +64,7 @@ CREATE TABLE clients (
 CREATE INDEX clients_owner_idx 				ON clients(owner);
 CREATE INDEX clients_scopes_idx 			ON clients(scopes);
 CREATE INDEX clients_scopes_requested_idx 	ON clients(scopes_requested);
-
+CREATE INDEX clients_organization_idx       ON clients(organization);
 
 CREATE TABLE clients_counters (
 	id uuid PRIMARY KEY,
@@ -219,6 +221,7 @@ CREATE TABLE apigk (
 	updated timestamp
 );
 CREATE INDEX apigk_owner_idx ON apigk(owner);
+CREATE INDEX apigk_organization_idx ON apigk(organization);
 
 CREATE TABLE grep_codes (
 	id text PRIMARY KEY,
