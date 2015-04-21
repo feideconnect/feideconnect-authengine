@@ -207,6 +207,7 @@ class CLI {
 				"id" => ["%38s", "black", 38 ],
 				"redirect_uri" => ["%-45s", "blue", 45],
 				"scopes" => ["%-90s", "purple", 90],
+				"organization" => ["%-30s", "green", 30]
 			]);
 
 		}
@@ -252,6 +253,9 @@ class CLI {
 
 
 
+
+
+
 	public function getAPIGKs() {
 
 		$apigks = $this->storage->getAPIGKs(200);
@@ -270,6 +274,7 @@ class CLI {
 				"name" => ["%30s", "green", 30],
 				"owner" => ["%38s", "green", 38],
 				"created" => ["%-45s", "blue", 45],
+				"organization" => ["%-45s", "cyan", 45],
 				// "scopes" => ["%-90s", "purple", 90],
 			]);
 
