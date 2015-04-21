@@ -215,6 +215,43 @@ class CLI {
 	}
 
 
+	public function getOrgs() {
+
+		$orgs = $this->storage->getOrgs();
+		$this->header("List organizations");
+		$c = 0;
+		foreach($orgs AS $org) {
+
+			$cinfo = $org->getAsArray();
+			$cinfo["c"] = ++$c;
+
+			// $this->oneEntry($cinfo);
+
+			echo $this->l($cinfo, [
+				"c" => ["%3d", "red"],
+
+				"id" => ["%30s", "green", 30],
+				"name" => ["%78s", "black", 78 ],
+				"type" => ["%60s", "green", 60],
+
+			]);
+
+		}
+
+
+	}
+
+	function getOrg($orgid) {
+
+		$this->header("Fetch information about org " . $orgid);
+		$org = $this->storage->getOrg($orgid);
+		$this->oneEntry($org);
+		return $org;
+
+	}
+
+
+
 	public function getAPIGKs() {
 
 		$apigks = $this->storage->getAPIGKs(200);

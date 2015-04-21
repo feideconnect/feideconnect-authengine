@@ -159,6 +159,19 @@ if ($command[0] === 'user') {
 
 
 
+} else if ($command[0] === 'orgs') {
+
+	$cli->getOrgs();
+
+
+} else if ($command[0] === 'org') {
+
+	$org = $cli->getOrg($command[1]);
+
+
+
+
+
  } else if ($command[0] === 'token') {
 
  	$cli->getToken($command[1]);
