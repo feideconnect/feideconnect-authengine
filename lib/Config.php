@@ -129,8 +129,18 @@ class Config {
 	 * @param  string $path [description]
 	 * @return [type]       [description]
 	 */
-	public static function dir($path = '', $file = '') {
-		return self::baseDir() . $path . $file;
+	public static function dir($path = '', $file = '', $component = null) {
+		if ($component === null) {
+			return self::baseDir() . $path . $file;	
+		}
+
+		$endpoints = self::getValue("endpoints", []);
+		if (!isset($endpoints[$component])) {
+			throw new \Exception('Missing endpoint definition for  ' . $component . ' in config.json');
+		}
+
+		$base = $endpoints[$component];
+		return $base . '/' . $path . $file;
 	}
 
 

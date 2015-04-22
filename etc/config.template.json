@@ -5,6 +5,12 @@
 		"keyspace": "feideconnect",
 		"nodes": ["158.38.213.74", "158.38.213.91", "158.38.213.87"]		
 	},
+
+	"endpoints": {
+		"core": "https://api.dev.feideconnect.no",
+		"groups": "https://groups-api.dev.feideconnect.no"
+	},
+
 	"logging": {
 		"file": true
 	},
@@ -12,6 +18,9 @@
 	"connect": {
 		"issuer": "connect"
 	},
+
+	"salt": "xxxx-xxxx-xxxx-xxxx-xxxx",
+
 
 	"salt": null,
 
