@@ -39,6 +39,8 @@ DROP INDEX IF EXISTS group_members_type_idx;
 
 DROP TABLE IF EXISTS grep_codes;
 
+DROP TABLE IF EXISTS mandatory_clients;
+
 /* Clients */
 CREATE TABLE clients (
 	id uuid PRIMARY KEY,
@@ -230,9 +232,8 @@ CREATE TABLE grep_codes (
 	last_changed timestamp
 );
 
-
-
-
-
-
-
+CREATE TABLE mandatory_clients (
+    realm text,
+    clientid uuid,
+    PRIMARY KEY (realm, clientid)
+);
