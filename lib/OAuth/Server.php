@@ -17,6 +17,7 @@ use FeideConnect\Data\StorageProvider;
 use FeideConnect\OAuth\Exceptions;
 use FeideConnect\Utils;
 use FeideConnect\Utils\Validator;
+use FeideConnect\Config;
 
 /**
  * Implementation of an OAuth Server
@@ -349,6 +350,7 @@ class Server {
 			$org = $this->storage->getOrg($client->organization);
 			if ($org !== null) {
 				$orginfo = $org->getAsArray();
+				$orginfo["logoURL"] = Config::dir("orgs/" . $org->id . "/logo", "", "core");
 				$data['ownerOrg'] = true;
 				$data['org'] = $orginfo;
 			}

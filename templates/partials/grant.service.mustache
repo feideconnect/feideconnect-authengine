@@ -33,6 +33,8 @@
 							{{! <p><span class="label label-danger">Warning: Application is insucure</span></p> }}
 						{{/client.isSecure}}
 
+						<p class="simpleSkip"><a target="_blank" href="#">Read more about this application</a></p>
+
 					</div>
 					
 					<div class="col-md-6 ownerbox">
@@ -40,11 +42,12 @@
 
 						{{#ownerOrg}}
 
-							<div class="pull-right ownerlogo">
+							<p class="ownerName" style="clear: right">{{org.name.nb}} </p>
+							<div style="clear: right" class="pull-right orglogo orglogoSmall">
 								<img style="" 
-									src="/user/media/{{owner.p}}">
+									src="{{org.logoURL}}">
 							</div>
-							<p class="ownerName">{{org.name.nb}} </p>
+							
 
 						{{/ownerOrg}}
 
@@ -61,6 +64,9 @@
 
 					</div>
 
+
+
+
 				</div>
 				
 
@@ -70,7 +76,7 @@
 
 		
 
-				<p class="simpleSkip"><a target="_blank" href="#">Read more about this application</a></p>
+				
 
 			</div>
 

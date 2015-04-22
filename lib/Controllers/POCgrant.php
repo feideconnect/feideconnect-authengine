@@ -9,6 +9,7 @@ use FeideConnect\Utils\URL;
 use FeideConnect\Data\StorageProvider;
 use FeideConnect\OAuth\ScopesInspector;
 use FeideConnect\Logger;
+use FeideConnect\Config;
 
 class POCgrant {
 
@@ -76,6 +77,7 @@ class POCgrant {
 			$org = $storage->getOrg($client->organization);
 			if ($org !== null) {
 				$orginfo = $org->getAsArray();
+				$orginfo["logoURL"] = Config::dir("orgs/" . $org->id . "/logo", "", "core");
 				$data['ownerOrg'] = true;
 				$data['org'] = $orginfo;
 			}

@@ -94,7 +94,7 @@ body.simpleGrant .simpleOnly {
 
 .grantEntry .ownerbox {
 	text-align: right; 
-	color: #732;
+	color: #333;
 }
 .grantEntry .ownerbox p {
 	margin: 0px 5px 0px 5px;
@@ -113,6 +113,17 @@ body.simpleGrant .simpleOnly {
 	margin-left: 5px
 }
 
+.grantEntry .ownerbox .orglogo img {
+	max-width: 128px; 
+	max-height: 128px; 
+	border: none;
+	border-radius: 0px;
+	margin-left: 5px;
+}
+.grantEntry .ownerbox .orglogo.orglogoSmall img {
+	max-width: 64px; 
+	max-height: 64px; 
+}
 
 .grantEntry .grantEntryContent.media .media-body {
 	width: 100%;

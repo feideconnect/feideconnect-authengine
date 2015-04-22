@@ -109,6 +109,7 @@ class ScopesInspector {
 						$apis[$apigkid]["orgObj"] = $this->getOrg($apigk->organization);
 						if ($apis[$apigkid]["orgObj"] !== null) {
 							$apis[$apigkid]["orgInfo"] = $apis[$apigkid]["orgObj"]->getAsArray();
+							$apis[$apigkid]["orgInfo"]["logoURL"] = Config::dir("orgs/" . $apigk->organization . "/logo", "", "core");
 						}
 
 					} else if (!isset($apis[$apigkid]["ownerObj"] )) {
@@ -157,7 +158,6 @@ class ScopesInspector {
 
 			$apiEntry = [
 				"info" => $api["apigk"]->getAsArray(),
-				"owner" => $api["ownerInfo"],
 				"scopes" => []
 			];
 			if (isset($api["ownerInfo"])) {
