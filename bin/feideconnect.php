@@ -166,7 +166,40 @@ if ($command[0] === 'user') {
 
 } else if ($command[0] === 'org') {
 
-	$org = $cli->getOrg($command[1]);
+	$orgid = $command[1];
+	$org = $cli->getOrg($orgid);
+
+
+	if (isset($command[2]) && $command[2] === 'setlogo' ) {
+
+		$file = $command[3];
+
+		echo "About to set a new logo for org [" . $orgid . "] from file [" . $file . "]\n";
+
+		if (!file_exists($file)) {
+			throw new \Exception('Cannot find logo file');
+		}
+
+		if ($org === null) {
+			throw new \Exception('Client not found');
+		}
+
+		// $userinfo = $user->getUserInfo();
+		// $sourceID = $user->selectedsource;
+
+		$logo = file_get_contents($file);
+
+		if (empty($logo)) {
+			throw new Exception('Logo was not found');
+		}
+		echo "Logo was " . sha1($logo) . "\n";
+
+		$cli->updateOrgLogo($org, $logo);
+
+
+	}
+
+
 
 
 

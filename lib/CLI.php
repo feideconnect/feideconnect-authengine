@@ -251,7 +251,12 @@ class CLI {
 
 	}
 
+	function updateOrgLogo($org, $logo) {
 
+
+		$this->storage->updateOrgLogo($org, $logo);
+
+	}
 
 
 
