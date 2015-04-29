@@ -60,6 +60,14 @@
 			"auto": false
 		}
 	},
+	"orgadmin": {
+		"title": "Org Admin",
+		"descr": "Manage mandatory clients for an organization",
+		"public": false,
+		"policy": {
+			"auto": false
+		}
+	},
 	"peoplesearch": {
 		"title": "PeopleSearch",
 		"descr": "Search for users",
