@@ -39,6 +39,16 @@ DROP INDEX IF EXISTS group_members_type_idx;
 
 DROP TABLE IF EXISTS grep_codes;
 
+DROP TABLE IF EXISTS mandatory_clients;
+
+DROP TABLE IF EXISTS organizations;
+DROP INDEX IF EXISTS organizations_kindid_idx;
+DROP INDEX IF EXISTS organizations_realm_idx;
+DROP INDEX IF EXISTS organizations_organization_number_idx;
+
+DROP TABLE IF EXISTS roles;
+DROP INDEX IF EXISTS roles_orgid_idx;
+
 /* Clients */
 CREATE TABLE clients (
 	id uuid PRIMARY KEY,
@@ -230,9 +240,33 @@ CREATE TABLE grep_codes (
 	last_changed timestamp
 );
 
+CREATE TABLE mandatory_clients (
+    realm text,
+    clientid uuid,
+    PRIMARY KEY (realm, clientid)
+);
 
 
+/* Organizations */
+CREATE TABLE organizations(
+       id  text PRIMARY KEY,
+       kindid int,
+       realm text,
+       type set<text>,
+       organization_number text,
+       name map<text, text>,
+       logo blob,
+       logo_updated timestamp
+);
+CREATE INDEX organizations_kindid_idx ON organizations(kindid);
+CREATE INDEX organizations_realm_idx ON organizations(realm);
+CREATE INDEX organizations_organization_number_idx ON organizations(organization_number);
 
 
-
-
+CREATE TABLE roles(
+       feideid text,
+       orgid text,
+       role set<text>,
+       PRIMARY KEY(feideid, orgid)
+);
+CREATE INDEX roles_orgid_idx ON roles(orgid);
