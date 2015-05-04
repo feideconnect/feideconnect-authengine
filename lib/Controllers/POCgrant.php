@@ -19,7 +19,8 @@ class POCgrant {
 		$user = $storage->getUserByUserID($userid);
 		$client = $storage->getClient($clientid);
 
-		$firsttime = true;
+		$firsttime = false;
+		$simpleView = true;
 
 		$postattrs = $_REQUEST;
 		$postattrs['client_id'] = $client->id;
@@ -66,6 +67,10 @@ class POCgrant {
 		$data['client']['isSecure'] = URL::isSecure($redirect_uri); // $oauthclient->isRedirectURISecured();
 
 
+		$data['bodyclass'] = '';
+		if ($simpleView) {
+			$data['bodyclass'] = 'simpleGrant';
+		}
 		$data['firsttime'] = $firsttime;
 		$data['validated'] = false;
 
