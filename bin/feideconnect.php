@@ -32,6 +32,16 @@ if ($command[0] === 'user') {
 			$cli->deleteUser($user);			
 		}
 
+	} else if (isset($command[2]) && $command[2] === "addsec") {
+
+		// $userid = $command[3];
+		$useridsec = $command[3];
+
+
+		$cli->info("User id is " . $user->userid . " and sec is [" . $useridsec . "]");
+		$cli->addUserIDsec($user->userid, $useridsec);
+
+
 	}
 
 } else if ($command[0] === 't') {

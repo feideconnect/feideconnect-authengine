@@ -80,6 +80,10 @@ class CLI {
 
 	}
 
+	function addUserIDsec($userid, $useridSec) {
+		$this->storage->addUserIDsec($userid, $useridSec);
+	}
+
 
 	function getAPIGK($apigkid) {
 
