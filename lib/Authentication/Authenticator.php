@@ -96,8 +96,12 @@ class Authenticator {
 		$attributes['idp'] = $this->as->getAuthData('saml:sp:IdP');
 		$attributes['authSource'] = $this->authSource;
 
+
+		$attributeMapper = new AttributeMapper();
+
+
 		// print_r($this->as); exit; 
-		$account = new Account($attributes);
+		$account = $attributeMapper->getAccount($attributes);
 
 		return $account;
 

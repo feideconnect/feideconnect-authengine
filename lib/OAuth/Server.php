@@ -20,6 +20,8 @@ use FeideConnect\Utils;
 use FeideConnect\Utils\Validator;
 use FeideConnect\Config;
 
+
+
 /**
  * Implementation of an OAuth Server
  */
@@ -237,8 +239,8 @@ class Server {
 				$tokenresponse = Messages\AuthorizationResponse::generate($request, $code);
 
 				Logger::info('OAuth Authorization Code is now stored, and may be fetched via the token endpoint.', array(
-					'user' => $user->getAsArray(),
-					'client' => $client->getAsArray(),
+					'user' => $user->getAsArrayLimited("userid", "userid_sec", "name"),
+					'client' => $client->getAsArrayLimited(["id", "name", "redirect_uri"]),
 					'code' => $code->getAsArray(),
 					'tokenresponse' => $tokenresponse->getAsArray(),
 				));

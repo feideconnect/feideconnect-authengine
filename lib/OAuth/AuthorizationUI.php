@@ -84,7 +84,7 @@ class AuthorizationUI {
 			// 'posturl_' => Utils\URL::selfURLNoQuery(), // Did not work with php-fpm, needs to check out.
 			'posturl' => Utils\URL::selfURLhost() . '/oauth/authorization',
 			'postdata' => $postdata,
-			'client' => $this->client->getAsArray(),
+			'client' => $this->client->getAsArrayLimited(["id", "name", "descr", "redirect_uri", "scopes"]),
 			'HOST' => Utils\URL::selfURLhost(),
 		];
 
