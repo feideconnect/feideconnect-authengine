@@ -4,6 +4,7 @@ namespace FeideConnect\OAuth;
 
 
 use FeideConnect\OAuth\Exceptions\OAuthException;
+use FeideConnect\OAuth\Exceptions\UserCannotAuthorizeException;
 
 use FeideConnect\Authentication\Authenticator;
 use FeideConnect\Authentication\UserMapper;
@@ -14,6 +15,7 @@ use FeideConnect\HTTP\JSONResponse;
 use FeideConnect\Logger;
 use FeideConnect\Data\Models;
 use FeideConnect\Data\StorageProvider;
+use FeideConnect\Data\MandatoryClientInspector;
 use FeideConnect\OAuth\Exceptions;
 use FeideConnect\Utils;
 use FeideConnect\Utils\Validator;
@@ -178,7 +180,7 @@ class Server {
 
 
 				} else {
-					return $this->requestAuthorizationUI($client, $request, $user, $redirect_uri, $scopesInQuestion, $ae->getRemainingScopes(), $organization); 	
+					return $this->requestAuthorizationUI($client, $request, $account, $user, $redirect_uri, $scopesInQuestion, $ae->getRemainingScopes(), $organization); 	
 				}
 
 			}
@@ -249,8 +251,12 @@ class Server {
 				throw new Exception('Unsupported response_type in request. Only supported code and token.');
 			}
 
+		} catch (UserCannotAuthorizeException $e) {
 
 
+			$data = array();
+			$response = (new TemplatedHTMLResponse('agelimit'))->setData($data);
+			return $response;
 
 		} catch (OAuthException $e) {
 
@@ -282,10 +288,8 @@ class Server {
 
 
 
-	protected function requestAuthorizationUI($client, $request, $user, $redirect_uri, $scopesInQuestion, $remainingScopes, $organization) {
+	protected function requestAuthorizationUI($client, $request, $account, $user, $redirect_uri, $scopesInQuestion, $remainingScopes, $organization) {
 
-
-		// $scopestr = join(',', $scopesInQuestion);
 
 
 		$postattrs = $_REQUEST;
@@ -294,11 +298,11 @@ class Server {
 		// $postattrs['scopes'] = $scopestr;
 		// $postattrs['return'] = Utils\URL::selfURL();
 
-
-		$firsttime = !($user->usageterms);
+		$firsttime = !($user->usageterms); // || true;
 		if (!$firsttime) {
 			$postattrs['bruksvilkar'] = 'yes';
 		}
+
 
 		$postdata = array();
 		foreach($postattrs AS $k => $v) {
@@ -308,6 +312,17 @@ class Server {
 
 		$scopesInspector = new ScopesInspector($client, $scopesInQuestion);
 
+		$isMandatory = MandatoryClientInspector::isClientMandatory($account, $client);
+		
+		if (!$isMandatory && $user->isBelowAgeLimit()) {
+			throw new UserCannotAuthorizeException();
+		}
+
+		$simpleView = $isMandatory;
+		// echo 'Realm is ' . $account->getRealm(); exit;
+
+
+		// $isMandatory = MandatoryClientInspector::isClientMandatory($account, $client);
 
 
 		$userinfo = $user->getBasicUserInfo(true);
@@ -329,21 +344,15 @@ class Server {
 		$data['client']['host'] = Utils\URL::getURLhostPart($redirect_uri);
 		$data['client']['isSecure'] = Utils\URL::isSecure($redirect_uri); // $oauthclient->isRedirectURISecured();
 
+		$data['bodyclass'] = '';
+		if ($simpleView) {
+			$data['bodyclass'] = 'simpleGrant';
+		}
 		$data['firsttime'] = $firsttime;
 		$data['organization'] = $organization;
-		$data['validated'] = false;
+		$data['validated'] = $isMandatory;
 
 
-		// if ($client->has('owner')) {
-
-		// 	$owner = $this->storage->getUserByUserID($client->owner);
-		// 	if ($owner !== null) {
-		// 		$oinfo = $owner->getBasicUserInfo(true);
-		// 		$oinfo['p'] = $owner->getProfileAccess();
-		// 		$data['owner'] = $oinfo;
-		// 	}
-			
-		// }
 
 		if ($client->has('organization')) {
 
