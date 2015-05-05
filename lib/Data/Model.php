@@ -74,6 +74,12 @@ abstract class Model {
 		return $a;
 	}
 
+	public function getAsArrayLimited($includes) {
+		$list = $this->getAsArray();
+		$res = array_intersect_key($list, array_flip($includes));
+		return $res;
+	}
+
 	public function getStorableArray() {
 
 		$a = array();
