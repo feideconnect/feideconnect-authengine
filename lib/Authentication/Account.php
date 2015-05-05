@@ -6,13 +6,6 @@ use FeideConnect\Config;
 
 class Account {
 
-	// TODO All attribute names and things needs to be put into config object, 
-	// or plugin arch.
-	// 
-	// Will wait and decide later how this is best implemented. Some parts are not that 
-	// easy to put in config files. Such as extraction of realms.
-	// 
-	// Will depend on both idp and authsource or one of them.
 
 	public $realm, $name, $mail;
 	public $photo = null;
@@ -94,14 +87,24 @@ class Account {
 		return $userids;
 	}
 
-	protected function getRealm() {
+	public function getRealm() {
 		if (isset($this->attributes[$this->realm])) {
 			if (preg_match('/^.+?@(.+?)$/', $this->attributes[$this->realm][0], $matches)) {
 				return $matches[1];
 			}
 		}
-		throw new Exception('Could not obtain the realm part of this authenticated account.');
+		return null;
+
 	}
+
+	public function requireRealm() {
+		$realm = $this->getRealm();
+		if ($realm === null) {
+			throw new Exception('Could not obtain the realm part of this authenticated account.');
+		}
+		return $realm;
+	}
+
 
 	function getPhoto() {
 		if ($this->photo === null) return null;
@@ -109,7 +112,7 @@ class Account {
 	}
 
 	function getSourceID() {
-		return "feide:" . $this->getRealm();
+		return "feide:" . $this->requireRealm();
 	}
 
 	function getName() {
