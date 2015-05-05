@@ -110,18 +110,12 @@ describe('Feide Connect test suite collection', function() {
 				});
 
 			// it('Waiting for test suite to complete', function(done) {
-				
-				// collection.completed(done);
+			// collection.completed(done);
 			// });
-
 			// done();
-
-	// 
 			// done();
 
 		}, parameters);
-
-
 
 	});
 

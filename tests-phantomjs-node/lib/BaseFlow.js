@@ -70,7 +70,7 @@ var BaseFlow = Class.extend({
 
 				that.page.onLoadFinished = (function(x) {
 					return function(status) {
-						// console.log("   [XXXXXXX] [--------] Loaded finnished. ");
+						console.log("   [XXXXXXX] [--------] Loaded finnished. ");
 						that.pageLoaded();
 					};
 				})(that);
@@ -133,10 +133,11 @@ var BaseFlow = Class.extend({
 					})
 					.then(function() {
 						var stepx = step;
+						console.log("   [ Executing ] ");
 						return stepx.execute.call(stepx);
 					})
 					.then(function() {
-						// console.log("    ======= ONE STEP COMPELTED  ==========");
+						console.log("    ======= ONE STEP COMPELTED  ==========");
 					});
 		
 			});
@@ -206,7 +207,7 @@ var BaseFlow = Class.extend({
 	"waitforPageLoad": function() {
 		var that = this;
 		return new Promise(function(resolve, reject) {
-			// console.log("    SETTING WAIT FOR PAGE load");
+			console.log("    SETTING WAIT FOR PAGE load");
 
 			if (that.pageLoadQueued) {
 				that.pageLoadQueued = false;

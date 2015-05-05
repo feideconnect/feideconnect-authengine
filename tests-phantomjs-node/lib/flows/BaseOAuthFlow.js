@@ -145,7 +145,7 @@ var BaseOAuthFlow = BaseFlow.extend({
 	"stepLogin": function() {
 		var flow = this;
 		return new Step('Login page (with credentials)', {
-			"debug": false,
+			"debug": true,
 			"evaluate": function(callback) {
 
 				// this.page.get('content', function (err,html) {
@@ -200,6 +200,8 @@ var BaseOAuthFlow = BaseFlow.extend({
 			"debug": false,
 			"evaluate": function(callback) {
 				this.page.evaluate(function() {
+					// console.log("Title " + document.title);
+					// console.log("URL " + window.location.href);
 					return {
 						"title": document.title,
 						"url": window.location.href
@@ -215,7 +217,14 @@ var BaseOAuthFlow = BaseFlow.extend({
 				var step = this;
 				return new Promise(function(resolve, reject) {
 
+					console.log("Executing !!!");
+
 					step.page.evaluate(function() {
+
+
+						$(document).ready(function() {
+							$('#yesbutton').click();
+						});
 
 						setTimeout(function() {
 							document.getElementById('yesbutton').click();
@@ -223,7 +232,7 @@ var BaseOAuthFlow = BaseFlow.extend({
 						
 					}, function(err, res) {
 						if (err) { return reject(err); }
-						// console.log(" = <> = <> ABOUT TO RESOLVE 4");
+						console.log(" = <> = <> ABOUT TO RESOLVE 4");
 						resolve(true);
 					});
 
