@@ -13,7 +13,9 @@ class Authenticator {
 
 	public function __construct() {
 
-		$this->as = new \SimpleSAML_Auth_Simple('default-sp');
+		$this->authSource = 'default-sp';
+
+		$this->as = new \SimpleSAML_Auth_Simple($this->authSource);
 		$this->user = null;
 
 	}
@@ -92,7 +94,7 @@ class Authenticator {
 
 		$attributes = $this->as->getAttributes();
 		$attributes['idp'] = $this->as->getAuthData('saml:sp:IdP');
-		$attributes['authSource'] = $this->as->getAuthData('default-sp');
+		$attributes['authSource'] = $this->authSource;
 
 		// print_r($this->as); exit; 
 		$account = new Account($attributes);
