@@ -5,7 +5,7 @@ namespace FeideConnect\OAuth;
 
 use FeideConnect\OAuth\Exceptions\OAuthException;
 use FeideConnect\OAuth\Exceptions\UserCannotAuthorizeException;
-
+use FeideConnect\OAuth\AuthorizationUI;
 use FeideConnect\Authentication\Authenticator;
 use FeideConnect\Authentication\UserMapper;
 
@@ -15,7 +15,6 @@ use FeideConnect\HTTP\JSONResponse;
 use FeideConnect\Logger;
 use FeideConnect\Data\Models;
 use FeideConnect\Data\StorageProvider;
-use FeideConnect\Data\MandatoryClientInspector;
 use FeideConnect\OAuth\Exceptions;
 use FeideConnect\Utils;
 use FeideConnect\Utils\Validator;
@@ -142,55 +141,54 @@ class Server {
 			$scopesInQuestion = $ae->getScopesInQuestion();
 
 			
+
+			$aui = new AuthorizationUI($client, $request, $account, $user, $redirect_uri, $scopesInQuestion, $ae, $organization);
+
+
+
 			if ($ae->needsAuthorization() ) {
 
 				if ($passive) {
 					throw new OAuthException('access_denied', 'User has not authorized, and were unable to perform passive authorization');
 				}
-
-
-				if (isset($_REQUEST["verifier"])) {
-
-					$verifier = $user->getVerifier();
-					if ($verifier !== $_REQUEST["verifier"]) {
-						throw new \Exception("Invalid verifier code.");
-					}
-
-					// echo '<pre>'; print_r($_REQUEST); exit;
-
-					if (!isset($_REQUEST['bruksvilkar'])) {
-						throw new \Exception('Bruksvilkår not accepted.');
-					}
-					if ($_REQUEST['bruksvilkar'] !== 'yes') {
-						throw new \Exception('Bruksvilkår not accepted.');	
-					}
-
-					$authorization = $ae->getUpdatedAuthorization();
-
-					// echo "<pre>";
-					// print_r($user->getBasicUserInfo());
-					// print_r($authorization->getAsArray()); exit;
-
-					$user->usageterms = true;
-
-					$user->updateUserBasics($account);
-
-
-					$this->storage->saveAuthorization($authorization);
-
-
-				} else {
-					return $this->requestAuthorizationUI($client, $request, $account, $user, $redirect_uri, $scopesInQuestion, $ae->getRemainingScopes(), $organization); 	
-				}
-
 			}
 
+			if (isset($_REQUEST["verifier"])) {
 
-			
+				$verifier = $user->getVerifier();
+				if ($verifier !== $_REQUEST["verifier"]) {
+					throw new \Exception("Invalid verifier code.");
+				}
+
+				// echo '<pre>'; print_r($_REQUEST); exit;
+
+				if (!isset($_REQUEST['bruksvilkar'])) {
+					throw new \Exception('Bruksvilkår not accepted.');
+				}
+				if ($_REQUEST['bruksvilkar'] !== 'yes') {
+					throw new \Exception('Bruksvilkår not accepted.');	
+				}
+
+				$authorization = $ae->getUpdatedAuthorization();
+
+				// echo "<pre>";
+				// print_r($user->getBasicUserInfo());
+				// print_r($authorization->getAsArray()); exit;
+
+				$user->usageterms = true;
+
+				$user->updateUserBasics($account);
 
 
+				$this->storage->saveAuthorization($authorization);
 
 
+			} else {
+
+				return $aui->show();
+			}
+
+		
 
 
 
@@ -283,123 +281,6 @@ class Server {
 
 
 	
-
-
-
-
-
-	protected function requestAuthorizationUI($client, $request, $account, $user, $redirect_uri, $scopesInQuestion, $remainingScopes, $organization) {
-
-
-
-		$postattrs = $_REQUEST;
-		$postattrs['client_id'] = $client->id;
-		$postattrs['verifier'] = $user->getVerifier();
-		// $postattrs['scopes'] = $scopestr;
-		// $postattrs['return'] = Utils\URL::selfURL();
-
-		$firsttime = !($user->usageterms); // || true;
-		if (!$firsttime) {
-			$postattrs['bruksvilkar'] = 'yes';
-		}
-
-
-		$postdata = array();
-		foreach($postattrs AS $k => $v) {
-			$postdata[] = array('key' => $k, 'value' => $v);
-		}
-
-
-		$scopesInspector = new ScopesInspector($client, $scopesInQuestion);
-
-		$isMandatory = MandatoryClientInspector::isClientMandatory($account, $client);
-		
-		if (!$isMandatory && $user->isBelowAgeLimit()) {
-			throw new UserCannotAuthorizeException();
-		}
-
-		$simpleView = $isMandatory;
-		// echo 'Realm is ' . $account->getRealm(); exit;
-
-
-		// $isMandatory = MandatoryClientInspector::isClientMandatory($account, $client);
-
-
-		$userinfo = $user->getBasicUserInfo(true);
-		$userinfo['userid'] = $user->userid;
-		$userinfo['p'] = $user->getProfileAccess();
-
-		$data = [
-			'perms' => $scopesInspector->getInfo(),
-			'user' => $userinfo,
-			// 'posturl_' => Utils\URL::selfURLNoQuery(), // Did not work with php-fpm, needs to check out.
-			'posturl' => Utils\URL::selfURLhost() . '/oauth/authorization',
-			'postdata' => $postdata,
-			'client' => $client->getAsArray(),
-			'HOST' => Utils\URL::selfURLhost(),
-		];
-
-
-
-		$data['client']['host'] = Utils\URL::getURLhostPart($redirect_uri);
-		$data['client']['isSecure'] = Utils\URL::isSecure($redirect_uri); // $oauthclient->isRedirectURISecured();
-
-		$data['bodyclass'] = '';
-		if ($simpleView) {
-			$data['bodyclass'] = 'simpleGrant';
-		}
-		$data['firsttime'] = $firsttime;
-		$data['organization'] = $organization;
-		$data['validated'] = $isMandatory;
-
-
-
-		if ($client->has('organization')) {
-
-			$org = $this->storage->getOrg($client->organization);
-			if ($org !== null) {
-				$orginfo = $org->getAsArray();
-				$orginfo["logoURL"] = Config::dir("orgs/" . $org->id . "/logo", "", "core");
-				$data['ownerOrg'] = true;
-				$data['org'] = $orginfo;
-			}
-
-		} else  if ($client->has('owner')) {
-
-			$owner = $this->storage->getUserByUserID($client->owner);
-			if ($owner !== null) {
-				$oinfo = $owner->getBasicUserInfo(true);
-				$oinfo['p'] = $owner->getProfileAccess();
-				$data['owner'] = $oinfo;
-			}
-			
-		}
-
-
-
-
-		Logger::info('OAuth About to present authorization dialog.', array(
-			'authorizationDialogData' => $data
-		));
-
-
-
-		if (isset($_REQUEST['debug'])) {
-			return (new JSONResponse($data))->setCORS(false);
-		}
-		
-		$response = new TemplatedHTMLResponse('oauthgrant');
-		$response->setData($data);
-		return $response;
-
-	}
-
-
-
-
-
-
-
 
 
 

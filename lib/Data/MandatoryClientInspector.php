@@ -15,9 +15,7 @@ class MandatoryClientInspector {
 
 		$realm = $account->getRealm();
 
-// 		echo "Check realm " . $account->getRealm() . " for client " . $client->id . "\n"; 
-// 		echo '<pre>INSERT INTO "mandatory_clients" (realm, clientid) VALUES (' . "'" . $account->getRealm() . "', " .  $client->id . ')';
-// exit;
+
 
 		$clientGlobalMandatory = $client->hasStatus("Mandatory");
 
@@ -34,6 +32,11 @@ class MandatoryClientInspector {
 		$storage = StorageProvider::getStorage();
 
 		$res = $storage->checkMandatory($realm, $client);
+
+		//	echo "Check realm " . $account->getRealm() . " for client " . $client->id . "\n"; 
+		//	echo '<pre>INSERT INTO "mandatory_clients" (realm, clientid) VALUES (' . "'" . $account->getRealm() . "', " .  $client->id . ')';
+		//	print_r($res);
+		//	exit;
 
 		if ($res !== null) {
 			return true;
