@@ -84,6 +84,14 @@
 			"auto": true
 		}
 	},
+	"groups-orgadmin": {	
+		"title": "Grupper - Connect Admin",
+		"descr": "Egne administratorgrupper for tjenester og institusjoner i Connect.",
+		"public": false,
+		"policy": {
+			"auto": false
+		}
+	},
 	"adhocgroupadmin": {
 		"title": "Håndtering av ad-hoc groupper",
 		"descr": "Legge til, endre ad-hoc grupper, og kunne legge til og fjerne medlemmer.",
