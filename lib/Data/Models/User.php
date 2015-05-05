@@ -30,10 +30,13 @@ class User extends \FeideConnect\Data\Model {
 		"updated" => "timestamp"
 	];
 
+	public function isBelowAgeLimit() {
+		return $this->aboveagelimit === false;
+	}
+
 	public function getStorableArray() {
 
 		$prepared = parent::getStorableArray();
-
 
 		if (isset($this->name)) {
 			$prepared["name"] =  new CollectionMap($this->name, Base::ASCII, Base::ASCII);	
@@ -56,7 +59,6 @@ class User extends \FeideConnect\Data\Model {
 		if (isset($this->userid_sec_seen)) {
 			$prepared["userid_sec_seen"] =  new CollectionMap($this->userid_sec_seen, Base::ASCII, Base::TIMESTAMP);
 		}
-		
 
 		return $prepared;
 	}
