@@ -28,6 +28,19 @@ class Client extends \FeideConnect\Data\Model {
 		return $this->scopes;
 	}
 
+	public function hasStatus($status) {
+
+		if ($this->status === null) {
+			return false;
+		}
+		foreach($this->status AS $s) {
+			if ($s === $status) {
+				return true;
+			}
+		}
+		return false;
+	}
+
 	public function getStorableArray() {
 
 		$prepared = parent::getStorableArray();
