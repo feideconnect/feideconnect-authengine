@@ -547,6 +547,16 @@ class Cassandra2 extends \FeideConnect\Data\Repository {
 	}
 
 
+	/*
+	 * ---- MAndatory clients -----
+	 */
+
+	function checkMandatory($realm, Models\Client $client) {
+		$query = 'SELECT * FROM "mandatory_clients" WHERE "realm" = :realm AND "clientid" = :clientid';
+		$params = ['realm' => $realm, 'clientid' => new Uuid($client->id)];
+		return $this->query($query, $params, __FUNCTION__);
+	}
+
 
 
 	/* 
