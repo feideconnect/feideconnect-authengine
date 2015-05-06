@@ -15,7 +15,7 @@ install:
 - composer install
 before_script:
 - cqlsh 127.0.0.1 -f etc/bootstrap.init-keyspace-ci.sql
-- cqlsh 127.0.0.1 -f etc/bootstrap.sql
+- cqlsh 127.0.0.1 -f etc/bootstrap.sql -k aetest
 - cqlsh 127.0.0.1 -f etc/ci/testdata.sql
 - sudo ln -s ../../../etc/ci/simplesamlphp-metadata vendor/andreassolberg/simplesamlphp/metadata
 - sudo ln -s ../../../etc/ci/simplesamlphp-config vendor/andreassolberg/simplesamlphp/config
