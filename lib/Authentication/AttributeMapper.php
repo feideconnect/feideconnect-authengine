@@ -49,6 +49,14 @@ class AttributeMapper {
 
 
 		$accountMaps = Config::getValue("accountMaps");
+
+		if (empty($accountMaps)) {
+			throw new Exception("Configuration [accountMaps] was not set");
+		}
+		if (!is_array($accountMaps)) {
+			throw new Exception("Configuration [accountMaps] was not set to be an array as expected");
+		}
+
 		foreach($accountMaps AS $am) {
 
 			if (self::ruleMatch($authSource, $idp, $am)) {
