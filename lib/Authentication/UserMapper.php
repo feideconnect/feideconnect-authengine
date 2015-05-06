@@ -191,7 +191,7 @@ class UserMapper {
 			if ($merge) {
 				$user = $this->mergeUsers($existingUser);
 				if ($update) {
-					$updated = $this->updateUser($account, $user);
+					$this->updateUser($account, $user);
 				}
 				return $user;
 			}

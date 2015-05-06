@@ -25,6 +25,7 @@ CREATE TABLE feideconnect.organizations (
 
 class Organization extends \FeideConnect\Data\Model {
 
+	public $id, $name, $realm, $type;
 
 	protected static $_properties = array(
 		"id", "name", "realm", "type"

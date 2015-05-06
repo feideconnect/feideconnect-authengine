@@ -17,6 +17,7 @@ use Cassandra\Type\Timestamp;
  */
 class User extends \FeideConnect\Data\Model {
 
+	public $userid, $email, $name, $profilephoto, $profilephotohash, $userid_sec, $userid_sec_seen, $selectedsource, $aboveagelimit, $usageterms, $created, $updated;
 
 	protected static $_properties = array(
 		"userid", "email", "name", 

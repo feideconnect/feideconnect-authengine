@@ -9,6 +9,7 @@ use Cassandra\Type\Timestamp;
 
 class Authorization extends \FeideConnect\Data\Model {
 
+	public $clientid, $userid, $scopes, $issued;
 
 	protected static $_properties = array(
 		"clientid", "userid", "scopes", "issued"

@@ -9,7 +9,7 @@ namespace FeideConnect\Authentication;
  */
 class Authenticator {
 
-	protected $as, $user;
+	protected $as, $user, $authSource;
 
 	public function __construct() {
 

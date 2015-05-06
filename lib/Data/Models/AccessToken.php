@@ -11,6 +11,7 @@ use Cassandra\Type\Timestamp;
 
 class AccessToken extends \FeideConnect\Data\Model {
 
+	public $access_token, $clientid, $userid, $issued, $scope, $token_type, $validuntil, $lastuse;
 
 	protected static $_properties = array(
 		"access_token", "clientid", "userid", "issued", 

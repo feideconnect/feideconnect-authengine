@@ -12,6 +12,7 @@ class Account {
 	public $photo = null;
 
 	public $attributes;
+	protected $accountMapRules;
 
 	function __construct($attributes, $accountMapRules) {
 		$this->attributes = $attributes;

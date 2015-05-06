@@ -4,6 +4,7 @@ namespace FeideConnect\Data\Models;
 
 class APIGK extends \FeideConnect\Data\Model {
 
+	public $id, $name, $descr, $owner, $organization, $endpoints, $expose, $httpscertpinned, $requireuser, $scopedef, $trust, $logo, $status, $created, $updated;
 
 	protected static $_properties = array(
 		"id", "name", "descr", 

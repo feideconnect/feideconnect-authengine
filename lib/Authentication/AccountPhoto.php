@@ -2,6 +2,7 @@
 
 namespace FeideConnect\Authentication;
 
+use FeideConnect\Exceptions\Exception;
 use \Imagick;
 
 /**

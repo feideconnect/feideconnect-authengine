@@ -11,6 +11,8 @@ use Cassandra\Type\Blob;
 
 class Client extends \FeideConnect\Data\Model {
 
+	public $id, $client_secret, $created, $descr, $name, $owner, $organization, $logo, $redirect_uri, $scopes, $scopes_requested, $status, $type, $updated;
+	
 
 	protected static $_properties = array(
 		"id", "client_secret", "created", "descr", "name", "owner", "organization",
