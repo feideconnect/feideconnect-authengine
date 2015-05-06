@@ -1,6 +1,16 @@
 # Instructions on testing
 
 
+## Preparation
+
+
+Initalize Cassandra schema
+
+	export CQLHOST=127.0.0.1
+
+	cqlsh $CQLHOST -f etc/bootstrap.init-keyspace-test.sql
+	cqlsh $CQLHOST -f etc/bootstrap.sql -k aetest
+
 
 
 ## PHP Unit Testing
