@@ -662,7 +662,7 @@ class Cassandra2 extends \FeideConnect\Data\Repository {
 		$this->execute($query, $params, __FUNCTION__);
 
 		$query = 'UPDATE "clients_counters" SET count_users = count_users - 1 WHERE "id" = :id';
-		$params = ['id' => new Uuid($authorization->clientid)];
+		$params = ['id' => new Uuid($clientid)];
 		return $this->execute($query, $params, __FUNCTION__);
 
 	}

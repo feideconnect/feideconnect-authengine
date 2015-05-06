@@ -16,7 +16,6 @@ class StorageProvider {
 
 		if ($storageType === 'cassandra') {
 
-
 			self::$storage = new Cassandra2();
 
 		} else {
