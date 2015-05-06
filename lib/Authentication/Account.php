@@ -200,30 +200,30 @@ class Account {
 	public function aboveAgeLimit($ageLimit = 13) {
 
 		$res = true;
-		if (isset($this->attributes['feideYearOfBirth']) && 
-			is_array($this->attributes['feideYearOfBirth'])
-			) {
+		$year = intval($this->yob);
 
-			$year = intval($this->attributes['feideYearOfBirth'][0]);
-			$dayofyear = date("z");
-			$thisyear = date("Y");
-
-			$requiredAge = $ageLimit;
-			if ($dayofyear < 175) {
-				$requiredAge = $ageLimit + 1;
-			}
-			
-			$age = $thisyear - $year;
-			
-			// echo "Reqired age is  " . $requiredAge . " ";
-			// echo "Age is " . $age;
-			if ($age >= $requiredAge) {
-				$res = true;
-			} else {
-				$res = false;
-			}
-		
+		if ($year < 1800) {
+			return $res;
 		}
+
+		$dayofyear = date("z");
+		$thisyear = date("Y");
+
+		$requiredAge = $ageLimit;
+		if ($dayofyear < 175) {
+			$requiredAge = $ageLimit + 1;
+		}
+		
+		$age = $thisyear - $year;
+		
+		// echo "Reqired age is  " . $requiredAge . " ";
+		// echo "Age is " . $age;
+		if ($age >= $requiredAge) {
+			$res = true;
+		} else {
+			$res = false;
+		}
+
 		return $res;
 
 	}
