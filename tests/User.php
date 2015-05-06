@@ -5,9 +5,16 @@ namespace tests;
 
 use FeideConnect\Authentication\Authenticator;
 use FeideConnect\Authentication\UserMapper;
+use FeideConnect\Authentication\AttributeMapper;
 use FeideConnect\Authentication\Account;
 use FeideConnect\Data\Models;
 use FeideConnect\Data\StorageProvider;
+
+
+putenv("AEENV=test");
+if (getenv('AEENV') !== "test") { 
+	throw new \Exception("Not able to set environmentvariable for test environment."); 
+}
 
 class UserTest extends \PHPUnit_Framework_TestCase {
 
@@ -34,12 +41,17 @@ class UserTest extends \PHPUnit_Framework_TestCase {
 			"displayName" => ["Andreas Åkre Solberg"],
 			"o" => ["UNINETT AS"],
 			"feideYearOfBirth" => ["1980"],
-			"idp" => ["https://idp-test.feide.no"],
+			"idp" => "https://idp-test.feide.no",
+			"authSource" => "default-sp",
 			"o" => ["UNINETT AS"]
 		];
 
+		$attributeMapper = new AttributeMapper();
 
-		$account = new Account($attributes);
+
+		// print_r($this->as); exit; 
+		$account = $attributeMapper->getAccount($attributes);
+
 
 		$userids = $account->getUserIDs();
 		$uidsShouldBe = ['feide:andreas@uninett.no'];
@@ -54,8 +66,8 @@ class UserTest extends \PHPUnit_Framework_TestCase {
 
 
 		$u2 = $this->db->getUserByUserIDsecList($userids);
-		// print_r($u2);
-		$this->assertEquals(null, $u2, "Should not find any existing users");
+		echo "\nUser list: \n\n"; var_dump($u2);
+		$this->assertEquals(null, $u2, "Should not find any existing users  (result should be [null])");
 
 
 		// $user = new Models\User();
@@ -82,12 +94,14 @@ class UserTest extends \PHPUnit_Framework_TestCase {
 			"displayName" => ["Andreas Åkre Solberg"],
 			"o" => ["UNINETT AS"],
 			"feideYearOfBirth" => ["2010"], // NOTICE BELOW AGE LIMIT
-			"idp" => ["https://idp-test.feide.no"],
+			"idp" => "https://idp-test.feide.no",
+			"authSource" => "default-sp",
 			"o" => ["UNINETT AS"]
 		];
 
 
-		$account2 = new Account($attributes2);
+		// $account2 = new Account($attributes2);
+		$account2 = $attributeMapper->getAccount($attributes2);
 
 		$isAbove2 = $account2->aboveAgeLimit();
 		$this->assertEquals(false, $isAbove2, 'Should not be above legal age');

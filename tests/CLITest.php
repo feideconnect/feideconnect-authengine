@@ -3,13 +3,19 @@
 
 namespace tests;
 
+use FeideConnect\CLI;
 use FeideConnect\Config;
 use FeideConnect\Router;
 use FeideConnect\HTTP\JSONResponse;
 use FeideConnect\Data\StorageProvider;
 use FeideConnect\Data\Models;
 
-class CLI extends \PHPUnit_Framework_TestCase {
+putenv("AEENV=test");
+if (getenv('AEENV') !== "test") { 
+	throw new \Exception("Not able to set environmentvariable for test environment."); 
+}
+
+class CLITest extends \PHPUnit_Framework_TestCase {
 
 
 	protected $cli;
