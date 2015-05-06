@@ -117,7 +117,7 @@ class AuthorizationUI {
 				$data['org'] = $orginfo;
 			}
 
-		} else  if ($client->has('owner')) {
+		} else if ($this->client->has('owner')) {
 
 			$owner = $this->storage->getUserByUserID($this->client->owner);
 			if ($owner !== null) {
