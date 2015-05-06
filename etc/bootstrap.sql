@@ -9,11 +9,13 @@ DROP TABLE IF EXISTS clients_counters;
 
 DROP TABLE IF EXISTS users;
 DROP TABLE IF EXISTS userid_sec;
-DROP INDEX IF EXISTS INDEX user_userid_sec_idx
+DROP INDEX IF EXISTS user_userid_sec_idx;
 
 DROP TABLE IF EXISTS groups;
 DROP INDEX IF EXISTS groups_owner_idx;
 DROP INDEX IF EXISTS groups_public_idx;
+
+
 
 DROP TABLE IF EXISTS oauth_codes;
 
@@ -36,6 +38,8 @@ DROP TABLE IF EXISTS group_members;
 DROP INDEX IF EXISTS group_members_groupid_idx;
 DROP INDEX IF EXISTS group_members_status_idx;
 DROP INDEX IF EXISTS group_members_type_idx;
+
+DROP TABLE IF EXISTS groupmember;
 
 DROP TABLE IF EXISTS grep_codes;
 
