@@ -78,6 +78,8 @@ class AuthorizationUI {
 		$userinfo['userid'] = $this->user->userid;
 		$userinfo['p'] = $this->user->getProfileAccess();
 
+		// echo '<pre>'; print_r($this->user); exit;
+
 		$data = [
 			'perms' => $scopesInspector->getInfo(),
 			'user' => $userinfo,

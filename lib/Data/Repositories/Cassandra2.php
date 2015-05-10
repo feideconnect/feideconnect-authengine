@@ -229,6 +229,8 @@ class Cassandra2 extends \FeideConnect\Data\Repository {
 		$query = self::generateInsert('users', $data);
 		$this->execute($query, $data, __FUNCTION__);
 
+		// echo "<pre>About to save user\n"; print_r($data); exit;
+
 		// We also need to populate the userid_sec table with the corresponding secondary keys.
 		// TODO; Make this a transaction
 		if (isset($user->userid_sec) && is_array($user->userid_sec)) {
