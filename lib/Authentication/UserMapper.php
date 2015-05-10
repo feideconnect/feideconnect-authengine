@@ -31,6 +31,12 @@ class UserMapper {
 
 	protected function createUser(Account $account) {
 
+
+		// header('Content-Type: text/plain; charset=utf-8');
+		// echo "About to create user with this account\n ";
+		// print_r($account);
+		// exit;
+
 		$uuid = Model::genUUID();
 		$user = new Models\User($this->repo);
 		$user->userid = $uuid;
@@ -130,10 +136,6 @@ class UserMapper {
 
 
 
-		// header('Content-Type: text/plain; charset=utf-8');
-		// echo "About to get user with this account\n ";
-		// print_r($existingUser[0]->debug());
-		// exit;
 		
 		// if ($update) {echo "UPDATE "; } else { echo "update "; }
 		// if ($create) {echo "CREATE "; } else { echo "create "; }

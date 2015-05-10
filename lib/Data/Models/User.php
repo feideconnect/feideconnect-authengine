@@ -129,7 +129,7 @@ class User extends \FeideConnect\Data\Model {
 		if (count($res) < 1) {
 
 			$profilePhotoAccess =  'p:' . Model::genUUID();
-			$user->userid_sec[] = $profilePhotoAccess;
+			$this->userid_sec[] = $profilePhotoAccess;
 
 			if ($save) {
 				$this->_repo->addUserIDsec($this->userid, $profilePhotoAccess);
