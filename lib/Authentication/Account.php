@@ -252,7 +252,8 @@ class Account {
 		return $this->realm;
 	}
 	public function getPhoto() {
-		return $this->photo;
+		if ($this->photo === null) return null;
+		return $this->photo->getPhoto();
 	}
 
 	public function requireRealm() {
