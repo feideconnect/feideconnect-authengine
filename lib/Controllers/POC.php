@@ -7,6 +7,8 @@ use FeideConnect\HTTP\HTTPResponse;
 use FeideConnect\HTTP\TemplatedHTMLResponse;
 use FeideConnect\Authentication;
 use FeideConnect\Data\StorageProvider;
+use FeideConnect\Config;
+use FeideConnect\Exceptions\Exception;
 
 class POC {
 
@@ -14,6 +16,10 @@ class POC {
 
 		$user = null;
 		$client = null;
+
+		if (!Config::getValue("pocEndpoint.enable", false)) {
+			throw new Exception("The POC endpoint is used for debugging is not enabled on this site.", 501, "Service not available");
+		}
 
 
 		$storage = StorageProvider::getStorage();
