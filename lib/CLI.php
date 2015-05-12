@@ -6,6 +6,8 @@ namespace FeideConnect;
 use FeideConnect\Authentication\UserID;
 use FeideConnect\Data\StorageProvider;
 use FeideConnect\Data\Types\Timestamp;
+use FeideConnect\Data\Models\AccessToken;
+use FeideConnect\OAuth\AccessTokenPool;
 
 class CLI {
 
@@ -98,8 +100,11 @@ class CLI {
 
 		$this->header("Fetch information about client " . $clientid);
 		$client = $this->storage->getClient($clientid);
-		$client->logo = '----';
-		$this->oneEntry($client);
+		if ($client !== null) {
+			$client->logo = '----';
+			$this->oneEntry($client);
+
+		}
 		return $client;
 
 	}
@@ -119,6 +124,60 @@ class CLI {
 		$this->storage->updateClientScopes($client, $scopes_requested, $scopes );
 		return $this->getClient($client->id);
 	}
+
+	function getTokensClient($client) {
+		$this->header("Fetch list of tokens for client " . $client->id);
+
+		$pool = new AccessTokenPool($client);
+		$tokens = $pool->getAllTokens();
+
+		// echo "TOKENS IS \n"; print_r($tokens); exit;
+		// print_r($tokens); 
+
+		$c = 0;
+		foreach($tokens AS $token) {
+			$t = $token->getAsArray(true, true);
+			// print_r($t);
+			$t["c"] = ++$c;
+			echo $this->l($t, [
+				"c" => ["%3d", "red"],
+				"access_token" => ["%38s", "black", 38 ],
+				"clientid" => ["%-30s", "blue", 38],
+				"userid" => ["%-30s", "red", 38],
+				"issued" => ["%-30s", "blue", 30],
+				"validuntil" => ["%-30s", "cyan", 30],
+				"scope" => ["%-22s", "purple"],
+			]);
+
+		}
+
+
+	}
+
+	function getTokensUser($client, $user) {
+		$this->header("Fetch list of tokens for client " . $client->id . " and user " . $user->userid);
+
+		$pool = new AccessTokenPool($client, $user);
+		$tokens = $pool->getAllTokens();
+
+		$c = 0;
+		foreach($tokens AS $token) {
+			$t = $token->getAsArray(true, true);
+			$t["c"] = ++$c;
+			echo $this->l($t, [
+				"c" => ["%3d", "red"],
+				"access_token" => ["%38s", "black", 38 ],
+				"clientid" => ["%-30s", "blue"],
+				"userid" => ["%-30s", "red"],
+				"issued" => ["%-30s", "blue", 20],
+				"validuntil" => ["%-30s", "cyan", 25],
+				"scope" => ["%-22s", "purple"],
+			]);
+
+		}
+
+	}
+
 
 	function getToken($token) {
 
@@ -296,6 +355,37 @@ class CLI {
 	}
 
 	public function t() {
+
+
+		$client = $this->storage->getClient("dbb117cb-a08c-4f8a-9b81-73bfae9d0744");
+		$user = null;
+
+		$scopesInQuestion = ["userinfo"];
+		$refreshToken = null;
+		$expires_in = 600;
+
+		// $token = new Models\AccessToken();
+		// $token->access_token = Models\AccessToken::genUUID();
+		// $token->clientid = $clientid;
+		// $token->userid = $userid;
+		// $token->scope = ['userinfo', 'groups'];
+		// $token->token_type = 'Bearer';
+
+		// $token->issued = new \FeideConnect\Data\Types\Timestamp();
+		// $token->validuntil = (new \FeideConnect\Data\Types\Timestamp())->addSeconds(3600);
+		// $token->lastuse = (new \FeideConnect\Data\Types\Timestamp())->addSeconds(5);
+
+
+		$accesstoken = AccessToken::generate($client, $user, $scopesInQuestion, $refreshToken, $expires_in);
+
+
+		// var_dump($accesstoken->getStorableArray()); exit;
+		$this->storage->saveToken($accesstoken);
+
+
+		return;
+
+
 
 		$c1 = \FeideConnect\Data\Models\Client::genUUID();
 

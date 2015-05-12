@@ -461,6 +461,51 @@ class Server {
 				return $tokenresponse->sendBodyJSON();
 
 				
+			} else if ($tokenrequest->grant_type === 'password') {
+
+
+
+
+
+				if (empty($_SERVER['PHP_AUTH_USER'])) 
+					throw new OAuthException('invalid_client', 'Unable to authenticate the request on behalf of a client (missing username)');
+				if (empty($_SERVER['PHP_AUTH_PW'])) 
+					throw new OAuthException('invalid_client', 'Unable to authenticate the request on behalf of a client (missing password)');
+
+				$clientid = $_SERVER['PHP_AUTH_USER'];
+
+
+				if (!Validator::validateID($clientid)) {
+					throw new OAuthException('invalid_request', 'Invalid client_id parameter');	
+				}
+
+				$client = $this->storage->getClient($clientid);
+				if ($client === null) {
+					throw new OAuthException('invalid_client', 'Request was on behalf of a nonexisting client');
+				}
+
+				if ($client->client_secret !== $_SERVER['PHP_AUTH_PW'])
+					throw new OAuthException('invalid_client', 'Wrong client credentials. Incorrect client_secret.');
+
+
+				$requestedScopes = $client->getScopeList();
+				if (!empty($this->tokenrequest->scope)) {
+					// Only consider scopes that the client is authorized to ask for.
+					$requestedScopes = array_intersect($this->tokenrequest->scope, $requestedScopes);
+				}
+
+
+				$expires_in = 3600*8; // 8 hours
+				if (in_array('longterm', $requestedScopes)) {
+					$expires_in = 3600*24*680; // 680 days
+				}
+
+				$pool = new AccessTokenPool($client);
+				$accesstoken = $pool->getToken($requestedScopes, false, $expires_in);
+
+				$tokenresponse = Messages\TokenResponse::generateFromAccessToken($accesstoken);
+				return $tokenresponse->sendBodyJSON();
+
 
 
 

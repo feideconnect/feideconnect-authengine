@@ -175,7 +175,6 @@ CREATE INDEX oauth_tokens_userid_idx ON oauth_tokens (userid);
 CREATE INDEX oauth_tokens_clientid_idx ON oauth_tokens (clientid);
 
 
-
 CREATE TABLE oauth_codes (
 	code uuid,
 

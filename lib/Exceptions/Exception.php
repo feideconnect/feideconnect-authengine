@@ -16,9 +16,13 @@ class Exception extends \Exception {
 		$this->head = $head;
 	}
 
+	function setHTTPcode() {
+		http_response_code($this->httpcode);
+	}
+
 	function prepareErrorMessage() {
 
-		// http_response_code($this->httpcode);
+		$this->setHTTPcode();
 
 		$data = array();
 		$data['code'] = $this->httpcode;

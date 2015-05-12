@@ -49,6 +49,7 @@ if ($command[0] === 'user') {
 	$cli->t();
 
 
+
 } else if ($command[0] === 'users') {
 
 	// echo "command " . $command[1];
@@ -218,6 +219,25 @@ if ($command[0] === 'user') {
  } else if ($command[0] === 'token') {
 
  	$cli->getToken($command[1]);
+
+
+} else if ($command[0] === 'tokens') {
+
+	$user = null;
+	$client = null;
+
+	if (isset($command[1])) {
+		$client = $cli->getClient($command[1]);
+	}
+	if (isset($command[2])) {
+		$user = $cli->getUser($command[2]);
+	}
+
+	if ($user === null) {
+		$cli->getTokensClient($client);
+	} else {
+		$cli->getTokensUser($client, $user);
+	}
 
 
 

@@ -22,7 +22,11 @@
 	"salt": "xxxx-xxxx-xxxx-xxxx-xxxx",
 
 
-	"salt": null,
+	"testUsers": {
+		"feide:test@test.org": {
+			"password": "xxxxxx"
+		}
+	},
 
 	"account": {
 		"useridmap": {
