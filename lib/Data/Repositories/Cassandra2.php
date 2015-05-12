@@ -606,6 +606,9 @@ class Cassandra2 extends \FeideConnect\Data\Repository {
 
 		$query = 'SELECT * FROM "oauth_tokens" WHERE "userid" = :userid AND "clientid" = :clientid ALLOW FILTERING';
 		$params = ['userid' => new Uuid($userid), 'clientid' => new Uuid($clientid)];
+
+		// print_r($params); exit;
+
 		return $this->query($query, $params, __FUNCTION__, 'FeideConnect\Data\Models\AccessToken', true);
 	}
 
@@ -617,6 +620,8 @@ class Cassandra2 extends \FeideConnect\Data\Repository {
 		}
 		$query = self::generateInsert('oauth_tokens', $data, $this->getTTLskew($token->validuntil));
 		$this->execute($query, $data, __FUNCTION__);
+
+		
 
 		$query = 'UPDATE "clients_counters" SET count_tokens = count_tokens + 1 WHERE "id" = :id';
 		$params = ['id' => new Uuid($token->clientid)];

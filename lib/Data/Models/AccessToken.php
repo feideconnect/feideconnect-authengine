@@ -34,7 +34,10 @@ class AccessToken extends \FeideConnect\Data\Model {
 		if (isset($this->clientid)) {
 			$prepared["clientid"] = new Uuid($this->clientid);
 		}
-		if (isset($this->userid)) {
+		
+		if (empty($this->userid)) {
+			$prepared["userid"] = new Uuid('00000000-0000-0000-0000-000000000000');
+		} else {
 			$prepared["userid"] = new Uuid($this->userid);
 		}
 		if (isset($this->scope)) {
@@ -49,7 +52,7 @@ class AccessToken extends \FeideConnect\Data\Model {
 
 	public static function generateFromCode(Models\AuthorizationCode $code) {
 
-
+		
 
 	}	
 
@@ -101,7 +104,7 @@ class AccessToken extends \FeideConnect\Data\Model {
 
 		$n->clientid = $client->id;
 
-		$n->userid = '';
+		$n->userid = null;
 		if ($user !== null) {
 			$n->userid = $user->userid;	
 		}
