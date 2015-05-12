@@ -12,15 +12,12 @@ use FeideConnect\HTTP\JSONResponse;
 
 class Message {
 
-	public $httpcode;
 
 	function __construct() {	
-		$this->httpcode = 200;
+
 	}
 
-	public function setStatus($status) {
-		$this->httpcode = $status;
-	}
+
 
 	public function asQS() {
 		$qs = array();
@@ -80,11 +77,11 @@ class Message {
 		return new Redirect($url);
 	}
 
-	public function sendBodyJSON() {
+	public function sendBodyJSON($httpcode = 200) {
 
 		// Requires pecl_http, and we do not want a dependency on that.
 		// http_send_status($this->httpcode);  
-		header('x', true, $this->httpcode);
+		header('x', true, $httpcode);
 
 		$body = array();
 		foreach($this AS $key => $value) {
