@@ -20,13 +20,15 @@ class ErrorResponse extends Message {
 		$this->state				= Message::optional($message, 'state');
 	}
 
-	public function sendBodyJSON() {
+	public function sendBodyJSON($httpcode = 200) {
 
 		$body = array();
 		foreach($this AS $key => $value) {
 			if (empty($value)) continue;
 			$body[$key] = $value;
 		}
+
+		header('x', true, $httpcode);
 
 		$response = new JSONResponse($body);
 		$response->setHeader("WWW-Authenticate", 'Bearer realm="feideconnect", error="' . $this->error . '", error_description="' . urlencode($this->error_description));

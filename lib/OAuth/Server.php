@@ -443,9 +443,9 @@ class Server {
 
 
 				$requestedScopes = $client->getScopeList();
-				if (!empty($this->tokenrequest->scope)) {
+				if (!empty($tokenrequest->scope)) {
 					// Only consider scopes that the client is authorized to ask for.
-					$requestedScopes = array_intersect($this->tokenrequest->scope, $requestedScopes);
+					$requestedScopes = array_intersect($tokenrequest->scope, $requestedScopes);
 				}
 
 
@@ -489,18 +489,38 @@ class Server {
 
 
 				$requestedScopes = $client->getScopeList();
-				if (!empty($this->tokenrequest->scope)) {
+				if (!empty($tokenrequest->scope)) {
 					// Only consider scopes that the client is authorized to ask for.
-					$requestedScopes = array_intersect($this->tokenrequest->scope, $requestedScopes);
+					$requestedScopes = array_intersect($tokenrequest->scope, $requestedScopes);
 				}
 
+
+
+				if (empty($tokenrequest->username)) 
+					throw new OAuthException('invalid_grant', 'Unable to authenticate resource owner (missing username)');
+				if (empty($tokenrequest->password)) 
+					throw new OAuthException('invalid_grant', 'Unable to authenticate resource owner (missing password)');
+
+				$testUsers = Config::getValue("testUsers", []);
+
+				if (!isset($testUsers[$tokenrequest->username])) {
+					throw new OAuthException('invalid_grant', 'Unable to authenticate resource owner (invalid user)');
+				}
+				if (!isset($testUsers[$tokenrequest->username]["password"])) {
+					throw new OAuthException('invalid_grant', 'Unable to authenticate resource owner (invalid user configuration)');
+				}
+				if ($testUsers[$tokenrequest->username]["password"] !== $tokenrequest->password) {
+					throw new OAuthException('invalid_grant', 'Unable to authenticate resource owner (invalid password)');
+				}
+
+				$user = $this->storage->getUserByUserIDsec($tokenrequest->username);
 
 				$expires_in = 3600*8; // 8 hours
 				if (in_array('longterm', $requestedScopes)) {
 					$expires_in = 3600*24*680; // 680 days
 				}
 
-				$pool = new AccessTokenPool($client);
+				$pool = new AccessTokenPool($client, $user);
 				$accesstoken = $pool->getToken($requestedScopes, false, $expires_in);
 
 				$tokenresponse = Messages\TokenResponse::generateFromAccessToken($accesstoken);
@@ -508,14 +528,10 @@ class Server {
 
 
 
-
-
 			} else {
-				throw new OAuthException('invalid_grant', 'Invalid [grant_type] provided to token endpoint.');
+				throw new OAuthException('unsupported_grant_type', 'Invalid [grant_type] provided to token endpoint.');
 			}
 			
-
-
 
 		} catch (OAuthException $e) {
 
@@ -526,15 +542,8 @@ class Server {
 			);
 			Logger::error('OAuth Error Response at Token endpoint.', $msg);
 
-
-			// header("HTTP/1.1 " . $e->getHTTPcode() );
-			// header('Content-Type: application/json; charset: utf-8');
-
-
-			$e->setHTTPcode();
 			$response = new Messages\ErrorResponse($msg);
-			$response->setStatus($e->httpcode);
-			return $response->sendBodyJSON();
+			return $response->sendBodyJSON($e->httpcode);
 
 			
 		}
