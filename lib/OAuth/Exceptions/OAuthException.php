@@ -12,8 +12,16 @@ class OAuthException extends Exceptions\Exception {
 	function __construct($code, $message, $state = null) {
 
 
-		$httpcode = 500;
-		$head = 'Internal Error';
+		// $httpcode = 500;
+		// $head = 'Internal Error';
+
+		$httpcode = 400;
+		$head = 'Bad Request';
+
+		if ($code === 'invalid_client') {
+			$httpcode = 401;
+			$head = 'Unauthorized';
+		}
 		if ($code === 'invalid_request') {
 			$httpcode = 400;
 			$head = 'Bad Request';

@@ -30,11 +30,12 @@ class ErrorResponse extends Message {
 
 		$response = new JSONResponse($body);
 		$response->setHeader("WWW-Authenticate", 'Bearer realm="feideconnect", error="' . $this->error . '", error_description="' . urlencode($this->error_description));
-		if($this->error === 'invalid_client') {
-			$response->setStatus(401);
-		} else {
-			$response->setStatus(400);
-		}
+		$response->setStatus($this->httpcode);
+		// if($this->error === 'invalid_client') {
+		// 	$response->setStatus(401);
+		// } else {
+		// 	$response->setStatus(400);
+		// }
 		
 		return $response;
 

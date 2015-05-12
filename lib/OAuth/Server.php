@@ -271,7 +271,9 @@ class Server {
 			// header("HTTP/1.1 " . $e->getHTTPcode() );
 			// header('Content-Type: application/json; charset: utf-8');
 
+
 			$response = new Messages\ErrorResponse($msg);
+			$response->setStatus($e->httpcode);
 			return $response->sendBodyJSON();
 
 			
@@ -458,6 +460,9 @@ class Server {
 				$tokenresponse = Messages\TokenResponse::generateFromAccessToken($accesstoken);
 				return $tokenresponse->sendBodyJSON();
 
+				
+
+
 
 
 			} else {
@@ -480,7 +485,10 @@ class Server {
 			// header("HTTP/1.1 " . $e->getHTTPcode() );
 			// header('Content-Type: application/json; charset: utf-8');
 
+
+			$e->setHTTPcode();
 			$response = new Messages\ErrorResponse($msg);
+			$response->setStatus($e->httpcode);
 			return $response->sendBodyJSON();
 
 			
