@@ -7,7 +7,7 @@
 ## Preparations
 
 	# Runtime environemnt
-	apt-get install apache2 php5 php5-cli php5-mcrypt php5-imagick php5-curl
+	apt-get install apache2 php5 php5-cli php5-mcrypt php5-imagick php5-curl php5-gmp
  
 	# building environment. Using node.js package manager npm.
 	apt-get install nodejs nodejs-legacy
@@ -15,26 +15,61 @@
 
 ## Install
 
+Make parent folder for Feide Connect.
 
-Composer initialization
+	mkdir -p /var/feideconnect
 
-installs PHP dependencies
 
-	composer install
-	cp -r vendor/andreassolberg/simplesamlphp/config-tempates etc/simplesamlphp-config
-	ln -s ../../../etc/simplesamlphp-config vendor/andreassolberg/simplesamlphp/config
+Download SimpleSAMLphp
 
-	cp -r vendor/andreassolberg/simplesamlphp/metadata-templates etc/simplesamlphp-metadata
-	ln -s ../../../etc/simplesamlphp-metadata vendor/andreassolberg/simplesamlphp/metadata
+	cd /var/feideconnect
+	wget https://simplesamlphp.org/res/downloads/simplesamlphp-1.13.2.tar.gz
+	tar zxvf simplesamlphp-1.13.2.tar.gz
+	ln -s simplesamlphp-1.13.2 simplesamlphp 
 
-	Configure SimpleSAMLphp
+	cd simplesamlphp
+	composer require duoshuo/php-cassandra dev-master
+	composer require feideconnect/simplesamlphp-module-cassandrastore dev-master
 
+Install Connect Auth Engine
+
+	cd /var/feideconnect
+	git clone https://github.com/feideconnect/feideconnect-authengine.git
+
+	cd feideconnect-authengine
+	composer update
+
+Setup configuration files:
+
+	cd /var/feideconnect
+
+	mv simplesamlphp/config feideconnect-authengine/etc/simplesamlphp-config
+	ln -s ../feideconnect-authengine/etc/simplesamlphp-config simplesamlphp/config
+
+	mv simplesamlphp/metadata feideconnect-authengine/etc/simplesamlphp-metadata
+	ln -s ../feideconnect-authengine/etc/simplesamlphp-metadata simplesamlphp/metadata
+
+
+Configuration of SimpleSAMLphp:
+
+
+Edit `feideconnect-authengine/etc/simplesamlphp-config/config.php`..
+
+
+    'auth.adminpassword' => 'xxxx',
+    'secretsalt' => 'xzmygojw4xmea8fplvcvfmyqk7sddhbv',
+    'technicalcontact_name' => 'Feide Connect',
+    'technicalcontact_email' => 'support@feide.no',
+    'store.type'                    => 'cassandrastore:CassandraStore',
+    'store.cassandra.nodes' => ["...."],
+    'store.cassandra.keyspace' => 'sessionstore',
 
 
 NPM initialization
 
 installs: bower and grunt
 
+	cd /var/feideconnect/feideconnect-authengine
 	npm install
 
 Bower

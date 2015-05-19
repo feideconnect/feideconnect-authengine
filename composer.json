@@ -11,23 +11,17 @@
 			"email": "andreas.solberg@uninett.no"
 		}
 	],
-	"repositories": [
-		{
-			"type": "vcs",
-			"url": "https://github.com/andreassolberg/simplesamlphp"
-		}
-	],
+
 	"require": {
 		"php": ">=5.4",
-		"andreassolberg/simplesamlphp": "dev-master",
-		"evseevnn/php-cassandra-binary": "dev-master#31fa28eb756e5d06470a1e4ae4698d44250231b8",
 		"mustache/mustache": "~2.6",
 		"nategood/commando": "*",
 		"firebase/php-jwt": "*",
 		"monolog/monolog": "~1.11.0",
 		"phroute/phroute": "*",
 		"duoshuo/php-cassandra": "dev-master",
-		"spomky-labs/base64url": "*"
+		"spomky-labs/base64url": "*",
+        "evseevnn/php-cassandra-binary": "dev-master#31fa28eb756e5d06470a1e4ae4698d44250231b8"
 	},
 	"require-dev": {
 		"codeclimate/php-test-reporter": "dev-master",
