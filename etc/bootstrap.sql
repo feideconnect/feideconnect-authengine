@@ -253,6 +253,7 @@ CREATE TABLE mandatory_clients (
 /* Organizations */
 CREATE TABLE organizations(
        id  text PRIMARY KEY,
+       fs_groups boolean,
        kindid int,
        realm text,
        type set<text>,
