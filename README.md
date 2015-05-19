@@ -24,7 +24,7 @@ Download SimpleSAMLphp
 
 	cd /var/feideconnect
 	wget https://simplesamlphp.org/res/downloads/simplesamlphp-1.13.2.tar.gz
-	tar zxvf simplesamlphp-1.13.2.tar.gz
+	tar zxf simplesamlphp-1.13.2.tar.gz
 	ln -s simplesamlphp-1.13.2 simplesamlphp 
 
 	cd simplesamlphp
@@ -75,6 +75,11 @@ installs: bower and grunt
 Bower
 
 	node_modules/bower/bin/bower install --allow-root
+
+Post-bower, fill in licenced fonts.
+
+* Add fonts into `static/components/uninett-bootstrap-theme/fonts/`.
+
 
 
 Initalize Cassandra schema
