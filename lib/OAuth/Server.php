@@ -265,17 +265,10 @@ class Server {
 				'error_description' => $e->getMessage(),
 				'error_uri' => 'https://feideconnect.no',
 			);
-			Logger::error('OAuth Error Response at Token endpoint.', $msg);
-
-
-			// header("HTTP/1.1 " . $e->getHTTPcode() );
-			// header('Content-Type: application/json; charset: utf-8');
-
+			Logger::error('OAuth Error Response at Authorization endpoint.', $msg);
 
 			$response = new Messages\ErrorResponse($msg);
-			$response->setStatus($e->httpcode);
-			return $response->sendBodyJSON();
-
+			return $response->sendBodyJSON($e->httpcode);
 			
 		}
 
