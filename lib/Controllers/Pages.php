@@ -5,7 +5,10 @@ namespace FeideConnect\Controllers;
 
 use FeideConnect\HTTP\HTTPResponse;
 use FeideConnect\HTTP\TextResponse;
+use FeideConnect\HTTP\JSONResponse;
 use FeideConnect\HTTP\TemplatedHTMLResponse;
+
+use FeideConnect\Utils\URL;
 
 class Pages {
 
@@ -27,6 +30,26 @@ class Pages {
 	static function robot() {
 		$txt = "User-agent: *\nDisallow: /\n";
 		return new TextResponse($txt);
+	}
+
+
+	static function debug() {
+
+
+
+		$data = [];
+		$data['endpoints'] = [
+			"oauth.base" => URL::getBaseURL() . 'oauth/',
+			"this" => URL::selfURL(),
+			"this.noquery" => URL::selfURLNoQuery(),
+			"this.host" =>  URL::selfURLhost(),
+		];
+		$data['client'] = $_SERVER['REMOTE_ADDR'];
+
+		$res = new JSONResponse($data);
+		$res->setCORS(false);
+		return $res;
+
 	}
 
 

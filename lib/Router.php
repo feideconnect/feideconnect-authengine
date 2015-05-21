@@ -51,6 +51,9 @@ class Router {
 		$this->router->get('/disco', ['FeideConnect\Controllers\Disco', 'process']);
 
 
+		$this->router->get('/debug', ['FeideConnect\Controllers\Pages', 'debug']);
+
+
 		// OpenID Connect
 		$this->router->get('/.well-known/openid-configuration', ['FeideConnect\Controllers\OpenIDConnect', 'config']);
 		$this->router->get('/openid/jwks', ['FeideConnect\Controllers\OpenIDConnect', 'getJWKs']);
