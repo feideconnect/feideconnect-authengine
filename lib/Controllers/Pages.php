@@ -46,6 +46,15 @@ class Pages {
 		];
 		$data['client'] = $_SERVER['REMOTE_ADDR'];
 
+
+		$baseDIR = dirname(dirname(__DIR__));
+
+		$data['dir'] = ["base" => $baseDIR];
+
+		$data["files"] = [
+			"config.json" => file_exists($baseDIR . '/etc/config.json'),
+		];
+
 		$res = new JSONResponse($data);
 		$res->setCORS(false);
 		return $res;
