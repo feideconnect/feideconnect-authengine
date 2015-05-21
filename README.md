@@ -8,6 +8,8 @@
 
 	# Runtime environemnt
 	apt-get install apache2 php5 php5-cli php5-mcrypt php5-imagick php5-curl php5-gmp
+
+	a2enmod ssl
  
 	# building environment. Using node.js package manager npm.
 	apt-get install nodejs nodejs-legacy
@@ -56,12 +58,12 @@ Configuration of SimpleSAMLphp:
 Edit `feideconnect-authengine/etc/simplesamlphp-config/config.php`..
 
 
-    'auth.adminpassword' => 'xxxx',
-    'secretsalt' => 'xzmygojw4xmea8fplvcvfmyqk7sddhbv',
-    'technicalcontact_name' => 'Feide Connect',
-    'technicalcontact_email' => 'support@feide.no',
-    'store.type'                    => 'cassandrastore:CassandraStore',
-    'store.cassandra.nodes' => ["...."],
+    'auth.adminpassword'       => '...',
+    'secretsalt'               => '...',
+    'technicalcontact_name'    => 'Feide Connect',
+    'technicalcontact_email'   => 'support@feide.no',
+    'store.type'               => 'cassandrastore:CassandraStore',
+    'store.cassandra.nodes'    => ["..."],
     'store.cassandra.keyspace' => 'sessionstore',
 
 
