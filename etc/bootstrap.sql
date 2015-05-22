@@ -42,6 +42,7 @@ DROP INDEX IF EXISTS group_members_type_idx;
 DROP TABLE IF EXISTS groupmember;
 
 DROP TABLE IF EXISTS grep_codes;
+DROP INDEX IF EXISTS grep_codes_code_idx;
 
 DROP TABLE IF EXISTS mandatory_clients;
 
@@ -242,6 +243,7 @@ CREATE TABLE grep_codes (
 	code text,
 	last_changed timestamp
 );
+CREATE INDEX grep_codes_code_idx ON grep_codes(code);
 
 CREATE TABLE mandatory_clients (
     realm text,
