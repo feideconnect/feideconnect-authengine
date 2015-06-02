@@ -6,6 +6,8 @@ namespace FeideConnect;
 // use \Monolog\Logger;
 use \Monolog\Handler\StreamHandler;
 use \Monolog\Handler\ErrorLogHandler;
+use \Monolog\Handler\SyslogHandler;
+use \Monolog\Formatter\LineFormatter;
 
 /**
 * Logger
@@ -22,8 +24,15 @@ class Logger {
 		if (Config::getValue('logging.file', false) && file_exists($filename) && is_writable($filename)) {
 			$this->log->pushHandler(new StreamHandler($filename, \Monolog\Logger::DEBUG));
 		}
-		$this->log->pushHandler(new ErrorLogHandler());
-		
+		$syslog_ident = Config::getValue('logging.syslog.ident', NULL);
+		$syslog_facility = Config::getValue('logging.syslog.facility', 'local0');
+		if ($syslog_ident && $syslog_facility) {
+			$syslog = new SyslogHandler($syslog_ident, $syslog_facility);
+			$syslog->setFormatter(new LineFormatter());
+		}
+		if (Config::getValue('logging.errorlog', true)) {
+			$this->log->pushHandler(new ErrorLogHandler());
+		}
 	}
 
 
