@@ -29,6 +29,7 @@ class Logger {
 		if ($syslog_ident && $syslog_facility) {
 			$syslog = new SyslogHandler($syslog_ident, $syslog_facility);
 			$syslog->setFormatter(new LineFormatter());
+			$this->log->pushHandler($syslog);
 		}
 		if (Config::getValue('logging.errorlog', true)) {
 			$this->log->pushHandler(new ErrorLogHandler());
