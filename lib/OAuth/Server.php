@@ -359,14 +359,17 @@ class Server {
 					throw new OAuthException('invalid_request', 'Invalid code parameter');	
 				}
 				$code = $this->storage->getAuthorizationCode($tokenrequest->code);
-				if ($code === null) 
+				if ($code === null) {
 					throw new OAuthException('invalid_grant', 'Provided Authorization Code was not found.');
+				}
 
-				if (!$code->stillValid()) 
+				if (!$code->stillValid()) {
 					throw new OAuthException('invalid_grant', 'Provided Authorization Code is expired.');
+				}
 
-				if ($code->clientid !== $client->id) 
+				if ($code->clientid !== $client->id) {
 					throw new OAuthException('invalid_grant', 'Provided Authorization Code was not issued to this client.');
+				}
 
 				if (!empty($code->redirect_uri)) {
 
@@ -489,10 +492,12 @@ class Server {
 
 
 
-				if (empty($tokenrequest->username)) 
+				if (empty($tokenrequest->username)) {
 					throw new OAuthException('invalid_grant', 'Unable to authenticate resource owner (missing username)');
-				if (empty($tokenrequest->password)) 
+				}
+				if (empty($tokenrequest->password)) {
 					throw new OAuthException('invalid_grant', 'Unable to authenticate resource owner (missing password)');
+				}
 
 				$testUsers = Config::getValue("testUsers", []);
 
@@ -507,6 +512,11 @@ class Server {
 				}
 
 				$user = $this->storage->getUserByUserIDsec($tokenrequest->username);
+				if ($user === null) {
+					throw new OAuthException('invalid_grant', 'Authenticated user does not have a user record.');
+				}
+				
+				
 
 				$expires_in = 3600*8; // 8 hours
 				if (in_array('longterm', $requestedScopes)) {
