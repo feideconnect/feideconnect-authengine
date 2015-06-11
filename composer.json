@@ -19,9 +19,8 @@
 		"firebase/php-jwt": "*",
 		"monolog/monolog": "~1.11.0",
 		"phroute/phroute": "*",
-		"duoshuo/php-cassandra": "dev-master",
-		"spomky-labs/base64url": "*",
-        "evseevnn/php-cassandra-binary": "dev-master#31fa28eb756e5d06470a1e4ae4698d44250231b8"
+		"duoshuo/php-cassandra": "dev-master#c9485df6d6ed797bd472d6bea5370b486d1edcb0",
+		"spomky-labs/base64url": "*"
 	},
 	"require-dev": {
 		"codeclimate/php-test-reporter": "dev-master",

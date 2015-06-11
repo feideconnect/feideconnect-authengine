@@ -14,6 +14,7 @@ use FeideConnect\Data\Models;
 use FeideConnect\Exceptions\Exception;
 use FeideConnect\Exceptions\StorageException;
 
+use Cassandra\Connection;
 use Cassandra\Type\Uuid;
 use Cassandra\Type\Timestamp;
 use Cassandra\Type\Blob;
@@ -39,7 +40,7 @@ class Cassandra2 extends \FeideConnect\Data\Repository {
 		if (empty($config['nodes'])) throw new FeideConnectException('Required config not set');
 
 		// $this->db = new \evseevnn\Cassandra\Database($config['nodes'], $config['keyspace']);
-		$this->db = new \Cassandra\Connection($config['nodes'], $config['keyspace']);
+		$this->db = new Connection($config['nodes'], $config['keyspace']);
 		$this->db->connect();
 
 		// Set consistency level for farther requests (default is CONSISTENCY_ONE)
@@ -97,7 +98,11 @@ class Cassandra2 extends \FeideConnect\Data\Repository {
 			'params' => $data
 		));
 
+
+			
+
 		try {
+
 
 			// $this->db->beginBatch();
 			$this->db->querySync($query, $data,
@@ -296,10 +301,14 @@ class Cassandra2 extends \FeideConnect\Data\Repository {
 	function updateProfilePhoto(Models\User $user, $sourceID) {
 
 
+
+
 		$userinfo = $user->getUserInfo($sourceID);
 
 		if (empty($userinfo['profilephoto'])) throw new Exception('Missing profilephoto');
 		if (empty($userinfo['profilephotohash'])) throw new Exception('Missing profilephotohash');
+
+
 
 		$query = 'UPDATE "users" SET updated = :updated, ' . 
 			'profilephoto[\'' . $sourceID  . '\'] = :profilephoto, ' . 
