@@ -118,7 +118,7 @@ class AccessToken extends \FeideConnect\Data\Model {
 			$n->refresh_token = self::genUUID();
 		}
 
-		$n->token_type = 'bearer';
+		$n->token_type = 'Bearer';
 		
 		if ($scope !== null) {
 			$n->scope = $scope;

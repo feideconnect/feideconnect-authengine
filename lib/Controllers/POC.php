@@ -98,7 +98,7 @@ class POC {
 		}
 		
 		$token->scope = $client->scopes;
-		$token->token_type = 'bearer';
+		$token->token_type = 'Bearer';
 		
 		$token->issued = new \FeideConnect\Data\Types\Timestamp();
 		$token->validuntil = (new \FeideConnect\Data\Types\Timestamp())->addSeconds(3600);
