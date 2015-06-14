@@ -48,6 +48,7 @@ class AuthorizationEvaluator {
 		return $a;
 	}
 
+
 	private function evaluateScopes() {
 
 		$this->scopesInQuestion = $this->client->getScopeList();
@@ -90,6 +91,15 @@ class AuthorizationEvaluator {
 
 	public function getScopesInQuestion() {
 		return $this->scopesInQuestion;
+	}
+
+	public function hasScopeInQuestion($scope) {
+		foreach($this->scopesInQuestion AS $sc) {
+			if ($scope === $sc) {
+				return true;
+			}
+		}
+		return false;
 	}
 
 	public function getRemainingScopes() {

@@ -2,6 +2,8 @@
 
 namespace FeideConnect\Data\Models;
 use FeideConnect\Data\StorageProvider;
+use FeideConnect\OpenIDConnect\IDToken;
+
 use Cassandra\Type\Uuid;
 use Cassandra\Type\CollectionMap;
 use Cassandra\Type\CollectionSet;
@@ -10,11 +12,12 @@ use Cassandra\Type\Timestamp;
 
 class AuthorizationCode extends \FeideConnect\Data\Model {
 
-	public $code, $clientid, $userid, $scope, $token_type, $redirect_uri, $issued, $validuntil;
+	public $code, $clientid, $userid, $scope, $token_type, $redirect_uri, $idtoken, $issued, $validuntil;
 
 	protected static $_properties = array(
 		"code", "clientid", "userid", 
 		"scope", "token_type", "redirect_uri",
+		"idtoken",
 		"issued", "validuntil"
 	);
 	protected static $_types = [
@@ -53,7 +56,7 @@ class AuthorizationCode extends \FeideConnect\Data\Model {
 
 
 
-	public static function generate(Client $client, User $user, $redirect_uri, $scope = null) {
+	public static function generate(Client $client, User $user, $redirect_uri, $scope = null, IDToken $idtoken = null) {
 
 		$expires_in = \FeideConnect\Config::getValue('oauth.code.lifetime', 5*60);
 
@@ -68,6 +71,10 @@ class AuthorizationCode extends \FeideConnect\Data\Model {
 		$n->validuntil = (new \FeideConnect\Data\Types\Timestamp())->addSeconds($expires_in);
 
 		$n->token_type = 'Bearer';
+
+		if (isset($idtoken) && $idtoken !== null) {
+			$n->idtoken = $idtoken->getEncoded();
+		}
 
 		$n->redirect_uri = $redirect_uri;
 		

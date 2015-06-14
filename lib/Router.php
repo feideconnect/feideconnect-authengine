@@ -3,6 +3,7 @@
 namespace FeideConnect;
 
 use Phroute\Phroute;
+
 use FeideConnect\Controllers;
 
 class Router {
@@ -57,7 +58,7 @@ class Router {
 		// OpenID Connect
 		$this->router->get('/.well-known/openid-configuration', ['FeideConnect\Controllers\OpenIDConnect', 'config']);
 		$this->router->get('/openid/jwks', ['FeideConnect\Controllers\OpenIDConnect', 'getJWKs']);
-
+		$this->router->any('/openid/userinfo', ['FeideConnect\Controllers\OpenIDConnect', 'userinfo']);
 
 		// Robots
 		$this->router->get('/robots.txt', ['FeideConnect\Controllers\Pages', 'robot']);

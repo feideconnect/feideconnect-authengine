@@ -20,6 +20,9 @@ class TokenResponse extends Message {
 		$this->scope			= Message::optional($message, 'scope');
 		$this->state			= Message::optional($message, 'state');
 
+		// Used with OpenID Connect
+		$this->idtoken			= Message::optional($message, 'idtoken');
+
 	}
 
 
@@ -52,7 +55,6 @@ class TokenResponse extends Message {
 		if (isset($request->state)) {
 			$a["state"] = $request->state;
 		}
-
 
 		$n = new self($a);
 		return $n;

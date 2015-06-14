@@ -16,7 +16,7 @@
 	},
 
 	"connect": {
-		"issuer": "connect"
+		"issuer": "https://feideconnect.no"
 	},
 
 	"salt": "xxxx-xxxx-xxxx-xxxx-xxxx",

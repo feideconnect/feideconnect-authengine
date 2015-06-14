@@ -184,6 +184,7 @@ CREATE TABLE oauth_codes (
 
 	scope set<text>,
 	token_type text,
+	idtoken text,
 
 	redirect_uri text,
 

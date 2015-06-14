@@ -18,7 +18,6 @@ class Message {
 	}
 
 
-
 	public function asQS() {
 		$qs = array();
 		foreach($this AS $key => $value) {
