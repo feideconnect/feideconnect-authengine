@@ -110,7 +110,7 @@ class OICAuthorization extends OAuthAuthorization {
 		
 
 		if ($this->request->isPassiveRequest()) {
-			echo "Passive request. Not yet implemented."; exit;
+			$this->isPassive = true;
 		}
 
 		// Ensure less duplicate code compared to the parent oauth processing...
