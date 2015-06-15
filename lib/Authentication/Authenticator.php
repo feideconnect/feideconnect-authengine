@@ -31,7 +31,7 @@ class Authenticator {
 
 		$this->as->login(array(
 			'isPassive' => true,
-			'ErrorURL' => \SimpleSAML_Utilities::addURLparameter(SimpleSAML_Utilities::selfURL(), array(
+			'ErrorURL' => \SimpleSAML_Utilities::addURLparameter(\SimpleSAML_Utilities::selfURL(), array(
 				"error" => 1,
 			)),
 		));
