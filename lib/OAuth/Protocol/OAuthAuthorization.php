@@ -199,13 +199,21 @@ class OAuthAuthorization {
 
 
 		$this->checkClient();
-		$this->authenticateUser();
-		$this->evaluateScopes();
+
+		if ($this->aevaluator === null) { 
+			$this->aevaluator = new AuthorizationEvaluator($this->storage, $this->client, $this->request, $this->user);
+		}
+		
+		// $this->evaluateScopes();
 
 		$stepup = $this->evaluateStepUp($this->aevaluator);
 		if ($stepup !== null) {
 			return $stepup;
 		}
+
+		$this->authenticateUser();
+		$this->aevaluator->setUser($this->user);
+
 
 		$res = $this->obtainAuthorization();
 		if ($res !== null) { return $res; }

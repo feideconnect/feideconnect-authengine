@@ -3,8 +3,6 @@
 
 namespace FeideConnect\OAuth;
 
-
-
 use FeideConnect\Logger;
 use FeideConnect\OAuth\Exceptions;
 use FeideConnect\Data\Models\Authorization;
@@ -15,17 +13,20 @@ use FeideConnect\Data\Models\Authorization;
 class AuthorizationEvaluator {
 	
 	protected $storage, $client, $request, $user;
+
 	protected $authorization = null;
 	protected $scopesInQuestion = null;
 	protected $scopesRemaining = null;
 
-	function __construct($storage, $client, $request, $user) {
+	function __construct($storage, $client, $request, $user = null) {
+
 		$this->storage = $storage;
 		$this->client = $client;
 		$this->request = $request;
 		$this->user = $user;
 
 		$this->authorization = null;
+
 		if ($user !== null) {
 			$this->authorization = $this->storage->getAuthorization($this->user->userid, $this->client->id);	
 		}
@@ -33,7 +34,37 @@ class AuthorizationEvaluator {
 		$this->evaluateScopes();
 	}
 
+	/**
+	 * Setting the user at initialization or later is required in order to get information about scopes that is authorized.
+	 * 
+	 * @param [type] $user [description]
+	 */
+	public function setUser($user) {
+		$this->user = $user;
+		$this->authorization = null;
+		if ($user !== null) {
+			$this->authorization = $this->storage->getAuthorization($this->user->userid, $this->client->id);	
+		}
+		$this->evaluateScopes();
+	}
+
+	/**
+	 * Throw an exception if the user it not set.
+	 * @return [type] [description]
+	 */
+	protected function requireUser() {
+		if ($this->user === null) {
+			throw new \Exception("An authenticated user is not set, and we may therefor not obtain information about authorized scopes.");
+		}
+	}
+
+
+	/**
+	 * Will add all remaining scopes from scopesinquestion to the authorization object.
+	 * @return [type] [description]
+	 */
 	public function getUpdatedAuthorization() {
+		$this->requireUser();
 		$a = $this->authorization;
 		if ($a === null) {
 			$a = new Authorization([
@@ -55,6 +86,11 @@ class AuthorizationEvaluator {
 		if (!empty($this->request->scope)) {
 			// Only consider scopes that the client is authorized to ask for.
 			$this->scopesInQuestion = array_intersect($this->request->getScopeList(), $this->scopesInQuestion);
+		}
+
+
+		if ($this->user === null) {
+			return;
 		}
 
 		if ($this->authorization === null) {
@@ -103,6 +139,7 @@ class AuthorizationEvaluator {
 	}
 
 	public function getRemainingScopes() {
+		$this->requireUser();
 		return $this->scopesRemaining;
 	}
 
@@ -113,6 +150,8 @@ class AuthorizationEvaluator {
 	 */
 	public function needsAuthorization() {
 
+		$this->requireUser();
+
 		if ($this->authorization === null) return true;
 		if (!empty($this->scopesRemaining)) return true;
 
@@ -121,7 +160,6 @@ class AuthorizationEvaluator {
 	}
 
 	public function getValidatedRedirectURI() {
-
 
 
 		$configuredRedirectURI = $this->client->redirect_uri;
@@ -142,36 +180,6 @@ class AuthorizationEvaluator {
 			return $requestedRedirectURI;
 		}
 
-		/**
-		 * Old code, doing prefix matching instead on the clients requested redirect uris.
-		 */
-		
-		// if (is_array($configuredRedirectURI)) {
-		// 	if (empty($request->redirect_uri)) {
-		// 		// url not specified in request, returning first entry from config
-		// 		return $configuredRedirectURI[0];
-				
-		// 	} else {
-		// 		// url specified in request, returning if is substring match any of the entries in config
-		// 		foreach($configuredRedirectURI AS $su) {
-		// 			if (strpos($request->redirect_uri, $su) === 0) {
-		// 				return $request->redirect_uri;
-		// 			}
-		// 		}
-		// 	}
-		// } else if (!empty($configuredRedirectURI)) {
-		// 	if (empty($request->redirect_uri)) {
-		// 		// url not specified in request, returning the only entry from config
-		// 		return $configuredRedirectURI;
-				
-		// 	} else {
-		// 		// url specified in request, returning if is substring match the entry in config
-		// 		if (strpos($request->redirect_uri, $configuredRedirectURI) === 0) {
-		// 			return $request->redirect_uri;
-		// 		}	
-		// 	}
-		// }
-		
 		Logger::error('OAuth AuthorizationEvaluator not able to resolve a valid redirect_uri for client', array(
 			'configuredRedirectURI' => $configuredRedirectURI,
 			'requestedRedirectURI' => $requestedRedirectURI,
