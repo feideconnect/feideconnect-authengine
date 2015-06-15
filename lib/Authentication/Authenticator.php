@@ -2,6 +2,7 @@
 
 namespace FeideConnect\Authentication;
 
+use FeideConnect\Config;
 /**
  * This class handles all authentication, and uses SimpleSAMLphp for that task.
  * It will also handle all local user creation. All new users will be stored in the user repository.
@@ -27,14 +28,15 @@ class Authenticator {
 	 */
 	protected function authenticatePassive() {
 
-		error_log("Perform passive authentication..");
+		
 
-		$this->as->login(array(
+		$this->as->login([
 			'isPassive' => true,
+			'saml:idp' => Config::getValue("defaultIdP"),
 			'ErrorURL' => \SimpleSAML_Utilities::addURLparameter(\SimpleSAML_Utilities::selfURL(), array(
 				"error" => 1,
 			)),
-		));
+		]);
 
 	}
 
