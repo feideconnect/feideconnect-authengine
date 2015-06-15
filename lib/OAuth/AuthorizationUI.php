@@ -105,6 +105,8 @@ class AuthorizationUI {
 		$data['organization'] = $this->organization;
 		$data['validated'] = $isMandatory;
 
+		$data["apibase"] = Config::getValue("endpoints.core");
+
 
 		// echo '<pre>'; print_r($this->remainingScopes); exit;
 
