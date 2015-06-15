@@ -76,6 +76,7 @@ class Authenticator {
 				$options['saml:idp'] = $_COOKIE['idp'];
 			}
 
+
 			// echo "about to require authentication "; print_r($options); print_r($_COOKIE); exit;
 			$this->as->requireAuth($options);
 
@@ -97,6 +98,7 @@ class Authenticator {
 		$attributes = $this->as->getAttributes();
 		$attributes['idp'] = $this->as->getAuthData('saml:sp:IdP');
 		$attributes['authSource'] = $this->authSource;
+		$attributes['AuthnInstant'] = $this->as->getAuthData("AuthnInstant");
 
 
 		$attributeMapper = new AttributeMapper();

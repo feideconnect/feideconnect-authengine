@@ -52,6 +52,14 @@ class Account {
 
 	}	
 
+	public function getAuthInstant() {
+
+		if (isset($this->attributes["AuthnInstant"])) {
+			return intval($this->attributes["AuthnInstant"]);
+		}
+		return time();
+	}
+
 
 	protected function getComplexRealm($attrname) {
 

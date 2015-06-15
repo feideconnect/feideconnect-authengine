@@ -30,7 +30,9 @@ class OICAuthorization extends OAuthAuthorization {
 
 	protected function getIDToken() {
 		$openid = new \FeideConnect\OpenIDConnect\OpenIDConnect();
-		$idtoken = $openid->getIDtoken($this->user->userid, $this->client->id);
+		$iat = $this->account->getAuthInstant();
+		// echo '<pre>iat'; print_r($iat); exit;
+		$idtoken = $openid->getIDtoken($this->user->userid, $this->client->id, $iat);
 		return $idtoken;
 	}
 
