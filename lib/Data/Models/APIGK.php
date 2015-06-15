@@ -19,12 +19,14 @@ class APIGK extends \FeideConnect\Data\Model {
 
 	function __construct($props) {
 
+		parent::__construct($props);
+
 		if (isset($props["scopedef"])) {
 			$this->scopedef = json_decode($props["scopedef"], true);
 			unset ($props["scopedef"]);
 		}
 
-		parent::__construct($props);
+
 	}
 
 
@@ -50,6 +52,7 @@ class APIGK extends \FeideConnect\Data\Model {
 		if (isset($this->scopedef) && isset($this->scopedef["subscopes"]) && isset($this->scopedef["subscopes"][$subscope])  && isset($this->scopedef["subscopes"][$subscope])) {
 			$sd = $this->scopedef["subscopes"][$subscope];
 		}
+
 		return $sd;
 	}
 
