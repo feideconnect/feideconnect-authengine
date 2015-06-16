@@ -92,20 +92,20 @@ class IDToken {
 		return $this->object;
 	}
 
-	public static function generate(TrustStore $trustStore, $iss, $sub, $aud, $expiresIn, $setIAT = null) {
+	public static function generate(TrustStore $trustStore, $iss, $sub, $aud, $expiresIn, $auth_time = null) {
 
 		$now = time();
-		$iat = $now;
-		if ($setIAT !== null) {
-			$iat = $setIAT;
-		}
-
 		$idtoken = new IDToken($trustStore);
 		$idtoken->set("iss", $iss)
 			->set("aud", $aud)
 			->set("sub", $sub)
-			->set("iat", $iat)
+			->set("iat", $now)
 			->set("exp", $now + $expiresIn);
+
+		if ($auth_time !== null) {
+			$idtoken->set("auth_time", $auth_time);
+		}
+
 		return $idtoken;
 
 	}

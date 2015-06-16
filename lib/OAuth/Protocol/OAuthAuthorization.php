@@ -25,6 +25,7 @@ class OAuthAuthorization {
 	protected $request;
 
 	protected $isPassive;
+	protected $maxage = null;
 
 	protected $client = null;
 	protected $user = null;
@@ -95,7 +96,7 @@ class OAuthAuthorization {
 
 
 
-		$this->auth->req($this->isPassive, true); // require($isPassive = false, $allowRedirect = false, $return = null
+		$this->auth->req($this->isPassive, true, null, $this->maxage); // require($isPassive = false, $allowRedirect = false, $return = null
 		$this->account = $this->auth->getAccount();
 
 		$this->organization = $this->account->getOrg();

@@ -2,6 +2,8 @@
 
 
 namespace FeideConnect\OpenIDConnect\Protocol;
+
+use FeideConnect\OAuth\Exceptions\OAuthException;
 use FeideConnect\OAuth\Protocol\OAuthAuthorization;
 use FeideConnect\OAuth\Messages;
 use FeideConnect\OAuth\AccessTokenPool;
@@ -110,20 +112,25 @@ class OICAuthorization extends OAuthAuthorization {
 
 		// TODO: Implement strictly require the redirect_uri to be present.
 		
-
 		if ($this->request->isPassiveRequest()) {
 			$this->isPassive = true;
 		}
 
-		// Ensure less duplicate code compared to the parent oauth processing...
+		if ($this->request->loginPromptRequested()) {
 
-		// GENERATE IDtoken and stuff together with code.
+			// If forcer authentication is requested by prompt=login, we will transform this into an 
+			// requirement about a less than 60 (+skey) seconds old authentication session.
+			$this->maxage = 60;
 
+		} else if ($this->request->max_age && is_int($this->request->max_age)) {
 
-		// echo "Processing an OpenID Connect request<pre>";
-		// print_r($this->request);
+			$this->maxage = $this->request->max_age;
+			if ($this->maxage < 10) {
+				$this->maxage = 10;
+			} 
 
-		// sleep(3);
+		}
+
 
 		return parent::process();
 

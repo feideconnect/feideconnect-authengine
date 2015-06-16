@@ -24,11 +24,11 @@ class OpenIDConnect {
 
 	}
 
-	public function getIDtoken($sub, $aud, $iat = null) {
+	public function getIDtoken($sub, $aud, $auth_time = null) {
 
 
 		//  generate(TrustStore $trustStore, $iss, $sub, $aud, $expires_in, $setiat) {
-		$idtoken = IDToken::generate($this->trustStore, $this->issuer, $sub, $aud, $this->expiration, $iat);
+		$idtoken = IDToken::generate($this->trustStore, $this->issuer, $sub, $aud, $this->expiration, $auth_time);
 		return $idtoken;
 
 	}
