@@ -3,6 +3,10 @@
 namespace FeideConnect\Authentication;
 
 use FeideConnect\Config;
+
+use FeideConnect\Logger;
+
+
 /**
  * This class handles all authentication, and uses SimpleSAMLphp for that task.
  * It will also handle all local user creation. All new users will be stored in the user repository.
@@ -41,6 +45,8 @@ class Authenticator {
 	}
 
 
+
+
 	/**
 	 * Require authentication of the user. This is meant to be used with user frontend access.
 	 * 
@@ -49,11 +55,47 @@ class Authenticator {
 	 * @param  [type]  $return        URL to return to after login.
 	 * @return void
 	 */
-	public function req($isPassive = false, $allowRedirect = false, $return = null) {
+	public function req($isPassive = false, $allowRedirect = false, $return = null, $maxage = null) {
 
-		if ($this->as->isAuthenticated()) {
+
+		$forceauthn = false;
+
+		if ($this->as->isAuthenticated() && ($maxage === null)) {
 			return;
+
+		} else if ($this->as->isAuthenticated()) {
+
+
+			$now = time();
+			$allowSkew = 20; // 20 seconds clock skew accepted.
+			$authninstant = $this->as->getAuthData("AuthnInstant");
+			$authAge = $now - $authninstant;
+
+			if ($authAge < ($maxage + $allowSkew)) {
+
+				// Already authenticated with a authnetication session which is sufficiently fresh.
+				return;
+			}
+
+			$forceauthn = true;
+
+			Logger::info('OAuth Processing authentication. User is authenticated but with a too old authninstant.', array(
+				'now' => $now,
+				'authninstant' => authninstant,
+				'maxage' => $maxage,
+				'allowskew' => $allowskew,
+				'authage' => $authAge
+			));
+
+
+			// $attributes = $this->as->getAttributes();
+			// if (isset($attributes) && isset($attributes["forcedAuthN"])) {
+			// 	return;
+			// }
 		}
+
+		// $session = \SimpleSAML_Session::getSessionFromRequest();
+		// echo '<pre>'; print_r($session); exit;
 
 		// User is not authenticated locally.
 		// If allowed, attempt is passive authentiation.
@@ -76,9 +118,17 @@ class Authenticator {
 				$options['saml:idp'] = $_COOKIE['idp'];
 			}
 
+			if ($forceauthn) {
+				$options['ForceAuthn'] = true;
+			}
 
-			// echo "about to require authentication "; print_r($options); print_r($_COOKIE); exit;
-			$this->as->requireAuth($options);
+			// echo "about to auth " . var_export($options, true); exit;
+
+			if ($forceauthn) {
+				$this->as->login($options);
+			} else {
+				$this->as->requireAuth($options);
+			}
 
 			return;
 
