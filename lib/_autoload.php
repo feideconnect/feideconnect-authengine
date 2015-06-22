@@ -60,6 +60,62 @@ require_once(dirname(dirname(__DIR__)) . '/simplesamlphp/lib/_autoload.php');
 
 use FeideConnect\Logger;
 
+
+function getStrackTrace() {
+
+
+    // Credits to http://makandracards.com/magento/8123-pretty-backtrace-stack-trace
+    $d = debug_backtrace();
+    array_shift($d);
+    array_shift($d);
+
+    // echo '<pre>'; print_r($d);
+
+    $out = '';
+    $c1width = strlen(count($d) + 1);
+    $c2width = 0;
+    foreach ($d as &$f) {
+        if (!isset($f['file'])) $f['file'] = '';
+        if (!isset($f['line'])) $f['line'] = '';
+        if (!isset($f['class'])) $f['class'] = '';
+        if (!isset($f['type'])) $f['type'] = '';
+        // $f['file_rel'] = str_replace(BP . DS, '', $f['file']);
+        $thisLen = strlen($f['file'] . ':' . $f['line']);
+        if ($c2width < $thisLen) $c2width = $thisLen;
+    }
+    foreach ($d as $i => $f) {
+        $args = '';
+        if (isset($f['args'])) {
+            $args = array();
+            foreach ($f['args'] as $arg) {
+                if (is_object($arg)) {
+                    $str = get_class($arg);
+                } elseif (is_array($arg)) {
+                    $str = 'Array';
+                } elseif (is_numeric($arg)) {
+                    $str = $arg;
+                } else {
+                    $str = "'$arg'";
+                }
+                $args[] = $str;
+            }
+            $args = implode(', ', $args);
+        }
+        $out .= sprintf(
+            "[%{$c1width}s] %-{$c2width}s %s%s%s(%s)\n",
+            $i,
+            $f['file'] . ':' . $f['line'],
+            $f['class'],
+            $f['type'],
+            $f['function'],
+            $args
+        );
+    }
+    return $out;
+
+}
+
+
 /* Log full backtrace on errors and warnings. */
 function Connect_error_handler($errno, $errstr, $errfile = NULL, $errline = 0, $errcontext = NULL) {
 
@@ -70,9 +126,7 @@ function Connect_error_handler($errno, $errstr, $errfile = NULL, $errline = 0, $
         return FALSE;
     }
 
-    var_dump($errcontext); exit;
-
-
+    // echo "<pre>" . getStrackTrace(); exit;
     switch ($errno) {
         case E_USER_ERROR:
 
@@ -80,7 +134,8 @@ function Connect_error_handler($errno, $errstr, $errfile = NULL, $errline = 0, $
                 "type" => "phperror",
                 "line" => $errline,
                 "file" => $errfile,
-                "context" => $errcontext
+                "context" => $errcontext,
+                "stacktrace" => getStrackTrace()
             ]);
 
             exit(1);
@@ -92,7 +147,8 @@ function Connect_error_handler($errno, $errstr, $errfile = NULL, $errline = 0, $
                 "type" => "phperror",
                 "line" => $errline,
                 "file" => $errfile,
-                "context" => $errcontext
+                "context" => $errcontext,
+                "stacktrace" => getStrackTrace()
             ]);
             break;
 
@@ -102,7 +158,8 @@ function Connect_error_handler($errno, $errstr, $errfile = NULL, $errline = 0, $
                 "type" => "phperror",
                 "line" => $errline,
                 "file" => $errfile,
-                "context" => $errcontext
+                "context" => $errcontext,
+                "stacktrace" => getStrackTrace()
             ]);
             break;
 
@@ -113,7 +170,8 @@ function Connect_error_handler($errno, $errstr, $errfile = NULL, $errline = 0, $
                 "type" => "phperror",
                 "line" => $errline,
                 "file" => $errfile,
-                "context" => $errcontext
+                "context" => $errcontext,
+                "stacktrace" => getStrackTrace()
             ]);
             break;
     }
