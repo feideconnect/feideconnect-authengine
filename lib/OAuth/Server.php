@@ -66,18 +66,7 @@ class Server {
 		try {
 
 
-			// If SimpleSAML_Auth_State_exceptionId query parameter is set, then something failed 
-			// while performing authentication.
-			if (!empty($_REQUEST['SimpleSAML_Auth_State_exceptionId'])) {
 
-				// The most likely error is that we are not able to perform passive authentication.
-				throw new OAuthException('access_denied', 'Unable to perform passive authentication [1]');
-
-			} else if (isset($_REQUEST['error']) && $_REQUEST['error'] === '1') {
-
-				// The most likely error is that we are not able to perform passive authentication.
-				throw new OAuthException('access_denied', 'Unable to perform passive authentication [2]');
-			}
 
 			/**
 			 * --- We've now dealted with all error responses that is returned from other systems..
@@ -85,13 +74,9 @@ class Server {
 			 * 
 			 */
 
-
 			// Decide whether to run in passive mode. In passive mode no UI is displayed to the enduser.
 			$passive = false;
 			if (isset($_REQUEST["passive"]) && $_REQUEST["passive"] === 'true') $passive = true;
-
-
-
 
 
 			// Parse the incomming Authorization Request.
@@ -101,12 +86,8 @@ class Server {
 				'passive' => $passive
 			));
 
-
-
 			$pAuthorization = new OAuthAuthorization($request);
 			return $pAuthorization->process();
-
-
 
 
 
@@ -126,7 +107,17 @@ class Server {
 			);
 			Logger::error('OAuth Error Response at Authorization endpoint.', $msg);
 
+
+			// echo "errror<pre>"; print_r($e); exit;
+
 			$response = new Messages\ErrorResponse($msg);
+			if ($e->state !== null) {
+				$response->state = $e->state;
+			}
+			if ($e->redirectURI !== null) {
+				return $response->sendRedirect($e->redirectURI, $e->useHashFragment);
+			}
+			
 			return $response->sendBodyJSON($e->httpcode);
 			
 		}

@@ -44,7 +44,7 @@ class OAuthAuthorization {
 		$this->isPassive = false;
 
 		if (!($this->request instanceof Messages\AuthorizationRequest)) {
-			throw new \Exception("Invalid request object type");
+			throw new OAuthException('invalid_request', 'Could not undestand request object.');
 		}
 
 
@@ -125,6 +125,7 @@ class OAuthAuthorization {
 
 
 		$redirect_uri = $this->aevaluator->getValidatedRedirectURI();
+		$state = $this->request->getState();
 		$scopesInQuestion = $this->aevaluator->getScopesInQuestion();
 
 
@@ -133,7 +134,7 @@ class OAuthAuthorization {
 		if ($this->aevaluator->needsAuthorization() ) {
 
 			if ($this->isPassive) {
-				throw new OAuthException('access_denied', 'User has not authorized, and were unable to perform passive authorization');
+				throw new OAuthException('access_denied', 'User has not authorized, and were unable to perform passive authorization', $state, $redirect_uri, $this->request->useHashFragment());
 			}
 
 		} else {
@@ -205,6 +206,26 @@ class OAuthAuthorization {
 			$this->aevaluator = new AuthorizationEvaluator($this->storage, $this->client, $this->request, $this->user);
 		}
 		
+
+		$redirect_uri = $this->aevaluator->getValidatedRedirectURI();
+		$state = $this->request->getState();
+		
+		// If SimpleSAML_Auth_State_exceptionId query parameter is set, then something failed 
+		// while performing authentication.
+		if (!empty($_REQUEST['SimpleSAML_Auth_State_exceptionId'])) {
+
+			// The most likely error is that we are not able to perform passive authentication.
+			throw new OAuthException('access_denied', 'Unable to perform passive authentication [1]', $state, $redirect_uri, $this->request->useHashFragment());
+
+		} else if (isset($_REQUEST['error']) && $_REQUEST['error'] === '1') {
+
+			// The most likely error is that we are not able to perform passive authentication.
+			throw new OAuthException('access_denied', 'Unable to perform passive authentication [2]', $state, $redirect_uri, $this->request->useHashFragment());
+		}
+
+
+
+
 		// $this->evaluateScopes();
 
 		$stepup = $this->evaluateStepUp($this->aevaluator);

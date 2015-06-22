@@ -19,9 +19,23 @@ class AuthorizationRequest extends Message {
 		
 	}
 
+	public function getState() {
+		if (isset($this->state) && $this->state !== null) {
+			return $this->state;
+		}
+		return null;
+	}
+
 	public function getScopeList() {
 		if (empty($this->scope)) return [];
 		return $this->scope;
+	}
+
+	public function useHashFragment() {
+		if (isset($this->response_type) && $this->response_type === 'token') {
+			return true;
+		}
+		return false;
 	}
 
 }

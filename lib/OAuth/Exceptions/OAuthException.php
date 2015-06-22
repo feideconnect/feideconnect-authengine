@@ -8,8 +8,9 @@ use FeideConnect\Exceptions;
 */
 class OAuthException extends Exceptions\Exception {
 	
-	public $code, $state;
-	function __construct($code, $message, $state = null) {
+	public $code, $state = null, $redirectURI = null, $useHashFragment = false;
+
+	function __construct($code, $message, $state = null, $redirectURI = null, $useHashFragment = false) {
 
 
 		// $httpcode = 500;
@@ -27,11 +28,19 @@ class OAuthException extends Exceptions\Exception {
 			$head = 'Bad Request';
 		}
 
+
+
 		parent::__construct($message, $httpcode, $head);
+
 		$this->code = $code;
 		$this->state = $state;
+		$this->redirectURI = $redirectURI;
+		$this->useHashFragment = $useHashFragment;
 
 	}
+
+
+
 
 
 	
