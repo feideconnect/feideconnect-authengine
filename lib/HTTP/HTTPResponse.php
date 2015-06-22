@@ -78,11 +78,14 @@ class HTTPResponse {
 
 	public function send() {
 
+
 		$this->preprocess();
 
-		$this->sendStatus();
+
 		$this->sendHeaders();
+		$this->sendStatus();
 		$this->sendBody();
+
 
 	}
 
