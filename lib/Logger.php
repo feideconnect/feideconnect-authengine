@@ -122,7 +122,6 @@ class Logger {
 		$l->log('debug', $str, $data);
 	}
 
-
 }
 
 
