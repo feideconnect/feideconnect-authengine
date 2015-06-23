@@ -9,6 +9,7 @@ use FeideConnect\Authentication;
 use FeideConnect\OAuth\APIProtector;
 use FeideConnect\Data\StorageProvider;
 
+
 class Auth {
 
 	static function logout() {
@@ -19,6 +20,7 @@ class Auth {
 	}
 
 	static function userdebug() {
+
 
 		$storage = StorageProvider::getStorage();
 
@@ -38,6 +40,8 @@ class Auth {
 				"mail" => $account->getMail()
 			]
 		];
+		// echo '<pre>';
+		// print_r($response); exit;
 
 		
 		$usermapper = new Authentication\UserMapper($storage);
@@ -49,6 +53,16 @@ class Auth {
 			$response['user'] = $user->getAsArray();	
 			$response['userinfo'] = $user->getUserInfo();
 		}
+
+		if (isset($response["user"]["profilephoto"]) && is_array($response["user"]["profilephoto"])) {
+			$response["user"]["profilephoto"] = array_map("base64_encode", $response["user"]["profilephoto"]);
+		}
+
+		if (isset($response["userinfo"]["profilephoto"]) ) {
+			$response["userinfo"]["profilephoto"] = base64_encode($response["userinfo"]["profilephoto"]);
+		}
+
+		// echo '<pre>'; print_r($response); exit;
 
 		$res = new JSONResponse($response);
 		$res->setCORS(false);
@@ -100,6 +114,9 @@ class Auth {
 	}
 
 	static function authinfo() {
+
+
+
 
 		$storage = StorageProvider::getStorage();
 
