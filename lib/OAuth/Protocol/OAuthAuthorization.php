@@ -9,6 +9,9 @@ use FeideConnect\OAuth\AccessTokenPool;
 use FeideConnect\OAuth\AuthorizationUI;
 use FeideConnect\OAuth\AuthorizationEvaluator;
 
+
+use FeideConnect\Data\Models;
+
 use FeideConnect\Data\StorageProvider;
 use FeideConnect\Authentication\Authenticator;
 use FeideConnect\Authentication\UserMapper;
@@ -200,6 +203,8 @@ class OAuthAuthorization {
 	public function process() {
 
 
+
+
 		$this->checkClient();
 
 		if ($this->aevaluator === null) { 
@@ -225,7 +230,6 @@ class OAuthAuthorization {
 
 
 
-
 		// $this->evaluateScopes();
 
 		$stepup = $this->evaluateStepUp($this->aevaluator);
@@ -240,12 +244,14 @@ class OAuthAuthorization {
 		$res = $this->obtainAuthorization();
 		if ($res !== null) { return $res; }
 
+
 		switch($this->request->response_type) {
 
 			case 'token':
 				return $this->processToken();
 
 			case 'code':
+
 				return $this->processCode();
 
 		}
@@ -285,14 +291,21 @@ class OAuthAuthorization {
 	protected function processCode() {
 
 
+
+
 		$scopesInQuestion = $this->aevaluator->getScopesInQuestion();
 		$redirectURI = null;
 		if (!empty($this->request->redirect_uri)) {
 			$redirectURI = $this->request->redirect_uri;
 		}
 
+
+		
+
 		$code = Models\AuthorizationCode::generate($this->client, $this->user, $redirectURI, $scopesInQuestion);
 		$this->storage->saveAuthorizationCode($code);
+
+
 
 		$tokenresponse = Messages\AuthorizationResponse::generate($this->request, $code);
 
