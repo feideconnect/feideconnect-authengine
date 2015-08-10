@@ -25,6 +25,41 @@ define(function(require, exports, module) {
 	var LocationController = require('./LocationController');
 
 
+	var Waiter = Class.extend({
+		"init": function(callback, waitms) {
+			this.callback = callback;
+			this.counter = 0;
+			this.waitms = waitms || 300;
+		},
+		"ping": function() {
+			var that = this;
+			this.counter++;
+			setTimeout(function() {
+				if (--that.counter <= 0) {
+					if (typeof that.callback === 'function') {
+						that.callback();
+					}
+				}
+			}, this.waitms);
+		}
+
+	});
+
+
+	var normalizeST = function(searchTerm) {
+		var x = searchTerm.toLowerCase().replace(/\W/g, '');
+		if (x === '') {
+			return null;
+		}
+		return x;
+	}
+
+	var stok = function(str) {
+		console.log("STR", str);
+		if (str === null) {return true;}
+		if (str.length > 2) { return true; }
+		return false;
+	}
 
 
     var DiscoveryController = Class.extend({
@@ -39,10 +74,38 @@ define(function(require, exports, module) {
     		this.orgs = [];
     		this.extra = [];
 
+    		this.maxshow = 10;
+
+    		this.searchTerm = null;
+
     		this.parseRequest();
+    		this.searchWaiter = new Waiter(function() {
+    			that.drawData();
+    		});
 
 			$('.dropdown-toggle').dropdown();
 			$('[data-toggle="tooltip"]').tooltip();
+
+			$("body").on("click", "#actshowall", function(e) {
+				e.preventDefault(); e.stopPropagation();
+
+				that.maxshow = 9999;
+				that.drawData();
+			});
+
+			$("#usersearch").on("propertychange change click keyup input paste", function() {
+				var st = normalizeST($("#usersearch").val());
+
+				if (st !== that.searchTerm) {
+					that.searchTerm = st;
+					if (stok(st)) {
+						that.searchWaiter.ping();	
+					}
+				}
+
+
+				console.log("Search term is now ", st);
+			});
 
 			$("body").on("click", ".idplist .idpentry", function(e) {
 				e.preventDefault();
@@ -74,8 +137,6 @@ define(function(require, exports, module) {
 
 
 				that.go(so);
-				
-				
 
 			});
 
@@ -96,6 +157,7 @@ define(function(require, exports, module) {
     		this.loadData();
     		this.loadDataExtra();
     	},
+
 
     	"activate": function() {
 
@@ -162,13 +224,48 @@ define(function(require, exports, module) {
 			});
     	},
 
+    	"matchSearchTerm": function(item) {
+
+    		if (this.searchTerm === null) {
+    			return true;
+    		}
+
+
+    		var searchTerm = this.searchTerm;
+    		console.log("Searching fdor [" + searchTerm + "]");
+
+    		if (item.title.toLowerCase().indexOf(searchTerm) !== -1) {
+    			return true;
+    		}
+
+    		return false;
+
+    	},
+
     	"drawData": function() {
 
 			var txt = '';
+			var c = 1; var missed = 0;
 			for(var i = 0; i < this.orgs.length; i++) {
 
-				var datastr = 'data-id="' + quoteattr(this.feideid) + '" data-subid="' + quoteattr(this.orgs[i].id) + '" data-type="saml"';
+				if (!this.matchSearchTerm(this.orgs[i])) {
+					missed++;
+					continue;
+				}
 
+				if (c > this.maxshow) {
+					var remaining = this.orgs.length - missed - c;
+
+					if (remaining > 0) {
+						txt += '<p style="font-size: 94%; text-align: center"><a style="color: #777" id="actshowall" href="#"><i class="fa fa-chevron-down"></i> show all  &nbsp;' + 
+							'('  + remaining + ' items hidden)</a>'
+
+					}
+					break;
+				}
+				c++;
+
+				var datastr = 'data-id="' + quoteattr(this.feideid) + '" data-subid="' + quoteattr(this.orgs[i].id) + '" data-type="saml"';
 				txt += '<a href="#" class="list-group-item idpentry" ' + datastr + '>' +
 					'<div class="media"><div class="media-left media-middle">' + 
 							'<img class="media-object" style="width: 48px; height: 48px" src="https://api.feideconnect.no/orgs/fc:org:' + this.orgs[i].id + '/logo" alt="...">' + 
@@ -192,7 +289,7 @@ define(function(require, exports, module) {
 				if (this.extra[i].iconImage) {
 					iconImage = '<img class="media-object" style="width: 48px; height: 48px" src="/static/media/disco/' + this.extra[i].iconImage + '" alt="...">';
 				} else if (this.extra[i].icon) {
-					iconImage = '<i class="' + this.extra[i].icon + '"></i>';
+					iconImage = '<i style="margin-left: 6px" class="' + this.extra[i].icon + '"></i>';
 				}
 
 				var idtxt = '';
