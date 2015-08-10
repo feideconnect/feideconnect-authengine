@@ -18,7 +18,6 @@ $storage = StorageProvider::getStorage();
 if ($command[0] === 'user') {
 
 	$userid = $command[1];
-
 	$user = $cli->getUser($userid);
 
 
@@ -172,7 +171,31 @@ if ($command[0] === 'user') {
 
 } else if ($command[0] === 'orgs') {
 
-	$cli->getOrgs();
+
+
+	if (isset($command[1]) && $command[1] === 'update' ) {
+
+
+		$file = json_decode(file_get_contents(dirname(dirname(__FILE__)) . '/var/orgdata.json'));
+
+		// print_r($file); exit;
+
+		foreach($file AS $id => $data) {
+			if (!isset($data->uiinfo)) { continue; }
+
+			$cli->info("Updating info on " . $id);
+			$org = $storage->getOrg("fc:org:" . $id);
+			$storage->updateOrgUIinfo($org, json_encode($data->uiinfo));
+
+			// print_r($data);
+			// exit;
+		}
+
+
+	} else {
+		$cli->getOrgs();
+	}
+
 
 
 } else if ($command[0] === 'org') {
@@ -208,8 +231,7 @@ if ($command[0] === 'user') {
 		$cli->updateOrgLogo($org, $logo);
 
 
-	}
-
+	} 
 
 
 
