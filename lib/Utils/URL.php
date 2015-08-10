@@ -210,6 +210,30 @@ class URL {
 	}
 
 
+	public static function compareHost($url1, $url2 = null) {
+
+		if ( $url2 === null) {
+			$url2 = self::selfURL();
+		}
+
+
+		// PHP prior of 5.3.3 emits a warning if the URL parsing failed.
+		$info1 = @parse_url($url1);
+		if (empty($info1)) {
+			return false;
+		}
+
+		$info2 = @parse_url($url2);
+		if (empty($info2)) {
+			return false;
+		}
+		
+		if ($info1["scheme"] !== $info2["scheme"]) {return false;}
+		if ($info1["host"] !== $info2["host"]) {return false;}
+
+		return true;
+	}
+
 	/**
 	 * Retrieve and return the absolute base URL for the simpleSAMLphp installation.
 	 *
