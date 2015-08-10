@@ -574,13 +574,13 @@ class Cassandra2 extends \FeideConnect\Data\Repository {
 	 * --- Database handling of the 'client' column family
 	 */
 	function getOrgs($count = 500) {
-		$query = 'SELECT id,name,realm,type FROM "organizations" LIMIT :count';
+		$query = 'SELECT id,name,realm,type,uiinfo,service FROM "organizations" LIMIT :count';
 		$params = ['count' => $count];
 		return $this->query($query, $params, __FUNCTION__, 'FeideConnect\Data\Models\Organization', true);
 	}
 
 	function getOrg($orgid) {
-		$query = 'SELECT id,name,realm,type FROM "organizations" WHERE "id" = :orgid';
+		$query = 'SELECT id,name,realm,type,uiinfo,service FROM "organizations" WHERE "id" = :orgid';
 		$params = ['orgid' => $orgid];
 		return $this->query($query, $params, __FUNCTION__, 'FeideConnect\Data\Models\Organization', false);
 	}
@@ -594,6 +594,20 @@ class Cassandra2 extends \FeideConnect\Data\Repository {
 		$params = [
 			'id' => $org->id,
 			'logo' => $logo,
+			'updated' => (new \FeideConnect\Data\Types\Timestamp())->getCassandraTimestamp(),
+		];
+		$this->execute($query, $params, __FUNCTION__);
+
+	}
+
+	function updateOrgUIinfo(Models\Organization $org, $uiinfo) {
+
+		$query = 'UPDATE "organizations" SET uiinfo = :uiinfo, logo_updated = :updated ' . 
+			'WHERE id = :id';
+
+		$params = [
+			'id' => $org->id,
+			'uiinfo' => $uiinfo,
 			'updated' => (new \FeideConnect\Data\Types\Timestamp())->getCassandraTimestamp(),
 		];
 		$this->execute($query, $params, __FUNCTION__);

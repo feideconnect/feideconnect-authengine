@@ -1,0 +1,40 @@
+
+body {
+	padding-top: 0px;
+}
+
+
+.container.mainContainer {
+	max-width: 860px;
+	margin-top: 0px;
+	border-radius: 5px;
+	background-color: white;
+}
+
+/* Small devices (tablets, 768px and up) */
+@media (min-width: 992px) {
+	.container.mainContainer {
+		margin-top: 0em;
+	}
+}
+
+
+#accounts.modeRemove .hideOnRemove {
+	display: none;
+}
+#accounts.modeRemove .showOnRemove {
+	display: inline;
+}
+#accounts .hideOnRemove {
+	display: inline;
+}
+#accounts .showOnRemove {
+	display: none;
+}
+
+
+
+a {
+	color: #228;	
+}
+

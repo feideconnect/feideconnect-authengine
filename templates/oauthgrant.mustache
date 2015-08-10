@@ -19,16 +19,24 @@
 
 		<!-- Javascript libraries -->
 		<script type="text/javascript" src="/static/components/jquery/dist/jquery.min.js"></script>
-		<script type="text/javascript" src="/static/js/grant.js"></script>
+<!-- 		<script type="text/javascript" src="/static/js/grant.js"></script> -->
 		<script type="text/javascript" src="/static/components/bootstrap/dist/js/bootstrap.min.js"></script>
 
-		<!-- <script type="text/javascript" src="/_/js/require.js"></script> -->
-		<!-- <script type="text/javascript" src="/static/oauthgrant/main.js"></script> -->
-		
+
+		<script type="text/javascript">
+			var visualTag = {{{visualTag}}};
+			var require = {
+				paths: {
+					"components": "../components"
+				}
+			};
+		</script>
+		<script data-main="/static/oauthgrant/main" src="/static/components/requirejs/require.js"></script>
+
 	</head>
 
 
-	<body class="{{bodyclass}}">
+	<body class="{{bodyclass}}" style="display: none">
 
 
 		<div class="container mainContainer" >

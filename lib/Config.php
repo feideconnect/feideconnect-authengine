@@ -101,11 +101,26 @@ class Config {
 		$configFilename = self::dir('etc/', $file);
 		// echo "Looking for " . $configFilename;
 		if (!file_exists($configFilename)) {
+			self::makeEmptyInstance();
 			throw new \Exception('Could not find config file ' . $configFilename);
 		}
-		$config = json_decode(file_get_contents($configFilename), true);
+		$configRaw = file_get_contents($configFilename);
+		if (empty($configRaw)) {
+			self::makeEmptyInstance();
+			throw new \Exception('Config file was empty');
+		}
+		$config = json_decode($configRaw, true);
+		if ($config === null || !is_array($config)) {
+			self::makeEmptyInstance();
+			throw new \Exception('Config file was not properly encoded JSON');
+		}
 
 		self::$instance = new Config($config);
+		return self::$instance;
+	}
+
+	public static function makeEmptyInstance() {
+		self::$instance = new Config([]);
 		return self::$instance;
 	}
 
@@ -141,6 +156,21 @@ class Config {
 
 		$base = $endpoints[$component];
 		return $base . '/' . $path . $file;
+	}
+
+
+	public static function filepath($path = '') {
+
+		$filepath = $path;
+
+		if (empty($path)) { return self::baseDir(); }
+
+		if ($path[0] === '/') {
+			return $filepath;
+		}
+
+		return self::baseDir() . '/' . $path;
+
 	}
 
 

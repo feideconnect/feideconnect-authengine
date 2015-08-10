@@ -74,6 +74,8 @@ class AttributeMapper {
 
 	function getAccount($attributes) {
 
+		// echo '<pre>'; print_r($attributes); exit;
+
 		if (!isset($attributes['authSource'])) {
 			throw new Exception("AuthSource was not set on authenticated user.");
 		}

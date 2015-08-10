@@ -15,6 +15,7 @@ class Account {
 	protected $accountMapRules;
 
 	function __construct($attributes, $accountMapRules) {
+
 		$this->attributes = $attributes;
 		$this->accountMapRules = $accountMapRules;
 
@@ -31,7 +32,7 @@ class Account {
 
 		$this->userids = $this->obtainUserIDs();
 
-
+		$this->idp    = $this->attributes["idp"];
 		$this->realm  = $this->get("realm");
 		$this->org    = $this->get("org");
 		$this->name   = $this->get("name", '');
@@ -39,7 +40,11 @@ class Account {
 		$this->yob    = $this->get("yob");
 		$this->sourceID = $this->get("sourceID", null, true);
 
+		// echo '<pre>'; print_r($this); exit;
+
 		$this->photo  = $this->obtainPhoto();
+
+		
 
 
 		// echo '<pre>We got this account map rules: ' . "\n";
@@ -50,7 +55,112 @@ class Account {
 		// exit;
 
 
-	}	
+	}
+
+	private function maskNin() {
+
+		$res = [];
+		foreach($this->userids AS $uid) {
+			if(strpos($uid, 'nin:') === 0){
+				
+				if (preg_match('/^nin:(\d{4})\d{7}/', $uid, $matches)) {
+					$res[] = 'nin:' . $matches[1] . '.......';
+				} else {
+					$res[] = 'nin:...........';
+				}
+			} else {
+				$res[] = $uid;
+			}
+		}
+		return $res;
+
+	}
+
+
+	// TODO: Update this code to automatically
+	public function getVisualTag() {
+
+		if (isset($this->sourceID) && preg_match("/^feide:(.*?)$/", $this->sourceID, $matches)) {
+
+			$org = $matches[1];
+			$tag = [
+				"name" => $this->name,
+				"type" => "saml",
+				"id" => "https://idp-test.feide.no",
+				"subid" => $org,
+				"title" => $this->org,
+				"userids" => $this->userids
+ 			];
+ 			return $tag;
+
+		} else if (isset($this->sourceID) && $this->sourceID === 'idporten') {
+
+			$org = $matches[1];
+			$tag = [
+				"name" => $this->name,
+				"type" => "saml",
+				"id" => "idporten.difi.no-v2",
+				"title" => 'IDporten',
+				"userids" => $this->maskNin($this->userids)
+ 			];
+ 			return $tag;
+
+		} else if (isset($this->sourceID) && $this->sourceID === 'openidp') {
+
+			$org = $matches[1];
+			$tag = [
+				"name" => $this->name,
+				"type" => "saml",
+				"id" => "https://openidp.feide.no",
+				"title" => 'Feide OpenIdP guest account',
+				"userids" => $this->userids
+ 			];
+ 			return $tag;
+
+		} else if (isset($this->sourceID) && $this->sourceID === 'twitter') {
+
+			$org = $matches[1];
+			$tag = [
+				"name" => $this->name,
+				"type" => "twitter",
+				"title" => 'Twitter',
+				"userids" => $this->userids
+ 			];
+ 			return $tag;
+
+		} else if (isset($this->sourceID) && $this->sourceID === 'linkedin') {
+
+			$org = $matches[1];
+			$tag = [
+				"name" => $this->name,
+				"type" => "linkedin",
+				"title" => 'LinkedIn',
+				"userids" => $this->userids
+ 			];
+ 			return $tag;
+
+		} else if (isset($this->sourceID) && $this->sourceID === 'facebook') {
+
+			$org = $matches[1];
+			$tag = [
+				"name" => $this->name,
+				"type" => "facebook",
+				"title" => 'Facebook',
+				"userids" => $this->userids
+ 			];
+ 			return $tag;
+
+		}
+
+
+		return [
+			"name" => $this->name,
+			"title" => "Unknown",
+			"userids" => $this->userids,
+		];
+
+	}
+
 
 	public function getAuthInstant() {
 
@@ -117,6 +227,27 @@ class Account {
 
 			return $this->getComplexSourceID($def);
 
+		} else if (isset($def["type"]) && $def["type"] === "urlref") {
+
+			if (!isset($def["attrname"])) {
+				throw new Exception("Missing [attrname] on complex attribute definition");
+			}
+			$attrname = $def["attrname"];
+			$url = $this->getValue($attrname);
+
+			$prot = parse_url($url, PHP_URL_SCHEME);
+			if ($prot === false) {
+				return null;
+			}
+			if (!in_array($prot, ["http", "https"])) {
+				return null;
+			}
+
+			$value = file_get_contents($url);
+			// echo $value; exit;
+
+			return $value;
+
 		} else if (isset($def["attrnames"]) && is_array($def["attrnames"])) {
 
 			$attrnames = $def["attrnames"];
@@ -131,6 +262,7 @@ class Account {
 
 		}
 
+		// echo '<pre>'; var_dump($def); var_dump($default); var_dump($required); exit;
 		throw new Exception("Unreckognized complex attribute mapping ruleset");
 
 	}
@@ -188,15 +320,21 @@ class Account {
 		if (!array_key_exists($property, $this->accountMapRules)) {
 			throw new Exception("No defined attribute account map rule for property [" . $property . "]");
 		}
+		// echo '<pre>_'; print_r($this->accountMapRules['photo']); exit;
+
 		if ($this->accountMapRules[$property] === null) {
 			return null;
 		}
 
-		if (isset($this->attributes[$this->accountMapRules[$property]])) {
+		if (is_string($this->accountMapRules[$property])) {
+			if (empty($this->attributes[$this->accountMapRules[$property]])) { return null; }
 			$value = $this->attributes[$this->accountMapRules[$property]][0];
 			return new AccountPhoto($value);
+		} else {
+			$value = $this->getComplex($this->accountMapRules[$property]);
+			$value = base64_encode($value);
+			return new AccountPhoto($value);
 		}
-
 
 	}
 

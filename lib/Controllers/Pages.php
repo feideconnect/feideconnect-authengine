@@ -32,6 +32,11 @@ class Pages {
 		return new TextResponse($txt);
 	}
 
+	static function emptyResponse() {
+
+		return (new TemplatedHTMLResponse('emptyresponsee'));
+
+	}
 
 	static function debug() {
 

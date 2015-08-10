@@ -5,17 +5,29 @@ namespace FeideConnect\Controllers;
 
 use FeideConnect\HTTP\HTTPResponse;
 use FeideConnect\HTTP\JSONResponse;
+use FeideConnect\HTTP\Redirect;
 use FeideConnect\Authentication;
 use FeideConnect\OAuth\APIProtector;
 use FeideConnect\Data\StorageProvider;
-
+use FeideConnect\Utils\URL;
 
 class Auth {
 
 	static function logout() {
 
-		$auth = new Authentication\Authenticator();
+		// echo '<pre>'; print_r($_SESSION); exit;
+
+		// Authentication\Authenticator::logoutAll();
+
+
+		$auth = new Authentication\Authenticator($authconfig);
 		$auth->logout();
+
+		return new Redirect('/loggedout');
+
+		// $auth = new Auth
+		// entication\Authenticator();
+		// $auth->logout();
 
 	}
 
@@ -24,8 +36,34 @@ class Auth {
 
 		$storage = StorageProvider::getStorage();
 
-		$auth = new Authentication\Authenticator();
-		$auth->req(false, true); // require($isPassive = false, $allowRedirect = false, $return = null
+		// $accountchooser = new Authentication\AccountChooserProtocol();
+		// // $accountchooser->debug();
+
+		// if (!$accountchooser->hasResponse()) {
+		// 	$requestURL = $accountchooser->getRequest();
+		// 	URL::redirect($requestURL);
+		// }
+
+		// $authconfig = [
+		// 	"type" => "twitter"
+		// ];
+		// $authconfig = $accountchooser->getAuthConfig();
+		$authconfig = [];
+		// echo '<pre>Auth config is '; print_r($authconfig); exit;
+// 
+		$auth = new Authentication\Authenticator($authconfig);
+
+		if (isset($_REQUEST['logout']) && $_REQUEST['logout'] === '1') {
+			$auth->logout();
+			$res = ['logout' => "ok"];
+			$res = new JSONResponse($response);
+			$res->setCORS(false);
+			return $res;
+		}
+
+
+
+		$auth->requireAuthentication(false, true); // require($isPassive = false, $allowRedirect = false, $return = null
 
 		$account = $auth->getAccount();
 
@@ -46,7 +84,10 @@ class Auth {
 		
 		$usermapper = new Authentication\UserMapper($storage);
 
-		$user = $usermapper->getUser($account, false, true, false);
+
+
+		$user = $usermapper->getUser($account, true, true, false);
+
 		// header('Content-type: text/plain');
 		// print_r($user); exit;
 		if (isset($user)) {
@@ -114,9 +155,6 @@ class Auth {
 	}
 
 	static function authinfo() {
-
-
-
 
 		$storage = StorageProvider::getStorage();
 

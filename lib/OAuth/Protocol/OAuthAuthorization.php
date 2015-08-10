@@ -41,9 +41,10 @@ class OAuthAuthorization {
 
 
 		$this->storage = StorageProvider::getStorage();
-		$this->auth = new Authenticator();
-		$this->request = $request;
 
+
+		$this->request = $request;
+		$this->auth = new Authenticator();
 		$this->isPassive = false;
 
 		if (!($this->request instanceof Messages\AuthorizationRequest)) {
@@ -99,7 +100,7 @@ class OAuthAuthorization {
 
 
 
-		$this->auth->req($this->isPassive, true, null, $this->maxage); // require($isPassive = false, $allowRedirect = false, $return = null
+		$this->auth->requireAuthentication($this->isPassive, true, null, $this->maxage); // require($isPassive = false, $allowRedirect = false, $return = null
 		$this->account = $this->auth->getAccount();
 
 		$this->organization = $this->account->getOrg();
@@ -288,10 +289,9 @@ class OAuthAuthorization {
 
 	}
 
+	
+
 	protected function processCode() {
-
-
-
 
 		$scopesInQuestion = $this->aevaluator->getScopesInQuestion();
 		$redirectURI = null;
@@ -299,13 +299,8 @@ class OAuthAuthorization {
 			$redirectURI = $this->request->redirect_uri;
 		}
 
-
-		
-
 		$code = Models\AuthorizationCode::generate($this->client, $this->user, $redirectURI, $scopesInQuestion);
 		$this->storage->saveAuthorizationCode($code);
-
-
 
 		$tokenresponse = Messages\AuthorizationResponse::generate($this->request, $code);
 

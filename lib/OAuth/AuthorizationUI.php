@@ -37,6 +37,7 @@ class AuthorizationUI {
 	function show() {
 
 
+
 		$postattrs = $_REQUEST;
 		$postattrs['client_id'] = $this->client->id;
 		$postattrs['verifier'] = $this->user->getVerifier();
@@ -68,6 +69,21 @@ class AuthorizationUI {
 		if (!$needs) {
 			$simpleView = true;
 		}
+
+		$bypass = $simpleView;
+		if ($firsttime) {
+			$bypass = false;
+		}
+
+		// echo '<p>Is mandatory'; var_dump($isMandatory);
+		// echo '<p>needs'; var_dump($needs);
+		// echo '<p>firsttime'; var_dump($firsttime);
+		// echo '<p>Simple view '; var_dump($simpleView);
+		// echo '<p>bypass '; var_dump($bypass);
+		// // echo '<p>Client '; var_dump($this->client);
+		// exit;
+
+
 		// echo 'Realm is ' . $account->getRealm(); exit;
 
 
@@ -78,7 +94,29 @@ class AuthorizationUI {
 		$userinfo['userid'] = $this->user->userid;
 		$userinfo['p'] = $this->user->getProfileAccess();
 
-		// echo '<pre>'; print_r($this->user); exit;
+		// echo '<pre>'; print_r($userinfo); exit;
+
+		$visualTag = $this->account->getVisualTag();
+		$visualTag["photo"] = '/user/media/' . $userinfo["p"];
+		$visualTag["photo"] = Config::dir('userinfo/v1/user/media/' . $userinfo["p"], "", "core");
+		$visualTag['rememberme'] = false;
+
+
+
+
+		$acresponse = [];
+		if (isset($_REQUEST['acresponse'])) {
+			$acresponse = json_decode($_REQUEST['acresponse'], true);
+		}
+		// echo '<pre>'; var_dump($acresponse); exit;
+		if (isset($acresponse["rememberme"]) && $acresponse["rememberme"]) {
+			$visualTag['rememberme'] = true;
+		}
+
+
+
+		// echo '<pre>'; print_r($visualTag); exit;
+
 
 		$data = [
 			'perms' => $scopesInspector->getInfo(),
@@ -88,18 +126,26 @@ class AuthorizationUI {
 			'postdata' => $postdata,
 			'client' => $this->client->getAsArrayLimited(["id", "name", "descr", "redirect_uri", "scopes"]),
 			'HOST' => Utils\URL::selfURLhost(),
+			'visualTag' => json_encode($visualTag),
+			'rememberme' => false,
 		];
 
 
+		// var_dump($visualTag); exit;
+		
 		$data['needsAuthorization'] = $needs;
 
 
 		$data['client']['host'] = Utils\URL::getURLhostPart($this->redirect_uri);
 		$data['client']['isSecure'] = Utils\URL::isSecure($this->redirect_uri); // $oauthclient->isRedirectURISecured();
 
+		$data['simpleView'] = $simpleView;
 		$data['bodyclass'] = '';
 		if ($simpleView) {
 			$data['bodyclass'] = 'simpleGrant';
+		}
+		if ($bypass) {
+			$data['bodyclass'] .= ' bypass';
 		}
 		$data['firsttime'] = $firsttime;
 		$data['organization'] = $this->organization;
@@ -108,7 +154,10 @@ class AuthorizationUI {
 		$data["apibase"] = Config::getValue("endpoints.core");
 
 
-		// echo '<pre>'; print_r($this->remainingScopes); exit;
+		// echo '<pre>'; 
+		// var_dump($this->account);
+		// var_dump($visualTag);
+		// exit;
 
 
 		if ($this->client->has('organization')) {

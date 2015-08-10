@@ -262,6 +262,8 @@ CREATE TABLE organizations(
        type set<text>,
        organization_number text,
        name map<text, text>,
+       uiinfo text,
+       service map<text, boolean>,
        logo blob,
        logo_updated timestamp
 );

@@ -15,6 +15,7 @@
 		"php": ">=5.4",
 		"mustache/mustache": "~2.6",
 		"nategood/commando": "*",
+        "geoip2/geoip2": "0.6.*",
 		"firebase/php-jwt": "*",
 		"monolog/monolog": "~1.11.0",
 		"phroute/phroute": "*",

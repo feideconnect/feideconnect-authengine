@@ -4,6 +4,7 @@
 namespace FeideConnect\Controllers;
 
 use FeideConnect\HTTP\ImageResponse;
+use FeideConnect\HTTP\JSONResponse;
 use FeideConnect\Config;
 use FeideConnect\Data\StorageProvider;
 use FeideConnect\Authentication\UserID;
@@ -54,6 +55,65 @@ class Data {
 		}
 		return $response;
 	}
+
+	static function scmp($a, $b) {
+
+		$ax = ($a["distance"] === null ? 9999 : $a["distance"]);
+		$bx = ($b["distance"] === null ? 9999 : $b["distance"]);
+
+
+		return ($ax < $bx) ? -1 : 1;
+	}
+
+	static function getOrgs() {
+
+		$lat = $_REQUEST['lat']; 
+		$lon = $_REQUEST['lon'];
+
+		$storage = StorageProvider::getStorage();
+		$orgs = $storage->getOrgs();
+		$data = [];
+		$subscribers = [
+            "fjellhaug.no",
+            "hioa.no",
+            "uninett.no",
+            "uib.no",
+            "ntnu.no",
+            "feide.egms.no",
+            "hin.no",
+            "hihm.no",
+            "hiof.no",
+            "skole.fredrikstad.no"
+        ];
+		foreach($orgs AS $org) {
+			if (!$org->isHomeOrg()) { continue; }
+			if (!in_array($org->realm, $subscribers)) { continue; }
+			$di = $org->getOrgInfo($lat, $lon);
+			$data[] = $di;
+		}
+
+
+		usort($data, ["\FeideConnect\Controllers\Data", "scmp"]);
+
+
+		// echo '<pre>';
+		// foreach($data AS $d) {
+		// 	echo join(',', $d["type"]) . "\n";
+		// }
+
+		// echo '<pre>Data:'; print_r($data); exit;
+		return new JSONResponse($data);
+	}
+
+
+	static function accountchooserExtra() {
+
+
+		$data = Config::readJSONfile("disco2.json");
+		return new JSONResponse($data);
+
+	}
+
 
 
 

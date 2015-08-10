@@ -31,6 +31,7 @@ class Router {
 		// Data APIs
 		$this->router->get('/user/media/{userid:[a-zA-Z0-9_\-\.:]+ }', ['FeideConnect\Controllers\Data', 'getUserProfilephoto']);
 		$this->router->get('/client/media/{clientid:[a-fA-F0-9\-]+ }', ['FeideConnect\Controllers\Data', 'getClientLogo']);
+		$this->router->get('/orgs', ['FeideConnect\Controllers\Data', 'getOrgs']);
 
 
 		// OAuth
@@ -50,7 +51,11 @@ class Router {
 
 		// IdP Discovery page
 		$this->router->get('/disco', ['FeideConnect\Controllers\Disco', 'process']);
+		$this->router->get('/accountchooser', ['FeideConnect\Controllers\AccountChooser', 'process']);
+		$this->router->get('/accountchooser/extra', ['FeideConnect\Controllers\Data', 'accountchooserExtra']);
+		$this->router->get('/accountchooser/response', ['FeideConnect\Controllers\Pages', 'emptyResponse']);
 
+		$this->router->get('/whereami', ['FeideConnect\Controllers\WhereAmI', 'process']);
 
 		$this->router->get('/debug', ['FeideConnect\Controllers\Pages', 'debug']);
 
