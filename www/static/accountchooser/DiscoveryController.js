@@ -23,13 +23,19 @@ define(function(require, exports, module) {
 
 	var FeideWriter = require('./FeideWriter');
 	var LocationController = require('./LocationController');
+	var DiscoveryFeedLoader = require('./DiscoveryFeedLoader');
 
+	var Provider = require('./models/Provider');
+	var NorwegianOrg = require('./models/NorwegianOrg');
 
 	var Waiter = Class.extend({
 		"init": function(callback, waitms) {
 			this.callback = callback;
 			this.counter = 0;
 			this.waitms = waitms || 300;
+
+
+
 		},
 		"ping": function() {
 			var that = this;
@@ -71,8 +77,16 @@ define(function(require, exports, module) {
     		this.feideid = 'https://idp.feide.no';
     		this.feideid = 'https://idp-test.feide.no';
 
+    		this.country = 'no';
+    		this.countries = {};
+    		for(var i = 0; i < countries.length; i++) {
+    			this.countries[countries[i].id] = countries[i].title;
+    		}
+
+
     		this.orgs = [];
     		this.extra = [];
+    		this.providers = [];
 
     		this.maxshow = 10;
 
@@ -83,6 +97,19 @@ define(function(require, exports, module) {
     			that.drawData();
     		});
 
+			this.dfl = new DiscoveryFeedLoader();
+			this.dfl.onUpdate(function(providers) {
+				that.providers = [];
+				for(var i = 0; i < providers.length; i++) {
+					that.providers.push(new Provider(providers[i]));
+				}
+
+				// console.error("Received", that.country);
+				if (that.country !== "no") {
+					that.drawData();
+				}
+			});
+
 			$('.dropdown-toggle').dropdown();
 			$('[data-toggle="tooltip"]').tooltip();
 
@@ -90,6 +117,13 @@ define(function(require, exports, module) {
 				e.preventDefault(); e.stopPropagation();
 
 				that.maxshow = 9999;
+				that.drawData();
+			});
+
+			$("#countryselector").on("click", ".selectcountry", function(e) {
+				// e.preventDefault(); e.stopPropagation();
+				var c = $(e.currentTarget).data("country");
+				that.updateCurrentCountry(c);
 				that.drawData();
 			});
 
@@ -140,6 +174,13 @@ define(function(require, exports, module) {
 
 			});
 
+    	},
+
+    	"updateCurrentCountry": function(c) {
+    		// console.log("Selected country is " + c);
+    		this.country = c;
+    		// console.log(this.countries);
+    		$("#selectedcountry").empty().append('<img style="margin-top: -3px; margin-right: 5px" src="/static/media/flag/' + c + '.png"> ' + this.countries[c] +' <span class="caret"></span>');
     	},
 
     	"initialize": function() {
@@ -206,6 +247,20 @@ define(function(require, exports, module) {
     		}
     	},
 
+    	"loadData": function() {
+    		var that = this;
+    		var loc = this.location.getLocation();
+			$.getJSON('/orgs?lat=' + loc.lat + '&lon=' + loc.lon + '', function(orgs) {
+
+				that.orgs = [];
+				for(var i = 0; i < orgs.length; i++) {
+					that.orgs.push(new NorwegianOrg(orgs[i]));
+				}
+
+				that.drawData();
+			});
+    	},
+
     	"loadDataExtra": function() {
     		var that = this;
 			$.getJSON('/accountchooser/extra', function(extra) {
@@ -215,14 +270,6 @@ define(function(require, exports, module) {
 
     	},
 
-    	"loadData": function() {
-    		var that = this;
-    		var loc = this.location.getLocation();
-			$.getJSON('/orgs?lat=' + loc.lat + '&lon=' + loc.lon + '', function(orgs) {
-				that.orgs = orgs;
-				that.drawData();
-			});
-    	},
 
     	"matchSearchTerm": function(item) {
 
@@ -244,17 +291,27 @@ define(function(require, exports, module) {
 
     	"drawData": function() {
 
+    		var it = null;
+
+    		console.error("Draw data with ", this.country);
+    		if (this.country === 'no') {
+    			it = this.orgs;
+    		} else {
+    			it = this.providers;
+    		}
+
+
 			var txt = '';
 			var c = 1; var missed = 0;
-			for(var i = 0; i < this.orgs.length; i++) {
+			for(var i = 0; i < it.length; i++) {
 
-				if (!this.matchSearchTerm(this.orgs[i])) {
+				if (!this.matchSearchTerm(it[i])) {
 					missed++;
 					continue;
 				}
 
 				if (c > this.maxshow) {
-					var remaining = this.orgs.length - missed - c;
+					var remaining = it.length - missed - c;
 
 					if (remaining > 0) {
 						txt += '<p style="font-size: 94%; text-align: center"><a style="color: #777" id="actshowall" href="#"><i class="fa fa-chevron-down"></i> show all  &nbsp;' + 
@@ -265,14 +322,10 @@ define(function(require, exports, module) {
 				}
 				c++;
 
-				var datastr = 'data-id="' + quoteattr(this.feideid) + '" data-subid="' + quoteattr(this.orgs[i].id) + '" data-type="saml"';
-				txt += '<a href="#" class="list-group-item idpentry" ' + datastr + '>' +
-					'<div class="media"><div class="media-left media-middle">' + 
-							'<img class="media-object" style="width: 48px; height: 48px" src="https://api.feideconnect.no/orgs/fc:org:' + this.orgs[i].id + '/logo" alt="...">' + 
-						'</div>' +
-						'<div class="media-body"><p>' + this.orgs[i].title + '</p></div>' +
-					'</div>' +
-				'</a>';
+
+				txt += it[i].getHTML();
+
+
 
 			}
 			$("#idplist").empty().append(txt);

@@ -37,10 +37,13 @@ class AccountChooser {
 			}
 		}
 
+		$countries = Config::readJSONfile("countries.json");
+
 		$l = new GeoLocation();
 		$data["location"] = $l->getLocation();
 		$data["extra"] = Config::readJSONfile("disco2.json");
-		$data["countries"] = Config::readJSONfile("countries.json");
+		$data["countries"] = $countries;
+		$data["countriesJSON"] = json_encode($countries);
 		$data["request"] = $request;
 		$data["requestJSON"] = json_encode($request);
 		
