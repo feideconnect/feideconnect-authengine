@@ -29,7 +29,7 @@ class Organization extends \FeideConnect\Data\Model {
 	public $id, $name, $realm, $type, $uiinfo, $service;
 
 	protected static $_properties = array(
-		"id", "name", "realm", "type", "uiinfo", "service"
+		"id", "name", "realm", "type", "uiinfo", "services"
 	);
 	protected static $_types = [
 	];
@@ -96,9 +96,12 @@ class Organization extends \FeideConnect\Data\Model {
 		$lang = Misc::get_browser_language(array_keys($prepared["name"]));
 		$res["title"] = $prepared["name"][$lang];
 		$res["uiinfo"] = $prepared["uiinfo"];
+		$res["services"] = $prepared["services"];
 
 		if ($lat !== null && $lon !== null) {
 			$res["distance"] = $this->distance($lat, $lon);
+		} else {
+			$res["distance"] = null;
 		}
 		
 		return $res;

@@ -98,8 +98,6 @@ class OAuthAuthorization {
 
 		if ($this->user !== null) { return; }
 
-
-
 		$this->auth->requireAuthentication($this->isPassive, true, null, $this->maxage); // require($isPassive = false, $allowRedirect = false, $return = null
 		$this->account = $this->auth->getAccount();
 

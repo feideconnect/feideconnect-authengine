@@ -32,6 +32,7 @@ define(function(require, exports, module) {
 			} else {
 				txt += '<div class="media-object" style="width: 200px; text-align: right">&nbsp;</div>';
 			}
+			
 
 			txt +=	'</div>' +
 					'<div class="media-body"><p style="margin-left: 10px">' + this.title + '</p></div>' +

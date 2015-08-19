@@ -58,6 +58,7 @@ class Data {
 
 	static function scmp($a, $b) {
 
+
 		$ax = ($a["distance"] === null ? 9999 : $a["distance"]);
 		$bx = ($b["distance"] === null ? 9999 : $b["distance"]);
 
@@ -71,23 +72,12 @@ class Data {
 		$lon = $_REQUEST['lon'];
 
 		$storage = StorageProvider::getStorage();
-		$orgs = $storage->getOrgs();
+		$orgs = $storage->getOrgsByService('pilot');
 		$data = [];
-		$subscribers = [
-            "fjellhaug.no",
-            "hioa.no",
-            "uninett.no",
-            "uib.no",
-            "ntnu.no",
-            "feide.egms.no",
-            "hin.no",
-            "hihm.no",
-            "hiof.no",
-            "skole.fredrikstad.no"
-        ];
+
 		foreach($orgs AS $org) {
 			if (!$org->isHomeOrg()) { continue; }
-			if (!in_array($org->realm, $subscribers)) { continue; }
+			// if (!in_array($org->realm, $subscribers)) { continue; }
 			$di = $org->getOrgInfo($lat, $lon);
 			$data[] = $di;
 		}

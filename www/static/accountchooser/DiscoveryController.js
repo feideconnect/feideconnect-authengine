@@ -162,12 +162,14 @@ define(function(require, exports, module) {
 
 				so.rememberme = $("#rememberme").is(":checked");
 				
-
 				if (!that.request.return) {
 					console.error("Invalid return address"); 
 					return;
 				}
 
+				if (t.hasClass("disabled")) {
+					return alert("This provider is not yet technically connected to the Connect pilot.");
+				}
 
 				that.go(so);
 
@@ -231,7 +233,7 @@ define(function(require, exports, module) {
 
     	"updateLocationView": function() {
     		var loc = this.location.getLocation();
-    		console.error("Location is ", loc);
+    		// console.error("Location is ", loc);
 			$("#locationtitle").empty().append(loc.title);
 			if (loc.stored) {
 				$("#removelocation").show();
@@ -277,10 +279,14 @@ define(function(require, exports, module) {
     			return true;
     		}
 
-
     		var searchTerm = this.searchTerm;
-    		console.log("Searching fdor [" + searchTerm + "]");
+    		console.log("Searching for [" + searchTerm + "]");
 
+
+    		if (item.title === null) {
+    			console.error("Title is empty", item); 
+    			return false;
+    		}
     		if (item.title.toLowerCase().indexOf(searchTerm) !== -1) {
     			return true;
     		}
@@ -330,7 +336,7 @@ define(function(require, exports, module) {
     		var that = this;
     		var it = null;
 
-    		console.error("Draw data with ", this.country);
+    		// console.error("Draw data with ", this.country);
     		if (this.country === 'no') {
     			it = this.orgs;
     		} else {
