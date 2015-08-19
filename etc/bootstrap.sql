@@ -51,6 +51,7 @@ DROP INDEX IF EXISTS organizations_kindid_idx;
 DROP INDEX IF EXISTS organizations_realm_idx;
 DROP INDEX IF EXISTS organizations_organization_number_idx;
 DROP INDEX IF EXISTS organizations_type_idx;
+DROP INDEX IF EXISTS organizations_services_idx;
 
 DROP TABLE IF EXISTS roles;
 DROP INDEX IF EXISTS roles_orgid_idx;
@@ -273,6 +274,7 @@ CREATE INDEX organizations_kindid_idx ON organizations(kindid);
 CREATE INDEX organizations_realm_idx ON organizations(realm);
 CREATE INDEX organizations_organization_number_idx ON organizations(organization_number);
 CREATE INDEX organizations_type_idx ON organizations(type);
+CREATE INDEX organizations_services_idx ON organizations(services);
 
 
 CREATE TABLE roles(
