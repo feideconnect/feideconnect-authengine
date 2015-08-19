@@ -14,3 +14,15 @@ Get information about users
 
 
 
+
+
+## Updating information about organizations
+
+Setting a logo
+
+	bin/feideconnect.php org fc:org:uio.no setlogo var/uio.png
+
+Updating uiinfo from `var/orginfo.json`
+
+	bin/feideconnect.php orgs update	
+
