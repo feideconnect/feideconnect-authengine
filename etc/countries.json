@@ -4,6 +4,22 @@
 		"id": "no"
 	},
 	{
+		"title": "Denmark",
+		"id": "dk"
+	},
+	{
+		"title": "Finland",
+		"id": "fi"
+	},
+	{
+		"title": "Sweden",
+		"id": "se"
+	},
+	{
+		"title": "Iceland",
+		"id": "is"
+	},
+	{
 		"title": "Netherlands",
 		"id": "nl"
 	}
