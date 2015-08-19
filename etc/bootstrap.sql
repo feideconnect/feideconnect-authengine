@@ -56,6 +56,7 @@ DROP INDEX IF EXISTS organizations_services_idx;
 DROP TABLE IF EXISTS roles;
 DROP INDEX IF EXISTS roles_orgid_idx;
 
+DROP TABLE IF EXISTS remote_apigatekeepers;
 
 /* Clients */
 CREATE TABLE clients (
@@ -284,3 +285,7 @@ CREATE TABLE roles(
        PRIMARY KEY(feideid, orgid)
 );
 CREATE INDEX roles_orgid_idx ON roles(orgid);
+
+CREATE TABLE feideconnect.remote_apigatekeepers (
+    fqdn text PRIMARY KEY
+);
