@@ -19,6 +19,25 @@ define(function(require, exports, module) {
 	        .replace(/[\r\n]/g, preserveCR);
 	}
 
+	/**
+	 * Functional description
+	 *
+	 * Will load metadata fee from these sourceS:
+	 * - DiscoJuice/edugain
+	 * - Feide org API
+	 * - Extra feed
+	 *
+	 * Will handle 
+	 * - selection of country,
+	 * - Incremental search
+	 * - Geo location changes  (LocationController)
+	 * - Selecting a provider.
+	 * 	- including feide preselect org (FeideWriter)
+	 * 
+	 */
+
+
+
 	var Class = require('./Class');
 
 	var FeideWriter = require('./FeideWriter');
@@ -28,28 +47,7 @@ define(function(require, exports, module) {
 	var Provider = require('./models/Provider');
 	var NorwegianOrg = require('./models/NorwegianOrg');
 
-	var Waiter = Class.extend({
-		"init": function(callback, waitms) {
-			this.callback = callback;
-			this.counter = 0;
-			this.waitms = waitms || 300;
-
-
-
-		},
-		"ping": function() {
-			var that = this;
-			this.counter++;
-			setTimeout(function() {
-				if (--that.counter <= 0) {
-					if (typeof that.callback === 'function') {
-						that.callback();
-					}
-				}
-			}, this.waitms);
-		}
-
-	});
+	var Waiter = require('./Waiter');
 
 
 	var normalizeST = function(searchTerm) {
@@ -72,10 +70,11 @@ define(function(require, exports, module) {
     	"init": function() {
     		var that = this;
 
-    		this.initialized = false;
-
     		this.feideid = 'https://idp.feide.no';
     		this.feideid = 'https://idp-test.feide.no';
+
+    		this.initialized = false;
+
 
     		this.country = 'no';
     		this.countries = {};
@@ -232,6 +231,7 @@ define(function(require, exports, module) {
 
     	"updateLocationView": function() {
     		var loc = this.location.getLocation();
+    		console.error("Location is ", loc);
 			$("#locationtitle").empty().append(loc.title);
 			if (loc.stored) {
 				$("#removelocation").show();
@@ -289,8 +289,45 @@ define(function(require, exports, module) {
 
     	},
 
+    	"matchCountry": function(item) {
+
+    		if (this.country === 'no') {
+    			return true;
+    		}
+
+    		if (this.country === null) {
+    			return true;
+    		}
+
+    		if (!item.hasOwnProperty("country")) {
+    			return false;
+    		}
+    		
+    		if (item.country.toLowerCase() === this.country) {
+    			return true;
+    		}
+    		return false;
+
+    	},
+
+    	"getCompareDistanceFunc": function() {
+
+    		var geo = this.location.getLocation();
+
+    		return function(a, b) {
+
+    			var dista = a.getDistance(geo);
+    			var distb = b.getDistance(geo);
+
+    			if (dista === distb) { return 0; }
+				return ((dista < distb) ? -1 : 1);
+    		}
+
+    	},
+
     	"drawData": function() {
 
+    		var that = this;
     		var it = null;
 
     		console.error("Draw data with ", this.country);
@@ -300,15 +337,35 @@ define(function(require, exports, module) {
     			it = this.providers;
     		}
 
+    		var i;
+    		var showit = [];
 
 			var txt = '';
 			var c = 1; var missed = 0;
-			for(var i = 0; i < it.length; i++) {
+			for(i = 0; i < it.length; i++) {
 
 				if (!this.matchSearchTerm(it[i])) {
 					missed++;
 					continue;
 				}
+
+				if (!this.matchCountry(it[i])) {
+					missed++;
+					continue;
+				}
+
+				showit.push(it[i]);
+			}
+
+			if (this.country !== 'no') {			
+				var sf = this.getCompareDistanceFunc();
+				showit.sort(sf);
+			}
+
+
+
+			for (i = 0; i < showit.length; i++) {
+
 
 				if (c > this.maxshow) {
 					var remaining = it.length - missed - c;
@@ -321,11 +378,7 @@ define(function(require, exports, module) {
 					break;
 				}
 				c++;
-
-
-				txt += it[i].getHTML();
-
-
+				txt += showit[i].getHTML();
 
 			}
 			$("#idplist").empty().append(txt);

@@ -29,7 +29,7 @@ define(function(require, exports, module) {
     	"loadData": function() {
     		
     		var that = this;
-    		var url = 'https://api.discojuice.org/feed/kalmar';
+    		var url = 'https://api.discojuice.org/feed/edugain';
     		$.ajax({
 				dataType: "json",
 				url: url,

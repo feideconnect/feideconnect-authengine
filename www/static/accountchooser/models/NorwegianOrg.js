@@ -2,33 +2,34 @@ define(function(require, exports, module) {
 	"use strict";	
 
 	var 
-		Model = require('./Model')
+		Model = require('./Model'),
+		Utils = require('../Utils')
 		;
 
-	function quoteattr(s, preserveCR) {
-	    preserveCR = preserveCR ? '&#13;' : '\n';
-	    return ('' + s) /* Forces the conversion to string. */
-	        .replace(/&/g, '&amp;') /* This MUST be the 1st replacement. */
-	        .replace(/'/g, '&apos;') /* The 4 other predefined entities, required. */
-	        .replace(/"/g, '&quot;')
-	        .replace(/</g, '&lt;')
-	        .replace(/>/g, '&gt;')
-	        /*
-	        You may add other replacements here for HTML only 
-	        (but it's not necessary).
-	        Or for XML, only if the named entities are defined in its DTD.
-	        */ 
-	        .replace(/\r\n/g, preserveCR) /* Must be before the next replacement. */
-	        .replace(/[\r\n]/g, preserveCR);
-	}
 
 
 	var NorwegianOrg = Model.extend({
+		"init": function(a) {
+    		this.feideid = 'https://idp.feide.no';
+    		this.feideid = 'https://idp-test.feide.no';
+    		this._super(a);
+		},
+		"getDistance": function(loc) {
 
+			if (this.hasOwnProperty("geo") && this.geo.hasOwnProperty("lat") && this.geo.hasOwnProperty("lon")) {
+				console.error("Compare ", loc.lat, loc.lon, this.geo.lat, this.geo.lon);
+				var dist = Utils.calculateDistance(loc.lat, loc.lon, this.geo.lat, this.geo.lon);
+				console.error("Dist is ", dist);
+				return dist;
+			}
+
+			return 9999;
+
+		},
 		"getHTML": function() {
 			
 			var txt = '';
-			var datastr = 'data-id="' + quoteattr(this.feideid) + '" data-subid="' + quoteattr(this.id) + '" data-type="saml"';
+			var datastr = 'data-id="' + Utils.quoteattr(this.feideid) + '" data-subid="' + Utils.quoteattr(this.id) + '" data-type="saml"';
 			txt += '<a href="#" class="list-group-item idpentry" ' + datastr + '>' +
 				'<div class="media"><div class="media-left media-middle">' + 
 						'<img class="media-object" style="width: 48px; height: 48px" src="https://api.feideconnect.no/orgs/fc:org:' + this.id + '/logo" alt="...">' + 
