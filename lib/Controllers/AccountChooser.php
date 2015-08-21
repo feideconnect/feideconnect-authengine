@@ -6,6 +6,7 @@ namespace FeideConnect\Controllers;
 use FeideConnect\HTTP\HTTPResponse;
 use FeideConnect\HTTP\Redirect;
 use FeideConnect\HTTP\TemplatedHTMLResponse;
+use FeideConnect\HTTP\LocalizedTemplatedHTMLResponse;
 use FeideConnect\Config;
 use FeideConnect\GeoLocation;
 use FeideConnect\Utils\URL;
@@ -55,7 +56,7 @@ class AccountChooser {
 			return new Redirect($data["return"]);
 		}
 		
-		return (new TemplatedHTMLResponse('accountchooser'))->setData($data);
+		return (new LocalizedTemplatedHTMLResponse('accountchooser'))->setData($data);
 
 	}
 

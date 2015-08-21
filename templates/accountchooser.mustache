@@ -58,7 +58,7 @@
 			<div class="row">
 				<div class="col-md-6 col-md-offset-3" style=" ">
 
-					<p style="font-size: 120%">Choose a user account to login with</p>
+					<p style="font-size: 120%">{{_.chooseaccount}}</p>
 					<div id="accounts" class="list-group">
 
 					</div>
@@ -77,18 +77,18 @@
 				<div class="col-md-8" style=" ">
 
 
-					<p style="font-size: 160%">Select your login provider</p>
+					<p style="font-size: 160%">{{_.selectprovider}}</p>
 					<div style="font-size: 85%">
 						<div class="checkbox">
 							<label>
-								<input id="rememberme" type="checkbox" checked="checked"> Remember me
+								<input id="rememberme" type="checkbox" checked="checked"> {{_.rememberme}}
 							</label>
 						</div>
 					</div>
 
 				</div>
 				<div class="col-md-4" style=" ">
-					<p>Alternative valg for brukere utenfor utdanningssektoren.</p>
+					<p>{{_.alternatechoice}}</p>
 				</div>
 			</div>
 
@@ -120,16 +120,16 @@
           <li><a href="#">Separated link</a></li> -->
         </ul>
       </div><!-- /btn-group -->
-      <input id="usersearch" type="text" class="form-control" placeholder="Søk etter skole...">
+      <input id="usersearch" type="text" class="form-control" placeholder="{{_.searchfor}}">
     </div><!-- /input-group -->
 
 
     <p style="margin-top: 8px; margin-left: 5px; margin-bottom: 0px; font-size: 70%; color: #555"><i class="fa fa-map-marker"></i> <span id="locationtitle">…</span>  
 
-    	<a id="updatelocation" style="color: #533; margin-left: 1.4em" href="#"><i class="fa fa-dot-circle-o"></i> update location</a>
-    	<a id="removelocation" style="color: #755; margin-left: 1.4em; display: none" href="#"><i class="fa fa-times"></i> forget</a>
+    	<a id="updatelocation" style="color: #533; margin-left: 1.4em" href="#"><i class="fa fa-dot-circle-o"></i> {{_.updatelocation}}</a>
+    	<a id="removelocation" style="color: #755; margin-left: 1.4em; display: none" href="#"><i class="fa fa-times"></i> {{_.forget}}</a>
     	{{! <a id="why" style="color: #888; margin-left: 1.4em" href="#"><i class="fa fa-question"></i> what is this</a> }}
-    	<a id="why" style="color: #755; margin-left: 1.4em" data-toggle="tooltip" data-placement="top" title="To easier find your login provider / school / university amongst all the options, your location is used to list the nearby providers first."><i class="fa fa-question"></i> what is this</a>
+    	<a id="why" style="color: #755; margin-left: 1.4em" data-toggle="tooltip" data-placement="top" title="{{_.whatmore}}"><i class="fa fa-question"></i> {{_.what}}</a>
 
 
    	</p>

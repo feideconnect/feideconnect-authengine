@@ -5,6 +5,7 @@
 		"requirejs": "~2.1.15",
 		"uninett-bootstrap-theme": "*",
 		"font-awsome": "~4.3.0",
-		"jquery": "~1.11.1"
+		"jquery": "~1.11.1",
+		"es6-promise": "*"
 	}
 }

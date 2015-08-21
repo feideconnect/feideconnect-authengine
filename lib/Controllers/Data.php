@@ -9,6 +9,7 @@ use FeideConnect\Config;
 use FeideConnect\Data\StorageProvider;
 use FeideConnect\Authentication\UserID;
 use FeideConnect\Exceptions\Exception;
+use FeideConnect\Localization;
 
 class Data {
 
@@ -95,6 +96,11 @@ class Data {
 		return new JSONResponse($data);
 	}
 
+	static function getDictionary() {
+
+		return new JSONResponse(Localization::getDictionary());
+
+	}
 
 	static function accountchooserExtra() {
 

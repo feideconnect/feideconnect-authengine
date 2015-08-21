@@ -32,6 +32,7 @@ class Router {
 		$this->router->get('/user/media/{userid:[a-zA-Z0-9_\-\.:]+ }', ['FeideConnect\Controllers\Data', 'getUserProfilephoto']);
 		$this->router->get('/client/media/{clientid:[a-fA-F0-9\-]+ }', ['FeideConnect\Controllers\Data', 'getClientLogo']);
 		$this->router->get('/orgs', ['FeideConnect\Controllers\Data', 'getOrgs']);
+		$this->router->get('/dictionary', ['FeideConnect\Controllers\Data', 'getDictionary']);
 
 
 		// OAuth

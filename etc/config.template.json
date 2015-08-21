@@ -22,6 +22,9 @@
 
 	"salt": "xxxx-xxxx-xxxx-xxxx-xxxx",
 
+	"availableLanguages": ["en", "nb", "nn"],
+	"enableLocalization": false,
+
 
 	"testUsers": {
 		"feide:test@test.org": {

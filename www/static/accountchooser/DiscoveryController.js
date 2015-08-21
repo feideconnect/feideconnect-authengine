@@ -40,6 +40,8 @@ define(function(require, exports, module) {
 
 	var Class = require('./Class');
 
+	var Controller = require('./Controller');
+
 	var FeideWriter = require('./FeideWriter');
 	var LocationController = require('./LocationController');
 	var DiscoveryFeedLoader = require('./DiscoveryFeedLoader');
@@ -66,15 +68,16 @@ define(function(require, exports, module) {
 	}
 
 
-    var DiscoveryController = Class.extend({
-    	"init": function() {
+    var DiscoveryController = Controller.extend({
+    	"init": function(app) {
     		var that = this;
+
+    		this.app = app;
 
     		this.feideid = 'https://idp.feide.no';
     		this.feideid = 'https://idp-test.feide.no';
 
     		this.initialized = false;
-
 
     		this.country = 'no';
     		this.countries = {};
@@ -108,6 +111,11 @@ define(function(require, exports, module) {
 					that.drawData();
 				}
 			});
+
+
+            this._super(undefined, false);
+
+
 
 			$('.dropdown-toggle').dropdown();
 			$('[data-toggle="tooltip"]').tooltip();
@@ -177,16 +185,10 @@ define(function(require, exports, module) {
 
     	},
 
-    	"updateCurrentCountry": function(c) {
-    		// console.log("Selected country is " + c);
-    		this.country = c;
-    		// console.log(this.countries);
-    		$("#selectedcountry").empty().append('<img style="margin-top: -3px; margin-right: 5px" src="/static/media/flag/' + c + '.png"> ' + this.countries[c] +' <span class="caret"></span>');
-    	},
 
-    	"initialize": function() {
-    		var that = this;
-    		this.initialized = true;
+		"initLoad": function() {
+
+			var that = this;
 
     		this.location = new LocationController();
     		this.location.onUpdate(function(loc) {
@@ -196,15 +198,34 @@ define(function(require, exports, module) {
     		
 			this.updateLocationView();
 
-    		this.loadData();
-    		this.loadDataExtra();
+
+
+
+
+			return this.app.onLoaded()
+				.then(function() {
+
+					console.error("DiscoveryController is waiting for app to load completed... Now it is.")
+
+		    		that.loadData();
+		    		that.loadDataExtra();
+				})
+				.then(this.proxy("_initLoaded"));
+
+		},
+
+    	"updateCurrentCountry": function(c) {
+    		// console.log("Selected country is " + c);
+    		this.country = c;
+    		// console.log(this.countries);
+    		$("#selectedcountry").empty().append('<img style="margin-top: -3px; margin-right: 5px" src="/static/media/flag/' + c + '.png"> ' + this.countries[c] +' <span class="caret"></span>');
     	},
 
 
     	"activate": function() {
 
-    		if (!this.initialized) {
-    			this.initialize();
+    		if (!this.isLoaded) {
+    			this.initLoad();
     		}
 
 			$("#panedisco").show();
@@ -369,6 +390,7 @@ define(function(require, exports, module) {
 			}
 
 
+			console.error("dict", this.app.dictionary);
 
 			for (i = 0; i < showit.length; i++) {
 
@@ -377,8 +399,9 @@ define(function(require, exports, module) {
 					var remaining = it.length - missed - c;
 
 					if (remaining > 0) {
-						txt += '<p style="font-size: 94%; text-align: center"><a style="color: #777" id="actshowall" href="#"><i class="fa fa-chevron-down"></i> show all  &nbsp;' + 
-							'('  + remaining + ' items hidden)</a>'
+						txt += '<p style="font-size: 94%; text-align: center"><a style="color: #777" id="actshowall" href="#"><i class="fa fa-chevron-down"></i> ' +
+						  this.app.dictionary.showall + '  &nbsp;' + 
+							'('  + remaining + ' ' + this.app.dictionary.hidden +')</a>'
 
 					}
 					break;
