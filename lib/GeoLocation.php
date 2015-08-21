@@ -8,29 +8,7 @@ use FeideConnect\Exceptions\Exception;
 class GeoLocation {
 
 
-	protected $countryTLDs = array(
-		'ua.' => 'AU',
-		'ac.' => 'CA',
-		'zn.' => 'NZ',
-		'lp.' => 'PL',
-		'uh.' => 'HU',
-		'es.' => 'SE',
-		'se.' => 'ES',
-		'ln.' => 'NL',
-		'ei.' => 'IE',
-		'rh.' => 'HR',
-		'ed.' => 'DE',
-		'rg.' => 'GR',
-		'hc.' => 'CH',
-		'if.' => 'FI',
-		'zc.' => 'CZ',
-		'rt.' => 'TR',
-		'kd.' => 'DK',
-		'on.' => 'NO',
-		'ude.' => 'US',
-		'ku.' => 'GB',
-		'rb.' => 'BR',
-	);
+
 
 	protected static $reader = null;
 
@@ -189,27 +167,6 @@ class GeoLocation {
 
 
 
-
-	public function countryFromURL($entityid) {
-		try {
-			$pu = parse_url($entityid, PHP_URL_HOST);			
-			if (!empty($pu)) {
-				$rh = strrev($pu); 
-				DiscoUtils::debug('Looking up TLD : ' . $rh);				 
-				foreach($this->countryTLDs AS $domain => $country) {
-					if (DiscoUtils::prefix($domain, $rh)) {
-						DiscoUtils::debug('Looking up TLD : ' . $rh . ' matched ' . $country);
-						return $country;
-					} 
-				}
-				DiscoUtils::debug('Looking up TLD : ' . $rh . ' DID NOT MATCH any');
-			}	
-		} catch(Exception $e) {
-
-		}
-		return null;
-	}
-		
 
 
 }
