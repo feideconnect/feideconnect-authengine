@@ -169,7 +169,7 @@ class Config {
 			return $filepath;
 		}
 
-		return self::baseDir() . '/' . $path;
+		return self::baseDir() . $path;
 
 	}
 
