@@ -9,5 +9,11 @@
 	"whatmore": "To easier find your login provider / school / university amongst all the options, your location is used to list the nearby providers first.",
 	"searchfor": "Search for the name of your school...",
 	"showall": "show all",
-	"hidden": "items hidden"
+	"hidden": "items hidden",
+	"cno": "Norway",
+	"cdk": "Denmark",
+	"cfi": "Finland",
+	"cse": "Sweden",
+	"cis": "Iceland",
+	"cnl": "Netherlands"
 }

@@ -32,7 +32,6 @@
 
 		<script type="text/javascript">
 			var acrequest = {{{requestJSON}}};
-			var countries = {{{countriesJSON}}};
 			window.loc = {
 				"lat": {{location.lat}},
 				"lon": {{location.lon}},
@@ -106,11 +105,9 @@
 	 <div class="input-group">
       <div class="input-group-btn">
         <button type="button" id="selectedcountry" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-	        <img style="margin-top: -3px; margin-right: 5px" src="/static/media/flag/no.png"> Norge <span class="caret"></span></button>
+		</button>
         <ul id="countryselector" class="dropdown-menu">
-{{#countries}}
-	<li><a class="selectcountry" data-country="{{id}}" href="#"><img style="margin-top: -4px; margin-right: 5px" src="/static/media/flag/{{id}}.png"> {{title}}</a></li>
-{{/countries}}
+
 
 
 <!--           <li><a href="#"><img src=""> Action</a></li>

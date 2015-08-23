@@ -80,10 +80,11 @@ define(function(require, exports, module) {
     		this.initialized = false;
 
     		this.country = 'no';
-    		this.countries = {};
-    		for(var i = 0; i < countries.length; i++) {
-    			this.countries[countries[i].id] = countries[i].title;
-    		}
+    		this.countrylist = ['no', 'dk', 'fi', 'se', 'is', 'nl'];
+    		// this.countries = {};
+    		// for(var i = 0; i < countries.length; i++) {
+    		// 	this.countries[countries[i].id] = countries[i].title;
+    		// }
 
 
     		this.orgs = [];
@@ -206,7 +207,8 @@ define(function(require, exports, module) {
 				.then(function() {
 
 					console.error("DiscoveryController is waiting for app to load completed... Now it is.")
-
+					that.updateCurrentCountry('no');
+					that.drawBasics();
 		    		that.loadData();
 		    		that.loadDataExtra();
 				})
@@ -218,7 +220,7 @@ define(function(require, exports, module) {
     		// console.log("Selected country is " + c);
     		this.country = c;
     		// console.log(this.countries);
-    		$("#selectedcountry").empty().append('<img style="margin-top: -3px; margin-right: 5px" src="/static/media/flag/' + c + '.png"> ' + this.countries[c] +' <span class="caret"></span>');
+    		$("#selectedcountry").empty().append('<img style="margin-top: -3px; margin-right: 5px" src="/static/media/flag/' + c + '.png"> ' + this.app.dictionary['c' + c] +' <span class="caret"></span>');
     	},
 
 
@@ -350,6 +352,20 @@ define(function(require, exports, module) {
 				return ((dista < distb) ? -1 : 1);
     		}
 
+    	},
+
+    	"drawBasics": function() {
+    		var ct, cn, txt = '';
+    		
+    		for(var i = 0; i < this.countrylist.length; i++) {
+    			ct = 'c' + this.countrylist[i];
+    			cn = this.app.dictionary[ct];
+     			// console.error("Country is ", ct, cn );
+     			txt += '<li><a class="selectcountry" data-country="' + this.countrylist[i] + '" href="#">' + 
+	     			'<img style="margin-top: -4px; margin-right: 5px" src="/static/media/flag/' + this.countrylist[i] + '.png">' + 
+	     			' ' + cn + '</a></li>';
+    		}
+    		$("#countryselector").empty().append(txt);
     	},
 
     	"drawData": function() {

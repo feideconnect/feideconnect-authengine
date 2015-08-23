@@ -20,9 +20,12 @@
 	},
 	"devDependencies": {
 		"bower": "*",
+
 		"grunt": "*",
 		"grunt-cli": "*",
 		"grunt-contrib-jshint": "*",
+		"grunt-shell": "*",
+		"grunt-transifex": "*",
 
 		"node-phantom-simple": "~1.2.0",
 		"promise": "*"

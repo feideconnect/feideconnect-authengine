@@ -87,6 +87,11 @@ class Data {
 		usort($data, ["\FeideConnect\Controllers\Data", "scmp"]);
 
 
+		
+
+
+
+
 		// echo '<pre>';
 		// foreach($data AS $d) {
 		// 	echo join(',', $d["type"]) . "\n";
@@ -106,7 +111,9 @@ class Data {
 
 
 		$data = Config::readJSONfile("disco2.json");
-		return new JSONResponse($data);
+
+		$ldata = Localization::localizeList($data, ['title', 'descr']);
+		return new JSONResponse($ldata);
 
 	}
 

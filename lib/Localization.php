@@ -51,6 +51,38 @@ class Localization {
 		return $dict;
 	}
 
+
+	static function localizeEntry($entry) {
+
+		if (is_string($entry)) {
+			return $entry;
+		} else if (is_array($entry)) {
+			$keys = array_keys($entry);
+			$sl = self::get_browser_language($keys);
+			return $entry[$sl];
+		}
+
+		return $entry;
+	} 
+
+	static function localizeList($list, $attrs) {
+
+		$res = [];
+		foreach($list AS $item) {
+			foreach ($item AS $key => $val) {
+
+				if (in_array($key, $attrs)) {
+					$item[$key] = self::localizeEntry($item[$key]);
+				}
+
+			}
+			$res[] = $item;
+		}
+		return $res;
+
+	}
+
+
 	/*
 	 * Source:
 	 * http://codereview.stackexchange.com/questions/9141/language-detection-php-script
