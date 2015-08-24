@@ -19,13 +19,13 @@ class Localization {
 	}
 
 
-	static function debug() {
+	// static function debug() {
 
 
-		$selected = Localization::get_browser_language(['nb', 'nn', 'en', 'de']);
-		echo "SELECTED\n"; var_dump($selected); exit;
+	// 	$selected = Localization::get_browser_language(['nb', 'nn', 'en', 'de']);
+	// 	echo "SELECTED\n"; var_dump($selected); exit;
 
-	}
+	// }
 
 	static function getDictionary() {
 
