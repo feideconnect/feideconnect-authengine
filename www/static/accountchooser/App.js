@@ -12,15 +12,13 @@ define(function(require, exports, module) {
     	"init": function() {
     		var that = this;
     		
+            that.config = null;
 
             this._super(undefined, true);
             
     		this.disco = new DiscoveryController(this);
     		this.accountstore = new AccountStore();
     		this.selector = new AccountSelector(this, this.accountstore);
-
-
-
 
     	},
 
@@ -34,9 +32,10 @@ define(function(require, exports, module) {
                     
                 })
                 .then(function() {
-
-                    return that.loadDictionary();
-                    
+                    return Promise.all([
+                        that.loadDictionary(),
+                        that.loadConfig()
+                    ]);
                 })
                 .then(function() {
 
@@ -52,6 +51,23 @@ define(function(require, exports, module) {
     
                 })
                 .then(that.proxy("_initLoaded"));
+
+        },
+
+        "loadConfig": function() {
+            var that = this;
+
+            return new Promise(function(resolve, reject) {
+                
+                console.error("About to load config");
+                $.getJSON('/accountchooser/config',function(data) {
+                    that.config = data;
+                    console.error("Config was loaded");
+                    // that.initAfterLoad();
+                    resolve();
+                });
+
+            });
 
         },
 

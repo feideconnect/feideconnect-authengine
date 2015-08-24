@@ -107,6 +107,20 @@ class Data {
 
 	}
 
+	static function accountchooserConfig() {
+
+
+		$config = [];
+		$config['feideIdP'] = Config::getValue('feideIdP');
+
+
+
+		// $ldata = Localization::localizeList($data, ['title', 'descr']);
+		return new JSONResponse($config);
+
+	}
+
+
 	static function accountchooserExtra() {
 
 

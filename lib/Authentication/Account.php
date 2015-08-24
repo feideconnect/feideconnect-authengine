@@ -82,11 +82,13 @@ class Account {
 
 		if (isset($this->sourceID) && preg_match("/^feide:(.*?)$/", $this->sourceID, $matches)) {
 
+			$feideidp = Config::getValue('feideIdP');
+
 			$org = $matches[1];
 			$tag = [
 				"name" => $this->name,
 				"type" => "saml",
-				"id" => "https://idp-test.feide.no",
+				"id" => $feideidp,
 				"subid" => $org,
 				"title" => $this->org,
 				"userids" => $this->userids

@@ -74,8 +74,8 @@ define(function(require, exports, module) {
 
     		this.app = app;
 
-    		this.feideid = 'https://idp.feide.no';
-    		this.feideid = 'https://idp-test.feide.no';
+
+    		this.feideid = null; // Will be set in initLoad, loading from app config.
 
     		this.initialized = false;
 
@@ -200,13 +200,11 @@ define(function(require, exports, module) {
 			this.updateLocationView();
 
 
-
-
-
 			return this.app.onLoaded()
 				.then(function() {
 
-					console.error("DiscoveryController is waiting for app to load completed... Now it is.")
+					console.error("DiscoveryController is waiting for app to load completed... Now it is. Setting Feide IDP to " + that.app.config.feideIdP );
+					that.feideid = that.app.config.feideIdP;
 					that.updateCurrentCountry('no');
 					that.drawBasics();
 		    		that.loadData();
@@ -241,7 +239,7 @@ define(function(require, exports, module) {
 
 			if (that.feideid === so.id) {
 
-				var f = (new FeideWriter(so.subid))
+				var f = (new FeideWriter(so.subid, that.feideid))
 					.onLoad( function() {
 						window.location = url;	
 					})
@@ -423,8 +421,7 @@ define(function(require, exports, module) {
 					break;
 				}
 				c++;
-				txt += showit[i].getHTML();
-
+				txt += showit[i].getHTML(that.app.config.feideIdP);
 			}
 			$("#idplist").empty().append(txt);
 			$("#usersearch").focus();

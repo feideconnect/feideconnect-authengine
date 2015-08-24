@@ -5,10 +5,20 @@ define(function(require, exports, module) {
 
 	var FeideWriter = Class.extend({
 
-		"init": function(org, callback) {
-			this.callback = callback;
-			var returnURL = 'https://auth.dev.feideconnect.no/accountchooser/response';
-			this.url = 'https://idp-test.feide.no/simplesaml/module.php/feide/preselectOrg.php?HomeOrg=' + encodeURIComponent(org) + '&ReturnTo=' + encodeURIComponent(returnURL);
+		"init": function(org, feideid) {
+			this.feideid = feideid;
+
+			var feideIdPEndpoints = {
+				'https://idp-test.feide.no': 'https://idp-test.feide.no/simplesaml/module.php/feide/preselectOrg.php',
+				'https://idp.feide.no': 'https://idp.feide.no/simplesaml/module.php/feide/preselectOrg.php'
+			};
+
+			if (!feideIdPEndpoints.hasOwnProperty(this.feideid)) {
+				throw new Error("Bad Feide entityID. No configuration found.");
+			}
+
+			var returnURL = window.location.origin + '/accountchooser/response';
+			this.url = feideIdPEndpoints[this.feideid] + '?HomeOrg=' + encodeURIComponent(org) + '&ReturnTo=' + encodeURIComponent(returnURL);
 
 			var that = this;
 

@@ -53,6 +53,7 @@ class Router {
 		// IdP Discovery page
 		$this->router->get('/disco', ['FeideConnect\Controllers\Disco', 'process']);
 		$this->router->get('/accountchooser', ['FeideConnect\Controllers\AccountChooser', 'process']);
+		$this->router->get('/accountchooser/config', ['FeideConnect\Controllers\Data', 'accountchooserConfig']);
 		$this->router->get('/accountchooser/extra', ['FeideConnect\Controllers\Data', 'accountchooserExtra']);
 		$this->router->get('/accountchooser/response', ['FeideConnect\Controllers\Pages', 'emptyResponse']);
 

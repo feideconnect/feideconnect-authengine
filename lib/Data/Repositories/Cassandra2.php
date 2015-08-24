@@ -39,6 +39,8 @@ class Cassandra2 extends \FeideConnect\Data\Repository {
 		if (empty($config['keyspace'])) throw new FeideConnectException('Required config not set');
 		if (empty($config['nodes'])) throw new FeideConnectException('Required config not set');
 
+
+
 		// $this->db = new \evseevnn\Cassandra\Database($config['nodes'], $config['keyspace']);
 		$this->db = new Connection($config['nodes'], $config['keyspace']);
 		$this->db->connect();

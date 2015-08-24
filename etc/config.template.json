@@ -1,6 +1,7 @@
 {
 	"idp": "https://idp-test.feide.no",
 	"defaultIdP": "https://idp-test.feide.no",
+	"feideIdP": "https://idp-test.feide.no",
 	"storage": {
 		"type": "cassandra",
 		"keyspace": "feideconnect",
