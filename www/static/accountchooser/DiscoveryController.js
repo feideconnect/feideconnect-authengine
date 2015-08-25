@@ -61,7 +61,7 @@ define(function(require, exports, module) {
 	}
 
 	var stok = function(str) {
-		console.log("STR", str);
+		// console.log("STR", str);
 		if (str === null) {return true;}
 		if (str.length > 2) { return true; }
 		return false;
@@ -146,7 +146,7 @@ define(function(require, exports, module) {
 				}
 
 
-				console.log("Search term is now ", st);
+				// console.log("Search term is now ", st);
 			});
 
 			$("body").on("click", ".idplist .idpentry", function(e) {
@@ -203,7 +203,7 @@ define(function(require, exports, module) {
 			return this.app.onLoaded()
 				.then(function() {
 
-					console.error("DiscoveryController is waiting for app to load completed... Now it is. Setting Feide IDP to " + that.app.config.feideIdP );
+					// console.error("DiscoveryController is waiting for app to load completed... Now it is. Setting Feide IDP to " + that.app.config.feideIdP );
 					that.feideid = that.app.config.feideIdP;
 					that.updateCurrentCountry('no');
 					that.drawBasics();
@@ -301,11 +301,11 @@ define(function(require, exports, module) {
     		}
 
     		var searchTerm = this.searchTerm;
-    		console.log("Searching for [" + searchTerm + "]");
+    		// console.log("Searching for [" + searchTerm + "]");
 
 
     		if (item.title === null) {
-    			console.error("Title is empty", item); 
+    			// console.error("Title is empty", item); 
     			return false;
     		}
     		if (item.title.toLowerCase().indexOf(searchTerm) !== -1) {
@@ -404,7 +404,7 @@ define(function(require, exports, module) {
 			}
 
 
-			console.error("dict", this.app.dictionary);
+			// console.error("dict", this.app.dictionary);
 
 			for (i = 0; i < showit.length; i++) {
 

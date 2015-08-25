@@ -19,7 +19,7 @@ define(function(require, exports, module) {
                 var userid = $(e.currentTarget).data("userid");
 
                 if  ($("#accounts").hasClass("modeRemove")) {
-                    console.log("Ignoring, since in remove mode...");
+                    // console.log("Ignoring, since in remove mode...");
                     return;
                 }
             
@@ -39,7 +39,7 @@ define(function(require, exports, module) {
                 
             
                 // that.app.disco.go(that.store.accts[userid]);
-                console.log("About to remove", userid);
+                // console.log("About to remove", userid);
             });
 
 

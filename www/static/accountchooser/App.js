@@ -28,7 +28,7 @@ define(function(require, exports, module) {
             return Promise.resolve()
                 .then(function() {
 
-                    console.error("App is loading...")
+                    // console.error("App is loading...")
                     
                 })
                 .then(function() {
@@ -40,14 +40,14 @@ define(function(require, exports, module) {
                 .then(function() {
 
 
-                    console.error("App is completed loading..");
+                    // console.error("App is completed loading..");
 
                     if (that.accountstore.hasAny())  {
                         that.selector.activate();
                     } else {
                         that.disco.activate();
                     }
-                    console.error("App is completed (2)");
+                    // console.error("App is completed (2)");
     
                 })
                 .then(that.proxy("_initLoaded"));
@@ -59,10 +59,10 @@ define(function(require, exports, module) {
 
             return new Promise(function(resolve, reject) {
                 
-                console.error("About to load config");
+                // console.error("About to load config");
                 $.getJSON('/accountchooser/config',function(data) {
                     that.config = data;
-                    console.error("Config was loaded");
+                    // console.error("Config was loaded");
                     // that.initAfterLoad();
                     resolve();
                 });
@@ -77,10 +77,10 @@ define(function(require, exports, module) {
 
             return new Promise(function(resolve, reject) {
                 
-                console.error("About to load dictionary");
+                // console.error("About to load dictionary");
                 $.getJSON('/dictionary',function(data) {
                     that.dictionary = data;
-                    console.error("Dictionary was loaded");
+                    // console.error("Dictionary was loaded");
                     // that.initAfterLoad();
                     resolve();
                 });

@@ -44,7 +44,7 @@ define(function(require, exports, module) {
 		},
 		"_initLoaded": function() {
 			var i;
-			console.error("_initloaded", this.onLoadedCallbacks);
+			// console.error("_initloaded", this.onLoadedCallbacks);
 			if (!this.isLoaded) {
 				this.isLoaded = true;
 				for(i = 0; i < this.onLoadedCallbacks.length; i++) {

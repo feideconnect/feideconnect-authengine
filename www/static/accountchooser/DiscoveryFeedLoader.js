@@ -11,7 +11,7 @@ define(function(require, exports, module) {
 
     		this.providers = [];
 
-    		console.log("INITING DiscoveryFeedLoader");
+    		// console.log("INITING DiscoveryFeedLoader");
 
     		this.initialized = false;
     		this.initialize();
