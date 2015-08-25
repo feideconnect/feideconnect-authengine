@@ -1,6 +1,8 @@
 <?php
 
 namespace FeideConnect\OpenIDConnect;
+use Firebase\JWT\JWT;
+
 
 class IDToken {
 
@@ -83,7 +85,7 @@ class IDToken {
 		 * https://tools.ietf.org/html/draft-ietf-jose-json-web-algorithms-40
 		 * for a list of spec-compliant algorithms.
 		 */
-		$this->encoded = \JWT::encode($this->object, $this->trustStore->getKey(), $this->trustStore->getSigningAlg());
+		$this->encoded = JWT::encode($this->object, $this->trustStore->getKey(), $this->trustStore->getSigningAlg());
 
 		return $this->encoded;
 	}
