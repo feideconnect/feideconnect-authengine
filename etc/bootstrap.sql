@@ -4,6 +4,7 @@ DROP INDEX IF EXISTS clients_owner_idx;
 DROP INDEX IF EXISTS clients_scopes_idx;
 DROP INDEX IF EXISTS clients_scopes_requested_idx;
 DROP INDEX IF EXISTS clients_organization_idx;
+DROP INDEX IF EXISTS clients_orgauthorization_idx;
 DROP TABLE IF EXISTS clients_counters;
 
 
@@ -72,6 +73,7 @@ CREATE TABLE clients (
 	redirect_uri list<text>,
 	scopes set<text>,
 	scopes_requested set<text>,
+	orgauthorization map<text, text>,
 	status set<text>,
 
 	authproviders set<text>,
@@ -86,6 +88,7 @@ CREATE INDEX clients_scopes_idx 			ON clients(scopes);
 CREATE INDEX clients_scopes_requested_idx 	ON clients(scopes_requested);
 CREATE INDEX clients_organization_idx       ON clients(organization);
 CREATE INDEX clients_authproviders_idx      ON clients(authproviders);
+CREATE INDEX clients_orgauthorization_idx       ON clients(keys(orgauthorization));
 
 CREATE TABLE clients_counters (
 	id uuid PRIMARY KEY,
