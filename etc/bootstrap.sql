@@ -73,6 +73,7 @@ CREATE TABLE clients (
 	scopes_requested set<text>,
 	status set<text>,
 
+	authproviders set<text>,
 
 
 	owner uuid,
@@ -84,6 +85,7 @@ CREATE INDEX clients_owner_idx 				ON clients(owner);
 CREATE INDEX clients_scopes_idx 			ON clients(scopes);
 CREATE INDEX clients_scopes_requested_idx 	ON clients(scopes_requested);
 CREATE INDEX clients_organization_idx       ON clients(organization);
+CREATE INDEX clients_authproviders_idx      ON clients(authproviders);
 
 CREATE TABLE clients_counters (
 	id uuid PRIMARY KEY,
