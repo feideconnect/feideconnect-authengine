@@ -3,6 +3,7 @@
 namespace FeideConnect\Authentication;
 
 use FeideConnect\Config;
+use FeideConnect\Data\StorageProvider;
 use FeideConnect\Exceptions\Exception;
 
 class Account {
@@ -91,8 +92,30 @@ class Account {
 				"id" => $feideidp,
 				"subid" => $org,
 				"title" => $this->org,
-				"userids" => $this->userids
+				"userids" => $this->userids,
+				"def" => []
  			];
+
+ 			if ($org === 'feide.no') {
+ 				$tag["def"][] = ["other", "feidetest"];
+ 			} else {
+
+ 				$storage = StorageProvider::getStorage();
+
+ 				$tag["def"][] = ["feide", "realm", $org];
+
+ 				$orginfo = $storage->getOrg('fc:org:' . $org);
+ 				if ($orginfo !== null) {
+
+ 					$types = $orginfo->getTypes();
+ 					foreach($types AS $type) {
+ 						$tag["def"][] = ["feide", $type];
+ 					}
+
+ 				}
+
+ 			}
+
  			return $tag;
 
 		} else if (isset($this->sourceID) && $this->sourceID === 'idporten') {
@@ -103,7 +126,8 @@ class Account {
 				"type" => "saml",
 				"id" => "idporten.difi.no-v2",
 				"title" => 'IDporten',
-				"userids" => $this->maskNin($this->userids)
+				"userids" => $this->maskNin($this->userids),
+				"def" => [["other", "idporten"]],
  			];
  			return $tag;
 
@@ -115,7 +139,8 @@ class Account {
 				"type" => "saml",
 				"id" => "https://openidp.feide.no",
 				"title" => 'Feide OpenIdP guest account',
-				"userids" => $this->userids
+				"userids" => $this->userids,
+				"def" => [["other", "openidp"]],
  			];
  			return $tag;
 
@@ -126,7 +151,8 @@ class Account {
 				"name" => $this->name,
 				"type" => "twitter",
 				"title" => 'Twitter',
-				"userids" => $this->userids
+				"userids" => $this->userids,
+				"def" => [["social", "twitter"]],
  			];
  			return $tag;
 
@@ -137,7 +163,8 @@ class Account {
 				"name" => $this->name,
 				"type" => "linkedin",
 				"title" => 'LinkedIn',
-				"userids" => $this->userids
+				"userids" => $this->userids,
+				"def" => [["social", "linkedin"]],
  			];
  			return $tag;
 
@@ -148,7 +175,8 @@ class Account {
 				"name" => $this->name,
 				"type" => "facebook",
 				"title" => 'Facebook',
-				"userids" => $this->userids
+				"userids" => $this->userids,
+				"def" => [["social", "facebook"]],
  			];
  			return $tag;
 
@@ -159,6 +187,7 @@ class Account {
 			"name" => $this->name,
 			"title" => "Unknown",
 			"userids" => $this->userids,
+			"def" => []
 		];
 
 	}

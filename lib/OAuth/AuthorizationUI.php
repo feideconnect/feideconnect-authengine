@@ -103,6 +103,8 @@ class AuthorizationUI {
 
 
 
+		// echo 'Visual tag'; var_dump($visualTag); exit;
+
 
 		$acresponse = [];
 		if (isset($_REQUEST['acresponse'])) {

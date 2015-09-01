@@ -59,6 +59,30 @@ define(function(require, exports, module) {
 
 		},
 
+
+    	"getAuthProviderDef": function() {
+
+    		var p, pp;
+    		if (this.authproviders) {
+    			return this.authproviders;
+    		}
+    		this.authproviders = [];
+    		if (this.client.authproviders && this.client.authproviders !== null) {
+
+    			p = this.client.authproviders;
+    			console.log("P is ", p);
+	    		for(var i = 0; i < p.length; i++) {
+	    			pp = p[i].split('|');
+	    			this.authproviders.push(pp);
+	    		}
+
+	    	} else {
+	    		this.authproviders.push(['all']);
+	    	}
+    		return this.authproviders;
+    	},
+
+
 		"parseRequest": function() {
 			if (acrequest) {
 				this.request = acrequest;
@@ -87,19 +111,20 @@ define(function(require, exports, module) {
 				console.log("Contacting url", url);
 				$.getJSON(url,function(data) {
 					data.authproviders = [];
-					// data.authproviders.push('all');
+					data.authproviders.push('all');
 					data.authproviders.push('social|all');
 					// data.authproviders.push('social|facebook');
 					// data.authproviders.push('social|twitter');
 					// data.authproviders.push('social|linkedin');
 					// data.authproviders.push('other|all');
-					data.authproviders.push('other|idporten');
-					data.authproviders.push('other|openidp');
-					data.authproviders.push('other|feidetest');
+					// data.authproviders.push('other|idporten');
+					// data.authproviders.push('other|openidp');
+					// // data.authproviders.push('other|openidp');
+					// data.authproviders.push('other|feidetest');
 					// data.authproviders.push('feide|all');
 					data.authproviders.push('feide|go');
 					// data.authproviders.push('feide|he');
-					data.authproviders.push('feide|realm|uninett.no');
+					// data.authproviders.push('feide|realm|uninett.no');
 					// data.authproviders.push('feide|realm|iktsenteret.no');
 
 					// console.error("Got clientinfo data:", data);

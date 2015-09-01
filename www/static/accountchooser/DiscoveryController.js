@@ -264,32 +264,10 @@ define(function(require, exports, module) {
 
     	},
 
-    	"getAuthProviderDef": function() {
-
-
-    		var p, pp;
-    		if (this.authproviders) {
-    			return this.authproviders;
-    		}
-    		this.authproviders = [];
-    		if (this.app.client.authproviders && this.app.client.authproviders !== null) {
-
-    			p = this.app.client.authproviders;
-    			console.log("P is ", p);
-	    		for(var i = 0; i < p.length; i++) {
-	    			pp = p[i].split('|');
-	    			this.authproviders.push(pp);
-	    		}
-
-	    	} else {
-	    		this.authproviders.push(['all']);
-	    	}
-    		return this.authproviders;
-    	},
 
 		"matchAuthProviderFilterExtra": function(item) {
 
-			var providers = this.getAuthProviderDef();
+			var providers = this.app.getAuthProviderDef();
 			for(var i = 0; i < providers.length; i++) {
 
 				if (item.matchType(providers[i])) {
@@ -301,9 +279,11 @@ define(function(require, exports, module) {
 		},
 
 
+
+
 		"matchAuthProviderFilter": function(item) {
 			
-			var providers = this.getAuthProviderDef();
+			var providers = this.app.getAuthProviderDef();
 			for(var i = 0; i < providers.length; i++) {
 				console.log("Compare", JSON.stringify(providers[i]), item);
 				if (providers[i][0] === 'all') {
