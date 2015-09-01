@@ -133,30 +133,28 @@ define(function(require, exports, module) {
 
 				var a = this.store.accts[userid];
 
-
 				allowed = true;
 				if (a.hasOwnProperty('def')) {
-					console.error("accounts draw", a);
+					// console.error("accounts draw", a);
 					allowed = this.matchAnyType(a.def);
-					console.error("Is this account ok?\n" + JSON.stringify(a.def) + "\nWhat is legal is :\n" + JSON.stringify( def));
-					console.error("Check match any type", allowed);
+					// console.error("Is this account ok?\n" + JSON.stringify(a.def) + "\nWhat is legal is :\n" + JSON.stringify( def));
+					// console.error("Check match any type", allowed);
 				}
 				var classes = ['list-group-item', 'accountentry'];
 				if (!allowed) { classes.push('disabled'); }
 
-				console.log("Foo", classes);
+				// console.log("Foo", classes);
 
 				txt += '<a href="#" class="' + classes.join(' ') + '" data-userid="' + Utils.quoteattr(userid) + '" style="">' +
 					'<div class="media"><div class="media-left media-middle">' + 
 							'<img class="media-object" style="width: 64px; height: 64px" src="' + Utils.quoteattr(a.photo) + '" alt="...">' + 
 						'</div>' +
 						'<div class="media-body">' + 
-						'<p class="showOnRemove" style=""><button class="btn btn-danger actRemove" style="float: right">Remove</button></p>' + 
-						'<i style="float: right; margin-top: 20px" class="fa fa-chevron-right fa-2x hideOnRemove"></i>' +
-						'<p style="font-size: 140%; margin: 0px">' + Utils.quoteattr(a.name) + '</p>' + 
-						'<p style="font-size: 100%; margin: 0px; margin-top: -6px">' + Utils.quoteattr(a.title) + '</p>' + 
-						'<p style="font-size: 70%; color: #aaa; margin: 0px">' + Utils.quoteattr(userid) + '</p>' + 
-
+							'<p class="showOnRemove" style=""><button class="btn btn-danger actRemove" style="float: right">Remove</button></p>' + 
+							'<i style="float: right; margin-top: 20px" class="fa fa-chevron-right fa-2x hideOnRemove"></i>' +
+							'<p style="font-size: 140%; margin: 0px">' + Utils.quoteattr(a.name) + '</p>' + 
+							'<p style="font-size: 100%; margin: 0px; margin-top: -6px">' + Utils.quoteattr(a.title) + '</p>' + 
+							'<p style="font-size: 70%; color: #aaa; margin: 0px">' + Utils.quoteattr(userid) + '</p>' + 
 						'</div>' +
 					'</div>' +
 				'</a>';

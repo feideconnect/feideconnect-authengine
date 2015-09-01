@@ -70,7 +70,7 @@ define(function(require, exports, module) {
     		if (this.client.authproviders && this.client.authproviders !== null) {
 
     			p = this.client.authproviders;
-    			console.log("P is ", p);
+    			// console.log("P is ", p);
 	    		for(var i = 0; i < p.length; i++) {
 	    			pp = p[i].split('|');
 	    			this.authproviders.push(pp);
@@ -91,7 +91,7 @@ define(function(require, exports, module) {
 
 		"loadClientInfo": function() {
 			var that = this;
-			console.log("Loading client info", this.request);
+			// console.log("Loading client info", this.request);
 
 			if (!this.request.clientid) {
 				return Promise.resolve();
@@ -108,7 +108,7 @@ define(function(require, exports, module) {
 				
 				// console.error("About to load config");
 				var url = 'https://api.feideconnect.no/clientadm/clients/' + that.request.clientid;
-				console.log("Contacting url", url);
+				// console.log("Contacting url", url);
 				$.getJSON(url,function(data) {
 					data.authproviders = [];
 					data.authproviders.push('all');

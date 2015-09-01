@@ -14,8 +14,8 @@ define(function(require, exports, module) {
 
     		if (visualTag) {
     			this.visualTag = visualTag;
-				console.log("AccountStore Visual tag received...");
-				console.error(visualTag);
+				// console.log("AccountStore Visual tag received...");
+				// console.error(visualTag);
 
 				if (visualTag.rememberme) {
 					this.saveAccountTag(visualTag);	
@@ -24,7 +24,7 @@ define(function(require, exports, module) {
 				}
     		}
 
-    		console.log("Accounts", this.accts);
+    		// console.log("Accounts", this.accts);
 	
     	},
 
