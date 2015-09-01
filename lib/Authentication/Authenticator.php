@@ -25,6 +25,7 @@ class Authenticator {
 
 		$this->authTypes = Config::getValue("authTypes");
 		$this->authSources = [];
+		$this->clientid = null;
 
 		$this->activeAuthType = null;
 
@@ -36,6 +37,9 @@ class Authenticator {
 
 	}
 
+	public function setClientID($clientid) {
+		$this->clientid = $clientid;
+	}
 
 	protected function getIdP() {
 
@@ -75,6 +79,10 @@ class Authenticator {
 	public function requireAuthentication($isPassive = false, $allowRedirect = false, $return = null, $maxage = null) {
 
 		$accountchooser = new Authentication\AccountChooserProtocol();
+
+
+
+		$accountchooser->setClientID($this->clientid);
 		// $accountchooser->debug();
 		if (!$accountchooser->hasResponse()) {
 			$requestURL = $accountchooser->getRequest();

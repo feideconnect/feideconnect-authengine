@@ -20,6 +20,23 @@ define(function(require, exports, module) {
 			return 9999;
 		},
 
+		"matchType": function(type) {
+
+			var def = this.def;
+			for (var i = 0; i < type.length; i++) {
+				if (type[i] === 'all') {
+					return true;
+				} else if (i > (def.length-1)) {
+
+					return false;
+
+				} else if (type[i] !== def[i]) {
+					return false;
+				}
+			}
+			return true;
+		},
+
 		"getHTML": function() {
 			
 			var txt = '';

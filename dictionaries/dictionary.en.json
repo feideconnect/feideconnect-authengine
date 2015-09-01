@@ -1,5 +1,7 @@
 {
 	"chooseaccount": "Choose a user account to login with",
+	"tologin1": "In order to login to ",
+	"tologin2": ", you need to select a login provider.",
 	"selectprovider": "Select your login provider",
 	"rememberme": "Remember me",
 	"alternatechoice": "Login options for non-educational users.",

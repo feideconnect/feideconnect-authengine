@@ -19,6 +19,8 @@ class AccountChooserProtocol {
 		$this->selfURL = URL::selfURL();
 		$this->baseURL = URL::getBaseURL() . 'accountchooser';
 
+		$this->clientid = null;
+
 		if (isset($_REQUEST['acresponse'])) {
 			$r = json_decode($_REQUEST['acresponse'], true);
 			if (is_array($r)) {
@@ -26,6 +28,10 @@ class AccountChooserProtocol {
 			}
 		}
 
+	}
+
+	public function setClientID($clientid) {
+		$this->clientid = $clientid;
 	}
 
 	public function getAuthConfig() {
@@ -53,6 +59,9 @@ class AccountChooserProtocol {
 		$ro = [
 			"return" => $this->selfURL,
 		];
+		if ($this->clientid) {
+			$ro['clientid'] = $this->clientid;
+		}
 		return $this->baseURL . '?request=' . rawurlencode(json_encode($ro));
 	}
 

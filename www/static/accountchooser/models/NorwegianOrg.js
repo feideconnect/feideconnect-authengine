@@ -22,6 +22,17 @@ define(function(require, exports, module) {
 			return 9999;
 
 		},
+		"isType": function(type) {
+			if (!this.type) {
+				return false;
+			}
+			for (var i = 0; i < this.type.length; i++) {
+				if (this.type[i] === type) {
+					return true;
+				}
+			}
+			return false;
+		},
 		"isEnabled": function() {
 			if (!this.services) {
 				return false;

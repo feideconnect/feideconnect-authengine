@@ -75,7 +75,6 @@ CREATE TABLE clients (
 
 	authproviders set<text>,
 
-
 	owner uuid,
 	organization text,
 	created timestamp,

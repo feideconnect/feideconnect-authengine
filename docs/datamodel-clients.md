@@ -34,17 +34,24 @@ CQL (see etc/bootstrap.cql for updated version):
 
 # Authproviders
 
-A set of tags that identify which providers that are allowed to login using this client.
+A set of tags that identify which providers that are allowed to login using this client. `authproviders`.
 
 	all
 
 	social|all
-	social|idporten
-	social|openidp
+	social|facebook
+	social|twitter
+	social|linkedin
+
+	other|all
+	other|openidp
+	other|idporten
+	other|feidetest
 
 	feide|all
 	feide|go
 	feide|uh
+	feide|vgs
 	feide|realm|uninett.no
 
 

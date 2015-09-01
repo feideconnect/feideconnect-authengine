@@ -37,6 +37,26 @@ define(function(require, exports, module) {
         return deg * Math.PI/180;
     };
 
+
+    // Normalize search term.
+    Utils.normalizeST = function(searchTerm) {
+        var x = searchTerm.toLowerCase().replace(/\W/g, '');
+        if (x === '') {
+            return null;
+        }
+        return x;
+    }
+
+    // Is search length ok?
+    Utils.stok = function(str) {
+        // console.log("STR", str);
+        if (str === null) {return true;}
+        if (str.length > 2) { return true; }
+        return false;
+    }
+
+
+
     return Utils;
 
 

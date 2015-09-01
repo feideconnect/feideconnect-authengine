@@ -1,23 +1,8 @@
 define(function(require, exports, module) {
 	"use strict";
 
+	var Utils = require('./Utils');
 
-	function quoteattr(s, preserveCR) {
-	    preserveCR = preserveCR ? '&#13;' : '\n';
-	    return ('' + s) /* Forces the conversion to string. */
-	        .replace(/&/g, '&amp;') /* This MUST be the 1st replacement. */
-	        .replace(/'/g, '&apos;') /* The 4 other predefined entities, required. */
-	        .replace(/"/g, '&quot;')
-	        .replace(/</g, '&lt;')
-	        .replace(/>/g, '&gt;')
-	        /*
-	        You may add other replacements here for HTML only 
-	        (but it's not necessary).
-	        Or for XML, only if the named entities are defined in its DTD.
-	        */ 
-	        .replace(/\r\n/g, preserveCR) /* Must be before the next replacement. */
-	        .replace(/[\r\n]/g, preserveCR);
-	}
 
 	/**
 	 * Functional description
@@ -52,28 +37,12 @@ define(function(require, exports, module) {
 	var Waiter = require('./Waiter');
 
 
-	var normalizeST = function(searchTerm) {
-		var x = searchTerm.toLowerCase().replace(/\W/g, '');
-		if (x === '') {
-			return null;
-		}
-		return x;
-	}
-
-	var stok = function(str) {
-		// console.log("STR", str);
-		if (str === null) {return true;}
-		if (str.length > 2) { return true; }
-		return false;
-	}
-
 
     var DiscoveryController = Controller.extend({
     	"init": function(app) {
     		var that = this;
 
     		this.app = app;
-
 
     		this.feideid = null; // Will be set in initLoad, loading from app config.
 
@@ -136,15 +105,14 @@ define(function(require, exports, module) {
 			});
 
 			$("#usersearch").on("propertychange change click keyup input paste", function() {
-				var st = normalizeST($("#usersearch").val());
+				var st = Utils.normalizeST($("#usersearch").val());
 
 				if (st !== that.searchTerm) {
 					that.searchTerm = st;
-					if (stok(st)) {
+					if (Utils.stok(st)) {
 						that.searchWaiter.ping();	
 					}
 				}
-
 
 				// console.log("Search term is now ", st);
 			});
@@ -287,11 +255,87 @@ define(function(require, exports, module) {
     	"loadDataExtra": function() {
     		var that = this;
 			$.getJSON('/accountchooser/extra', function(extra) {
-				that.extra = extra;
+				that.extra = [];
+				for (var i = 0; i < extra.length; i++) {
+					that.extra.push(new Provider(extra[i]));
+				}
 				that.drawDataExtra();
 			});
 
     	},
+
+    	"getAuthProviderDef": function() {
+
+
+    		var p, pp;
+    		if (this.authproviders) {
+    			return this.authproviders;
+    		}
+    		this.authproviders = [];
+    		if (this.app.client.authproviders && this.app.client.authproviders !== null) {
+
+    			p = this.app.client.authproviders;
+    			console.log("P is ", p);
+	    		for(var i = 0; i < p.length; i++) {
+	    			pp = p[i].split('|');
+	    			this.authproviders.push(pp);
+	    		}
+
+	    	} else {
+	    		this.authproviders.push(['all']);
+	    	}
+    		return this.authproviders;
+    	},
+
+		"matchAuthProviderFilterExtra": function(item) {
+
+			var providers = this.getAuthProviderDef();
+			for(var i = 0; i < providers.length; i++) {
+
+				if (item.matchType(providers[i])) {
+					return true;
+				}
+
+			}
+			return false;
+		},
+
+
+		"matchAuthProviderFilter": function(item) {
+			
+			var providers = this.getAuthProviderDef();
+			for(var i = 0; i < providers.length; i++) {
+				console.log("Compare", JSON.stringify(providers[i]), item);
+				if (providers[i][0] === 'all') {
+					return true;
+				}
+				if (providers[i][0] === 'feide') {
+
+					if (providers[i][1] === 'all') {
+						return true;
+					}
+					switch (providers[i][1]) {
+						case 'go':
+						case 'he':
+						case 'vgs':
+							if (item.isType(providers[i][1])) {
+								return true;
+							}
+							break;
+
+						case 'realm':
+							if (providers[i][2] === item.id) {
+								return true;
+							}
+							break;
+
+					}
+
+				}
+			}
+
+			return false;
+		},
 
 
     	"matchSearchTerm": function(item) {
@@ -385,6 +429,10 @@ define(function(require, exports, module) {
 			var c = 1; var missed = 0;
 			for(i = 0; i < it.length; i++) {
 
+				if (!this.matchAuthProviderFilter(it[i])) {
+					continue;
+				}
+
 				if (!this.matchSearchTerm(it[i])) {
 					missed++;
 					continue;
@@ -433,6 +481,12 @@ define(function(require, exports, module) {
 
 			var txt = '';
 			for(var i = 0; i < this.extra.length; i++) {
+
+				if (!this.matchAuthProviderFilterExtra(this.extra[i])) {
+					continue;
+				}
+
+
 				var iconImage = '';
 				if (this.extra[i].iconImage) {
 					iconImage = '<img class="media-object" style="width: 48px; height: 48px" src="/static/media/disco/' + this.extra[i].iconImage + '" alt="...">';
@@ -442,13 +496,13 @@ define(function(require, exports, module) {
 
 				var idtxt = '';
 				if (this.extra[i].id) {
-					idtxt += ' data-id="' + quoteattr(this.extra[i].id) + '"';  
+					idtxt += ' data-id="' + Utils.quoteattr(this.extra[i].id) + '"';  
 				}
 				if (this.extra[i].type) {
-					idtxt += ' data-type="' + quoteattr(this.extra[i].type) + '"';  
+					idtxt += ' data-type="' + Utils.quoteattr(this.extra[i].type) + '"';  
 				}
 				if (this.extra[i].subid) {
-					idtxt += ' data-subid="' + quoteattr(this.extra[i].subid) + '"';  
+					idtxt += ' data-subid="' + Utils.quoteattr(this.extra[i].subid) + '"';  
 				}
 
 				txt += '<a href="#" class="list-group-item idpentry" ' + idtxt + '>' +

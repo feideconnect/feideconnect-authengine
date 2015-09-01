@@ -45,6 +45,13 @@ class OAuthAuthorization {
 
 		$this->request = $request;
 		$this->auth = new Authenticator();
+
+		// echo 'About to require authentication'; var_dump($this->request); Exit;
+		
+		if ($this->request->client_id) {
+			$this->auth->setClientID($request->client_id);	
+		}
+		
 		$this->isPassive = false;
 
 		if (!($this->request instanceof Messages\AuthorizationRequest)) {
@@ -66,7 +73,6 @@ class OAuthAuthorization {
 			));
 			$pAuthorization = new \FeideConnect\OpenIDConnect\Protocol\OICAuthorization($request);
 			
-
 			return $pAuthorization->process();
 
 		}

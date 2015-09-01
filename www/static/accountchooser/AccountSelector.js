@@ -6,6 +6,9 @@ define(function(require, exports, module) {
 	var AccountStore = require('../oauthgrant/AccountStore');
 
 
+    var Utils = require('./Utils');
+
+
 
     var AccountSelector = Class.extend({
 
@@ -69,33 +72,35 @@ define(function(require, exports, module) {
         "draw": function() {
             var txt = '';
             for(var userid in this.store.accts) {
+
+
+                console.error("Is this account ok?", this.store.accts[userid], this.app.client.authproviders);
+
                 var a = this.store.accts[userid];
-                txt += '<a href="#" class="list-group-item accountentry" data-userid="' + userid + '" style="">' +
+                txt += '<a href="#" class="list-group-item accountentry" data-userid="' + Utils.quoteattr(userid) + '" style="">' +
                     '<div class="media"><div class="media-left media-middle">' + 
-                            '<img class="media-object" style="width: 64px; height: 64px" src="' + a.photo + '" alt="...">' + 
+                            '<img class="media-object" style="width: 64px; height: 64px" src="' + Utils.quoteattr(a.photo) + '" alt="...">' + 
                         '</div>' +
                         '<div class="media-body">' + 
                         '<p class="showOnRemove" style=""><button class="btn btn-danger actRemove" style="float: right">Remove</button></p>' + 
                         '<i style="float: right; margin-top: 20px" class="fa fa-chevron-right fa-2x hideOnRemove"></i>' +
-                        '<p style="font-size: 140%; margin: 0px">' + a.name + '</p>' + 
-                        '<p style="font-size: 100%; margin: 0px; margin-top: -6px">' + a.title + '</p>' + 
-                        '<p style="font-size: 70%; color: #aaa; margin: 0px">' + userid + '</p>' + 
+                        '<p style="font-size: 140%; margin: 0px">' + Utils.quoteattr(a.name) + '</p>' + 
+                        '<p style="font-size: 100%; margin: 0px; margin-top: -6px">' + Utils.quoteattr(a.title) + '</p>' + 
+                        '<p style="font-size: 70%; color: #aaa; margin: 0px">' + Utils.quoteattr(userid) + '</p>' + 
 
                         '</div>' +
                     '</div>' +
                 '</a>';
-
             }
 
             txt += '<div class="list-group-item">' + 
-
                 '<p style="text-align: right; font-size: 80%; marging-top: 2em">' +
                     '   <a id="removeacct" class="hideOnRemove" href="" style="color: #888; "><i class="fa fa-times"></i> remove accounts</a>' +
                     '   <a class="showOnRemove" id="removedone" href="" style="color: #888"><i class="fa fa-check"></i> done</a>' + 
                 '</p>' +
                 '<p style="text-align: center; marging-top: 1em"><a id="altlogin" href="">or login with another account</a></p>' +
-
                 '</div>';
+
             $("#accounts").empty().append(txt);
 
         }
