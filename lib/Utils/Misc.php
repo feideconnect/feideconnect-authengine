@@ -14,6 +14,8 @@ class Misc {
 		
 
 
+
+
 		$cachestr = join('|', $available_languages);
 		if (isset(self::$langCache[$cachestr])) {
 			return self::$langCache[$cachestr];
@@ -55,7 +57,19 @@ class Misc {
 			}
 		}
 
-		// echo '<pre>'; print_r($hits); exit;
+
+		if (isset($_COOKIE["lang"]) && in_array($_COOKIE["lang"], $available_languages)) {
+			$bestlang = $_COOKIE["lang"];
+		}
+
+		
+		// var_dump($_COOKIE["lang"]); 
+		// var_dump($available_languages); 
+		// var_dump($hits);
+		// var_dump($bestlang);
+		// exit;
+
+
 		self::$langCache[$cachestr] = $bestlang;
 		return $bestlang;
 	}
@@ -88,7 +102,7 @@ class Misc {
 	/*::         GeoDataSource.com (C) All Rights Reserved 2015		   		     :*/
 	/*::                                                                         :*/
 	/*::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
-	function distance($lat1, $lon1, $lat2, $lon2) {
+	static function distance($lat1, $lon1, $lat2, $lon2) {
 
 		$theta = $lon1 - $lon2;
 		$dist = sin(deg2rad($lat1)) * sin(deg2rad($lat2)) +  cos(deg2rad($lat1)) * cos(deg2rad($lat2)) * cos(deg2rad($theta));

@@ -7,7 +7,8 @@ use FeideConnect\HTTP\HTTPResponse;
 use FeideConnect\HTTP\TextResponse;
 use FeideConnect\HTTP\JSONResponse;
 use FeideConnect\HTTP\TemplatedHTMLResponse;
-
+use FeideConnect\Config;
+use FeideConnect\Utils\Misc;
 use FeideConnect\Utils\URL;
 
 class Pages {
@@ -51,6 +52,25 @@ class Pages {
 		];
 		$data['client'] = $_SERVER['REMOTE_ADDR'];
 
+
+		$cookie = (isset($_COOKIE['lang']) ? $_COOKIE['lang'] : null);
+
+		$hdrs = getallheaders();
+		$langheader = (isset($hdrs['Accept-Language']) ? $hdrs['Accept-Language'] : null);
+		// var_dump($hdrs); exit;
+
+		$availlang = Config::getValue('availableLanguages');
+		$defaultlang = $availlang[count($availlang) - 1];
+		$locenabled = Config::getValue('enableLocalization');
+
+		$data['lang'] = [
+			"cookie" => $cookie,
+			"accept-language" => $langheader,
+			"available" => $availlang,
+			"default" => $defaultlang,
+			"enabled" => $locenabled,
+			"selected" => Misc::get_browser_language($availlang)
+		];
 
 		$baseDIR = dirname(dirname(__DIR__));
 
