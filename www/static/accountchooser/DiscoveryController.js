@@ -285,7 +285,7 @@ define(function(require, exports, module) {
 			
 			var providers = this.app.getAuthProviderDef();
 			for(var i = 0; i < providers.length; i++) {
-				console.log("Compare", JSON.stringify(providers[i]), item);
+				// console.log("Compare", JSON.stringify(providers[i]), item);
 				if (providers[i][0] === 'all') {
 					return true;
 				}
