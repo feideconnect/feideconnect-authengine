@@ -175,7 +175,7 @@ define(function(require, exports, module) {
 				// console.error("About to load dictionary");
 				$.getJSON('/dictionary',function(data) {
 					that.dictionary = data;
-					console.error("Dictionary was loaded", that.dictionary);
+					// console.error("Dictionary was loaded", that.dictionary);
 					// that.initAfterLoad();
 					that.lang.initLoad(data._lang);
 					resolve();
