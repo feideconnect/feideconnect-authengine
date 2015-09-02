@@ -31,6 +31,7 @@
 	"service": "The application",
 	"requestsperms": "requests the following permissions on behalf of you:",
 	"requeststhirdperms": "In addition the application requests these permissions to third party services on behalf of you:",
+	"thirdpermuserinfo": "These third party services will get access to your userID and group memberships.",
 	"readmoreconnect": "Read more about Feide and Connect",
 	"connectpersonvern": "Connect privacy policy",
 	"thisisfirsttime": "This is the first time you login to an application using Feide / Connect. To continue you need to accept the Connect Terms of Use.",
