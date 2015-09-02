@@ -24,14 +24,14 @@ define(function(require, exports, module) {
 			this.el.on('click', '.ls', function(e) {
 				e.preventDefault();
 				var s = $(e.currentTarget).data('lang');
-				console.log("Selected ", s);
+				// console.log("Selected ", s);
 				that.setLang(s);
 			});
 		},
 		"setLang": function(lang) {
 
 			// console.log("Lang was ", Cookies.get('lang'));
-			Cookies.set('lang', lang, {'path': '', 'domain': '.feideconnect.no', 'expires': (365*10)});
+			Cookies.set('lang', lang, {'path': '/', 'domain': '.feideconnect.no', 'expires': (365*10)});
 			// console.log("Lang is ", Cookies.get('lang'));
 			// return;
 
@@ -62,9 +62,11 @@ define(function(require, exports, module) {
 
 
 		"initLoad": function(lang) {
-			console.log("initload");
+			// console.log("initload");
 			var that = this;
 			this.selected = lang;
+
+			// console.log("Lang was ", Cookies.get('lang'));
 			return Promise.resolve()
 				.then(that.proxy("draw"))
 				.then(that.proxy("_initLoaded"));
