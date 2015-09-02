@@ -15,6 +15,7 @@ define(function(require, exports, module) {
 			this.accountstore = new AccountStore(visualTag);
 
 
+
 			$(".grantEntry").on("click", function(item) {
 				console.log("Click");
 				$(item.currentTarget).toggleClass("grantEntryActive");

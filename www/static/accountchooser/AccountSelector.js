@@ -150,7 +150,7 @@ define(function(require, exports, module) {
 							'<img class="media-object" style="width: 64px; height: 64px" src="' + Utils.quoteattr(a.photo) + '" alt="...">' + 
 						'</div>' +
 						'<div class="media-body">' + 
-							'<p class="showOnRemove" style=""><button class="btn btn-danger actRemove" style="float: right">Remove</button></p>' + 
+							'<p class="showOnRemove" style=""><button class="btn btn-danger actRemove" style="float: right">' + this.app.dictionary.remove + '</button></p>' + 
 							'<i style="float: right; margin-top: 20px" class="fa fa-chevron-right fa-2x hideOnRemove"></i>' +
 							'<p style="font-size: 140%; margin: 0px">' + Utils.quoteattr(a.name) + '</p>' + 
 							'<p style="font-size: 100%; margin: 0px; margin-top: -6px">' + Utils.quoteattr(a.title) + '</p>' + 
@@ -162,10 +162,10 @@ define(function(require, exports, module) {
 
 			txt += '<div class="list-group-item">' + 
 				'<p style="text-align: right; font-size: 80%; marging-top: 2em">' +
-					'   <a id="removeacct" class="hideOnRemove" href="" style="color: #888; "><i class="fa fa-times"></i> remove accounts</a>' +
-					'   <a class="showOnRemove" id="removedone" href="" style="color: #888"><i class="fa fa-check"></i> done</a>' + 
+					'   <a id="removeacct" class="hideOnRemove" href="" style="color: #888; "><i class="fa fa-times"></i>' + this.app.dictionary.removeacct + ' </a>' +
+					'   <a class="showOnRemove" id="removedone" href="" style="color: #888"><i class="fa fa-check"></i> ' + this.app.dictionary.done + '</a>' + 
 				'</p>' +
-				'<p style="text-align: center; marging-top: 1em"><a id="altlogin" href="">or login with another account</a></p>' +
+				'<p style="text-align: center; marging-top: 1em"><a id="altlogin" href="">' + this.app.dictionary.oranotheraccount + '</a></p>' +
 				'</div>';
 
 			$("#accounts").empty().append(txt);

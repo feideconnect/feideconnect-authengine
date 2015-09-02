@@ -5,7 +5,7 @@ define(function(require, exports, module) {
 	var DiscoveryController = require('./DiscoveryController');
 	var AccountStore = require('../oauthgrant/AccountStore');
 	var AccountSelector = require('./AccountSelector');
-
+	var LanguageSelector = require('./LanguageSelector');
 	var Controller = require('./Controller');
 
 	var App = Controller.extend({
@@ -16,6 +16,8 @@ define(function(require, exports, module) {
 
 			this.client = null;
 
+
+			this.lang = new LanguageSelector($("#langselector"), true);
 			this.disco = new DiscoveryController(this);
 			this.accountstore = new AccountStore();
 			this.selector = new AccountSelector(this, this.accountstore);
@@ -67,6 +69,11 @@ define(function(require, exports, module) {
     			return this.authproviders;
     		}
     		this.authproviders = [];
+
+    		if (!this.client) {
+    			return this.authproviders;
+    		}
+
     		if (this.client.authproviders && this.client.authproviders !== null) {
 
     			p = this.client.authproviders;
@@ -168,8 +175,9 @@ define(function(require, exports, module) {
 				// console.error("About to load dictionary");
 				$.getJSON('/dictionary',function(data) {
 					that.dictionary = data;
-					// console.error("Dictionary was loaded");
+					console.error("Dictionary was loaded", that.dictionary);
 					// that.initAfterLoad();
+					that.lang.initLoad(data._lang);
 					resolve();
 				});
 
