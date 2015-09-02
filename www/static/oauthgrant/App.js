@@ -5,7 +5,7 @@ define(function(require, exports, module) {
 
 	// var FeideWriter = require('./FeideWriter');
 	// var LocationController = require('./LocationController');
-
+	var LanguageSelector = require('../accountchooser/LanguageSelector');
 	var AccountStore = require('./AccountStore');
 
     var App = Class.extend({
@@ -15,6 +15,7 @@ define(function(require, exports, module) {
 			this.accountstore = new AccountStore(visualTag);
 
 
+			this.lang = new LanguageSelector($("#langselector"), true);
 
 			$(".grantEntry").on("click", function(item) {
 				console.log("Click");
@@ -40,7 +41,26 @@ define(function(require, exports, module) {
 				$("body").show();
 			}
 
-    	}
+			this.loadDictionary();
+
+    	},
+		"loadDictionary": function() {
+			var that = this;
+
+			return new Promise(function(resolve, reject) {
+				
+				// console.error("About to load dictionary");
+				$.getJSON('/dictionary',function(data) {
+					that.dictionary = data;
+					// console.error("Dictionary was loaded", that.dictionary);
+					// that.initAfterLoad();
+					that.lang.initLoad(data._lang);
+					resolve();
+				});
+
+			});
+
+		}
 
     });
     return App;

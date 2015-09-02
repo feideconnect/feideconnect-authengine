@@ -8,7 +8,7 @@
 		<div class="pull-right grantDetailsHide selectIndicator" style="font-size: 150%"><i class="glyphicon glyphicon-chevron-left "></i></div>
 
 		<p class="" style="margin-bottom: 0px">
-			<span style="" class="glyphicon glyphicon-user"></span> Tilgang til informasjon om hvem du er</p>
+			<span style="" class="glyphicon glyphicon-user"></span> {{_.accesstouserinfo}}</p>
 	
 
 		<div class="grantDetails">
@@ -16,13 +16,13 @@
 
 			<p class="userInfoEntry">
 				<span class="fa fa-user"></span> 
-					<abbr title="{{user.userid}}">Bruker ID</abbr> &nbsp; &nbsp;
+					<abbr title="{{user.userid}}">{{_.userid}}</abbr> &nbsp; &nbsp;
 			</p>
 
 			<p class="userInfoEntry">
 				{{#perms.global.userinfo-feide}}
 					<span  class="fa fa-user"></span> 
-						<span style="">Profile photo</span> &nbsp; &nbsp;
+						<span style="">{{_.profilephoto}}</span> &nbsp; &nbsp;
 				{{/perms.global.userinfo-feide}}
 			</p>
 
@@ -31,30 +31,28 @@
 			<p class="userInfoEntry">
 				{{#perms.global.userinfo-feide}}
 					<span  class="fa fa-user"></span> 
-						<span style="">Feide ID</span> &nbsp; &nbsp;
+						<span style="">{{_.feideid}}</span> &nbsp; &nbsp;
 				{{/perms.global.userinfo-feide}}
 			</p>
 
 			<p class="userInfoEntry">
 				{{#perms.global.userinfo-mail}}
 					<span  class="fa fa-envelope-o"></span> 
-						<span style="">Email address: <tt>{{user.email}}</tt></span>
+						<span style="">{{_.email}}: <tt>{{user.email}}</tt></span>
 				{{/perms.global.userinfo-mail}}
 			</p>
 
 
 			{{#perms.global.openid}}
+			<!--
 			<p class="userInfoEntry openid">
 				<i class="fa fa-openid" style="color: #800"></i> OpenID Connect
-			</p>
+			</p> 
+			-->
 			{{/perms.global.openid}}
 			
 
 		</div>
-
-
-
-
 
 	</div><!-- panel -->
 {{/perms.global.userinfo}}

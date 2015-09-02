@@ -6,7 +6,7 @@ use FeideConnect\OAuth\Exceptions\UserCannotAuthorizeException;
 use FeideConnect\Data\StorageProvider;
 use FeideConnect\Data\MandatoryClientInspector;
 
-use FeideConnect\HTTP\TemplatedHTMLResponse;
+use FeideConnect\HTTP\LocalizedTemplatedHTMLResponse;
 use FeideConnect\HTTP\JSONResponse;
 
 use FeideConnect\Utils;
@@ -196,7 +196,7 @@ class AuthorizationUI {
 			return (new JSONResponse($data))->setCORS(false);
 		}
 		
-		$response = new TemplatedHTMLResponse('oauthgrant');
+		$response = new LocalizedTemplatedHTMLResponse('oauthgrant');
 		$response->setData($data);
 		return $response;
 

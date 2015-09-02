@@ -7,8 +7,8 @@
 
 	<div class="media grantEntryContent" style="">
 		<div class="media-left ">
-			<img class="media-object grantDetails" style="max-height: 64px; max-width: 64px" src="/client/media/{{client.id}}" alt="...">
-			<img class="media-object grantDetailsHide" style="max-height: 32px; max-width: 32px" src="/client/media/{{client.id}}" alt="...">
+			<img class="media-object grantDetails" style="max-height: 64px; max-width: 64px" src="{{apibase}}/clientadm/clients/{{client.id}}/logo" alt="...">
+			<img class="media-object grantDetailsHide" style="max-height: 32px; max-width: 32px" src="{{apibase}}/clientadm/clients/{{client.id}}/logo" alt="...">
 		</div>
 
 		<div class="media-body" style="" >
@@ -21,6 +21,8 @@
 			
 				<div class="row" style="">
 						
+
+
 					<div class="col-md-6">
 
 						{{#client.descr}}
@@ -30,13 +32,17 @@
 						<p class="simpleSkip"><code>{{client.host}}</code></p>
 
 						{{^client.isSecure}}
-							{{! <p><span class="label label-danger">Warning: Application is insucure</span></p> }}
+							<p><span class="label label-danger">Warning: Application is insucure (not running on HTTPS)</span></p>
 						{{/client.isSecure}}
 
-						<p class="simpleSkip"><a target="_blank" href="#">Read more about this application</a></p>
+						<p class="simpleSkip"><a target="_blank" href="#">{{_.applicationreadmore}}</a></p>
 
 					</div>
 					
+
+
+
+
 					<div class="col-md-6 ownerbox">
 
 
@@ -48,19 +54,24 @@
 									src="{{org.logoURL}}">
 							</div>
 							
-
 						{{/ownerOrg}}
 
+
+
 						{{#owner}}
+
 							<div class="pull-right ownerlogo">
 								<img style="" 
-									src="/user/media/{{owner.p}}">
+									src="{{apibase}}/userinfo/v1/user/media/{{owner.p}}">
 							</div>
 							<p class="ownerName">{{owner.name}} </p>
 							<p class="ownerMail">
 								<a href="mailto:{{owner.mail}}">{{owner.email}}</a>
 							</p>
+
 						{{/owner}}
+
+
 
 					</div>
 
@@ -68,14 +79,6 @@
 
 
 				</div>
-				
-
-
-
-
-
-		
-
 				
 
 			</div>

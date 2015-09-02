@@ -4,7 +4,7 @@
 namespace FeideConnect\Controllers;
 
 use FeideConnect\HTTP\HTTPResponse;
-use FeideConnect\HTTP\TemplatedHTMLResponse;
+use FeideConnect\HTTP\LocalizedTemplatedHTMLResponse;
 use FeideConnect\Utils\URL;
 use FeideConnect\Data\StorageProvider;
 use FeideConnect\OAuth\ScopesInspector;
@@ -59,7 +59,8 @@ class POCgrant {
 			'HOST' => URL::selfURLhost(),
 		];
 
-
+		$data['visualTag'] = [];
+		$data["apibase"] = Config::getValue("endpoints.core");
 		// echo '<pre>'; print_r($data); exit;
 
 
@@ -103,7 +104,7 @@ class POCgrant {
 		));
 
 
-		$response = new TemplatedHTMLResponse('oauthgrant');
+		$response = new LocalizedTemplatedHTMLResponse('oauthgrant');
 		$response->setData($data);
 		return $response;
 
