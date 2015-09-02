@@ -15,6 +15,10 @@
 	"searchfor": "Search for the name of your school...",
 	"showall": "show all",
 	"hidden": "items hidden",
+
+	"servicenotaccessible": "Service not accessible",
+	"authprovidernotaccepted": "You have logged in with an authentication provider that was not allowed by this application. Please return to the application and try again, selecting another login provider. If problem consists contact the application owner.",
+
 	"cno": "Norway",
 	"cdk": "Denmark",
 	"cfi": "Finland",

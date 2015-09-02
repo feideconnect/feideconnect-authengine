@@ -5,6 +5,7 @@ namespace FeideConnect\Authentication;
 use FeideConnect\Config;
 use FeideConnect\Data\StorageProvider;
 use FeideConnect\Exceptions\Exception;
+use FeideConnect\Exceptions\AuthProviderNotAccepted;
 
 class Account {
 
@@ -77,6 +78,98 @@ class Account {
 
 	}
 
+	public function allowAll($authproviders) {
+
+		foreach($authproviders AS $ap) {
+			if (count($ap) === 1 && $ap[0] === 'all') {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	public function compareType($candidate, $match) {
+
+		// echo '<p>Compare candidate'; var_dump($candidate);
+		// echo '<p>with match'; var_dump($match);
+
+		for($i = 0; $i < count($match); $i++) {
+			if ($match[$i] === 'all') {
+				return true;
+			}
+			if ($i > (count($candidate)- 1)) {
+				return false;
+			}
+			if ($match[$i] !== $candidate[$i]) {
+				return false;
+			}
+		}
+		return true;
+	}
+
+	public function getDef() {
+
+		$def = [];
+
+		$tag = $this->getVisualTag();
+		return $tag["def"];
+
+		// var_dump($tag);
+		// if (!empty($tag["def"])) {
+		// 	foreach($tag["def"] AS $d) {
+		// 		// var_dump("TAG"); var_dump($d);
+		// 		// $s = 
+		// 		// $def[] = explode(':', $d);	
+		// 		echo 'fooo'; var_dump($d);
+		// 		array_push($def, explode(':', $d));
+		// 		$def[] = explode(':', $d);
+		// 		var_dump(explode(':', $d));
+		// 	}
+			
+			
+		// }
+		// var_dump($def);
+		// return $def;
+
+
+	}
+
+	public function validateAuthProvider($authproviders) {
+
+
+		// echo '<h1>validateAuthProvider()</h1>';
+		// var_dump($authproviders);
+		
+		$def = $this->getDef();
+
+		if (empty($authproviders)) {
+			return true;
+		}
+		
+		if ($this->allowAll($authproviders)) {
+			return true;
+		}
+
+		if (empty($def)) {
+			throw new \Exception('Unable to detect where this user can login.');
+		}
+
+		foreach($def AS $d) {
+			foreach($authproviders AS $ap) {
+				if ($this->compareType($d, $ap)) {
+					// echo "<h2>Did match</h2>"; var_dump($d); var_dump($ap);
+					return true;
+				}	
+			}
+			
+		}
+
+		throw new AuthProviderNotAccepted('Authentication provider is not accepted by requesting client. Return to application and try to login again selecting another provider.');
+
+
+
+	}
+
 
 	// TODO: Update this code to automatically
 	public function getVisualTag() {
@@ -120,7 +213,7 @@ class Account {
 
 		} else if (isset($this->sourceID) && $this->sourceID === 'idporten') {
 
-			$org = $matches[1];
+
 			$tag = [
 				"name" => $this->name,
 				"type" => "saml",
@@ -133,7 +226,6 @@ class Account {
 
 		} else if (isset($this->sourceID) && $this->sourceID === 'openidp') {
 
-			$org = $matches[1];
 			$tag = [
 				"name" => $this->name,
 				"type" => "saml",
@@ -146,7 +238,7 @@ class Account {
 
 		} else if (isset($this->sourceID) && $this->sourceID === 'twitter') {
 
-			$org = $matches[1];
+
 			$tag = [
 				"name" => $this->name,
 				"type" => "twitter",
@@ -158,7 +250,7 @@ class Account {
 
 		} else if (isset($this->sourceID) && $this->sourceID === 'linkedin') {
 
-			$org = $matches[1];
+
 			$tag = [
 				"name" => $this->name,
 				"type" => "linkedin",
@@ -170,7 +262,7 @@ class Account {
 
 		} else if (isset($this->sourceID) && $this->sourceID === 'facebook') {
 
-			$org = $matches[1];
+
 			$tag = [
 				"name" => $this->name,
 				"type" => "facebook",

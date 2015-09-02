@@ -9,6 +9,7 @@ use FeideConnect\OAuth\AccessTokenPool;
 use FeideConnect\OAuth\AuthorizationUI;
 use FeideConnect\OAuth\AuthorizationEvaluator;
 
+use FeideConnect\HTTP\LocalizedTemplatedHTMLResponse;
 
 use FeideConnect\Data\Models;
 
@@ -17,7 +18,7 @@ use FeideConnect\Authentication\Authenticator;
 use FeideConnect\Authentication\UserMapper;
 
 use FeideConnect\Logger;
-
+use FeideConnect\Exceptions\AuthProviderNotAccepted;
 
 
 
@@ -203,11 +204,15 @@ class OAuthAuthorization {
 
 	}
 
+	protected function validateAuthProvider() {
+
+
+		$this->account->validateAuthProvider($this->client->getAuthProviders());
+
+	}
 
 
 	public function process() {
-
-
 
 
 		$this->checkClient();
@@ -245,9 +250,21 @@ class OAuthAuthorization {
 		$this->authenticateUser();
 		$this->aevaluator->setUser($this->user);
 
+		try {
+
+			$this->validateAuthProvider();	
+
+		} catch(AuthProviderNotAccepted $a) {
+
+			return (new LocalizedTemplatedHTMLResponse('authprovidernotaccepted'))->setData([]);
+		}
+		
+
 
 		$res = $this->obtainAuthorization();
 		if ($res !== null) { return $res; }
+
+
 
 
 		switch($this->request->response_type) {
@@ -256,7 +273,6 @@ class OAuthAuthorization {
 				return $this->processToken();
 
 			case 'code':
-
 				return $this->processCode();
 
 		}

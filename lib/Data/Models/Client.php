@@ -11,13 +11,13 @@ use Cassandra\Type\Blob;
 
 class Client extends \FeideConnect\Data\Model {
 
-	public $id, $client_secret, $created, $descr, $name, $owner, $organization, $logo, $redirect_uri, $scopes, $scopes_requested, $status, $type, $updated;
+	public $id, $client_secret, $created, $descr, $name, $owner, $organization, $logo, $redirect_uri, $scopes, $scopes_requested, $status, $type, $updated, $authproviders;
 	
 
 	protected static $_properties = array(
 		"id", "client_secret", "created", "descr", "name", "owner", "organization",
 		"logo",
-		"redirect_uri", "scopes", "scopes_requested", "status", "type", "updated"
+		"redirect_uri", "scopes", "scopes_requested", "status", "type", "updated", "authproviders"
 	);
 	protected static $_types = [
 		"created" => "timestamp",
@@ -42,6 +42,18 @@ class Client extends \FeideConnect\Data\Model {
 		}
 		return false;
 	}
+	public function getAuthProviders() {
+		$res = [];
+		if (empty($this->authproviders)) {
+			return [["all"]];
+		}
+		foreach($this->authproviders AS $a) {
+			$res[] = explode('|', $a);
+		}
+		return $res;
+
+	}
+
 
 	public function getStorableArray() {
 
