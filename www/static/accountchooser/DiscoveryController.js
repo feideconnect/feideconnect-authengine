@@ -409,12 +409,15 @@ define(function(require, exports, module) {
     		var showit = [];
 
 			var txt = '';
-			var c = 1; var missed = 0;
+			var c = 0; var missed = 0;
+			var cc = 0;
 			for(i = 0; i < it.length; i++) {
 
 				if (!this.matchAuthProviderFilter(it[i])) {
 					continue;
 				}
+
+				cc++;
 
 				if (!this.matchSearchTerm(it[i])) {
 					missed++;
@@ -440,7 +443,7 @@ define(function(require, exports, module) {
 			for (i = 0; i < showit.length; i++) {
 
 
-				if (c > this.maxshow) {
+				if (c > (this.maxshow - 1)) {
 					var remaining = it.length - missed - c;
 
 					if (remaining > 0) {
@@ -455,6 +458,11 @@ define(function(require, exports, module) {
 				txt += showit[i].getHTML(that.app.config.feideIdP);
 			}
 			$("#idplist").empty().append(txt);
+			if (cc === 0) {
+				$(".orgchoices").hide();
+				$(".altchoices").removeClass("col-md-4").addClass("col-md-12");
+			}
+
 			$("#usersearch").focus();
 
     	},
@@ -463,6 +471,8 @@ define(function(require, exports, module) {
     	"drawDataExtra": function() {
 
 			var txt = '';
+			var c = 0;
+
 			for(var i = 0; i < this.extra.length; i++) {
 
 				if (!this.matchAuthProviderFilterExtra(this.extra[i])) {
@@ -488,6 +498,7 @@ define(function(require, exports, module) {
 					idtxt += ' data-subid="' + Utils.quoteattr(this.extra[i].subid) + '"';  
 				}
 
+				c++;
 				txt += '<a href="#" class="list-group-item idpentry" ' + idtxt + '>' +
 					'<div class="media"><div class="media-left media-middle">' + iconImage + '</div>' +
 						'<div class="media-body"><p>' + this.extra[i].title + '</p></div>' +
@@ -496,6 +507,11 @@ define(function(require, exports, module) {
 
 			}
 
+			if (c === 0) {
+				$(".altchoices").hide();
+				$(".orgchoices").removeClass("col-md-8").addClass("col-md-12");
+
+			}
 			$("#idplistextra").empty().append(txt);
 
     	}
