@@ -268,6 +268,9 @@ define(function(require, exports, module) {
 		"matchAuthProviderFilterExtra": function(item) {
 
 			var providers = this.app.getAuthProviderDef();
+
+			// console.error("Maching auth providers: ", providers);
+
 			for(var i = 0; i < providers.length; i++) {
 
 				if (item.matchType(providers[i])) {

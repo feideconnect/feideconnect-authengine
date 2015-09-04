@@ -70,20 +70,23 @@ define(function(require, exports, module) {
     		}
     		this.authproviders = [];
 
-    		if (!this.client) {
-    			return this.authproviders;
-    		}
+    		if (this.client) {
 
-    		if (this.client.authproviders && this.client.authproviders !== null) {
+	    		if (this.client.authproviders && this.client.authproviders !== null) {
 
-    			p = this.client.authproviders;
-    			// console.log("P is ", p);
-	    		for(var i = 0; i < p.length; i++) {
-	    			pp = p[i].split('|');
-	    			this.authproviders.push(pp);
-	    		}
+	    			p = this.client.authproviders;
+	    			// console.log("P is ", p);
+		    		for(var i = 0; i < p.length; i++) {
+		    			pp = p[i].split('|');
+		    			this.authproviders.push(pp);
+		    		}
 
-	    	} else {
+		    	} else {
+		    		this.authproviders.push(['all']);
+		    	}
+		    }
+		    
+	    	if (this.authproviders.length === 0) {
 	    		this.authproviders.push(['all']);
 	    	}
     		return this.authproviders;
