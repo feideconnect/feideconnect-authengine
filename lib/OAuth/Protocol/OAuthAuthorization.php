@@ -134,6 +134,8 @@ class OAuthAuthorization {
 
 
 		$redirect_uri = $this->aevaluator->getValidatedRedirectURI();
+
+
 		$state = $this->request->getState();
 		$scopesInQuestion = $this->aevaluator->getScopesInQuestion();
 
@@ -215,6 +217,9 @@ class OAuthAuthorization {
 	public function process() {
 
 
+
+
+
 		$this->checkClient();
 
 		if ($this->aevaluator === null) { 
@@ -222,8 +227,11 @@ class OAuthAuthorization {
 		}
 		
 
+
 		$redirect_uri = $this->aevaluator->getValidatedRedirectURI();
 		$state = $this->request->getState();
+
+
 		
 		// If SimpleSAML_Auth_State_exceptionId query parameter is set, then something failed 
 		// while performing authentication.
@@ -247,8 +255,12 @@ class OAuthAuthorization {
 			return $stepup;
 		}
 
+
+
 		$this->authenticateUser();
 		$this->aevaluator->setUser($this->user);
+
+
 
 		try {
 
@@ -260,9 +272,11 @@ class OAuthAuthorization {
 		}
 		
 
-
 		$res = $this->obtainAuthorization();
 		if ($res !== null) { return $res; }
+
+
+
 
 
 
@@ -270,9 +284,11 @@ class OAuthAuthorization {
 		switch($this->request->response_type) {
 
 			case 'token':
+
 				return $this->processToken();
 
 			case 'code':
+
 				return $this->processCode();
 
 		}
@@ -312,6 +328,8 @@ class OAuthAuthorization {
 	
 
 	protected function processCode() {
+
+
 
 		$scopesInQuestion = $this->aevaluator->getScopesInQuestion();
 		$redirectURI = null;

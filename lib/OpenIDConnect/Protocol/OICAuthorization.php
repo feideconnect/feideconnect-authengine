@@ -61,8 +61,6 @@ class OICAuthorization extends OAuthAuthorization {
 
 
 
-
-
 		$tokenresponse = \FeideConnect\OpenIDConnect\Messages\TokenResponse::generateWithIDtoken($this->request, $accesstoken, $idtoken);
 
 		Logger::info('OAuth Access Token and IDtoken is now issued.', array(
@@ -81,17 +79,17 @@ class OICAuthorization extends OAuthAuthorization {
 
 	protected function processCode() {
 
-
-		// echo "Processing OpenID Connect Code"; exit;
-
 		$scopesInQuestion = $this->aevaluator->getScopesInQuestion();
-		$redirectURI = null;
-		if (!empty($this->request->redirect_uri)) {
-			$redirectURI = $this->request->redirect_uri;
+
+		if (empty($this->request->redirect_uri)) {
+			throw new \Exception("Missing OpenID Connect required parameter [redirect_uri] at the authorization endpoint");
 		}
 
+		$redirect_uri = $this->aevaluator->getValidatedRedirectURI();
+
+
 		$idtoken = $this->getIDToken();
-		$code = AuthorizationCode::generate($this->client, $this->user, $redirectURI, $scopesInQuestion, $idtoken);
+		$code = AuthorizationCode::generate($this->client, $this->user, $redirect_uri, $scopesInQuestion, $idtoken);
 		$this->storage->saveAuthorizationCode($code);
 
 		$tokenresponse = Messages\AuthorizationResponse::generate($this->request, $code);
