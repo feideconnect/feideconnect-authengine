@@ -56,6 +56,8 @@ define(function(require, exports, module) {
 					}
 					// console.error("App is completed (2)");
 	
+
+	
 				})
 				.then(that.proxy("_initLoaded"));
 

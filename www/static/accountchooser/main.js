@@ -12,6 +12,7 @@ define(function(require, exports, module) {
 		}
 	}
 
+
     var App = require('App');
 	$(document).ready(function() {
 	    var app = new App();

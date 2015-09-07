@@ -86,7 +86,7 @@ define(function(require, exports, module) {
             this._super(undefined, false);
 
 
-
+			
 			$('.dropdown-toggle').dropdown();
 			$('[data-toggle="tooltip"]').tooltip();
 
@@ -158,6 +158,8 @@ define(function(require, exports, module) {
 		"initLoad": function() {
 
 			var that = this;
+
+
 
     		this.location = new LocationController();
     		this.location.onUpdate(function(loc) {
