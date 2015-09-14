@@ -22,6 +22,7 @@ DROP TABLE IF EXISTS oauth_codes;
 DROP TABLE IF EXISTS oauth_tokens;
 DROP INDEX IF EXISTS oauth_tokens_userid_idx;
 DROP INDEX IF EXISTS oauth_tokens_clientid_idx;
+DROP INDEX IF EXISTS oauth_tokens_scope_idx;
 
 DROP TABLE IF EXISTS oauth_authorizations;
 
@@ -179,6 +180,7 @@ CREATE TABLE oauth_tokens (
 );
 CREATE INDEX oauth_tokens_userid_idx ON oauth_tokens (userid);
 CREATE INDEX oauth_tokens_clientid_idx ON oauth_tokens (clientid);
+CREATE INDEX oauth_tokens_scope_idx ON oauth_tokens (scope);
 
 
 CREATE TABLE oauth_codes (
