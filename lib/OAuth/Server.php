@@ -39,8 +39,6 @@ class Server {
 	}
 
 
-
-
 	/**
 	 * OAuth Authorization Endpoint
 	 *
@@ -235,30 +233,15 @@ class Server {
 				$user = $this->storage->getUserByUserID($code->userid);
 
 
-				$expires_in = 3600*8; // 8 hours
-				if (in_array('longterm', $code->scope)) {
-					$expires_in = 3600*24*680; // 680 days
-				}
-
-				$pool = new AccessTokenPool($client, $user);
-				$accesstoken = $pool->getToken($code->scope, false, $expires_in);
-				// TODO Verify that this saveToken was successfull before continuing.
 
 				// Now, we consider us completed with this code, and we ensure that it cannot be used again
 				$this->storage->removeAuthorizationCode($code);
 
-				$tokenresponse = Messages\TokenResponse::generateFromAccessToken($accesstoken);
+				$tokenresponse = OAuthAuthorization::generateTokenResponse($client, $user, $code->scope, "authorization code");
 
 				if (isset($code->idtoken) && $code->idtoken !== null) {
 					$tokenresponse->idtoken = $code->idtoken;
 				}
-
-				Logger::info('OAuth Access Token is now issued as part of the authorization code flow at the token endpoint.', array(
-					'user' => $user->getAsArray(),
-					'client' => $client->getAsArray(),
-					'accesstoken' => $accesstoken->getAsArray(),
-					'tokenresponse' => $tokenresponse->getAsArray(),
-				));
 
 				return $tokenresponse->sendBodyJSON();
 
@@ -299,23 +282,11 @@ class Server {
 				}
 
 
-				$expires_in = 3600*8; // 8 hours
-				if (in_array('longterm', $requestedScopes)) {
-					$expires_in = 3600*24*680; // 680 days
-				}
-
-				$pool = new AccessTokenPool($client);
-				$accesstoken = $pool->getToken($requestedScopes, false, $expires_in);
-
-				$tokenresponse = Messages\TokenResponse::generateFromAccessToken($accesstoken);
+				$tokenresponse = OAuthAuthorization::generateTokenResponse($client, null, $requestedScopes, "client_credentials");
 				return $tokenresponse->sendBodyJSON();
 
 				
 			} else if ($tokenrequest->grant_type === 'password') {
-
-
-
-
 
 				if (empty($_SERVER['PHP_AUTH_USER'])) 
 					throw new OAuthException('invalid_client', 'Unable to authenticate the request on behalf of a client (missing username)');
@@ -369,26 +340,13 @@ class Server {
 				if ($user === null) {
 					throw new OAuthException('invalid_grant', 'Authenticated user does not have a user record.');
 				}
-				
-				
-
-				$expires_in = 3600*8; // 8 hours
-				if (in_array('longterm', $requestedScopes)) {
-					$expires_in = 3600*24*680; // 680 days
-				}
-
-				$pool = new AccessTokenPool($client, $user);
-				$accesstoken = $pool->getToken($requestedScopes, false, $expires_in);
-
-				$tokenresponse = Messages\TokenResponse::generateFromAccessToken($accesstoken);
-				return $tokenresponse->sendBodyJSON();
-
-
 
 			} else {
 				throw new OAuthException('unsupported_grant_type', 'Invalid [grant_type] provided to token endpoint.');
 			}
 			
+			$tokenresponse = OAuthAuthorization::generateTokenResponse($client, $user, $requestedScopes, "password");
+			return $tokenresponse->sendBodyJSON();
 
 		} catch (OAuthException $e) {
 

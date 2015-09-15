@@ -62,6 +62,33 @@ class OAuthAuthorization {
 
 	}
 
+	static function generateTokenResponse($client, $user, $requestedScopes, $flow, $state = null) {
+		$expires_in = 3600*8; // 8 hours
+		if (in_array('longterm', $requestedScopes)) {
+			$expires_in = 3600*24*680; // 680 days
+		}
+
+		$pool = new AccessTokenPool($client, $user);
+		$accesstoken = $pool->getToken($requestedScopes, false, $expires_in);
+		// TODO Verify that this saveToken was successfull before continuing.
+
+		$tokenresponse = Messages\TokenResponse::generate($accesstoken, $state);
+
+		$logdata = array(
+			'flow' => $flow,
+			'client' => $client->getAsArray(),
+			'accesstoken' => $accesstoken->getAsArray(),
+			'tokenresponse' => $tokenresponse->getAsArray(),
+		);
+		if ($user !== null) {
+			$logdata['user'] = $user->getAsArray();
+		}
+		Logger::info('OAuth Access Token is now issued.', $logdata);
+
+		return $tokenresponse;
+	}
+
+
 	function evaluateStepUp($aevaluator) {
 
 		// We are in the mid of processing the OAuth authorization
@@ -196,16 +223,6 @@ class OAuthAuthorization {
 	}
 
 
-	protected function getTokenDuration() {
-
-		$expires_in = 3600*8; // 8 hours
-		if ($this->aevaluator->hasScopeInQuestion('longterm')) {
-			$expires_in = 3600*24*680; // 680 days
-		}
-		return $expires_in;
-
-	}
-
 	protected function validateAuthProvider() {
 
 
@@ -301,25 +318,11 @@ class OAuthAuthorization {
 	protected function processToken() {
 
 		$redirect_uri = $this->aevaluator->getValidatedRedirectURI();
-		$expires_in = $this->getTokenDuration();
 		$scopesInQuestion = $this->aevaluator->getScopesInQuestion();
 
-		$pool = new AccessTokenPool($this->client, $this->user);
-		$accesstoken = $pool->getToken($scopesInQuestion, false, $expires_in);
+		$tokenresponse = $this->generateTokenResponse($this->client, $this->user, $scopesInQuestion, "implicit grant",
+		                                              $this->request->state);
 
-		// $accesstoken = Models\AccessToken::generate($client, $user, $scopesInQuestion, false, $expires_in);
-		// 
-		// TODO Verify that this saveToken was successfull before continuing.
-
-
-		$tokenresponse = Messages\TokenResponse::generate($this->request, $accesstoken);
-
-		Logger::info('OAuth Access Token is now issued.', array(
-			'user' => $this->user->getAsArray(),
-			'client' => $this->client->getAsArray(),
-			'accesstoken' => $accesstoken->getAsArray(),
-			'tokenresponse' => $tokenresponse->getAsArray(),
-		));
 
 		return $tokenresponse->sendRedirect($redirect_uri, true);
 

@@ -26,7 +26,7 @@ class TokenResponse extends Message {
 	}
 
 
-	public static function generateFromAccessToken(Models\AccessToken $accesstoken) {
+	public static function generate(Models\AccessToken $accesstoken, $state = null) {
 		$a = [
 			"access_token" => $accesstoken->access_token,
 			"token_type" => $accesstoken->token_type,
@@ -36,24 +36,8 @@ class TokenResponse extends Message {
 		if (isset($accesstoken->refresh_token)) $a["refresh_token"] = $accesstoken->refresh_token;
 		if (isset($accesstoken->scope)) $a["scope"] = join(' ', $accesstoken->scope);
 
-		$n = new self($a);
-		return $n;
-
-	}
-
-
-	public static function generate(AuthorizationRequest $request, Models\AccessToken $accesstoken) {
-		$a = [
-			"access_token" => $accesstoken->access_token,
-			"token_type" => $accesstoken->token_type,
-		];
-
-		if (isset($accesstoken->validuntil)) $a["expires_in"] = $accesstoken->validuntil->getInSeconds();
-		if (isset($accesstoken->refresh_token)) $a["refresh_token"] = $accesstoken->refresh_token;
-		if (isset($accesstoken->scope)) $a["scope"] = join(' ', $accesstoken->scope);
-
-		if (isset($request->state)) {
-			$a["state"] = $request->state;
+		if (!empty($state)) {
+			$a["state"] = $state;
 		}
 
 		$n = new self($a);
