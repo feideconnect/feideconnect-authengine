@@ -52,6 +52,10 @@ try {
 
 	$response = (new TemplatedHTMLResponse('exception'))->setData($data);
 
+} catch(HTTPRedirectException $e) {
+
+	$response = $e->getHTTPResponse();
+
 } catch(APIAuthorizationException $e) {
 
 	$response = $e->getJSONResponse();

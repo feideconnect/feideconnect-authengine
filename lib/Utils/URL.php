@@ -5,58 +5,6 @@ namespace FeideConnect\Utils;
 class URL {
 
 
-	public static function redirect($url) {
-
-		// Copied from SimplesAMLphp::Utilties.
-		assert('is_string($url)');
-		assert('!empty($url)');
-		// assert('is_array($parameters)');
-		// if (!empty($parameters)) {
-		// 	$url = self::addURLparameter($url, $parameters);
-		// }
-		/* Set the HTTP result code. This is either 303 See Other or
-		 * 302 Found. HTTP 303 See Other is sent if the HTTP version
-		 * is HTTP/1.1 and the request type was a POST request.
-		 */
-		if ($_SERVER['SERVER_PROTOCOL'] === 'HTTP/1.1' &&
-			$_SERVER['REQUEST_METHOD'] === 'POST') {
-			$code = 303;
-		} else {
-			$code = 302;
-		}
-		if (strlen($url) > 2048) {
-			error_log('Redirecting to a URL longer than 2048 bytes.');
-		}
-		/* Set the location header. */
-		header('Location: ' . $url, TRUE, $code);
-		/* Disable caching of this response. */
-		header('Pragma: no-cache');
-		header('Cache-Control: no-cache, must-revalidate');
-		/* Show a minimal web page with a clickable link to the URL. */
-		echo '<?xml version="1.0" encoding="UTF-8"?>' . "\n";
-		echo '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"' .
-			' "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">' . "\n";
-		echo '<html xmlns="http://www.w3.org/1999/xhtml">';
-		echo '<head>
-					<meta http-equiv="content-type" content="text/html; charset=utf-8">
-					<title>Redirect</title>
-				</head>';
-		echo '<body>';
-		echo '<h1>Redirect</h1>';
-		echo '<p>';
-		echo 'You were redirected to: ';
-		echo '<a id="redirlink" href="' .
-			htmlspecialchars($url) . '">' . htmlspecialchars($url) . '</a>';
-		echo '<script type="text/javascript">document.getElementById("redirlink").focus();</script>';
-		echo '</p>';
-		echo '</body>';
-		echo '</html>';
-		/* End script execution. */
-		exit;
-	}
-
-
-
 	public static function getURLhostPart($url) {
 		$host = parse_url($url, PHP_URL_HOST);
 		return $host;

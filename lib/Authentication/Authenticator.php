@@ -6,6 +6,7 @@ use FeideConnect\Authentication;
 use FeideConnect\Utils\URL;
 use FeideConnect\Config;
 use FeideConnect\Logger;
+use FeideConnect\Exceptions\RedirectException;
 
 
 /**
@@ -86,7 +87,7 @@ class Authenticator {
 		// $accountchooser->debug();
 		if (!$accountchooser->hasResponse()) {
 			$requestURL = $accountchooser->getRequest();
-			URL::redirect($requestURL);
+			throw new RedirectException($requestURL);
 		}
 		$authconfig = $accountchooser->getAuthConfig();
 
