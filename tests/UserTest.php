@@ -25,10 +25,18 @@ class UserTest extends \PHPUnit_Framework_TestCase {
 
 		// $config = json_decode(file_get_contents(__DIR__ . '/../etc/ci/config.json'), true);
 		$this->db = StorageProvider::getStorage();
-
+		if (\FeideConnect\Config::getValue('storage.keyspace') == 'feideconnect') {
+			throw new \Exception("Not running testes on production database");
+		}
 	}
 
 
+	public function setUp() {
+		$users = $this->db->getUsers();
+		foreach ($users as $user) {
+			$this->db->deleteUser($user);
+		}
+	}
 
 	public function testAccount() {
 
