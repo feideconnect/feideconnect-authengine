@@ -29,7 +29,9 @@ class OAuthTest extends \PHPUnit_Framework_TestCase {
 
 		// $config = json_decode(file_get_contents(__DIR__ . '/../etc/ci/config.json'), true);
 		$this->db = StorageProvider::getStorage();
+	}
 
+	public function setUp() {
 		$clientid = Models\Client::genUUID();
 	
 		$client = new Models\Client($this->db);
@@ -45,8 +47,6 @@ class OAuthTest extends \PHPUnit_Framework_TestCase {
 		$this->client = $client;
 
 		$this->db->saveClient($client);
-
-
 	}
 
 	public function testOAuthConfig() {
@@ -63,7 +63,9 @@ class OAuthTest extends \PHPUnit_Framework_TestCase {
 	}
 
     public function testAuthorizationRequestImplicitGrant() {
-		$this->markTestSkipped();
+		$this->setExpectedExceptionRegExp(
+		    'FeideConnect\Exceptions\RedirectException', '/^http:\/\/localhost\/accountchooser\?/'
+		);
 		$router = new Router();
 		
 		$_REQUEST['response_type'] = 'token';
@@ -73,24 +75,11 @@ class OAuthTest extends \PHPUnit_Framework_TestCase {
 
 		$response = $router->dispatchCustom('GET', '/oauth/authorization');
 
-		$this->assertInstanceOf('FeideConnect\HTTP\HTTPResponse', $response, 'Expected response to be an httpresponse');
-
-		$data = $response->getData();
-
-		$this->assertArrayHasKey('authorization', $data);
-		$this->assertArrayHasKey('token', $data);
-
-		$this->cleanup();
-
     }
 
-    protected function cleanup() {
+    function tearDown() {
 
     	$this->db->removeClient($this->client);
 
     }
-
-
-
-
 }
