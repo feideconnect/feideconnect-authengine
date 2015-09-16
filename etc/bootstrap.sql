@@ -289,6 +289,6 @@ CREATE TABLE roles(
 );
 CREATE INDEX roles_orgid_idx ON roles(orgid);
 
-CREATE TABLE feideconnect.remote_apigatekeepers (
+CREATE TABLE remote_apigatekeepers (
     fqdn text PRIMARY KEY
 );
