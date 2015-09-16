@@ -340,16 +340,16 @@ class OAuthAuthorization {
 		$code = Models\AuthorizationCode::generate($this->client, $this->user, $redirectURI, $scopesInQuestion);
 		$this->storage->saveAuthorizationCode($code);
 
-		$tokenresponse = Messages\AuthorizationResponse::generate($this->request, $code);
+		$authorizationresponse = Messages\AuthorizationResponse::generate($this->request, $code);
 
 		Logger::info('OAuth Authorization Code is now stored, and may be fetched via the token endpoint.', array(
 			'user' => $this->user->getAsArrayLimited("userid", "userid_sec", "name"),
 			'client' => $this->client->getAsArrayLimited(["id", "name", "redirect_uri"]),
 			'code' => $code->getAsArray(),
-			'tokenresponse' => $tokenresponse->getAsArray(),
+			'authorizationresponse' => $authorizationresponse->getAsArray(),
 		));
 
-		return $tokenresponse->sendRedirect($this->request->redirect_uri);
+		return $authorizationresponse->sendRedirect($this->request->redirect_uri);
 
 	}
 
