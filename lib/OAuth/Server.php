@@ -168,7 +168,7 @@ class Server {
 				}
 
 				if (!Validator::validateUUID($tokenrequest->client_id)) {
-					throw new OAuthException('invalid_request', 'Invalid client_id parameter');	
+					throw new OAuthException('invalid_client', 'Invalid client_id parameter');
 				}
 
 				$clientid = $tokenrequest->client_id;
@@ -280,7 +280,7 @@ class Server {
 
 
 				if (!Validator::validateUUID($clientid)) {
-					throw new OAuthException('invalid_request', 'Invalid client_id parameter');	
+					throw new OAuthException('invalid_client', 'Invalid client_id parameter');
 				}
 
 				$client = $this->storage->getClient($clientid);
