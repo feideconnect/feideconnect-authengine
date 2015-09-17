@@ -57,7 +57,7 @@
     </apply>
   </target>
 
-  <target name="pdepend" description="Calculate software metrics using PHP_Depend">
+  <target name="pdepend" depends="composer-install" description="Calculate software metrics using PHP_Depend">
     <exec executable="./vendor/bin/pdepend">
       <arg value="--jdepend-xml=${basedir}/build/logs/jdepend.xml" />
       <arg value="--jdepend-chart=${basedir}/build/pdepend/dependencies.svg" />
@@ -67,7 +67,7 @@
   </target>
 
 
-  <target name="phpcs"
+  <target name="phpcs" depends="composer-install"
           description="Find coding standard violations using PHP_CodeSniffer and print human readable output. Intended for usage on the command line before committing.">
     <exec executable="./vendor/bin/phpcs">
       <arg value="--standard=${basedir}/build/phpcs.xml" />
@@ -78,7 +78,7 @@
     </exec>
   </target>
 
-  <target name="phpcs-ci" description="Find coding standard violations using PHP_CodeSniffer creating a log file for the continuous integration server">
+  <target name="phpcs-ci" depends="composer-install" description="Find coding standard violations using PHP_CodeSniffer creating a log file for the continuous integration server">
     <exec executable="./vendor/bin/phpcs">
       <arg value="--report=checkstyle" />
       <arg value="--report-file=${basedir}/build/logs/checkstyle.xml" />
@@ -90,7 +90,7 @@
     </exec>
   </target>
 
-  <target name="phpcpd" description="Find duplicate code using PHPCPD">
+  <target name="phpcpd" depends="composer-install" description="Find duplicate code using PHPCPD">
     <exec executable="./vendor/bin/phpcpd">
       <arg value="--log-pmd" />
       <arg value="${basedir}/build/logs/pmd-cpd.xml" />
@@ -101,7 +101,7 @@
     </exec>
   </target>
 
-  <target name="phpunit" description="Run unit tests with PHPUnit">
+  <target name="phpunit" depends="composer-install" description="Run unit tests with PHPUnit">
     <exec executable="./vendor/bin/phpunit" failonerror="true">
     </exec>
   </target>
