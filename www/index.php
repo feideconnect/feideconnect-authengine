@@ -9,6 +9,8 @@ namespace FeideConnect;
 
 use FeideConnect\OAuth\Exceptions\APIAuthorizationException;
 use FeideConnect\Exceptions\Exception;
+use FeideConnect\Exceptions\RedirectException;
+
 use FeideConnect\HTTP\HTTPResponse;
 use FeideConnect\HTTP\EmptyResponse;
 use FeideConnect\HTTP\TemplatedHTMLResponse;
@@ -17,8 +19,6 @@ use Phroute\Phroute;
 
 
 require_once(dirname(dirname(__FILE__)) . '/lib/_autoload.php');
-
-
 
 
 try {
@@ -52,7 +52,7 @@ try {
 
 	$response = (new TemplatedHTMLResponse('exception'))->setData($data);
 
-} catch(HTTPRedirectException $e) {
+} catch(RedirectException $e) {
 
 	$response = $e->getHTTPResponse();
 
