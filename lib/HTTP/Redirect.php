@@ -38,6 +38,9 @@ class Redirect extends HTTPResponse {
 		$this->url = $url;
 	}
 
+	public function getURL() {
+		return $this->url;
+	}
 
 	protected function sendBody() {
 
