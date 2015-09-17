@@ -25,7 +25,7 @@
     <get src="https://getcomposer.org/composer.phar" dest="build/composer.phar"/>
   </target>
   <target name="vendor-uptodate">
-    <uptodate srcfile="composer.json" targetfile="lib/_autoload.php" property="vendor.uptodate"/>
+    <uptodate srcfile="composer.json" targetfile="vendor/autoload.php" property="vendor.uptodate"/>
   </target>
   <target name="composer-install" depends="download-composer,vendor-uptodate" unless="vendor.uptodate">
     <exec executable="php" failonerror="true">
