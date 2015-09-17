@@ -18,6 +18,23 @@
     <mkdir dir="${basedir}/build/phpdox"/>
   </target>
 
+  <target name="check-composer-present" depends="dirs">
+    <available file="build/composer.phar" property="composer.present"/>
+  </target>
+  <target name="download-composer" depends="dirs,check-composer-present" unless="composer.present" description="Download composer">
+    <get src="https://getcomposer.org/composer.phar" dest="build/composer.phar"/>
+  </target>
+  <target name="vendor-uptodate">
+    <uptodate srcfile="composer.json" targetfile="lib/_autoload.php" property="vendor.uptodate"/>
+  </target>
+  <target name="composer-install" depends="download-composer,vendor-uptodate" unless="vendor.uptodate">
+    <exec executable="php" failonerror="true">
+      <arg value="build/composer.phar"/>
+      <arg value="install"/>
+      <arg value="--ignore-platform-reqs"/>
+    </exec>
+  </target>
+
   <target name="lint" description="Perform syntax check of sourcecode files">
     <apply executable="php" failonerror="true">
       <arg value="-l" />
