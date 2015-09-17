@@ -28,6 +28,7 @@
     <uptodate srcfile="composer.json" targetfile="vendor/autoload.php" property="vendor.uptodate"/>
   </target>
   <target name="composer-install" depends="download-composer,vendor-uptodate" unless="vendor.uptodate">
+    <delete file="${basedir}/composer.lock"/>
     <exec executable="php" failonerror="true">
       <arg value="build/composer.phar"/>
       <arg value="install"/>
