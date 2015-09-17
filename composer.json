@@ -24,6 +24,7 @@
 	},
 	"require-dev": {
 		"codeclimate/php-test-reporter": "dev-master",
-		"pdepend/pdepend" : "~2.0.4"
+		"pdepend/pdepend" : "~2.0.4",
+		"phpunit/phpunit" : "^4.8.0"
 	}
 }
