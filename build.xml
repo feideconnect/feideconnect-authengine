@@ -18,10 +18,10 @@
     <mkdir dir="${basedir}/build/phpdox"/>
   </target>
 
-  <target name="check-composer-present" depends="dirs">
+  <target name="check-composer-present" depends="prepare">
     <available file="build/composer.phar" property="composer.present"/>
   </target>
-  <target name="download-composer" depends="dirs,check-composer-present" unless="composer.present" description="Download composer">
+  <target name="download-composer" depends="prepare,check-composer-present" unless="composer.present" description="Download composer">
     <get src="https://getcomposer.org/composer.phar" dest="build/composer.phar"/>
   </target>
   <target name="vendor-uptodate">
