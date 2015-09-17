@@ -104,13 +104,13 @@
 
   <target name="phpunit" depends="composer-install" description="Run unit tests with PHPUnit">
     <exec executable="./vendor/bin/phpunit" failonerror="true">
+      <arg value="-c"/>
+      <arg value="phpunit-ci.xml"/>
     </exec>
   </target>
 
   <target name="phpdox" description="Generate API documentation using phpDox">
     <exec executable="phpdox">
-      <arg value="-c"/>
-      <arg value="phpunit-ci.xml"/>
     </exec>
   </target>
 
