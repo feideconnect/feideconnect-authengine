@@ -108,7 +108,10 @@
   </target>
 
   <target name="phpdox" description="Generate API documentation using phpDox">
-    <exec executable="phpdox"/>
+    <exec executable="phpdox">
+      <arg value="-c"/>
+      <arg value="phpunit-ci.xml"/>
+    </exec>
   </target>
 
 </project>
