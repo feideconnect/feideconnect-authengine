@@ -16,9 +16,10 @@ class SimpleSAML_Auth_Simple {
 		return true;
 	}
 	public function getAuthData($type) {
-		return array(
+		$auth_data = array(
 			"saml:sp:IdP" => "https://idp.feide.no",
 			"AuthnInstant" => "ugle",
-		)[$type];
+		);
+		return $auth_data[$type];
 	}
 }
