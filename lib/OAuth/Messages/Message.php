@@ -78,16 +78,14 @@ class Message {
 
 	public function sendBodyJSON($httpcode = 200) {
 
-		// Requires pecl_http, and we do not want a dependency on that.
-		// http_send_status($this->httpcode);  
-		header('x', true, $httpcode);
-
 		$body = array();
 		foreach($this AS $key => $value) {
 			if (empty($value)) continue;
 			$body[$key] = $value;
 		}
-		return new JSONResponse($body);
+		$response = new JSONResponse($body);
+		$response->setStatus($httpcode);
+		return $response;
 	}
 
 	// public function sendBodyForm() {
