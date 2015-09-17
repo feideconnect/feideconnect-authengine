@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project name="connect-auth-engine" default="build">
   <target name="build"
-          depends="prepare,lint,pdepend,phpcpd,phpunit" />
+          depends="prepare,lint,pdepend,phpcs-ci,phpcpd,phpunit" />
 
   <target name="clean" description="Cleanup build artifacts">
     <delete dir="${basedir}/build/api"/>
