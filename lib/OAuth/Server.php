@@ -167,7 +167,7 @@ class Server {
 					throw new OAuthException('invalid_request', 'Request was missing the required client_id parameter');
 				}
 
-				if (!Validator::validateID($tokenrequest->client_id)) {
+				if (!Validator::validateUUID($tokenrequest->client_id)) {
 					throw new OAuthException('invalid_request', 'Invalid client_id parameter');	
 				}
 
@@ -279,7 +279,7 @@ class Server {
 				$clientid = $_SERVER['PHP_AUTH_USER'];
 
 
-				if (!Validator::validateID($clientid)) {
+				if (!Validator::validateUUID($clientid)) {
 					throw new OAuthException('invalid_request', 'Invalid client_id parameter');	
 				}
 
@@ -325,7 +325,7 @@ class Server {
 				$clientid = $_SERVER['PHP_AUTH_USER'];
 
 
-				if (!Validator::validateID($clientid)) {
+				if (!Validator::validateUUID($clientid)) {
 					throw new OAuthException('invalid_request', 'Invalid client_id parameter');	
 				}
 
