@@ -69,6 +69,9 @@ class Data {
 
 	static function getOrgs() {
 
+
+		// TODO: Fix to avoid warnings when lat and lon is not passed...
+
 		$lat = $_REQUEST['lat']; 
 		$lon = $_REQUEST['lon'];
 

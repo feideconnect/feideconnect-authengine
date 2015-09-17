@@ -38,7 +38,7 @@ define(function(require, exports, module) {
 				console.error("Bypass simplegrant");
 				// $("body").show();
 			} else {
-				$("body").show();
+				$("#mcontent").show();
 			}
 
 			this.loadDictionary();
