@@ -2,7 +2,6 @@
 <phpunit bootstrap="lib/_autoload.php"
          backupGlobals="false"
          backupStaticAttributes="false"
-         strict="true"
          verbose="true">
 
   <testsuites>

@@ -20,10 +20,11 @@ class OAuthImplicitGrantTest extends \PHPUnit_Framework_TestCase {
 
 	function __construct() {
 		$this->db = StorageProvider::getStorage();
+		$this->_SERVER = $_SERVER;
 	}
 
 	public function setUp() {
-		$_SERVER = array();
+		$_SERVER = $this->_SERVER;
 		$_SERVER['REMOTE_ADDR'] = '127.0.0.1';
 		$_SERVER['REQUEST_URI'] = '/foo';
 		$_SERVER['REQUEST_METHOD'] = 'GET';
