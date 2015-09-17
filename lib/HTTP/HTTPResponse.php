@@ -70,6 +70,10 @@ class HTTPResponse {
 		return $this;
 	}
 
+	public function getStatus() {
+		return $this->status;
+	}
+
 	public function setHeader($attr, $value) {
 		$this->headers[$attr] = $value;
 		return $this;
