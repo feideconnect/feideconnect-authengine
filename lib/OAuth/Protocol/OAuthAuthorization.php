@@ -343,7 +343,7 @@ class OAuthAuthorization {
 		$authorizationresponse = Messages\AuthorizationResponse::generate($this->request, $code);
 
 		Logger::info('OAuth Authorization Code is now stored, and may be fetched via the token endpoint.', array(
-			'user' => $this->user->getAsArrayLimited("userid", "userid_sec", "name"),
+			'user' => $this->user->getAsArrayLimited(["userid", "userid_sec", "name"]),
 			'client' => $this->client->getAsArrayLimited(["id", "name", "redirect_uri"]),
 			'code' => $code->getAsArray(),
 			'authorizationresponse' => $authorizationresponse->getAsArray(),
