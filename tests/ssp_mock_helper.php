@@ -9,6 +9,7 @@ class SimpleSAML_Auth_Simple {
 	public function getAttributes() {
 		return array(
 			'eduPersonPrincipalName' => array('testuser@example.org'),
+			'displayNAme' => 'Test User',
 			'attr' => array('val1', 'val2'),
 		);
 	}
