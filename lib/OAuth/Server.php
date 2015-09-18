@@ -300,13 +300,13 @@ class Server {
 					throw new OAuthException('invalid_grant', 'Authenticated user does not have a user record.');
 				}
 
+				$tokenresponse = OAuthAuthorization::generateTokenResponse($client, $user, $requestedScopes, "password");
+				return $tokenresponse->sendBodyJSON();
+
 			} else {
 				throw new OAuthException('unsupported_grant_type', 'Invalid [grant_type] provided to token endpoint.');
 			}
 			
-			$tokenresponse = OAuthAuthorization::generateTokenResponse($client, $user, $requestedScopes, "password");
-			return $tokenresponse->sendBodyJSON();
-
 		} catch (OAuthException $e) {
 
 			$msg = array(
