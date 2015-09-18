@@ -125,7 +125,35 @@ class Server {
 	}
 
 
-	
+	protected function validateClientCredentials($clientid, $password) {
+		if (!Validator::validateUUID($clientid)) {
+			throw new OAuthException('invalid_client', 'Invalid client_id parameter');
+		}
+
+		$client = $this->storage->getClient($clientid);
+		if ($client === null) {
+			throw new OAuthException('invalid_client', 'Request was on behalf of a nonexisting client');
+		}
+
+		if ($client->client_secret !== $_SERVER['PHP_AUTH_PW'])
+			throw new OAuthException('invalid_client', 'Wrong client credentials. Incorrect client_secret.');
+
+		return $client;
+
+	}
+
+	protected function validateClientAuthorization() {
+		if (empty($_SERVER['PHP_AUTH_USER']))
+			throw new OAuthException('invalid_client', 'Unable to authenticate the request on behalf of a client (missing username)');
+		if (empty($_SERVER['PHP_AUTH_PW']))
+			throw new OAuthException('invalid_client', 'Unable to authenticate the request on behalf of a client (missing password)');
+
+		$clientid = $_SERVER['PHP_AUTH_USER'];
+		$password = $_SERVER['PHP_AUTH_PW'];
+
+		return $this->validateClientCredentials($clientid, $password);
+
+	}
 
 
 
@@ -165,43 +193,17 @@ class Server {
 					throw new OAuthException('invalid_request', 'Request was missing the required client_id parameter');
 				}
 
-				if (!Validator::validateUUID($tokenrequest->client_id)) {
-					throw new OAuthException('invalid_client', 'Invalid client_id parameter');
-				}
-
-				$clientid = $tokenrequest->client_id;
-				$client = $this->storage->getClient($clientid);
-				if ($client === null) {
-					throw new OAuthException('invalid_client', 'Request was on behalf of a nonexisting client');
-				}
-
-				$password = null;
 				if (!empty($_SERVER['PHP_AUTH_PW'])) {
-					$password = $_SERVER['PHP_AUTH_PW'];
-				} else if (isset($tokenrequest->client_secret)) {
+					$client = $this->validateClientAuthorization();
+					if ($client->id !== $tokenrequest->client_id) {
+						throw new OAuthException('invalid_client', 'Wrong client credentials. Client id does not match the request.');
+					}
+				} elseif (isset($tokenrequest->client_secret)) {
 					$password = $tokenrequest->client_secret;
-				}
-
-				if (isset($_SERVER['PHP_AUTH_USER']) && $_SERVER['PHP_AUTH_USER'] !== $clientid) {
-					throw new OAuthException('invalid_client', 'Wrong client credentials. Client id does not match the request.');
-				}
-
-				Logger::info('OAuth client identified.', [
-					'client' => $client->getAsArray(),
-					'username' => $clientid,
-					'password' => $password,
-				]);
-
-				if ($password === null) {
+					$client = $this->validateClientCredentials($tokenrequest->client_id, $password);
+				} else {
 					throw new OAuthException('invalid_client', 'Unable to authenticate the request on behalf of a client (missing password/client_secret)');
 				}
-
-				if ($client->client_secret !== $password) {
-					throw new OAuthException('invalid_client', 'Wrong client credentials. Incorrect client_secret.');
-				}
-
-
-
 
 				if (!Validator::validateID($tokenrequest->code)) {
 					throw new OAuthException('invalid_request', 'Invalid code parameter');	
@@ -249,31 +251,7 @@ class Server {
 				
 			} else if ($tokenrequest->grant_type === 'client_credentials') {
 
-
-
-
-
-
-				if (empty($_SERVER['PHP_AUTH_USER'])) 
-					throw new OAuthException('invalid_client', 'Unable to authenticate the request on behalf of a client (missing username)');
-				if (empty($_SERVER['PHP_AUTH_PW'])) 
-					throw new OAuthException('invalid_client', 'Unable to authenticate the request on behalf of a client (missing password)');
-
-				$clientid = $_SERVER['PHP_AUTH_USER'];
-
-
-				if (!Validator::validateUUID($clientid)) {
-					throw new OAuthException('invalid_client', 'Invalid client_id parameter');
-				}
-
-				$client = $this->storage->getClient($clientid);
-				if ($client === null) {
-					throw new OAuthException('invalid_client', 'Request was on behalf of a nonexisting client');
-				}
-
-				if ($client->client_secret !== $_SERVER['PHP_AUTH_PW'])
-					throw new OAuthException('invalid_client', 'Wrong client credentials. Incorrect client_secret.');
-
+				$client = $this->validateClientAuthorization();
 
 				$requestedScopes = $client->getScopeList();
 				if (!empty($tokenrequest->scope)) {
@@ -288,26 +266,7 @@ class Server {
 				
 			} else if ($tokenrequest->grant_type === 'password') {
 
-				if (empty($_SERVER['PHP_AUTH_USER'])) 
-					throw new OAuthException('invalid_client', 'Unable to authenticate the request on behalf of a client (missing username)');
-				if (empty($_SERVER['PHP_AUTH_PW'])) 
-					throw new OAuthException('invalid_client', 'Unable to authenticate the request on behalf of a client (missing password)');
-
-				$clientid = $_SERVER['PHP_AUTH_USER'];
-
-
-				if (!Validator::validateUUID($clientid)) {
-					throw new OAuthException('invalid_client', 'Invalid client_id parameter');
-				}
-
-				$client = $this->storage->getClient($clientid);
-				if ($client === null) {
-					throw new OAuthException('invalid_client', 'Request was on behalf of a nonexisting client');
-				}
-
-				if ($client->client_secret !== $_SERVER['PHP_AUTH_PW'])
-					throw new OAuthException('invalid_client', 'Wrong client credentials. Incorrect client_secret.');
-
+				$client = $this->validateClientAuthorization();
 
 				$requestedScopes = $client->getScopeList();
 				if (!empty($tokenrequest->scope)) {
