@@ -110,7 +110,6 @@ class OAuthAuthorizationCodeTest extends \PHPUnit_Framework_TestCase {
 		$this->assertEquals(parse_url($url, PHP_URL_HOST), "example.org");
 		$query = parse_url($url, PHP_URL_QUERY);
 		parse_str($query, $params);
-		var_export($params);
 		$this->assertArrayHasKey('state', $params);
 		$this->assertEquals($params['state'], $_REQUEST['state']);
 		$this->assertArrayHasKey('code', $params);
