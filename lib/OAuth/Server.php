@@ -231,30 +231,25 @@ class Server {
 
 				}
 
-
 				$user = $this->storage->getUserByUserID($code->userid);
-
-
 
 				// Now, we consider us completed with this code, and we ensure that it cannot be used again
 				$this->storage->removeAuthorizationCode($code);
 
-				$tokenresponse = OAuthAuthorization::generateTokenResponse($client, $user, $code->scope, "authorization code");
+				$tokenresponse = OAuthUtils::generateTokenResponse($client, $user, $code->scope, "authorization code");
 
 				if (isset($code->idtoken) && $code->idtoken !== null) {
 					$tokenresponse->idtoken = $code->idtoken;
 				}
 
 				return $tokenresponse->sendBodyJSON();
-
-
 				
 			} else if ($tokenrequest->grant_type === 'client_credentials') {
 
 				$client = $this->validateClientAuthorization();
 				$requestedScopes = OAuthUtils::evaluateScopes($client, $tokenrequest->scope);
 
-				$tokenresponse = OAuthAuthorization::generateTokenResponse($client, null, $requestedScopes, "client_credentials");
+				$tokenresponse = OAuthUtils::generateTokenResponse($client, null, $requestedScopes, "client_credentials");
 				return $tokenresponse->sendBodyJSON();
 
 				
@@ -288,7 +283,7 @@ class Server {
 					throw new OAuthException('invalid_grant', 'Authenticated user does not have a user record.');
 				}
 
-				$tokenresponse = OAuthAuthorization::generateTokenResponse($client, $user, $requestedScopes, "password");
+				$tokenresponse = OAuthUtils::generateTokenResponse($client, $user, $requestedScopes, "password");
 				return $tokenresponse->sendBodyJSON();
 
 			} else {

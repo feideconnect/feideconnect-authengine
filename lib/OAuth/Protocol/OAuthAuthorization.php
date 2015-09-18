@@ -8,6 +8,7 @@ use FeideConnect\OAuth\Messages;
 use FeideConnect\OAuth\AccessTokenPool;
 use FeideConnect\OAuth\AuthorizationUI;
 use FeideConnect\OAuth\AuthorizationEvaluator;
+use FeideConnect\OAuth\OAuthUtils;
 
 use FeideConnect\HTTP\LocalizedTemplatedHTMLResponse;
 
@@ -61,33 +62,6 @@ class OAuthAuthorization {
 
 
 	}
-
-	static function generateTokenResponse($client, $user, $requestedScopes, $flow, $state = null) {
-		$expires_in = 3600*8; // 8 hours
-		if (in_array('longterm', $requestedScopes)) {
-			$expires_in = 3600*24*680; // 680 days
-		}
-
-		$pool = new AccessTokenPool($client, $user);
-		$accesstoken = $pool->getToken($requestedScopes, false, $expires_in);
-		// TODO Verify that this saveToken was successfull before continuing.
-
-		$tokenresponse = Messages\TokenResponse::generate($accesstoken, $state);
-
-		$logdata = array(
-			'flow' => $flow,
-			'client' => $client->getAsArray(),
-			'accesstoken' => $accesstoken->getAsArray(),
-			'tokenresponse' => $tokenresponse->getAsArray(),
-		);
-		if ($user !== null) {
-			$logdata['user'] = $user->getAsArray();
-		}
-		Logger::info('OAuth Access Token is now issued.', $logdata);
-
-		return $tokenresponse;
-	}
-
 
 	function evaluateStepUp($aevaluator) {
 
@@ -320,8 +294,8 @@ class OAuthAuthorization {
 		$redirect_uri = $this->aevaluator->getValidatedRedirectURI();
 		$scopesInQuestion = $this->aevaluator->getScopesInQuestion();
 
-		$tokenresponse = $this->generateTokenResponse($this->client, $this->user, $scopesInQuestion, "implicit grant",
-		                                              $this->request->state);
+		$tokenresponse = OAuthUtils::generateTokenResponse($this->client, $this->user, $scopesInQuestion, "implicit grant",
+		                                                   $this->request->state);
 
 
 		return $tokenresponse->sendRedirect($redirect_uri, true);
