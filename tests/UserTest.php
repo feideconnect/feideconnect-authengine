@@ -1,6 +1,5 @@
 <?php
 
-
 namespace tests;
 
 use FeideConnect\Authentication\Authenticator;
@@ -63,7 +62,7 @@ class UserTest extends \PHPUnit_Framework_TestCase {
 
 
 		$u2 = $this->db->getUserByUserIDsecList($userids);
-		echo "\nUser list: \n\n"; var_dump($u2);
+//		echo "\nUser list: \n\n"; var_dump($u2);
 		$this->assertEquals(null, $u2, "Should not find any existing users  (result should be [null])");
 
 
