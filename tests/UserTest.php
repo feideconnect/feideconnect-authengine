@@ -10,12 +10,6 @@ use FeideConnect\Authentication\Account;
 use FeideConnect\Data\Models;
 use FeideConnect\Data\StorageProvider;
 
-
-putenv("AEENV=test");
-if (getenv('AEENV') !== "test") { 
-	throw new \Exception("Not able to set environmentvariable for test environment."); 
-}
-
 class UserTest extends \PHPUnit_Framework_TestCase {
 
 

@@ -12,11 +12,6 @@ use FeideConnect\Config;
 // use FeideConnect\Data\StorageProvider;
 // use FeideConnect\Data\Models;
 
-putenv("AEENV=test");
-if (getenv('AEENV') !== "test") { 
-	throw new \Exception("Not able to set environmentvariable for test environment."); 
-}
-
 class IDTokenTest extends \PHPUnit_Framework_TestCase {
 
 	protected $truststore;

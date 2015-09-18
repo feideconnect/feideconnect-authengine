@@ -6,11 +6,6 @@ namespace tests;
 use FeideConnect\Data\Models;
 use FeideConnect\Data\StorageProvider;
 
-putenv("AEENV=test");
-if (getenv('AEENV') !== "test") { 
-	throw new \Exception("Not able to set environmentvariable for test environment."); 
-}
-
 class DBTest extends \PHPUnit_Framework_TestCase {
 
 

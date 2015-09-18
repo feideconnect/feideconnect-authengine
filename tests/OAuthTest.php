@@ -3,11 +3,6 @@ namespace tests;
 use FeideConnect\Router;
 use FeideConnect\HTTP\JSONResponse;
 
-putenv("AEENV=test");
-if (getenv('AEENV') !== "test") {
-	throw new \Exception("Not able to set environmentvariable for test environment.");
-}
-
 class OAuthTest extends \PHPUnit_Framework_TestCase {
 
 	function __construct() {
