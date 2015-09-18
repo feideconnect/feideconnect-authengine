@@ -155,7 +155,98 @@ class Server {
 
 	}
 
+	protected function validateTestUserCredentials($tokenrequest) {
+		if (empty($tokenrequest->username)) {
+			throw new OAuthException('invalid_grant', 'Unable to authenticate resource owner (missing username)');
+		}
+		if (empty($tokenrequest->password)) {
+			throw new OAuthException('invalid_grant', 'Unable to authenticate resource owner (missing password)');
+		}
 
+		$testUsers = Config::getValue("testUsers", []);
+
+		if (!isset($testUsers[$tokenrequest->username])) {
+			throw new OAuthException('invalid_grant', 'Unable to authenticate resource owner (invalid user)');
+		}
+		if (!isset($testUsers[$tokenrequest->username]["password"])) {
+			throw new OAuthException('invalid_grant', 'Unable to authenticate resource owner (invalid user configuration)');
+		}
+		if ($testUsers[$tokenrequest->username]["password"] !== $tokenrequest->password) {
+			throw new OAuthException('invalid_grant', 'Unable to authenticate resource owner (invalid password)');
+		}
+
+		$user = $this->storage->getUserByUserIDsec($tokenrequest->username);
+		if ($user === null) {
+			throw new OAuthException('invalid_grant', 'Authenticated user does not have a user record.');
+		}
+
+		return $user;
+	}
+
+	protected function tokenFromCode($tokenrequest) {
+		Logger::info('OAuth Processing an authorization_code request.', array(
+			'tokenrequest' => $tokenrequest->getAsArray(),
+			'rawrequest' => $_REQUEST,
+		));
+
+		if (empty($tokenrequest->code)) {
+			throw new OAuthException('invalid_request', 'Request was missing the required code parameter');
+		}
+		if (empty($tokenrequest->client_id)) {
+			throw new OAuthException('invalid_request', 'Request was missing the required client_id parameter');
+		}
+
+		if (!empty($_SERVER['PHP_AUTH_PW'])) {
+			$client = $this->validateClientAuthorization();
+			if ($client->id !== $tokenrequest->client_id) {
+				throw new OAuthException('invalid_client', 'Wrong client credentials. Client id does not match the request.');
+			}
+		} elseif (isset($tokenrequest->client_secret)) {
+			$password = $tokenrequest->client_secret;
+			$client = $this->validateClientCredentials($tokenrequest->client_id, $password);
+		} else {
+			throw new OAuthException('invalid_client', 'Unable to authenticate the request on behalf of a client (missing password/client_secret)');
+		}
+
+		if (!Validator::validateID($tokenrequest->code)) {
+			throw new OAuthException('invalid_request', 'Invalid code parameter');
+		}
+		$code = $this->storage->getAuthorizationCode($tokenrequest->code);
+		if ($code === null) {
+			throw new OAuthException('invalid_grant', 'Provided Authorization Code was not found.');
+		}
+
+		if (!$code->stillValid()) {
+			throw new OAuthException('invalid_grant', 'Provided Authorization Code is expired.');
+		}
+
+		if ($code->clientid !== $client->id) {
+			throw new OAuthException('invalid_grant', 'Provided Authorization Code was not issued to this client.');
+		}
+
+		if (!empty($code->redirect_uri)) {
+
+			if (empty($tokenrequest->redirect_uri))
+				throw new OAuthException('invalid_request', 'Request was missing the required redirect_uri parameter');
+
+			if ($tokenrequest->redirect_uri !== $code->redirect_uri)
+				throw new OAuthException('invalid_request', 'Mismatching redirect_uris provided in the token request compared to the authorization request');
+
+		}
+
+		$user = $this->storage->getUserByUserID($code->userid);
+
+		// Now, we consider us completed with this code, and we ensure that it cannot be used again
+		$this->storage->removeAuthorizationCode($code);
+
+		$tokenresponse = OAuthUtils::generateTokenResponse($client, $user, $code->scope, "authorization code");
+
+		if (isset($code->idtoken) && $code->idtoken !== null) {
+			$tokenresponse->idtoken = $code->idtoken;
+		}
+
+		return $tokenresponse->sendBodyJSON();
+	}
 
 	/**
 	 * Implementation of the OAuth 2.0 Token Endpoint.
@@ -165,131 +256,38 @@ class Server {
 
 		try {
 
-
-
-
 			$tokenrequest = new Messages\TokenRequest($_REQUEST);
 			// $tokenrequest->parseServer($_SERVER);
-
 
 			Logger::info('OAuth Received incomming AccessTokenRequest.', array(
 				'tokenrequest' => $tokenrequest->getAsArray(),
 				'rawrequest' => $_REQUEST,
 			));
 
-			
 			if ($tokenrequest->grant_type === 'authorization_code') {
-				
 
-				Logger::info('OAuth Processing an authorization_code request.', array(
-					'tokenrequest' => $tokenrequest->getAsArray(),
-					'rawrequest' => $_REQUEST,
-				));
+				return $this->tokenFromCode($tokenrequest);
 
-				if (empty($tokenrequest->code)) {
-					throw new OAuthException('invalid_request', 'Request was missing the required code parameter');
-				}
-				if (empty($tokenrequest->client_id)) {
-					throw new OAuthException('invalid_request', 'Request was missing the required client_id parameter');
-				}
+			}
 
-				if (!empty($_SERVER['PHP_AUTH_PW'])) {
-					$client = $this->validateClientAuthorization();
-					if ($client->id !== $tokenrequest->client_id) {
-						throw new OAuthException('invalid_client', 'Wrong client credentials. Client id does not match the request.');
-					}
-				} elseif (isset($tokenrequest->client_secret)) {
-					$password = $tokenrequest->client_secret;
-					$client = $this->validateClientCredentials($tokenrequest->client_id, $password);
-				} else {
-					throw new OAuthException('invalid_client', 'Unable to authenticate the request on behalf of a client (missing password/client_secret)');
-				}
+			$client = $this->validateClientAuthorization();
+			$requestedScopes = OAuthUtils::evaluateScopes($client, $tokenrequest->scope);
 
-				if (!Validator::validateID($tokenrequest->code)) {
-					throw new OAuthException('invalid_request', 'Invalid code parameter');	
-				}
-				$code = $this->storage->getAuthorizationCode($tokenrequest->code);
-				if ($code === null) {
-					throw new OAuthException('invalid_grant', 'Provided Authorization Code was not found.');
-				}
-
-				if (!$code->stillValid()) {
-					throw new OAuthException('invalid_grant', 'Provided Authorization Code is expired.');
-				}
-
-				if ($code->clientid !== $client->id) {
-					throw new OAuthException('invalid_grant', 'Provided Authorization Code was not issued to this client.');
-				}
-
-				if (!empty($code->redirect_uri)) {
-
-					if (empty($tokenrequest->redirect_uri)) 
-						throw new OAuthException('invalid_request', 'Request was missing the required redirect_uri parameter');
-
-					if ($tokenrequest->redirect_uri !== $code->redirect_uri)
-						throw new OAuthException('invalid_request', 'Mismatching redirect_uris provided in the token request compared to the authorization request');
-
-				}
-
-				$user = $this->storage->getUserByUserID($code->userid);
-
-				// Now, we consider us completed with this code, and we ensure that it cannot be used again
-				$this->storage->removeAuthorizationCode($code);
-
-				$tokenresponse = OAuthUtils::generateTokenResponse($client, $user, $code->scope, "authorization code");
-
-				if (isset($code->idtoken) && $code->idtoken !== null) {
-					$tokenresponse->idtoken = $code->idtoken;
-				}
-
-				return $tokenresponse->sendBodyJSON();
-				
-			} else if ($tokenrequest->grant_type === 'client_credentials') {
-
-				$client = $this->validateClientAuthorization();
-				$requestedScopes = OAuthUtils::evaluateScopes($client, $tokenrequest->scope);
+			if ($tokenrequest->grant_type === 'client_credentials') {
 
 				$tokenresponse = OAuthUtils::generateTokenResponse($client, null, $requestedScopes, "client_credentials");
-				return $tokenresponse->sendBodyJSON();
-
 				
 			} else if ($tokenrequest->grant_type === 'password') {
 
-				$client = $this->validateClientAuthorization();
-
-				$requestedScopes = OAuthUtils::evaluateScopes($client, $tokenrequest->scope);
-
-				if (empty($tokenrequest->username)) {
-					throw new OAuthException('invalid_grant', 'Unable to authenticate resource owner (missing username)');
-				}
-				if (empty($tokenrequest->password)) {
-					throw new OAuthException('invalid_grant', 'Unable to authenticate resource owner (missing password)');
-				}
-
-				$testUsers = Config::getValue("testUsers", []);
-
-				if (!isset($testUsers[$tokenrequest->username])) {
-					throw new OAuthException('invalid_grant', 'Unable to authenticate resource owner (invalid user)');
-				}
-				if (!isset($testUsers[$tokenrequest->username]["password"])) {
-					throw new OAuthException('invalid_grant', 'Unable to authenticate resource owner (invalid user configuration)');
-				}
-				if ($testUsers[$tokenrequest->username]["password"] !== $tokenrequest->password) {
-					throw new OAuthException('invalid_grant', 'Unable to authenticate resource owner (invalid password)');
-				}
-
-				$user = $this->storage->getUserByUserIDsec($tokenrequest->username);
-				if ($user === null) {
-					throw new OAuthException('invalid_grant', 'Authenticated user does not have a user record.');
-				}
-
+				$user = $this->validateTestUserCredentials($tokenrequest);
 				$tokenresponse = OAuthUtils::generateTokenResponse($client, $user, $requestedScopes, "password");
-				return $tokenresponse->sendBodyJSON();
 
 			} else {
 				throw new OAuthException('unsupported_grant_type', 'Invalid [grant_type] provided to token endpoint.');
 			}
 			
+			return $tokenresponse->sendBodyJSON();
+
 		} catch (OAuthException $e) {
 
 			$msg = array(
