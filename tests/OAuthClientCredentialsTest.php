@@ -11,6 +11,7 @@ class OAuthClientCredentialsTest extends \PHPUnit_Framework_TestCase {
 
 	function __construct() {
 		$this->db = StorageProvider::getStorage();
+		$this->dbhelper = new DBHelper();
 		$this->_SERVER = $_SERVER;
 	}
 
@@ -26,24 +27,10 @@ class OAuthClientCredentialsTest extends \PHPUnit_Framework_TestCase {
 		$_REQUEST['grant_type'] = 'client_credentials';
 
 
-		$clientid = Models\Client::genUUID();
-
-		$client = new Models\Client($this->db);
-		$client->id = $clientid;
-		$client->client_secret = Models\Client::genUUID();
-		$client->created = new \FeideConnect\Data\Types\Timestamp();
-		$client->name = 'name';
-		$client->descr = 'descr';
-		$client->owner = null;
-		$client->redirect_uri = ['http://example.org'];
-		$client->scopes = ['userinfo', 'groups'];
-		$client->client_secret = Models\Client::genUUID();
-
-		$this->client = $client;
+		$this->client = $this->dbhelper->client();
 		$_SERVER['PHP_AUTH_USER'] = $this->client->id;
 		$_SERVER['PHP_AUTH_PW'] = $this->client->client_secret;
 
-		$this->db->saveClient($client);
 	}
 
     public function testGetToken() {

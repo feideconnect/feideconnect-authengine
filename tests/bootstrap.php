@@ -14,3 +14,5 @@ define('TESTUSER_SEC', 'feide:' . TESTUSER);
 if (\FeideConnect\Config::getValue('storage.keyspace') == 'feideconnect') {
 	throw new \Exception("Not running testes on production database");
 }
+
+require_once(__DIR__ . '/DBHelper.php');

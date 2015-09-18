@@ -3,7 +3,6 @@ namespace tests;
 use FeideConnect\Router;
 use FeideConnect\HTTP\JSONResponse;
 use FeideConnect\Data\StorageProvider;
-use FeideConnect\Data\Models;
 use FeideConnect\Config;
 
 class OAuthPasswordTest extends \PHPUnit_Framework_TestCase {
@@ -12,6 +11,7 @@ class OAuthPasswordTest extends \PHPUnit_Framework_TestCase {
 
 	function __construct() {
 		$this->db = StorageProvider::getStorage();
+		$this->dbhelper = new DBHelper();
 		$this->_SERVER = $_SERVER;
 	}
 
@@ -32,39 +32,11 @@ class OAuthPasswordTest extends \PHPUnit_Framework_TestCase {
 			$_REQUEST['password'] = $data['password'];
 		}
 
-
-		$clientid = Models\Client::genUUID();
-
-		$client = new Models\Client($this->db);
-		$client->id = $clientid;
-		$client->client_secret = Models\Client::genUUID();
-		$client->created = new \FeideConnect\Data\Types\Timestamp();
-		$client->name = 'name';
-		$client->descr = 'descr';
-		$client->owner = null;
-		$client->redirect_uri = ['http://example.org'];
-		$client->scopes = ['userinfo', 'groups'];
-		$client->client_secret = Models\Client::genUUID();
-
-		$this->client = $client;
+		$this->client = $this->dbhelper->client();
 		$_SERVER['PHP_AUTH_USER'] = $this->client->id;
 		$_SERVER['PHP_AUTH_PW'] = $this->client->client_secret;
 
-		$this->db->saveClient($client);
-
-		$user = $this->db->getUserByUserIDsec($userid_sec);
-		while ($user !== null) {
-			$this->db->deleteUser($user);
-			$user = $this->db->getUserByUserIDsec($userid_sec);
-		}
-		$userid = Models\User::genUUID();
-		$user = new Models\User($this->db);
-		$user->userid = $userid;
-		$user->userid_sec = array($userid_sec);
-		$user->selectedsource = 'feide:feide.no';
-
-		$this->db->saveUser($user);
-		$this->user = $user;
+		$this->user = $this->dbhelper->user($userid_sec);
 	}
 
 	public function testGetToken() {

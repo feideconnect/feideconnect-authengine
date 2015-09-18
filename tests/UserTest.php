@@ -13,20 +13,18 @@ use FeideConnect\Data\StorageProvider;
 class UserTest extends \PHPUnit_Framework_TestCase {
 
 
-	protected $db;
+	protected $db, $dbhelper;
 
 	function __construct() {
 
 		// $config = json_decode(file_get_contents(__DIR__ . '/../etc/ci/config.json'), true);
 		$this->db = StorageProvider::getStorage();
+		$this->dbhelper = new DBHelper();
 	}
 
 
 	public function setUp() {
-		$users = $this->db->getUsers();
-		foreach ($users as $user) {
-			$this->db->deleteUser($user);
-		}
+		$this->dbhelper->clearUsers();
 	}
 
 	public function testAccount() {
