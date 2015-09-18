@@ -82,12 +82,7 @@ class AuthorizationEvaluator {
 
 	private function evaluateScopes() {
 
-		$this->scopesInQuestion = $this->client->getScopeList();
-		if (!empty($this->request->scope)) {
-			// Only consider scopes that the client is authorized to ask for.
-			$this->scopesInQuestion = array_intersect($this->request->getScopeList(), $this->scopesInQuestion);
-		}
-
+		$this->scopesInQuestion = OAuthUtils::evaluateScopes($this->client, $this->request->scope);
 
 		if ($this->user === null) {
 			return;

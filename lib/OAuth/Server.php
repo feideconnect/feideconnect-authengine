@@ -252,13 +252,7 @@ class Server {
 			} else if ($tokenrequest->grant_type === 'client_credentials') {
 
 				$client = $this->validateClientAuthorization();
-
-				$requestedScopes = $client->getScopeList();
-				if (!empty($tokenrequest->scope)) {
-					// Only consider scopes that the client is authorized to ask for.
-					$requestedScopes = array_intersect($tokenrequest->scope, $requestedScopes);
-				}
-
+				$requestedScopes = OAuthUtils::evaluateScopes($client, $tokenrequest->scope);
 
 				$tokenresponse = OAuthAuthorization::generateTokenResponse($client, null, $requestedScopes, "client_credentials");
 				return $tokenresponse->sendBodyJSON();
@@ -268,13 +262,7 @@ class Server {
 
 				$client = $this->validateClientAuthorization();
 
-				$requestedScopes = $client->getScopeList();
-				if (!empty($tokenrequest->scope)) {
-					// Only consider scopes that the client is authorized to ask for.
-					$requestedScopes = array_intersect($tokenrequest->scope, $requestedScopes);
-				}
-
-
+				$requestedScopes = OAuthUtils::evaluateScopes($client, $tokenrequest->scope);
 
 				if (empty($tokenrequest->username)) {
 					throw new OAuthException('invalid_grant', 'Unable to authenticate resource owner (missing username)');
