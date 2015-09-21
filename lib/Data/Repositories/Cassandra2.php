@@ -639,6 +639,12 @@ class Cassandra2 extends \FeideConnect\Data\Repository {
 		$this->execute($query, $data, __FUNCTION__);
 	}
 
+	function removeOrganization(Models\Organization $org) {
+		$query = 'DELETE FROM "organizations" WHERE "id" = :id';
+		$params = ['id' => $org->id];
+		$this->execute($query, $params, __FUNCTION__);
+	}
+
 
 	/* 
 	 * --- Database handling of the 'accesstoken' column family

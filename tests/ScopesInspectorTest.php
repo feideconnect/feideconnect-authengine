@@ -6,7 +6,7 @@ use FeideConnect\OAuth\ScopesInspector;
 use FeideConnect\Data\StorageProvider;
 
 class ScopesInspectorTest extends \PHPUnit_Framework_TestCase {
-	protected $db, $dbhelper, $api;
+	protected $db, $dbhelper, $api, $org;
 
 	function __construct() {
 
@@ -142,7 +142,7 @@ class ScopesInspectorTest extends \PHPUnit_Framework_TestCase {
 	}
 
 	public function testApiOrg() {
-		$org = $this->dbhelper->org();
+		$this->org = $org = $this->dbhelper->org();
 		$this->api->organization = $org->id;
 		$this->db->saveAPIGK($this->api);
 		
@@ -167,6 +167,10 @@ class ScopesInspectorTest extends \PHPUnit_Framework_TestCase {
 
 	public function tearDown() {
 		$this->db->removeAPIGK($this->api);
+		if (isset($this->org)) {
+			$this->db->removeOrganization($this->org);
+			$this->org = null;
+		}
 	}
 	
 }
