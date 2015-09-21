@@ -5,6 +5,7 @@ namespace FeideConnect\Data\Models;
 use Cassandra\Type\Uuid;
 use Cassandra\Type\CollectionList;
 use Cassandra\Type\CollectionSet;
+use Cassandra\Type\CollectionMap;
 use Cassandra\Type\Base;
 use Cassandra\Type\Timestamp;
 use Cassandra\Type\Blob;
@@ -123,20 +124,9 @@ class Organization extends \FeideConnect\Data\Model {
 		$prepared = parent::getStorableArray();
 		$prepared["uiinfo"] = json_encode($this->uiinfo);
 
-		// if (isset($this->redirect_uri)) {
-		// 	$prepared["redirect_uri"] =  new CollectionList($this->redirect_uri, Base::ASCII);
-		// }
-		// if (isset($this->scopes)) {
-		// 	$prepared["scopes"] =  new CollectionSet($this->scopes, Base::ASCII);
-		// }
-		// if (isset($this->scopes_requested)) {
-		// 	$prepared["scopes_requested"] =  new CollectionSet($this->scopes_requested, Base::ASCII);
-		// }
-		// if (isset($this->status)) {
-		// 	$prepared["status"] =  new CollectionSet($this->status, Base::ASCII);
-		// }
-		
-
+		if (isset($this->name)) {
+			$prepared["name"] =  new CollectionMap($this->name, Base::ASCII, Base::ASCII);
+		}
 		return $prepared;
 	}
 

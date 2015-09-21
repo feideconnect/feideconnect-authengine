@@ -523,6 +523,14 @@ class Cassandra2 extends \FeideConnect\Data\Repository {
 		$this->execute($query, $params, __FUNCTION__);
 	}
 
+	function saveAPIGK(Models\APIGK $apigk) {
+		$data = $apigk->getStorableArray();
+		$query = self::generateInsert('apigk', $data);
+		// echo $query . "\n\n";
+		// echo var_export($data, true); exit;
+		$this->execute($query, $data, __FUNCTION__);
+	}
+
 
 	/* 
 	 * --- Database handling of the 'client' column family
@@ -623,6 +631,13 @@ class Cassandra2 extends \FeideConnect\Data\Repository {
 
 	}
 
+	function saveOrganization(Models\Organization $org) {
+		$data = $org->getStorableArray();
+		$query = self::generateInsert('organizations', $data);
+		// echo $query . "\n\n";
+		// echo var_export($data, true); exit;
+		$this->execute($query, $data, __FUNCTION__);
+	}
 
 
 	/* 

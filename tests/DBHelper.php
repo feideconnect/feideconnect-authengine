@@ -57,4 +57,45 @@ class DBHelper {
 		$this->db->saveUser($user);
 		return $user;
 	}
+
+	public function apigk() {
+		$apiid = 'test';
+		$user = $this->user('feide:gkowner@example.org');
+		$apigk = new Models\APIGK(array(
+			'id' => $apiid,
+			'name' => 'Test API',
+			'owner' => $user->userid,
+			'scopedef' => json_encode(array(
+				'title' => 'Basic',
+				'descr' => 'Test api',
+				'policy' => array('auto' => true),
+				'subscopes' => array(
+					'a' => array(
+						'title' => 'scope a',
+						'descr' => 'test scope a',
+						'policy' => array('auto' => true),
+					),
+					'b' => array(
+						'title' => 'scope b',
+						'descr' => 'test scope b',
+						'policy' => array('auto' => false),
+					),
+				),
+			)),
+		));
+		$this->db->saveAPIGK($apigk);
+		return $apigk;
+	}
+
+	public function org() {
+		$org = new Models\Organization(array(
+			'id' => 'fc:org:example.org',
+			'name' => array(
+				'nb' => 'Testorganisasjon',
+				'en' => 'Test organization',
+			),
+		));
+		$this->db->saveOrganization($org);
+		return $org;
+	}
 }
