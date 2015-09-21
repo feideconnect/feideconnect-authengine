@@ -102,7 +102,7 @@ class ScopesInspector {
 						$apis[$apigkid]["basic"] = true;
 					}
 
-					if (!isset($apis[$apigkid]["info"])) {
+					if (!isset($apis[$apigkid]["apigk"])) {
 						$apis[$apigkid]["apigk"] = $apigk;
 					}
 					if (!isset($apis[$apigkid]["orgObj"]) && $apigk->has('organization')) {
