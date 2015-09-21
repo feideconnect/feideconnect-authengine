@@ -32,7 +32,7 @@ class ScopesInspector {
 		$this->apis = [];
 	}
 
-	public function getOwner($ownerid) {
+	protected function getOwner($ownerid) {
 		if (isset($this->owners[$ownerid])) {
 			return $this->owners[$ownerid];
 		}
@@ -40,7 +40,7 @@ class ScopesInspector {
 		return $this->owners[$ownerid];
 	}
 
-	public function getOrg($orgid) {
+	protected function getOrg($orgid) {
 		if (isset($this->orgs[$orgid])) {
 			return $this->orgs[$orgid];
 		}
@@ -48,7 +48,7 @@ class ScopesInspector {
 		return $this->orgs[$orgid];
 	}
 
-	public function getAPI($apigkid) {
+	protected function getAPI($apigkid) {
 
 		if (isset($this->apis[$apigkid])) {
 			if ($this->apis[$apigkid] === null) {
@@ -57,12 +57,38 @@ class ScopesInspector {
 			return $this->apis[$apigkid];
 		}
 
-		$this->apis[$apigkid] = $this->storage->getAPIGK($apigkid);
+		$apigk = $this->storage->getAPIGK($apigkid);
 
-		if ($this->apis[$apigkid] === null) {
+		if ($apigk === null) {
+			$this->apis[$apigkid] = null;
 			throw new \Exception("APIGK not found " . $apigkid);
 		}
-		return $this->apis[$apigkid];
+
+		$apiInfo = array(
+			'apigk' => $apigk,
+			'localScopes' => [],
+		);
+		try {
+			if ($apigk->has('organization')) {
+				$orgObj = $this->getOrg($apigk->organization);
+				if ($orgObj !== null) {
+					$apiInfo["orgInfo"] = $orgObj->getAsArray();
+					$apiInfo["orgInfo"]["logoURL"] = Config::dir("orgs/" . $apigk->organization . "/logo", "", "core");
+				}
+
+			} else {
+				$ownerObj = $this->getOwner($apigk->owner);
+				if ($ownerObj !== null) {
+					$apiInfo["ownerInfo"] = $ownerObj->getBasicUserInfo(true, ["userid", "p"]);
+				}
+			}
+		}
+		catch (\Exception $e) {
+			$this->apis[$apigkid] = null;
+			throw new \Exception("APIGK not found " . $apigkid);
+		}
+		$this->apis[$apigkid] = $apiInfo;
+		return $apiInfo;
 	}
 
 
@@ -79,44 +105,19 @@ class ScopesInspector {
 
 		foreach($this->scopes AS $scope) {
 
-
-
 			// Basic and subscopes scopes for an APIGK
 			if (preg_match('/^gk_([a-z0-9\-]+)(_([a-z0-9\-]+))?$/', $scope, $matches)) {
 
 				$apigkid = $matches[1];
-				// Utils::validateID($appid);
-				
 
 				try {
 
-					$apigk = $this->getAPI($apigkid);
-
-					if (!isset($apis[$apigkid])) {
-						$apis[$apigkid] = ['localScopes' => [] ];
-					}
+					$api = $this->getAPI($apigkid);
 
 					if (isset($matches[3])) {
-						$apis[$apigkid]['localScopes'][] = $matches[3];
+						$api['localScopes'][] = $matches[3];
 					}
-
-					if (!isset($apis[$apigkid]["apigk"])) {
-						$apis[$apigkid]["apigk"] = $apigk;
-					}
-					if (!isset($apis[$apigkid]["orgObj"]) && $apigk->has('organization')) {
-						$apis[$apigkid]["orgObj"] = $this->getOrg($apigk->organization);
-						if ($apis[$apigkid]["orgObj"] !== null) {
-							$apis[$apigkid]["orgInfo"] = $apis[$apigkid]["orgObj"]->getAsArray();
-							$apis[$apigkid]["orgInfo"]["logoURL"] = Config::dir("orgs/" . $apigk->organization . "/logo", "", "core");
-						}
-
-					} else if (!isset($apis[$apigkid]["ownerObj"] )) {
-						$apis[$apigkid]["ownerObj"] = $this->getOwner($apigk->owner);
-						if ($apis[$apigkid]["ownerObj"] !== null) {
-							$apis[$apigkid]["ownerInfo"] = $apis[$apigkid]["ownerObj"]->getBasicUserInfo(true, ["userid", "p"]);
-						}
-					}
-
+					$apis[$apigkid] = $api;
 
 				} catch (\Exception $e) {
 
@@ -143,11 +144,7 @@ class ScopesInspector {
 
 				}
 
-
 			}
-
-
-			
 
 		}
 
@@ -181,6 +178,4 @@ class ScopesInspector {
 
 	}
 
-
-
-} 
+}
