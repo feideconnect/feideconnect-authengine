@@ -22,10 +22,8 @@ class Router {
 		$this->router->get('/loggedout', ['FeideConnect\Controllers\Pages', 'loggedout']);
 
 
-		// POC
-		$this->router->get('/poc/{user}/{client}', ['FeideConnect\Controllers\POC', 'process']);
+		// Test
 		$this->router->get('/test', ['FeideConnect\Controllers\TestController', 'test']);
-		$this->router->get('/poc-grant/{clientid:[a-fA-F0-9\-]+}/{userid:[a-zA-Z0-9_\-\.:]+ }', ['FeideConnect\Controllers\POCgrant', 'run']);
 
 
 		// Data APIs
