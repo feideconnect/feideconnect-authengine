@@ -1,7 +1,7 @@
 {
 	"userinfo": {
 		"title": "Brukerinfo",
-		"descr": "Basisinformasjon om brukere. BrukerID, navn og profilbilde.",
+		"descr": "Basisinformasjon om brukere. BrukerID og navn.",
 		"public": true,
 		"policy": {
 			"auto": true
