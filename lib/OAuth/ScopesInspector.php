@@ -98,8 +98,6 @@ class ScopesInspector {
 
 					if (isset($matches[3])) {
 						$apis[$apigkid]['localScopes'][] = $matches[3];
-					} else {
-						$apis[$apigkid]["basic"] = true;
 					}
 
 					if (!isset($apis[$apigkid]["apigk"])) {
