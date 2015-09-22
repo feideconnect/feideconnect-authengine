@@ -4,6 +4,7 @@ DROP INDEX IF EXISTS clients_owner_idx;
 DROP INDEX IF EXISTS clients_scopes_idx;
 DROP INDEX IF EXISTS clients_scopes_requested_idx;
 DROP INDEX IF EXISTS clients_organization_idx;
+DROP INDEX IF EXISTS clients_authproviders_idx;
 DROP INDEX IF EXISTS clients_orgauthorization_idx;
 DROP TABLE IF EXISTS clients_counters;
 
