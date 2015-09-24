@@ -89,6 +89,26 @@ class ScopesInspector {
 		return $apiInfo;
 	}
 
+	public function getScopeAPIGKs() {
+		$apis = [];
+		foreach($this->scopes AS $scope) {
+			if (!preg_match('/^gk_([a-z0-9\-]+)(_([a-z0-9\-]+))?$/', $scope, $matches)) {
+				continue;
+			}
+
+			$apigkid = $matches[1];
+			try {
+				$apiInfo = $this->getAPI($apigkid);
+			} catch(\Exception $e) {
+				continue;
+			}
+			if (isset($matches[3])) {
+				$apiInfo['localScopes'][] = $matches[3];
+			}
+			$apis[$scope] = $apiInfo;
+		}
+		return $apis;
+	}
 
 	public function getInfo() {
 
@@ -101,30 +121,13 @@ class ScopesInspector {
 			"allScopes" => $this->scopes
 		];
 
+		$scope_apis = $this->getScopeAPIGKs();
+
 		foreach($this->scopes AS $scope) {
 
-			// Basic and subscopes scopes for an APIGK
-			if (preg_match('/^gk_([a-z0-9\-]+)(_([a-z0-9\-]+))?$/', $scope, $matches)) {
-
-				$apigkid = $matches[1];
-
-				try {
-
-					$api = $this->getAPI($apigkid);
-
-					if (isset($matches[3])) {
-						$api['localScopes'][] = $matches[3];
-					}
-					$apis[$apigkid] = $api;
-
-				} catch (\Exception $e) {
-
-					Logger::error('Unable to retrieve scope information for an APIGK: ' . $e->getMessage(), [
-						'apigkid' => $apigkid
-					]);
-					$data["unknown"][] = $scope;
-				}
-
+			if (isset($scope_apis[$scope])) {
+				$apiInfo = $scope_apis[$scope];
+				$apis[$apiInfo['apigk']->id] = $apiInfo;
 
 			} else {
 
