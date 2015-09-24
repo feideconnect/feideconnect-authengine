@@ -56,7 +56,7 @@ class AuthorizationUI {
 		}
 
 
-		$scopesInspector = new ScopesInspector($this->client, $this->scopesInQuestion);
+		$scopesInspector = new ScopesInspector($this->scopesInQuestion);
 
 		$isMandatory = MandatoryClientInspector::isClientMandatory($this->account, $this->client);
 		$needs = $this->ae->needsAuthorization();

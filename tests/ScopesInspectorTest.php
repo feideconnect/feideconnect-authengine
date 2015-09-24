@@ -27,7 +27,7 @@ class ScopesInspectorTest extends \PHPUnit_Framework_TestCase {
 	}
 
 	public function testGlobalScope() {
-		$test = new ScopesInspector(null, ['userinfo']);
+		$test = new ScopesInspector(['userinfo']);
 		$res = $test->getInfo();
 		$this->assertEquals($res, array(
 			'hasAPIs' => false,
@@ -47,7 +47,7 @@ class ScopesInspectorTest extends \PHPUnit_Framework_TestCase {
 	}
 
 	public function testUnknownScope() {
-		$test = new ScopesInspector(null, ['ugle']);
+		$test = new ScopesInspector(['ugle']);
 		$res = $test->getInfo();
 		$this->assertEquals($res, array(
 			'hasAPIs' => false,
@@ -59,7 +59,7 @@ class ScopesInspectorTest extends \PHPUnit_Framework_TestCase {
 	}
 
 	public function testUnknownGKScope() {
-		$test = new ScopesInspector(null, ['gk_ugle']);
+		$test = new ScopesInspector(['gk_ugle']);
 		$res = $test->getInfo();
 		$this->assertEquals($res, array(
 			'hasAPIs' => false,
@@ -71,7 +71,7 @@ class ScopesInspectorTest extends \PHPUnit_Framework_TestCase {
 	}
 
 	public function testApiBasic() {
-		$test = new ScopesInspector(null, ['gk_test']);
+		$test = new ScopesInspector(['gk_test']);
 		$res = $test->getInfo();
 		$this->myAssertSubset(array(
 			'hasAPIs' => true,
@@ -103,7 +103,7 @@ class ScopesInspectorTest extends \PHPUnit_Framework_TestCase {
 	}
 
 	public function testApiSubscope() {
-		$test = new ScopesInspector(null, ['gk_test', 'gk_test_a']);
+		$test = new ScopesInspector(['gk_test', 'gk_test_a']);
 		$res = $test->getInfo();
 		$this->myAssertSubset(array(
 			'hasAPIs' => true,
@@ -146,7 +146,7 @@ class ScopesInspectorTest extends \PHPUnit_Framework_TestCase {
 		$this->api->organization = $org->id;
 		$this->db->saveAPIGK($this->api);
 		
-		$test = new ScopesInspector(null, ['gk_test']);
+		$test = new ScopesInspector(['gk_test']);
 		$res = $test->getInfo();
 		$this->assertArrayHasKey('apis', $res);
 		$apis = $res['apis'];

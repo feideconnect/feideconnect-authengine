@@ -13,7 +13,6 @@ use FeideConnect\Logger;
  */
 class ScopesInspector {
 	
-	protected $client;
 	protected $scopes;
 
 	protected $globalScopes;
@@ -22,8 +21,7 @@ class ScopesInspector {
 
 	protected $apis = [], $owners = [], $orgs = [];
 
-	public function __construct($client, $scopes) {
-		$this->client = $client;
+	public function __construct($scopes) {
 		$this->scopes = $scopes;
 		$this->globalScopes = Config::readJSONfile('scopedef.json');
 
