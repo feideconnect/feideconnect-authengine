@@ -20,7 +20,7 @@ abstract class Model {
 
 		foreach($props AS $k => $v) {
 			if (!in_array($k, static::$_properties)) {
-				error_log("Trying to set a property [" . $k . "] that is not legal.");
+				error_log(get_class($this) . ": Trying to set a property [" . $k . "] that is not legal.");
 				continue;
 			}
 
@@ -28,7 +28,7 @@ abstract class Model {
 			if (isset(static::$_types[$k])) {
 				if (static::$_types[$k] === 'timestamp') {
 					if (!($v instanceof Timestamp)) {
-						error_log("Trying to set property [" . $k . "] with an invalid timestamp type");
+						error_log(get_class($this) . ": Trying to set property [" . $k . "] with an invalid timestamp type");
 						continue;
 					}
 				}
