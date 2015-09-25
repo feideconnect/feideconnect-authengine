@@ -231,7 +231,6 @@ class OAuthAuthorization {
 		$redirect_uri = $this->aevaluator->getValidatedRedirectURI();
 		$state = $this->request->getState();
 
-
 		
 		// If SimpleSAML_Auth_State_exceptionId query parameter is set, then something failed 
 		// while performing authentication.
@@ -329,15 +328,10 @@ class OAuthAuthorization {
 
 	protected function processCode() {
 
-
-
+		$redirect_uri = $this->aevaluator->getValidatedRedirectURI();
 		$scopesInQuestion = $this->aevaluator->getScopesInQuestion();
-		$redirectURI = null;
-		if (!empty($this->request->redirect_uri)) {
-			$redirectURI = $this->request->redirect_uri;
-		}
 
-		$code = Models\AuthorizationCode::generate($this->client, $this->user, $redirectURI, $scopesInQuestion);
+		$code = Models\AuthorizationCode::generate($this->client, $this->user, $redirect_uri, $scopesInQuestion);
 		$this->storage->saveAuthorizationCode($code);
 
 		$tokenresponse = Messages\AuthorizationResponse::generate($this->request, $code);
@@ -349,7 +343,7 @@ class OAuthAuthorization {
 			'tokenresponse' => $tokenresponse->getAsArray(),
 		));
 
-		return $tokenresponse->sendRedirect($this->request->redirect_uri);
+		return $tokenresponse->sendRedirect($redirect_uri);
 
 	}
 
