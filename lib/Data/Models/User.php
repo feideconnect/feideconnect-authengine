@@ -269,6 +269,18 @@ class User extends \FeideConnect\Data\Model {
 	}
 
 
+	public function getFeideRealms() {
+		$feideids = $this->getUserIDsecPrefixed('feide');
+		$realms = array();
+		foreach($feideids AS $feideid) {
+			$parts = explode('@', $feideid);
+			if (count($parts) === 2) {
+				$realms[$parts[1]] = true;
+			}
+		}
+		return array_keys($realms);
+	}
+
 	public function updateUserBasics(Account $a) {
 
 		$this->aboveagelimit = $a->aboveAgeLimit();

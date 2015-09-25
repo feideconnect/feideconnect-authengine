@@ -131,6 +131,19 @@ class UserTest extends \PHPUnit_Framework_TestCase {
 	}
 
 
+	public function testGetFeideRealms() {
+		$user = $this->dbhelper->user();
+		$this->assertEquals($user->getFeideRealms(), ['example.org']);
+		$user->userid_sec = [];
+		$this->assertEquals($user->getFeideRealms(), []);
+		$user->userid_sec = ['mail:foo@example.com', 'feide:dust@example.org', 'p:123', 'feide:ugle@example.net'];
+		$realms = $user->getFeideRealms();
+		sort($realms);
+		$this->assertEquals($realms, ['example.net', 'example.org']);
+		$user->userid_sec = ['feide:foo'];
+		$this->assertEquals($user->getFeideRealms(), []);
+	}
+
 	// public function testUsers() {
 	// 	// return;
 	// 	$user = new Models\User();
