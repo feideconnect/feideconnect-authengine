@@ -275,17 +275,17 @@ class Server {
 
 			if ($tokenrequest->grant_type === 'client_credentials') {
 
-				$tokenresponse = OAuthUtils::generateTokenResponse($client, null, $requestedScopes, "client_credentials");
-				
+				$user = null;
+
 			} else if ($tokenrequest->grant_type === 'password') {
 
 				$user = $this->validateTestUserCredentials($tokenrequest);
-				$tokenresponse = OAuthUtils::generateTokenResponse($client, $user, $requestedScopes, "password");
 
 			} else {
 				throw new OAuthException('unsupported_grant_type', 'Invalid [grant_type] provided to token endpoint.');
 			}
 			
+			$tokenresponse = OAuthUtils::generateTokenResponse($client, $user, $requestedScopes, $tokenrequest->grant_type);
 			return $tokenresponse->sendBodyJSON();
 
 		} catch (OAuthException $e) {
