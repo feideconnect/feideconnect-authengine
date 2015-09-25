@@ -172,7 +172,8 @@ class AuthorizationEvaluator {
 		));
 
 		if (empty($this->request->redirect_uri)) {
-			return $configuredRedirectURI;
+			// Use the first of the configured redirectURIs if multiple are configured.
+			return $configuredRedirectURI[0];
 		}
 
 
