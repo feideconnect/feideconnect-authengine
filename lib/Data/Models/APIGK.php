@@ -42,6 +42,39 @@ class APIGK extends \FeideConnect\Data\Model {
 		return $data;
 	}
 
+	function getScopeDef($scope) {
+		if (!isset($this->scopedef)) {
+			throw new \Exception("APIGK does not have scopedef set" . $this->id);
+		}
+		$scopedef = $this->scopedef;
+		if (!preg_match('/^gk_([a-z0-9\-]+)(_([a-z0-9\-]+))?$/', $scope, $matches)) {
+			throw new \Exception("Incorrect APIGK (" . $this->id . ") for scope: " . $scope);
+		}
+		if (isset($matches[3])) {
+			$subscope = $matches[3];
+			if (isset($scopedef["subscopes"]) && isset($this->scopedef["subscopes"][$subscope])) {
+				return $this->scopedef["subscopes"][$subscope];
+			}
+			throw new \Exception("APIGK (" . $this->id . ") does not define scope " . $scope);
+		}
+		return array_filter($scopedef, function($key) {return $key !== "subscopes";}, ARRAY_FILTER_USE_KEY);
+	}
+
+	function isOrgModerated($scope) {
+		$scopedef = $this->getScopeDef($scope);
+		if (!isset($scopedef['policy'])) {
+			return false;
+		}
+		if (!isset($scopedef['policy']['orgadmin'])) {
+			return false;
+		}
+		$orgadminpolicy = $scopedef['policy']['orgadmin'];
+		if (!isset($orgadminpolicy['moderate'])) {
+			return false;
+		}
+		return $orgadminpolicy['moderate'] === true;
+	}
+
 	function getBasicScopeView() {
 		$sd = [
 			"title" => "Basic access",

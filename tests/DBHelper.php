@@ -24,7 +24,7 @@ class DBHelper {
 	public function client() {
 		$clientid = Models\Client::genUUID();
 
-		$client = new Models\Client($this->db);
+		$client = new Models\Client();
 		$client->id = $clientid;
 		$client->client_secret = Models\Client::genUUID();
 		$client->created = new \FeideConnect\Data\Types\Timestamp();
@@ -79,6 +79,16 @@ class DBHelper {
 						'title' => 'scope b',
 						'descr' => 'test scope b',
 						'policy' => array('auto' => false),
+					),
+					'moderated' => array(
+						'title' => 'scope moderated',
+						'descr' => 'a org moderated scope',
+						'policy' => array(
+							'auto' => true,
+							'orgadmin' => array(
+								'moderate' => true,
+							),
+						),
 					),
 				),
 			)),

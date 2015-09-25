@@ -82,7 +82,7 @@ class AuthorizationEvaluator {
 
 	private function evaluateScopes() {
 
-		$this->scopesInQuestion = OAuthUtils::evaluateScopes($this->client, $this->request->scope);
+		$this->scopesInQuestion = OAuthUtils::evaluateScopes($this->client, $this->user, $this->request->scope);
 
 		if ($this->user === null) {
 			return;

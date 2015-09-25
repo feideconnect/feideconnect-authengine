@@ -271,7 +271,6 @@ class Server {
 			}
 
 			$client = $this->validateClientAuthorization();
-			$requestedScopes = OAuthUtils::evaluateScopes($client, $tokenrequest->scope);
 
 			if ($tokenrequest->grant_type === 'client_credentials') {
 
@@ -285,6 +284,7 @@ class Server {
 				throw new OAuthException('unsupported_grant_type', 'Invalid [grant_type] provided to token endpoint.');
 			}
 			
+			$requestedScopes = OAuthUtils::evaluateScopes($client, $user, $tokenrequest->scope);
 			$tokenresponse = OAuthUtils::generateTokenResponse($client, $user, $requestedScopes, $tokenrequest->grant_type);
 			return $tokenresponse->sendBodyJSON();
 

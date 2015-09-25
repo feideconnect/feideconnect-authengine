@@ -11,19 +11,33 @@ use Cassandra\Type\Blob;
 
 class Client extends \FeideConnect\Data\Model {
 
-	public $id, $client_secret, $created, $descr, $name, $owner, $organization, $logo, $redirect_uri, $scopes, $scopes_requested, $status, $type, $updated, $authproviders;
+	public $id, $client_secret, $created, $descr, $name, $owner, $organization, $logo, $redirect_uri, $scopes, $scopes_requested, $status, $type, $updated, $authproviders, $orgauthorization;
 	
 
 	protected static $_properties = array(
 		"id", "client_secret", "created", "descr", "name", "owner", "organization",
 		"logo",
-		"redirect_uri", "scopes", "scopes_requested", "status", "type", "updated", "authproviders"
+		"redirect_uri", "scopes", "scopes_requested", "status", "type", "updated", "authproviders", "orgauthorizations",
 	);
 	protected static $_types = [
 		"created" => "timestamp",
 		"updated" => "timestamp"
 	];
 
+	function __construct($props = array()) {
+
+		parent::__construct($props);
+
+		if (isset($props["orgauthorizations"])) {
+			$this->orgauthorizations = array();
+			foreach ($props["orgauthorizations"] as $realm => $authz) {
+				$this->orgauthorizations[$realm] = json_decode($authz);
+			}
+			unset ($props["orgauthorizations"]);
+		}
+
+
+	}
 
 	public function getScopeList() {
 		if (empty($this->scopes)) return [];
@@ -52,6 +66,13 @@ class Client extends \FeideConnect\Data\Model {
 		}
 		return $res;
 
+	}
+
+	public function getOrgAuthorizations($realm) {
+		if (!isset($this->orgauthorizations[$realm])) {
+			return [];
+		}
+		return json_decode($this->orgauthorizations[$realm]);
 	}
 
 
