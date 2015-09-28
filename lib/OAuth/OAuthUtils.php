@@ -14,7 +14,7 @@ class OAuthUtils {
 	 * @return array list of valid scopes
 	 */
 	public static function evaluateScopes($client, $user, $requestedScopes) {
-		$scopelist = $client->getScopeList();
+		$scopelist = $clientscopes = $client->getScopeList();
 		if (!empty($requestedScopes)) {
 			// Only consider scopes that the client is authorized to ask for.
 			$scopelist = array_intersect($requestedScopes, $scopelist);
@@ -56,7 +56,19 @@ class OAuthUtils {
 			}
 		}
 
-		return array_keys($scopes);
+		$result = array_keys($scopes);
+		$logdata = array(
+			'requested_scopes' => $requestedScopes,
+			'client_scopes' => $clientscopes,
+			'org_moderated_scopes' => $orgmoderatedscopes,
+			'feideuser' => $feideuser,
+			'result_scopes' => $result,
+		);
+		if ($feideuser) {
+			$logdata['user_realms'] = $realms;
+		}
+		Logger::info('Evaluated scopes', $logdata);
+		return $result;
 	}
 
 	public static function generateTokenResponse($client, $user, $scopes, $flow, $state = null) {
