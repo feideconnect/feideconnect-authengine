@@ -91,7 +91,7 @@ class OAuthUtils {
 			'tokenresponse' => $tokenresponse->getAsArray(),
 		);
 		if ($user !== null) {
-			$logdata['user'] = $user->getAsArray();
+			$logdata['user'] = $user->getUserInfo();
 		}
 		Logger::info('OAuth Access Token is now issued.', $logdata);
 
