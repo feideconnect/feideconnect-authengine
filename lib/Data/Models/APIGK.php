@@ -57,7 +57,9 @@ class APIGK extends \FeideConnect\Data\Model {
 			}
 			throw new \Exception("APIGK (" . $this->id . ") does not define scope " . $scope);
 		}
-		return array_filter($scopedef, function($key) {return $key !== "subscopes";}, ARRAY_FILTER_USE_KEY);
+		$output = $scopedef;
+		unset($output['subscopes']);
+		return $output;
 	}
 
 	function isOrgModerated($scope) {
