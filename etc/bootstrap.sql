@@ -68,6 +68,7 @@ CREATE TABLE clients (
 
 	name text,
 	descr text,
+	systemdescr text,
 	logo blob,
 	type text,
 
@@ -76,8 +77,13 @@ CREATE TABLE clients (
 	scopes_requested set<text>,
 	orgauthorization map<text, text>,
 	status set<text>,
+	privacypolicyurl text,
+	homepageurl text,
+	loginurl text,
+	supporturl text,
 
 	authproviders set<text>,
+	authoptions text,	-- JSON Structure
 
 	owner uuid,
 	organization text,
@@ -229,6 +235,7 @@ CREATE TABLE apigk (
 
 	name text,
 	descr text,
+	systemdescr text,
 	logo blob,
 
 	endpoints list<text>,
@@ -240,6 +247,9 @@ CREATE TABLE apigk (
 	httpscertpinned text, 	-- X509 Certificate
 
 	status set<text>,
+
+	privacypolicyurl text,
+	docurl text,
 
 	owner uuid,
 	organization text,
