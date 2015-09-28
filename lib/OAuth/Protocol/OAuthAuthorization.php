@@ -117,7 +117,7 @@ class OAuthAuthorization {
 		// echo '<pre>'; print_r($user); exit;
 
 		Logger::info('OAuth Processing Authorization request, user is authenticated', array(
-			'user' => $this->user->getUserInfo()
+			'user' => $this->user->getBasicUserInfo()
 		));
 
 	}
