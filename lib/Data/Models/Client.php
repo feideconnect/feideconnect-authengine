@@ -5,6 +5,7 @@ namespace FeideConnect\Data\Models;
 use Cassandra\Type\Uuid;
 use Cassandra\Type\CollectionList;
 use Cassandra\Type\CollectionSet;
+use Cassandra\Type\CollectionMap;
 use Cassandra\Type\Base;
 use Cassandra\Type\Timestamp;
 use Cassandra\Type\Blob;
@@ -17,7 +18,7 @@ class Client extends \FeideConnect\Data\Model {
 	protected static $_properties = array(
 		"id", "client_secret", "created", "descr", "name", "owner", "organization",
 		"logo",
-		"redirect_uri", "scopes", "scopes_requested", "status", "type", "updated", "authproviders", "orgauthorizations",
+		"redirect_uri", "scopes", "scopes_requested", "status", "type", "updated", "authproviders", "orgauthorization",
 	);
 	protected static $_types = [
 		"created" => "timestamp",
@@ -68,11 +69,11 @@ class Client extends \FeideConnect\Data\Model {
 
 	}
 
-	public function getOrgAuthorizations($realm) {
-		if (!isset($this->orgauthorizations[$realm])) {
+	public function getOrgAuthorization($realm) {
+		if (!isset($this->orgauthorization[$realm])) {
 			return [];
 		}
-		return json_decode($this->orgauthorizations[$realm]);
+		return $this->orgauthorization[$realm];
 	}
 
 
@@ -103,6 +104,14 @@ class Client extends \FeideConnect\Data\Model {
 		
 		if (isset($this->owner)) {
 			$prepared["owner"] =  new Uuid($this->owner);
+		}
+
+		if (isset($this->orgauthorization)) {
+			$encoded = array();
+			foreach($this->orgauthorization as $realm => $authz) {
+				$encoded[$realm] = json_encode($authz);
+			}
+			$prepared["orgauthorization"] = new CollectionMap($encoded, Base::ASCII, BASE::ASCII);
 		}
 
 

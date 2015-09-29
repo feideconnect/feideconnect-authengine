@@ -34,6 +34,7 @@ class DBHelper {
 		$client->redirect_uri = ['http://example.org'];
 		$client->scopes = ['userinfo', 'groups'];
 		$client->client_secret = Models\Client::genUUID();
+		$client->orgauthorizations = array();
 		$this->db->saveClient($client);
 
 		return $client;

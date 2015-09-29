@@ -56,7 +56,9 @@ class EvaluateScopesTest extends \PHPUnit_Framework_TestCase {
 	function testOrgAdminScopesOK() {
 		$scopes = ['gk_test_moderated', 'userinfo'];
 		$this->client->scopes = $scopes;
-		$this->client->orgauthorizations['example.org'] = json_encode(['gk_test_moderated']);
+		$this->client->orgauthorization['example.org'] = ['gk_test_moderated'];
+		$this->db->saveClient($this->client);
+		$this->client = $this->db->getClient($this->client->id);
 		$this->assertEquals($scopes, OAuthUtils::evaluateScopes($this->client, $this->user, $scopes));
 	}
 
