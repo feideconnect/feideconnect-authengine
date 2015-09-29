@@ -5,18 +5,11 @@ namespace tests;
 use FeideConnect\OAuth\ScopesInspector;
 use FeideConnect\Data\StorageProvider;
 
-class ScopesInspectorTest extends \PHPUnit_Framework_TestCase {
-	protected $db, $dbhelper, $api, $org;
-
-	function __construct() {
-
-		// $config = json_decode(file_get_contents(__DIR__ . '/../etc/ci/config.json'), true);
-		$this->db = StorageProvider::getStorage();
-		$this->dbhelper = new DBHelper();
-	}
+class ScopesInspectorTest extends DBHelper {
+	protected $api, $org;
 
 	public function setUp() {
-		$this->api = $this->dbhelper->apigk();
+		$this->api = $this->apigk();
 	}
 
 	public function myAssertSubset($a, $b) {
@@ -142,7 +135,7 @@ class ScopesInspectorTest extends \PHPUnit_Framework_TestCase {
 	}
 
 	public function testApiOrg() {
-		$this->org = $org = $this->dbhelper->org();
+		$this->org = $org = $this->org();
 		$this->api->organization = $org->id;
 		$this->db->saveAPIGK($this->api);
 		

@@ -6,19 +6,13 @@ use FeideConnect\OAuth\AuthorizationEvaluator;
 use FeideConnect\Data\StorageProvider;
 use FeideConnect\OAuth\Messages\AuthorizationRequest;
 
-class AuthorizationEvaluatorTest extends \PHPUnit_Framework_TestCase {
+class AuthorizationEvaluatorTest extends DBHelper {
 
-	protected $db, $dbhelper;
 	protected $user, $client, $aevaluator;
 
-	function __construct() {
-
-		// $config = json_decode(file_get_contents(__DIR__ . '/../etc/ci/config.json'), true);
-		$this->db = StorageProvider::getStorage();
-		$this->dbhelper = new DBHelper();
-
-		$this->user = $this->dbhelper->user();
-		$this->client = $this->dbhelper->client();
+	function setUp() {
+		$this->user = $this->user();
+		$this->client = $this->client();
 	}
 
 	function getRequest($redirect_uri = null) {

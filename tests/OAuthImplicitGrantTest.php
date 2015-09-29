@@ -5,13 +5,12 @@ use FeideConnect\Router;
 use FeideConnect\HTTP\JSONResponse;
 use FeideConnect\Data\StorageProvider;
 
-class OAuthImplicitGrantTest extends \PHPUnit_Framework_TestCase {
+class OAuthImplicitGrantTest extends DBHelper {
 
-	protected $db, $client;
+	protected $client;
 
 	function __construct() {
-		$this->db = StorageProvider::getStorage();
-		$this->dbhelper = new DBHelper();
+		parent::__construct();
 		$this->_SERVER = $_SERVER;
 	}
 
@@ -28,10 +27,10 @@ class OAuthImplicitGrantTest extends \PHPUnit_Framework_TestCase {
 		$_REQUEST['state'] = '06dad165-7d22-4dcf-bda9-38f4048b9e3d';
 		$_REQUEST['redirect_uri'] = 'http://example.org';
 
-		$this->client = $this->dbhelper->client();
+		$this->client = $this->client();
 		$_REQUEST['client_id'] = $this->client->id;
 
-		$this->user = $this->dbhelper->user();
+		$this->user = $this->user();
 	}
 
     public function testAuthorizationToAccountChooser() {

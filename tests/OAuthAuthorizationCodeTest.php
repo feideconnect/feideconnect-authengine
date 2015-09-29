@@ -5,13 +5,12 @@ use FeideConnect\Router;
 use FeideConnect\HTTP\JSONResponse;
 use FeideConnect\Data\StorageProvider;
 
-class OAuthAuthorizationCodeTest extends \PHPUnit_Framework_TestCase {
+class OAuthAuthorizationCodeTest extends DBHelper {
 
-	protected $db, $dbhelper, $client;
+	protected $client;
 
 	function __construct() {
-		$this->db = StorageProvider::getStorage();
-		$this->dbhelper = new DBHelper();
+		parent::__construct();
 		$this->_SERVER = $_SERVER;
 	}
 
@@ -30,10 +29,10 @@ class OAuthAuthorizationCodeTest extends \PHPUnit_Framework_TestCase {
 
 
 
-		$this->client = $this->dbhelper->client();
+		$this->client = $this->client();
 		$_REQUEST['client_id'] = $this->client->id;
 
-		$this->user = $this->dbhelper->user();
+		$this->user = $this->user();
 	}
 
     public function testAuthorizationToAccountChooser() {

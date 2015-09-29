@@ -5,13 +5,12 @@ use FeideConnect\HTTP\JSONResponse;
 use FeideConnect\Data\StorageProvider;
 use FeideConnect\Config;
 
-class OAuthPasswordTest extends \PHPUnit_Framework_TestCase {
+class OAuthPasswordTest extends DBHelper {
 
-	protected $db, $client;
+	protected $client;
 
 	function __construct() {
-		$this->db = StorageProvider::getStorage();
-		$this->dbhelper = new DBHelper();
+		parent::__construct();
 		$this->_SERVER = $_SERVER;
 	}
 
@@ -32,11 +31,11 @@ class OAuthPasswordTest extends \PHPUnit_Framework_TestCase {
 			$_REQUEST['password'] = $data['password'];
 		}
 
-		$this->client = $this->dbhelper->client();
+		$this->client = $this->client();
 		$_SERVER['PHP_AUTH_USER'] = $this->client->id;
 		$_SERVER['PHP_AUTH_PW'] = $this->client->client_secret;
 
-		$this->user = $this->dbhelper->user($userid_sec);
+		$this->user = $this->user($userid_sec);
 	}
 
 	public function testGetToken() {

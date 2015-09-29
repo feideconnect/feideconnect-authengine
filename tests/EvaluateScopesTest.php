@@ -5,22 +5,14 @@ namespace tests;
 use FeideConnect\OAuth\OAuthUtils;
 use FeideConnect\Data\StorageProvider;
 
-class EvaluateScopesTest extends \PHPUnit_Framework_TestCase {
+class EvaluateScopesTest extends DBHelper {
 
-	protected $db, $dbhelper;
 	protected $user, $client, $apigk;
 
-	function __construct() {
-
-		// $config = json_decode(file_get_contents(__DIR__ . '/../etc/ci/config.json'), true);
-		$this->db = StorageProvider::getStorage();
-		$this->dbhelper = new DBHelper();
-	}
-
 	function setUp() {
-		$this->user = $this->dbhelper->user();
-		$this->client = $this->dbhelper->client();
-		$this->apigk = $this->dbhelper->apigk();
+		$this->user = $this->user();
+		$this->client = $this->client();
+		$this->apigk = $this->apigk();
 	}
 
 	function testNoRequestedScopes() {

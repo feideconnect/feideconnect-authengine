@@ -5,7 +5,7 @@ namespace tests;
 use FeideConnect\Data\StorageProvider;
 use FeideConnect\Data\Models;
 
-class DBHelper {
+class DBHelper extends \PHPUnit_Framework_TestCase {
 
 
 	protected $db;

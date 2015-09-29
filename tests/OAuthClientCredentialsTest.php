@@ -5,13 +5,10 @@ use FeideConnect\HTTP\JSONResponse;
 use FeideConnect\Data\StorageProvider;
 use FeideConnect\Data\Models;
 
-class OAuthClientCredentialsTest extends \PHPUnit_Framework_TestCase {
-
-	protected $db, $client;
+class OAuthClientCredentialsTest extends DBHelper {
 
 	function __construct() {
-		$this->db = StorageProvider::getStorage();
-		$this->dbhelper = new DBHelper();
+		parent::__construct();
 		$this->_SERVER = $_SERVER;
 	}
 
@@ -27,7 +24,7 @@ class OAuthClientCredentialsTest extends \PHPUnit_Framework_TestCase {
 		$_REQUEST['grant_type'] = 'client_credentials';
 
 
-		$this->client = $this->dbhelper->client();
+		$this->client = $this->client();
 		$_SERVER['PHP_AUTH_USER'] = $this->client->id;
 		$_SERVER['PHP_AUTH_PW'] = $this->client->client_secret;
 

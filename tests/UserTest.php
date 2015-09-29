@@ -9,21 +9,10 @@ use FeideConnect\Authentication\Account;
 use FeideConnect\Data\Models;
 use FeideConnect\Data\StorageProvider;
 
-class UserTest extends \PHPUnit_Framework_TestCase {
-
-
-	protected $db, $dbhelper;
-
-	function __construct() {
-
-		// $config = json_decode(file_get_contents(__DIR__ . '/../etc/ci/config.json'), true);
-		$this->db = StorageProvider::getStorage();
-		$this->dbhelper = new DBHelper();
-	}
-
+class UserTest extends DBHelper {
 
 	public function setUp() {
-		$this->dbhelper->clearUsers();
+		$this->clearUsers();
 	}
 
 	public function testAccount() {
@@ -132,7 +121,7 @@ class UserTest extends \PHPUnit_Framework_TestCase {
 
 
 	public function testGetFeideRealms() {
-		$user = $this->dbhelper->user();
+		$user = $this->user();
 		$this->assertEquals($user->getFeideRealms(), ['example.org']);
 		$user->userid_sec = [];
 		$this->assertEquals($user->getFeideRealms(), []);
