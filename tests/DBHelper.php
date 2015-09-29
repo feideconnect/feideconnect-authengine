@@ -8,10 +8,22 @@ use FeideConnect\Data\Models;
 class DBHelper extends \PHPUnit_Framework_TestCase {
 
 
-	protected $db;
+	protected $db, $_SERVER, $_REQUEST;
 
 	function __construct() {
 		$this->db = StorageProvider::getStorage();
+		$this->_SERVER = $_SERVER;
+		$this->_REQUEST = $_REQUEST;
+	}
+
+	function setUp() {
+		$_SERVER = $this->_SERVER;
+		$_REQUEST = $this->_REQUEST;
+	}
+
+	function tearDown() {
+		$_SERVER = $this->_SERVER;
+		$_REQUEST = $this->_REQUEST;
 	}
 
 	public function clearUsers() {

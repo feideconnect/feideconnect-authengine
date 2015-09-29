@@ -7,20 +7,14 @@ use FeideConnect\Data\Models;
 
 class OAuthClientCredentialsTest extends DBHelper {
 
-	function __construct() {
-		parent::__construct();
-		$this->_SERVER = $_SERVER;
-	}
-
 	public function setUp() {
-		$_SERVER = $this->_SERVER;
+		parent::setUp();
 		$_SERVER['REMOTE_ADDR'] = '127.0.0.1';
 		$_SERVER['REQUEST_URI'] = '/foo';
 		$_SERVER['REQUEST_METHOD'] = 'GET';
 		$_SERVER['SERVER_PROTOCOL'] = 'HTTP/1.1';
 		$_SERVER['HTTP_ACCEPT_LANGUAGE'] = 'en-US';
 
-		$_REQUEST = array();
 		$_REQUEST['grant_type'] = 'client_credentials';
 
 
@@ -74,7 +68,7 @@ class OAuthClientCredentialsTest extends DBHelper {
     }
     
     function tearDown() {
-
+		parent::tearDown();
     	$this->db->removeClient($this->client);
 
     }
