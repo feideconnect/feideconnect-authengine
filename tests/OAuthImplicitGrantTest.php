@@ -19,7 +19,7 @@ class OAuthImplicitGrantTest extends DBHelper {
 		$_SERVER['REMOTE_ADDR'] = '127.0.0.1';
 		$_SERVER['REQUEST_URI'] = '/foo';
 		$_SERVER['REQUEST_METHOD'] = 'GET';
-		$_SERVER['SERVER_PROTOCOL'] = 'https';
+		$_SERVER['SERVER_PROTOCOL'] = 'HTTP/1.1';
 		$_SERVER['HTTP_ACCEPT_LANGUAGE'] = 'en-US';
 
 		$_REQUEST = array();
