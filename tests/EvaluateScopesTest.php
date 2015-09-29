@@ -26,51 +26,51 @@ class EvaluateScopesTest extends \PHPUnit_Framework_TestCase {
 	function testNoRequestedScopes() {
 		$scopes = ['userinfo', 'groups'];
 		$this->client->scopes = $scopes;
-		$this->assertEquals(OAuthUtils::evaluateScopes($this->client, $this->user, []), $scopes);
+		$this->assertEquals($scopes, OAuthUtils::evaluateScopes($this->client, $this->user, []));
 	}
 
 	function testAllRequestedScopesOK() {
 		$scopes = ['userinfo', 'groups'];
 		$this->client->scopes = $scopes;
-		$this->assertEquals(OAuthUtils::evaluateScopes($this->client, $this->user, $scopes), $scopes);
+		$this->assertEquals($scopes, OAuthUtils::evaluateScopes($this->client, $this->user, $scopes));
 	}
 
 	function testNoRequestedScopesOK() {
 		$scopes = ['userinfo', 'groups'];
 		$this->client->scopes = $scopes;
-		$this->assertEquals(OAuthUtils::evaluateScopes($this->client, $this->user, ['longterm']), []);
+		$this->assertEquals([], OAuthUtils::evaluateScopes($this->client, $this->user, ['longterm']));
 	}
 
 	function testSomeRequestedScopesOK() {
 		$scopes = ['userinfo', 'groups'];
 		$this->client->scopes = $scopes;
-		$this->assertEquals(OAuthUtils::evaluateScopes($this->client, $this->user, ['longterm', 'userinfo']), ['userinfo']);
+		$this->assertEquals(['userinfo'], OAuthUtils::evaluateScopes($this->client, $this->user, ['longterm', 'userinfo']));
 	}
 
 	function testOrgAdminScopesNotOK() {
 		$scopes = ['gk_test_moderated', 'userinfo'];
 		$this->client->scopes = $scopes;
-		$this->assertEquals(OAuthUtils::evaluateScopes($this->client, $this->user, $scopes), ['userinfo']);
+		$this->assertEquals(['userinfo'], OAuthUtils::evaluateScopes($this->client, $this->user, $scopes));
 	}
 
 	function testOrgAdminScopesOK() {
 		$scopes = ['gk_test_moderated', 'userinfo'];
 		$this->client->scopes = $scopes;
 		$this->client->orgauthorizations['example.org'] = json_encode(['gk_test_moderated']);
-		$this->assertEquals(OAuthUtils::evaluateScopes($this->client, $this->user, $scopes), $scopes);
+		$this->assertEquals($scopes, OAuthUtils::evaluateScopes($this->client, $this->user, $scopes));
 	}
 
 	function testOrgAdminScopesNoUser() {
 		$scopes = ['gk_test_moderated', 'userinfo'];
 		$this->client->scopes = $scopes;
-		$this->assertEquals(OAuthUtils::evaluateScopes($this->client, null, $scopes), ['userinfo']);
+		$this->assertEquals(['userinfo'], OAuthUtils::evaluateScopes($this->client, null, $scopes));
 	}
 
 	function testOrgAdminScopesNotFeideUser() {
 		$scopes = ['gk_test_moderated', 'userinfo'];
 		$this->client->scopes = $scopes;
 		$this->user->userid_sec = ['p:123'];
-		$this->assertEquals(OAuthUtils::evaluateScopes($this->client, $this->user, $scopes), ['userinfo']);
+		$this->assertEquals(['userinfo'], OAuthUtils::evaluateScopes($this->client, $this->user, $scopes));
 	}
 
 }

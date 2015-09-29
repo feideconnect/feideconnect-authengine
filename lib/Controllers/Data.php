@@ -70,10 +70,12 @@ class Data {
 	static function getOrgs() {
 
 
-		// TODO: Fix to avoid warnings when lat and lon is not passed...
-
-		$lat = $_REQUEST['lat']; 
-		$lon = $_REQUEST['lon'];
+		if (isset($_REQUEST['lat']) && isset($_REQUEST['lon'])) {
+			$lat = $_REQUEST['lat'];
+			$lon = $_REQUEST['lon'];
+		} else {
+			$lat = $lon = null;
+		}
 
 		$storage = StorageProvider::getStorage();
 		$orgs = $storage->getOrgsByService('pilot');
