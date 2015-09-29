@@ -29,12 +29,12 @@ class Client extends \FeideConnect\Data\Model {
 
 		parent::__construct($props);
 
-		if (isset($props["orgauthorizations"])) {
-			$this->orgauthorizations = array();
-			foreach ($props["orgauthorizations"] as $realm => $authz) {
-				$this->orgauthorizations[$realm] = json_decode($authz);
+		if (isset($props["orgauthorization"])) {
+			$this->orgauthorization = array();
+			foreach ($props["orgauthorization"] as $realm => $authz) {
+				$this->orgauthorization[$realm] = json_decode($authz);
 			}
-			unset ($props["orgauthorizations"]);
+			unset ($props["orgauthorization"]);
 		}
 
 
