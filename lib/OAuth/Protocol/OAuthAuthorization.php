@@ -123,14 +123,6 @@ class OAuthAuthorization {
 	}
 
 
-	protected function evaluateScopes() {
-
-		if ($this->aevaluator !== null) { return; }
-		$this->aevaluator = new AuthorizationEvaluator($this->storage, $this->client, $this->request, $this->user);
-
-	}
-
-
 	protected function obtainAuthorization() {
 
 
@@ -237,9 +229,6 @@ class OAuthAuthorization {
 			throw new OAuthException('access_denied', 'Unable to perform passive authentication [2]', $state, $redirect_uri, $this->request->useHashFragment());
 		}
 
-
-
-		// $this->evaluateScopes();
 
 		$stepup = $this->evaluateStepUp($this->aevaluator);
 		if ($stepup !== null) {
