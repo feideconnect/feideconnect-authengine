@@ -10,7 +10,7 @@ class Misc {
 	 * Source:
 	 * http://codereview.stackexchange.com/questions/9141/language-detection-php-script
 	 */
-	static function get_browser_language($available_languages, $http_accept_language = 'auto') {
+	static function getBrowserLanguage($available_languages, $http_accept_language = 'auto') {
 		
 
 

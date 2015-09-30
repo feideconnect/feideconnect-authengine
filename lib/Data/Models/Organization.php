@@ -94,7 +94,7 @@ class Organization extends \FeideConnect\Data\Model {
 		$res["id"] = $prepared["realm"];
 		$res["type"] = $this->getTypes();
 
-		$lang = Misc::get_browser_language(array_keys($prepared["name"]));
+		$lang = Misc::getBrowserLanguage(array_keys($prepared["name"]));
 		$res["title"] = $prepared["name"][$lang];
 		if (isset($prepared["uiinfo"])) { 
 			$res["uiinfo"] = $prepared["uiinfo"];

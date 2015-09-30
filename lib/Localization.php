@@ -20,19 +20,11 @@ class Localization {
 	}
 
 
-	// static function debug() {
-
-
-	// 	$selected = Localization::get_browser_language(['nb', 'nn', 'en', 'de']);
-	// 	echo "SELECTED\n"; var_dump($selected); exit;
-
-	// }
-
 	static function getDictionary() {
 
 		if (Config::getValue('enableLocalization', false)) {
 			$availableLanguages = Config::getValue('availableLanguages', ['en']);
-			$lang = Misc::get_browser_language($availableLanguages);
+			$lang = Misc::getBrowserLanguage($availableLanguages);
 			$dictionaryFile = Config::filepath('dictionaries/build/dictionary.' . $lang . '.json');
 		} else {
 			$dictionaryFile = Config::filepath('dictionaries/dictionary.en.json');
@@ -60,7 +52,7 @@ class Localization {
 			return $entry;
 		} else if (is_array($entry)) {
 			$keys = array_keys($entry);
-			$sl = Misc::get_browser_language($keys);
+			$sl = Misc::getBrowserLanguage($keys);
 			return $entry[$sl];
 		}
 

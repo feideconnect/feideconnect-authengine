@@ -69,7 +69,7 @@ class Pages {
 			"available" => $availlang,
 			"default" => $defaultlang,
 			"enabled" => $locenabled,
-			"selected" => Misc::get_browser_language($availlang)
+			"selected" => Misc::getBrowserLanguage($availlang)
 		];
 
 		$baseDIR = dirname(dirname(__DIR__));
