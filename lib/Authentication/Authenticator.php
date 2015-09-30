@@ -220,19 +220,6 @@ class Authenticator {
 
 	}
 
-	// public static function logoutAll() {
-
-
-	// 	throw new \Exception("Deprecated");
-
-	// 	$authsources = ["saml"]; //, "google", "twitter", "facebook"];
-	// 	foreach($authsources AS $as) {
-	// 		$authsource = new \SimpleSAML_Auth_Simple($as);
-	// 		$authsource->logout('/loggedout');
-	// 	}
-	// 	echo 'Logout is not yet fully implemented as part of the accountchooser branch'; exit;
-	// }
-
 
 	public function getAccount() {
 
