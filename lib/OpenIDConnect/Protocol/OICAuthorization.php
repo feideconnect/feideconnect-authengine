@@ -7,6 +7,7 @@ use FeideConnect\OAuth\Exceptions\OAuthException;
 use FeideConnect\OAuth\Protocol\OAuthAuthorization;
 use FeideConnect\OAuth\Messages;
 use FeideConnect\OAuth\AccessTokenPool;
+use FeideConnect\OAuth\OAuthUtils;
 use FeideConnect\Data\Models\AuthorizationCode;
 
 
@@ -40,36 +41,14 @@ class OICAuthorization extends OAuthAuthorization {
 
 	protected function processToken() {
 
-
 		$redirect_uri = $this->aevaluator->getValidatedRedirectURI();
-		$expires_in = $this->getTokenDuration();
 		$scopesInQuestion = $this->aevaluator->getScopesInQuestion();
 
-		$pool = new AccessTokenPool($this->client, $this->user);
-		$accesstoken = $pool->getToken($scopesInQuestion, false, $expires_in);
-
-		// $accesstoken = Models\AccessToken::generate($client, $user, $scopesInQuestion, false, $expires_in);
-		// 
-		// TODO Verify that this saveToken was successfull before continuing.
-
-		
-
 		$idtoken = $this->getIDToken();
-		// $idv = $idtoken->getEncoded();
+		$tokenresponse = OAuthUtils::generateTokenResponse($this->client, $this->user, $scopesInQuestion,
+		                                                   "OpenID Connect implicit grant",
+                                                           $this->request->state, $idtoken);
 
-		// echo $idv; exit;
-
-
-
-		$tokenresponse = \FeideConnect\OpenIDConnect\Messages\TokenResponse::generateWithIDtoken($this->request, $accesstoken, $idtoken);
-
-		Logger::info('OAuth Access Token and IDtoken is now issued.', array(
-			'user' => $this->user->getAsArray(),
-			'client' => $this->client->getAsArray(),
-			'accesstoken' => $accesstoken->getAsArray(),
-			'tokenresponse' => $tokenresponse->getAsArray(),
-			'idtoken' => $idtoken->getObject(),
-		));
 
 		return $tokenresponse->sendRedirect($redirect_uri, true);
 

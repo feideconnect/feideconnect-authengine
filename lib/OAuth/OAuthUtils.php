@@ -71,7 +71,7 @@ class OAuthUtils {
 		return $result;
 	}
 
-	public static function generateTokenResponse($client, $user, $scopes, $flow, $state = null) {
+	public static function generateTokenResponse($client, $user, $scopes, $flow, $state = null, $idtoken = null) {
 
 		$expires_in = 3600*8; // 8 hours
 		if (in_array('longterm', $scopes, true)) {
@@ -82,7 +82,7 @@ class OAuthUtils {
 		$accesstoken = $pool->getToken($scopes, false, $expires_in);
 		// TODO Verify that this saveToken was successfull before continuing.
 
-		$tokenresponse = Messages\TokenResponse::generate($accesstoken, $state);
+		$tokenresponse = Messages\TokenResponse::generate($accesstoken, $state, $idtoken);
 
 		$logdata = array(
 			'flow' => $flow,

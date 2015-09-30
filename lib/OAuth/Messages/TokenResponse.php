@@ -26,7 +26,7 @@ class TokenResponse extends Message {
 	}
 
 
-	public static function generate(Models\AccessToken $accesstoken, $state = null) {
+	public static function generate(Models\AccessToken $accesstoken, $state = null, $idtoken = null) {
 		$a = [
 			"access_token" => $accesstoken->access_token,
 			"token_type" => $accesstoken->token_type,
@@ -38,6 +38,9 @@ class TokenResponse extends Message {
 
 		if (!empty($state)) {
 			$a["state"] = $state;
+		}
+		if ($idtoken !== null) {
+			$a["idtoken"] = $idtoken->getEncoded();
 		}
 
 		$n = new self($a);

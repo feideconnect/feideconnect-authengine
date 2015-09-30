@@ -17,10 +17,12 @@ class OAuthAuthorizationTest extends DBHelper {
 		$_SERVER['SERVER_PROTOCOL'] = 'HTTP/1.1';
 		$_SERVER['REQUEST_METHOD'] = 'GET';
 		$_SERVER['HTTP_ACCEPT_LANGUAGE'] = 'en-US';
+		$_REQUEST['response_type'] = 'code';
+		$_REQUEST['client_id'] = $this->client->id;
 	}
 
-	private function doRun($request) {
-		$request = new Messages\AuthorizationRequest($request);
+	private function doRun() {
+		$request = new Messages\AuthorizationRequest($_REQUEST);
 		$auth = new OAuthAuthorization($request);
 		return $auth->process();
 	}
@@ -29,20 +31,14 @@ class OAuthAuthorizationTest extends DBHelper {
 		$this->setExpectedExceptionRegExp(
 		    'FeideConnect\Exceptions\RedirectException', '/^http:\/\/localhost\/accountchooser\?/'
 		);
-		$this->doRun(array(
-			'response_type' => 'code',
-			'client_id' => $this->client->id,
-		));
+		$this->doRun();
 	}
 
 
     public function testAuthorizationToConsent() {
 		$_REQUEST['acresponse'] = '{"id": "https://idp.feide.no","subid":"example.org"}';
 
-		$response = $this->doRun(array(
-			'response_type' => 'code',
-			'client_id' => $this->client->id,
-		));
+		$response = $this->doRun();
 		$this->assertInstanceOf('FeideConnect\HTTP\LocalizedTemplatedHTMLResponse', $response, 'Expected /oauth/authorization endpoint to return html');
 
 		$data = $response->getData();
@@ -53,11 +49,9 @@ class OAuthAuthorizationTest extends DBHelper {
     }
 
 	public function testAuthorizationBadClientID() {
+		$_REQUEST['client_id'] = '00000000-0000-0000-0000-000000000000';
 		try {
-			$this->doRun(array(
-				'response_type' => 'code',
-				'client_id' => '00000000-0000-0000-0000-000000000000',
-			));
+			$this->doRun();
 			$this->assertEquals(true, false, "Did not raise exception as expected");
 		} catch (\FeideConnect\OAuth\Exceptions\OAuthException $e) {
 			$this->assertEquals('invalid_client', $e->code);
@@ -71,24 +65,18 @@ class OAuthAuthorizationTest extends DBHelper {
 		$_REQUEST['acresponse'] = '{"id": "https://idp.feide.no","subid":"example.org"}';
 		$_REQUEST['verifier'] = 'ugle';
 		$_REQUEST['bruksvilkar'] = 'yes';
+		$_REQUEST['redirect_uri'] = 'http://example.org';
 
-		$this->doRun(array(
-			'response_type' => 'code',
-			'client_id' => $this->client->id,
-			'redirect_uri' => 'http://example.org',
-		));
+		$this->doRun();
 	}
 
 	public function testBruksvilkarMissing() {
 		$this->setExpectedException('\Exception');
 		$_REQUEST['acresponse'] = '{"id": "https://idp.feide.no","subid":"example.org"}';
 		$_REQUEST['verifier'] = $this->user->getVerifier();
+		$_REQUEST['redirect_uri'] = 'http://example.org';
 
-		$this->doRun(array(
-			'response_type' => 'code',
-			'client_id' => $this->client->id,
-			'redirect_uri' => 'http://example.org',
-		));
+		$this->doRun();
 	}
 
 	public function testBruksvilkarNotAccepted() {
@@ -96,24 +84,18 @@ class OAuthAuthorizationTest extends DBHelper {
 		$_REQUEST['acresponse'] = '{"id": "https://idp.feide.no","subid":"example.org"}';
 		$_REQUEST['verifier'] = $this->user->getVerifier();
 		$_REQUEST['bruksvilkar'] = 'no';
+		$_REQUEST['redirect_uri'] = 'http://example.org';
 
-		$this->doRun(array(
-			'response_type' => 'code',
-			'client_id' => $this->client->id,
-			'redirect_uri' => 'http://example.org',
-		));
+		$this->doRun();
 	}
 
     public function testAuthorizationToCode() {
 		$_REQUEST['acresponse'] = '{"id": "https://idp.feide.no","subid":"example.org"}';
 		$_REQUEST['verifier'] = $this->user->getVerifier();
 		$_REQUEST['bruksvilkar'] = 'yes';
+		$_REQUEST['redirect_uri'] = 'http://example.org';
 
-		$response = $this->doRun(array(
-			'response_type' => 'code',
-			'client_id' => $this->client->id,
-			'redirect_uri' => 'http://example.org',
-		));
+		$response = $this->doRun();
 		$this->assertInstanceOf('FeideConnect\HTTP\Redirect', $response, 'Expected /oauth/authorization endpoint to redirect');
 
 //		var_export($response);
@@ -123,19 +105,18 @@ class OAuthAuthorizationTest extends DBHelper {
 		$query = parse_url($url, PHP_URL_QUERY);
 		parse_str($query, $params);
 		$this->assertArrayHasKey('code', $params);
+		return $params;
     }
 
     public function testAuthorizationToToken() {
 		$_REQUEST['acresponse'] = '{"id": "https://idp.feide.no","subid":"example.org"}';
 		$_REQUEST['verifier'] = $this->user->getVerifier();
 		$_REQUEST['bruksvilkar'] = 'yes';
+		$_REQUEST['redirect_uri'] = 'http://example.org';
+		$_REQUEST['state'] = '12354';
+		$_REQUEST['response_type'] = 'token';
 
-		$response = $this->doRun(array(
-			'response_type' => 'token',
-			'client_id' => $this->client->id,
-			'redirect_uri' => 'http://example.org',
-			'state' => '12354',
-		));
+		$response = $this->doRun();
 		$this->assertInstanceOf('FeideConnect\HTTP\Redirect', $response, 'Expected /oauth/authorization endpoint to redirect');
 
 //		var_export($response);
@@ -151,5 +132,6 @@ class OAuthAuthorizationTest extends DBHelper {
 		$this->assertArrayHasKey('state', $params);
 		$this->assertEquals($params['state'], '12354');
 		$this->assertEquals($params['token_type'], 'Bearer');
+		return $params;
     }
 }
