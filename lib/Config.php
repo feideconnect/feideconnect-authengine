@@ -3,11 +3,6 @@
 namespace FeideConnect;
 
 
-class ArrIndexNotFoundException extends \Exception {
-
-}
-
-
 /**
  * Config
  */
@@ -34,7 +29,7 @@ class Config {
 				// echo "picking " . $pick[$i] . "\n"; print_r($ref); print_r($ref[$pick[$i]]);
 				$ref =& $ref[$pick[$i]];
 			} else {
-				throw new ArrIndexNotFoundException();
+				throw new \UnexpectedValueException();
 			}
 		}
 		return $ref;
@@ -46,7 +41,7 @@ class Config {
 
 			return self::arrayPick($this->properties, explode('.',$key));
 
-		} catch (ArrIndexNotFoundException $e) {
+		} catch (\UnexpectedValueException $e) {
 
 			if ($required === true) throw new \Exception('Missing required global configuration property [' . $key . ']');
 			return $default;
