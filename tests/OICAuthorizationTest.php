@@ -1,6 +1,5 @@
 <?php
 namespace tests;
-require_once(__DIR__ . '/OAuthAuthorizationTest.php');
 
 use FeideConnect\OAuth\Messages;
 use FeideConnect\OAuth\Protocol\OAuthAuthorization;
