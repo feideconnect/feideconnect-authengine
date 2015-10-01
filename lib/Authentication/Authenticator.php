@@ -149,45 +149,40 @@ class Authenticator {
 
 
 
-
+		if (!$allowRedirect) {
+			throw new \Exception('User is not authenticated. Authentication is required for this operation.');
+		}
 
 		// User is not authenticated locally.
 		// If allowed, attempt is passive authentiation.
-		if ($isPassive && $allowRedirect) {
+		if ($isPassive) {
 
 			// TODO: add info about selected IdP here as well..
 			$this->authenticatePassive($as);
 			return;
 		}
 
-		if ($allowRedirect) {
-			if ($return === null) $return = \SimpleSAML_Utilities::selfURL();
+		if ($return === null) $return = \SimpleSAML_Utilities::selfURL();
 
-			$options = array();
+		$options = array();
 			
 
-			if (isset($authconfig["idp"])) {
-				$options["saml:idp"] = $authconfig["idp"];
-			}
-
-			// echo '<pre>Options:' ; print_r($options); exit;
-
-			// echo "about to auth " . var_export($options, true); exit;
-
-			if ($forceauthn) {
-				$options['ForceAuthn'] = true;
-				$as->login($options);
-			} else {
-				$as->requireAuth($options);
-			}
-
-			return;
-
+		if (isset($authconfig["idp"])) {
+			$options["saml:idp"] = $authconfig["idp"];
 		}
 
-		throw new \Exception('User is not authenticated. Authentication is required for this operation.');
+		// echo '<pre>Options:' ; print_r($options); exit;
 
+		// echo "about to auth " . var_export($options, true); exit;
 
+		if ($forceauthn) {
+			$options['ForceAuthn'] = true;
+			$as->login($options);
+		} else {
+			$as->requireAuth($options);
+		}
+
+		return;
 
 	}
 
