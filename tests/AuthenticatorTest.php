@@ -99,6 +99,7 @@ class AuthenticatorRequireAuthenticationTest extends DBHelper {
 			'isPassive' => true,
 			'ErrorURL' => "http://localhost/foo?error=1",
 		])->shouldBeCalled();
+		$as->getAuthData('AuthnInstant')->willReturn(time() - 30);
 		$as->isAuthenticated()->willReturn(false)->shouldBeCalled();
 		MockAuthSource::set('default-sp', $as->reveal());
 		$authenticator = new Authenticator();
@@ -133,5 +134,27 @@ class AuthenticatorRequireAuthenticationTest extends DBHelper {
 		MockAuthSource::set('default-sp', $as->reveal());
 		$authenticator = new Authenticator();
 		$this->assertNull($authenticator->requireAuthentication(false, true, null, 60));
+	}
+
+	function testPassiveRedirectMaxagePassed() {
+		$this->setExpectedException(
+		    'FeideConnect\Exceptions\RedirectException', 'http://localhost/foo?error=1'
+		);
+
+		$_REQUEST['acresponse'] = '{"id": "https://idp.feide.no","subid":"example.org"}';
+
+		$as = $this->prophesize('\tests\MockAuthSource');
+		$as->isAuthenticated()->willReturn(true)->shouldBeCalled();
+		$as->getAuthData('AuthnInstant')->willReturn(time() - 90)->shouldBeCalled();
+		$as->getAuthData('saml:sp:IdP')->willReturn("https://idp.feide.no")->shouldBeCalled();
+		$as->getAttributes()->willReturn(MockAuthSource::$attributes)->shouldBeCalled();
+		$as->login([
+			'saml:idp' => 'https://idp.feide.no',
+			'isPassive' => true,
+			'ErrorURL' => "http://localhost/foo?error=1",
+		])->shouldBeCalled();
+		MockAuthSource::set('default-sp', $as->reveal());
+		$authenticator = new Authenticator();
+		$this->assertNull($authenticator->requireAuthentication(true, true, null, 60));
 	}
 }

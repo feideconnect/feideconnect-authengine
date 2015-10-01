@@ -69,6 +69,29 @@ class Authenticator {
 	}
 
 
+	protected function verifyMaxAge($authninstant, $maxage) {
+		if ($maxage === null) {
+			return true;
+		}
+		$now = time();
+		$allowSkew = 20; // 20 seconds clock skew accepted.
+		$authAge = $now - $authninstant;
+
+		if ($authAge < ($maxage + $allowSkew)) {
+
+			// Already authenticated with a authnetication session which is sufficiently fresh.
+			return true;
+		}
+		Logger::info('OAuth Processing authentication. User is authenticated but with a too old authninstant.', array(
+			'now' => $now,
+			'authninstant' => $authninstant,
+			'maxage' => $maxage,
+			'allowskew' => $allowSkew,
+			'authage' => $authAge
+		));
+		return false;
+	}
+
 	/**
 	 * Require authentication of the user. This is meant to be used with user frontend access.
 	 * 
@@ -119,35 +142,13 @@ class Authenticator {
 
 			}
 
-			if ($maxage !== null) {
-
-				$now = time();
-				$allowSkew = 20; // 20 seconds clock skew accepted.
-				$authninstant = $as->getAuthData("AuthnInstant");
-				$authAge = $now - $authninstant;
-
-				if ($authAge < ($maxage + $allowSkew)) {
-
-					// Already authenticated with a authnetication session which is sufficiently fresh.
-					return;
-				}
-
-				$forceauthn = true;
-
-				Logger::info('OAuth Processing authentication. User is authenticated but with a too old authninstant.', array(
-					'now' => $now,
-					'authninstant' => $authninstant,
-					'maxage' => $maxage,
-					'allowskew' => $allowSkew,
-					'authage' => $authAge
-				));
-			} else {
+			if ($this->verifyMaxAge($as->getAuthData("AuthnInstant"), $maxage)) {
 				return;
 			}
+
+			$forceauthn = true;
+
 		}
-
-
-
 
 		if (!$allowRedirect) {
 			throw new \Exception('User is not authenticated. Authentication is required for this operation.');
@@ -159,6 +160,11 @@ class Authenticator {
 
 			// TODO: add info about selected IdP here as well..
 			$this->authenticatePassive($as);
+			if (!$this->verifyMaxAge($as->getAuthData("AuthnInstant"), $maxage)) {
+				throw new RedirectException(\SimpleSAML_Utilities::addURLparameter(\SimpleSAML_Utilities::selfURL(), array(
+					"error" => 1,
+				)));
+			}
 			return;
 		}
 
