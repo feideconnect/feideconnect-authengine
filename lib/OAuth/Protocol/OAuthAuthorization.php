@@ -93,7 +93,7 @@ class OAuthAuthorization {
 		}
 
 		Logger::info('OAuth Processing Authorization request, resolved client of the request.', array(
-			'client' => $this->client->getAsArray()
+			'client' => $this->client
 		));
 
 	}
@@ -117,7 +117,7 @@ class OAuthAuthorization {
 		// echo '<pre>'; print_r($user); exit;
 
 		Logger::info('OAuth Processing Authorization request, user is authenticated', array(
-			'user' => $this->user->getBasicUserInfo()
+			'user' => $this->user
 		));
 
 	}
@@ -309,10 +309,10 @@ class OAuthAuthorization {
 		$authorizationresponse = Messages\AuthorizationResponse::generate($this->request, $code);
 
 		Logger::info('OAuth Authorization Code is now stored, and may be fetched via the token endpoint.', array(
-			'user' => $this->user->getAsArrayLimited(["userid", "userid_sec", "name"]),
-			'client' => $this->client->getAsArrayLimited(["id", "name", "redirect_uri"]),
-			'code' => $code->getAsArray(),
-			'authorizationresponse' => $authorizationresponse->getAsArray(),
+			'user' => $this->user,
+			'client' => $this->client,
+			'code' => $code,
+			'authorizationresponse' => $authorizationresponse,
 		));
 
 		return $authorizationresponse->sendRedirect($this->request->redirect_uri);

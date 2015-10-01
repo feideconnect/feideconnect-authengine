@@ -95,15 +95,13 @@ class AuthorizationEvaluator {
 		}
 
 		Logger::info('OAuth AuthorizationEvaluator evaluateScopes()', array(
-			'scopeEvaluation' => [
-				'clientScopes' => $this->client->getScopeList(),
-				'requestedScopes' => $this->request->getScopeList(),
-				'requestedScopesStr' => $this->request->scope,
-				'authorization' => ($this->authorization === null ? null : $this->authorization->getAsArray()),
-				'scopesInQuestion' => $this->scopesInQuestion,
-				'scopesRemaining' => $this->scopesRemaining,
-				'needsAuthorization' => $this->needsAuthorization()
-			]
+			'clientScopes' => $this->client->getScopeList(),
+			'requestedScopes' => $this->request->getScopeList(),
+			'requestedScopesStr' => $this->request->scope,
+			'authorization' => $this->authorization,
+			'scopesInQuestion' => $this->scopesInQuestion,
+			'scopesRemaining' => $this->scopesRemaining,
+			'needsAuthorization' => $this->needsAuthorization()
 		));
 
 		// echo '<pre>';

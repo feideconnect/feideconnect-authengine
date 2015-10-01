@@ -69,7 +69,7 @@ class APIProtector {
 		}
 
 		Logger::info('Authenticated request using an Bearer Access Token', array(
-			'accesstoken' => $this->accesstoken->getAsArray(),
+			'accesstoken' => $this->accesstoken,
 		));
 
 		if (!$this->accesstoken->stillValid()) {

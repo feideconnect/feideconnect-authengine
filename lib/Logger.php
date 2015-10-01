@@ -58,6 +58,13 @@ class Logger {
 		}
 		$data['request'] = self::requestId();
 
+		foreach ($data as $key => &$value) {
+			if ($value instanceof Utils\Loggable) {
+				$value = $value->toLog();
+			}
+		}
+		unset($value);
+
 		switch ($level) {
 
 			case 'alert':

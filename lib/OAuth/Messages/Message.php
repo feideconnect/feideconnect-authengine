@@ -5,12 +5,13 @@ namespace FeideConnect\OAuth\Messages;
 use FeideConnect\OAuth\Exceptions;
 use FeideConnect\HTTP\Redirect;
 use FeideConnect\HTTP\JSONResponse;
+use FeideConnect\Utils;
 
 /**
 * 	
 */
 
-class Message {
+class Message implements Utils\Loggable {
 
 
 	function __construct() {	
@@ -157,6 +158,8 @@ class Message {
 	}
 
 
-
+	public function toLog() {
+		return $this->getAsArray();
+	}
 
 }

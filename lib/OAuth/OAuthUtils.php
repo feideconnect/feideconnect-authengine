@@ -86,12 +86,12 @@ class OAuthUtils {
 
 		$logdata = array(
 			'flow' => $flow,
-			'client' => $client->getAsArray(),
-			'accesstoken' => $accesstoken->getAsArray(),
-			'tokenresponse' => $tokenresponse->getAsArray(),
+			'client' => $client,
+			'accesstoken' => $accesstoken,
+			'tokenresponse' => $tokenresponse,
 		);
 		if ($user !== null) {
-			$logdata['user'] = $user->getBasicUserInfo();
+			$logdata['user'] = $user;
 		}
 		Logger::info('OAuth Access Token is now issued.', $logdata);
 

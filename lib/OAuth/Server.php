@@ -80,7 +80,7 @@ class Server {
 			// Parse the incomming Authorization Request.
 			$request = new Messages\AuthorizationRequest($_REQUEST);
 			Logger::info('Successfully parsed OAuth Authorization Request. Next up: resolve client.', array(
-				'authorization_request' => $request->asArray(),
+				'authorization_request' => $request,
 				'passive' => $passive
 			));
 
@@ -185,7 +185,7 @@ class Server {
 
 	protected function tokenFromCode($tokenrequest) {
 		Logger::info('OAuth Processing an authorization_code request.', array(
-			'tokenrequest' => $tokenrequest->getAsArray(),
+			'tokenrequest' => $tokenrequest,
 			'rawrequest' => $_REQUEST,
 		));
 
@@ -260,7 +260,7 @@ class Server {
 			// $tokenrequest->parseServer($_SERVER);
 
 			Logger::info('OAuth Received incomming AccessTokenRequest.', array(
-				'tokenrequest' => $tokenrequest->getAsArray(),
+				'tokenrequest' => $tokenrequest,
 				'rawrequest' => $_REQUEST,
 			));
 

@@ -74,10 +74,10 @@ class OICAuthorization extends OAuthAuthorization {
 		$tokenresponse = Messages\AuthorizationResponse::generate($this->request, $code);
 
 		Logger::info('OAuth Authorization Code is now stored, and may be fetched via the token endpoint.', array(
-			'user' => $this->user->getAsArrayLimited(["userid", "userid_sec", "name"]),
-			'client' => $this->client->getAsArrayLimited(["id", "name", "redirect_uri"]),
-			'code' => $code->getAsArray(),
-			'tokenresponse' => $tokenresponse->getAsArray(),
+			'user' => $this->user,
+			'client' => $this->client,
+			'code' => $code,
+			'tokenresponse' => $tokenresponse,
 		));
 
 		return $tokenresponse->sendRedirect($this->request->redirect_uri);

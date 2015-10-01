@@ -5,7 +5,7 @@ use FeideConnect\Data\StorageProvider;
 use FeideConnect\Data\Types\Timestamp;
 use FeideConnect\Utils;
 
-abstract class Model {
+abstract class Model implements Utils\Loggable {
 
 	protected $_repo;
 	protected static $_properties = [];
@@ -113,4 +113,7 @@ abstract class Model {
 		return Utils\Misc::genUUID();
 	}
 
+	public function toLog() {
+		return $this->getAsArray();
+	}
 }
