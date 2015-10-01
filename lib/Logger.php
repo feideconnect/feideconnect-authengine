@@ -9,6 +9,7 @@ use \Monolog\Handler\ErrorLogHandler;
 use \Monolog\Handler\SyslogHandler;
 use \Monolog\Formatter\LineFormatter;
 
+use FeideConnect\Utils;
 /**
 * Logger
 */
@@ -16,6 +17,7 @@ class Logger {
 
 	protected $log;
 	protected static $instance = null;
+	protected static $requestId;
 
 
 	function __construct() {
@@ -36,7 +38,12 @@ class Logger {
 		}
 	}
 
-
+	protected static function requestId() {
+		if (self::$requestId === null) {
+			self::$requestId = Utils\Misc::genUUID();
+		}
+		return self::$requestId;
+	}
 
 	public function log($level, $str, $data = array()) {
 
@@ -49,6 +56,7 @@ class Logger {
 		if (isset($_SERVER['REMOTE_ADDR'])) {
 			$data['src_ip'] = $_SERVER['REMOTE_ADDR'];	
 		}
+		$data['request'] = self::requestId();
 
 		switch ($level) {
 
