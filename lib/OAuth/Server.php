@@ -80,7 +80,7 @@ class Server {
 			// Parse the incomming Authorization Request.
 			$request = new Messages\AuthorizationRequest($_REQUEST);
 			Logger::info('Successfully parsed OAuth Authorization Request. Next up: resolve client.', array(
-				'request' => $request->asArray(),
+				'authorization_request' => $request->asArray(),
 				'passive' => $passive
 			));
 
