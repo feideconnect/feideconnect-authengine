@@ -1,9 +1,9 @@
 <?php
 namespace tests;
-require_once(__DIR__ . '/ssp_mock_helper.php');
 use FeideConnect\Router;
 use FeideConnect\HTTP\JSONResponse;
 use FeideConnect\Data\StorageProvider;
+use FeideConnect\Authentication\AuthSource;
 
 class OAuthImplicitGrantTest extends DBHelper {
 
@@ -25,6 +25,8 @@ class OAuthImplicitGrantTest extends DBHelper {
 		$_REQUEST['client_id'] = $this->client->id;
 
 		$this->user = $this->user();
+
+		AuthSource::setFactory(function($type) { return new MockAuthSource($type); });
 	}
 
     public function testAuthorizationToAccountChooser() {

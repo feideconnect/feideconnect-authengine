@@ -31,7 +31,7 @@ class Authenticator {
 		$this->activeAuthType = null;
 
 		foreach($this->authTypes AS $authtype => $authTypeConfig) {
-			$this->authSources[$authtype] = new \SimpleSAML_Auth_Simple($authTypeConfig["authSource"]);
+			$this->authSources[$authtype] = AuthSource::create($authTypeConfig["authSource"]);
 			// echo "Creating auth source [" . $authtype . "] using [" . $authTypeConfig["authSource"] . "] ";
 		}
 		$this->user = null;

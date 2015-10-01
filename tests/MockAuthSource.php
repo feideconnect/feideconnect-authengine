@@ -1,6 +1,7 @@
 <?php
+namespace tests;
 
-class SimpleSAML_Auth_Simple {
+class MockAuthSource {
 	public function __construct($ignore) {
 	}
 	public function requireAuth() {

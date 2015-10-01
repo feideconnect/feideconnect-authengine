@@ -1,9 +1,9 @@
 <?php
 namespace tests;
-require_once(__DIR__ . '/ssp_mock_helper.php');
 
 use FeideConnect\OAuth\Messages;
 use FeideConnect\OAuth\Protocol\OAuthAuthorization;
+use FeideConnect\Authentication\AuthSource;
 
 class OAuthAuthorizationTest extends DBHelper {
 
@@ -19,6 +19,7 @@ class OAuthAuthorizationTest extends DBHelper {
 		$_SERVER['HTTP_ACCEPT_LANGUAGE'] = 'en-US';
 		$_REQUEST['response_type'] = 'code';
 		$_REQUEST['client_id'] = $this->client->id;
+		AuthSource::setFactory(function($type) { return new MockAuthSource($type); });
 	}
 
 	private function doRun() {

@@ -16,3 +16,4 @@ if (\FeideConnect\Config::getValue('storage.keyspace') == 'feideconnect') {
 }
 
 require_once(__DIR__ . '/DBHelper.php');
+require_once(__DIR__ . '/MockAuthSource.php');

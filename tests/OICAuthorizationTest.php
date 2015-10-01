@@ -4,6 +4,7 @@ require_once(__DIR__ . '/OAuthAuthorizationTest.php');
 
 use FeideConnect\OAuth\Messages;
 use FeideConnect\OAuth\Protocol\OAuthAuthorization;
+use FeideConnect\Authentication\AuthSource;
 
 class OICAuthorizationTest extends OAuthAuthorizationTest {
 
@@ -11,6 +12,7 @@ class OICAuthorizationTest extends OAuthAuthorizationTest {
 		parent::setUp();
 		$this->client->scopes[] = 'openid';
 		$this->db->saveClient($this->client);
+		AuthSource::setFactory(function($type) { return new MockAuthSource($type); });
 	}
 
     public function testAuthorizationToCode() {
