@@ -143,9 +143,9 @@ class Authenticator {
 
 			Logger::info('OAuth Processing authentication. User is authenticated but with a too old authninstant.', array(
 				'now' => $now,
-				'authninstant' => authninstant,
+				'authninstant' => $authninstant,
 				'maxage' => $maxage,
-				'allowskew' => $allowskew,
+				'allowskew' => $allowSkew,
 				'authage' => $authAge
 			));
 		}
@@ -193,7 +193,7 @@ class Authenticator {
 
 		}
 
-		throw new Exception('User is not authenticated. Authentication is required for this operation.');
+		throw new \Exception('User is not authenticated. Authentication is required for this operation.');
 
 
 
