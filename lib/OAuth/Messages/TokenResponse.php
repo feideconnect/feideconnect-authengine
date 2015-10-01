@@ -47,4 +47,9 @@ class TokenResponse extends Message {
 		return $n;
 	}
 
+	public function toLog() {
+		$log = parent::toLog();
+		unset($log['access_token']);
+		return $log;
+	}
 }

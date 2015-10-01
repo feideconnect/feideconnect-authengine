@@ -126,5 +126,7 @@ class AccessToken extends \FeideConnect\Data\Model {
 		return $n;
 	}
 
-
+	public function toLog() {
+		return md5($this->access_token);
+	}
 }
