@@ -119,35 +119,31 @@ class Authenticator {
 
 			}
 
-		}
+			if ($maxage !== null) {
 
+				$now = time();
+				$allowSkew = 20; // 20 seconds clock skew accepted.
+				$authninstant = $as->getAuthData("AuthnInstant");
+				$authAge = $now - $authninstant;
 
-		if ($as->isAuthenticated() && ($maxage === null)) {
-			return;
+				if ($authAge < ($maxage + $allowSkew)) {
 
-		} else if ($as->isAuthenticated()) {
+					// Already authenticated with a authnetication session which is sufficiently fresh.
+					return;
+				}
 
+				$forceauthn = true;
 
-			$now = time();
-			$allowSkew = 20; // 20 seconds clock skew accepted.
-			$authninstant = $as->getAuthData("AuthnInstant");
-			$authAge = $now - $authninstant;
-
-			if ($authAge < ($maxage + $allowSkew)) {
-
-				// Already authenticated with a authnetication session which is sufficiently fresh.
+				Logger::info('OAuth Processing authentication. User is authenticated but with a too old authninstant.', array(
+					'now' => $now,
+					'authninstant' => $authninstant,
+					'maxage' => $maxage,
+					'allowskew' => $allowSkew,
+					'authage' => $authAge
+				));
+			} else {
 				return;
 			}
-
-			$forceauthn = true;
-
-			Logger::info('OAuth Processing authentication. User is authenticated but with a too old authninstant.', array(
-				'now' => $now,
-				'authninstant' => $authninstant,
-				'maxage' => $maxage,
-				'allowskew' => $allowSkew,
-				'authage' => $authAge
-			));
 		}
 
 
@@ -176,14 +172,10 @@ class Authenticator {
 
 			// echo '<pre>Options:' ; print_r($options); exit;
 
-
-			if ($forceauthn) {
-				$options['ForceAuthn'] = true;
-			}
-
 			// echo "about to auth " . var_export($options, true); exit;
 
 			if ($forceauthn) {
+				$options['ForceAuthn'] = true;
 				$as->login($options);
 			} else {
 				$as->requireAuth($options);
