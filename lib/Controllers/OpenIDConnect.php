@@ -52,7 +52,7 @@ class OpenIDConnect {
         $allowseckeys = ['userid'];
         $includeEmail = false;
 
-        foreach($hasScopes as $scope) {
+        foreach ($hasScopes as $scope) {
             // $data[$scope] = true;
             if ($scope === 'userinfo-feide') {
                 $allowseckeys[] = 'feide';

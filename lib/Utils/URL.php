@@ -37,7 +37,7 @@ class URL {
             /* Almost certainly not what you want, but ... */
             $currenthost = 'localhost';
         }
-        if(strstr($currenthost, ":")) {
+        if (strstr($currenthost, ":")) {
             $currenthostdecomposed = explode(":", $currenthost);
             $port = array_pop($currenthostdecomposed);
             if (!is_numeric($port)) {
@@ -76,11 +76,11 @@ class URL {
      * retrieve HTTPS status from $_SERVER environment variables
      */
     private static function getServerHTTPS() {
-        if(!array_key_exists('HTTPS', $_SERVER)) {
+        if (!array_key_exists('HTTPS', $_SERVER)) {
             /* Not an https-request. */
             return false;
         }
-        if($_SERVER['HTTPS'] === 'off') {
+        if ($_SERVER['HTTPS'] === 'off') {
             /* IIS with HTTPS off. */
             return false;
         }

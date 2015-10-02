@@ -42,8 +42,7 @@ try {
 
 
 
-} catch(Phroute\Exception\HttpRouteNotFoundException $e) {
-
+} catch (Phroute\Exception\HttpRouteNotFoundException $e) {
     $data = array();
     $data['code'] = '404';
     $data['head'] = 'Not Found';
@@ -51,12 +50,10 @@ try {
 
     $response = (new TemplatedHTMLResponse('exception'))->setData($data);
 
-} catch(RedirectException $e) {
-
+} catch (RedirectException $e) {
     $response = $e->getHTTPResponse();
 
-} catch(APIAuthorizationException $e) {
-
+} catch (APIAuthorizationException $e) {
     $response = $e->getJSONResponse();
 
     Logger::error('Error processing request: ' . $e->getMessage(), array(
@@ -65,7 +62,7 @@ try {
     ));
 
 
-} catch(Exception $e) {
+} catch (Exception $e) {
     $data = $e->prepareErrorMessage();
     $response = (new TemplatedHTMLResponse('exception'))->setData($data);
 
@@ -74,8 +71,7 @@ try {
         'errordetails' => $data,
     ));
 
-} catch(\Exception $e) {
-
+} catch (\Exception $e) {
     $data = array();
     $data['code'] = '500';
     $data['head'] = 'Internal Error';

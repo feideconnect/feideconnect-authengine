@@ -62,7 +62,7 @@ class Localization {
     static function localizeList($list, $attrs) {
 
         $res = [];
-        foreach($list as $item) {
+        foreach ($list as $item) {
             foreach ($item as $key => $val) {
 
                 if (in_array($key, $attrs)) {

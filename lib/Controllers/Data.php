@@ -81,8 +81,10 @@ class Data {
         $orgs = $storage->getOrgsByService('pilot');
         $data = [];
 
-        foreach($orgs as $org) {
-            if (!$org->isHomeOrg()) { continue; }
+        foreach ($orgs as $org) {
+            if (!$org->isHomeOrg()) {
+                continue;
+            }
             // if (!in_array($org->realm, $subscribers)) { continue; }
             $di = $org->getOrgInfo($lat, $lon);
             $data[] = $di;

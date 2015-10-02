@@ -80,8 +80,7 @@ class ScopesInspector {
                     $apiInfo["ownerInfo"] = $ownerObj->getBasicUserInfo(true, ["userid", "p"]);
                 }
             }
-        }
-        catch (\Exception $e) {
+        } catch (\Exception $e) {
             $this->apis[$apigkid] = null;
             throw new \Exception("APIGK not found " . $apigkid);
         }
@@ -91,7 +90,7 @@ class ScopesInspector {
 
     public function getScopeAPIGKs() {
         $apis = [];
-        foreach($this->scopes as $scope) {
+        foreach ($this->scopes as $scope) {
             if (!preg_match('/^gk_([a-z0-9\-]+)(_([a-z0-9\-]+))?$/', $scope, $matches)) {
                 continue;
             }
@@ -99,7 +98,7 @@ class ScopesInspector {
             $apigkid = $matches[1];
             try {
                 $apiInfo = $this->getAPI($apigkid);
-            } catch(\Exception $e) {
+            } catch (\Exception $e) {
                 continue;
             }
             if (isset($matches[3])) {
@@ -123,8 +122,7 @@ class ScopesInspector {
 
         $scope_apis = $this->getScopeAPIGKs();
 
-        foreach($this->scopes as $scope) {
-
+        foreach ($this->scopes as $scope) {
             if (isset($scope_apis[$scope])) {
                 $apiInfo = $scope_apis[$scope];
                 $apis[$apiInfo['apigk']->id] = $apiInfo;
@@ -150,8 +148,7 @@ class ScopesInspector {
         }
 
 
-        foreach($apis as $apigkid => $api) {
-
+        foreach ($apis as $apigkid => $api) {
             $apiEntry = [
                 "info" => $api["apigk"]->getAsArray(),
                 "scopes" => []
@@ -164,7 +161,7 @@ class ScopesInspector {
             }
 
             $apiEntry["scopes"][] = $api["apigk"]->getBasicScopeView();
-            foreach($api["localScopes"] as $ls) {
+            foreach ($api["localScopes"] as $ls) {
                 $apiEntry["scopes"][] = $api["apigk"]->getSubScopeView($ls);
             }
 

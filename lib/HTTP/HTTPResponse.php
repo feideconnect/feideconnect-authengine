@@ -43,7 +43,7 @@ class HTTPResponse {
 
     protected function sendHeaders() {
 
-        foreach($this->headers as $k => $v) {
+        foreach ($this->headers as $k => $v) {
             header($k . ": " . $v);
         }
 

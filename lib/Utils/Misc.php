@@ -40,8 +40,9 @@ class Misc {
             if (!empty($arr[3])) {
                 $langrange = strtolower($arr[3]);
                 $language = $langprefix . "-" . $langrange;
+            } else {
+                $language = $langprefix;
             }
-            else $language = $langprefix;
             $qvalue = 1.0;
             if (!empty($arr[5])) $qvalue = floatval($arr[5]);
 
@@ -49,9 +50,8 @@ class Misc {
             if (in_array($language, $available_languages) && ($qvalue > $bestqval)) {
                 $bestlang = $language;
                 $bestqval = $qvalue;
-            }
-            // if no direct hit, try the prefix only but decrease q-value by 10% (as http_negotiate_language does)
-            else if (in_array($langprefix, $available_languages) && (($qvalue*0.9) > $bestqval)) {
+            } else if (in_array($langprefix, $available_languages) && (($qvalue*0.9) > $bestqval)) {
+                // if no direct hit, try the prefix only but decrease q-value by 10% (as http_negotiate_language does)
                 $bestlang = $langprefix;
                 $bestqval = $qvalue*0.9;
             }

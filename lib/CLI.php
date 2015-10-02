@@ -55,8 +55,7 @@ class CLI {
         // echo var_export($info, true); exit;
 
         if (!empty($user->userid_sec)) {
-            foreach($user->userid_sec as $k) {
-
+            foreach ($user->userid_sec as $k) {
                 $u = $this->storage->getUserByUserIDsec($k);
 
                 if ($u === null) {
@@ -135,7 +134,7 @@ class CLI {
         // print_r($tokens);
 
         $c = 0;
-        foreach($tokens as $token) {
+        foreach ($tokens as $token) {
             $t = $token->getAsArray(true, true);
             // print_r($t);
             $t["c"] = ++$c;
@@ -161,7 +160,7 @@ class CLI {
         $tokens = $pool->getAllTokens();
 
         $c = 0;
-        foreach($tokens as $token) {
+        foreach ($tokens as $token) {
             $t = $token->getAsArray(true, true);
             $t["c"] = ++$c;
             echo $this->l($t, [
@@ -213,8 +212,7 @@ class CLI {
         $users = $this->storage->getUsers($count);
         $this->header("List users");
         $c = 0;
-        foreach($users as $user) {
-
+        foreach ($users as $user) {
             $uinfo = $user->getBasicUserInfo(true, true);
             $uinfo["c"] = ++$c;
             echo $this->l($uinfo, [
@@ -235,7 +233,7 @@ class CLI {
     public function getUserIDsec($count = 100) {
         $users = $this->storage->getUserIDsecList($count);
         $c = 0;
-        foreach($users as $user) {
+        foreach ($users as $user) {
             // $uinfo = $user->getBasicUserInfo(true, true);
             $uinfo = $user;
             $uinfo["c"] = ++$c;
@@ -255,8 +253,7 @@ class CLI {
         $clients = $this->storage->getClients(200);
         $this->header("List clients");
         $c = 0;
-        foreach($clients as $client) {
-
+        foreach ($clients as $client) {
             $cinfo = $client->getAsArray();
             $cinfo["c"] = ++$c;
 
@@ -284,8 +281,7 @@ class CLI {
         $orgs = $this->storage->getOrgs();
         $this->header("List organizations");
         $c = 0;
-        foreach($orgs as $org) {
-
+        foreach ($orgs as $org) {
             $cinfo = $org->getAsArray();
             $cinfo["c"] = ++$c;
 
@@ -329,8 +325,7 @@ class CLI {
         $apigks = $this->storage->getAPIGKs(200);
         $this->header("List APIGKs");
         $c = 0;
-        foreach($apigks as $apigk) {
-
+        foreach ($apigks as $apigk) {
             $cinfo = $apigk->getAsArray();
             $cinfo["c"] = ++$c;
 
@@ -360,7 +355,7 @@ class CLI {
         $s = '';
 
 
-        foreach($fmt as $k => $f) {
+        foreach ($fmt as $k => $f) {
             $max = (isset($f[2]) ? $f[2] : 100);
             if (!isset($data[$k])) {
                 $dv = '_';
@@ -385,7 +380,7 @@ class CLI {
 
         // echo var_export($data, true);
 
-        foreach($data as $k => $v) {
+        foreach ($data as $k => $v) {
             if (!is_string($v)) {
                 $dv = json_encode($v);
             } else {

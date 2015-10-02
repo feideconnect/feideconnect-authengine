@@ -113,7 +113,7 @@ class User extends \FeideConnect\Data\Model {
             $this->userid_sec = [];
             return $res;
         }
-        foreach($this->userid_sec as $k) {
+        foreach ($this->userid_sec as $k) {
             if (self::startsWith($k, $prefix)) {
                 $res[] = $k;
             }
@@ -187,7 +187,7 @@ class User extends \FeideConnect\Data\Model {
             $f = $this->profilephoto;
             // unset($this->profilephoto);
             $a['profilephoto'] = [];
-            foreach($f as $k => $p) {
+            foreach ($f as $k => $p) {
                 $a['profilephoto'][$k] = base64_encode($p);
             }
         }
@@ -240,12 +240,11 @@ class User extends \FeideConnect\Data\Model {
         }
 
         if ($allowseckeys === true) {
-
             $userinfo["userid_sec"] = $this->userid_sec;
 
         } else if (is_array($allowseckeys)) {
             if (!empty($allowseckeys)) {
-                foreach($allowseckeys as $key) {
+                foreach ($allowseckeys as $key) {
                     $nc = $this->getUserIDsecPrefixed($key);
 
                     if ($key === 'p' && count($nc) > 0) {
@@ -253,7 +252,7 @@ class User extends \FeideConnect\Data\Model {
                         continue;
                     }
 
-                    foreach($nc as $nk) {
+                    foreach ($nc as $nk) {
                         $userinfo['userid_sec'][] = $nk;
                     }
                 }
@@ -272,7 +271,7 @@ class User extends \FeideConnect\Data\Model {
     public function getFeideRealms() {
         $feideids = $this->getUserIDsecPrefixed('feide');
         $realms = array();
-        foreach($feideids as $feideid) {
+        foreach ($feideids as $feideid) {
             $parts = explode('@', $feideid);
             if (count($parts) === 2) {
                 $realms[$parts[1]] = true;

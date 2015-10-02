@@ -31,7 +31,7 @@ class APIProtector {
      */
     protected function getBearerToken() {
         $hdrs = getallheaders();
-        foreach($hdrs as $h => $v) {
+        foreach ($hdrs as $h => $v) {
             if ($h === 'Authorization') {
                 if (preg_match('/^Bearer\s(.*?)$/i', $v, $matches)) {
                     return trim($matches[1]);

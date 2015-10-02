@@ -47,7 +47,7 @@ class Authorization extends \FeideConnect\Data\Model {
 
     public function addScopes($scopes) {
         if (empty($this->scopes)) $this->scopes = [];
-        foreach($scopes as $s) {
+        foreach ($scopes as $s) {
             if (!in_array($s, $this->scopes)) {
                 $this->scopes[] = $s;
             }
@@ -61,7 +61,7 @@ class Authorization extends \FeideConnect\Data\Model {
         if ($requiredscopes === null) return true;
         // echo '<pre>'; print_r($requiredscopes); exit;
         assert('is_array($requiredscopes)');
-        foreach($requiredscopes as $rs) {
+        foreach ($requiredscopes as $rs) {
             if (!in_array($rs, $myScopes)) return false;
         }
         return true;

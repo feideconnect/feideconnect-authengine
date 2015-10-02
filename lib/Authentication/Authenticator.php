@@ -29,7 +29,7 @@ class Authenticator {
 
         $this->activeAuthType = null;
 
-        foreach($this->authTypes as $authtype => $authTypeConfig) {
+        foreach ($this->authTypes as $authtype => $authTypeConfig) {
             $this->authSources[$authtype] = AuthSource::create($authTypeConfig["authSource"]);
             // echo "Creating auth source [" . $authtype . "] using [" . $authTypeConfig["authSource"] . "] ";
         }
@@ -126,15 +126,13 @@ class Authenticator {
         $forceauthn = false;
 
         if ($as->isAuthenticated()) {
-
             // First check if we are authenticated using the expected IdP, as the user has seleted some.
             if (isset($authconfig['idp'])) {
-
                 $account = $this->getAccount();
                 // var_dump($account); var_dump($authconfig); exit;
                 if ($account->idp !== $authconfig['idp']) {
                     $this->logoutAS($as);
-                } else if($authconfig['subid'] && $authconfig['subid'] !== $account->realm) {
+                } else if ($authconfig['subid'] && $authconfig['subid'] !== $account->realm) {
                     // TODO: This can cause problems for users that does not want to login to the service...
                     // $this->logoutAS($as);
                 }
@@ -204,7 +202,7 @@ class Authenticator {
         // $this->authTypes = Config::getValue("authTypes");
         // $this->authSources = [];
 
-        foreach($this->authSources as $type => $authSource) {
+        foreach ($this->authSources as $type => $authSource) {
             if ($authSource->isAuthenticated()) {
                 $this->logoutAS($authSource);
             }

@@ -53,8 +53,8 @@ class Organization extends \FeideConnect\Data\Model {
 
     public function getTypes() {
         $t = [];
-        foreach($this->type as $type) {
-            switch($type) {
+        foreach ($this->type as $type) {
+            switch ($type) {
                 case 'primary_and_lower_secondary':
                     $t[] = 'go'; break;
                 case 'upper_secondary':
@@ -72,12 +72,18 @@ class Organization extends \FeideConnect\Data\Model {
 
     public function distance($lat, $lon) {
 
-        if (!isset($this->uiinfo)) { return null; }
-        if (!isset($this->uiinfo["geo"])) { return null; }
-        if (!is_array($this->uiinfo["geo"])) { return null; }
+        if (!isset($this->uiinfo)) {
+            return null;
+        }
+        if (!isset($this->uiinfo["geo"])) {
+            return null;
+        }
+        if (!is_array($this->uiinfo["geo"])) {
+            return null;
+        }
 
         $distance = 9999;
-        foreach($this->uiinfo["geo"] as $geoitem) {
+        foreach ($this->uiinfo["geo"] as $geoitem) {
             $dc = Misc::distance($lat, $lon, $geoitem["lat"], $geoitem["lon"]);
             if ($dc < $distance) {
                 $distance = $dc;
@@ -115,7 +121,9 @@ class Organization extends \FeideConnect\Data\Model {
     }
 
     public function hasType($type) {
-        if ($this->type === null) { return false; }
+        if ($this->type === null) {
+            return false;
+        }
         return in_array($type, $this->type);
     }
 

@@ -21,7 +21,7 @@ class ErrorResponse extends Message {
     public function sendBodyJSON($httpcode = 200) {
 
         $body = array();
-        foreach($this as $key => $value) {
+        foreach ($this as $key => $value) {
             if (empty($value)) continue;
             $body[$key] = $value;
         }

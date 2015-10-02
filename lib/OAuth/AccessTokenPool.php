@@ -31,7 +31,7 @@ class AccessTokenPool {
 
         $ct = $this->storage->getAccessTokens($userid, $this->client->id);
 
-        foreach($ct as $t) {
+        foreach ($ct as $t) {
             if ($t->stillValid()) {
                 $this->tokens[] = $t;
             }
@@ -45,7 +45,7 @@ class AccessTokenPool {
     function getCandidates($scopesInQuestion) {
         $candidates = [];
 
-        foreach($this->tokens as $token) {
+        foreach ($this->tokens as $token) {
             if ($token->hasExactScopes($scopesInQuestion)) {
                 $candidates[] = $token;
             }
@@ -56,7 +56,9 @@ class AccessTokenPool {
 
     function getSelectedCandidate($scopesInQuestion) {
         $candidates = $this->getCandidates($scopesInQuestion);
-        if  (empty($candidates)) return null;
+        if (empty($candidates)) {
+            return null;
+        }
 
         // TODO Implement policy on which token to select.
         // TODO Also require that the token is valid significantly long into the future

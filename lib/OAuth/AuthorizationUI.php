@@ -51,7 +51,7 @@ class AuthorizationUI {
 
 
         $postdata = array();
-        foreach($postattrs as $k => $v) {
+        foreach ($postattrs as $k => $v) {
             $postdata[] = array('key' => $k, 'value' => $v);
         }
 

@@ -20,7 +20,7 @@ abstract class Model implements Utils\Loggable {
             $this->{$k} = null;
         }
 
-        foreach($props as $k => $v) {
+        foreach ($props as $k => $v) {
             if (!in_array($k, static::$_properties)) {
                 error_log(get_class($this) . ": Trying to set a property [" . $k . "] that is not legal.");
                 continue;
@@ -62,9 +62,8 @@ abstract class Model implements Utils\Loggable {
     public function getAsArray() {
 
         $a = array();
-        foreach(static::$_properties as $k) {
+        foreach (static::$_properties as $k) {
             if (isset($this->{$k})) {
-
                 if (isset(static::$_types[$k])) {
                     $a[$k] = $this->{$k}->format();
                     continue;
@@ -85,9 +84,8 @@ abstract class Model implements Utils\Loggable {
     public function getStorableArray() {
 
         $a = array();
-        foreach(static::$_properties as $k) {
+        foreach (static::$_properties as $k) {
             if (isset($this->{$k})) {
-
                 if (isset(static::$_types[$k])) {
                     $a[$k] = $this->{$k}->getDBobject();
                 } else {

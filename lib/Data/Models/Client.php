@@ -50,7 +50,7 @@ class Client extends \FeideConnect\Data\Model {
         if ($this->status === null) {
             return false;
         }
-        foreach($this->status as $s) {
+        foreach ($this->status as $s) {
             if ($s === $status) {
                 return true;
             }
@@ -62,7 +62,7 @@ class Client extends \FeideConnect\Data\Model {
         if (empty($this->authproviders)) {
             return [["all"]];
         }
-        foreach($this->authproviders as $a) {
+        foreach ($this->authproviders as $a) {
             $res[] = explode('|', $a);
         }
         return $res;
@@ -108,7 +108,7 @@ class Client extends \FeideConnect\Data\Model {
 
         if (isset($this->orgauthorization)) {
             $encoded = array();
-            foreach($this->orgauthorization as $realm => $authz) {
+            foreach ($this->orgauthorization as $realm => $authz) {
                 $encoded[$realm] = json_encode($authz);
             }
             $prepared["orgauthorization"] = new CollectionMap($encoded, Base::ASCII, BASE::ASCII);

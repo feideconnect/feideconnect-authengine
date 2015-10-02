@@ -103,7 +103,9 @@ class OAuthAuthorization {
      */
     protected function authenticateUser() {
 
-        if ($this->user !== null) { return; }
+        if ($this->user !== null) {
+            return;
+        }
 
         $this->auth->requireAuthentication($this->isPassive, true, null, $this->maxage); // require($isPassive = false, $allowRedirect = false, $return = null
         $this->account = $this->auth->getAccount();
@@ -244,15 +246,15 @@ class OAuthAuthorization {
         try {
 
             $this->validateAuthProvider();
-
-        } catch(AuthProviderNotAccepted $a) {
-
+        } catch (AuthProviderNotAccepted $a) {
             return (new LocalizedTemplatedHTMLResponse('authprovidernotaccepted'))->setData([]);
         }
 
 
         $res = $this->obtainAuthorization();
-        if ($res !== null) { return $res; }
+        if ($res !== null) {
+            return $res;
+        }
 
 
 
@@ -260,8 +262,7 @@ class OAuthAuthorization {
 
 
 
-        switch($this->request->response_type) {
-
+        switch ($this->request->response_type) {
             case 'token':
 
                 return $this->processToken();

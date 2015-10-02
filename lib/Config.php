@@ -23,7 +23,7 @@ class Config {
 
         // echo "about to pick "; print_r($arr); print_r($pick);
         $ref =& $arr;
-        for($i = 0; $i < count($pick); $i++) {
+        for ($i = 0; $i < count($pick); $i++) {
             if (array_key_exists($pick[$i], $ref)) {
                 // echo "picking " . $pick[$i] . "\n"; print_r($ref); print_r($ref[$pick[$i]]);
                 $ref =& $ref[$pick[$i]];

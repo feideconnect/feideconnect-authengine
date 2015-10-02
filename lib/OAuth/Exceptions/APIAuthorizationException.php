@@ -21,7 +21,7 @@ class APIAuthorizationException extends Exceptions\Exception {
         $httpcode = 401;
         $head = 'Unauthorized';
 
-        switch($type) {
+        switch ($type) {
             case 'invalid_request':
                 $httpcode = 400;
                 $head = 'Bad Request';

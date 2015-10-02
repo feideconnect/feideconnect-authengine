@@ -42,7 +42,7 @@ class AccountPhoto {
             $maxsize = 128;
 
             // Resizes to whichever is larger, width or height
-            if($image->getImageHeight() <= $image->getImageWidth()) {
+            if ($image->getImageHeight() <= $image->getImageWidth()) {
                 // Resize image using the lanczos resampling algorithm based on width
                 $image->resizeImage($maxsize, 0, Imagick::FILTER_LANCZOS, 1);
             } else {
