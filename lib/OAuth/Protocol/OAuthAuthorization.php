@@ -85,7 +85,9 @@ class OAuthAuthorization {
     protected function checkClient() {
 
 
-        if ($this->client !== null) { return; }
+        if ($this->client !== null) {
+            return;
+        }
 
         $this->client = $this->storage->getClient($this->request->client_id);
         if ($this->client === null) {

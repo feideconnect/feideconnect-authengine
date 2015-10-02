@@ -450,7 +450,9 @@ class Account {
         }
 
         if (is_string($this->accountMapRules[$property])) {
-            if (empty($this->attributes[$this->accountMapRules[$property]])) { return null; }
+            if (empty($this->attributes[$this->accountMapRules[$property]])) {
+                return null;
+            }
             $value = $this->attributes[$this->accountMapRules[$property]][0];
             return new AccountPhoto($value);
         } else {

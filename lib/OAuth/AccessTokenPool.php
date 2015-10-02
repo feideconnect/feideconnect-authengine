@@ -23,7 +23,9 @@ class AccessTokenPool {
         $this->tokens = [];
 
         $userid = '00000000-0000-0000-0000-000000000000';
-        if ($this->user !== null) {$userid = $this->user->userid;}
+        if ($this->user !== null) {
+            $userid = $this->user->userid;
+        }
 
         // echo "about to get access token "; print_r($userid); print_r($this->client->id); exit;
 

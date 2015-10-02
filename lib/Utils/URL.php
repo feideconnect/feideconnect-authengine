@@ -176,8 +176,12 @@ class URL {
             return false;
         }
 
-        if ($info1["scheme"] !== $info2["scheme"]) {return false;}
-        if ($info1["host"] !== $info2["host"]) {return false;}
+        if ($info1["scheme"] !== $info2["scheme"]) {
+            return false;
+        }
+        if ($info1["host"] !== $info2["host"]) {
+            return false;
+        }
 
         return true;
     }

@@ -158,7 +158,9 @@ class Config {
 
         $filepath = $path;
 
-        if (empty($path)) { return self::baseDir(); }
+        if (empty($path)) {
+            return self::baseDir();
+        }
 
         if ($path[0] === '/') {
             return $filepath;

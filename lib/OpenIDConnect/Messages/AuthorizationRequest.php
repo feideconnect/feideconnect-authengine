@@ -38,13 +38,17 @@ class AuthorizationRequest extends \FeideConnect\OAuth\Messages\AuthorizationReq
      * @return boolean [description]
      */
     public function isPassiveRequest() {
-        if (empty($this->prompt)) { return false; }
+        if (empty($this->prompt)) {
+            return false;
+        }
         $values = explode(' ', $this->prompt);
         return in_array("none", $values);
     }
 
     public function loginPromptRequested() {
-        if (empty($this->prompt)) { return false; }
+        if (empty($this->prompt)) {
+            return false;
+        }
         $values = explode(' ', $this->prompt);
         return in_array("login", $values);
     }
