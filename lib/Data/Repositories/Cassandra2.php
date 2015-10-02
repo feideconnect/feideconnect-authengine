@@ -589,11 +589,11 @@ class Cassandra2 extends \FeideConnect\Data\Repository {
         return $this->query($query, $params, __FUNCTION__, 'FeideConnect\Data\Models\Organization', true);
     }
 
-   function getOrgsByService($service = 'auth') {
-           $count = 500;
+    function getOrgsByService($service = 'auth') {
+        $count = 500;
         $query = 'SELECT id,name,realm,type,uiinfo,services FROM "organizations" WHERE (services CONTAINS :service) LIMIT :count';
-            $params = ['count' => $count, 'service' => $service];
-            return $this->query($query, $params, __FUNCTION__, 'FeideConnect\Data\Models\Organization', true);
+        $params = ['count' => $count, 'service' => $service];
+        return $this->query($query, $params, __FUNCTION__, 'FeideConnect\Data\Models\Organization', true);
     }
 
     function getOrg($orgid) {

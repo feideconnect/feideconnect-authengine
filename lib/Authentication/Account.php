@@ -187,29 +187,29 @@ class Account {
                 "title" => $this->org,
                 "userids" => $this->userids,
                 "def" => []
-             ];
+            ];
 
-             if ($org === 'feide.no') {
-                 $tag["def"][] = ["other", "feidetest"];
-             } else {
+            if ($org === 'feide.no') {
+                $tag["def"][] = ["other", "feidetest"];
+            } else {
 
-                 $storage = StorageProvider::getStorage();
+                $storage = StorageProvider::getStorage();
 
-                 $tag["def"][] = ["feide", "realm", $org];
+                $tag["def"][] = ["feide", "realm", $org];
 
-                 $orginfo = $storage->getOrg('fc:org:' . $org);
-                 if ($orginfo !== null) {
+                $orginfo = $storage->getOrg('fc:org:' . $org);
+                if ($orginfo !== null) {
 
-                     $types = $orginfo->getTypes();
-                     foreach($types AS $type) {
-                         $tag["def"][] = ["feide", $type];
-                     }
+                    $types = $orginfo->getTypes();
+                    foreach($types AS $type) {
+                        $tag["def"][] = ["feide", $type];
+                    }
 
-                 }
+                }
 
-             }
+            }
 
-             return $tag;
+            return $tag;
 
         } else if (isset($this->sourceID) && $this->sourceID === 'idporten') {
 

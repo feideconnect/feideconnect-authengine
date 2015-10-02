@@ -36,10 +36,10 @@ class AccountChooser {
         $request = [];
         if (isset($_REQUEST['request'])) {
             $r = json_decode($_REQUEST['request'], true);
-             if (is_array($r) && isset($r["return"])) {
-                 if (!URL::compareHost($r['return'])) {
-                     throw new Exception("Invalid return address.");
-                 }
+            if (is_array($r) && isset($r["return"])) {
+                if (!URL::compareHost($r['return'])) {
+                    throw new Exception("Invalid return address.");
+                }
                 $request = $r;
             }
         }

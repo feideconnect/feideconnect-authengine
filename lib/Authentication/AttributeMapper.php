@@ -35,13 +35,13 @@ class AttributeMapper {
             if ($am["authSource"] !== $authSource) {
                 return false;
             }
-         }
-         if (isset($am["idp"]) && is_array($am["idp"])) {
-             if (!in_array($idp, $am["idp"])) {
-                 return false;
-             }
-         }
-         return true;
+        }
+        if (isset($am["idp"]) && is_array($am["idp"])) {
+            if (!in_array($idp, $am["idp"])) {
+                return false;
+            }
+        }
+        return true;
     }
 
 
