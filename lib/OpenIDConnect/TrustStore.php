@@ -7,43 +7,43 @@ use Base64Url\Base64Url;
 
 class TrustStore {
 
-	protected $key;
+    protected $key;
 
-	function __construct() {
+    function __construct() {
 
-		$keyfile = Config::dir('etc', '/jwt-key.pem');
-		$crtfile = Config::dir('etc', '/jwt-cert.pem');
+        $keyfile = Config::dir('etc', '/jwt-key.pem');
+        $crtfile = Config::dir('etc', '/jwt-cert.pem');
 
-		$this->key = file_get_contents($keyfile);
-		$this->crt = file_get_contents($crtfile);
+        $this->key = file_get_contents($keyfile);
+        $this->crt = file_get_contents($crtfile);
 
-		// echo '<pre>File';
-		// echo $keyfile;
-		//  print_r($this->key); exit;
+        // echo '<pre>File';
+        // echo $keyfile;
+        //  print_r($this->key); exit;
 
-	}
+    }
 
-	function getSigningAlg() {
-		return 'RS256';
-	}
+    function getSigningAlg() {
+        return 'RS256';
+    }
 
-	function getKey() {
-		return $this->key;
-	}
-
-
-	public function getJWKs() {
-		$jwks = [];
-		$jwks[] = self::loadKeyFromFile($this->crt);
-		return $jwks;
-	}
+    function getKey() {
+        return $this->key;
+    }
 
 
-	/*
-	 * Credits to Spomky-Labs/jose
-	 * https://github.com/Spomky-Labs/jose/blob/master/lib/Util/RSAConverter.php
-	 * MIT Licence: https://github.com/Spomky-Labs/jose/blob/master/LICENSE
-	 */
+    public function getJWKs() {
+        $jwks = [];
+        $jwks[] = self::loadKeyFromFile($this->crt);
+        return $jwks;
+    }
+
+
+    /*
+     * Credits to Spomky-Labs/jose
+     * https://github.com/Spomky-Labs/jose/blob/master/lib/Util/RSAConverter.php
+     * MIT Licence: https://github.com/Spomky-Labs/jose/blob/master/LICENSE
+     */
 
 
     /**

@@ -9,18 +9,18 @@ class TextResponse extends HTTPResponse {
 
 
 
-	protected $txt;
+    protected $txt;
 
-	function __construct($txt) {
-		parent::__construct();
-		$this->txt = $txt;
-		$this->setCORS(false);
-		$this->setHeader("Content-Type", "text/plain; charset=utf-8");
-	}
+    function __construct($txt) {
+        parent::__construct();
+        $this->txt = $txt;
+        $this->setCORS(false);
+        $this->setHeader("Content-Type", "text/plain; charset=utf-8");
+    }
 
-	protected function sendBody() {
-		echo $this->txt;
-	}
+    protected function sendBody() {
+        echo $this->txt;
+    }
 
 
 }

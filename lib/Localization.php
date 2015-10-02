@@ -8,73 +8,73 @@ use FeideConnect\Utils\Misc;
 
 class Localization {
 
-	protected static $langCache = [];
+    protected static $langCache = [];
 
 
-	protected static $aliases = [
-		"no" => "nb"
-	];
+    protected static $aliases = [
+        "no" => "nb"
+    ];
 
-	function __construct() {
+    function __construct() {
 
-	}
-
-
-	static function getDictionary() {
-
-		if (Config::getValue('enableLocalization', false)) {
-			$availableLanguages = Config::getValue('availableLanguages', ['en']);
-			$lang = Misc::getBrowserLanguage($availableLanguages);
-			$dictionaryFile = Config::filepath('dictionaries/build/dictionary.' . $lang . '.json');
-		} else {
-			$dictionaryFile = Config::filepath('dictionaries/dictionary.en.json');
-		}
+    }
 
 
+    static function getDictionary() {
+
+        if (Config::getValue('enableLocalization', false)) {
+            $availableLanguages = Config::getValue('availableLanguages', ['en']);
+            $lang = Misc::getBrowserLanguage($availableLanguages);
+            $dictionaryFile = Config::filepath('dictionaries/build/dictionary.' . $lang . '.json');
+        } else {
+            $dictionaryFile = Config::filepath('dictionaries/dictionary.en.json');
+        }
 
 
-		if (!file_exists($dictionaryFile)) {
-			throw new \Exception('Cannot locate dictionary file: ' . $dictionaryFile);
-		}
-		$dictionaryContent = file_get_contents($dictionaryFile);
-		$dict = json_decode($dictionaryContent, true);
-		if (empty($dict)) {
-			throw new \Exception('Dictionary file was empty or not properly formatted JSON');
-		}
-
-		return $dict;
-	}
 
 
-	static function localizeEntry($entry) {
+        if (!file_exists($dictionaryFile)) {
+            throw new \Exception('Cannot locate dictionary file: ' . $dictionaryFile);
+        }
+        $dictionaryContent = file_get_contents($dictionaryFile);
+        $dict = json_decode($dictionaryContent, true);
+        if (empty($dict)) {
+            throw new \Exception('Dictionary file was empty or not properly formatted JSON');
+        }
 
-		if (is_string($entry)) {
-			return $entry;
-		} else if (is_array($entry)) {
-			$keys = array_keys($entry);
-			$sl = Misc::getBrowserLanguage($keys);
-			return $entry[$sl];
-		}
+        return $dict;
+    }
 
-		return $entry;
-	} 
 
-	static function localizeList($list, $attrs) {
+    static function localizeEntry($entry) {
 
-		$res = [];
-		foreach($list AS $item) {
-			foreach ($item AS $key => $val) {
+        if (is_string($entry)) {
+            return $entry;
+        } else if (is_array($entry)) {
+            $keys = array_keys($entry);
+            $sl = Misc::getBrowserLanguage($keys);
+            return $entry[$sl];
+        }
 
-				if (in_array($key, $attrs)) {
-					$item[$key] = self::localizeEntry($item[$key]);
-				}
+        return $entry;
+    } 
 
-			}
-			$res[] = $item;
-		}
-		return $res;
+    static function localizeList($list, $attrs) {
 
-	}
+        $res = [];
+        foreach($list AS $item) {
+            foreach ($item AS $key => $val) {
+
+                if (in_array($key, $attrs)) {
+                    $item[$key] = self::localizeEntry($item[$key]);
+                }
+
+            }
+            $res[] = $item;
+        }
+        return $res;
+
+    }
 
 
 

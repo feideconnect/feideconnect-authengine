@@ -10,30 +10,30 @@ use FeideConnect\OAuth\Server;
 
 class OAuth {
 
-	static function providerconfig() {
+    static function providerconfig() {
 
-		$base = URL::getBaseURL() . 'oauth/';
-		$providerconfig = [
-			'authorization' => $base . 'authorization',
-			'token' => $base . 'token'
-		];
-		$response = new JSONResponse($providerconfig);
-		return $response;
+        $base = URL::getBaseURL() . 'oauth/';
+        $providerconfig = [
+            'authorization' => $base . 'authorization',
+            'token' => $base . 'token'
+        ];
+        $response = new JSONResponse($providerconfig);
+        return $response;
 
-	}
+    }
 
-	static function authorization() {
+    static function authorization() {
 
-		$oauth = new Server();
-		return $oauth->authorizationEndpoint();
+        $oauth = new Server();
+        return $oauth->authorizationEndpoint();
 
-	}
+    }
 
-	static function token() {
+    static function token() {
 
-		$oauth = new Server();
-		return $oauth->token();
+        $oauth = new Server();
+        return $oauth->token();
 
-	}
+    }
 
 }

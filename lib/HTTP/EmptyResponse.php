@@ -9,15 +9,15 @@ use FeideConnect\HTTP\HTTPResponse;
 class EmptyResponse extends HTTPResponse {
 
 
-	function __construct() {
-		parent::__construct();
-	}
+    function __construct() {
+        parent::__construct();
+    }
 
-	protected function sendBody() {
+    protected function sendBody() {
 
-		exit;
+        exit;
 
-	}
+    }
 
 
 }

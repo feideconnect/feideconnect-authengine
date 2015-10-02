@@ -7,6 +7,6 @@ use FeideConnect\Exceptions;
 * 
 */
 class NotFoundException extends Exceptions\Exception {
-	
-	
+    
+    
 }

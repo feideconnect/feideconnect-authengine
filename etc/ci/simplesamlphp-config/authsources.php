@@ -176,8 +176,8 @@ $config = array(
         // custom extension arguments
         'extension.args' => array(
             //'http://specs.openid.net/extensions/ui/1.0' => array(
-            //	'mode' => 'popup',
-            //	'icon' => 'true',
+            //    'mode' => 'popup',
+            //    'icon' => 'true',
             //),
         ),
     ),

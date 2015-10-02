@@ -13,176 +13,176 @@ use FeideConnect\Utils\URL;
 
 class Auth {
 
-	static function logout() {
+    static function logout() {
 
-		// echo '<pre>'; print_r($_SESSION); exit;
+        // echo '<pre>'; print_r($_SESSION); exit;
 
-		// Authentication\Authenticator::logoutAll();
-
-
-		$auth = new Authentication\Authenticator($authconfig);
-		$auth->logout();
-
-		return new Redirect('/loggedout');
-
-		// $auth = new Auth
-		// entication\Authenticator();
-		// $auth->logout();
-
-	}
-
-	static function userdebug() {
+        // Authentication\Authenticator::logoutAll();
 
 
-		$storage = StorageProvider::getStorage();
+        $auth = new Authentication\Authenticator($authconfig);
+        $auth->logout();
 
-		// $accountchooser = new Authentication\AccountChooserProtocol();
-		// // $accountchooser->debug();
+        return new Redirect('/loggedout');
 
-		// if (!$accountchooser->hasResponse()) {
-		// 	$requestURL = $accountchooser->getRequest();
-		// 	URL::redirect($requestURL);
-		// }
+        // $auth = new Auth
+        // entication\Authenticator();
+        // $auth->logout();
 
-		// $authconfig = [
-		// 	"type" => "twitter"
-		// ];
-		// $authconfig = $accountchooser->getAuthConfig();
-		$authconfig = [];
-		// echo '<pre>Auth config is '; print_r($authconfig); exit;
+    }
+
+    static function userdebug() {
+
+
+        $storage = StorageProvider::getStorage();
+
+        // $accountchooser = new Authentication\AccountChooserProtocol();
+        // // $accountchooser->debug();
+
+        // if (!$accountchooser->hasResponse()) {
+        //     $requestURL = $accountchooser->getRequest();
+        //     URL::redirect($requestURL);
+        // }
+
+        // $authconfig = [
+        //     "type" => "twitter"
+        // ];
+        // $authconfig = $accountchooser->getAuthConfig();
+        $authconfig = [];
+        // echo '<pre>Auth config is '; print_r($authconfig); exit;
 // 
-		$auth = new Authentication\Authenticator($authconfig);
+        $auth = new Authentication\Authenticator($authconfig);
 
-		if (isset($_REQUEST['logout']) && $_REQUEST['logout'] === '1') {
-			$auth->logout();
-			$res = ['logout' => "ok"];
-			$res = new JSONResponse($response);
-			$res->setCORS(false);
-			return $res;
-		}
-
-
-
-		$auth->requireAuthentication(false, true); // require($isPassive = false, $allowRedirect = false, $return = null
-
-		$account = $auth->getAccount();
-
-		// $res = $auth->storeUser();
-		// 
-		// $response = array('account' => $account->getAccountID());
-		$response = [
-			"account" => [
-				"userids" => $account->getUserIDs(),
-				"sourceID" => $account->getSourceID(),
-				"name" => $account->getName(),
-				"mail" => $account->getMail()
-			]
-		];
-		// echo '<pre>';
-		// print_r($response); exit;
-
-		
-		$usermapper = new Authentication\UserMapper($storage);
+        if (isset($_REQUEST['logout']) && $_REQUEST['logout'] === '1') {
+            $auth->logout();
+            $res = ['logout' => "ok"];
+            $res = new JSONResponse($response);
+            $res->setCORS(false);
+            return $res;
+        }
 
 
 
-		$user = $usermapper->getUser($account, true, true, false);
+        $auth->requireAuthentication(false, true); // require($isPassive = false, $allowRedirect = false, $return = null
 
-		// header('Content-type: text/plain');
-		// print_r($user); exit;
-		if (isset($user)) {
-			$response['user'] = $user->getAsArray();	
-			$response['userinfo'] = $user->getUserInfo();
-		}
+        $account = $auth->getAccount();
 
-		if (isset($response["user"]["profilephoto"]) && is_array($response["user"]["profilephoto"])) {
-			$response["user"]["profilephoto"] = array_map("base64_encode", $response["user"]["profilephoto"]);
-		}
+        // $res = $auth->storeUser();
+        // 
+        // $response = array('account' => $account->getAccountID());
+        $response = [
+            "account" => [
+                "userids" => $account->getUserIDs(),
+                "sourceID" => $account->getSourceID(),
+                "name" => $account->getName(),
+                "mail" => $account->getMail()
+            ]
+        ];
+        // echo '<pre>';
+        // print_r($response); exit;
 
-		if (isset($response["userinfo"]["profilephoto"]) ) {
-			$response["userinfo"]["profilephoto"] = base64_encode($response["userinfo"]["profilephoto"]);
-		}
-
-		// echo '<pre>'; print_r($response); exit;
-
-		$res = new JSONResponse($response);
-		$res->setCORS(false);
-		return $res;
-
-	}
-
-	static function userinfo() {
+        
+        $usermapper = new Authentication\UserMapper($storage);
 
 
 
-		$apiprotector = new APIProtector();
-		$user = $apiprotector
-			->requireClient()->requireUser()->requireScopes(['userinfo'])
-			->getUser();
-		$client = $apiprotector->getClient();
+        $user = $usermapper->getUser($account, true, true, false);
+
+        // header('Content-type: text/plain');
+        // print_r($user); exit;
+        if (isset($user)) {
+            $response['user'] = $user->getAsArray();    
+            $response['userinfo'] = $user->getUserInfo();
+        }
+
+        if (isset($response["user"]["profilephoto"]) && is_array($response["user"]["profilephoto"])) {
+            $response["user"]["profilephoto"] = array_map("base64_encode", $response["user"]["profilephoto"]);
+        }
+
+        if (isset($response["userinfo"]["profilephoto"]) ) {
+            $response["userinfo"]["profilephoto"] = base64_encode($response["userinfo"]["profilephoto"]);
+        }
+
+        // echo '<pre>'; print_r($response); exit;
+
+        $res = new JSONResponse($response);
+        $res->setCORS(false);
+        return $res;
+
+    }
+
+    static function userinfo() {
 
 
-		$hasScopes = $apiprotector->getScopes();
+
+        $apiprotector = new APIProtector();
+        $user = $apiprotector
+            ->requireClient()->requireUser()->requireScopes(['userinfo'])
+            ->getUser();
+        $client = $apiprotector->getClient();
 
 
-		$allowseckeys = ['userid'];
-		$includeEmail = false;
-
-		foreach($hasScopes AS $scope) {
-			$data[$scope] = true;
-			if ($scope === 'userinfo-feide') {
-				$allowseckeys[] = 'feide';
-			}
-			if ($scope === 'userinfo-photo') {
-				$allowseckeys[] = 'p';
-			}
-			if ($scope === 'userinfo-mail') {
-				$includeEmail = true;
-			}
-		}
-
-		$userinfo = $user->getBasicUserInfo($includeEmail, $allowseckeys);
+        $hasScopes = $apiprotector->getScopes();
 
 
-		$data = [
-			'user' => $userinfo,
-			'audience' => $client->id,
-		];
+        $allowseckeys = ['userid'];
+        $includeEmail = false;
+
+        foreach($hasScopes AS $scope) {
+            $data[$scope] = true;
+            if ($scope === 'userinfo-feide') {
+                $allowseckeys[] = 'feide';
+            }
+            if ($scope === 'userinfo-photo') {
+                $allowseckeys[] = 'p';
+            }
+            if ($scope === 'userinfo-mail') {
+                $includeEmail = true;
+            }
+        }
+
+        $userinfo = $user->getBasicUserInfo($includeEmail, $allowseckeys);
 
 
-		return new JSONResponse($data);
+        $data = [
+            'user' => $userinfo,
+            'audience' => $client->id,
+        ];
 
-	}
 
-	static function authinfo() {
+        return new JSONResponse($data);
 
-		$storage = StorageProvider::getStorage();
+    }
 
-		$apiprotector = new OAuth\APIProtector();
-		$user = $apiprotector
-			->requireClient()->requireUser()->requireScopes(['userinfo'])
-			->getUser();
-		// $client = $apiprotector->getClient();
+    static function authinfo() {
 
-		$allowseckeys = ['userid'];
-		$allowseckeys[] = 'p';
-		$allowseckeys[] = 'feide';
+        $storage = StorageProvider::getStorage();
 
-		// $includeEmail = true;
+        $apiprotector = new OAuth\APIProtector();
+        $user = $apiprotector
+            ->requireClient()->requireUser()->requireScopes(['userinfo'])
+            ->getUser();
+        // $client = $apiprotector->getClient();
 
-		$authorizations = $storage->getAuthorizationsByUser($user);
+        $allowseckeys = ['userid'];
+        $allowseckeys[] = 'p';
+        $allowseckeys[] = 'feide';
 
-		$data = [
-			"authorizations" => [],
-			"tokens" => [],
-		];
-		foreach($authorizations AS $auth) {
-			$data["authorizations"][] = $auth->getAsArray();
-		}
+        // $includeEmail = true;
 
-		return new JSONResponse($data);
+        $authorizations = $storage->getAuthorizationsByUser($user);
 
-	}
+        $data = [
+            "authorizations" => [],
+            "tokens" => [],
+        ];
+        foreach($authorizations AS $auth) {
+            $data["authorizations"][] = $auth->getAsArray();
+        }
+
+        return new JSONResponse($data);
+
+    }
 
 
 }

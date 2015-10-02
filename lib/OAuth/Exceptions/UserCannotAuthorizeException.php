@@ -7,6 +7,6 @@ use FeideConnect\Exceptions;
 * 
 */
 class UserCannotAuthorizeException extends Exceptions\Exception {
-	
-	
+    
+    
 }

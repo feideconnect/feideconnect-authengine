@@ -7,71 +7,71 @@ use FeideConnect\Data\Models;
 
 class AccessTokenPool {
 
-	protected $client, $user, $stoarge;
-	protected $tokens;
+    protected $client, $user, $stoarge;
+    protected $tokens;
 
-	function __construct($client, $user = null) {
-		$this->client = $client;
-		$this->user = $user;
-		$this->storage = StorageProvider::getStorage();
+    function __construct($client, $user = null) {
+        $this->client = $client;
+        $this->user = $user;
+        $this->storage = StorageProvider::getStorage();
 
-		$this->getTokens();
-	}
-
-
-	function getTokens() {
-		$this->tokens = [];
-
-		$userid = '00000000-0000-0000-0000-000000000000';
-		if ($this->user !== null) {$userid = $this->user->userid;}
-
-		// echo "about to get access token "; print_r($userid); print_r($this->client->id); exit;
-
-		$ct = $this->storage->getAccessTokens($userid, $this->client->id);
-
-		foreach($ct AS $t) {
-			if ($t->stillValid()) {
-				$this->tokens[] = $t;
-			}
-		}
-	}
-
-	function getAllTokens() {
-		return $this->tokens;
-	}
-
-	function getCandidates($scopesInQuestion) {
-		$candidates = [];
-
-		foreach($this->tokens AS $token) {
-			if ($token->hasExactScopes($scopesInQuestion)) {
-				$candidates[] = $token;
-			}
-		}
-		return $candidates;
-	}
+        $this->getTokens();
+    }
 
 
-	function getSelectedCandidate($scopesInQuestion) {
-		$candidates = $this->getCandidates($scopesInQuestion);
-		if  (empty($candidates)) return null;
+    function getTokens() {
+        $this->tokens = [];
 
-		// TODO Implement policy on which token to select.
-		// TODO Also require that the token is valid significantly long into the future
-		return $candidates[0];
-	}
+        $userid = '00000000-0000-0000-0000-000000000000';
+        if ($this->user !== null) {$userid = $this->user->userid;}
+
+        // echo "about to get access token "; print_r($userid); print_r($this->client->id); exit;
+
+        $ct = $this->storage->getAccessTokens($userid, $this->client->id);
+
+        foreach($ct AS $t) {
+            if ($t->stillValid()) {
+                $this->tokens[] = $t;
+            }
+        }
+    }
+
+    function getAllTokens() {
+        return $this->tokens;
+    }
+
+    function getCandidates($scopesInQuestion) {
+        $candidates = [];
+
+        foreach($this->tokens AS $token) {
+            if ($token->hasExactScopes($scopesInQuestion)) {
+                $candidates[] = $token;
+            }
+        }
+        return $candidates;
+    }
 
 
-	function getToken($scopesInQuestion, $refreshToken, $expires_in) {
-		$candidate = $this->getSelectedCandidate($scopesInQuestion);
+    function getSelectedCandidate($scopesInQuestion) {
+        $candidates = $this->getCandidates($scopesInQuestion);
+        if  (empty($candidates)) return null;
 
-		if ($candidate !== null) return $candidate;
+        // TODO Implement policy on which token to select.
+        // TODO Also require that the token is valid significantly long into the future
+        return $candidates[0];
+    }
 
-		$accesstoken = Models\AccessToken::generate($this->client, $this->user, $scopesInQuestion, $refreshToken, $expires_in);
-		$this->storage->saveToken($accesstoken);
 
-		return $accesstoken;
-	}
+    function getToken($scopesInQuestion, $refreshToken, $expires_in) {
+        $candidate = $this->getSelectedCandidate($scopesInQuestion);
+
+        if ($candidate !== null) return $candidate;
+
+        $accesstoken = Models\AccessToken::generate($this->client, $this->user, $scopesInQuestion, $refreshToken, $expires_in);
+        $this->storage->saveToken($accesstoken);
+
+        return $accesstoken;
+    }
 
 
 

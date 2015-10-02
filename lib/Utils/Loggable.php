@@ -2,5 +2,5 @@
 namespace FeideConnect\Utils;
 
 interface Loggable {
-	public function toLog();
+    public function toLog();
 }

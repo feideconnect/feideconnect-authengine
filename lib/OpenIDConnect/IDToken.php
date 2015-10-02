@@ -6,10 +6,10 @@ use Firebase\JWT\JWT;
 
 class IDToken {
 
-	protected $trustStore;
+    protected $trustStore;
 
-	protected $encoded;
-	protected $object;
+    protected $encoded;
+    protected $object;
 
 
 /**
@@ -44,73 +44,73 @@ class IDToken {
  */
 
 
-	function __construct(TrustStore $trustStore) {
+    function __construct(TrustStore $trustStore) {
 
-		$this->trustStore = $trustStore;
-		$this->object = [];
+        $this->trustStore = $trustStore;
+        $this->object = [];
 
-		// $this->object = array(
-		// 	"iss" => "http://example.org",
-		// 	"aud" => "http://example.com",
-		// 	"iat" => 1356999524,
-		// 	"nbf" => 1357000000
-		// );
+        // $this->object = array(
+        //     "iss" => "http://example.org",
+        //     "aud" => "http://example.com",
+        //     "iat" => 1356999524,
+        //     "nbf" => 1357000000
+        // );
 
 
-		// $decoded = JWT::decode($jwt, $key, array('HS256'));
+        // $decoded = JWT::decode($jwt, $key, array('HS256'));
 
-		// print_r($decoded);
+        // print_r($decoded);
 
-		/*
-		 NOTE: This will now be an object instead of an associative array. To get
-		 an associative array, you will need to cast it as such:
-		*/
+        /*
+         NOTE: This will now be an object instead of an associative array. To get
+         an associative array, you will need to cast it as such:
+        */
 
-		// $decoded_array = (array) $decoded;
+        // $decoded_array = (array) $decoded;
 
-		 // echo '<pre>'; print_r($jwt); exit;
+         // echo '<pre>'; print_r($jwt); exit;
 
-	}
+    }
 
-	public function set($key, $val) {
-		$this->object[$key] = $val;
-		return $this;
-	}
+    public function set($key, $val) {
+        $this->object[$key] = $val;
+        return $this;
+    }
 
-	function getEncoded() {
+    function getEncoded() {
 
-		/**
-		 * IMPORTANT:
-		 * You must specify supported algorithms for your application. See
-		 * https://tools.ietf.org/html/draft-ietf-jose-json-web-algorithms-40
-		 * for a list of spec-compliant algorithms.
-		 */
-		$this->encoded = JWT::encode($this->object, $this->trustStore->getKey(), $this->trustStore->getSigningAlg());
+        /**
+         * IMPORTANT:
+         * You must specify supported algorithms for your application. See
+         * https://tools.ietf.org/html/draft-ietf-jose-json-web-algorithms-40
+         * for a list of spec-compliant algorithms.
+         */
+        $this->encoded = JWT::encode($this->object, $this->trustStore->getKey(), $this->trustStore->getSigningAlg());
 
-		return $this->encoded;
-	}
+        return $this->encoded;
+    }
 
-	function getObject() {
-		return $this->object;
-	}
+    function getObject() {
+        return $this->object;
+    }
 
-	public static function generate(TrustStore $trustStore, $iss, $sub, $aud, $expiresIn, $auth_time = null) {
+    public static function generate(TrustStore $trustStore, $iss, $sub, $aud, $expiresIn, $auth_time = null) {
 
-		$now = time();
-		$idtoken = new IDToken($trustStore);
-		$idtoken->set("iss", $iss)
-			->set("aud", $aud)
-			->set("sub", $sub)
-			->set("iat", $now)
-			->set("exp", $now + $expiresIn);
+        $now = time();
+        $idtoken = new IDToken($trustStore);
+        $idtoken->set("iss", $iss)
+            ->set("aud", $aud)
+            ->set("sub", $sub)
+            ->set("iat", $now)
+            ->set("exp", $now + $expiresIn);
 
-		if ($auth_time !== null) {
-			$idtoken->set("auth_time", $auth_time);
-		}
+        if ($auth_time !== null) {
+            $idtoken->set("auth_time", $auth_time);
+        }
 
-		return $idtoken;
+        return $idtoken;
 
-	}
+    }
 
 
 }

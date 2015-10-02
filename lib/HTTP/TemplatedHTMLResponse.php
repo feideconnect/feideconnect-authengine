@@ -9,41 +9,41 @@ use FeideConnect\HTTP\HTTPResponse;
 class TemplatedHTMLResponse extends HTTPResponse {
 
 
-	protected $template;
-	protected $data;
+    protected $template;
+    protected $data;
 
-	function __construct($templateName) {
-		parent::__construct();
+    function __construct($templateName) {
+        parent::__construct();
 
-		$templateDir = Config::dir('templates');
-		$partialsDir = Config::dir('templates/partials');
-		$mustache = new \Mustache_Engine(array(
-			'loader' => new \Mustache_Loader_FilesystemLoader($templateDir),
-			// 'cache' => '/tmp/uwap-mustache',
-			'partials_loader' => new \Mustache_Loader_FilesystemLoader($partialsDir),
-		));
-		$this->template = $mustache->loadTemplate($templateName);
+        $templateDir = Config::dir('templates');
+        $partialsDir = Config::dir('templates/partials');
+        $mustache = new \Mustache_Engine(array(
+            'loader' => new \Mustache_Loader_FilesystemLoader($templateDir),
+            // 'cache' => '/tmp/uwap-mustache',
+            'partials_loader' => new \Mustache_Loader_FilesystemLoader($partialsDir),
+        ));
+        $this->template = $mustache->loadTemplate($templateName);
 
-		$this->setCORS(false);
+        $this->setCORS(false);
 
-		$this->data = null;
-	}
+        $this->data = null;
+    }
 
 
-	public function setData($data) {
-		$this->data = $data;
-		return $this;
-	}
+    public function setData($data) {
+        $this->data = $data;
+        return $this;
+    }
 
-	public function getData() {
-		return $this->data;
-	}
+    public function getData() {
+        return $this->data;
+    }
 
-	protected function sendBody() {
+    protected function sendBody() {
 
-		echo $this->template->render($this->data);
+        echo $this->template->render($this->data);
 
-	}
+    }
 
 
 }

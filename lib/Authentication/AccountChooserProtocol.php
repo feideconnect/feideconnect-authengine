@@ -10,72 +10,72 @@ use FeideConnect\Exceptions\Exception;
 
 class AccountChooserProtocol {
 
-	protected $selfURL;
-	protected $baseURL;
-	protected $response = null;
+    protected $selfURL;
+    protected $baseURL;
+    protected $response = null;
 
-	function __construct() { 
+    function __construct() { 
 
-		$this->selfURL = URL::selfURL();
-		$this->baseURL = URL::getBaseURL() . 'accountchooser';
+        $this->selfURL = URL::selfURL();
+        $this->baseURL = URL::getBaseURL() . 'accountchooser';
 
-		$this->clientid = null;
+        $this->clientid = null;
 
-		if (isset($_REQUEST['acresponse'])) {
-			$r = json_decode($_REQUEST['acresponse'], true);
-			if (is_array($r)) {
-				$this->response = $r;
-			}
-		}
+        if (isset($_REQUEST['acresponse'])) {
+            $r = json_decode($_REQUEST['acresponse'], true);
+            if (is_array($r)) {
+                $this->response = $r;
+            }
+        }
 
-	}
+    }
 
-	public function setClientID($clientid) {
-		$this->clientid = $clientid;
-	}
+    public function setClientID($clientid) {
+        $this->clientid = $clientid;
+    }
 
-	public function getAuthConfig() {
-		$ac = [
-			"type" => "saml"
-		];
-		if (isset($this->response["type"])) {
-			$ac["type"] = $this->response["type"];
-		}
+    public function getAuthConfig() {
+        $ac = [
+            "type" => "saml"
+        ];
+        if (isset($this->response["type"])) {
+            $ac["type"] = $this->response["type"];
+        }
 
-		if (isset($this->response["id"])) {
-			$ac["idp"] = $this->response["id"];
-		}
-		if (isset($this->response["subid"])) {
-			$ac["subid"] = $this->response["subid"];
-		}
-		return $ac;
-	}
+        if (isset($this->response["id"])) {
+            $ac["idp"] = $this->response["id"];
+        }
+        if (isset($this->response["subid"])) {
+            $ac["subid"] = $this->response["subid"];
+        }
+        return $ac;
+    }
 
-	public function hasResponse() {
-		return ($this->response !== null);
-	}
+    public function hasResponse() {
+        return ($this->response !== null);
+    }
 
-	public function getRequest() {
-		$ro = [
-			"return" => $this->selfURL,
-		];
-		if ($this->clientid) {
-			$ro['clientid'] = $this->clientid;
-		}
-		return $this->baseURL . '?request=' . rawurlencode(json_encode($ro));
-	}
+    public function getRequest() {
+        $ro = [
+            "return" => $this->selfURL,
+        ];
+        if ($this->clientid) {
+            $ro['clientid'] = $this->clientid;
+        }
+        return $this->baseURL . '?request=' . rawurlencode(json_encode($ro));
+    }
 
-	public function debug() {
+    public function debug() {
 
-		echo '<pre>' . "accountchooser: \n";
-		echo "Base URL " . $this->baseURL . "\n";
-		echo "Self URL " . $this->selfURL . "\n";
-		print_r($this->response);
+        echo '<pre>' . "accountchooser: \n";
+        echo "Base URL " . $this->baseURL . "\n";
+        echo "Self URL " . $this->selfURL . "\n";
+        print_r($this->response);
 
-		echo "\n-----\n Request url \n   " . $this->getRequest();
-		exit;
+        echo "\n-----\n Request url \n   " . $this->getRequest();
+        exit;
 
-	}
+    }
 
 
 }

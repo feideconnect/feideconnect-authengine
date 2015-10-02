@@ -12,77 +12,77 @@ use Cassandra\Type\Timestamp;
 
 class AuthorizationCode extends \FeideConnect\Data\Model {
 
-	public $code, $clientid, $userid, $scope, $token_type, $redirect_uri, $idtoken, $issued, $validuntil;
+    public $code, $clientid, $userid, $scope, $token_type, $redirect_uri, $idtoken, $issued, $validuntil;
 
-	protected static $_properties = array(
-		"code", "clientid", "userid", 
-		"scope", "token_type", "redirect_uri",
-		"idtoken",
-		"issued", "validuntil"
-	);
-	protected static $_types = [
-		"issued" => "timestamp",
-		"validuntil" => "timestamp"
-	];
-
-
-	public function getStorableArray() {
-
-		$prepared = parent::getStorableArray();
+    protected static $_properties = array(
+        "code", "clientid", "userid", 
+        "scope", "token_type", "redirect_uri",
+        "idtoken",
+        "issued", "validuntil"
+    );
+    protected static $_types = [
+        "issued" => "timestamp",
+        "validuntil" => "timestamp"
+    ];
 
 
-		if (isset($this->code)) {
-			$prepared["code"] = new Uuid($this->code);
-		}
-		if (isset($this->clientid)) {
-			$prepared["clientid"] = new Uuid($this->clientid);
-		}
-		if (isset($this->userid)) {
-			$prepared["userid"] = new Uuid($this->userid);
-		}
+    public function getStorableArray() {
 
-		if (isset($this->scope)) {
-			$prepared["scope"] = new CollectionSet($this->scope, Base::ASCII);
-		}
+        $prepared = parent::getStorableArray();
 
 
-		return $prepared;
-	}
+        if (isset($this->code)) {
+            $prepared["code"] = new Uuid($this->code);
+        }
+        if (isset($this->clientid)) {
+            $prepared["clientid"] = new Uuid($this->clientid);
+        }
+        if (isset($this->userid)) {
+            $prepared["userid"] = new Uuid($this->userid);
+        }
+
+        if (isset($this->scope)) {
+            $prepared["scope"] = new CollectionSet($this->scope, Base::ASCII);
+        }
 
 
-	public function stillValid() {
-		return (!($this->validuntil->inPast()));
-	}
+        return $prepared;
+    }
+
+
+    public function stillValid() {
+        return (!($this->validuntil->inPast()));
+    }
 
 
 
-	public static function generate(Client $client, User $user, $redirect_uri, $scope = null, IDToken $idtoken = null) {
+    public static function generate(Client $client, User $user, $redirect_uri, $scope = null, IDToken $idtoken = null) {
 
-		$expires_in = \FeideConnect\Config::getValue('oauth.code.lifetime', 5*60);
+        $expires_in = \FeideConnect\Config::getValue('oauth.code.lifetime', 5*60);
 
-		$n = new self();
+        $n = new self();
 
-		$n->code = self::genUUID();
-		
-		$n->clientid = $client->id;
-		$n->userid = $user->userid;
+        $n->code = self::genUUID();
+        
+        $n->clientid = $client->id;
+        $n->userid = $user->userid;
 
-		$n->issued = new \FeideConnect\Data\Types\Timestamp();
-		$n->validuntil = (new \FeideConnect\Data\Types\Timestamp())->addSeconds($expires_in);
+        $n->issued = new \FeideConnect\Data\Types\Timestamp();
+        $n->validuntil = (new \FeideConnect\Data\Types\Timestamp())->addSeconds($expires_in);
 
-		$n->token_type = 'Bearer';
+        $n->token_type = 'Bearer';
 
-		if (isset($idtoken) && $idtoken !== null) {
-			$n->idtoken = $idtoken->getEncoded();
-		}
+        if (isset($idtoken) && $idtoken !== null) {
+            $n->idtoken = $idtoken->getEncoded();
+        }
 
-		$n->redirect_uri = $redirect_uri;
-		
-		if ($scope !== null) {
-			$n->scope = $scope;
-		}
-		return $n;
-	}
+        $n->redirect_uri = $redirect_uri;
+        
+        if ($scope !== null) {
+            $n->scope = $scope;
+        }
+        return $n;
+    }
 
 
 }

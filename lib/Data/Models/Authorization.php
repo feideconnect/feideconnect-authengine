@@ -9,66 +9,66 @@ use Cassandra\Type\Timestamp;
 
 class Authorization extends \FeideConnect\Data\Model {
 
-	public $clientid, $userid, $scopes, $issued;
+    public $clientid, $userid, $scopes, $issued;
 
-	protected static $_properties = array(
-		"clientid", "userid", "scopes", "issued"
-	);
-	protected static $_types = [
-		"issued" => "timestamp"
-	];
-
-
-	public function getStorableArray() {
-
-		$prepared = parent::getStorableArray();
+    protected static $_properties = array(
+        "clientid", "userid", "scopes", "issued"
+    );
+    protected static $_types = [
+        "issued" => "timestamp"
+    ];
 
 
+    public function getStorableArray() {
+
+        $prepared = parent::getStorableArray();
 
 
-		if (isset($this->scopes)) {
-			$prepared["scopes"] = new CollectionSet($this->scopes, Base::ASCII);
-		}
-		if (isset($this->clientid)) {
-			$prepared["clientid"] = new Uuid($this->clientid);
-		}
-		if (isset($this->userid)) {
-			$prepared["userid"] = new Uuid($this->userid);
-		}
 
-		return $prepared;
-	}
 
-	public function getScopeList() {
-		if (empty($this->scopes)) return [];
-		return $this->scopes;
-	}
+        if (isset($this->scopes)) {
+            $prepared["scopes"] = new CollectionSet($this->scopes, Base::ASCII);
+        }
+        if (isset($this->clientid)) {
+            $prepared["clientid"] = new Uuid($this->clientid);
+        }
+        if (isset($this->userid)) {
+            $prepared["userid"] = new Uuid($this->userid);
+        }
 
-	public function addScopes($scopes) {
-		if (empty($this->scopes)) $this->scopes = [];
-		foreach($scopes AS $s) {
-			if (!in_array($s, $this->scopes)) {
-				$this->scopes[] = $s;
-			}
-		}
-	}
+        return $prepared;
+    }
 
-	function includeScopes($requiredscopes) {
+    public function getScopeList() {
+        if (empty($this->scopes)) return [];
+        return $this->scopes;
+    }
 
-		$myScopes = $this->getScopeList();
+    public function addScopes($scopes) {
+        if (empty($this->scopes)) $this->scopes = [];
+        foreach($scopes AS $s) {
+            if (!in_array($s, $this->scopes)) {
+                $this->scopes[] = $s;
+            }
+        }
+    }
 
-		if ($requiredscopes === null) return true;
-		// echo '<pre>'; print_r($requiredscopes); exit;
-		assert('is_array($requiredscopes)');
-		foreach($requiredscopes AS $rs) {
-			if (!in_array($rs, $myScopes)) return false;
-		}
-		return true;
-	}
-	public function remainingScopes($requiredscopes) {
-		$myScopes = $this->getScopeList();
-		return array_diff($requiredscopes, $myScopes);
-	}
+    function includeScopes($requiredscopes) {
+
+        $myScopes = $this->getScopeList();
+
+        if ($requiredscopes === null) return true;
+        // echo '<pre>'; print_r($requiredscopes); exit;
+        assert('is_array($requiredscopes)');
+        foreach($requiredscopes AS $rs) {
+            if (!in_array($rs, $myScopes)) return false;
+        }
+        return true;
+    }
+    public function remainingScopes($requiredscopes) {
+        $myScopes = $this->getScopeList();
+        return array_diff($requiredscopes, $myScopes);
+    }
 
 
 }

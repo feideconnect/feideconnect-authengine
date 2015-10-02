@@ -14,127 +14,127 @@ use FeideConnect\Localization;
 class Data {
 
 
-	static function getUserProfilephoto($useridstr) {
+    static function getUserProfilephoto($useridstr) {
 
-		$storage = StorageProvider::getStorage();
-		$userid = new UserID($useridstr);
+        $storage = StorageProvider::getStorage();
+        $userid = new UserID($useridstr);
 
-		if ($userid->prefix !== 'p') {
-			throw new Exception('You may only lookup users by p: keys');
-		}
+        if ($userid->prefix !== 'p') {
+            throw new Exception('You may only lookup users by p: keys');
+        }
 
-		$user = $storage->getUserByUserIDsec($useridstr);
+        $user = $storage->getUserByUserIDsec($useridstr);
 
-		$response = new ImageResponse();
+        $response = new ImageResponse();
 
-		if (!empty($user)) {
-			$userinfo = $user->getUserInfo();
-			if (!empty($userinfo['profilephoto'])) {
-				// $response->setImage(substr($userinfo['profilephoto'], 4), 'jpeg');
-				$response->setImage($userinfo['profilephoto'], 'jpeg');
-			} else {
-				$response->setImageFile('www/static/media/default-profile.jpg', 'jpeg');
-			}
-		} else {
-			$response->setImageFile('www/static/media/default-profile.jpg', 'jpeg');
-		}
-
-
-		return $response;
-	} 
-
-	static function getClientLogo($clientid) {
-
-		$storage = StorageProvider::getStorage();
-		$client = $storage->getClient($clientid);
-		$response = new ImageResponse();
-
-		if (!empty($client->logo)) {
-			$response->setImage($client->logo, 'jpeg');
-		} else {
-			$response->setImageFile('www/static/media/default-client.png', 'png');
-		}
-		return $response;
-	}
-
-	static function scmp($a, $b) {
+        if (!empty($user)) {
+            $userinfo = $user->getUserInfo();
+            if (!empty($userinfo['profilephoto'])) {
+                // $response->setImage(substr($userinfo['profilephoto'], 4), 'jpeg');
+                $response->setImage($userinfo['profilephoto'], 'jpeg');
+            } else {
+                $response->setImageFile('www/static/media/default-profile.jpg', 'jpeg');
+            }
+        } else {
+            $response->setImageFile('www/static/media/default-profile.jpg', 'jpeg');
+        }
 
 
-		$ax = ($a["distance"] === null ? 9999 : $a["distance"]);
-		$bx = ($b["distance"] === null ? 9999 : $b["distance"]);
+        return $response;
+    } 
+
+    static function getClientLogo($clientid) {
+
+        $storage = StorageProvider::getStorage();
+        $client = $storage->getClient($clientid);
+        $response = new ImageResponse();
+
+        if (!empty($client->logo)) {
+            $response->setImage($client->logo, 'jpeg');
+        } else {
+            $response->setImageFile('www/static/media/default-client.png', 'png');
+        }
+        return $response;
+    }
+
+    static function scmp($a, $b) {
 
 
-		return ($ax < $bx) ? -1 : 1;
-	}
-
-	static function getOrgs() {
+        $ax = ($a["distance"] === null ? 9999 : $a["distance"]);
+        $bx = ($b["distance"] === null ? 9999 : $b["distance"]);
 
 
-		if (isset($_REQUEST['lat']) && isset($_REQUEST['lon'])) {
-			$lat = $_REQUEST['lat'];
-			$lon = $_REQUEST['lon'];
-		} else {
-			$lat = $lon = null;
-		}
+        return ($ax < $bx) ? -1 : 1;
+    }
 
-		$storage = StorageProvider::getStorage();
-		$orgs = $storage->getOrgsByService('pilot');
-		$data = [];
-
-		foreach($orgs AS $org) {
-			if (!$org->isHomeOrg()) { continue; }
-			// if (!in_array($org->realm, $subscribers)) { continue; }
-			$di = $org->getOrgInfo($lat, $lon);
-			$data[] = $di;
-		}
+    static function getOrgs() {
 
 
-		usort($data, ["\FeideConnect\Controllers\Data", "scmp"]);
+        if (isset($_REQUEST['lat']) && isset($_REQUEST['lon'])) {
+            $lat = $_REQUEST['lat'];
+            $lon = $_REQUEST['lon'];
+        } else {
+            $lat = $lon = null;
+        }
+
+        $storage = StorageProvider::getStorage();
+        $orgs = $storage->getOrgsByService('pilot');
+        $data = [];
+
+        foreach($orgs AS $org) {
+            if (!$org->isHomeOrg()) { continue; }
+            // if (!in_array($org->realm, $subscribers)) { continue; }
+            $di = $org->getOrgInfo($lat, $lon);
+            $data[] = $di;
+        }
 
 
-		
+        usort($data, ["\FeideConnect\Controllers\Data", "scmp"]);
 
 
-
-
-		// echo '<pre>';
-		// foreach($data AS $d) {
-		// 	echo join(',', $d["type"]) . "\n";
-		// }
-
-		// echo '<pre>Data:'; print_r($data); exit;
-		return new JSONResponse($data);
-	}
-
-	static function getDictionary() {
-
-		return new JSONResponse(Localization::getDictionary());
-
-	}
-
-	static function accountchooserConfig() {
-
-
-		$config = [];
-		$config['feideIdP'] = Config::getValue('feideIdP');
+        
 
 
 
-		// $ldata = Localization::localizeList($data, ['title', 'descr']);
-		return new JSONResponse($config);
 
-	}
+        // echo '<pre>';
+        // foreach($data AS $d) {
+        //     echo join(',', $d["type"]) . "\n";
+        // }
+
+        // echo '<pre>Data:'; print_r($data); exit;
+        return new JSONResponse($data);
+    }
+
+    static function getDictionary() {
+
+        return new JSONResponse(Localization::getDictionary());
+
+    }
+
+    static function accountchooserConfig() {
 
 
-	static function accountchooserExtra() {
+        $config = [];
+        $config['feideIdP'] = Config::getValue('feideIdP');
 
 
-		$data = Config::readJSONfile("disco2.json");
 
-		$ldata = Localization::localizeList($data, ['title', 'descr']);
-		return new JSONResponse($ldata);
+        // $ldata = Localization::localizeList($data, ['title', 'descr']);
+        return new JSONResponse($config);
 
-	}
+    }
+
+
+    static function accountchooserExtra() {
+
+
+        $data = Config::readJSONfile("disco2.json");
+
+        $ldata = Localization::localizeList($data, ['title', 'descr']);
+        return new JSONResponse($ldata);
+
+    }
 
 
 
