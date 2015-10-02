@@ -759,9 +759,3 @@ class Cassandra2 extends \FeideConnect\Data\Repository {
 
 
 }
-
-
-
-
-
-

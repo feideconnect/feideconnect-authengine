@@ -102,6 +102,3 @@ echo $response->send();
 
 
 profiler_status();
-
-
-

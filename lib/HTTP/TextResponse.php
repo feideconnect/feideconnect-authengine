@@ -24,5 +24,3 @@ class TextResponse extends HTTPResponse {
 
 
 }
-
-
