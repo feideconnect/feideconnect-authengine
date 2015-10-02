@@ -89,7 +89,7 @@ class TrustStore {
         return $result;
     }
 
-    // --- o --- o --- o --- o --- o --- o --- o --- o --- o --- 
+    // --- o --- o --- o --- o --- o --- o --- o --- o --- o ---
 
 
 }

@@ -63,7 +63,7 @@ class AttributeMapper {
                 return $am;
             }
         }
-        throw new Exception("Unable to find a matching account map for this authSource [" . 
+        throw new Exception("Unable to find a matching account map for this authSource [" .
             $authSource . "] and idp [" . ($idp !==  null ? $idp : '...') . "]");
 
 

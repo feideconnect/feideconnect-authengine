@@ -6,7 +6,7 @@ namespace FeideConnect\Authentication;
 /**
  * This class handles all authentication, and uses SimpleSAMLphp for that task.
  * It will also handle all local user creation. All new users will be stored in the user repository.
- * 
+ *
  */
 class AuthSource {
     protected static $instance;

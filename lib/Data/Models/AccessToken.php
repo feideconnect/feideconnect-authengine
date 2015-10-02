@@ -14,7 +14,7 @@ class AccessToken extends \FeideConnect\Data\Model {
     public $access_token, $clientid, $userid, $issued, $scope, $token_type, $validuntil, $lastuse;
 
     protected static $_properties = array(
-        "access_token", "clientid", "userid", "issued", 
+        "access_token", "clientid", "userid", "issued",
         "scope", "token_type", "validuntil", "lastuse"
     );
     protected static $_types = [
@@ -34,7 +34,7 @@ class AccessToken extends \FeideConnect\Data\Model {
         if (isset($this->clientid)) {
             $prepared["clientid"] = new Uuid($this->clientid);
         }
-        
+
         if (empty($this->userid)) {
             $prepared["userid"] = new Uuid('00000000-0000-0000-0000-000000000000');
         } else {
@@ -52,9 +52,9 @@ class AccessToken extends \FeideConnect\Data\Model {
 
     public static function generateFromCode(Models\AuthorizationCode $code) {
 
-        
 
-    }    
+
+    }
 
 
     public function hasExactScopes($scopes) {
@@ -106,7 +106,7 @@ class AccessToken extends \FeideConnect\Data\Model {
 
         $n->userid = null;
         if ($user !== null) {
-            $n->userid = $user->userid;    
+            $n->userid = $user->userid;
         }
 
         $n->issued = new \FeideConnect\Data\Types\Timestamp();
@@ -119,7 +119,7 @@ class AccessToken extends \FeideConnect\Data\Model {
         }
 
         $n->token_type = 'Bearer';
-        
+
         if ($scope !== null) {
             $n->scope = $scope;
         }

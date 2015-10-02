@@ -30,7 +30,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase {
     public function testConfig() {
 
   //       echo "oooooo";
-        // echo("........==> " . Config::getValue('test.foo.lo')); 
+        // echo("........==> " . Config::getValue('test.foo.lo'));
 
         $this->assertTrue(Config::getValue('test.bar', true) === true, 'Config picking not existing prop should return default');
         $this->assertTrue(Config::getValue('test.foo.lo') === 3, 'Config read test.foo.lo === 3');

@@ -132,7 +132,7 @@ class CLI {
         $tokens = $pool->getAllTokens();
 
         // echo "TOKENS IS \n"; print_r($tokens); exit;
-        // print_r($tokens); 
+        // print_r($tokens);
 
         $c = 0;
         foreach($tokens AS $token) {
@@ -185,7 +185,7 @@ class CLI {
 
         $token = $this->storage->getAccessToken($token);
 
-        // print_r($token); 
+        // print_r($token);
 
         $this->oneEntry($token);
 
@@ -387,17 +387,17 @@ class CLI {
 
         foreach($data AS $k => $v) {
             if (!is_string($v)) {
-                $dv = json_encode($v);    
+                $dv = json_encode($v);
             } else {
                 $dv = $v;
             }
-            
-            echo 
+
+            echo
                 $this->colored(sprintf("%20s", $k), "green")  . " " .
                 sprintf("%s", $dv) . "\n";
         }
 
-    } 
+    }
 
     function info($str = '') {
         echo "  " . $str . "\n";

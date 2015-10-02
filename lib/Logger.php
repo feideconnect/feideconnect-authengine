@@ -1,4 +1,4 @@
-<?php 
+<?php
 
 
 namespace FeideConnect;
@@ -51,10 +51,10 @@ class Logger {
         $str = str_replace(['{', '}'], ['[', ']'], $str);
 
         if (isset($_SERVER['REQUEST_URI'])) {
-            $data['path'] = $_SERVER['REQUEST_URI'];    
+            $data['path'] = $_SERVER['REQUEST_URI'];
         }
         if (isset($_SERVER['REMOTE_ADDR'])) {
-            $data['src_ip'] = $_SERVER['REMOTE_ADDR'];    
+            $data['src_ip'] = $_SERVER['REMOTE_ADDR'];
         }
         $data['request'] = self::requestId();
 
@@ -98,7 +98,7 @@ class Logger {
 
     /**
      * The way to load a global config object.
-     * 
+     *
      * @return [type] [description]
      */
     public static function getInstance() {

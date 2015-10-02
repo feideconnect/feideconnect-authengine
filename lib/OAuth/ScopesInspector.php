@@ -12,7 +12,7 @@ use FeideConnect\Logger;
  * ScopesInspector
  */
 class ScopesInspector {
-    
+
     protected $scopes;
 
     protected $globalScopes;

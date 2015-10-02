@@ -15,7 +15,7 @@ class AuthorizationCode extends \FeideConnect\Data\Model {
     public $code, $clientid, $userid, $scope, $token_type, $redirect_uri, $idtoken, $issued, $validuntil;
 
     protected static $_properties = array(
-        "code", "clientid", "userid", 
+        "code", "clientid", "userid",
         "scope", "token_type", "redirect_uri",
         "idtoken",
         "issued", "validuntil"
@@ -63,7 +63,7 @@ class AuthorizationCode extends \FeideConnect\Data\Model {
         $n = new self();
 
         $n->code = self::genUUID();
-        
+
         $n->clientid = $client->id;
         $n->userid = $user->userid;
 
@@ -77,7 +77,7 @@ class AuthorizationCode extends \FeideConnect\Data\Model {
         }
 
         $n->redirect_uri = $redirect_uri;
-        
+
         if ($scope !== null) {
             $n->scope = $scope;
         }

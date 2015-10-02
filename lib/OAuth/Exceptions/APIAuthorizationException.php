@@ -5,10 +5,10 @@ use FeideConnect\Exceptions;
 use FeideConnect\HTTP\JSONResponse;
 
 /**
-* 
+*
 */
 class APIAuthorizationException extends Exceptions\Exception {
-    
+
 
     protected $type = null;
 
@@ -38,7 +38,7 @@ class APIAuthorizationException extends Exceptions\Exception {
         }
 
         parent::__construct($message, $httpcode, $head);
-        
+
     }
 
     function getData() {
@@ -53,9 +53,9 @@ class APIAuthorizationException extends Exceptions\Exception {
 
         $response = new JSONResponse($this->getData());
         $response->setStatus($this->httpcode);
-        
+
         if ($this->type !== null) {
-            $response->setHeader('WWW-Authenticate', 
+            $response->setHeader('WWW-Authenticate',
                 'Bearer realm="feideconnect", error="' . $this->type . '", error_description="' . urlencode($this->getMessage()) . '"');
         }
         return $response;

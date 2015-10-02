@@ -5,14 +5,14 @@ namespace FeideConnect\OpenIDConnect\Messages;
 use FeideConnect\OAuth\Messages\Message;
 
 /**
-* 
+*
 */
 class AuthorizationRequest extends \FeideConnect\OAuth\Messages\AuthorizationRequest {
-    
+
     function __construct($message) {
-        
+
         parent::__construct($message);
-        
+
         $this->response_mode    = Message::optional($message, 'response_mode');
         $this->nonce            = Message::optional($message, 'nonce');
         $this->display            = Message::optional($message, 'display');
@@ -23,13 +23,13 @@ class AuthorizationRequest extends \FeideConnect\OAuth\Messages\AuthorizationReq
         $this->acr_values        = Message::optional($message, 'acr_values');
 
         // These parameters are inherited from the OAuth request.
-        
-        // $this->response_type    = Message::prequire($message, 'response_type', ['code', 'token'], true);        
+
+        // $this->response_type    = Message::prequire($message, 'response_type', ['code', 'token'], true);
         // $this->client_id         = Message::prequire($message, 'client_id');
         // $this->redirect_uri        = Message::optional($message, 'redirect_uri');
         // $this->scope            = Message::spacelist(Message::optional($message, 'scope'));
         // $this->state            = Message::optional($message, 'state');
-        
+
     }
 
 

@@ -65,7 +65,7 @@ class OAuthClientCredentialsTest extends DBHelper {
         $this->assertEquals($response->getStatus(), 401);
 
     }
-    
+
     function tearDown() {
         parent::tearDown();
         $this->db->removeClient($this->client);

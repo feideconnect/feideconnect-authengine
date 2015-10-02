@@ -3,7 +3,7 @@
 
 /*
  * A cassandra repository implementation
- * Using this cassandra binding library: 
+ * Using this cassandra binding library:
  *     https://github.com/duoshuo/php-cassandra
  */
 
@@ -35,7 +35,7 @@ class Cassandra2 extends \FeideConnect\Data\Repository {
     function __construct() {
 
         $config = \FeideConnect\Config::getValue('storage');
-        
+
         if (empty($config['keyspace'])) throw new FeideConnectException('Required config not set');
         if (empty($config['nodes'])) throw new FeideConnectException('Required config not set');
 
@@ -51,11 +51,11 @@ class Cassandra2 extends \FeideConnect\Data\Repository {
     }
 
     protected function getTTLskew(\FeideConnect\Data\Types\Timestamp $validuntil) {
-        
+
         if ($validuntil->inPast()) {
             throw new StorageException('Invalid timestamp (in the past) for expiration provided');
         }
-        $skew = \FeideConnect\Config::getValue('storage.ttlskew', 60); 
+        $skew = \FeideConnect\Config::getValue('storage.ttlskew', 60);
         // echo "ABOUT TO WIPE IN " . ($validuntil->getInSeconds() + $skew) . "\n\n"; exit;
         return $validuntil->getInSeconds() + $skew;
     }
@@ -75,7 +75,7 @@ class Cassandra2 extends \FeideConnect\Data\Repository {
         if ($ttl !== null && is_int($ttl)) {
             $ttltext = ' USING TTL ' . $ttl;
         }
-        
+
 
 
         $query = 'INSERT INTO "' . $table . '" (' . $keystr . ') VALUES (' . $keyval . ')' . $ttltext . "\n\n";
@@ -86,7 +86,7 @@ class Cassandra2 extends \FeideConnect\Data\Repository {
 
     /**
      * Insert data into cassandra with wrapper
-     * 
+     *
      * @param  [type] $query [description]
      * @param  [type] $data  [description]
      * @param  string $title [description]
@@ -101,7 +101,7 @@ class Cassandra2 extends \FeideConnect\Data\Repository {
         ));
 
 
-            
+
 
         try {
 
@@ -118,14 +118,14 @@ class Cassandra2 extends \FeideConnect\Data\Repository {
         } catch (StorageException $e) {
             // TODO catch only Cassandras own exception type
 
-            
+
             Logger::error('Cassandra execute (' . $title . ') FAILED ' . $e->getMessage(), array(
                 'query' => $query,
                 'params' => $data,
                 // 'message' => $e->getMessage(),
             ));
 
-            // print_r($e); 
+            // print_r($e);
 
             throw new StorageException('Error executing operation on storage: ' . $title);
 
@@ -138,7 +138,7 @@ class Cassandra2 extends \FeideConnect\Data\Repository {
 
     /**
      * Query data from cassandra, within wrapper. This function deals with errors, etc.
-     * 
+     *
      * @param  [type]  $query    [description]
      * @param  [type]  $params   [description]
      * @param  string  $title    [description]
@@ -155,8 +155,8 @@ class Cassandra2 extends \FeideConnect\Data\Repository {
 
         $data = null;
 
-        try {    
-            
+        try {
+
             $response = $this->db->querySync($query, $params,
                 \Cassandra\Request\Request::CONSISTENCY_QUORUM,
                 [
@@ -219,7 +219,7 @@ class Cassandra2 extends \FeideConnect\Data\Repository {
         foreach($data AS $k => $v) {
             $transformed[$k] = $model::fromDB($k, $v);
         }
-        
+
         return new $model($transformed);
     }
 
@@ -228,7 +228,7 @@ class Cassandra2 extends \FeideConnect\Data\Repository {
 
 
 
-    /* 
+    /*
      * --- Database handling of the 'users' and 'userid_sec' column family
      */
     function saveUser(Models\User $user) {
@@ -254,9 +254,9 @@ class Cassandra2 extends \FeideConnect\Data\Repository {
      */
     function updateUserBasics(Models\User $user) {
 
-        $query = 'UPDATE "users" SET updated = :updated, ' . 
-            'aboveagelimit = :aboveagelimit, ' . 
-            'usageterms = :usageterms ' . 
+        $query = 'UPDATE "users" SET updated = :updated, ' .
+            'aboveagelimit = :aboveagelimit, ' .
+            'usageterms = :usageterms ' .
             'WHERE userid = :userid';
         $params = [
             'updated' => (new \FeideConnect\Data\Types\Timestamp())->getCassandraTimestamp(),
@@ -287,13 +287,13 @@ class Cassandra2 extends \FeideConnect\Data\Repository {
         foreach($props AS $key) {
 
             if ($userinfo[$key] !== null) {
-                $assignments[] = $key . '[\'' . $sourceID .'\'] = :' . $key; 
+                $assignments[] = $key . '[\'' . $sourceID .'\'] = :' . $key;
             }
 
         }
 
         $query = 'UPDATE "users" SET ' . join(', ', $assignments) . " WHERE userid = :userid";
-        // echo "QUERY IS " . $query; 
+        // echo "QUERY IS " . $query;
         // print_r($params);
 
         $this->execute($query, $params, __FUNCTION__);
@@ -312,9 +312,9 @@ class Cassandra2 extends \FeideConnect\Data\Repository {
 
 
 
-        $query = 'UPDATE "users" SET updated = :updated, ' . 
-            'profilephoto[\'' . $sourceID  . '\'] = :profilephoto, ' . 
-            'profilephotohash[\'' . $sourceID  . '\'] = :profilephotohash ' . 
+        $query = 'UPDATE "users" SET updated = :updated, ' .
+            'profilephoto[\'' . $sourceID  . '\'] = :profilephoto, ' .
+            'profilephotohash[\'' . $sourceID  . '\'] = :profilephotohash ' .
             'WHERE userid = :userid';
         $params = [
             'updated' => (new \FeideConnect\Data\Types\Timestamp())->getCassandraTimestamp(),
@@ -330,7 +330,7 @@ class Cassandra2 extends \FeideConnect\Data\Repository {
 
     function updateClientLogo(Models\Client $client, $logo) {
 
-        $query = 'UPDATE "clients" SET logo = :logo, updated = :updated ' . 
+        $query = 'UPDATE "clients" SET logo = :logo, updated = :updated ' .
             'WHERE id = :id';
 
         $params = [
@@ -345,8 +345,8 @@ class Cassandra2 extends \FeideConnect\Data\Repository {
 
     function updateClientScopes(Models\Client $client, $scopes_requested, $scopes) {
 
-        $query = 'UPDATE "clients" SET ' . 
-            'scopes = :scopes, scopes_requested = :scopes_requested, updated = :updated ' . 
+        $query = 'UPDATE "clients" SET ' .
+            'scopes = :scopes, scopes_requested = :scopes_requested, updated = :updated ' .
             'WHERE id = :id';
 
         $params = [
@@ -435,7 +435,7 @@ class Cassandra2 extends \FeideConnect\Data\Repository {
      * Zero, one or multiple users.
      * If no users found, returns null.
      * If one or more users, returns an array.
-     * 
+     *
      * @param  [type] $useridsec [description]
      * @return [type]            [description]
      */
@@ -468,7 +468,7 @@ class Cassandra2 extends \FeideConnect\Data\Repository {
         $params2 = ['userids' => new CollectionSet($userids, Base::UUID)];
         // echo var_export($params2, true);
         $res = $this->query($query2, $params2, __FUNCTION__, 'FeideConnect\Data\Models\User', true);
-        
+
         if (empty($res)) return null;
         return $res;
     }
@@ -487,9 +487,9 @@ class Cassandra2 extends \FeideConnect\Data\Repository {
 
 
 
-    /* 
+    /*
      * --- Database handling of the 'apigk' column family
-     * 
+     *
      * TABLE feideconnect.apigk :
      *   id text PRIMARY KEY,
      *   created timestamp,
@@ -532,7 +532,7 @@ class Cassandra2 extends \FeideConnect\Data\Repository {
     }
 
 
-    /* 
+    /*
      * --- Database handling of the 'client' column family
      */
     function getClient( $id) {
@@ -580,7 +580,7 @@ class Cassandra2 extends \FeideConnect\Data\Repository {
 
 
 
-    /* 
+    /*
      * --- Database handling of the 'client' column family
      */
     function getOrgs($count = 500) {
@@ -605,7 +605,7 @@ class Cassandra2 extends \FeideConnect\Data\Repository {
 
     function updateOrgLogo(Models\Organization $org, $logo) {
 
-        $query = 'UPDATE "organizations" SET logo = :logo, logo_updated = :updated ' . 
+        $query = 'UPDATE "organizations" SET logo = :logo, logo_updated = :updated ' .
             'WHERE id = :id';
 
         $params = [
@@ -619,7 +619,7 @@ class Cassandra2 extends \FeideConnect\Data\Repository {
 
     function updateOrgUIinfo(Models\Organization $org, $uiinfo) {
 
-        $query = 'UPDATE "organizations" SET uiinfo = :uiinfo, logo_updated = :updated ' . 
+        $query = 'UPDATE "organizations" SET uiinfo = :uiinfo, logo_updated = :updated ' .
             'WHERE id = :id';
 
         $params = [
@@ -646,7 +646,7 @@ class Cassandra2 extends \FeideConnect\Data\Repository {
     }
 
 
-    /* 
+    /*
      * --- Database handling of the 'accesstoken' column family
      */
     function getAccessToken($accesstoken) {
@@ -674,7 +674,7 @@ class Cassandra2 extends \FeideConnect\Data\Repository {
         $query = self::generateInsert('oauth_tokens', $data, $this->getTTLskew($token->validuntil));
         $this->execute($query, $data, __FUNCTION__);
 
-        
+
 
         $query = 'UPDATE "clients_counters" SET count_tokens = count_tokens + 1 WHERE "id" = :id';
         $params = ['id' => new Uuid($token->clientid)];
@@ -685,10 +685,10 @@ class Cassandra2 extends \FeideConnect\Data\Repository {
         $params = ['access_token' => new Uuid($token->access_token)];
         $this->execute($query, $params, __FUNCTION__);
     }
-    
 
 
-    /* 
+
+    /*
      * --- Database handling of the 'oauth_authorizations' column family
      */
     function getAuthorization($userid, $clientid) {
@@ -727,9 +727,9 @@ class Cassandra2 extends \FeideConnect\Data\Repository {
 
     }
 
-    
 
-    /* 
+
+    /*
      * --- Database handling of the 'oauth_codes' column family
      */
     function getAuthorizationCode($code) {

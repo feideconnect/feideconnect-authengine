@@ -24,7 +24,7 @@ class URL {
         $length = strcspn($url,'/:',$start);
         return substr($url, $start, $length);
     }
-    
+
     /**
      * Retrieve Host value from $_SERVER environment variables
      */
@@ -56,7 +56,7 @@ class URL {
         $length = strcspn($url,'/',$start) + $start;
         return substr($url, 0, $length);
     }
-    
+
     /**
      * This function checks if we should set a secure cookie.
      *
@@ -110,14 +110,14 @@ class URL {
      * Will return https://sp.example.org/universities/ruc/baz/simplesaml/saml2/SSOService.php
      */
     public static function selfURLNoQuery() {
-    
+
         $selfURLhost = self::selfURLhost();
         $selfURLhost .= $_SERVER['SCRIPT_NAME'];
         if (isset($_SERVER['PATH_INFO'])) {
             $selfURLhost .= $_SERVER['PATH_INFO'];
         }
         return $selfURLhost;
-    
+
     }
     /**
      * Will return sp.example.org/ssp/sp1
@@ -126,25 +126,25 @@ class URL {
      * SP, as defined in the global configuration.
      */
     public static function getSelfHostWithPath() {
-    
+
         $baseurl = explode("/", self::getBaseURL());
         $elements = array_slice($baseurl, 3 - count($baseurl), count($baseurl) - 4);
         $path = implode("/", $elements);
         $selfhostwithpath = self::getSelfHost();
         return $selfhostwithpath . "/" . $path;
     }
-    
+
     /**
      * Will return foo
      */
     public static function getFirstPathElement($trailingslash = true) {
-    
+
         if (preg_match('|^/(.*?)/|', $_SERVER['SCRIPT_NAME'], $matches)) {
             return ($trailingslash ? '/' : '') . $matches[1];
         }
         return '';
     }
-    
+
     public static function selfURL() {
         $selfURLhost = self::selfURLhost();
         $requestURI = $_SERVER['REQUEST_URI'];
@@ -175,7 +175,7 @@ class URL {
         if (empty($info2)) {
             return false;
         }
-        
+
         if ($info1["scheme"] !== $info2["scheme"]) {return false;}
         if ($info1["host"] !== $info2["host"]) {return false;}
 
@@ -194,7 +194,7 @@ class URL {
     public static function getBaseURL() {
         // $globalConfig = SimpleSAML_Configuration::getInstance();
         $baseURL = '/';
-        
+
         if (preg_match('#^https?://.*/$#D', $baseURL, $matches)) {
             /* full URL in baseurlpath, override local server values */
             return $baseURL;

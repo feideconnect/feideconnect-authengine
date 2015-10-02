@@ -4,7 +4,7 @@
  *
  * Remember to remove the IdPs you don't use from this file.
  *
- * See: https://simplesamlphp.org/docs/stable/simplesamlphp-reference-idp-remote 
+ * See: https://simplesamlphp.org/docs/stable/simplesamlphp-reference-idp-remote
  */
 
 /*
@@ -25,17 +25,17 @@ $metadata['https://openidp.feide.no'] = array(
 $metadata['https://idp-test.feide.no'] = array (
   'metadata-set' => 'saml20-idp-remote',
   'entityid' => 'https://idp-test.feide.no',
-  'SingleSignOnService' => 
+  'SingleSignOnService' =>
   array (
-    0 => 
+    0 =>
     array (
       'Binding' => 'urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Redirect',
       'Location' => 'https://idp-test.feide.no/simplesaml/saml2/idp/SSOService.php',
     ),
   ),
-  'SingleLogoutService' => 
+  'SingleLogoutService' =>
   array (
-    0 => 
+    0 =>
     array (
       'Binding' => 'urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Redirect',
       'Location' => 'https://idp-test.feide.no/simplesaml/saml2/idp/SingleLogoutService.php',
@@ -43,17 +43,17 @@ $metadata['https://idp-test.feide.no'] = array (
   ),
   'certData' => 'MIIDkDCCAngCCQCLL8NWusxhbzANBgkqhkiG9w0BAQUFADCBiTELMAkGA1UEBhMCTk8xEjAQBgNVBAcTCVRyb25kaGVpbTETMBEGA1UEChMKVW5pbmV0dCBBUzEOMAwGA1UECxMFRkVJREUxGjAYBgNVBAMTEWlkcC10ZXN0LmZlaWRlLm5vMSUwIwYJKoZIhvcNAQkBFhZtb3JpYS1kcmlmdEB1bmluZXR0Lm5vMB4XDTE0MDQxMTEwMjkxMloXDTM0MDQxMTEwMjkxMlowgYkxCzAJBgNVBAYTAk5PMRIwEAYDVQQHEwlUcm9uZGhlaW0xEzARBgNVBAoTClVuaW5ldHQgQVMxDjAMBgNVBAsTBUZFSURFMRowGAYDVQQDExFpZHAtdGVzdC5mZWlkZS5ubzElMCMGCSqGSIb3DQEJARYWbW9yaWEtZHJpZnRAdW5pbmV0dC5ubzCCASIwDQYJKoZIhvcNAQEBBQADggEPADCCAQoCggEBAMFL8ZFo/E42mPw4r27+HVn54E0ltmb88q1MsfGyiRlaEvVdnIo81tTUonjG4EP58wz/bQ49dSPOOoNVZ4NkhU2G4x81XErqEGFw31NBQerXp0Gcs8A93aIVGluKfCW5kDZtV+WnE0P2trwyPS5vKTVvs4MvIoDrGoWRT0y2ok9xzv5nxbICrSzsnBTC5rMrKFgKeaoappnZHt3isttfVZSP3aidmHEbl2Hw7xci554woRjx7n2kOxgOUa8A49HqV7Sr9lZDyffusOZ8QRBjongfBOgNGcrkyxXjI9xs1dD9ZKrwlORNx54kP9/rpHe+drXCV9QvR6zNrxHnxbEuWiUCAwEAATANBgkqhkiG9w0BAQUFAAOCAQEAFOsehLFueCFZqVOua+Uc81amKA+ZWHkvZWOavCsfzozZSLH4gGtwzMA1/6bh+FhURB+QdIiglH9EUDWWItaC8SCvhDo87v3bzg+LT8AE9go8mI15AraZAF6XwJC6r23UOsHcn68GLuDF+om8slizTTec6aQtA9qkhMLSwMarvk1S3m8KZEVOcghB9cpgyt3otz0JbiOmfIDoetbNeEa/x6sLXi9il/H5mtEmJUhdB6YjKaIPtMiILr1ow7DaHmJGgt+qyr09rZXOCz3okDko6WRCGCw5EdgDuYwiHz4xtixLhBvY5TKqIwgKAhNYKRxO6C4ugrS/ToCgC0j1epeK6A==',
   'NameIDFormat' => 'urn:oasis:names:tc:SAML:2.0:nameid-format:transient',
-  'OrganizationName' => 
+  'OrganizationName' =>
   array (
     'en' => 'Feide',
     'no' => 'Feide',
   ),
-  'OrganizationDisplayName' => 
+  'OrganizationDisplayName' =>
   array (
     'en' => 'Feide - Norwegian educational institutions (test-IdP)',
     'no' => 'Feide - Norske utdanningsinstitusjoner (test-IdP)',
   ),
-  'OrganizationURL' => 
+  'OrganizationURL' =>
   array (
     'en' => 'http://www.feide.no/introducing-feide',
     'no' => 'http://www.feide.no/',

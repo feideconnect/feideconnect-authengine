@@ -8,10 +8,10 @@ use FeideConnect\Config;
 
 
 /**
-* 
+*
 */
 class OpenIDConnect {
-    
+
     protected $trustStore;
     protected $issuer;
 
@@ -54,7 +54,7 @@ class OpenIDConnect {
             'ui_locales_supported' => ["en", "no", "nb", "nn"],
             'service_documentation' => 'http://feideconnect.no/docs/gettingstarted/',
             'jwks_uri' => $base2 . 'jwks'
-        ];        
+        ];
         return $config;
 
     }

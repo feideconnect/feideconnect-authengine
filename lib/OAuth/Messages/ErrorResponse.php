@@ -7,9 +7,9 @@ use FeideConnect\HTTP\JSONResponse;
 
 
 class ErrorResponse extends Message {
-    
+
     function __construct($message) {
-        
+
         parent::__construct($message);
 
         $this->error                 = Message::prequire($message, 'error', array(
@@ -38,7 +38,7 @@ class ErrorResponse extends Message {
         // } else {
         //     $response->setStatus(400);
         // }
-        
+
         return $response;
 
     }

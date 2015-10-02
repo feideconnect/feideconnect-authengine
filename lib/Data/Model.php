@@ -44,7 +44,7 @@ abstract class Model implements Utils\Loggable {
 
         if (isset(static::$_types[$key])) {
             if (static::$_types[$key] === 'timestamp') {
-                return Timestamp::fromCassandraTimestamp($value); 
+                return Timestamp::fromCassandraTimestamp($value);
             } else if (static::$_types[$key] === 'blob') {
                 return substr($value, 4);
             }
@@ -90,7 +90,7 @@ abstract class Model implements Utils\Loggable {
                 if (isset(static::$_types[$k])) {
                     $a[$k] = $this->{$k}->getDBobject();
                 } else {
-                    $a[$k] = $this->{$k};    
+                    $a[$k] = $this->{$k};
                 }
             }
         }

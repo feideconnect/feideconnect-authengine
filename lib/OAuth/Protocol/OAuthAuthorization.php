@@ -49,11 +49,11 @@ class OAuthAuthorization {
         $this->auth = new Authenticator();
 
         // echo 'About to require authentication'; var_dump($this->request); Exit;
-        
+
         if ($this->request->client_id) {
-            $this->auth->setClientID($request->client_id);    
+            $this->auth->setClientID($request->client_id);
         }
-        
+
         $this->isPassive = false;
 
         if (!($this->request instanceof Messages\AuthorizationRequest)) {
@@ -74,7 +74,7 @@ class OAuthAuthorization {
                 'request' => $request->asArray()
             ));
             $pAuthorization = new \FeideConnect\OpenIDConnect\Protocol\OICAuthorization($request);
-            
+
             return $pAuthorization->process();
 
         }
@@ -110,7 +110,7 @@ class OAuthAuthorization {
         $this->account = $this->auth->getAccount();
 
         $this->organization = $this->account->getOrg();
-        
+
         $usermapper = new UserMapper($this->storage);
         $this->user = $usermapper->getUser($this->account, true, true, false);
 
@@ -163,7 +163,7 @@ class OAuthAuthorization {
                 throw new \Exception('Bruksvilkår not accepted.');
             }
             if ($_REQUEST['bruksvilkar'] !== 'yes') {
-                throw new \Exception('Bruksvilkår not accepted.');    
+                throw new \Exception('Bruksvilkår not accepted.');
             }
 
             $authorization = $this->aevaluator->getUpdatedAuthorization();
@@ -205,18 +205,18 @@ class OAuthAuthorization {
 
         $this->checkClient();
 
-        if ($this->aevaluator === null) { 
+        if ($this->aevaluator === null) {
             $this->aevaluator = new AuthorizationEvaluator($this->storage, $this->client, $this->request, $this->user);
         }
-        
+
 
 
         $redirect_uri = $this->aevaluator->getValidatedRedirectURI();
         $state = $this->request->getState();
 
 
-        
-        // If SimpleSAML_Auth_State_exceptionId query parameter is set, then something failed 
+
+        // If SimpleSAML_Auth_State_exceptionId query parameter is set, then something failed
         // while performing authentication.
         if (!empty($_REQUEST['SimpleSAML_Auth_State_exceptionId'])) {
 
@@ -244,13 +244,13 @@ class OAuthAuthorization {
 
         try {
 
-            $this->validateAuthProvider();    
+            $this->validateAuthProvider();
 
         } catch(AuthProviderNotAccepted $a) {
 
             return (new LocalizedTemplatedHTMLResponse('authprovidernotaccepted'))->setData([]);
         }
-        
+
 
         $res = $this->obtainAuthorization();
         if ($res !== null) { return $res; }
@@ -291,7 +291,7 @@ class OAuthAuthorization {
 
     }
 
-    
+
 
     protected function processCode() {
 

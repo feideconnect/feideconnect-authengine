@@ -50,7 +50,7 @@ class Auth {
         // $authconfig = $accountchooser->getAuthConfig();
         $authconfig = [];
         // echo '<pre>Auth config is '; print_r($authconfig); exit;
-// 
+//
         $auth = new Authentication\Authenticator($authconfig);
 
         if (isset($_REQUEST['logout']) && $_REQUEST['logout'] === '1') {
@@ -68,7 +68,7 @@ class Auth {
         $account = $auth->getAccount();
 
         // $res = $auth->storeUser();
-        // 
+        //
         // $response = array('account' => $account->getAccountID());
         $response = [
             "account" => [
@@ -81,7 +81,7 @@ class Auth {
         // echo '<pre>';
         // print_r($response); exit;
 
-        
+
         $usermapper = new Authentication\UserMapper($storage);
 
 
@@ -91,7 +91,7 @@ class Auth {
         // header('Content-type: text/plain');
         // print_r($user); exit;
         if (isset($user)) {
-            $response['user'] = $user->getAsArray();    
+            $response['user'] = $user->getAsArray();
             $response['userinfo'] = $user->getUserInfo();
         }
 

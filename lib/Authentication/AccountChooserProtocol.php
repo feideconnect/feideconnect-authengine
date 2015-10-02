@@ -14,7 +14,7 @@ class AccountChooserProtocol {
     protected $baseURL;
     protected $response = null;
 
-    function __construct() { 
+    function __construct() {
 
         $this->selfURL = URL::selfURL();
         $this->baseURL = URL::getBaseURL() . 'accountchooser';

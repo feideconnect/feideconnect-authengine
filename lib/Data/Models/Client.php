@@ -13,7 +13,7 @@ use Cassandra\Type\Blob;
 class Client extends \FeideConnect\Data\Model {
 
     public $id, $client_secret, $created, $descr, $name, $owner, $organization, $logo, $redirect_uri, $scopes, $scopes_requested, $status, $type, $updated, $authproviders, $orgauthorization;
-    
+
 
     protected static $_properties = array(
         "id", "client_secret", "created", "descr", "name", "owner", "organization",
@@ -101,7 +101,7 @@ class Client extends \FeideConnect\Data\Model {
         if (isset($this->status)) {
             $prepared["status"] =  new CollectionSet($this->status, Base::ASCII);
         }
-        
+
         if (isset($this->owner)) {
             $prepared["owner"] =  new Uuid($this->owner);
         }
@@ -115,7 +115,7 @@ class Client extends \FeideConnect\Data\Model {
         }
 
 
-        // echo var_export($prepared, true); 
+        // echo var_export($prepared, true);
 
         return $prepared;
     }

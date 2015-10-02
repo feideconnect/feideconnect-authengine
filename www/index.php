@@ -25,7 +25,7 @@ try {
 
 
     /*
-     * Phroute does not support dealing with OPTIONS and CORS in an elegant way, 
+     * Phroute does not support dealing with OPTIONS and CORS in an elegant way,
      * so here we handle this separately.
      */
 
@@ -33,7 +33,7 @@ try {
 
         $response = new EmptyResponse();
         $response->setCORS(true)->setCachable(true);
-        
+
     } else {
 
         $router = new Router();

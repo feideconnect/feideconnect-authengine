@@ -57,7 +57,7 @@ class Localization {
         }
 
         return $entry;
-    } 
+    }
 
     static function localizeList($list, $attrs) {
 

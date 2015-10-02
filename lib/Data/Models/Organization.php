@@ -96,7 +96,7 @@ class Organization extends \FeideConnect\Data\Model {
 
         $lang = Misc::getBrowserLanguage(array_keys($prepared["name"]));
         $res["title"] = $prepared["name"][$lang];
-        if (isset($prepared["uiinfo"])) { 
+        if (isset($prepared["uiinfo"])) {
             $res["uiinfo"] = $prepared["uiinfo"];
         }
         $res["services"] = $prepared["services"];
@@ -106,7 +106,7 @@ class Organization extends \FeideConnect\Data\Model {
         } else {
             $res["distance"] = null;
         }
-        
+
         return $res;
     }
 

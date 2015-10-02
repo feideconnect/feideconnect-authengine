@@ -30,7 +30,7 @@ class Account {
         }
 
 
-        
+
 
         $this->userids = $this->obtainUserIDs();
 
@@ -46,11 +46,11 @@ class Account {
 
         $this->photo  = $this->obtainPhoto();
 
-        
+
 
 
         // echo '<pre>We got this account map rules: ' . "\n";
-        // // print_r($accountMapRules); 
+        // // print_r($accountMapRules);
         // // print_r($this->attributes);
         // echo var_dump($this);
         // echo "Age: " . $this->aboveAgeLimit(35) . ".";
@@ -64,7 +64,7 @@ class Account {
         $res = [];
         foreach($this->userids AS $uid) {
             if(strpos($uid, 'nin:') === 0){
-                
+
                 if (preg_match('/^nin:(\d{4})\d{7}/', $uid, $matches)) {
                     $res[] = 'nin:' . $matches[1] . '.......';
                 } else {
@@ -118,15 +118,15 @@ class Account {
         // if (!empty($tag["def"])) {
         //     foreach($tag["def"] AS $d) {
         //         // var_dump("TAG"); var_dump($d);
-        //         // $s = 
-        //         // $def[] = explode(':', $d);    
+        //         // $s =
+        //         // $def[] = explode(':', $d);
         //         echo 'fooo'; var_dump($d);
         //         array_push($def, explode(':', $d));
         //         $def[] = explode(':', $d);
         //         var_dump(explode(':', $d));
         //     }
-            
-            
+
+
         // }
         // var_dump($def);
         // return $def;
@@ -139,13 +139,13 @@ class Account {
 
         // echo '<h1>validateAuthProvider()</h1>';
         // var_dump($authproviders);
-        
+
         $def = $this->getDef();
 
         if (empty($authproviders)) {
             return true;
         }
-        
+
         if ($this->allowAll($authproviders)) {
             return true;
         }
@@ -159,9 +159,9 @@ class Account {
                 if ($this->compareType($d, $ap)) {
                     // echo "<h2>Did match</h2>"; var_dump($d); var_dump($ap);
                     return true;
-                }    
+                }
             }
-            
+
         }
 
         throw new AuthProviderNotAccepted('Authentication provider is not accepted by requesting client. Return to application and try to login again selecting another provider.');
@@ -412,7 +412,7 @@ class Account {
         } else if(is_array($this->accountMapRules[$property])) {
             return $this->getComplex($this->accountMapRules[$property], $default, $required);
         }
-        
+
         if ($required) {
             throw new Exception("Missing required attribute [" . $property . "]");
         }
@@ -483,9 +483,9 @@ class Account {
         if ($dayofyear < 175) {
             $requiredAge = $ageLimit + 1;
         }
-        
+
         $age = $thisyear - $year;
-        
+
         // echo "Reqired age is  " . $requiredAge . " ";
         // echo "Age is " . $age;
         if ($age >= $requiredAge) {

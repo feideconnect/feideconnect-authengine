@@ -15,8 +15,8 @@ use FeideConnect\Data\Model;
  *    * Update user objects
  *    * Create user objects
  *
- * Activity is initiated by user authentication of one account.    
- * 
+ * Activity is initiated by user authentication of one account.
+ *
  */
 
 
@@ -96,14 +96,14 @@ class UserMapper {
 
         // header('Content-Type: text/plain; charset=utf-8');
         // echo "ABOUT TO UPDATE\n\n";
-        // $user->debug(); 
+        // $user->debug();
         // print_r($account->attributes);
         // exit;
 
 
 
         $user->ensureProfileAccess(true);
-        
+
         // echo "Newq account info";
         // print_r($account);
 
@@ -136,7 +136,7 @@ class UserMapper {
 
 
 
-        
+
         // if ($update) {echo "UPDATE "; } else { echo "update "; }
         // if ($create) {echo "CREATE "; } else { echo "create "; }
         // if ($merge) {echo "MERGE "; } else { echo "merge "; }
@@ -169,7 +169,7 @@ class UserMapper {
 
 
         if (count($existingUser) === 1) {
-            
+
 
 
 

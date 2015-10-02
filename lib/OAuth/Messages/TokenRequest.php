@@ -4,12 +4,12 @@ namespace FeideConnect\OAuth\Messages;
 
 
 /**
-* 
+*
 */
 class TokenRequest extends Message {
-    
+
     function __construct($message) {
-        
+
         parent::__construct($message);
 
         $this->grant_type        = Message::prequire($message, 'grant_type', array('authorization_code', 'refresh_token', 'client_credentials', 'password'));

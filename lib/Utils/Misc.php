@@ -11,7 +11,7 @@ class Misc {
      * http://codereview.stackexchange.com/questions/9141/language-detection-php-script
      */
     static function getBrowserLanguage($available_languages, $http_accept_language = 'auto') {
-        
+
 
 
 
@@ -21,7 +21,7 @@ class Misc {
             return self::$langCache[$cachestr];
         }
 
-        // TODO : an accept header of 'no' should aid in preferring 'nb'. 
+        // TODO : an accept header of 'no' should aid in preferring 'nb'.
         // Need to support some kind of alias for this
 
         if ($http_accept_language == 'auto') {
@@ -62,9 +62,9 @@ class Misc {
             $bestlang = $_COOKIE["lang"];
         }
 
-        
-        // var_dump($_COOKIE["lang"]); 
-        // var_dump($available_languages); 
+
+        // var_dump($_COOKIE["lang"]);
+        // var_dump($available_languages);
         // var_dump($hits);
         // var_dump($bestlang);
         // exit;

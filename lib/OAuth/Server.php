@@ -51,11 +51,11 @@ class Server {
      * issue access token and send response.
      *
      * Handle different OAuth flows
-     * 
+     *
      * Perform authorization (authentication and check authorization)
      * In contrast to So_Server, this implementation of the authorization endpoint also
      * handles authentication, which is not implemented in the gneric So_Server.
-     * 
+     *
      * @return [type] [description]
      */
     public function authorizationEndpoint() {
@@ -69,7 +69,7 @@ class Server {
             /**
              * --- We've now dealted with all error responses that is returned from other systems..
              * Lets move on to processing the OAuth authorization request.
-             * 
+             *
              */
 
             // Decide whether to run in passive mode. In passive mode no UI is displayed to the enduser.
@@ -115,9 +115,9 @@ class Server {
             if ($e->redirectURI !== null) {
                 return $response->sendRedirect($e->redirectURI, $e->useHashFragment);
             }
-            
+
             return $response->sendBodyJSON($e->httpcode);
-            
+
         }
 
 
@@ -283,7 +283,7 @@ class Server {
             } else {
                 throw new OAuthException('unsupported_grant_type', 'Invalid [grant_type] provided to token endpoint.');
             }
-            
+
             $requestedScopes = OAuthUtils::evaluateScopes($client, $user, $tokenrequest->scope);
             $tokenresponse = OAuthUtils::generateTokenResponse($client, $user, $requestedScopes, $tokenrequest->grant_type);
             return $tokenresponse->sendBodyJSON();
@@ -300,7 +300,7 @@ class Server {
             $response = new Messages\ErrorResponse($msg);
             return $response->sendBodyJSON($e->httpcode);
 
-            
+
         }
 
 
@@ -308,7 +308,7 @@ class Server {
     }
 
 
-    
+
 }
 
 

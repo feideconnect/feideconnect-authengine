@@ -37,7 +37,7 @@ class DBTest extends \PHPUnit_Framework_TestCase {
 
         $authorization = new Models\Authorization();
         $authorization->issued = new \FeideConnect\Data\Types\Timestamp();
-        
+
         $authorization->clientid = $clientid;
         $authorization->userid = $userid;
         $authorization->scopes = ['userinfo', 'groups'];
@@ -50,7 +50,7 @@ class DBTest extends \PHPUnit_Framework_TestCase {
         $this->assertTrue($authorization2->includeScopes(['userinfo', 'groups']), 'Retrieved stored item, check scopes');
         $this->assertFalse($authorization2->includeScopes(['xxxxx']), 'Retrieved stored item, check scopes');
 
-        
+
 
         $authorization4 = $this->db->getAuthorizationsByUser($user);
         $this->assertTrue(count($authorization4) === 1, 'Should find authorizations for this user');
@@ -69,7 +69,7 @@ class DBTest extends \PHPUnit_Framework_TestCase {
 
 
     /*
-    
+
     function getAccessToken($accesstoken) {
     function getAccessTokens($userid, $clientid) {
     function saveToken(Models\AccessToken $token) {
@@ -220,7 +220,7 @@ class DBTest extends \PHPUnit_Framework_TestCase {
         $this->assertTrue(count($list3) === 0, 'Should return empty list of clients');
 
 
-        
+
     }
 
 
@@ -247,7 +247,7 @@ class DBTest extends \PHPUnit_Framework_TestCase {
         $user->userid = $uuid;
         $user->setUserInfo('test:test', 'Tester Test', $mail, $photo, $photohash);
         $user->selectedsource = 'test:test';
-        
+
 
 
         $userinfo = $user->getBasicUserInfo(true);
@@ -289,7 +289,7 @@ class DBTest extends \PHPUnit_Framework_TestCase {
         $user->selectedsource = 'feide:uninett.no';
 
         $user->userid_sec = [$feideid, $mail];
-        
+
         $this->assertTrue($user->userid === $uuid, 'UUID is set and kept');
 
         $this->db->saveUser($user);

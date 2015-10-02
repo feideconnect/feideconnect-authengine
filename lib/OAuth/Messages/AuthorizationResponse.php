@@ -4,16 +4,16 @@ namespace FeideConnect\OAuth\Messages;
 
 use FeideConnect\Data\Models;
 /**
-* 
+*
 */
 class AuthorizationResponse extends Message {
-    
+
     function __construct($message) {
-        
+
         parent::__construct($message);
-        $this->code        = Message::prequire($message, 'code');        
+        $this->code        = Message::prequire($message, 'code');
         $this->state     = Message::optional($message, 'state');
-        
+
     }
 
 

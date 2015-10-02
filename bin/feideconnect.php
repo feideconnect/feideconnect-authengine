@@ -25,10 +25,10 @@ if ($command[0] === 'user') {
 
 
         if ($user === null) {
-            $cli->info("Cannot delete a user that we cannot find ");            
+            $cli->info("Cannot delete a user that we cannot find ");
         } else {
             $cli->info("Deleting user " . $user->userid);
-            $cli->deleteUser($user);            
+            $cli->deleteUser($user);
         }
 
     } else if (isset($command[2]) && $command[2] === "addsec") {
@@ -74,15 +74,15 @@ if ($command[0] === 'user') {
 
 
         if ($apigk === null) {
-            $cli->info("Cannot delete a apigk that we cannot find ");            
+            $cli->info("Cannot delete a apigk that we cannot find ");
         } else {
             $cli->info("Deleting apigk " . $apigk->id);
-            $cli->deleteAPIGK($apigk);            
+            $cli->deleteAPIGK($apigk);
         }
 
     }
 
-    
+
 
 } else if ($command[0] === 'apigks') {
 
@@ -152,8 +152,8 @@ if ($command[0] === 'user') {
 
     // echo "\nListing clients\n";
     // foreach($clientlist AS $client) {
-    //     echo " " 
-    //         . sprintf("%30s", $client->name) . "  " 
+    //     echo " "
+    //         . sprintf("%30s", $client->name) . "  "
     //         . sprintf("%30s", $client->id)
     //         . " \n";
     // }
@@ -225,7 +225,7 @@ if ($command[0] === 'user') {
         $cli->updateOrgLogo($org, $logo);
 
 
-    } 
+    }
 
 
 
@@ -261,7 +261,7 @@ if ($command[0] === 'user') {
 
 
      $users = $cli->getUsers(10000);
-     
+
     $cql = '';
 
     foreach($users AS $u) {
@@ -351,5 +351,5 @@ if ($command[0] === 'user') {
 
 
 
-} 
+}
 

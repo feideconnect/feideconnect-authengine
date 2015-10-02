@@ -12,7 +12,7 @@ use FeideConnect\Exceptions\RedirectException;
 /**
  * This class handles all authentication, and uses SimpleSAMLphp for that task.
  * It will also handle all local user creation. All new users will be stored in the user repository.
- * 
+ *
  */
 class Authenticator {
 
@@ -94,7 +94,7 @@ class Authenticator {
 
     /**
      * Require authentication of the user. This is meant to be used with user frontend access.
-     * 
+     *
      * @param  boolean $isPassive     [description]
      * @param  boolean $allowRedirect Set to false if using on an API where user cannot be redirected.
      * @param  [type]  $return        URL to return to after login.
@@ -171,7 +171,7 @@ class Authenticator {
         if ($return === null) $return = \SimpleSAML_Utilities::selfURL();
 
         $options = array();
-            
+
 
         if (isset($authconfig["idp"])) {
             $options["saml:idp"] = $authconfig["idp"];
@@ -234,7 +234,7 @@ class Authenticator {
 
 
 
-        // print_r($as); exit; 
+        // print_r($as); exit;
         $account = $attributeMapper->getAccount($attributes);
 
 

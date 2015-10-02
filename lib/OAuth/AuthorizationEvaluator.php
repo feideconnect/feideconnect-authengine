@@ -8,10 +8,10 @@ use FeideConnect\OAuth\Exceptions;
 use FeideConnect\Data\Models\Authorization;
 
 /**
-* 
+*
 */
 class AuthorizationEvaluator {
-    
+
     protected $storage, $client, $request, $user;
 
     protected $authorization = null;
@@ -28,7 +28,7 @@ class AuthorizationEvaluator {
         $this->authorization = null;
 
         if ($user !== null) {
-            $this->authorization = $this->storage->getAuthorization($this->user->userid, $this->client->id);    
+            $this->authorization = $this->storage->getAuthorization($this->user->userid, $this->client->id);
         }
 
         $this->evaluateScopes();
@@ -36,14 +36,14 @@ class AuthorizationEvaluator {
 
     /**
      * Setting the user at initialization or later is required in order to get information about scopes that is authorized.
-     * 
+     *
      * @param [type] $user [description]
      */
     public function setUser($user) {
         $this->user = $user;
         $this->authorization = null;
         if ($user !== null) {
-            $this->authorization = $this->storage->getAuthorization($this->user->userid, $this->client->id);    
+            $this->authorization = $this->storage->getAuthorization($this->user->userid, $this->client->id);
         }
         $this->evaluateScopes();
     }

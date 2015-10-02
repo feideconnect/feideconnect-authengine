@@ -1,4 +1,4 @@
-<?php 
+<?php
 
 namespace FeideConnect\OAuth;
 
@@ -60,7 +60,7 @@ class AuthorizationUI {
 
         $isMandatory = MandatoryClientInspector::isClientMandatory($this->account, $this->client);
         $needs = $this->ae->needsAuthorization();
-        
+
         if (!$isMandatory && $this->user->isBelowAgeLimit()) {
             throw new UserCannotAuthorizeException();
         }
@@ -134,7 +134,7 @@ class AuthorizationUI {
 
 
         // var_dump($visualTag); exit;
-        
+
         $data['needsAuthorization'] = $needs;
 
 
@@ -156,7 +156,7 @@ class AuthorizationUI {
         $data["apibase"] = Config::getValue("endpoints.core");
 
 
-        // echo '<pre>'; 
+        // echo '<pre>';
         // var_dump($this->account);
         // var_dump($visualTag);
         // exit;
@@ -180,7 +180,7 @@ class AuthorizationUI {
                 $oinfo['p'] = $owner->getProfileAccess();
                 $data['owner'] = $oinfo;
             }
-            
+
         }
 
 
@@ -195,7 +195,7 @@ class AuthorizationUI {
         if (isset($_REQUEST['debug'])) {
             return (new JSONResponse($data))->setCORS(false);
         }
-        
+
         $response = new LocalizedTemplatedHTMLResponse('oauthgrant');
         $response->setData($data);
         return $response;

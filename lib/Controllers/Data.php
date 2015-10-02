@@ -41,7 +41,7 @@ class Data {
 
 
         return $response;
-    } 
+    }
 
     static function getClientLogo($clientid) {
 
@@ -92,7 +92,7 @@ class Data {
         usort($data, ["\FeideConnect\Controllers\Data", "scmp"]);
 
 
-        
+
 
 
 

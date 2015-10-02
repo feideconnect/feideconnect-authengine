@@ -13,15 +13,15 @@ use Cassandra\Type\Timestamp;
 
 
 /**
- * User 
+ * User
  */
 class User extends \FeideConnect\Data\Model {
 
     public $userid, $email, $name, $profilephoto, $profilephotohash, $userid_sec, $userid_sec_seen, $selectedsource, $aboveagelimit, $usageterms, $created, $updated;
 
     protected static $_properties = array(
-        "userid", "email", "name", 
-        "profilephoto", "profilephotohash", 
+        "userid", "email", "name",
+        "profilephoto", "profilephotohash",
         "userid_sec", "userid_sec_seen", "selectedsource",
         "aboveagelimit", "usageterms",
         "created", "updated"
@@ -40,7 +40,7 @@ class User extends \FeideConnect\Data\Model {
         $prepared = parent::getStorableArray();
 
         if (isset($this->name)) {
-            $prepared["name"] =  new CollectionMap($this->name, Base::ASCII, Base::ASCII);    
+            $prepared["name"] =  new CollectionMap($this->name, Base::ASCII, Base::ASCII);
         }
         if (isset($this->email)) {
             $prepared["email"] =  new CollectionMap($this->email, Base::ASCII, Base::ASCII);
@@ -165,7 +165,7 @@ class User extends \FeideConnect\Data\Model {
     }
 
     public function getVerifier() {
-        
+
         $salt = Config::getValue('salt', null, true);
         $rawstr = 'consent' . '|' . $salt . '|' . $this->userid;
 
@@ -192,7 +192,7 @@ class User extends \FeideConnect\Data\Model {
             }
         }
 
-        
+
         echo json_encode($a, JSON_PRETTY_PRINT) . "\n";
 
     }
@@ -297,7 +297,7 @@ class User extends \FeideConnect\Data\Model {
 
         /*
          * ----- SECTION Check if userinfo name and email needs to be updated
-         * 
+         *
          */
 
         $modified = false;
@@ -338,7 +338,7 @@ class User extends \FeideConnect\Data\Model {
 
         /*
          * ----- SECTION Check if profile photo needs to be updated
-         * 
+         *
          */
 
         $modified = false;
@@ -351,7 +351,7 @@ class User extends \FeideConnect\Data\Model {
                     $modified = true;
                 }
             }
-        }    
+        }
 
 
         if ($modified) {

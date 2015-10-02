@@ -1,4 +1,4 @@
-<?php 
+<?php
 
 namespace FeideConnect;
 
@@ -69,7 +69,7 @@ class Config {
 
     /**
      * The way to load a global config object.
-     * 
+     *
      * @return [type] [description]
      */
     public static function getInstance() {
@@ -80,16 +80,16 @@ class Config {
 
 
         $file = 'config.json';
-        if (getenv('CI') || 
+        if (getenv('CI') ||
                 (isset($_SERVER['user']) && $_SERVER['user'] === 'travis')
             ) {
             // echo "RUNNING CI "; exit;
             $file = 'ci/config.json';
         }
         if (getenv('AEENV') === 'test') {
-            $file = 'test/config.json';    
+            $file = 'test/config.json';
         } else if (getenv('AEENV') === 'CI') {
-            $file = 'ci/config.json';    
+            $file = 'ci/config.json';
         }
 
 
@@ -121,7 +121,7 @@ class Config {
 
 
     /**
-     * Will return the base directory for the installation, such as 
+     * Will return the base directory for the installation, such as
      * in example /var/www/feideconnect
      * @return [type] [description]
      */
@@ -131,17 +131,17 @@ class Config {
 
     /**
      * Returns a subfolder, relative to the base directory:
-     * In example dir('templates/') may return 
+     * In example dir('templates/') may return
      * /var/www/feideconnect/templates/
      *
      * Filename, if present, is added to the end.
-     * 
+     *
      * @param  string $path [description]
      * @return [type]       [description]
      */
     public static function dir($path = '', $file = '', $component = null) {
         if ($component === null) {
-            return self::baseDir() . $path . $file;    
+            return self::baseDir() . $path . $file;
         }
 
         $endpoints = self::getValue("endpoints", []);
@@ -194,5 +194,5 @@ class Config {
     }
 
 
-    
+
 }

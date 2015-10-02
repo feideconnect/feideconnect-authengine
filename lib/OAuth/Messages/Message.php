@@ -8,13 +8,13 @@ use FeideConnect\HTTP\JSONResponse;
 use FeideConnect\Utils;
 
 /**
-*     
+*
 */
 
 class Message implements Utils\Loggable {
 
 
-    function __construct() {    
+    function __construct() {
 
     }
 
@@ -67,11 +67,11 @@ class Message implements Utils\Loggable {
             } else {
                 $redirurl = $endpoint . '?' . $this->asQS();
             }
-            
+
         }
         return $redirurl;
     }
-    
+
     public function sendRedirect($endpoint, $hash = false) {
         $url = $this->getRedirectURL($endpoint, $hash);
         return new Redirect($url);
@@ -103,15 +103,15 @@ class Message implements Utils\Loggable {
     //     echo http_build_query($body);
     //     exit;
     // }
-    
 
-    
+
+
     public function post($endpoint) {
         error_log('posting to endpoint: ' . $endpoint);
         $postdata = $this->asQS();
-        
+
         error_log('Sending body: ' . $postdata);
-        
+
         $opts = array('http' =>
             array(
                 'method'  => 'POST',
@@ -122,7 +122,7 @@ class Message implements Utils\Loggable {
         $context  = stream_context_create($opts);
         $result = file_get_contents($endpoint, false, $context);
         $resultobj = json_decode($result, true);
-        
+
 
         return $resultobj;
     }
@@ -147,13 +147,13 @@ class Message implements Utils\Loggable {
                 foreach($rvs AS $v) {
                     if (!in_array($v, $values)) {
                         throw new Exceptions\OAuthException('invalid_request', 'Message parameter [' . $key . '] does include an illegal / unknown value.');
-                    }                    
+                    }
                 }
             }
             if (!in_array($message[$key], $values)) {
                 throw new Exceptions\OAuthException('invalid_request', 'Message parameter [' . $key . '] does include an illegal / unknown value.');
             }
-        } 
+        }
         return $message[$key];
     }
 

@@ -3,13 +3,13 @@
 namespace FeideConnect\HTTP;
 
 /**
-* 
+*
 */
 class HTTPResponse {
-    
+
     protected $headers;
     protected $status;
-    
+
     protected $cors;
     protected $cachable;
 
@@ -34,7 +34,7 @@ class HTTPResponse {
             $this->setHeader('Cache-Control', 'no-cache, must-revalidate');
             $this->setHeader('Expires', 'Fri, 10 Oct 1980 04:00:00 GMT');
         }
-        
+
     }
 
     protected function sendStatus() {

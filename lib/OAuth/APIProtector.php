@@ -60,10 +60,10 @@ class APIProtector {
         }
 
         if (!Validator::validateID($this->tokenvalue)) {
-            throw new APIAuthorizationException('Authorization Bearer Token has invalid format', 'invalid_request');    
+            throw new APIAuthorizationException('Authorization Bearer Token has invalid format', 'invalid_request');
         }
 
-        $this->accesstoken = $this->storage->getAccessToken($this->tokenvalue);        
+        $this->accesstoken = $this->storage->getAccessToken($this->tokenvalue);
         if ($this->accesstoken === null) {
             throw new APIAuthorizationException('Authorization Bearer Token was not valid', 'invalid_token');
         }
@@ -74,7 +74,7 @@ class APIProtector {
 
         if (!$this->accesstoken->stillValid()) {
             $this->accesstoken = null;
-            throw new APIAuthorizationException('Authorization Bearer Token was expired', 'invalid_token');    
+            throw new APIAuthorizationException('Authorization Bearer Token was expired', 'invalid_token');
         }
 
         return $this;
@@ -135,7 +135,7 @@ class APIProtector {
 
     public function getClient() {
         $this->requireClient();
-        return $this->client;        
+        return $this->client;
     }
 
     public function getUser() {

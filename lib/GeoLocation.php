@@ -53,7 +53,7 @@ class GeoLocation {
                 if (isset($record->city->name)) {
                     $title .= ', ' . $record->city->name;
                 }
-                
+
                 if (isset($record->mostSpecificSubdivision->name) && $record->mostSpecificSubdivision->name !== $record->city->name) {
                     $title .= ', ' . $record->mostSpecificSubdivision->name;
                 }
@@ -106,7 +106,7 @@ class GeoLocation {
             // $tz = 'Europe/Amsterdam';
             error_log("Error looking up GeoIP for address: " . $ip);
         }
-        
+
         return null;
 
 
@@ -137,7 +137,7 @@ class GeoLocation {
     }
 
     function addrGeo($address) {
-        
+
         // Temorary disabled. Needs to figure out a way to use a API key and add caching.
         return null;
 
@@ -147,13 +147,13 @@ class GeoLocation {
         //     if ($stored === NULL) throw new Exception('Got negative cache for this Address');
         //     return $stored;
         // }
-        
-        
-        $url = 'http://maps.google.com/maps/geo?' . 
-            'q=' . urlencode($address) . 
-            '&key=ABQIAAAASglC3nGToDgiRPCcRfdVShS0II289t7QEnBTuvu6rL3UOFsbQRRRned7x9TQ1oaYxRr6qsA98J-tuA' .  
-            '&sensor=false' . 
-            '&output=json' . 
+
+
+        $url = 'http://maps.google.com/maps/geo?' .
+            'q=' . urlencode($address) .
+            '&key=ABQIAAAASglC3nGToDgiRPCcRfdVShS0II289t7QEnBTuvu6rL3UOFsbQRRRned7x9TQ1oaYxRr6qsA98J-tuA' .
+            '&sensor=false' .
+            '&output=json' .
             '&oe=utf8';
         $res = file_get_contents($url);
         $result = json_decode($res);

@@ -24,16 +24,16 @@ class MandatoryClientInspector {
         }
 
 
-        // If there is no realm associated with the user, then 
-        if ($realm === null) { 
-            return false; 
+        // If there is no realm associated with the user, then
+        if ($realm === null) {
+            return false;
         }
 
         $storage = StorageProvider::getStorage();
 
         $res = $storage->checkMandatory($realm, $client);
 
-        //    echo "Check realm " . $account->getRealm() . " for client " . $client->id . "\n"; 
+        //    echo "Check realm " . $account->getRealm() . " for client " . $client->id . "\n";
         //    echo '<pre>INSERT INTO "mandatory_clients" (realm, clientid) VALUES (' . "'" . $account->getRealm() . "', " .  $client->id . ')';
         //    print_r($res);
         //    exit;

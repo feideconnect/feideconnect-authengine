@@ -48,7 +48,7 @@ class AccountChooser {
 
 
         $baseURL = $request["return"];
-        
+
 
 
 
@@ -99,14 +99,14 @@ class AccountChooser {
         $data["noscriptentries"] = $noscriptdata;
 
         // $data["noscriptjson"] = json_encode(Config::getInstance()->get(""), JSON_PRETTY_PRINT);
-        
+
         if (isset($_REQUEST["isPassive"]) && $_REQUEST["isPassive"] === "true") {
-            // The correct behaviour of the IdP Discovery Protocol will be to return 
+            // The correct behaviour of the IdP Discovery Protocol will be to return
             // without the "returnIDParam" parameter set to anything.
             // If the disco stores preferences, we might return that instead.
             return new Redirect($data["return"]);
         }
-        
+
         return (new LocalizedTemplatedHTMLResponse('accountchooser'))->setData($data);
 
     }

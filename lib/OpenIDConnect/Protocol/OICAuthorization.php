@@ -88,14 +88,14 @@ class OICAuthorization extends OAuthAuthorization {
     public function process() {
 
         // TODO: Implement strictly require the redirect_uri to be present.
-        
+
         if ($this->request->isPassiveRequest()) {
             $this->isPassive = true;
         }
 
         if ($this->request->loginPromptRequested()) {
 
-            // If forcer authentication is requested by prompt=login, we will transform this into an 
+            // If forcer authentication is requested by prompt=login, we will transform this into an
             // requirement about a less than 60 (+skey) seconds old authentication session.
             $this->maxage = 60;
 
@@ -104,7 +104,7 @@ class OICAuthorization extends OAuthAuthorization {
             $this->maxage = $this->request->max_age;
             if ($this->maxage < 10) {
                 $this->maxage = 10;
-            } 
+            }
 
         }
 

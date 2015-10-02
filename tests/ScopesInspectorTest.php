@@ -81,7 +81,7 @@ class ScopesInspectorTest extends DBHelper {
         $this->assertArrayHasKey('userid_sec', $owner);
         $this->assertArrayHasKey('name', $owner);
         $this->assertArrayHasKey('email', $owner);
-        
+
         $this->assertArrayHasKey('info', $api);
         $this->assertArrayHasKey('scopes', $api);
         $this->myAssertSubset(array(
@@ -113,7 +113,7 @@ class ScopesInspectorTest extends DBHelper {
         $this->assertArrayHasKey('userid_sec', $owner);
         $this->assertArrayHasKey('name', $owner);
         $this->assertArrayHasKey('email', $owner);
-        
+
         $this->assertArrayHasKey('info', $api);
         $this->assertArrayHasKey('scopes', $api);
         $this->myAssertSubset(array(
@@ -137,7 +137,7 @@ class ScopesInspectorTest extends DBHelper {
         $this->org = $org = $this->org();
         $this->api->organization = $org->id;
         $this->db->saveAPIGK($this->api);
-        
+
         $test = new ScopesInspector(['gk_test']);
         $res = $test->getInfo();
         $this->assertArrayHasKey('apis', $res);
@@ -164,5 +164,5 @@ class ScopesInspectorTest extends DBHelper {
             $this->org = null;
         }
     }
-    
+
 }

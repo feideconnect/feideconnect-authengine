@@ -6,14 +6,14 @@ use FeideConnect\Data\Models;
 
 
 /**
-* 
+*
 */
 class TokenResponse extends Message {
-    
+
     function __construct($message) {
-        
+
         parent::__construct($message);
-        $this->access_token        = Message::prequire($message, 'access_token');        
+        $this->access_token        = Message::prequire($message, 'access_token');
         $this->token_type         = Message::prequire($message, 'token_type');
         $this->expires_in        = Message::optional($message, 'expires_in');
         $this->refresh_token    = Message::optional($message, 'refresh_token');

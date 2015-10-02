@@ -33,7 +33,7 @@ class UserTest extends DBHelper {
         $attributeMapper = new AttributeMapper();
 
 
-        // print_r($this->as); exit; 
+        // print_r($this->as); exit;
         $account = $attributeMapper->getAccount($attributes);
 
 
@@ -100,11 +100,11 @@ class UserTest extends DBHelper {
 
         $u3 = $u3[0];
 
-        $this->assertEquals(false, $user2->aboveagelimit, 'aboveagelimit is set to false');        
-        $this->assertEquals(false, $u3->aboveagelimit, 'aboveagelimit is set to false');        
+        $this->assertEquals(false, $user2->aboveagelimit, 'aboveagelimit is set to false');
+        $this->assertEquals(false, $u3->aboveagelimit, 'aboveagelimit is set to false');
 
-        $this->assertEquals(false, $user2->usageterms, 'usageterms is set to false');        
-        $this->assertEquals(false, $u3->usageterms, 'usageterms is set to false');        
+        $this->assertEquals(false, $user2->usageterms, 'usageterms is set to false');
+        $this->assertEquals(false, $u3->usageterms, 'usageterms is set to false');
 
 
 
@@ -151,7 +151,7 @@ class UserTest extends DBHelper {
     //     $user->selectedsource = 'feide:uninett.no';
 
     //     $user->userid_sec = [$feideid, $mail];
-        
+
     //     $this->assertTrue($user->userid === $uuid, 'UUID is set and kept');
 
     //     $this->db->saveUser($user);
@@ -245,7 +245,7 @@ class UserTest extends DBHelper {
     //     $user->userid = $uuid;
     //     $user->setUserInfo('test:test', 'Tester Test', $mail, $photo, $photohash);
     //     $user->selectedsource = 'test:test';
-        
+
 
 
     //     $userinfo = $user->getBasicUserInfo(true);

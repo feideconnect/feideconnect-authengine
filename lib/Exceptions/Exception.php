@@ -3,10 +3,10 @@
 namespace FeideConnect\Exceptions;
 
 /**
-* 
+*
 */
 class Exception extends \Exception {
-    
+
 
     public $httpcode = 500;
 
