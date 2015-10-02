@@ -20,8 +20,8 @@ class URL {
      */
     public static function getSelfHost() {
         $url = self::getBaseURL();
-        $start = strpos($url,'://') + 3;
-        $length = strcspn($url,'/:',$start);
+        $start = strpos($url, '://') + 3;
+        $length = strcspn($url, '/:', $start);
         return substr($url, $start, $length);
     }
 
@@ -52,8 +52,8 @@ class URL {
      */
     public static function selfURLhost() {
         $url = self::getBaseURL();
-        $start = strpos($url,'://') + 3;
-        $length = strcspn($url,'/',$start) + $start;
+        $start = strpos($url, '://') + 3;
+        $length = strcspn($url, '/', $start) + $start;
         return substr($url, 0, $length);
     }
 
@@ -64,7 +64,7 @@ class URL {
      */
     public static function isHTTPS() {
         $url = self::getBaseURL();
-        $end = strpos($url,'://');
+        $end = strpos($url, '://');
         $protocol = substr($url, 0, $end);
         if ($protocol === 'https') {
             return TRUE;

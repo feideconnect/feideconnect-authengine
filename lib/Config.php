@@ -38,7 +38,7 @@ class Config {
 
         try {
 
-            return self::arrayPick($this->properties, explode('.',$key));
+            return self::arrayPick($this->properties, explode('.', $key));
 
         } catch (\UnexpectedValueException $e) {
 

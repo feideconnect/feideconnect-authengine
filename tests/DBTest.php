@@ -284,7 +284,7 @@ class DBTest extends \PHPUnit_Framework_TestCase {
 
         $user->userid = $uuid;
 
-        $user->setUserInfo('feide:uninett.no','Andreas Åkre Solberg', 'andreas.solberg@uninett.no');
+        $user->setUserInfo('feide:uninett.no', 'Andreas Åkre Solberg', 'andreas.solberg@uninett.no');
         $user->selectedsource = 'feide:uninett.no';
 
         $user->userid_sec = [$feideid, $mail];

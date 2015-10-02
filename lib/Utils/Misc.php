@@ -46,12 +46,12 @@ class Misc {
             if (!empty($arr[5])) $qvalue = floatval($arr[5]);
 
             // find q-maximal language
-            if (in_array($language,$available_languages) && ($qvalue > $bestqval)) {
+            if (in_array($language, $available_languages) && ($qvalue > $bestqval)) {
                 $bestlang = $language;
                 $bestqval = $qvalue;
             }
             // if no direct hit, try the prefix only but decrease q-value by 10% (as http_negotiate_language does)
-            else if (in_array($langprefix,$available_languages) && (($qvalue*0.9) > $bestqval)) {
+            else if (in_array($langprefix, $available_languages) && (($qvalue*0.9) > $bestqval)) {
                 $bestlang = $langprefix;
                 $bestqval = $qvalue*0.9;
             }
