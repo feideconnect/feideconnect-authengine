@@ -91,7 +91,7 @@ class ScopesInspector {
 
     public function getScopeAPIGKs() {
         $apis = [];
-        foreach($this->scopes AS $scope) {
+        foreach($this->scopes as $scope) {
             if (!preg_match('/^gk_([a-z0-9\-]+)(_([a-z0-9\-]+))?$/', $scope, $matches)) {
                 continue;
             }
@@ -123,7 +123,7 @@ class ScopesInspector {
 
         $scope_apis = $this->getScopeAPIGKs();
 
-        foreach($this->scopes AS $scope) {
+        foreach($this->scopes as $scope) {
 
             if (isset($scope_apis[$scope])) {
                 $apiInfo = $scope_apis[$scope];
@@ -150,7 +150,7 @@ class ScopesInspector {
         }
 
 
-        foreach($apis AS $apigkid => $api) {
+        foreach($apis as $apigkid => $api) {
 
             $apiEntry = [
                 "info" => $api["apigk"]->getAsArray(),
@@ -164,7 +164,7 @@ class ScopesInspector {
             }
 
             $apiEntry["scopes"][] = $api["apigk"]->getBasicScopeView();
-            foreach($api["localScopes"] AS $ls) {
+            foreach($api["localScopes"] as $ls) {
                 $apiEntry["scopes"][] = $api["apigk"]->getSubScopeView($ls);
             }
 

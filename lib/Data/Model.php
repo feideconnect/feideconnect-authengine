@@ -16,11 +16,11 @@ abstract class Model implements Utils\Loggable {
     function __construct($props = array()) {
         $this->_repo = StorageProvider::getStorage();
 
-        foreach (static::$_properties AS $k) {
+        foreach (static::$_properties as $k) {
             $this->{$k} = null;
         }
 
-        foreach($props AS $k => $v) {
+        foreach($props as $k => $v) {
             if (!in_array($k, static::$_properties)) {
                 error_log(get_class($this) . ": Trying to set a property [" . $k . "] that is not legal.");
                 continue;
@@ -62,7 +62,7 @@ abstract class Model implements Utils\Loggable {
     public function getAsArray() {
 
         $a = array();
-        foreach(static::$_properties AS $k) {
+        foreach(static::$_properties as $k) {
             if (isset($this->{$k})) {
 
                 if (isset(static::$_types[$k])) {
@@ -85,7 +85,7 @@ abstract class Model implements Utils\Loggable {
     public function getStorableArray() {
 
         $a = array();
-        foreach(static::$_properties AS $k) {
+        foreach(static::$_properties as $k) {
             if (isset($this->{$k})) {
 
                 if (isset(static::$_types[$k])) {

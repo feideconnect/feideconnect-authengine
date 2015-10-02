@@ -31,7 +31,7 @@ class AccessTokenPool {
 
         $ct = $this->storage->getAccessTokens($userid, $this->client->id);
 
-        foreach($ct AS $t) {
+        foreach($ct as $t) {
             if ($t->stillValid()) {
                 $this->tokens[] = $t;
             }
@@ -45,7 +45,7 @@ class AccessTokenPool {
     function getCandidates($scopesInQuestion) {
         $candidates = [];
 
-        foreach($this->tokens AS $token) {
+        foreach($this->tokens as $token) {
             if ($token->hasExactScopes($scopesInQuestion)) {
                 $candidates[] = $token;
             }

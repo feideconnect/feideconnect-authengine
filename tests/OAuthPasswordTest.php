@@ -19,7 +19,7 @@ class OAuthPasswordTest extends DBHelper {
 
         $_REQUEST['grant_type'] = 'password';
         $users = Config::getValue('testUsers');
-        foreach ($users AS $userid => $data) {
+        foreach ($users as $userid => $data) {
             $userid_sec = $userid;
             $_REQUEST['username'] = $userid;
             $_REQUEST['password'] = $data['password'];

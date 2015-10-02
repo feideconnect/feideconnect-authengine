@@ -29,7 +29,7 @@ class Authenticator {
 
         $this->activeAuthType = null;
 
-        foreach($this->authTypes AS $authtype => $authTypeConfig) {
+        foreach($this->authTypes as $authtype => $authTypeConfig) {
             $this->authSources[$authtype] = AuthSource::create($authTypeConfig["authSource"]);
             // echo "Creating auth source [" . $authtype . "] using [" . $authTypeConfig["authSource"] . "] ";
         }
@@ -204,7 +204,7 @@ class Authenticator {
         // $this->authTypes = Config::getValue("authTypes");
         // $this->authSources = [];
 
-        foreach($this->authSources AS $type => $authSource) {
+        foreach($this->authSources as $type => $authSource) {
             if ($authSource->isAuthenticated()) {
                 $this->logoutAS($authSource);
             }

@@ -20,7 +20,7 @@ class OAuthUtils {
             $scopelist = array_intersect($requestedScopes, $scopelist);
         }
         $scopes = array();
-        foreach($scopelist AS $scope) {
+        foreach($scopelist as $scope) {
             $scopes[$scope] = true;
         }
 
@@ -36,19 +36,19 @@ class OAuthUtils {
 
         $orgmoderatedscopes = array();
 
-        foreach($scopesinspector->getScopeAPIGKs($scopelist) AS $scope => $apigkinfo) {
+        foreach($scopesinspector->getScopeAPIGKs($scopelist) as $scope => $apigkinfo) {
             $apigk = $apigkinfo['apigk'];
             if ($apigk->isOrgModerated($scope)) {
                 $orgmoderatedscopes[] = $scope;
             }
         }
         if (!$feideuser) {
-            foreach($orgmoderatedscopes AS $scope) {
+            foreach($orgmoderatedscopes as $scope) {
                 unset($scopes[$scope]);
             }
         } else {
-            foreach($orgmoderatedscopes AS $scope) {
-                foreach($realms AS $realm) {
+            foreach($orgmoderatedscopes as $scope) {
+                foreach($realms as $realm) {
                     if (array_search($scope, $client->getOrgAuthorization($realm)) === FALSE) {
                         unset($scopes[$scope]);
                     }

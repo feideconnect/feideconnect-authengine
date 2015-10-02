@@ -60,7 +60,7 @@ class UserMapper {
         $user->selectedsource = $account->getSourceID();
 
         $user->userid_sec_seen = array();
-        foreach($user->userid_sec AS $u) {
+        foreach($user->userid_sec as $u) {
             $user->userid_sec_seen[$u] = microtime(true)*1000.0;
         }
 
@@ -200,7 +200,7 @@ class UserMapper {
 
             // For debugging creae a list of users
             $userlist = [];
-            foreach($existingUser AS $u) {
+            foreach($existingUser as $u) {
                 $userlist[] = $u->getAsArray();
             }
 

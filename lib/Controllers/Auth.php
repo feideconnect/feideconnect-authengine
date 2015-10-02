@@ -128,7 +128,7 @@ class Auth {
         $allowseckeys = ['userid'];
         $includeEmail = false;
 
-        foreach($hasScopes AS $scope) {
+        foreach($hasScopes as $scope) {
             $data[$scope] = true;
             if ($scope === 'userinfo-feide') {
                 $allowseckeys[] = 'feide';
@@ -176,7 +176,7 @@ class Auth {
             "authorizations" => [],
             "tokens" => [],
         ];
-        foreach($authorizations AS $auth) {
+        foreach($authorizations as $auth) {
             $data["authorizations"][] = $auth->getAsArray();
         }
 

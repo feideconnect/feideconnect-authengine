@@ -123,7 +123,7 @@ class AuthorizationEvaluator {
     }
 
     public function hasScopeInQuestion($scope) {
-        foreach($this->scopesInQuestion AS $sc) {
+        foreach($this->scopesInQuestion as $sc) {
             if ($scope === $sc) {
                 return true;
             }

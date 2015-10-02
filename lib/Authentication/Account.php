@@ -62,7 +62,7 @@ class Account {
     private function maskNin() {
 
         $res = [];
-        foreach($this->userids AS $uid) {
+        foreach($this->userids as $uid) {
             if(strpos($uid, 'nin:') === 0){
 
                 if (preg_match('/^nin:(\d{4})\d{7}/', $uid, $matches)) {
@@ -80,7 +80,7 @@ class Account {
 
     public function allowAll($authproviders) {
 
-        foreach($authproviders AS $ap) {
+        foreach($authproviders as $ap) {
             if (count($ap) === 1 && $ap[0] === 'all') {
                 return true;
             }
@@ -116,7 +116,7 @@ class Account {
 
         // var_dump($tag);
         // if (!empty($tag["def"])) {
-        //     foreach($tag["def"] AS $d) {
+        //     foreach($tag["def"] as $d) {
         //         // var_dump("TAG"); var_dump($d);
         //         // $s =
         //         // $def[] = explode(':', $d);
@@ -154,8 +154,8 @@ class Account {
             throw new \Exception('Unable to detect where this user can login.');
         }
 
-        foreach($def AS $d) {
-            foreach($authproviders AS $ap) {
+        foreach($def as $d) {
+            foreach($authproviders as $ap) {
                 if ($this->compareType($d, $ap)) {
                     // echo "<h2>Did match</h2>"; var_dump($d); var_dump($ap);
                     return true;
@@ -201,7 +201,7 @@ class Account {
                 if ($orginfo !== null) {
 
                     $types = $orginfo->getTypes();
-                    foreach($types AS $type) {
+                    foreach($types as $type) {
                         $tag["def"][] = ["feide", $type];
                     }
 
@@ -309,7 +309,7 @@ class Account {
     }
 
     protected function getComplexAttrnames($attrnames, $default = null, $required = false) {
-        foreach($attrnames AS $attr) {
+        foreach($attrnames as $attr) {
             if (isset($this->attributes[$attr])) {
                 return $this->attributes[$attr][0];
             }
@@ -429,7 +429,7 @@ class Account {
         $useridMap = $this->accountMapRules[$property];
         $userids = [];
 
-        foreach($useridMap AS $prefix => $attrname) {
+        foreach($useridMap as $prefix => $attrname) {
             if (isset($this->attributes[$attrname])) {
                 $userids[] = $prefix . ':' . $this->attributes[$attrname][0];
             }
@@ -508,7 +508,7 @@ class Account {
     }
 
     //     $userids = array();
-    //     foreach($this->accountmap AS $prefix => $attrname) {
+    //     foreach($this->accountmap as $prefix => $attrname) {
     //         if (isset($this->attributes[$attrname])) {
     //             $userids[] = $prefix . ':' . $this->attributes[$attrname][0];
     //         }

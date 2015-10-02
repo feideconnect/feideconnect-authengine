@@ -62,8 +62,8 @@ class Localization {
     static function localizeList($list, $attrs) {
 
         $res = [];
-        foreach($list AS $item) {
-            foreach ($item AS $key => $val) {
+        foreach($list as $item) {
+            foreach ($item as $key => $val) {
 
                 if (in_array($key, $attrs)) {
                     $item[$key] = self::localizeEntry($item[$key]);

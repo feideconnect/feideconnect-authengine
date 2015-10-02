@@ -80,7 +80,7 @@ class AccessToken extends \FeideConnect\Data\Model {
         if (empty($scopes)) return true;
         if (empty($this->scope)) return false;
 
-        foreach($scopes AS $scope) {
+        foreach($scopes as $scope) {
             if (!in_array($scope, $this->scope)) {
                 return false;
             }

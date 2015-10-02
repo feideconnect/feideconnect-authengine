@@ -21,7 +21,7 @@ class Message implements Utils\Loggable {
 
     public function asQS() {
         $qs = array();
-        foreach($this AS $key => $value) {
+        foreach($this as $key => $value) {
             if (empty($value)) continue;
             $qs[] = urlencode($key) . '=' . urlencode($value);
         }
@@ -30,7 +30,7 @@ class Message implements Utils\Loggable {
 
     public function asArray() {
         $qs = array();
-        foreach($this AS $key => $value) {
+        foreach($this as $key => $value) {
             $qs[$key] = $value;
         }
         return $qs;
@@ -40,7 +40,7 @@ class Message implements Utils\Loggable {
 
     public function getAsArray() {
         $arr = array();
-        foreach($this AS $k => $v) {
+        foreach($this as $k => $v) {
             if (isset($this->{$k})) {
                 $arr[$k] = $this->{$k};
             }
@@ -80,7 +80,7 @@ class Message implements Utils\Loggable {
     public function sendBodyJSON($httpcode = 200) {
 
         $body = array();
-        foreach($this AS $key => $value) {
+        foreach($this as $key => $value) {
             if (empty($value)) continue;
             $body[$key] = $value;
         }
@@ -94,7 +94,7 @@ class Message implements Utils\Loggable {
     //     header('Content-Type: application/x-www-form-urlencoded');
 
     //     $body = array();
-    //     foreach($this AS $key => $value) {
+    //     foreach($this as $key => $value) {
     //         if (empty($value)) continue;
     //         $body[$key] = $value;
     //     }
@@ -144,7 +144,7 @@ class Message implements Utils\Loggable {
         if (!empty($values)) {
             if ($multivalued) {
                 $rvs = explode(' ', $message[$key]);
-                foreach($rvs AS $v) {
+                foreach($rvs as $v) {
                     if (!in_array($v, $values)) {
                         throw new Exceptions\OAuthException('invalid_request', 'Message parameter [' . $key . '] does include an illegal / unknown value.');
                     }

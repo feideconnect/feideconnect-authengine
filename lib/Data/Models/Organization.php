@@ -53,7 +53,7 @@ class Organization extends \FeideConnect\Data\Model {
 
     public function getTypes() {
         $t = [];
-        foreach($this->type AS $type) {
+        foreach($this->type as $type) {
             switch($type) {
                 case 'primary_and_lower_secondary':
                     $t[] = 'go'; break;
@@ -77,7 +77,7 @@ class Organization extends \FeideConnect\Data\Model {
         if (!is_array($this->uiinfo["geo"])) { return null; }
 
         $distance = 9999;
-        foreach($this->uiinfo["geo"] AS $geoitem) {
+        foreach($this->uiinfo["geo"] as $geoitem) {
             $dc = Misc::distance($lat, $lon, $geoitem["lat"], $geoitem["lon"]);
             if ($dc < $distance) {
                 $distance = $dc;

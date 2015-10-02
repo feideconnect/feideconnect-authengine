@@ -56,7 +56,7 @@ class AttributeMapper {
             throw new Exception("Configuration [accountMaps] was not set to be an array as expected");
         }
 
-        foreach($accountMaps AS $am) {
+        foreach($accountMaps as $am) {
 
             if (self::ruleMatch($authSource, $idp, $am)) {
                 return $am;

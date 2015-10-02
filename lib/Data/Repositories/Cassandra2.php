@@ -183,7 +183,7 @@ class Cassandra2 extends \FeideConnect\Data\Repository {
         if ($multiple) {
 
             $res = [];
-            foreach($data AS $i) {
+            foreach($data as $i) {
                 if ($model !== null) {
                     $res[] = $this->getObject($model, $i);
                 } else {
@@ -212,7 +212,7 @@ class Cassandra2 extends \FeideConnect\Data\Repository {
 
     function getObject($model, $data) {
         $transformed = [];
-        foreach($data AS $k => $v) {
+        foreach($data as $k => $v) {
             $transformed[$k] = $model::fromDB($k, $v);
         }
 
@@ -237,7 +237,7 @@ class Cassandra2 extends \FeideConnect\Data\Repository {
         // We also need to populate the userid_sec table with the corresponding secondary keys.
         // TODO; Make this a transaction
         if (isset($user->userid_sec) && is_array($user->userid_sec)) {
-            foreach($user->userid_sec AS $sec) {
+            foreach($user->userid_sec as $sec) {
                 $this->addUserIDsec($user->userid, $sec);
             }
         }
@@ -280,7 +280,7 @@ class Cassandra2 extends \FeideConnect\Data\Repository {
         ];
 
 
-        foreach($props AS $key) {
+        foreach($props as $key) {
 
             if ($userinfo[$key] !== null) {
                 $assignments[] = $key . '[\'' . $sourceID .'\'] = :' . $key;

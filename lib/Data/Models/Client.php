@@ -50,7 +50,7 @@ class Client extends \FeideConnect\Data\Model {
         if ($this->status === null) {
             return false;
         }
-        foreach($this->status AS $s) {
+        foreach($this->status as $s) {
             if ($s === $status) {
                 return true;
             }
@@ -62,7 +62,7 @@ class Client extends \FeideConnect\Data\Model {
         if (empty($this->authproviders)) {
             return [["all"]];
         }
-        foreach($this->authproviders AS $a) {
+        foreach($this->authproviders as $a) {
             $res[] = explode('|', $a);
         }
         return $res;

@@ -81,7 +81,7 @@ class Data {
         $orgs = $storage->getOrgsByService('pilot');
         $data = [];
 
-        foreach($orgs AS $org) {
+        foreach($orgs as $org) {
             if (!$org->isHomeOrg()) { continue; }
             // if (!in_array($org->realm, $subscribers)) { continue; }
             $di = $org->getOrgInfo($lat, $lon);
@@ -98,7 +98,7 @@ class Data {
 
 
         // echo '<pre>';
-        // foreach($data AS $d) {
+        // foreach($data as $d) {
         //     echo join(',', $d["type"]) . "\n";
         // }
 

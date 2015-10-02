@@ -12,7 +12,7 @@ class ScopesInspectorTest extends DBHelper {
     }
 
     public function myAssertSubset($a, $b) {
-        foreach ($a AS $key => $value) {
+        foreach ($a as $key => $value) {
             $this->assertArrayHasKey($key, $b, "missing key " . $key);
             $this->assertEquals($value, $b[$key], "value does not match for key " . $key);
         }

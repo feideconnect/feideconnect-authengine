@@ -61,7 +61,7 @@ class AccountChooser {
         }
 
         $noscriptdata[] = $feideentry;
-        foreach($discoveryConfig AS $dentry) {
+        foreach($discoveryConfig as $dentry) {
 
             $noscriptentry["title"] = Localization::localizeEntry($dentry["title"]);
 
