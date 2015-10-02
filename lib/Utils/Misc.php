@@ -36,9 +36,9 @@ class Misc {
         $bestqval = 0;
 
         foreach ($hits as $arr) {
-            $langprefix = strtolower ($arr[1]);
+            $langprefix = strtolower($arr[1]);
             if (!empty($arr[3])) {
-                $langrange = strtolower ($arr[3]);
+                $langrange = strtolower($arr[3]);
                 $language = $langprefix . "-" . $langrange;
             }
             else $language = $langprefix;

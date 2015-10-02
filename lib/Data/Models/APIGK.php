@@ -25,7 +25,7 @@ class APIGK extends \FeideConnect\Data\Model {
 
         if (isset($props["scopedef"])) {
             $this->scopedef = json_decode($props["scopedef"], true);
-            unset ($props["scopedef"]);
+            unset($props["scopedef"]);
         }
 
 

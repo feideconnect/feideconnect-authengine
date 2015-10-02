@@ -43,7 +43,7 @@ class Organization extends \FeideConnect\Data\Model {
 
         if (isset($props["uiinfo"])) {
             $this->uiinfo = json_decode($props["uiinfo"], true);
-            unset ($props["uiinfo"]);
+            unset($props["uiinfo"]);
         }
 
 

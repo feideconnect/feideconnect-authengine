@@ -36,7 +36,7 @@ class Timestamp {
     }
 
     function getInSeconds() {
-        return floor($this->_value - microtime(true) );
+        return floor($this->_value - microtime(true));
     }
 
 

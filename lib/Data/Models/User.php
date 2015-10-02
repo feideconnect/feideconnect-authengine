@@ -319,7 +319,7 @@ class User extends \FeideConnect\Data\Model {
                 ],
             ]);
 
-            $this->setUserInfo($sourceID, $a->getName(), $a->getMail() );
+            $this->setUserInfo($sourceID, $a->getName(), $a->getMail());
             $this->_repo->updateUserInfo($this, $sourceID, ["name", "email"]);
 
         }
@@ -355,7 +355,7 @@ class User extends \FeideConnect\Data\Model {
 
 
         if ($modified) {
-            $this->setUserInfo($sourceID, null, null, $a->photo->getPhoto(), $a->photo->getHash() );
+            $this->setUserInfo($sourceID, null, null, $a->photo->getPhoto(), $a->photo->getHash());
 
             Logger::info('Updating profile photo for user', [
                 'userid' => $this->userid,

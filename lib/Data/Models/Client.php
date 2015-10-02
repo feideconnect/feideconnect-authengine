@@ -34,7 +34,7 @@ class Client extends \FeideConnect\Data\Model {
             foreach ($props["orgauthorization"] as $realm => $authz) {
                 $this->orgauthorization[$realm] = json_decode($authz);
             }
-            unset ($props["orgauthorization"]);
+            unset($props["orgauthorization"]);
         }
 
 
