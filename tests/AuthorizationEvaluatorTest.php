@@ -3,7 +3,6 @@
 namespace tests;
 
 use FeideConnect\OAuth\AuthorizationEvaluator;
-use FeideConnect\Data\StorageProvider;
 use FeideConnect\OAuth\Messages\AuthorizationRequest;
 
 class AuthorizationEvaluatorTest extends DBHelper {

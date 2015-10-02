@@ -3,7 +3,6 @@
 namespace tests;
 
 use FeideConnect\OAuth\ScopesInspector;
-use FeideConnect\Data\StorageProvider;
 
 class ScopesInspectorTest extends DBHelper {
 	protected $api, $org;

@@ -11,7 +11,6 @@ use FeideConnect\Config;
 use FeideConnect\GeoLocation;
 use FeideConnect\Localization;
 use FeideConnect\Utils\URL;
-use FeideConnect\Utils\URLBuilder;
 use FeideConnect\Exceptions\Exception;
 
 

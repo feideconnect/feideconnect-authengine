@@ -7,11 +7,6 @@ use FeideConnect\OpenIDConnect\IDToken;
 use FeideConnect\OpenIDConnect\TrustStore;
 use FeideConnect\Config;
 
-// use FeideConnect\Router;
-// use FeideConnect\HTTP\JSONResponse;
-// use FeideConnect\Data\StorageProvider;
-// use FeideConnect\Data\Models;
-
 class IDTokenTest extends \PHPUnit_Framework_TestCase {
 
 	protected $truststore;

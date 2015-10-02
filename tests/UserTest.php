@@ -7,7 +7,6 @@ use FeideConnect\Authentication\UserMapper;
 use FeideConnect\Authentication\AttributeMapper;
 use FeideConnect\Authentication\Account;
 use FeideConnect\Data\Models;
-use FeideConnect\Data\StorageProvider;
 
 class UserTest extends DBHelper {
 

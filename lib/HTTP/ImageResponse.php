@@ -3,7 +3,6 @@
 
 namespace FeideConnect\HTTP;
 
-use FeideConnect\Config;
 use FeideConnect\HTTP\HTTPResponse;
 
 class ImageResponse extends HTTPResponse {

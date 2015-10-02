@@ -7,7 +7,6 @@ use FeideConnect\CLI;
 use FeideConnect\Config;
 use FeideConnect\Router;
 use FeideConnect\HTTP\JSONResponse;
-use FeideConnect\Data\StorageProvider;
 use FeideConnect\Data\Models;
 
 class CLITest extends \PHPUnit_Framework_TestCase {

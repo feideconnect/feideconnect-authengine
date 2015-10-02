@@ -3,7 +3,6 @@
 namespace tests;
 
 use FeideConnect\OAuth\OAuthUtils;
-use FeideConnect\Data\StorageProvider;
 
 class EvaluateScopesTest extends DBHelper {
 

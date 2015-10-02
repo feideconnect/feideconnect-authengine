@@ -4,7 +4,6 @@
 namespace FeideConnect\HTTP;
 
 use FeideConnect\Localization;
-use FeideConnect\Config;
 use FeideConnect\HTTP\HTTPResponse;
 
 class LocalizedTemplatedHTMLResponse extends TemplatedHTMLResponse {

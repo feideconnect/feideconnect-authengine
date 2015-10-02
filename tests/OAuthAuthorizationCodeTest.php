@@ -2,7 +2,6 @@
 namespace tests;
 use FeideConnect\Router;
 use FeideConnect\HTTP\JSONResponse;
-use FeideConnect\Data\StorageProvider;
 use FeideConnect\Authentication\AuthSource;
 
 class OAuthAuthorizationCodeTest extends DBHelper {
