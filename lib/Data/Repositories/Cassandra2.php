@@ -1,6 +1,4 @@
 <?php
-
-
 /*
  * A cassandra repository implementation
  * Using this cassandra binding library:
@@ -21,8 +19,6 @@ use Cassandra\Type\Blob;
 use Cassandra\Type\CollectionMap;
 use Cassandra\Type\CollectionSet;
 use Cassandra\Type\Base;
-
-
 
 // use duoshuo\php-cassandra\Connection;
 

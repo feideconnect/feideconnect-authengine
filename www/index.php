@@ -17,7 +17,6 @@ use FeideConnect\HTTP\TemplatedHTMLResponse;
 use FeideConnect\Router;
 use Phroute\Phroute;
 
-
 require_once(dirname(dirname(__FILE__)) . '/lib/_autoload.php');
 
 

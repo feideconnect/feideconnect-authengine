@@ -57,6 +57,4 @@ class AuthorizationEvaluatorTest extends DBHelper {
         $redirect_uri = $this->aevaluator->getValidatedRedirectURI();
 
     }
-
-
 }

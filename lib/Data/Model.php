@@ -1,6 +1,7 @@
 <?php
 
 namespace FeideConnect\Data;
+
 use FeideConnect\Data\StorageProvider;
 use FeideConnect\Data\Types\Timestamp;
 use FeideConnect\Utils;

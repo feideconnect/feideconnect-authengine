@@ -1,8 +1,6 @@
 <?php
 
-
 namespace FeideConnect\HTTP;
-
 
 use FeideConnect\HTTP\HTTPResponse;
 

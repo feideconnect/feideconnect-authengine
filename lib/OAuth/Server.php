@@ -2,13 +2,10 @@
 
 namespace FeideConnect\OAuth;
 
-
 use FeideConnect\OAuth\Exceptions\OAuthException;
 use FeideConnect\OAuth\Exceptions\UserCannotAuthorizeException;
 
-
 use FeideConnect\OAuth\Protocol\OAuthAuthorization;
-
 
 use FeideConnect\HTTP\TemplatedHTMLResponse;
 use FeideConnect\HTTP\JSONResponse;
@@ -20,8 +17,6 @@ use FeideConnect\OAuth\Exceptions;
 use FeideConnect\Utils;
 use FeideConnect\Utils\Validator;
 use FeideConnect\Config;
-
-
 
 /**
  * Implementation of an OAuth Server

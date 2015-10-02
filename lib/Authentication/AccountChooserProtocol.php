@@ -1,12 +1,10 @@
 <?php
 
-
 namespace FeideConnect\Authentication;
 
 use FeideConnect\Config;
 use FeideConnect\Utils\URL;
 use FeideConnect\Exceptions\Exception;
-
 
 class AccountChooserProtocol {
 

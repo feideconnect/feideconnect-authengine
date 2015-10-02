@@ -1,6 +1,7 @@
 <?php
 
 namespace FeideConnect\Data\Models;
+
 use FeideConnect\Data\StorageProvider;
 use FeideConnect\OpenIDConnect\IDToken;
 

@@ -10,6 +10,7 @@ use \Monolog\Handler\SyslogHandler;
 use \Monolog\Formatter\LineFormatter;
 
 use FeideConnect\Utils;
+
 /**
 * Logger
 */

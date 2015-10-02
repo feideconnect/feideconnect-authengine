@@ -1,7 +1,7 @@
 <?php
 
-
 namespace FeideConnect\OAuth;
+
 use FeideConnect\OAuth\Exceptions\APIAuthorizationException;
 use FeideConnect\Utils\Validator;
 use FeideConnect\Data\StorageProvider;

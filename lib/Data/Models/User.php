@@ -1,6 +1,7 @@
 <?php
 
 namespace FeideConnect\Data\Models;
+
 use FeideConnect\Logger;
 use FeideConnect\Config;
 use FeideConnect\Authentication\Account;
@@ -10,7 +11,6 @@ use Cassandra\Type\CollectionMap;
 use Cassandra\Type\CollectionSet;
 use Cassandra\Type\Base;
 use Cassandra\Type\Timestamp;
-
 
 /**
  * User

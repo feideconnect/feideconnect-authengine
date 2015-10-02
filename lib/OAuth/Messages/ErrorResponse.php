@@ -1,10 +1,8 @@
 <?php
 
-
 namespace FeideConnect\OAuth\Messages;
 
 use FeideConnect\HTTP\JSONResponse;
-
 
 class ErrorResponse extends Message {
 

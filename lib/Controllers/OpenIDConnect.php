@@ -1,6 +1,5 @@
 <?php
 
-
 namespace FeideConnect\Controllers;
 
 use FeideConnect\HTTP\HTTPResponse;
@@ -8,7 +7,6 @@ use FeideConnect\HTTP\JSONResponse;
 use FeideConnect\OAuth\APIProtector;
 
 use FeideConnect\Config;
-
 
 class OpenIDConnect {
 

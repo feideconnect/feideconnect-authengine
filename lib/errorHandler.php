@@ -1,7 +1,6 @@
 <?php
 use FeideConnect\Logger;
 
-
 function getStrackTrace() {
 
 

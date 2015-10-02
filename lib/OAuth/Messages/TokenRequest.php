@@ -2,7 +2,6 @@
 
 namespace FeideConnect\OAuth\Messages;
 
-
 /**
 *
 */

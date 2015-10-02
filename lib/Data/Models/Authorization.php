@@ -1,6 +1,7 @@
 <?php
 
 namespace FeideConnect\Data\Models;
+
 use Cassandra\Type\Uuid;
 use Cassandra\Type\CollectionMap;
 use Cassandra\Type\CollectionSet;

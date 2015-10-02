@@ -1,5 +1,6 @@
 <?php
 namespace tests;
+
 use FeideConnect\Router;
 use FeideConnect\HTTP\JSONResponse;
 use FeideConnect\Data\Models;

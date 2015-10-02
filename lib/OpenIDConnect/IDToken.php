@@ -1,8 +1,8 @@
 <?php
 
 namespace FeideConnect\OpenIDConnect;
-use Firebase\JWT\JWT;
 
+use Firebase\JWT\JWT;
 
 class IDToken {
 

@@ -5,7 +5,6 @@ namespace FeideConnect\Authentication;
 use FeideConnect\Config;
 use FeideConnect\Exceptions\Exception;
 
-
 class AttributeMapper {
 
     function __construct() {

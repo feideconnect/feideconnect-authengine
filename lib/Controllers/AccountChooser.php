@@ -1,6 +1,5 @@
 <?php
 
-
 namespace FeideConnect\Controllers;
 
 use FeideConnect\HTTP\HTTPResponse;
@@ -12,8 +11,6 @@ use FeideConnect\GeoLocation;
 use FeideConnect\Localization;
 use FeideConnect\Utils\URL;
 use FeideConnect\Exceptions\Exception;
-
-
 
 class AccountChooser {
 

@@ -1,7 +1,7 @@
 <?php
 
-
 namespace FeideConnect\OAuth;
+
 use FeideConnect\Data\StorageProvider;
 use FeideConnect\Data\Models;
 

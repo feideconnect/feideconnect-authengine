@@ -2,7 +2,6 @@
 
 namespace FeideConnect\Authentication;
 
-
 class UserID {
 
     public $prefix;

@@ -1,13 +1,13 @@
 <?php
 
 namespace FeideConnect\Data\Models;
+
 use FeideConnect\Data\StorageProvider;
 use Cassandra\Type\Uuid;
 use Cassandra\Type\CollectionMap;
 use Cassandra\Type\CollectionSet;
 use Cassandra\Type\Base;
 use Cassandra\Type\Timestamp;
-
 
 class AccessToken extends \FeideConnect\Data\Model {
 

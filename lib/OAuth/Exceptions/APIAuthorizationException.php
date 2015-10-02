@@ -1,6 +1,7 @@
 <?php
 
 namespace FeideConnect\OAuth\Exceptions;
+
 use FeideConnect\Exceptions;
 use FeideConnect\HTTP\JSONResponse;
 

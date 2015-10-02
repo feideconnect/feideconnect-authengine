@@ -1,6 +1,5 @@
 <?php
 
-
 namespace FeideConnect\OAuth\Protocol;
 
 use FeideConnect\OAuth\Exceptions\OAuthException;
@@ -20,8 +19,6 @@ use FeideConnect\Authentication\UserMapper;
 
 use FeideConnect\Logger;
 use FeideConnect\Exceptions\AuthProviderNotAccepted;
-
-
 
 class OAuthAuthorization {
 

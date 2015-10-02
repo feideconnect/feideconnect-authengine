@@ -1,6 +1,5 @@
 <?php
 
-
 namespace tests;
 
 use FeideConnect\Data\Models;
@@ -358,6 +357,4 @@ class DBTest extends \PHPUnit_Framework_TestCase {
 
          */
     }
-
-
 }

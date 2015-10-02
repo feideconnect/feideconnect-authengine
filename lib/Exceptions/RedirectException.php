@@ -1,6 +1,7 @@
 <?php
 
 namespace FeideConnect\Exceptions;
+
 use FeideConnect\HTTP\Redirect;
 
 /**

@@ -1,7 +1,7 @@
 <?php
 
-
 namespace FeideConnect\OpenIDConnect\Messages;
+
 use FeideConnect\OAuth\Messages\Message;
 
 /**

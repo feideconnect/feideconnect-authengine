@@ -5,8 +5,6 @@ namespace FeideConnect\OpenIDConnect;
 use FeideConnect\Utils\URL;
 use FeideConnect\Config;
 
-
-
 /**
 *
 */

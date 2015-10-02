@@ -1,7 +1,7 @@
 <?php
 
-
 namespace FeideConnect\OAuth\Messages;
+
 use FeideConnect\OAuth\Exceptions;
 use FeideConnect\HTTP\Redirect;
 use FeideConnect\HTTP\JSONResponse;
