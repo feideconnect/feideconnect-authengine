@@ -44,7 +44,7 @@ spl_autoload_register(function ($class) {
 
 
 if (get_magic_quotes_runtime()) {
-    set_magic_quotes_runtime(FALSE);
+    set_magic_quotes_runtime(false);
 }
 
 

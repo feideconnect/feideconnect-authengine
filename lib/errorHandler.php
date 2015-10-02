@@ -57,13 +57,13 @@ function getStrackTrace() {
 
 
 /* Log full backtrace on errors and warnings. */
-function Connect_error_handler($errno, $errstr, $errfile = NULL, $errline = 0, $errcontext = NULL) {
+function Connect_error_handler($errno, $errstr, $errfile = null, $errline = 0, $errcontext = null) {
 
     static $limit = 5;
     $limit -= 1;
     if ($limit < 0) {
         /* We have reached the limit in the number of backtraces we will log. */
-        return FALSE;
+        return false;
     }
 
     // echo "<pre>" . getStrackTrace(); exit;

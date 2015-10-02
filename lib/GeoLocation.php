@@ -159,7 +159,7 @@ class GeoLocation {
         $result = json_decode($res);
         if ($result->Status->code !== 200) {
             // $this->store->set('geoaddr', $id, NULL, NULL);
-            return NULL;
+            return null;
         }
         $location = array('lat' => $result->Placemark[0]->Point->coordinates[1], 'lon' => $result->Placemark[0]->Point->coordinates[0]);
         return $location;

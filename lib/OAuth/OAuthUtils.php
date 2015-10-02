@@ -49,7 +49,7 @@ class OAuthUtils {
         } else {
             foreach($orgmoderatedscopes as $scope) {
                 foreach($realms as $realm) {
-                    if (array_search($scope, $client->getOrgAuthorization($realm)) === FALSE) {
+                    if (array_search($scope, $client->getOrgAuthorization($realm)) === false) {
                         unset($scopes[$scope]);
                     }
                 }

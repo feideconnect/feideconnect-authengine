@@ -67,9 +67,9 @@ class URL {
         $end = strpos($url, '://');
         $protocol = substr($url, 0, $end);
         if ($protocol === 'https') {
-            return TRUE;
+            return true;
         } else {
-            return FALSE;
+            return false;
         }
     }
     /**
@@ -78,11 +78,11 @@ class URL {
     private static function getServerHTTPS() {
         if(!array_key_exists('HTTPS', $_SERVER)) {
             /* Not an https-request. */
-            return FALSE;
+            return false;
         }
         if($_SERVER['HTTPS'] === 'off') {
             /* IIS with HTTPS off. */
-            return FALSE;
+            return false;
         }
         /* Otherwise, HTTPS will be a non-empty string. */
         return $_SERVER['HTTPS'] !== '';
