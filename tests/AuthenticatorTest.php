@@ -15,7 +15,8 @@ class AuthenticatorRequireAuthenticationTest extends DBHelper {
 
     function testToAccountChooser() {
         $this->setExpectedExceptionRegExp(
-            'FeideConnect\Exceptions\RedirectException', '/^http:\/\/localhost\/accountchooser\?/'
+            'FeideConnect\Exceptions\RedirectException',
+            '/^http:\/\/localhost\/accountchooser\?/'
         );
         $authenticator = new Authenticator();
         $authenticator->requireAuthentication();
@@ -138,7 +139,8 @@ class AuthenticatorRequireAuthenticationTest extends DBHelper {
 
     function testPassiveRedirectMaxagePassed() {
         $this->setExpectedException(
-            'FeideConnect\Exceptions\RedirectException', 'http://localhost/foo?error=1'
+            'FeideConnect\Exceptions\RedirectException',
+            'http://localhost/foo?error=1'
         );
 
         $_REQUEST['acresponse'] = '{"id": "https://idp.feide.no","subid":"example.org"}';

@@ -282,8 +282,13 @@ class OAuthAuthorization {
         $redirect_uri = $this->aevaluator->getValidatedRedirectURI();
         $scopesInQuestion = $this->aevaluator->getScopesInQuestion();
 
-        $tokenresponse = OAuthUtils::generateTokenResponse($this->client, $this->user, $scopesInQuestion, "implicit grant",
-                                                           $this->request->state);
+        $tokenresponse = OAuthUtils::generateTokenResponse(
+            $this->client,
+            $this->user,
+            $scopesInQuestion,
+            "implicit grant",
+            $this->request->state
+        );
 
 
         return $tokenresponse->sendRedirect($redirect_uri, true);

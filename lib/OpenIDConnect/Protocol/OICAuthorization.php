@@ -45,9 +45,14 @@ class OICAuthorization extends OAuthAuthorization {
         $scopesInQuestion = $this->aevaluator->getScopesInQuestion();
 
         $idtoken = $this->getIDToken();
-        $tokenresponse = OAuthUtils::generateTokenResponse($this->client, $this->user, $scopesInQuestion,
-                                                           "OpenID Connect implicit grant",
-                                                           $this->request->state, $idtoken);
+        $tokenresponse = OAuthUtils::generateTokenResponse(
+            $this->client,
+            $this->user,
+            $scopesInQuestion,
+            "OpenID Connect implicit grant",
+            $this->request->state,
+            $idtoken
+        );
 
 
         return $tokenresponse->sendRedirect($redirect_uri, true);

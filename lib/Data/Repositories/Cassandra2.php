@@ -103,11 +103,14 @@ class Cassandra2 extends \FeideConnect\Data\Repository {
 
 
             // $this->db->beginBatch();
-            $this->db->querySync($query, $data,
+            $this->db->querySync(
+                $query,
+                $data,
                 \Cassandra\Request\Request::CONSISTENCY_QUORUM,
                 [
                     'names_for_values' => true
-                ]);
+                ]
+            );
             // $result = $this->db->applyBatch();
 
 
@@ -153,11 +156,14 @@ class Cassandra2 extends \FeideConnect\Data\Repository {
 
         try {
 
-            $response = $this->db->querySync($query, $params,
+            $response = $this->db->querySync(
+                $query,
+                $params,
                 \Cassandra\Request\Request::CONSISTENCY_QUORUM,
                 [
                     'names_for_values' => true
-                ]);
+                ]
+            );
             $data = $response->fetchAll();
 
         } catch (\Exception $e) {

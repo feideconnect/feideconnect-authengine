@@ -32,7 +32,8 @@ class OAuthAuthorizationCodeTest extends DBHelper {
 
     public function testAuthorizationToAccountChooser() {
         $this->setExpectedExceptionRegExp(
-            'FeideConnect\Exceptions\RedirectException', '/^http:\/\/localhost\/accountchooser\?/'
+            'FeideConnect\Exceptions\RedirectException',
+            '/^http:\/\/localhost\/accountchooser\?/'
         );
         $router = new Router();
 

@@ -56,8 +56,10 @@ class APIAuthorizationException extends Exceptions\Exception {
         $response->setStatus($this->httpcode);
 
         if ($this->type !== null) {
-            $response->setHeader('WWW-Authenticate',
-                'Bearer realm="feideconnect", error="' . $this->type . '", error_description="' . urlencode($this->getMessage()) . '"');
+            $response->setHeader(
+                'WWW-Authenticate',
+                'Bearer realm="feideconnect", error="' . $this->type . '", error_description="' . urlencode($this->getMessage()) . '"'
+            );
         }
         return $response;
     }
