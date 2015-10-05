@@ -15,7 +15,6 @@ class StorageProvider {
         $storageType = \FeideConnect\Config::getValue('storage.type');
 
         if ($storageType === 'cassandra') {
-
             self::$storage = new Cassandra2();
 
         } else {

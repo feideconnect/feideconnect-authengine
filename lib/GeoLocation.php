@@ -45,7 +45,6 @@ class GeoLocation {
             $code = null;
             $title = '';
             if (isset($record->country)) {
-
                 if (isset($record->country->isoCode)) {
                     $code = strtolower($record->country->isoCode);
                 }

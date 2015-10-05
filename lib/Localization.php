@@ -64,7 +64,6 @@ class Localization {
         $res = [];
         foreach ($list as $item) {
             foreach ($item as $key => $val) {
-
                 if (in_array($key, $attrs)) {
                     $item[$key] = self::localizeEntry($item[$key]);
                 }

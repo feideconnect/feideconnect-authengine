@@ -66,7 +66,6 @@ class CLI {
                 } else if ($u->userid === $user->userid) {
                     $this->info("OK reverse for " . $k);
                 } else {
-
                     $this->info("ERROR in reverse for " . $k . " userid found was " . $u->userid);
                 }
 

@@ -57,10 +57,6 @@ class Server {
 
 
         try {
-
-
-
-
             /**
              * --- We've now dealted with all error responses that is returned from other systems..
              * Lets move on to processing the OAuth authorization request.
@@ -85,14 +81,11 @@ class Server {
 
 
         } catch (UserCannotAuthorizeException $e) {
-
-
             $data = array();
             $response = (new TemplatedHTMLResponse('agelimit'))->setData($data);
             return $response;
 
         } catch (OAuthException $e) {
-
             $msg = array(
                 'error' => $e->code,
                 'error_description' => $e->getMessage(),
@@ -250,7 +243,6 @@ class Server {
     public function token() {
 
         try {
-
             $tokenrequest = new Messages\TokenRequest($_REQUEST);
             // $tokenrequest->parseServer($_SERVER);
 
@@ -260,7 +252,6 @@ class Server {
             ));
 
             if ($tokenrequest->grant_type === 'authorization_code') {
-
                 return $this->tokenFromCode($tokenrequest);
 
             }
@@ -268,11 +259,9 @@ class Server {
             $client = $this->validateClientAuthorization();
 
             if ($tokenrequest->grant_type === 'client_credentials') {
-
                 $user = null;
 
             } else if ($tokenrequest->grant_type === 'password') {
-
                 $user = $this->validateTestUserCredentials($tokenrequest);
 
             } else {
@@ -284,7 +273,6 @@ class Server {
             return $tokenresponse->sendBodyJSON();
 
         } catch (OAuthException $e) {
-
             $msg = array(
                 'error' => $e->code,
                 'error_description' => $e->getMessage(),

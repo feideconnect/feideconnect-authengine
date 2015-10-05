@@ -127,7 +127,6 @@ class User extends \FeideConnect\Data\Model {
         $res = $this->getUserIDsecPrefixed('p:');
 
         if (count($res) < 1) {
-
             $profilePhotoAccess =  'p:' . Model::genUUID();
             $this->userid_sec[] = $profilePhotoAccess;
 
@@ -304,7 +303,6 @@ class User extends \FeideConnect\Data\Model {
         if ($a->getMail() !== $existing['email']) $modified = true;
 
         if ($modified) {
-
             Logger::info('Updating userinfo', [
                 'userid' => $this->userid,
                 'sourceID' => $sourceID,
@@ -342,7 +340,6 @@ class User extends \FeideConnect\Data\Model {
 
         $modified = false;
         if ($a->photo !== null) {
-
             if ($existing['profilephotohash'] === null) {
                 $modified = true;
             } else {

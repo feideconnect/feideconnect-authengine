@@ -100,8 +100,6 @@ class Cassandra2 extends \FeideConnect\Data\Repository {
 
 
         try {
-
-
             // $this->db->beginBatch();
             $this->db->querySync(
                 $query,
@@ -155,7 +153,6 @@ class Cassandra2 extends \FeideConnect\Data\Repository {
         $data = null;
 
         try {
-
             $response = $this->db->querySync(
                 $query,
                 $params,
@@ -187,7 +184,6 @@ class Cassandra2 extends \FeideConnect\Data\Repository {
         assert('$data instanceof SplFixedArray');
 
         if ($multiple) {
-
             $res = [];
             foreach ($data as $i) {
                 if ($model !== null) {
@@ -199,7 +195,6 @@ class Cassandra2 extends \FeideConnect\Data\Repository {
             return $res;
 
         } else {
-
             // echo var_export($data, true); exit;
 
             if ($data->count() < 1) {

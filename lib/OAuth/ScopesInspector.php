@@ -128,17 +128,13 @@ class ScopesInspector {
                 $apis[$apiInfo['apigk']->id] = $apiInfo;
 
             } else {
-
-
                 if (isset($this->globalScopes[$scope])) {
-
                     $ne = $this->globalScopes[$scope];
                     $ne["scope"] = $scope;
                     $data['global'][$scope] = $ne;
 
 
                 } else {
-
                     $data["unknown"][] = $scope;
 
                 }

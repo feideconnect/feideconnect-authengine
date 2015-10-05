@@ -21,20 +21,16 @@ require_once(dirname(dirname(__FILE__)) . '/lib/_autoload.php');
 
 
 try {
-
-
     /*
      * Phroute does not support dealing with OPTIONS and CORS in an elegant way,
      * so here we handle this separately.
      */
 
     if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
-
         $response = new EmptyResponse();
         $response->setCORS(true)->setCachable(true);
 
     } else {
-
         $router = new Router();
         $response = $router->dispatch();
 

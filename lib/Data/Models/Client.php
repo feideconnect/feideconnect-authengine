@@ -57,6 +57,7 @@ class Client extends \FeideConnect\Data\Model {
         }
         return false;
     }
+
     public function getAuthProviders() {
         $res = [];
         if (empty($this->authproviders)) {

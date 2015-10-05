@@ -29,7 +29,6 @@ class AccountPhoto {
 
 
         try {
-
             // $fileraw = tempnam(sys_get_temp_dir(), 'FeideConnect-PP-Raw');
             // $filegen = tempnam(sys_get_temp_dir(), 'FeideConnect-PP-Gen');
             // file_put_contents($fileraw, base64_decode($this->raw));
@@ -65,12 +64,8 @@ class AccountPhoto {
             $image->destroy();
 
             return $result;
-
-
         } catch (Exception $e) {
-
             return null;
-
         }
 
 

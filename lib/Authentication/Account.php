@@ -174,7 +174,6 @@ class Account {
     public function getVisualTag() {
 
         if (isset($this->sourceID) && preg_match("/^feide:(.*?)$/", $this->sourceID, $matches)) {
-
             $feideidp = Config::getValue('feideIdP');
 
             $org = $matches[1];
@@ -191,14 +190,12 @@ class Account {
             if ($org === 'feide.no') {
                 $tag["def"][] = ["other", "feidetest"];
             } else {
-
                 $storage = StorageProvider::getStorage();
 
                 $tag["def"][] = ["feide", "realm", $org];
 
                 $orginfo = $storage->getOrg('fc:org:' . $org);
                 if ($orginfo !== null) {
-
                     $types = $orginfo->getTypes();
                     foreach ($types as $type) {
                         $tag["def"][] = ["feide", $type];
@@ -211,8 +208,6 @@ class Account {
             return $tag;
 
         } else if (isset($this->sourceID) && $this->sourceID === 'idporten') {
-
-
             $tag = [
                 "name" => $this->name,
                 "type" => "saml",
@@ -224,7 +219,6 @@ class Account {
              return $tag;
 
         } else if (isset($this->sourceID) && $this->sourceID === 'openidp') {
-
             $tag = [
                 "name" => $this->name,
                 "type" => "saml",
@@ -236,8 +230,6 @@ class Account {
              return $tag;
 
         } else if (isset($this->sourceID) && $this->sourceID === 'twitter') {
-
-
             $tag = [
                 "name" => $this->name,
                 "type" => "twitter",
@@ -248,8 +240,6 @@ class Account {
              return $tag;
 
         } else if (isset($this->sourceID) && $this->sourceID === 'linkedin') {
-
-
             $tag = [
                 "name" => $this->name,
                 "type" => "linkedin",
@@ -260,8 +250,6 @@ class Account {
              return $tag;
 
         } else if (isset($this->sourceID) && $this->sourceID === 'facebook') {
-
-
             $tag = [
                 "name" => $this->name,
                 "type" => "facebook",
@@ -337,7 +325,6 @@ class Account {
 
         // If definition contains type = realm.
         if (isset($def["type"]) && $def["type"] === "realm") {
-
             if (!isset($def["attrname"])) {
                 throw new Exception("Missing [attrname] on complex attribute definition");
             }
@@ -346,11 +333,9 @@ class Account {
 
         // If definition contains type = realm.
         } else if (isset($def["type"]) && $def["type"] === "sourceID") {
-
             return $this->getComplexSourceID($def);
 
         } else if (isset($def["type"]) && $def["type"] === "urlref") {
-
             if (!isset($def["attrname"])) {
                 throw new Exception("Missing [attrname] on complex attribute definition");
             }
@@ -371,12 +356,10 @@ class Account {
             return $value;
 
         } else if (isset($def["attrnames"]) && is_array($def["attrnames"])) {
-
             $attrnames = $def["attrnames"];
             return $this->getComplexAttrnames($attrnames, $default, $required);
 
         } else if (isset($def["type"]) && $def["type"] === "fixed") {
-
             if (!isset($def["value"])) {
                 throw new Exception("Missing [value] on complex attribute definition");
             }

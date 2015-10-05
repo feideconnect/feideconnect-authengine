@@ -37,14 +37,11 @@ class Config {
     public function get($key, $default = null, $required = false) {
 
         try {
-
             return self::arrayPick($this->properties, explode('.', $key));
-
         } catch (\UnexpectedValueException $e) {
 
             if ($required === true) throw new \Exception('Missing required global configuration property [' . $key . ']');
             return $default;
-
         }
 
 

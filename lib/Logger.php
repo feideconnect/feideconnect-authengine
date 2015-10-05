@@ -67,7 +67,6 @@ class Logger {
         unset($value);
 
         switch ($level) {
-
             case 'alert':
                 $this->log->addAlert($str, $data);
                 break;

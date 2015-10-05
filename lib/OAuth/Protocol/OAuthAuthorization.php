@@ -64,7 +64,6 @@ class OAuthAuthorization {
 
         // We are in the mid of processing the OAuth authorization
         if ($aevaluator->hasScopeInQuestion('openid')) {
-
             // Parse the incomming Authorization Request.
             $request = new \FeideConnect\OpenIDConnect\Messages\AuthorizationRequest($_REQUEST);
             Logger::info('Successfully parsed OpenID Connect Authorization Request.', array(
@@ -137,13 +136,11 @@ class OAuthAuthorization {
         $aui = new AuthorizationUI($this->client, $this->request, $this->account, $this->user, $redirect_uri, $scopesInQuestion, $this->aevaluator, $this->organization);
 
         if ($this->aevaluator->needsAuthorization() ) {
-
             if ($this->isPassive) {
                 throw new OAuthException('access_denied', 'User has not authorized, and were unable to perform passive authorization', $state, $redirect_uri, $this->request->useHashFragment());
             }
 
         } else {
-
             if ($this->isPassive) {
                 return null;
             }
@@ -152,7 +149,6 @@ class OAuthAuthorization {
 
 
         if (isset($_REQUEST["verifier"])) {
-
             $verifier = $this->user->getVerifier();
             if ($verifier !== $_REQUEST["verifier"]) {
                 throw new \Exception("Invalid verifier code.");
@@ -180,7 +176,6 @@ class OAuthAuthorization {
 
 
         } else {
-
             return $aui->show();
         }
 
@@ -220,12 +215,10 @@ class OAuthAuthorization {
         // If SimpleSAML_Auth_State_exceptionId query parameter is set, then something failed
         // while performing authentication.
         if (!empty($_REQUEST['SimpleSAML_Auth_State_exceptionId'])) {
-
             // The most likely error is that we are not able to perform passive authentication.
             throw new OAuthException('access_denied', 'Unable to perform passive authentication [1]', $state, $redirect_uri, $this->request->useHashFragment());
 
         } else if (isset($_REQUEST['error']) && $_REQUEST['error'] === '1') {
-
             // The most likely error is that we are not able to perform passive authentication.
             throw new OAuthException('access_denied', 'Unable to perform passive authentication [2]', $state, $redirect_uri, $this->request->useHashFragment());
         }
@@ -244,7 +237,6 @@ class OAuthAuthorization {
 
 
         try {
-
             $this->validateAuthProvider();
         } catch (AuthProviderNotAccepted $a) {
             return (new LocalizedTemplatedHTMLResponse('authprovidernotaccepted'))->setData([]);

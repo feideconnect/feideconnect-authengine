@@ -77,7 +77,6 @@ class Authenticator {
         $authAge = $now - $authninstant;
 
         if ($authAge < ($maxage + $allowSkew)) {
-
             // Already authenticated with a authnetication session which is sufficiently fresh.
             return true;
         }
@@ -154,7 +153,6 @@ class Authenticator {
         // User is not authenticated locally.
         // If allowed, attempt is passive authentiation.
         if ($isPassive) {
-
             // TODO: add info about selected IdP here as well..
             $this->authenticatePassive($as);
             if (!$this->verifyMaxAge($as->getAuthData("AuthnInstant"), $maxage)) {

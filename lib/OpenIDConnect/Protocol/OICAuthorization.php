@@ -99,13 +99,11 @@ class OICAuthorization extends OAuthAuthorization {
         }
 
         if ($this->request->loginPromptRequested()) {
-
             // If forcer authentication is requested by prompt=login, we will transform this into an
             // requirement about a less than 60 (+skey) seconds old authentication session.
             $this->maxage = 60;
 
         } else if ($this->request->max_age && is_int($this->request->max_age)) {
-
             $this->maxage = $this->request->max_age;
             if ($this->maxage < 10) {
                 $this->maxage = 10;

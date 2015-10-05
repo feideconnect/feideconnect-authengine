@@ -163,7 +163,6 @@ class AuthorizationUI {
 
 
         if ($this->client->has('organization')) {
-
             $org = $this->storage->getOrg($this->client->organization);
             if ($org !== null) {
                 $orginfo = $org->getAsArray();
@@ -173,7 +172,6 @@ class AuthorizationUI {
             }
 
         } else if ($this->client->has('owner')) {
-
             $owner = $this->storage->getUserByUserID($this->client->owner);
             if ($owner !== null) {
                 $oinfo = $owner->getBasicUserInfo(true);

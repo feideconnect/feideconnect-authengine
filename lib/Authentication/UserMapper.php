@@ -169,16 +169,9 @@ class UserMapper {
 
 
         if (count($existingUser) === 1) {
-
-
-
-
-
             if ($update) {
                 $this->updateUser($account, $existingUser[0]);
             }
-
-
 
             // header('content-type: text/plain');
             // echo "poot";
@@ -189,7 +182,6 @@ class UserMapper {
 
 
         if (count($existingUser) > 1) {
-
             if ($merge) {
                 $user = $this->mergeUsers($existingUser);
                 if ($update) {
