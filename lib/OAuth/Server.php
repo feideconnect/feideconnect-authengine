@@ -65,7 +65,9 @@ class Server {
 
             // Decide whether to run in passive mode. In passive mode no UI is displayed to the enduser.
             $passive = false;
-            if (isset($_REQUEST["passive"]) && $_REQUEST["passive"] === 'true') $passive = true;
+            if (isset($_REQUEST["passive"]) && $_REQUEST["passive"] === 'true') {
+                $passive = true;
+            }
 
 
             // Parse the incomming Authorization Request.
@@ -123,18 +125,21 @@ class Server {
             throw new OAuthException('invalid_client', 'Request was on behalf of a nonexisting client');
         }
 
-        if ($client->client_secret !== $_SERVER['PHP_AUTH_PW'])
+        if ($client->client_secret !== $_SERVER['PHP_AUTH_PW']) {
             throw new OAuthException('invalid_client', 'Wrong client credentials. Incorrect client_secret.');
+        }
 
         return $client;
 
     }
 
     protected function validateClientAuthorization() {
-        if (empty($_SERVER['PHP_AUTH_USER']))
+        if (empty($_SERVER['PHP_AUTH_USER'])) {
             throw new OAuthException('invalid_client', 'Unable to authenticate the request on behalf of a client (missing username)');
-        if (empty($_SERVER['PHP_AUTH_PW']))
+        }
+        if (empty($_SERVER['PHP_AUTH_PW'])) {
             throw new OAuthException('invalid_client', 'Unable to authenticate the request on behalf of a client (missing password)');
+        }
 
         $clientid = $_SERVER['PHP_AUTH_USER'];
         $password = $_SERVER['PHP_AUTH_PW'];
@@ -213,12 +218,13 @@ class Server {
         }
 
         if (!empty($code->redirect_uri)) {
-
-            if (empty($tokenrequest->redirect_uri))
+            if (empty($tokenrequest->redirect_uri)) {
                 throw new OAuthException('invalid_request', 'Request was missing the required redirect_uri parameter');
+            }
 
-            if ($tokenrequest->redirect_uri !== $code->redirect_uri)
+            if ($tokenrequest->redirect_uri !== $code->redirect_uri) {
                 throw new OAuthException('invalid_request', 'Mismatching redirect_uris provided in the token request compared to the authorization request');
+            }
 
         }
 

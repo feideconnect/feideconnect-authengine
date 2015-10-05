@@ -41,7 +41,9 @@ class Client extends \FeideConnect\Data\Model {
     }
 
     public function getScopeList() {
-        if (empty($this->scopes)) return [];
+        if (empty($this->scopes)) {
+            return [];
+        }
         return $this->scopes;
     }
 

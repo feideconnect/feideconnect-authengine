@@ -15,13 +15,23 @@ function getStrackTrace() {
     $c1width = strlen(count($d) + 1);
     $c2width = 0;
     foreach ($d as &$f) {
-        if (!isset($f['file'])) $f['file'] = '';
-        if (!isset($f['line'])) $f['line'] = '';
-        if (!isset($f['class'])) $f['class'] = '';
-        if (!isset($f['type'])) $f['type'] = '';
+        if (!isset($f['file'])) {
+            $f['file'] = '';
+        }
+        if (!isset($f['line'])) {
+            $f['line'] = '';
+        }
+        if (!isset($f['class'])) {
+            $f['class'] = '';
+        }
+        if (!isset($f['type'])) {
+            $f['type'] = '';
+        }
         // $f['file_rel'] = str_replace(BP . DS, '', $f['file']);
         $thisLen = strlen($f['file'] . ':' . $f['line']);
-        if ($c2width < $thisLen) $c2width = $thisLen;
+        if ($c2width < $thisLen) {
+            $c2width = $thisLen;
+        }
     }
     foreach ($d as $i => $f) {
         $args = '';

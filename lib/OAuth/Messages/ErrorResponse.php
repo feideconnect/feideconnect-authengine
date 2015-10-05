@@ -22,7 +22,9 @@ class ErrorResponse extends Message {
 
         $body = array();
         foreach ($this as $key => $value) {
-            if (empty($value)) continue;
+            if (empty($value)) {
+                continue;
+            }
             $body[$key] = $value;
         }
 

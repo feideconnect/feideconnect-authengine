@@ -163,7 +163,9 @@ class Authenticator {
             return;
         }
 
-        if ($return === null) $return = \SimpleSAML_Utilities::selfURL();
+        if ($return === null) {
+            $return = \SimpleSAML_Utilities::selfURL();
+        }
 
         $options = array();
 

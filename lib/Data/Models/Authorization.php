@@ -41,12 +41,16 @@ class Authorization extends \FeideConnect\Data\Model {
     }
 
     public function getScopeList() {
-        if (empty($this->scopes)) return [];
+        if (empty($this->scopes)) {
+            return [];
+        }
         return $this->scopes;
     }
 
     public function addScopes($scopes) {
-        if (empty($this->scopes)) $this->scopes = [];
+        if (empty($this->scopes)) {
+            $this->scopes = [];
+        }
         foreach ($scopes as $s) {
             if (!in_array($s, $this->scopes)) {
                 $this->scopes[] = $s;
@@ -58,11 +62,15 @@ class Authorization extends \FeideConnect\Data\Model {
 
         $myScopes = $this->getScopeList();
 
-        if ($requiredscopes === null) return true;
+        if ($requiredscopes === null) {
+            return true;
+        }
         // echo '<pre>'; print_r($requiredscopes); exit;
         assert('is_array($requiredscopes)');
         foreach ($requiredscopes as $rs) {
-            if (!in_array($rs, $myScopes)) return false;
+            if (!in_array($rs, $myScopes)) {
+                return false;
+            }
         }
         return true;
     }

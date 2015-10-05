@@ -27,7 +27,9 @@ class AuthorizationRequest extends Message {
     }
 
     public function getScopeList() {
-        if (empty($this->scope)) return [];
+        if (empty($this->scope)) {
+            return [];
+        }
         return $this->scope;
     }
 

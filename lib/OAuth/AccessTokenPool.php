@@ -69,7 +69,9 @@ class AccessTokenPool {
     function getToken($scopesInQuestion, $refreshToken, $expires_in) {
         $candidate = $this->getSelectedCandidate($scopesInQuestion);
 
-        if ($candidate !== null) return $candidate;
+        if ($candidate !== null) {
+            return $candidate;
+        }
 
         $accesstoken = Models\AccessToken::generate($this->client, $this->user, $scopesInQuestion, $refreshToken, $expires_in);
         $this->storage->saveToken($accesstoken);

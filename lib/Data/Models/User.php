@@ -74,26 +74,42 @@ class User extends \FeideConnect\Data\Model {
      */
     public function setUserInfo($sourceID, $name = null, $email = null, $profilephoto = null, $profilephotohash = null) {
 
-        if (empty($this->name)) $this->name = [];
-        if (empty($this->email)) $this->email = [];
-        if (empty($this->profilephoto)) $this->profilephoto = [];
+        if (empty($this->name)) {
+            $this->name = [];
+        }
+        if (empty($this->email)) {
+            $this->email = [];
+        }
+        if (empty($this->profilephoto)) {
+            $this->profilephoto = [];
+        }
 
-        if (empty($sourceID)) throw new \Exception('Cannot set userinfo to a user without a sourceid.');
+        if (empty($sourceID)) {
+            throw new \Exception('Cannot set userinfo to a user without a sourceid.');
+        }
 
         if (!empty($name)) {
-            if (empty($this->name)) $this->name = [];
+            if (empty($this->name)) {
+                $this->name = [];
+            }
             $this->name[$sourceID] = $name;
         }
         if (!empty($email)) {
-            if (empty($this->email)) $this->email = [];
+            if (empty($this->email)) {
+                $this->email = [];
+            }
             $this->email[$sourceID] = $email;
         }
         if (!empty($profilephoto)) {
-            if (empty($this->profilephoto)) $this->profilephoto = [];
+            if (empty($this->profilephoto)) {
+                $this->profilephoto = [];
+            }
             $this->profilephoto[$sourceID] = $profilephoto;
         }
         if (!empty($profilephotohash)) {
-            if (empty($this->profilephotohash)) $this->profilephotohash = [];
+            if (empty($this->profilephotohash)) {
+                $this->profilephotohash = [];
+            }
             $this->profilephotohash[$sourceID] = $profilephotohash;
         }
 
@@ -299,8 +315,12 @@ class User extends \FeideConnect\Data\Model {
          */
 
         $modified = false;
-        if ($a->getName() !== $existing['name']) $modified = true;
-        if ($a->getMail() !== $existing['email']) $modified = true;
+        if ($a->getName() !== $existing['name']) {
+            $modified = true;
+        }
+        if ($a->getMail() !== $existing['email']) {
+            $modified = true;
+        }
 
         if ($modified) {
             Logger::info('Updating userinfo', [

@@ -22,7 +22,9 @@ class Message implements Utils\Loggable {
     public function asQS() {
         $qs = array();
         foreach ($this as $key => $value) {
-            if (empty($value)) continue;
+            if (empty($value)) {
+                continue;
+            }
             $qs[] = urlencode($key) . '=' . urlencode($value);
         }
         return join('&', $qs);
@@ -81,7 +83,9 @@ class Message implements Utils\Loggable {
 
         $body = array();
         foreach ($this as $key => $value) {
-            if (empty($value)) continue;
+            if (empty($value)) {
+                continue;
+            }
             $body[$key] = $value;
         }
         $response = new JSONResponse($body);
@@ -129,12 +133,16 @@ class Message implements Utils\Loggable {
 
 
     public static function spacelist($arg) {
-        if ($arg === null) return null;
+        if ($arg === null) {
+            return null;
+        }
         return explode(' ', $arg);
     }
 
     public static function optional($message, $key) {
-        if (empty($message[$key])) return null;
+        if (empty($message[$key])) {
+            return null;
+        }
         return $message[$key];
     }
     public static function prequire($message, $key, $values = null, $multivalued = false) {

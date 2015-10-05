@@ -84,7 +84,9 @@ class APIProtector {
 
     public function requireClient() {
 
-        if ($this->client !== null) return $this;
+        if ($this->client !== null) {
+            return $this;
+        }
         $this->requireToken();
 
         if (empty($this->accesstoken->clientid)) {
@@ -103,7 +105,9 @@ class APIProtector {
 
     public function checkUser() {
 
-        if ($this->user !== null) return $this;
+        if ($this->user !== null) {
+            return $this;
+        }
         $this->requireToken();
 
         if (empty($this->accesstoken->userid)) {
@@ -116,7 +120,9 @@ class APIProtector {
 
     public function requireUser() {
 
-        if ($this->user !== null) return $this;
+        if ($this->user !== null) {
+            return $this;
+        }
         $this->requireToken();
 
         if (empty($this->accesstoken->userid)) {

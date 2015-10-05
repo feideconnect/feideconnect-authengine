@@ -20,7 +20,9 @@ class AccountPhoto {
     }
 
     public function getHash() {
-        if ($this->hash !== null) return $this->hash;
+        if ($this->hash !== null) {
+            return $this->hash;
+        }
         $this->hash = sha1($this->raw);
         return $this->hash;
     }

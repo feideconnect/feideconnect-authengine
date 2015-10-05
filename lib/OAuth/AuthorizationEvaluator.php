@@ -145,8 +145,12 @@ class AuthorizationEvaluator {
 
         $this->requireUser();
 
-        if ($this->authorization === null) return true;
-        if (!empty($this->scopesRemaining)) return true;
+        if ($this->authorization === null) {
+            return true;
+        }
+        if (!empty($this->scopesRemaining)) {
+            return true;
+        }
 
         return false;
 

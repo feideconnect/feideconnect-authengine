@@ -100,9 +100,13 @@ class URL {
         }
         $port = ':' . $portnumber;
         if (self::getServerHTTPS()) {
-            if ($portnumber == '443') $port = '';
+            if ($portnumber == '443') {
+                $port = '';
+            }
         } else {
-            if ($portnumber == '80') $port = '';
+            if ($portnumber == '80') {
+                $port = '';
+            }
         }
         return $port;
     }

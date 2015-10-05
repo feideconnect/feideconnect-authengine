@@ -505,7 +505,9 @@ class Account {
         return $this->realm;
     }
     public function getPhoto() {
-        if ($this->photo === null) return null;
+        if ($this->photo === null) {
+            return null;
+        }
         return $this->photo->getPhoto();
     }
 

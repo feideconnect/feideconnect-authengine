@@ -10,7 +10,9 @@ class StorageProvider {
     public static $storage = null;
 
     public static function init() {
-        if (self::$storage !== null) return;
+        if (self::$storage !== null) {
+            return;
+        }
 
         $storageType = \FeideConnect\Config::getValue('storage.type');
 

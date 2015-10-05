@@ -32,8 +32,12 @@ class Cassandra2 extends \FeideConnect\Data\Repository {
 
         $config = \FeideConnect\Config::getValue('storage');
 
-        if (empty($config['keyspace'])) throw new FeideConnectException('Required config not set');
-        if (empty($config['nodes'])) throw new FeideConnectException('Required config not set');
+        if (empty($config['keyspace'])) {
+            throw new FeideConnectException('Required config not set');
+        }
+        if (empty($config['nodes'])) {
+            throw new FeideConnectException('Required config not set');
+        }
 
 
 
@@ -303,8 +307,12 @@ class Cassandra2 extends \FeideConnect\Data\Repository {
 
         $userinfo = $user->getUserInfo($sourceID);
 
-        if (empty($userinfo['profilephoto'])) throw new Exception('Missing profilephoto');
-        if (empty($userinfo['profilephotohash'])) throw new Exception('Missing profilephotohash');
+        if (empty($userinfo['profilephoto'])) {
+            throw new Exception('Missing profilephoto');
+        }
+        if (empty($userinfo['profilephotohash'])) {
+            throw new Exception('Missing profilephotohash');
+        }
 
 
 
@@ -420,7 +428,9 @@ class Cassandra2 extends \FeideConnect\Data\Repository {
         $query = 'SELECT * FROM "userid_sec" WHERE "userid_sec" = :userid_sec';
         $params = ['userid_sec' => $useridsec];
         $result = $this->query($query, $params, __FUNCTION__, null, false);
-        if ($result === null) return null;
+        if ($result === null) {
+            return null;
+        }
 
         return $this->getUserByUserID($result['userid']);
     }
@@ -445,7 +455,9 @@ class Cassandra2 extends \FeideConnect\Data\Repository {
         // echo var_export($params, true);
 
         $data = $this->query($query, $params, __FUNCTION__, null, true);
-        if (empty($data)) return null;
+        if (empty($data)) {
+            return null;
+        }
 
 
         // Helper function to get an array with a list of userids
@@ -465,7 +477,9 @@ class Cassandra2 extends \FeideConnect\Data\Repository {
         // echo var_export($params2, true);
         $res = $this->query($query2, $params2, __FUNCTION__, 'FeideConnect\Data\Models\User', true);
 
-        if (empty($res)) return null;
+        if (empty($res)) {
+            return null;
+        }
         return $res;
     }
 
