@@ -125,7 +125,7 @@ class Server {
             throw new OAuthException('invalid_client', 'Request was on behalf of a nonexisting client');
         }
 
-        if ($client->client_secret !== $_SERVER['PHP_AUTH_PW']) {
+        if ($client->client_secret !== $password) {
             throw new OAuthException('invalid_client', 'Wrong client credentials. Incorrect client_secret.');
         }
 

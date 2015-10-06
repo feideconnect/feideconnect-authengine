@@ -75,11 +75,18 @@ class OAuthAuthorizationCodeTest extends DBHelper {
         $this->assertArrayHasKey('state', $params);
         $this->assertEquals($params['state'], $_REQUEST['state']);
         $this->assertArrayHasKey('code', $params);
+        return $params['code'];
+
+    }
+
+    public function testTokenBasicAuthOK() {
+        $router = new Router();
+        $code = $this->testAuthorizationToCode();
 
         $_SERVER['PHP_AUTH_USER'] = $this->client->id;
         $_SERVER['PHP_AUTH_PW'] = $this->client->client_secret;
         $_REQUEST['grant_type'] = 'authorization_code';
-        $_REQUEST['code'] = $params['code'];
+        $_REQUEST['code'] = $code;
         $response = $router->dispatchCustom('GET', '/oauth/token');
 
         $this->assertInstanceOf('FeideConnect\HTTP\JSONResponse', $response, 'Expected /oauth/token endpoint to return json');
@@ -92,6 +99,96 @@ class OAuthAuthorizationCodeTest extends DBHelper {
         $this->assertArrayHasKey('expires_in', $data);
         $this->assertArrayHasKey('scope', $data);
         $this->assertEquals($data['token_type'], 'Bearer');
+    }
+
+    public function testTokenBasicAuthWrongClientId() {
+        $router = new Router();
+        $code = $this->testAuthorizationToCode();
+
+        $_SERVER['PHP_AUTH_USER'] = "wrong";
+        $_SERVER['PHP_AUTH_PW'] = $this->client->client_secret;
+        $_REQUEST['grant_type'] = 'authorization_code';
+        $_REQUEST['code'] = $code;
+        $response = $router->dispatchCustom('GET', '/oauth/token');
+
+        $this->assertInstanceOf('FeideConnect\HTTP\JSONResponse', $response, 'Expected /oauth/token endpoint to return json');
+
+        $data = $response->getData();
+        $this->assertEquals($response->getStatus(), 401);
+
+    }
+
+    public function testTokenBasicAuthWrongClientSecret() {
+        $router = new Router();
+        $code = $this->testAuthorizationToCode();
+
+        $_SERVER['PHP_AUTH_USER'] = $this->client->id;
+        $_SERVER['PHP_AUTH_PW'] = "wrong";
+        $_REQUEST['grant_type'] = 'authorization_code';
+        $_REQUEST['code'] = $code;
+        $response = $router->dispatchCustom('GET', '/oauth/token');
+
+        $this->assertInstanceOf('FeideConnect\HTTP\JSONResponse', $response, 'Expected /oauth/token endpoint to return json');
+
+        $data = $response->getData();
+        $this->assertEquals($response->getStatus(), 401);
+
+    }
+
+    public function testTokenPOSTOK() {
+        $router = new Router();
+        $code = $this->testAuthorizationToCode();
+
+        $_REQUEST['client_id'] = $this->client->id;
+        $_REQUEST['client_secret'] = $this->client->client_secret;
+        $_REQUEST['grant_type'] = 'authorization_code';
+        $_REQUEST['code'] = $code;
+        $response = $router->dispatchCustom('GET', '/oauth/token');
+
+        $this->assertInstanceOf('FeideConnect\HTTP\JSONResponse', $response, 'Expected /oauth/token endpoint to return json');
+
+        $data = $response->getData();
+        $this->assertEquals($response->getStatus(), 200);
+
+        $this->assertArrayHasKey('access_token', $data);
+        $this->assertArrayHasKey('token_type', $data);
+        $this->assertArrayHasKey('expires_in', $data);
+        $this->assertArrayHasKey('scope', $data);
+        $this->assertEquals($data['token_type'], 'Bearer');
+    }
+
+    public function testTokenPOSTWrongClientId() {
+        $router = new Router();
+        $code = $this->testAuthorizationToCode();
+
+        $_REQUEST['client_id'] = "wrong";
+        $_REQUEST['client_secret'] = $this->client->client_secret;
+        $_REQUEST['grant_type'] = 'authorization_code';
+        $_REQUEST['code'] = $code;
+        $response = $router->dispatchCustom('GET', '/oauth/token');
+
+        $this->assertInstanceOf('FeideConnect\HTTP\JSONResponse', $response, 'Expected /oauth/token endpoint to return json');
+
+        $data = $response->getData();
+        $this->assertEquals($response->getStatus(), 401);
+
+    }
+
+    public function testTokenPOSTWrongClientSecret() {
+        $router = new Router();
+        $code = $this->testAuthorizationToCode();
+
+        $_REQUEST['client_id'] = $this->client->id;
+        $_REQUEST['client_secret'] = "wrong";
+        $_REQUEST['grant_type'] = 'authorization_code';
+        $_REQUEST['code'] = $code;
+        $response = $router->dispatchCustom('GET', '/oauth/token');
+
+        $this->assertInstanceOf('FeideConnect\HTTP\JSONResponse', $response, 'Expected /oauth/token endpoint to return json');
+
+        $data = $response->getData();
+        $this->assertEquals($response->getStatus(), 401);
+
     }
 
     function tearDown() {
