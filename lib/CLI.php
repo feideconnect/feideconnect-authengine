@@ -12,12 +12,12 @@ use FeideConnect\OAuth\AccessTokenPool;
 class CLI {
 
     protected $storage;
-    function __construct() {
+    public function __construct() {
         $this->storage = StorageProvider::getStorage();
     }
 
 
-    function getUser($userid) {
+    public function getUser($userid) {
 
 
         $this->header("Fetch information about user " . $userid);
@@ -80,12 +80,12 @@ class CLI {
 
     }
 
-    function addUserIDsec($userid, $useridSec) {
+    public function addUserIDsec($userid, $useridSec) {
         $this->storage->addUserIDsec($userid, $useridSec);
     }
 
 
-    function getAPIGK($apigkid) {
+    public function getAPIGK($apigkid) {
 
         $this->header("Fetch information about API Gatekeeper " . $apigkid);
         $apigk = $this->storage->getAPIGK($apigkid);
@@ -94,7 +94,7 @@ class CLI {
 
     }
 
-    function getClient($clientid) {
+    public function getClient($clientid) {
 
         $this->header("Fetch information about client " . $clientid);
         $client = $this->storage->getClient($clientid);
@@ -107,23 +107,23 @@ class CLI {
 
     }
 
-    function deleteClient($client) {
+    public function deleteClient($client) {
         $this->header("Deleting client " . $client->id);
         $this->storage->removeClient($client);
     }
 
-    function deleteAPIGK($apigk) {
+    public function deleteAPIGK($apigk) {
         $this->header("Deleting apigk " . $apigk->id);
         $this->storage->removeAPIGK($apigk);
     }
 
 
-    function setScopes($client, $scopes_requested, $scopes) {
+    public function setScopes($client, $scopes_requested, $scopes) {
         $this->storage->updateClientScopes($client, $scopes_requested, $scopes);
         return $this->getClient($client->id);
     }
 
-    function getTokensClient($client) {
+    public function getTokensClient($client) {
         $this->header("Fetch list of tokens for client " . $client->id);
 
         $pool = new AccessTokenPool($client);
@@ -152,7 +152,7 @@ class CLI {
 
     }
 
-    function getTokensUser($client, $user) {
+    public function getTokensUser($client, $user) {
         $this->header("Fetch list of tokens for client " . $client->id . " and user " . $user->userid);
 
         $pool = new AccessTokenPool($client, $user);
@@ -177,7 +177,7 @@ class CLI {
     }
 
 
-    function getToken($token) {
+    public function getToken($token) {
 
         $this->header("Fetch information about token " . $token);
 
@@ -200,13 +200,13 @@ class CLI {
     }
 
 
-    function deleteUser($user) {
+    public function deleteUser($user) {
         $this->header("Deleting user " . $user->userid);
         $this->storage->deleteUser($user);
     }
 
 
-    function getUsers($count) {
+    public function getUsers($count) {
 
         $users = $this->storage->getUsers($count);
         $this->header("List users");
@@ -300,7 +300,7 @@ class CLI {
 
     }
 
-    function getOrg($orgid) {
+    public function getOrg($orgid) {
 
         $this->header("Fetch information about org " . $orgid);
         $org = $this->storage->getOrg($orgid);
@@ -309,7 +309,7 @@ class CLI {
 
     }
 
-    function updateOrgLogo($org, $logo) {
+    public function updateOrgLogo($org, $logo) {
 
 
         $this->storage->updateOrgLogo($org, $logo);
@@ -370,7 +370,7 @@ class CLI {
 
     }
 
-    function oneEntry($object) {
+    public function oneEntry($object) {
 
         $data = $object->getAsArray();
         if (isset($data['profilephoto'])) {
@@ -393,15 +393,15 @@ class CLI {
 
     }
 
-    function info($str = '') {
+    public function info($str = '') {
         echo "  " . $str . "\n";
     }
 
-    function header($str) {
+    public function header($str) {
         echo "\n\n" . $str . "\n\n";
     }
 
-    function colored($str, $c) {
+    public function colored($str, $c) {
         $colors = [
             "black" => '30',
             "red" => '31',
