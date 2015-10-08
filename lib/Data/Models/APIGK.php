@@ -19,7 +19,7 @@ class APIGK extends \FeideConnect\Data\Model {
     ];
 
 
-    function __construct($props) {
+    public function __construct($props) {
 
         parent::__construct($props);
 
@@ -42,7 +42,7 @@ class APIGK extends \FeideConnect\Data\Model {
         return $data;
     }
 
-    function getScopeDef($scope) {
+    public function getScopeDef($scope) {
         if (!isset($this->scopedef)) {
             throw new \Exception("APIGK does not have scopedef set" . $this->id);
         }
@@ -62,7 +62,7 @@ class APIGK extends \FeideConnect\Data\Model {
         return $output;
     }
 
-    function isOrgModerated($scope) {
+    public function isOrgModerated($scope) {
         $scopedef = $this->getScopeDef($scope);
         if (!isset($scopedef['policy'])) {
             return false;
@@ -77,7 +77,7 @@ class APIGK extends \FeideConnect\Data\Model {
         return $orgadminpolicy['moderate'] === true;
     }
 
-    function getBasicScopeView() {
+    public function getBasicScopeView() {
         $sd = [
             "title" => "Basic access",
             "descr" => "Basic access to this API."
@@ -91,7 +91,7 @@ class APIGK extends \FeideConnect\Data\Model {
         return $sd;
     }
 
-    function getSubScopeView($subscope) {
+    public function getSubScopeView($subscope) {
         $sd = [
             "title" => "Unknown subscope [" . $subscope . "]",
             "descr" => "Unknown subscope [" . $subscope . "]"

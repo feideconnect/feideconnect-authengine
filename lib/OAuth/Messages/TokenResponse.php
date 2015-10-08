@@ -9,7 +9,7 @@ use FeideConnect\Data\Models;
 */
 class TokenResponse extends Message {
 
-    function __construct($message) {
+    protected function __construct($message) {
 
         parent::__construct($message);
         $this->access_token        = Message::prequire($message, 'access_token');

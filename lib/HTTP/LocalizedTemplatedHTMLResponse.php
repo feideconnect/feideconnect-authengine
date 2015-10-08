@@ -15,7 +15,7 @@ class LocalizedTemplatedHTMLResponse extends TemplatedHTMLResponse {
     protected $dictionary;
 
 
-    function __construct($templateName) {
+    public function __construct($templateName) {
         parent::__construct($templateName);
 
 

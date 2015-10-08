@@ -17,7 +17,7 @@ class AuthorizationUI {
 
 
     // $client, $request, $account, $user, $redirect_uri, $scopesInQuestion, $ae->getRemainingScopes(), $organization
-    function __construct($client, $request, $account, $user, $redirect_uri, $scopesInQuestion, $ae, $organization) {
+    public function __construct($client, $request, $account, $user, $redirect_uri, $scopesInQuestion, $ae, $organization) {
 
         $this->client = $client;
         $this->request = $request;
@@ -34,7 +34,7 @@ class AuthorizationUI {
     }
 
 
-    function show() {
+    public function show() {
 
 
 

@@ -24,7 +24,7 @@ class UserMapper {
 
     protected $repo;
 
-    function __construct($repo) {
+    public function __construct($repo) {
         $this->repo = $repo;
     }
 
@@ -129,7 +129,7 @@ class UserMapper {
      * @param  boolean $merge   [description]
      * @return [type]           [description]
      */
-    function getUser(Account $account, $update = false, $create = false, $merge = false) {
+    public function getUser(Account $account, $update = false, $create = false, $merge = false) {
 
         $userIDs = $account->getUserIDs();
         $existingUser = $this->repo->getUserByUserIDsecList($userIDs);

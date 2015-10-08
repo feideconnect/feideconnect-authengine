@@ -16,7 +16,7 @@ class Account {
     public $attributes;
     protected $accountMapRules;
 
-    function __construct($attributes, $accountMapRules) {
+    public function __construct($attributes, $accountMapRules) {
 
         $this->attributes = $attributes;
         $this->accountMapRules = $accountMapRules;
@@ -522,15 +522,15 @@ class Account {
 
 
 
-    function getSourceID() {
+    public function getSourceID() {
         return $this->sourceID;
     }
 
-    function getName() {
+    public function getName() {
         return $this->name;
     }
 
-    function getMail() {
+    public function getMail() {
         return $this->mail;
     }
 

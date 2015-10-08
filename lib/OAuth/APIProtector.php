@@ -17,7 +17,7 @@ class APIProtector {
     protected $client = null;
     protected $user = null;
 
-    function __construct() {
+    public function __construct() {
 
         $this->tokenvalue = $this->getBearerToken();
         $this->storage = StorageProvider::getStorage();

@@ -14,7 +14,7 @@ use FeideConnect\Utils;
 class Message implements Utils\Loggable {
 
 
-    function __construct() {
+    protected function __construct() {
 
     }
 

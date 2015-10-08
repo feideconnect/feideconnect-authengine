@@ -36,7 +36,7 @@ class OAuthAuthorization {
 
     protected $aevaluator = null;
 
-    function __construct(Messages\Message $request) {
+    public function __construct(Messages\Message $request) {
 
 
         $this->storage = StorageProvider::getStorage();
@@ -60,7 +60,7 @@ class OAuthAuthorization {
 
     }
 
-    function evaluateStepUp($aevaluator) {
+    protected function evaluateStepUp($aevaluator) {
 
         // We are in the mid of processing the OAuth authorization
         if ($aevaluator->hasScopeInQuestion('openid')) {

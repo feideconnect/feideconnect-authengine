@@ -10,7 +10,7 @@ class AccessTokenPool {
     protected $client, $user, $stoarge;
     protected $tokens;
 
-    function __construct($client, $user = null) {
+    public function __construct($client, $user = null) {
         $this->client = $client;
         $this->user = $user;
         $this->storage = StorageProvider::getStorage();
@@ -19,7 +19,7 @@ class AccessTokenPool {
     }
 
 
-    function getTokens() {
+    private function getTokens() {
         $this->tokens = [];
 
         $userid = '00000000-0000-0000-0000-000000000000';
@@ -38,11 +38,11 @@ class AccessTokenPool {
         }
     }
 
-    function getAllTokens() {
+    public function getAllTokens() {
         return $this->tokens;
     }
 
-    function getCandidates($scopesInQuestion) {
+    private function getCandidates($scopesInQuestion) {
         $candidates = [];
 
         foreach ($this->tokens as $token) {
@@ -54,7 +54,7 @@ class AccessTokenPool {
     }
 
 
-    function getSelectedCandidate($scopesInQuestion) {
+    private function getSelectedCandidate($scopesInQuestion) {
         $candidates = $this->getCandidates($scopesInQuestion);
         if (empty($candidates)) {
             return null;
@@ -66,7 +66,7 @@ class AccessTokenPool {
     }
 
 
-    function getToken($scopesInQuestion, $refreshToken, $expires_in) {
+    public function getToken($scopesInQuestion, $refreshToken, $expires_in) {
         $candidate = $this->getSelectedCandidate($scopesInQuestion);
 
         if ($candidate !== null) {

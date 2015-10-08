@@ -10,7 +10,7 @@ class Router {
 
     protected $router, $dispatcher;
 
-    function __construct() {
+    public function __construct() {
 
 
         $this->router = new Phroute\RouteCollector();
@@ -78,11 +78,11 @@ class Router {
     }
 
 
-    function dispatch() {
+    public function dispatch() {
         return $this->dispatcher->dispatch($_SERVER['REQUEST_METHOD'], parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH));
     }
 
-    function dispatchCustom($method, $path) {
+    public function dispatchCustom($method, $path) {
         return $this->dispatcher->dispatch($method, $path);
     }
 

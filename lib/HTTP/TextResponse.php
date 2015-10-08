@@ -11,7 +11,7 @@ class TextResponse extends HTTPResponse {
 
     protected $txt;
 
-    function __construct($txt) {
+    public function __construct($txt) {
         parent::__construct();
         $this->txt = $txt;
         $this->setCORS(false);

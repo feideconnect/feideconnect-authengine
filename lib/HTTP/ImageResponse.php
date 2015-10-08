@@ -10,7 +10,7 @@ class ImageResponse extends HTTPResponse {
 
     protected $data;
 
-    function __construct() {
+    public function __construct() {
         parent::__construct();
         $this->setCachable(true);
     }

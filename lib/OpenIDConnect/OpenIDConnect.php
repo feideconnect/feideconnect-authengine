@@ -14,7 +14,7 @@ class OpenIDConnect {
     protected $issuer;
 
 
-    function __construct() {
+    public function __construct() {
 
         $this->trustStore = new TrustStore();
         $this->issuer = Config::getValue('connect.issuer');

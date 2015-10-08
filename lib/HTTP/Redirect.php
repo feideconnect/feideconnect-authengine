@@ -11,7 +11,7 @@ class Redirect extends HTTPResponse {
     protected $template;
     protected $url;
 
-    function __construct($url = null) {
+    public function __construct($url = null) {
         parent::__construct();
 
         $this->url = $url;

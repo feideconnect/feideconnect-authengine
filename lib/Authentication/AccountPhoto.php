@@ -15,7 +15,7 @@ class AccountPhoto {
     public $raw = null;
     protected $hash = null;
 
-    function __construct($raw) {
+    public function __construct($raw) {
         $this->raw = $raw;
     }
 

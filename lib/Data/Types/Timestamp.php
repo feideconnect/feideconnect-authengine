@@ -7,7 +7,7 @@ class Timestamp {
 
     protected $_value;
 
-    function __construct($input = null) {
+    public function __construct($input = null) {
 
         if ($input === null) {
             $this->setNow();
@@ -17,34 +17,34 @@ class Timestamp {
 
     }
 
-    function setNow() {
+    private function setNow() {
         $this->_value = microtime(true);
         return $this;
     }
 
 
-    function addSeconds($sec) {
+    public function addSeconds($sec) {
         $this->_value += $sec;
         return $this;
     }
 
-    function inPast () {
+    public function inPast () {
 
         $now = microtime(true);
         return $now > $this->_value;
 
     }
 
-    function getInSeconds() {
+    public function getInSeconds() {
         return floor($this->_value - microtime(true));
     }
 
 
-    function getCassandraTimestamp() {
+    public function getCassandraTimestamp() {
         return new \Cassandra\Type\Timestamp($this->_value * 1000);
     }
 
-    static function fromCassandraTimestamp($input) {
+    public static function fromCassandraTimestamp($input) {
         return new self($input / 1000.0);
     }
 

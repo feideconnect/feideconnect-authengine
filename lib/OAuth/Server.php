@@ -27,7 +27,7 @@ class Server {
     protected $server;
     protected $auth;
 
-    function __construct() {
+    public function __construct() {
 
         $this->storage = StorageProvider::getStorage();
 

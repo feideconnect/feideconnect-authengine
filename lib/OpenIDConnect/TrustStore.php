@@ -9,7 +9,7 @@ class TrustStore {
 
     protected $key;
 
-    function __construct() {
+    public function __construct() {
 
         $keyfile = Config::dir('etc', '/jwt-key.pem');
         $crtfile = Config::dir('etc', '/jwt-cert.pem');
@@ -23,11 +23,11 @@ class TrustStore {
 
     }
 
-    function getSigningAlg() {
+    public function getSigningAlg() {
         return 'RS256';
     }
 
-    function getKey() {
+    public function getKey() {
         return $this->key;
     }
 

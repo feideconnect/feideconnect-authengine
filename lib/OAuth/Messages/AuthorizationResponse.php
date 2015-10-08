@@ -9,7 +9,7 @@ use FeideConnect\Data\Models;
 */
 class AuthorizationResponse extends Message {
 
-    function __construct($message) {
+    protected function __construct($message) {
 
         parent::__construct($message);
         $this->code        = Message::prequire($message, 'code');

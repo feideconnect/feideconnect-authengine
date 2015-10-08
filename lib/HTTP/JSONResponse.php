@@ -11,7 +11,7 @@ class JSONResponse extends HTTPResponse {
     protected $data;
     protected $prettyprint;
 
-    function __construct($data = null) {
+    public function __construct($data = null) {
         parent::__construct();
 
         $this->prettyprint = true;

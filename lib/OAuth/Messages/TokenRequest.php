@@ -7,7 +7,7 @@ namespace FeideConnect\OAuth\Messages;
 */
 class TokenRequest extends Message {
 
-    function __construct($message) {
+    public function __construct($message) {
 
         parent::__construct($message);
 

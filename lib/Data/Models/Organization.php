@@ -37,7 +37,7 @@ class Organization extends \FeideConnect\Data\Model {
 
 
 
-    function __construct($props) {
+    public function __construct($props) {
 
         parent::__construct($props);
 

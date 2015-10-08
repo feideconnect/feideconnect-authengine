@@ -12,7 +12,7 @@ class TemplatedHTMLResponse extends HTTPResponse {
     protected $template;
     protected $data;
 
-    function __construct($templateName) {
+    public function __construct($templateName) {
         parent::__construct();
 
         $templateDir = Config::dir('templates');

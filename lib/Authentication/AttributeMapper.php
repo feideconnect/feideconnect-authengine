@@ -7,7 +7,7 @@ use FeideConnect\Exceptions\Exception;
 
 class AttributeMapper {
 
-    function __construct() {
+    public function __construct() {
 
         // $this->accountmap = Config::getValue('account.useridmap', [
         //     "feide" => "eduPersonPrincipalName",
@@ -70,7 +70,7 @@ class AttributeMapper {
     }
 
 
-    function getAccount($attributes) {
+    public function getAccount($attributes) {
 
         // echo '<pre>'; print_r($attributes); exit;
 

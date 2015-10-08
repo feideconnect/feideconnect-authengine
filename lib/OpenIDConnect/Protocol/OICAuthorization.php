@@ -16,7 +16,7 @@ use FeideConnect\Logger;
 class OICAuthorization extends OAuthAuthorization {
 
 
-    function __construct(Messages\Message $request) {
+    public function __construct(Messages\Message $request) {
 
         parent::__construct($request);
 
@@ -26,7 +26,7 @@ class OICAuthorization extends OAuthAuthorization {
 
     }
 
-    function evaluateStepUp($aevaluator) {
+    protected function evaluateStepUp($aevaluator) {
         return null;
     }
 

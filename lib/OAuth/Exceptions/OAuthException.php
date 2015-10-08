@@ -11,7 +11,7 @@ class OAuthException extends Exceptions\Exception {
 
     public $code, $state = null, $redirectURI = null, $useHashFragment = false;
 
-    function __construct($code, $message, $state = null, $redirectURI = null, $useHashFragment = false) {
+    public function __construct($code, $message, $state = null, $redirectURI = null, $useHashFragment = false) {
 
 
         // $httpcode = 500;

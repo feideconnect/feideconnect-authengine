@@ -14,7 +14,7 @@ class APIAuthorizationException extends Exceptions\Exception {
     protected $type = null;
 
     // protected $code, $state;
-    function __construct($message, $type = null) {
+    public function __construct($message, $type = null) {
 
         $this->type = $type;
 
@@ -42,7 +42,7 @@ class APIAuthorizationException extends Exceptions\Exception {
 
     }
 
-    function getData() {
+    public function getData() {
         $data = [
             'error' => $this->head,
             'message' => $this->getMessage(),
@@ -50,7 +50,7 @@ class APIAuthorizationException extends Exceptions\Exception {
         return $data;
     }
 
-    function getJSONResponse() {
+    public function getJSONResponse() {
 
         $response = new JSONResponse($this->getData());
         $response->setStatus($this->httpcode);

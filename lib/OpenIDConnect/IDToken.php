@@ -44,7 +44,7 @@ class IDToken {
  */
 
 
-    function __construct(TrustStore $trustStore) {
+    private function __construct(TrustStore $trustStore) {
 
         $this->trustStore = $trustStore;
         $this->object = [];
@@ -77,7 +77,7 @@ class IDToken {
         return $this;
     }
 
-    function getEncoded() {
+    public function getEncoded() {
 
         /**
          * IMPORTANT:
@@ -90,7 +90,7 @@ class IDToken {
         return $this->encoded;
     }
 
-    function getObject() {
+    public function getObject() {
         return $this->object;
     }
 

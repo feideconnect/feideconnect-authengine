@@ -10,17 +10,17 @@ class Exception extends \Exception {
 
     public $httpcode = 500;
 
-    function __construct($message, $httpcode = 500, $head = 'Internal Error') {
+    public function __construct($message, $httpcode = 500, $head = 'Internal Error') {
         parent::__construct($message);
         $this->httpcode = $httpcode;
         $this->head = $head;
     }
 
-    function setHTTPcode() {
+    public function setHTTPcode() {
         http_response_code($this->httpcode);
     }
 
-    function prepareErrorMessage() {
+    public function prepareErrorMessage() {
 
         $this->setHTTPcode();
 

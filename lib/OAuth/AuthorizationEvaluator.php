@@ -18,7 +18,7 @@ class AuthorizationEvaluator {
     protected $scopesInQuestion = null;
     protected $scopesRemaining = null;
 
-    function __construct($storage, $client, $request, $user = null) {
+    public function __construct($storage, $client, $request, $user = null) {
 
         $this->storage = $storage;
         $this->client = $client;

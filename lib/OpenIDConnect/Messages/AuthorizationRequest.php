@@ -9,7 +9,7 @@ use FeideConnect\OAuth\Messages\Message;
 */
 class AuthorizationRequest extends \FeideConnect\OAuth\Messages\AuthorizationRequest {
 
-    function __construct($message) {
+    public function __construct($message) {
 
         parent::__construct($message);
 

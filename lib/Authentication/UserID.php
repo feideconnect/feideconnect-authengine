@@ -7,7 +7,7 @@ class UserID {
     public $prefix;
     public $local;
 
-    function __construct($in = null) {
+    public function __construct($in = null) {
 
         if (preg_match('/^(.*):(.*?)$/', $in, $matches)) {
             $this->prefix = $matches[1];

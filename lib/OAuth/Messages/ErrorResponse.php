@@ -6,7 +6,7 @@ use FeideConnect\HTTP\JSONResponse;
 
 class ErrorResponse extends Message {
 
-    function __construct($message) {
+    public function __construct($message) {
 
         parent::__construct($message);
 

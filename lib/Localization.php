@@ -15,7 +15,7 @@ class Localization {
         "no" => "nb"
     ];
 
-    static function getDictionary() {
+    public static function getDictionary() {
 
         if (Config::getValue('enableLocalization', false)) {
             $availableLanguages = Config::getValue('availableLanguages', ['en']);
@@ -41,7 +41,7 @@ class Localization {
     }
 
 
-    static function localizeEntry($entry) {
+    public static function localizeEntry($entry) {
 
         if (is_string($entry)) {
             return $entry;
@@ -54,7 +54,7 @@ class Localization {
         return $entry;
     }
 
-    static function localizeList($list, $attrs) {
+    public static function localizeList($list, $attrs) {
 
         $res = [];
         foreach ($list as $item) {

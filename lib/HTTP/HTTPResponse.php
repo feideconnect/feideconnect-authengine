@@ -13,7 +13,7 @@ class HTTPResponse {
     protected $cors;
     protected $cachable;
 
-    function __construct(){
+    public function __construct(){
         $this->headers = [];
         $this->status = 200;
 

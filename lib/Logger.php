@@ -21,7 +21,7 @@ class Logger {
     protected static $requestId;
 
 
-    function __construct() {
+    private function __construct() {
         $this->log = new \Monolog\Logger('feideconnect');
         $filename = Config::getValue('logging.filename', '/var/log/feideconnect-authengine.log');
         if (Config::getValue('logging.file', false) && file_exists($filename) && is_writable($filename)) {

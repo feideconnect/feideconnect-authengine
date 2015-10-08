@@ -12,7 +12,7 @@ class GeoLocation {
 
     protected static $reader = null;
 
-    function __construct() {
+    public function __construct() {
 
         $geoipfile = Config::filepath(Config::getValue('geodb'));
 
@@ -32,7 +32,7 @@ class GeoLocation {
     }
 
 
-    function getLocation() {
+    public function getLocation() {
 
         $ip = $_SERVER['REMOTE_ADDR'];
         if (isset($_REQUEST['ip'])) {
@@ -135,7 +135,7 @@ class GeoLocation {
         return null;
     }
 
-    function addrGeo($address) {
+    private function addrGeo($address) {
 
         // Temorary disabled. Needs to figure out a way to use a API key and add caching.
         return null;

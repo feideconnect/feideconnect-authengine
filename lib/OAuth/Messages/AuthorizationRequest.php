@@ -8,7 +8,7 @@ namespace FeideConnect\OAuth\Messages;
 */
 class AuthorizationRequest extends Message {
 
-    function __construct($message) {
+    public function __construct($message) {
 
         parent::__construct($message);
         $this->response_type    = Message::prequire($message, 'response_type', ['code', 'token'], true);

@@ -25,7 +25,7 @@ class Client extends \FeideConnect\Data\Model {
         "updated" => "timestamp"
     ];
 
-    function __construct($props = array()) {
+    public function __construct($props = array()) {
 
         parent::__construct($props);
 

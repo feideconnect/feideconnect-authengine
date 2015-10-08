@@ -13,7 +13,7 @@ abstract class Model implements Utils\Loggable {
     protected static $_types = [];
 
 
-    function __construct($props = array()) {
+    public function __construct($props = array()) {
         $this->_repo = StorageProvider::getStorage();
 
         foreach (static::$_properties as $k) {

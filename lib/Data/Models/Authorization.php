@@ -58,7 +58,7 @@ class Authorization extends \FeideConnect\Data\Model {
         }
     }
 
-    function includeScopes($requiredscopes) {
+    public function includeScopes($requiredscopes) {
 
         $myScopes = $this->getScopeList();
 
