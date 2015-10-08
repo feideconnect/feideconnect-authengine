@@ -207,68 +207,49 @@ class Account {
 
             return $tag;
 
-        } else if (isset($this->sourceID) && $this->sourceID === 'idporten') {
-            $tag = [
-                "name" => $this->name,
+        }
+        $sourceData = [
+            'idporten' => [
                 "type" => "saml",
                 "id" => "idporten.difi.no-v2",
                 "title" => 'IDporten',
-                "userids" => $this->maskNin($this->userids),
                 "def" => [["other", "idporten"]],
-             ];
-             return $tag;
-
-        } else if (isset($this->sourceID) && $this->sourceID === 'openidp') {
-            $tag = [
-                "name" => $this->name,
+            ],
+            'openidp' => [
                 "type" => "saml",
                 "id" => "https://openidp.feide.no",
                 "title" => 'Feide OpenIdP guest account',
-                "userids" => $this->userids,
                 "def" => [["other", "openidp"]],
-             ];
-             return $tag;
-
-        } else if (isset($this->sourceID) && $this->sourceID === 'twitter') {
-            $tag = [
-                "name" => $this->name,
+            ],
+            'twitter' => [
                 "type" => "twitter",
                 "title" => 'Twitter',
-                "userids" => $this->userids,
                 "def" => [["social", "twitter"]],
-             ];
-             return $tag;
-
-        } else if (isset($this->sourceID) && $this->sourceID === 'linkedin') {
-            $tag = [
-                "name" => $this->name,
+            ],
+            'linkedin' => [
                 "type" => "linkedin",
                 "title" => 'LinkedIn',
-                "userids" => $this->userids,
                 "def" => [["social", "linkedin"]],
-             ];
-             return $tag;
-
-        } else if (isset($this->sourceID) && $this->sourceID === 'facebook') {
-            $tag = [
-                "name" => $this->name,
+            ],
+            'facebook' => [
                 "type" => "facebook",
                 "title" => 'Facebook',
-                "userids" => $this->userids,
                 "def" => [["social", "facebook"]],
-             ];
-             return $tag;
-
-        }
-
-
-        return [
-            "name" => $this->name,
-            "title" => "Unknown",
-            "userids" => $this->userids,
-            "def" => []
+            ],
+            '' => [
+                "title" => "Unknown",
+                "def" => [],
+            ]
         ];
-
+        $sourceID = $this->sourceID;
+        if (!isset($sourceData[$sourceID])) {
+            $sourceID = '';
+        }
+        $tag = [
+            "name" => $this->name,
+            "userids" => $this->maskNin($this->userids),
+        ];
+        return array_merge($sourceData[$sourceID], $tag);
     }
 
 
