@@ -56,11 +56,14 @@ class Organization extends \FeideConnect\Data\Model {
         foreach ($this->type as $type) {
             switch ($type) {
                 case 'primary_and_lower_secondary':
-                    $t[] = 'go'; break;
+                    $t[] = 'go';
+                    break;
                 case 'upper_secondary':
-                    $t[] = 'vgs'; break;
+                    $t[] = 'vgs';
+                    break;
                 case 'higher_education':
-                    $t[] = 'he'; break;
+                    $t[] = 'he';
+                    break;
                 // case 'service_provider':
                 //     $t[] = 'sp'; break;
             }

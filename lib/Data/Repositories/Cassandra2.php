@@ -522,7 +522,7 @@ class Cassandra2 extends \FeideConnect\Data\Repository {
         return $this->query($query, $params, __FUNCTION__, 'FeideConnect\Data\Models\APIGK', true);
     }
 
-    public function getAPIGK( $id) {
+    public function getAPIGK($id) {
         $query = 'SELECT id, descr, endpoints, expose, httpscertpinned, name, owner, organization, requireuser, scopedef, status, created, updated FROM "apigk" WHERE "id" = :id';
         $params = ['id' => $id];
         return $this->query($query, $params, __FUNCTION__, 'FeideConnect\Data\Models\APIGK', false);
@@ -545,7 +545,7 @@ class Cassandra2 extends \FeideConnect\Data\Repository {
     /*
      * --- Database handling of the 'client' column family
      */
-    public function getClient( $id) {
+    public function getClient($id) {
         $query = 'SELECT id, client_secret, created, descr, name, owner, organization, authproviders, logo, redirect_uri, scopes, scopes_requested, status, type, updated, orgauthorization FROM "clients" WHERE "id" = :id';
         $params = ['id' => new Uuid($id)];
         return $this->query($query, $params, __FUNCTION__, 'FeideConnect\Data\Models\Client', false);
