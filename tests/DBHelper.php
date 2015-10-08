@@ -117,6 +117,7 @@ class DBHelper extends \PHPUnit_Framework_TestCase {
                 'nb' => 'Testorganisasjon',
                 'en' => 'Test organization',
             ),
+            'type' => ['higher_education'],
         ));
         $this->db->saveOrganization($org);
         return $org;

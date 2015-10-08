@@ -138,6 +138,10 @@ class Organization extends \FeideConnect\Data\Model {
         if (isset($this->name)) {
             $prepared["name"] =  new CollectionMap($this->name, Base::ASCII, Base::ASCII);
         }
+
+        if (isset($this->type)) {
+            $prepared["type"] = new CollectionSet($this->type, Base::ASCII);
+        }
         return $prepared;
     }
 
