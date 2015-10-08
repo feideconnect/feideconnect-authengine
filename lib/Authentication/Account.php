@@ -288,31 +288,31 @@ class Account {
         return $default;
     }
 
-    protected function getComplexSourceID($def) {
+    protected function getComplexSourceID($rule) {
         $value = '';
-        if (!isset($def["prefix"])) {
+        if (!isset($rule["prefix"])) {
             throw new Exception("Missing sourceID prefix for attribute map ruleset");
         }
 
-        $value .= $def["prefix"];
+        $value .= $rule["prefix"];
 
-        if ($def["realm"]) {
+        if ($rule["realm"]) {
             $value .= ':' . $this->requireRealm();
         }
         return $value;
     }
 
-    protected function getComplex($def, $default = null, $required = false) {
+    protected function getComplex($rule, $default = null, $required = false) {
 
         // If definition contains type = realm.
-        if (isset($def["type"]) && $def["type"] === "sourceID") {
-            return $this->getComplexSourceID($def);
+        if (isset($rule["type"]) && $rule["type"] === "sourceID") {
+            return $this->getComplexSourceID($rule);
 
-        } else if (isset($def["type"]) && $def["type"] === "urlref") {
-            if (!isset($def["attrname"])) {
+        } else if (isset($rule["type"]) && $rule["type"] === "urlref") {
+            if (!isset($rule["attrname"])) {
                 throw new Exception("Missing [attrname] on complex attribute definition");
             }
-            $attrname = $def["attrname"];
+            $attrname = $rule["attrname"];
             $url = $this->getValue($attrname);
 
             $prot = parse_url($url, PHP_URL_SCHEME);
@@ -328,19 +328,19 @@ class Account {
 
             return $value;
 
-        } else if (isset($def["attrnames"]) && is_array($def["attrnames"])) {
-            $attrnames = $def["attrnames"];
+        } else if (isset($rule["attrnames"]) && is_array($rule["attrnames"])) {
+            $attrnames = $rule["attrnames"];
             return $this->getComplexAttrnames($attrnames, $default, $required);
 
-        } else if (isset($def["type"]) && $def["type"] === "fixed") {
-            if (!isset($def["value"])) {
+        } else if (isset($rule["type"]) && $rule["type"] === "fixed") {
+            if (!isset($rule["value"])) {
                 throw new Exception("Missing [value] on complex attribute definition");
             }
-            return $def["value"];
+            return $rule["value"];
 
         }
 
-        // echo '<pre>'; var_dump($def); var_dump($default); var_dump($required); exit;
+        // echo '<pre>'; var_dump($rule); var_dump($default); var_dump($required); exit;
         throw new Exception("Unreckognized complex attribute mapping ruleset");
 
     }
