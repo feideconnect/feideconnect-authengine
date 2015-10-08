@@ -285,38 +285,40 @@ class Account {
         return null;
     }
 
+    protected function getComplexUrlref($rule) {
+        if (!isset($rule["attrname"])) {
+            throw new Exception("Missing [attrname] on complex attribute definition");
+        }
+        $attrname = $rule["attrname"];
+        $url = $this->getValue($attrname);
+
+        $prot = parse_url($url, PHP_URL_SCHEME);
+        if ($prot === false) {
+            return null;
+        }
+        if (!in_array($prot, ["http", "https"])) {
+            return null;
+        }
+
+        $value = file_get_contents($url);
+        // echo $value; exit;
+
+        return $value;
+
+    }
+
     protected function getComplex($rule) {
 
         if (isset($rule["type"]) && $rule["type"] === "urlref") {
-            if (!isset($rule["attrname"])) {
-                throw new Exception("Missing [attrname] on complex attribute definition");
-            }
-            $attrname = $rule["attrname"];
-            $url = $this->getValue($attrname);
-
-            $prot = parse_url($url, PHP_URL_SCHEME);
-            if ($prot === false) {
-                return null;
-            }
-            if (!in_array($prot, ["http", "https"])) {
-                return null;
-            }
-
-            $value = file_get_contents($url);
-            // echo $value; exit;
-
-            return $value;
-
+            return $this->getComplexUrlref($rule);
         } else if (isset($rule["attrnames"]) && is_array($rule["attrnames"])) {
             $attrnames = $rule["attrnames"];
             return $this->getComplexAttrnames($attrnames);
-
         } else if (isset($rule["type"]) && $rule["type"] === "fixed") {
             if (!isset($rule["value"])) {
                 throw new Exception("Missing [value] on complex attribute definition");
             }
             return $rule["value"];
-
         }
 
         // echo '<pre>'; var_dump($rule); var_dump($default); var_dump($required); exit;
