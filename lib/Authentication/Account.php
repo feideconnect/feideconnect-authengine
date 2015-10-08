@@ -364,16 +364,19 @@ class Account {
         return $default;
     }
 
-    protected function get($property, $default = null, $required = false) {
-
+    protected function getRule($property) {
         if (!array_key_exists($property, $this->accountMapRules)) {
             throw new Exception("No defined attribute account map rule for property [" . $property . "]");
         }
+        return $this->accountMapRules[$property];
+    }
 
-        if (is_string($this->accountMapRules[$property])) {
-            return $this->getValue($this->accountMapRules[$property], $default, $required);
-        } else if (is_array($this->accountMapRules[$property])) {
-            return $this->getComplex($this->accountMapRules[$property], $default, $required);
+    protected function get($property, $default = null, $required = false) {
+        $rule = $this->getRule($property);
+        if (is_string($rule)) {
+            return $this->getValue($rule, $default, $required);
+        } else if (is_array($rule)) {
+            return $this->getComplex($rule, $default, $required);
         }
 
         if ($required) {
@@ -385,11 +388,8 @@ class Account {
 
     protected function obtainUserIDs() {
         $property = "userid";
-        if (!isset($this->accountMapRules[$property])) {
-            throw new Exception("No defined attribute account map rule for property [" . $property . "]");
-        }
 
-        $useridMap = $this->accountMapRules[$property];
+        $useridMap = $this->getRule($property);
         $userids = [];
 
         foreach ($useridMap as $prefix => $attrname) {
@@ -403,23 +403,20 @@ class Account {
 
     protected function obtainPhoto() {
         $property = "photo";
-        if (!array_key_exists($property, $this->accountMapRules)) {
-            throw new Exception("No defined attribute account map rule for property [" . $property . "]");
-        }
-        // echo '<pre>_'; print_r($this->accountMapRules['photo']); exit;
+        $rule = $this->getRule($property);
 
-        if ($this->accountMapRules[$property] === null) {
+        if ($rule === null) {
             return null;
         }
 
-        if (is_string($this->accountMapRules[$property])) {
-            if (empty($this->attributes[$this->accountMapRules[$property]])) {
+        if (is_string($rule)) {
+            if (empty($this->attributes[$rule])) {
                 return null;
             }
-            $value = $this->attributes[$this->accountMapRules[$property]][0];
+            $value = $this->attributes[$rule][0];
             return new AccountPhoto($value);
         } else {
-            $value = $this->getComplex($this->accountMapRules[$property]);
+            $value = $this->getComplex($rule);
             $value = base64_encode($value);
             return new AccountPhoto($value);
         }
