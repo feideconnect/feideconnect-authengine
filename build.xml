@@ -71,11 +71,11 @@
   <target name="phpcs" depends="composer-install"
           description="Find coding standard violations using PHP_CodeSniffer and print human readable output. Intended for usage on the command line before committing.">
     <exec executable="./vendor/bin/phpcs">
-      <arg value="--standard=PSR1"/>
+      <arg value="--standard=phpcsrules.xml"/>
       <arg path="${basedir}/lib" />
       <arg path="${basedir}/templates" />
       <arg path="${basedir}/tests" />
-      <arg path="${basedir}/www" />
+      <arg path="${basedir}/www/index.php" />
     </exec>
   </target>
 
@@ -83,11 +83,11 @@
     <exec executable="./vendor/bin/phpcs">
       <arg value="--report=checkstyle" />
       <arg value="--report-file=${basedir}/build/logs/checkstyle.xml" />
-      <arg value="--standard=PSR1"/>
+      <arg value="--standard=phpcsrules.xml"/>
       <arg path="${basedir}/lib" />
       <arg path="${basedir}/templates" />
       <arg path="${basedir}/tests" />
-      <arg path="${basedir}/www" />
+      <arg path="${basedir}/www/index.php" />
     </exec>
   </target>
 
