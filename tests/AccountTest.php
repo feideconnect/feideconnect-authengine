@@ -153,9 +153,10 @@ class AccountTest extends DBHelper {
         'realm' => null,
         'name' =>
         array (
-            'attrnames' =>
+            'joinattrnames' =>
             array (
                 0 => 'linkedin.firstName',
+                1 => 'linkedin.lastName',
             ),
         ),
         'mail' => null,
@@ -323,7 +324,7 @@ class AccountTest extends DBHelper {
         ], self::$linkedinAM);
         $tag = $account->getVisualTag();
         $this->assertEquals([
-            'name' => 'ln',
+            'name' => 'ln user',
             'type' => 'linkedin',
             'title' => 'LinkedIn',
             'userids' => ['linkedin:12345'],

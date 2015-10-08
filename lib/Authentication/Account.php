@@ -285,6 +285,19 @@ class Account {
         return null;
     }
 
+    protected function getComplexJoinAttrnames($attrnames) {
+        $parts = [];
+        foreach ($attrnames as $attr) {
+            if (isset($this->attributes[$attr])) {
+                $parts[] = $this->attributes[$attr][0];
+            }
+        }
+        if (empty($parts)) {
+            return null;
+        }
+        return join(" ", $parts);
+    }
+
     protected function getComplexUrlref($rule) {
         if (!isset($rule["attrname"])) {
             throw new Exception("Missing [attrname] on complex attribute definition");
@@ -322,6 +335,9 @@ class Account {
         if (isset($rule["attrnames"]) && is_array($rule["attrnames"])) {
             $attrnames = $rule["attrnames"];
             return $this->getComplexAttrnames($attrnames);
+        }
+        if (isset($rule["joinattrnames"]) && is_array($rule["joinattrnames"])) {
+            return $this->getComplexJoinAttrnames($rule["joinattrnames"]);
         }
 
         // echo '<pre>'; var_dump($rule); var_dump($default); var_dump($required); exit;
