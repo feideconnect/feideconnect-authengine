@@ -40,7 +40,7 @@ class Account {
         $this->name   = $this->get("name", '');
         $this->mail   = $this->get("mail", '');
         $this->yob    = $this->get("yob");
-        $this->sourceID = $this->get("sourceID", null, true);
+        $this->sourceID = $this->obtainSourceID();
 
         // echo '<pre>'; print_r($this); exit;
 
@@ -288,27 +288,9 @@ class Account {
         return $default;
     }
 
-    protected function getComplexSourceID($rule) {
-        $value = '';
-        if (!isset($rule["prefix"])) {
-            throw new Exception("Missing sourceID prefix for attribute map ruleset");
-        }
-
-        $value .= $rule["prefix"];
-
-        if ($rule["realm"]) {
-            $value .= ':' . $this->requireRealm();
-        }
-        return $value;
-    }
-
     protected function getComplex($rule, $default = null, $required = false) {
 
-        // If definition contains type = realm.
-        if (isset($rule["type"]) && $rule["type"] === "sourceID") {
-            return $this->getComplexSourceID($rule);
-
-        } else if (isset($rule["type"]) && $rule["type"] === "urlref") {
+        if (isset($rule["type"]) && $rule["type"] === "urlref") {
             if (!isset($rule["attrname"])) {
                 throw new Exception("Missing [attrname] on complex attribute definition");
             }
@@ -376,6 +358,23 @@ class Account {
         }
         return $default;
 
+    }
+
+    protected function obtainSourceID() {
+        $property = "sourceID";
+        $rule = $this->getRule($property);
+
+        $value = '';
+        if (!is_array($rule) || !isset($rule["prefix"])) {
+            throw new Exception("Incorrect sourceID specification in attribute map ruleset");
+        }
+
+        $value .= $rule["prefix"];
+
+        if ($rule["realm"]) {
+            $value .= ':' . $this->requireRealm();
+        }
+        return $value;
     }
 
     protected function obtainRealm() {
