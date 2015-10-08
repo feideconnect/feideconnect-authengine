@@ -27,7 +27,7 @@ class OAuthAuthorizationCodeTest extends DBHelper {
         $_REQUEST['client_id'] = $this->client->id;
 
         $this->user = $this->user();
-        AuthSource::setFactory(function($type) { return new MockAuthSource($type); });
+        AuthSource::setFactory(['\tests\MockAuthSource', 'create']);
     }
 
     public function testAuthorizationToAccountChooser() {

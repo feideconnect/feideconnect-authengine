@@ -19,7 +19,7 @@ class OAuthAuthorizationTest extends DBHelper {
         $_SERVER['HTTP_ACCEPT_LANGUAGE'] = 'en-US';
         $_REQUEST['response_type'] = 'code';
         $_REQUEST['client_id'] = $this->client->id;
-        AuthSource::setFactory(function($type) { return new MockAuthSource($type); });
+        AuthSource::setFactory(['\tests\MockAuthSource', 'create']);
     }
 
     private function doRun() {

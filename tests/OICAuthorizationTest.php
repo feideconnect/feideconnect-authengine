@@ -11,7 +11,7 @@ class OICAuthorizationTest extends OAuthAuthorizationTest {
         parent::setUp();
         $this->client->scopes[] = 'openid';
         $this->db->saveClient($this->client);
-        AuthSource::setFactory(function($type) { return new MockAuthSource($type); });
+        AuthSource::setFactory(['\tests\MockAuthSource', 'create']);
     }
 
     public function testAuthorizationToCode() {

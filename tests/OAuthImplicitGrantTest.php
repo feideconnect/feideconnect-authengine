@@ -26,7 +26,7 @@ class OAuthImplicitGrantTest extends DBHelper {
 
         $this->user = $this->user();
 
-        AuthSource::setFactory(function ($type) { return new MockAuthSource($type); });
+        AuthSource::setFactory(['\tests\MockAuthSource', 'create']);
     }
 
     public function testAuthorizationToAccountChooser() {
