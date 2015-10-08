@@ -28,7 +28,7 @@ class AttributeMapper {
     }
 
 
-    private static function ruleMatch($authSource, $idp = null, $am) {
+    private static function ruleMatch($authSource, $idp, $am) {
 
         if (isset($am["authSource"])) {
             if ($am["authSource"] !== $authSource) {
