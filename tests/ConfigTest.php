@@ -10,7 +10,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase {
 
     protected $db;
 
-    function __construct() {
+    public function __construct() {
 
         // $c = [
         //     "foo" => [

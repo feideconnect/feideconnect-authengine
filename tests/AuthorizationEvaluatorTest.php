@@ -9,12 +9,12 @@ class AuthorizationEvaluatorTest extends DBHelper {
 
     protected $user, $client, $aevaluator;
 
-    function setUp() {
+    public function setUp() {
         $this->user = $this->user();
         $this->client = $this->client();
     }
 
-    function getRequest($redirect_uri = null) {
+    private function getRequest($redirect_uri = null) {
 
         $req = [
             "response_type" => "code",
@@ -27,7 +27,7 @@ class AuthorizationEvaluatorTest extends DBHelper {
         return new AuthorizationRequest($req);
     }
 
-    function testAuthorizationEvaluatorNoURLinRequest() {
+    public function testAuthorizationEvaluatorNoURLinRequest() {
 
 
         $request = $this->getRequest();
@@ -37,7 +37,7 @@ class AuthorizationEvaluatorTest extends DBHelper {
 
     }
 
-    function testAuthorizationEvaluatorCorrectURLinRequest() {
+    public function testAuthorizationEvaluatorCorrectURLinRequest() {
 
 
         $request = $this->getRequest('http://example.org');
@@ -49,7 +49,7 @@ class AuthorizationEvaluatorTest extends DBHelper {
     }
 
 
-    function testAuthorizationEvaluatorBadURLinRequest() {
+    public function testAuthorizationEvaluatorBadURLinRequest() {
 
         $this->setExpectedException('FeideConnect\OAuth\Exceptions\OAuthException');
         $request = $this->getRequest('http://bad.example.org');

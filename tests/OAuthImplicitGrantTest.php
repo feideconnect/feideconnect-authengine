@@ -79,7 +79,7 @@ class OAuthImplicitGrantTest extends DBHelper {
         $this->assertEquals($params['token_type'], 'Bearer');
     }
 
-    function tearDown() {
+    public function tearDown() {
 
         parent::tearDown();
         $this->db->removeClient($this->client);

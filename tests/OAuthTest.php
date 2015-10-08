@@ -6,7 +6,7 @@ use FeideConnect\HTTP\JSONResponse;
 
 class OAuthTest extends \PHPUnit_Framework_TestCase {
 
-    function __construct() {
+    public function __construct() {
 
 
         $_SERVER['REMOTE_ADDR'] = '127.0.0.1';

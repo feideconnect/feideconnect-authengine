@@ -10,7 +10,7 @@ class DBTest extends \PHPUnit_Framework_TestCase {
 
     protected $db;
 
-    function __construct() {
+    public function __construct() {
 
         // $config = json_decode(file_get_contents(__DIR__ . '/../etc/ci/config.json'), true);
         $this->db = StorageProvider::getStorage();

@@ -12,7 +12,7 @@ class IDTokenTest extends \PHPUnit_Framework_TestCase {
     protected $truststore;
 
 
-    function __construct() {
+    public function __construct() {
 
 
         $this->truststore = new TrustStore();

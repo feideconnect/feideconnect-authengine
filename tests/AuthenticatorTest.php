@@ -5,7 +5,7 @@ use FeideConnect\Authentication\AuthSource;
 use FeideConnect\Authentication\Authenticator;
 
 class AuthenticatorRequireAuthenticationTest extends DBHelper {
-    function setUp() {
+    public function setUp() {
         parent::setUp();
         $_SERVER['REQUEST_URI'] = '/foo';
         $_SERVER['SERVER_PROTOCOL'] = 'HTTP/1.1';
@@ -13,7 +13,7 @@ class AuthenticatorRequireAuthenticationTest extends DBHelper {
         AuthSource::setFactory(['\tests\MockAuthSource', 'create']);
     }
 
-    function testToAccountChooser() {
+    public function testToAccountChooser() {
         $this->setExpectedExceptionRegExp(
             'FeideConnect\Exceptions\RedirectException',
             '/^http:\/\/localhost\/accountchooser\?/'
@@ -22,7 +22,7 @@ class AuthenticatorRequireAuthenticationTest extends DBHelper {
         $authenticator->requireAuthentication();
     }
 
-    function testDefaultLoggedIn() {
+    public function testDefaultLoggedIn() {
         $_REQUEST['acresponse'] = '{"id": "https://idp.feide.no","subid":"example.org"}';
 
         $as = AuthSource::create('default-sp');
@@ -31,7 +31,7 @@ class AuthenticatorRequireAuthenticationTest extends DBHelper {
         $this->assertNull($authenticator->requireAuthentication());
     }
 
-    function testDefaultNotLoggedIn() {
+    public function testDefaultNotLoggedIn() {
         $this->setExpectedException('\Exception');
         $_REQUEST['acresponse'] = '{"id": "https://idp.feide.no","subid":"example.org"}';
 
@@ -41,7 +41,7 @@ class AuthenticatorRequireAuthenticationTest extends DBHelper {
         $authenticator->requireAuthentication();
     }
 
-    function testActiveRedirectLoggedIn() {
+    public function testActiveRedirectLoggedIn() {
         $_REQUEST['acresponse'] = '{"id": "https://idp.feide.no","subid":"example.org"}';
 
         $as = AuthSource::create('default-sp');
@@ -50,7 +50,7 @@ class AuthenticatorRequireAuthenticationTest extends DBHelper {
         $this->assertNull($authenticator->requireAuthentication(false, true));
     }
 
-    function testActiveRedirectNotLoggedIn() {
+    public function testActiveRedirectNotLoggedIn() {
         $_REQUEST['acresponse'] = '{"id": "https://idp.feide.no","subid":"example.org"}';
 
         $as = $this->prophesize('\tests\MockAuthSource');
@@ -61,7 +61,7 @@ class AuthenticatorRequireAuthenticationTest extends DBHelper {
         $authenticator->requireAuthentication(false, true);
     }
 
-    function testPassiveNoRedirectLoggedIn() {
+    public function testPassiveNoRedirectLoggedIn() {
         $_REQUEST['acresponse'] = '{"id": "https://idp.feide.no","subid":"example.org"}';
 
         $as = new MockAuthSource('default-sp');
@@ -71,7 +71,7 @@ class AuthenticatorRequireAuthenticationTest extends DBHelper {
         $this->assertNull($authenticator->requireAuthentication(true));
     }
 
-    function testPassiveNoRedirectNotLoggedIn() {
+    public function testPassiveNoRedirectNotLoggedIn() {
         $this->setExpectedException('\Exception');
         $_REQUEST['acresponse'] = '{"id": "https://idp.feide.no","subid":"example.org"}';
 
@@ -81,7 +81,7 @@ class AuthenticatorRequireAuthenticationTest extends DBHelper {
         $authenticator->requireAuthentication(true);
     }
 
-    function testPassiveRedirectLoggedIn() {
+    public function testPassiveRedirectLoggedIn() {
         $_REQUEST['acresponse'] = '{"id": "https://idp.feide.no","subid":"example.org"}';
 
         $as = new MockAuthSource('default-sp');
@@ -91,7 +91,7 @@ class AuthenticatorRequireAuthenticationTest extends DBHelper {
         $this->assertNull($authenticator->requireAuthentication(true, true));
     }
 
-    function testPassiveRedirectNotLoggedIn() {
+    public function testPassiveRedirectNotLoggedIn() {
         $_REQUEST['acresponse'] = '{"id": "https://idp.feide.no","subid":"example.org"}';
 
         $as = $this->prophesize('\tests\MockAuthSource');
@@ -107,7 +107,7 @@ class AuthenticatorRequireAuthenticationTest extends DBHelper {
         $this->assertNull($authenticator->requireAuthentication(true, true));
     }
 
-    function testActiveRedirectMaxageOK() {
+    public function testActiveRedirectMaxageOK() {
         $_REQUEST['acresponse'] = '{"id": "https://idp.feide.no","subid":"example.org"}';
 
         $as = $this->prophesize('\tests\MockAuthSource');
@@ -120,7 +120,7 @@ class AuthenticatorRequireAuthenticationTest extends DBHelper {
         $this->assertNull($authenticator->requireAuthentication(false, true, null, 60));
     }
 
-    function testActiveRedirectMaxagePassed() {
+    public function testActiveRedirectMaxagePassed() {
         $_REQUEST['acresponse'] = '{"id": "https://idp.feide.no","subid":"example.org"}';
 
         $as = $this->prophesize('\tests\MockAuthSource');
@@ -137,7 +137,7 @@ class AuthenticatorRequireAuthenticationTest extends DBHelper {
         $this->assertNull($authenticator->requireAuthentication(false, true, null, 60));
     }
 
-    function testPassiveRedirectMaxagePassed() {
+    public function testPassiveRedirectMaxagePassed() {
         $this->setExpectedException(
             'FeideConnect\Exceptions\RedirectException',
             'http://localhost/foo?error=1'

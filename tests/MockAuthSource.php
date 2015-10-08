@@ -37,14 +37,14 @@ class MockAuthSource {
         return $auth_data[$type];
     }
 
-    static function set($type, $obj) {
+    public static function set($type, $obj) {
         if (self::$sources === null) {
             self::$sources = array();
         }
         self::$sources[$type] = $obj;
     }
 
-    static function create($type) {
+    public static function create($type) {
         if (self::$sources === null) {
             self::$sources = array();
         }

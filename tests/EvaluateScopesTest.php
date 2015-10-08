@@ -8,43 +8,43 @@ class EvaluateScopesTest extends DBHelper {
 
     protected $user, $client, $apigk;
 
-    function setUp() {
+    public function setUp() {
         $this->user = $this->user();
         $this->client = $this->client();
         $this->apigk = $this->apigk();
     }
 
-    function testNoRequestedScopes() {
+    public function testNoRequestedScopes() {
         $scopes = ['userinfo', 'groups'];
         $this->client->scopes = $scopes;
         $this->assertEquals($scopes, OAuthUtils::evaluateScopes($this->client, $this->user, []));
     }
 
-    function testAllRequestedScopesOK() {
+    public function testAllRequestedScopesOK() {
         $scopes = ['userinfo', 'groups'];
         $this->client->scopes = $scopes;
         $this->assertEquals($scopes, OAuthUtils::evaluateScopes($this->client, $this->user, $scopes));
     }
 
-    function testNoRequestedScopesOK() {
+    public function testNoRequestedScopesOK() {
         $scopes = ['userinfo', 'groups'];
         $this->client->scopes = $scopes;
         $this->assertEquals([], OAuthUtils::evaluateScopes($this->client, $this->user, ['longterm']));
     }
 
-    function testSomeRequestedScopesOK() {
+    public function testSomeRequestedScopesOK() {
         $scopes = ['userinfo', 'groups'];
         $this->client->scopes = $scopes;
         $this->assertEquals(['userinfo'], OAuthUtils::evaluateScopes($this->client, $this->user, ['longterm', 'userinfo']));
     }
 
-    function testOrgAdminScopesNotOK() {
+    public function testOrgAdminScopesNotOK() {
         $scopes = ['gk_test_moderated', 'userinfo'];
         $this->client->scopes = $scopes;
         $this->assertEquals(['userinfo'], OAuthUtils::evaluateScopes($this->client, $this->user, $scopes));
     }
 
-    function testOrgAdminScopesOK() {
+    public function testOrgAdminScopesOK() {
         $scopes = ['gk_test_moderated', 'userinfo'];
         $this->client->scopes = $scopes;
         $this->client->orgauthorization['example.org'] = ['gk_test_moderated'];
@@ -53,13 +53,13 @@ class EvaluateScopesTest extends DBHelper {
         $this->assertEquals($scopes, OAuthUtils::evaluateScopes($this->client, $this->user, $scopes));
     }
 
-    function testOrgAdminScopesNoUser() {
+    public function testOrgAdminScopesNoUser() {
         $scopes = ['gk_test_moderated', 'userinfo'];
         $this->client->scopes = $scopes;
         $this->assertEquals(['userinfo'], OAuthUtils::evaluateScopes($this->client, null, $scopes));
     }
 
-    function testOrgAdminScopesNotFeideUser() {
+    public function testOrgAdminScopesNotFeideUser() {
         $scopes = ['gk_test_moderated', 'userinfo'];
         $this->client->scopes = $scopes;
         $this->user->userid_sec = ['p:123'];

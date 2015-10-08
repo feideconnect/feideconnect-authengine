@@ -7,7 +7,7 @@ use FeideConnect\Authentication\AuthSource;
 
 class OICAuthorizationTest extends OAuthAuthorizationTest {
 
-    function setUp() {
+    public function setUp() {
         parent::setUp();
         $this->client->scopes[] = 'openid';
         $this->db->saveClient($this->client);

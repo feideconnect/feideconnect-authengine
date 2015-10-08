@@ -67,7 +67,7 @@ class OAuthClientCredentialsTest extends DBHelper {
 
     }
 
-    function tearDown() {
+    public function tearDown() {
         parent::tearDown();
         $this->db->removeClient($this->client);
 

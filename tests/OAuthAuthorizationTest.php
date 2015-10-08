@@ -9,7 +9,7 @@ class OAuthAuthorizationTest extends DBHelper {
 
     protected $client;
 
-    function setUp() {
+    public function setUp() {
         parent::setUp();
         $this->client = $this->client();
         $this->user = $this->user();

@@ -10,18 +10,18 @@ class DBHelper extends \PHPUnit_Framework_TestCase {
 
     protected $db, $_SERVER, $_REQUEST;
 
-    function __construct() {
+    public function __construct() {
         $this->db = StorageProvider::getStorage();
         $this->_SERVER = $_SERVER;
         $this->_REQUEST = $_REQUEST;
     }
 
-    function setUp() {
+    public function setUp() {
         $_SERVER = $this->_SERVER;
         $_REQUEST = $this->_REQUEST;
     }
 
-    function tearDown() {
+    public function tearDown() {
         $_SERVER = $this->_SERVER;
         $_REQUEST = $this->_REQUEST;
     }
