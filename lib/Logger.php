@@ -31,7 +31,7 @@ class Logger {
         $syslog_facility = Config::getValue('logging.syslog.facility', 'local0');
         if ($syslog_ident && $syslog_facility) {
             $syslog = new SyslogHandler($syslog_ident, $syslog_facility);
-            $syslog->setFormatter(new LineFormatter());
+            $syslog->setFormatter(new LineFormatter(null, 'Y-m-d H:i:s.u'));
             $this->log->pushHandler($syslog);
         }
         if (Config::getValue('logging.errorlog', true)) {
