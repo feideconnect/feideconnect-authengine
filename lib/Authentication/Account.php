@@ -339,7 +339,7 @@ class Account {
         return $this->accountMapRules[$property];
     }
 
-    protected function get($property, $default = null, $required = false) {
+    protected function get($property, $default = null) {
         $value = null;
         $rule = $this->getRule($property);
         if (is_string($rule)) {
@@ -352,9 +352,6 @@ class Account {
             return $value;
         }
 
-        if ($required) {
-            throw new Exception("Missing required attribute [" . $property . "]");
-        }
         return $default;
 
     }
