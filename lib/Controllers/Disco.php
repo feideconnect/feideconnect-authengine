@@ -11,7 +11,7 @@ use FeideConnect\Config;
 class Disco {
 
 
-    static function process() {
+    public static function process() {
 
         $data = array();
         $data["disco"] = Config::readJSONfile("disco.json");

@@ -15,7 +15,7 @@ use FeideConnect\Exceptions\Exception;
 class AccountChooser {
 
 
-    static function process() {
+    public static function process() {
 
 
 

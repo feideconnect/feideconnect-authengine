@@ -14,7 +14,7 @@ use FeideConnect\Localization;
 class Data {
 
 
-    static function getUserProfilephoto($useridstr) {
+    public static function getUserProfilephoto($useridstr) {
 
         $storage = StorageProvider::getStorage();
         $userid = new UserID($useridstr);
@@ -43,7 +43,7 @@ class Data {
         return $response;
     }
 
-    static function getClientLogo($clientid) {
+    public static function getClientLogo($clientid) {
 
         $storage = StorageProvider::getStorage();
         $client = $storage->getClient($clientid);
@@ -57,7 +57,7 @@ class Data {
         return $response;
     }
 
-    static function scmp($a, $b) {
+    public static function scmp($a, $b) {
 
 
         $ax = ($a["distance"] === null ? 9999 : $a["distance"]);
@@ -67,7 +67,7 @@ class Data {
         return ($ax < $bx) ? -1 : 1;
     }
 
-    static function getOrgs() {
+    public static function getOrgs() {
 
 
         if (isset($_REQUEST['lat']) && isset($_REQUEST['lon'])) {
@@ -108,13 +108,13 @@ class Data {
         return new JSONResponse($data);
     }
 
-    static function getDictionary() {
+    public static function getDictionary() {
 
         return new JSONResponse(Localization::getDictionary());
 
     }
 
-    static function accountchooserConfig() {
+    public static function accountchooserConfig() {
 
 
         $config = [];
@@ -128,7 +128,7 @@ class Data {
     }
 
 
-    static function accountchooserExtra() {
+    public static function accountchooserExtra() {
 
 
         $data = Config::readJSONfile("disco2.json");

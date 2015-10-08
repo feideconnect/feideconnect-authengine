@@ -12,7 +12,7 @@ class OpenIDConnect {
 
 
 
-    static function config() {
+    public static function config() {
 
         $openid = new \FeideConnect\OpenIDConnect\OpenIDConnect();
         $config = $openid->getProviderConfiguration();
@@ -21,7 +21,7 @@ class OpenIDConnect {
 
     }
 
-    static function getJWKs() {
+    public static function getJWKs() {
 
         $openid = new \FeideConnect\OpenIDConnect\OpenIDConnect();
         $jwks = $openid->getJWKs();
@@ -35,7 +35,7 @@ class OpenIDConnect {
         return $response;
     }
 
-    static function userinfo() {
+    public static function userinfo() {
 
 
 

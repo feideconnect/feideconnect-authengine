@@ -13,14 +13,14 @@ use FeideConnect\Utils\URL;
 
 class Pages {
 
-    static function reject() {
+    public static function reject() {
 
         return (new TemplatedHTMLResponse('reject'))->setData([
             "head" => "You rejected the authorization request for an application"
         ]);
     }
 
-    static function loggedout() {
+    public static function loggedout() {
 
         return (new TemplatedHTMLResponse('loggedout'))->setData([
             "head" => "You are now logged out"
@@ -28,18 +28,18 @@ class Pages {
     }
 
 
-    static function robot() {
+    public static function robot() {
         $txt = "User-agent: *\nDisallow: /\n";
         return new TextResponse($txt);
     }
 
-    static function emptyResponse() {
+    public static function emptyResponse() {
 
         return (new TemplatedHTMLResponse('emptyresponsee'));
 
     }
 
-    static function debug() {
+    public static function debug() {
 
 
 

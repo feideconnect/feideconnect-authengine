@@ -13,7 +13,7 @@ use FeideConnect\Utils\URL;
 
 class Auth {
 
-    static function logout() {
+    public static function logout() {
 
         // echo '<pre>'; print_r($_SESSION); exit;
 
@@ -31,7 +31,7 @@ class Auth {
 
     }
 
-    static function userdebug() {
+    public static function userdebug() {
 
 
         $storage = StorageProvider::getStorage();
@@ -111,7 +111,7 @@ class Auth {
 
     }
 
-    static function userinfo() {
+    public static function userinfo() {
 
 
 
@@ -154,7 +154,7 @@ class Auth {
 
     }
 
-    static function authinfo() {
+    public static function authinfo() {
 
         $storage = StorageProvider::getStorage();
 

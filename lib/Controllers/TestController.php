@@ -8,13 +8,13 @@ use FeideConnect\HTTP\TemplatedHTMLResponse;
 
 class TestController {
 
-    static function test() {
+    public static function test() {
 
         return new HTTPResponse();
 
     }
 
-    static function reject() {
+    public static function reject() {
 
         return new TemplatedHTMLResponse('reject');
 
