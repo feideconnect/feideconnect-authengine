@@ -29,9 +29,6 @@ class Account {
             throw new Exception("Loading an account with an empty attribute map ruleset");
         }
 
-
-
-
         $this->userids = $this->obtainUserIDs();
 
         $this->idp    = $this->attributes["idp"];
@@ -46,16 +43,12 @@ class Account {
 
         $this->photo  = $this->obtainPhoto();
 
-
-
-
         // echo '<pre>We got this account map rules: ' . "\n";
         // // print_r($accountMapRules);
         // // print_r($this->attributes);
         // echo var_dump($this);
         // echo "Age: " . $this->aboveAgeLimit(35) . ".";
         // exit;
-
 
     }
 
@@ -129,13 +122,9 @@ class Account {
         // }
         // var_dump($def);
         // return $def;
-
-
     }
 
     public function validateAuthProvider($authproviders) {
-
-
         // echo '<h1>validateAuthProvider()</h1>';
         // var_dump($authproviders);
 
@@ -160,15 +149,11 @@ class Account {
                     return true;
                 }
             }
-
         }
 
         throw new AuthProviderNotAccepted('Authentication provider is not accepted by requesting client. Return to application and try to login again selecting another provider.');
 
-
-
     }
-
 
     // TODO: Update this code to automatically
     public function getVisualTag() {
@@ -300,7 +285,7 @@ class Account {
 
     protected function getComplexUrlref($rule) {
         if (!isset($rule["attrname"])) {
-            throw new Exception("Missing [attrname] on complex attribute definition");
+            throw new Exception("Missing [attrname] on complex attribute definition");
         }
         $attrname = $rule["attrname"];
         $url = $this->getValue($attrname);
@@ -327,7 +312,7 @@ class Account {
         }
         if (isset($rule["type"]) && $rule["type"] === "fixed") {
             if (!isset($rule["value"])) {
-                throw new Exception("Missing [value] on complex attribute definition");
+                throw new Exception("Missing [value] on complex attribute definition");
             }
             return $rule["value"];
 
@@ -443,12 +428,6 @@ class Account {
 
     }
 
-
-
-
-
-
-
     public function aboveAgeLimit($ageLimit = 13) {
 
         $res = true;
@@ -516,9 +495,6 @@ class Account {
         }
         return $realm;
     }
-
-
-
 
     public function getSourceID() {
         return $this->sourceID;
