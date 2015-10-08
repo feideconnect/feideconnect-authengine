@@ -70,7 +70,7 @@ class Account {
 
     }
 
-    public function allowAll($authproviders) {
+    public static function allowAll($authproviders) {
 
         foreach ($authproviders as $ap) {
             if (count($ap) === 1 && $ap[0] === 'all') {
@@ -80,7 +80,7 @@ class Account {
         return false;
     }
 
-    public function compareType($candidate, $match) {
+    public static function compareType($candidate, $match) {
 
         // echo '<p>Compare candidate'; var_dump($candidate);
         // echo '<p>with match'; var_dump($match);
@@ -128,8 +128,6 @@ class Account {
         // echo '<h1>validateAuthProvider()</h1>';
         // var_dump($authproviders);
 
-        $def = $this->getDef();
-
         if (empty($authproviders)) {
             return true;
         }
@@ -137,6 +135,8 @@ class Account {
         if ($this->allowAll($authproviders)) {
             return true;
         }
+
+        $def = $this->getDef();
 
         if (empty($def)) {
             throw new \Exception('Unable to detect where this user can login.');
@@ -428,17 +428,17 @@ class Account {
 
     }
 
-    public function aboveAgeLimit($ageLimit = 13) {
-
+    public static function checkAgeLimit($yob, $ageLimit, $ts) {
         $res = true;
-        $year = intval($this->yob);
+
+        $year = intval($yob);
 
         if ($year < 1800) {
             return $res;
         }
 
-        $dayofyear = date("z");
-        $thisyear = date("Y");
+        $dayofyear = date("z", $ts);
+        $thisyear = date("Y", $ts);
 
         $requiredAge = $ageLimit;
         if ($dayofyear < 175) {
@@ -456,7 +456,10 @@ class Account {
         }
 
         return $res;
+    }
 
+    public function aboveAgeLimit($ageLimit = 13) {
+        return self::checkAgeLimit($this->yob, $ageLimit, time());
     }
 
     public function getUserIDs() {

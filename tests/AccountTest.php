@@ -351,4 +351,31 @@ class AccountTest extends DBHelper {
             ]
         ], $tag);
     }
+
+    public function testAllowAll() {
+        $this->assertTrue(Account::allowAll([['all']]));
+        $this->assertTrue(Account::allowAll([['ugle'], ['all']]));
+        $this->assertTrue(Account::allowAll([['all'], ['ugle']]));
+        $this->assertFalse(Account::allowAll([]));
+        $this->assertFalse(Account::allowAll([['all', 'ugle']]));
+    }
+
+    public function testCompareType() {
+        $this->assertTrue(Account::compareType(['ugle'], []));
+        $this->assertTrue(Account::compareType(['ugle'], ['ugle']));
+        $this->assertTrue(Account::compareType(['ugle'], ['ugle', 'all']));
+        $this->assertTrue(Account::compareType(['ugle', 'foo'], ['ugle', 'all']));
+        $this->assertTrue(Account::compareType(['ugle', 'foo', 'bar'], ['ugle', 'all']));
+        $this->assertFalse(Account::compareType([], ['ugle']));
+        $this->assertFalse(Account::compareType(['foo'], ['ugle']));
+    }
+
+    public function testAgeLimit() {
+        $this->assertTrue(Account::checkAgeLimit(1950, 13, mktime(0,0,0,1,1,1964)));
+        $this->assertTrue(Account::checkAgeLimit(1950, 13, mktime(0,0,0,9,1,1963)));
+        $this->assertTrue(Account::checkAgeLimit(1950, 13, mktime(0,0,0,9,1,1982)));
+        $this->assertTrue(Account::checkAgeLimit(1950, 13, mktime(0,0,0,9,1,2063)));
+        $this->assertFalse(Account::checkAgeLimit(1950, 13, mktime(0,0,0,9,1,1953)));
+        $this->assertFalse(Account::checkAgeLimit(1950, 13, mktime(0,0,0,1,1,1963)));
+    }
 }
