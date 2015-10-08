@@ -276,19 +276,16 @@ class Account {
         return null;
     }
 
-    protected function getComplexAttrnames($attrnames, $default = null, $required = false) {
+    protected function getComplexAttrnames($attrnames) {
         foreach ($attrnames as $attr) {
             if (isset($this->attributes[$attr])) {
                 return $this->attributes[$attr][0];
             }
         }
-        if ($required) {
-            throw new Exception("Missing required attribute [" . join(',', $attrnames) . "]");
-        }
-        return $default;
+        return null;
     }
 
-    protected function getComplex($rule, $default = null, $required = false) {
+    protected function getComplex($rule) {
 
         if (isset($rule["type"]) && $rule["type"] === "urlref") {
             if (!isset($rule["attrname"])) {
@@ -312,7 +309,7 @@ class Account {
 
         } else if (isset($rule["attrnames"]) && is_array($rule["attrnames"])) {
             $attrnames = $rule["attrnames"];
-            return $this->getComplexAttrnames($attrnames, $default, $required);
+            return $this->getComplexAttrnames($attrnames);
 
         } else if (isset($rule["type"]) && $rule["type"] === "fixed") {
             if (!isset($rule["value"])) {
@@ -328,14 +325,11 @@ class Account {
     }
 
 
-    protected function getValue($property, $default = null, $required = false) {
+    protected function getValue($property) {
         if (isset($this->attributes[$property])) {
             return $this->attributes[$property][0];
         }
-        if ($required) {
-            throw new Exception("Missing required attribute [" . $property . "]");
-        }
-        return $default;
+        return null;
     }
 
     protected function getRule($property) {
@@ -346,11 +340,16 @@ class Account {
     }
 
     protected function get($property, $default = null, $required = false) {
+        $value = null;
         $rule = $this->getRule($property);
         if (is_string($rule)) {
-            return $this->getValue($rule, $default, $required);
+            $value = $this->getValue($rule);
         } else if (is_array($rule)) {
-            return $this->getComplex($rule, $default, $required);
+            $value = $this->getComplex($rule);
+        }
+
+        if ($value !== null) {
+            return $value;
         }
 
         if ($required) {
