@@ -11,29 +11,29 @@ class AccountTest extends DBHelper {
     private static $feideAM = array (
         '_title' => 'Feide account mapper',
         'authSource' => 'default-sp',
-        'idp' => 
+        'idp' =>
         array (
             0 => 'https://idp-test.feide.no',
             1 => 'https://idp.feide.no',
         ),
-        'sourceID' => 
+        'sourceID' =>
         array (
             'type' => 'sourceID',
             'prefix' => 'feide',
             'realm' => true,
         ),
-        'userid' => 
+        'userid' =>
         array (
             'feide' => 'eduPersonPrincipalName',
         ),
-        'realm' => 
+        'realm' =>
         array (
             'attrname' => 'eduPersonPrincipalName',
             'type' => 'realm',
         ),
-        'name' => 
+        'name' =>
         array (
-            'attrnames' => 
+            'attrnames' =>
             array (
                 0 => 'displayName',
                 1 => 'cn',
@@ -47,152 +47,152 @@ class AccountTest extends DBHelper {
     private static $idportenAM = array (
         '_title' => 'IDporten accountmapper',
         'authSource' => 'default-sp',
-        'idp' => 
+        'idp' =>
         array (
             0 => 'idporten.difi.no-v2',
         ),
-        'sourceID' => 
+        'sourceID' =>
         array (
             'type' => 'sourceID',
             'prefix' => 'idporten',
             'realm' => false,
         ),
-        'userid' => 
+        'userid' =>
         array (
             'nin' => 'uid',
         ),
-        'realm' => NULL,
-        'name' => 
+        'realm' => null,
+        'name' =>
         array (
             'type' => 'fixed',
             'value' => 'IDporten user',
         ),
-        'mail' => NULL,
-        'org' => NULL,
-        'photo' => NULL,
-        'yob' => NULL,
+        'mail' => null,
+        'org' => null,
+        'photo' => null,
+        'yob' => null,
     );
 
     private static $openidpAM = array (
         '_title' => 'Feide OpenIdP',
         'authSource' => 'default-sp',
-        'idp' => 
+        'idp' =>
         array (
             0 => 'https://openidp.feide.no',
         ),
-        'sourceID' => 
+        'sourceID' =>
         array (
             'type' => 'sourceID',
             'prefix' => 'openidp',
             'realm' => false,
         ),
-        'userid' => 
+        'userid' =>
         array (
             'feide' => 'eduPersonPrincipalName',
         ),
-        'realm' => NULL,
-        'name' => 
+        'realm' => null,
+        'name' =>
         array (
-            'attrnames' => 
+            'attrnames' =>
             array (
                 0 => 'displayName',
                 1 => 'cn',
             ),
         ),
         'mail' => 'mail',
-        'org' => NULL,
+        'org' => null,
         'photo' => 'jpegPhoto',
-        'yob' => NULL,
+        'yob' => null,
     );
 
     public static $twitterAM = array (
         '_title' => 'Twitter accountmapper',
         'authSource' => 'twitter',
-        'sourceID' => 
+        'sourceID' =>
         array (
             'type' => 'sourceID',
             'prefix' => 'twitter',
             'realm' => false,
         ),
-        'userid' => 
+        'userid' =>
         array (
             'twitter' => 'twitter.id_str',
         ),
-        'realm' => NULL,
-        'name' => 
+        'realm' => null,
+        'name' =>
         array (
-            'attrnames' => 
+            'attrnames' =>
             array (
                 0 => 'twitter.name',
                 1 => 'twitter_at_screen_name',
             ),
         ),
-        'mail' => NULL,
-        'org' => NULL,
-        'photo' => 
+        'mail' => null,
+        'org' => null,
+        'photo' =>
         array (
             'type' => 'urlref',
             'attrname' => 'twitter.profile_image_url',
         ),
-        'yob' => NULL,
+        'yob' => null,
     );
 
     public static $linkedinAM = array (
         '_title' => 'Linkedin accountmapper',
         'authSource' => 'linkedin',
-        'sourceID' => 
+        'sourceID' =>
         array (
             'type' => 'sourceID',
             'prefix' => 'linkedin',
             'realm' => false,
         ),
-        'userid' => 
+        'userid' =>
         array (
             'linkedin' => 'linkedin.id',
         ),
-        'realm' => NULL,
-        'name' => 
+        'realm' => null,
+        'name' =>
         array (
-            'attrnames' => 
+            'attrnames' =>
             array (
                 0 => 'linkedin.firstName',
             ),
         ),
-        'mail' => NULL,
-        'org' => NULL,
-        'photo' => 
+        'mail' => null,
+        'org' => null,
+        'photo' =>
         array (
             'type' => 'urlref',
             'attrname' => 'linkedin.pictureUrl',
         ),
-        'yob' => NULL,
+        'yob' => null,
     );
 
     public static $facebookAM = array (
         '_title' => 'Facebook accountmapper',
         'authSource' => 'facebook',
-        'sourceID' => 
+        'sourceID' =>
         array (
             'type' => 'sourceID',
             'prefix' => 'facebook',
             'realm' => false,
         ),
-        'userid' => 
+        'userid' =>
         array (
             'facebook' => 'facebook.id',
         ),
-        'realm' => NULL,
-        'name' => 
+        'realm' => null,
+        'name' =>
         array (
-            'attrnames' => 
+            'attrnames' =>
             array (
                 0 => 'facebook.name',
             ),
         ),
-        'mail' => NULL,
-        'org' => NULL,
-        'photo' => NULL,
-        'yob' => NULL,
+        'mail' => null,
+        'org' => null,
+        'photo' => null,
+        'yob' => null,
     );
 
     public function setUp() {
@@ -257,7 +257,7 @@ class AccountTest extends DBHelper {
             ]
         ], $tag);
     }
-    
+
 
     public function testGetVisualTagIDPorten() {
         $account = new Account([
