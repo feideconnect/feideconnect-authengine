@@ -35,7 +35,7 @@ class Account {
         $this->userids = $this->obtainUserIDs();
 
         $this->idp    = $this->attributes["idp"];
-        $this->realm  = $this->get("realm");
+        $this->realm  = $this->obtainRealm();
         $this->org    = $this->get("org");
         $this->name   = $this->get("name", '');
         $this->mail   = $this->get("mail", '');
@@ -305,15 +305,7 @@ class Account {
     protected function getComplex($def, $default = null, $required = false) {
 
         // If definition contains type = realm.
-        if (isset($def["type"]) && $def["type"] === "realm") {
-            if (!isset($def["attrname"])) {
-                throw new Exception("Missing [attrname] on complex attribute definition");
-            }
-            $attrname = $def["attrname"];
-            return $this->getComplexRealm($attrname);
-
-        // If definition contains type = realm.
-        } else if (isset($def["type"]) && $def["type"] === "sourceID") {
+        if (isset($def["type"]) && $def["type"] === "sourceID") {
             return $this->getComplexSourceID($def);
 
         } else if (isset($def["type"]) && $def["type"] === "urlref") {
@@ -384,6 +376,18 @@ class Account {
         }
         return $default;
 
+    }
+
+    protected function obtainRealm() {
+        $property = "realm";
+        $rule = $this->getRule($property);
+        if (!isset($rule)) {
+            return null;
+        }
+        if (!isset($rule["attrname"])) {
+            throw new Exception("Missing [attrname] on realm definition");
+        }
+        return $this->getComplexRealm($rule["attrname"]);
     }
 
     protected function obtainUserIDs() {
