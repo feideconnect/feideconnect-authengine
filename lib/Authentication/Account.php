@@ -311,14 +311,17 @@ class Account {
 
         if (isset($rule["type"]) && $rule["type"] === "urlref") {
             return $this->getComplexUrlref($rule);
-        } else if (isset($rule["attrnames"]) && is_array($rule["attrnames"])) {
-            $attrnames = $rule["attrnames"];
-            return $this->getComplexAttrnames($attrnames);
-        } else if (isset($rule["type"]) && $rule["type"] === "fixed") {
+        }
+        if (isset($rule["type"]) && $rule["type"] === "fixed") {
             if (!isset($rule["value"])) {
                 throw new Exception("Missing [value] on complex attribute definition");
             }
             return $rule["value"];
+
+        }
+        if (isset($rule["attrnames"]) && is_array($rule["attrnames"])) {
+            $attrnames = $rule["attrnames"];
+            return $this->getComplexAttrnames($attrnames);
         }
 
         // echo '<pre>'; var_dump($rule); var_dump($default); var_dump($required); exit;
