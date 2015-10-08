@@ -295,10 +295,7 @@ class OAuthAuthorization {
 
 
         $scopesInQuestion = $this->aevaluator->getScopesInQuestion();
-        $redirectURI = null;
-        if (!empty($this->request->redirect_uri)) {
-            $redirectURI = $this->request->redirect_uri;
-        }
+        $redirectURI = $this->aevaluator->getValidatedRedirectURI();
 
         $code = Models\AuthorizationCode::generate($this->client, $this->user, $redirectURI, $scopesInQuestion);
         $this->storage->saveAuthorizationCode($code);
@@ -312,7 +309,7 @@ class OAuthAuthorization {
             'authorizationresponse' => $authorizationresponse,
         ));
 
-        return $authorizationresponse->sendRedirect($this->request->redirect_uri);
+        return $authorizationresponse->sendRedirect($redirectURI);
 
     }
 
