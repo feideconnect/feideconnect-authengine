@@ -28,7 +28,7 @@ class Cassandra2 extends \FeideConnect\Data\Repository {
 
     protected $db;
 
-    function __construct() {
+    public function __construct() {
 
         $config = \FeideConnect\Config::getValue('storage');
 
@@ -215,7 +215,7 @@ class Cassandra2 extends \FeideConnect\Data\Repository {
 
     }
 
-    function getObject($model, $data) {
+    protected function getObject($model, $data) {
         $transformed = [];
         foreach ($data as $k => $v) {
             $transformed[$k] = $model::fromDB($k, $v);
@@ -232,7 +232,7 @@ class Cassandra2 extends \FeideConnect\Data\Repository {
     /*
      * --- Database handling of the 'users' and 'userid_sec' column family
      */
-    function saveUser(Models\User $user) {
+    public function saveUser(Models\User $user) {
         $data = $user->getStorableArray();
         $query = self::generateInsert('users', $data);
         $this->execute($query, $data, __FUNCTION__);
@@ -253,7 +253,7 @@ class Cassandra2 extends \FeideConnect\Data\Repository {
      * @param  Models\User $user [description]
      * @return [type]            [description]
      */
-    function updateUserBasics(Models\User $user) {
+    public function updateUserBasics(Models\User $user) {
 
         $query = 'UPDATE "users" SET updated = :updated, ' .
             'aboveagelimit = :aboveagelimit, ' .
@@ -270,7 +270,7 @@ class Cassandra2 extends \FeideConnect\Data\Repository {
     }
 
 
-    function updateUserInfo(Models\User $user, $sourceID, $props = []) {
+    public function updateUserInfo(Models\User $user, $sourceID, $props = []) {
 
 
         $assignments = [];
@@ -300,7 +300,7 @@ class Cassandra2 extends \FeideConnect\Data\Repository {
 
     }
 
-    function updateProfilePhoto(Models\User $user, $sourceID) {
+    public function updateProfilePhoto(Models\User $user, $sourceID) {
 
 
 
@@ -332,7 +332,7 @@ class Cassandra2 extends \FeideConnect\Data\Repository {
 
 
 
-    function updateClientLogo(Models\Client $client, $logo) {
+    public function updateClientLogo(Models\Client $client, $logo) {
 
         $query = 'UPDATE "clients" SET logo = :logo, updated = :updated ' .
             'WHERE id = :id';
@@ -347,7 +347,7 @@ class Cassandra2 extends \FeideConnect\Data\Repository {
     }
 
 
-    function updateClientScopes(Models\Client $client, $scopes_requested, $scopes) {
+    public function updateClientScopes(Models\Client $client, $scopes_requested, $scopes) {
 
         $query = 'UPDATE "clients" SET ' .
             'scopes = :scopes, scopes_requested = :scopes_requested, updated = :updated ' .
@@ -364,7 +364,7 @@ class Cassandra2 extends \FeideConnect\Data\Repository {
     }
 
 
-    function addUserIDsec($userid, $userid_sec) {
+    public function addUserIDsec($userid, $userid_sec) {
         $query  = 'UPDATE "users" SET userid_sec = userid_sec + :useridsec  WHERE userid = :userid';
         $query2 = 'INSERT INTO "userid_sec" (userid_sec, userid) VALUES (:useridsec, :userid)';
         $this->execute($query, [
@@ -378,7 +378,7 @@ class Cassandra2 extends \FeideConnect\Data\Repository {
         ], __FUNCTION__);
     }
 
-    function removeUserIDsec($userid, $userid_sec) {
+    public function removeUserIDsec($userid, $userid_sec) {
 
         $query  = 'UPDATE "users" SET userid_sec = userid_sec - :useridsec  WHERE userid = :userid';
         $query2 = 'DELETE FROM "userid_sec" WHERE (userid_sec = :useridsec)';
@@ -395,7 +395,7 @@ class Cassandra2 extends \FeideConnect\Data\Repository {
 
     }
 
-    function deleteUser(Models\User $user) {
+    public function deleteUser(Models\User $user) {
 
         // Logger::debug('DELETING USER ()', array(
         //     'userid' => $user->userid,
@@ -414,7 +414,7 @@ class Cassandra2 extends \FeideConnect\Data\Repository {
 
     }
 
-    function getUserByUserID($userid) {
+    public function getUserByUserID($userid) {
         $query = 'SELECT userid, created, updated, name, email, profilephoto, profilephotohash, selectedsource, aboveagelimit, usageterms, userid_sec, userid_sec_seen FROM "users" WHERE "userid" = :userid';
         // $query = 'SELECT * FROM "users" WHERE "userid" = :userid';
         $params = ['userid' => new Uuid($userid)];
@@ -424,7 +424,7 @@ class Cassandra2 extends \FeideConnect\Data\Repository {
 
 
 
-    function getUserByUserIDsec($useridsec) {
+    public function getUserByUserIDsec($useridsec) {
         $query = 'SELECT * FROM "userid_sec" WHERE "userid_sec" = :userid_sec';
         $params = ['userid_sec' => $useridsec];
         $result = $this->query($query, $params, __FUNCTION__, null, false);
@@ -445,7 +445,7 @@ class Cassandra2 extends \FeideConnect\Data\Repository {
      * @param  [type] $useridsec [description]
      * @return [type]            [description]
      */
-    function getUserByUserIDsecList($useridsec) {
+    public function getUserByUserIDsecList($useridsec) {
 
 
 
@@ -483,13 +483,13 @@ class Cassandra2 extends \FeideConnect\Data\Repository {
         return $res;
     }
 
-    function getUsers($count = 100) {
+    public function getUsers($count = 100) {
         $query = 'SELECT * FROM "users" LIMIT :count';
         $params = ['count' => $count];
         return $this->query($query, $params, __FUNCTION__, 'FeideConnect\Data\Models\User', true);
     }
 
-    function getUserIDsecList($count = 100) {
+    public function getUserIDsecList($count = 100) {
         $query = 'SELECT * FROM "userid_sec" LIMIT :count';
         $params = ['count' => $count];
         return $this->query($query, $params, __FUNCTION__, null, true);
@@ -516,24 +516,24 @@ class Cassandra2 extends \FeideConnect\Data\Repository {
      *   trust text,
      *   updated timestamp
      */
-    function getAPIGKs($count = 100) {
+    public function getAPIGKs($count = 100) {
         $query = 'SELECT * FROM "apigk" LIMIT :count';
         $params = ['count' => $count];
         return $this->query($query, $params, __FUNCTION__, 'FeideConnect\Data\Models\APIGK', true);
     }
 
-    function getAPIGK( $id) {
+    public function getAPIGK( $id) {
         $query = 'SELECT id, descr, endpoints, expose, httpscertpinned, name, owner, organization, requireuser, scopedef, status, created, updated FROM "apigk" WHERE "id" = :id';
         $params = ['id' => $id];
         return $this->query($query, $params, __FUNCTION__, 'FeideConnect\Data\Models\APIGK', false);
     }
-    function removeAPIGK(Models\APIGK $apigk) {
+    public function removeAPIGK(Models\APIGK $apigk) {
         $query = 'DELETE FROM "apigk" WHERE "id" = :id';
         $params = ['id' => $apigk->id];
         $this->execute($query, $params, __FUNCTION__);
     }
 
-    function saveAPIGK(Models\APIGK $apigk) {
+    public function saveAPIGK(Models\APIGK $apigk) {
         $data = $apigk->getStorableArray();
         $query = self::generateInsert('apigk', $data);
         // echo $query . "\n\n";
@@ -545,13 +545,13 @@ class Cassandra2 extends \FeideConnect\Data\Repository {
     /*
      * --- Database handling of the 'client' column family
      */
-    function getClient( $id) {
+    public function getClient( $id) {
         $query = 'SELECT id, client_secret, created, descr, name, owner, organization, authproviders, logo, redirect_uri, scopes, scopes_requested, status, type, updated, orgauthorization FROM "clients" WHERE "id" = :id';
         $params = ['id' => new Uuid($id)];
         return $this->query($query, $params, __FUNCTION__, 'FeideConnect\Data\Models\Client', false);
     }
 
-    function saveClient(Models\Client $client) {
+    public function saveClient(Models\Client $client) {
         $data = $client->getStorableArray();
         $query = self::generateInsert('clients', $data);
         // echo $query . "\n\n";
@@ -559,19 +559,19 @@ class Cassandra2 extends \FeideConnect\Data\Repository {
         $this->execute($query, $data, __FUNCTION__);
     }
 
-    function getClients($count = 100) {
+    public function getClients($count = 100) {
         $query = 'SELECT * FROM "clients" LIMIT :count';
         $params = ['count' => $count];
         return $this->query($query, $params, __FUNCTION__, 'FeideConnect\Data\Models\Client', true);
     }
 
-    function removeClient(Models\Client $client) {
+    public function removeClient(Models\Client $client) {
         $query = 'DELETE FROM "clients" WHERE "id" = :id';
         $params = ['id' => new Uuid($client->id)];
         $this->execute($query, $params, __FUNCTION__);
     }
 
-    function getClientsByOwner(Models\User $owner) {
+    public function getClientsByOwner(Models\User $owner) {
         $query = 'SELECT * FROM "clients" WHERE "owner" = :owner';
         $params = ['owner' => new Uuid($owner->userid)];
         return $this->query($query, $params, __FUNCTION__, 'FeideConnect\Data\Models\Client', true);
@@ -582,7 +582,7 @@ class Cassandra2 extends \FeideConnect\Data\Repository {
      * ---- MAndatory clients -----
      */
 
-    function checkMandatory($realm, Models\Client $client) {
+    public function checkMandatory($realm, Models\Client $client) {
         $query = 'SELECT * FROM "mandatory_clients" WHERE "realm" = :realm AND "clientid" = :clientid';
         $params = ['realm' => $realm, 'clientid' => new Uuid($client->id)];
         return $this->query($query, $params, __FUNCTION__);
@@ -593,27 +593,27 @@ class Cassandra2 extends \FeideConnect\Data\Repository {
     /*
      * --- Database handling of the 'client' column family
      */
-    function getOrgs($count = 500) {
+    public function getOrgs($count = 500) {
         $query = 'SELECT id,name,realm,type,uiinfo,services FROM "organizations" LIMIT :count';
         $params = ['count' => $count];
         return $this->query($query, $params, __FUNCTION__, 'FeideConnect\Data\Models\Organization', true);
     }
 
-    function getOrgsByService($service = 'auth') {
+    public function getOrgsByService($service = 'auth') {
         $count = 500;
         $query = 'SELECT id,name,realm,type,uiinfo,services FROM "organizations" WHERE (services CONTAINS :service) LIMIT :count';
         $params = ['count' => $count, 'service' => $service];
         return $this->query($query, $params, __FUNCTION__, 'FeideConnect\Data\Models\Organization', true);
     }
 
-    function getOrg($orgid) {
+    public function getOrg($orgid) {
         $query = 'SELECT id,name,realm,type,uiinfo,services FROM "organizations" WHERE "id" = :orgid';
         $params = ['orgid' => $orgid];
         return $this->query($query, $params, __FUNCTION__, 'FeideConnect\Data\Models\Organization', false);
     }
 
 
-    function updateOrgLogo(Models\Organization $org, $logo) {
+    public function updateOrgLogo(Models\Organization $org, $logo) {
 
         $query = 'UPDATE "organizations" SET logo = :logo, logo_updated = :updated ' .
             'WHERE id = :id';
@@ -627,7 +627,7 @@ class Cassandra2 extends \FeideConnect\Data\Repository {
 
     }
 
-    function updateOrgUIinfo(Models\Organization $org, $uiinfo) {
+    public function updateOrgUIinfo(Models\Organization $org, $uiinfo) {
 
         $query = 'UPDATE "organizations" SET uiinfo = :uiinfo, logo_updated = :updated ' .
             'WHERE id = :id';
@@ -641,7 +641,7 @@ class Cassandra2 extends \FeideConnect\Data\Repository {
 
     }
 
-    function saveOrganization(Models\Organization $org) {
+    public function saveOrganization(Models\Organization $org) {
         $data = $org->getStorableArray();
         $query = self::generateInsert('organizations', $data);
         // echo $query . "\n\n";
@@ -649,7 +649,7 @@ class Cassandra2 extends \FeideConnect\Data\Repository {
         $this->execute($query, $data, __FUNCTION__);
     }
 
-    function removeOrganization(Models\Organization $org) {
+    public function removeOrganization(Models\Organization $org) {
         $query = 'DELETE FROM "organizations" WHERE "id" = :id';
         $params = ['id' => $org->id];
         $this->execute($query, $params, __FUNCTION__);
@@ -659,13 +659,13 @@ class Cassandra2 extends \FeideConnect\Data\Repository {
     /*
      * --- Database handling of the 'accesstoken' column family
      */
-    function getAccessToken($accesstoken) {
+    public function getAccessToken($accesstoken) {
         $query = 'SELECT * FROM "oauth_tokens" WHERE "access_token" = :access_token';
         $params = ['access_token' => new Uuid($accesstoken)];
         return $this->query($query, $params, __FUNCTION__, 'FeideConnect\Data\Models\AccessToken', false);
     }
 
-    function getAccessTokens($userid, $clientid) {
+    public function getAccessTokens($userid, $clientid) {
 
         $query = 'SELECT * FROM "oauth_tokens" WHERE "userid" = :userid AND "clientid" = :clientid ALLOW FILTERING';
         $params = ['userid' => new Uuid($userid), 'clientid' => new Uuid($clientid)];
@@ -675,7 +675,7 @@ class Cassandra2 extends \FeideConnect\Data\Repository {
         return $this->query($query, $params, __FUNCTION__, 'FeideConnect\Data\Models\AccessToken', true);
     }
 
-    function saveToken(Models\AccessToken $token) {
+    public function saveToken(Models\AccessToken $token) {
         $data = $token->getStorableArray();
 
         if (!($token->validuntil instanceof \FeideConnect\Data\Types\Timestamp)) {
@@ -690,7 +690,7 @@ class Cassandra2 extends \FeideConnect\Data\Repository {
         $params = ['id' => new Uuid($token->clientid)];
         $this->execute($query, $params, __FUNCTION__);
     }
-    function removeAccessToken(Models\AccessToken $token) {
+    public function removeAccessToken(Models\AccessToken $token) {
         $query = 'DELETE FROM "oauth_tokens" WHERE "access_token" = :access_token';
         $params = ['access_token' => new Uuid($token->access_token)];
         $this->execute($query, $params, __FUNCTION__);
@@ -701,19 +701,19 @@ class Cassandra2 extends \FeideConnect\Data\Repository {
     /*
      * --- Database handling of the 'oauth_authorizations' column family
      */
-    function getAuthorization($userid, $clientid) {
+    public function getAuthorization($userid, $clientid) {
         $query = 'SELECT * FROM "oauth_authorizations" WHERE "userid" = :userid AND "clientid" = :clientid';
         $params = ['userid' => new Uuid($userid), 'clientid' => new Uuid($clientid)];
         return $this->query($query, $params, __FUNCTION__, 'FeideConnect\Data\Models\Authorization', false);
     }
 
-    function getAuthorizationsByUser(Models\User $user) {
+    public function getAuthorizationsByUser(Models\User $user) {
         $query = 'SELECT * FROM "oauth_authorizations" WHERE "userid" = :userid';
         $params = ['userid' => new Uuid($user->userid)];
         return $this->query($query, $params, __FUNCTION__, 'FeideConnect\Data\Models\Authorization', true);
     }
 
-    function saveAuthorization(Models\Authorization $authorization) {
+    public function saveAuthorization(Models\Authorization $authorization) {
         $data = $authorization->getStorableArray();
         $query = self::generateInsert('oauth_authorizations', $data);
         $this->execute($query, $data, __FUNCTION__);
@@ -723,7 +723,7 @@ class Cassandra2 extends \FeideConnect\Data\Repository {
         return $this->execute($query, $params, __FUNCTION__);
     }
 
-    function removeAuthorizations($userid, $clientid) {
+    public function removeAuthorizations($userid, $clientid) {
         $query = 'DELETE FROM "oauth_authorizations" WHERE "userid" = :userid AND "clientid" = :clientid';
         $params = [
             'userid' => new Uuid($userid),
@@ -742,13 +742,13 @@ class Cassandra2 extends \FeideConnect\Data\Repository {
     /*
      * --- Database handling of the 'oauth_codes' column family
      */
-    function getAuthorizationCode($code) {
+    public function getAuthorizationCode($code) {
         $query = 'SELECT * FROM "oauth_codes" WHERE "code" = :code';
         $params = ['code' => new Uuid($code)];
         return $this->query($query, $params, __FUNCTION__, 'FeideConnect\Data\Models\AuthorizationCode', false);
     }
 
-    function saveAuthorizationCode(Models\AuthorizationCode $code) {
+    public function saveAuthorizationCode(Models\AuthorizationCode $code) {
         $data = $code->getStorableArray();
 
         if (!($code->validuntil instanceof \FeideConnect\Data\Types\Timestamp)) {
@@ -758,7 +758,7 @@ class Cassandra2 extends \FeideConnect\Data\Repository {
         $this->execute($query, $data, __FUNCTION__);
     }
 
-    function removeAuthorizationCode(Models\AuthorizationCode $code) {
+    public function removeAuthorizationCode(Models\AuthorizationCode $code) {
         $query = 'DELETE FROM "oauth_codes" WHERE "code" = :code';
         $params = ['code' => new Uuid($code->code)];
         $this->execute($query, $params, __FUNCTION__);
