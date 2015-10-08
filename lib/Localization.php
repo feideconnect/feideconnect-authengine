@@ -15,11 +15,6 @@ class Localization {
         "no" => "nb"
     ];
 
-    function __construct() {
-
-    }
-
-
     static function getDictionary() {
 
         if (Config::getValue('enableLocalization', false)) {

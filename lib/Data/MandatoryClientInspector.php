@@ -4,13 +4,6 @@ namespace FeideConnect\Data;
 
 class MandatoryClientInspector {
 
-
-    function __construct() {
-
-    }
-
-
-
     public static function isClientMandatory($account, $client) {
 
         $realm = $account->getRealm();
