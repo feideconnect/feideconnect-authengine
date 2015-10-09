@@ -15,7 +15,7 @@ use FeideConnect\Exceptions\RedirectException;
  */
 class Authenticator {
 
-    protected $as, $user, $authSources, $authConfig;
+    protected $authSources, $authConfig;
 
 
     public function __construct() {
@@ -33,8 +33,6 @@ class Authenticator {
             $this->authSources[$authtype] = AuthSource::create($authTypeConfig["authSource"]);
             // echo "Creating auth source [" . $authtype . "] using [" . $authTypeConfig["authSource"] . "] ";
         }
-        $this->user = null;
-
     }
 
     public function setClientID($clientid) {
