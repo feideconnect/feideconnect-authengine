@@ -15,7 +15,7 @@ use FeideConnect\Exceptions\RedirectException;
  */
 class Authenticator {
 
-    protected $authSources, $authConfig, $authTypes, $clientid, $activeAuthType;
+    protected $authSources, $authTypes, $clientid, $activeAuthType;
 
 
     public function __construct() {
@@ -39,10 +39,10 @@ class Authenticator {
         $this->clientid = $clientid;
     }
 
-    protected function getIdP() {
+    protected static function getIdP($authconfig) {
 
-        if (isset($this->authConfig["idp"])) {
-            return $this->authConfig["idp"];
+        if (isset($authConfig["idp"])) {
+            return $authConfig["idp"];
         }
         return Config::getValue("defaultIdP");
 
@@ -53,11 +53,11 @@ class Authenticator {
      * Assumes the user is not logged in, and performs a isPassive=true login request against the IdP
      * @return [type] [description]
      */
-    protected function authenticatePassive($as) {
+    protected function authenticatePassive($as, $authconfig) {
 
         $as->login([
             'isPassive' => true,
-            'saml:idp' => $this->getIdP(),
+            'saml:idp' => $this->getIdP($authconfig),
             'ErrorURL' => \SimpleSAML_Utilities::addURLparameter(\SimpleSAML_Utilities::selfURL(), array(
                 "error" => 1,
             )),
@@ -152,7 +152,7 @@ class Authenticator {
         // If allowed, attempt is passive authentiation.
         if ($isPassive) {
             // TODO: add info about selected IdP here as well..
-            $this->authenticatePassive($as);
+            $this->authenticatePassive($as, $authconfig);
             if (!$this->verifyMaxAge($as->getAuthData("AuthnInstant"), $maxage)) {
                 throw new RedirectException(\SimpleSAML_Utilities::addURLparameter(\SimpleSAML_Utilities::selfURL(), array(
                     "error" => 1,
