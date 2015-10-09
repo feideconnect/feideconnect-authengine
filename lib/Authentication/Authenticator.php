@@ -18,7 +18,7 @@ class Authenticator {
     protected $as, $user, $authSource, $authConfig;
 
 
-    public function __construct($authconfig = null) {
+    public function __construct() {
 
 
 

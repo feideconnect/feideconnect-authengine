@@ -20,7 +20,7 @@ class Auth {
         // Authentication\Authenticator::logoutAll();
 
 
-        $auth = new Authentication\Authenticator($authconfig);
+        $auth = new Authentication\Authenticator();
         $auth->logout();
 
         return new Redirect('/loggedout');
@@ -48,10 +48,9 @@ class Auth {
         //     "type" => "twitter"
         // ];
         // $authconfig = $accountchooser->getAuthConfig();
-        $authconfig = [];
         // echo '<pre>Auth config is '; print_r($authconfig); exit;
 //
-        $auth = new Authentication\Authenticator($authconfig);
+        $auth = new Authentication\Authenticator();
 
         if (isset($_REQUEST['logout']) && $_REQUEST['logout'] === '1') {
             $auth->logout();
