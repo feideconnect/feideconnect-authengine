@@ -39,7 +39,7 @@ class OpenIDConnect {
 
 
 
-        $apiprotector = new APIProtector(getallheaders());
+        $apiprotector = APIProtector::get();
         $user = $apiprotector
             ->requireClient()->requireUser()->requireScopes(['openid'])
             ->getUser();

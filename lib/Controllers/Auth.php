@@ -115,7 +115,7 @@ class Auth {
 
 
 
-        $apiprotector = new APIProtector(getallheaders());
+        $apiprotector = APIProtector::get();
         $user = $apiprotector
             ->requireClient()->requireUser()->requireScopes(['userinfo'])
             ->getUser();
@@ -158,7 +158,7 @@ class Auth {
 
         $storage = StorageProvider::getStorage();
 
-        $apiprotector = new OAuth\APIProtector(getallheaders());
+        $apiprotector = OAuth\APIProtector::get();
         $user = $apiprotector
             ->requireClient()->requireUser()->requireScopes(['userinfo'])
             ->getUser();

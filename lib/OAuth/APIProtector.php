@@ -8,7 +8,7 @@ use FeideConnect\Data\StorageProvider;
 use FeideConnect\Logger;
 
 class APIProtector {
-
+    public static $instance = null;
 
     protected $accesstoken = null;
     protected $tokenvalue = null;
@@ -17,11 +17,20 @@ class APIProtector {
     protected $client = null;
     protected $user = null;
 
-    public function __construct($headers) {
-
+    public function __construct($headers=null) {
+        if ($headers===null) {
+            $headers = getallheaders();
+        }
         $this->tokenvalue = $this->getBearerToken($headers);
         $this->storage = StorageProvider::getStorage();
 
+    }
+
+    public static function get() {
+        if (self::$instance === null) {
+            self::$instance = new self();
+        }
+        return self::$instance;
     }
 
     /**
