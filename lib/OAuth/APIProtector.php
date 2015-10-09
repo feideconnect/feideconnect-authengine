@@ -17,9 +17,9 @@ class APIProtector {
     protected $client = null;
     protected $user = null;
 
-    public function __construct() {
+    public function __construct($headers) {
 
-        $this->tokenvalue = $this->getBearerToken();
+        $this->tokenvalue = $this->getBearerToken($headers);
         $this->storage = StorageProvider::getStorage();
 
     }
@@ -29,8 +29,7 @@ class APIProtector {
      * if present. If not present, return null.
      * @return [type] [description]
      */
-    protected function getBearerToken() {
-        $hdrs = getallheaders();
+    protected function getBearerToken($hdrs) {
         foreach ($hdrs as $h => $v) {
             if ($h === 'Authorization') {
                 if (preg_match('/^Bearer\s(.*?)$/i', $v, $matches)) {
@@ -59,7 +58,7 @@ class APIProtector {
             throw new APIAuthorizationException('Authorization Bearer Token not present in request');
         }
 
-        if (!Validator::validateID($this->tokenvalue)) {
+        if (!Validator::validateUUID($this->tokenvalue)) {
             throw new APIAuthorizationException('Authorization Bearer Token has invalid format', 'invalid_request');
         }
 
@@ -125,7 +124,7 @@ class APIProtector {
         }
         $this->requireToken();
 
-        if (empty($this->accesstoken->userid)) {
+        if (empty($this->accesstoken->userid) || $this->accesstoken->userid === '00000000-0000-0000-0000-000000000000') {
             throw new APIAuthorizationException('Authorization Bearer Token was not associated with an authenticated user', 'invalid_token');
         }
 
