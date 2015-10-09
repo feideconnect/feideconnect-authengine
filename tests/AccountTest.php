@@ -370,6 +370,25 @@ class AccountTest extends DBHelper {
         $this->assertFalse(Account::compareType(['foo'], ['ugle']));
     }
 
+    public function testValidateAuthProviderOK() {
+        $account = new Account([
+            'eduPersonPrincipalName' => ['test@example.org'],
+            'idp' => self::$feideidp,
+        ], self::$feideAM);
+        $this->assertTrue($account->validateAuthProvider([]));
+        $this->assertTrue($account->validateAuthProvider([['all']]));
+        $this->assertTrue($account->validateAuthProvider([['feide', 'all']]));
+    }
+
+    public function testValidateAuthProviderFail() {
+        $this->setExpectedException('\FeideConnect\Exceptions\AuthProviderNotAccepted');
+        $account = new Account([
+            'eduPersonPrincipalName' => ['test@example.org'],
+            'idp' => self::$feideidp,
+        ], self::$feideAM);
+        $account->validateAuthProvider([['social', 'facebook']]);
+    }
+
     public function testAgeLimit() {
         $this->assertTrue(Account::checkAgeLimit(1950, 13, mktime(0, 0, 0, 1, 1, 1964)));
         $this->assertTrue(Account::checkAgeLimit(1950, 13, mktime(0, 0, 0, 9, 1, 1963)));
