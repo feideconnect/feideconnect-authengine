@@ -45,6 +45,7 @@ try {
     $data['message'] = $e->getMessage();
 
     $response = (new TemplatedHTMLResponse('exception'))->setData($data);
+    $response->setStutus(404);
 
 } catch (RedirectException $e) {
     $response = $e->getHTTPResponse();
