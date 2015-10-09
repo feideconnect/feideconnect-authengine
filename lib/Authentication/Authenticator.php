@@ -131,7 +131,7 @@ class Authenticator {
                 // var_dump($account); var_dump($authconfig); exit;
                 if ($account->idp !== $authconfig['idp']) {
                     $this->logoutAS($as);
-                } else if ($authconfig['subid'] && $authconfig['subid'] !== $account->realm) {
+                } else if (isset($authconfig['subid']) && $authconfig['subid'] !== $account->realm) {
                     // TODO: This can cause problems for users that does not want to login to the service...
                     // $this->logoutAS($as);
                 }
