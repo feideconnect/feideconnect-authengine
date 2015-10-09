@@ -205,7 +205,8 @@ define(function(require, exports, module) {
     	"go": function(so) {
     		var that = this;
 			var url = that.request.return;
-			url += '&acresponse=' + encodeURIComponent(JSON.stringify(so));
+			var sep = (url.indexOf('?') > -1) ? '&' : '?';
+			url += sep + 'acresponse=' + encodeURIComponent(JSON.stringify(so));
 
 			if (that.feideid === so.id) {
 
