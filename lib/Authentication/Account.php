@@ -291,7 +291,7 @@ class Account {
         $url = $this->getValue($attrname);
 
         $prot = parse_url($url, PHP_URL_SCHEME);
-        if ($prot === false) {
+        if ($prot === false || $prot === null) {
             return null;
         }
         if (!in_array($prot, ["http", "https"])) {
@@ -422,6 +422,9 @@ class Account {
             return new AccountPhoto($value);
         } else {
             $value = $this->getComplex($rule);
+            if ($value === null) {
+                return null;
+            }
             $value = base64_encode($value);
             return new AccountPhoto($value);
         }
