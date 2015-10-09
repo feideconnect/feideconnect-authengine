@@ -15,7 +15,7 @@ use FeideConnect\Exceptions\RedirectException;
  */
 class Authenticator {
 
-    protected $authSources, $authConfig;
+    protected $authSources, $authConfig, $authTypes, $clientid, $activeAuthType;
 
 
     public function __construct() {
