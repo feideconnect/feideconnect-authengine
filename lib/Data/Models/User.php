@@ -168,7 +168,7 @@ class User extends \FeideConnect\Data\Model {
 
     public function getSourcedProperty($name, $sourceID) {
 
-        // echo "About to pick " . $name . " " . $soureID . "\n";
+        // echo "About to pick " . $name . " " . $sourceID . "\n";
         // print_r($)
 
         if (isset($this->{$name}) && is_array($this->{$name})) {
