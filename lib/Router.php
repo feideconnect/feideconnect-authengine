@@ -43,7 +43,6 @@ class Router {
         // Informatio about authentication.
         $this->router->get('/auth', ['FeideConnect\Controllers\Auth', 'userdebug']);
         $this->router->get('/userinfo', ['FeideConnect\Controllers\Auth', 'userinfo']);
-        $this->router->get('/userinfo/authinfo', ['FeideConnect\Controllers\Auth', 'authinfo']);
         $this->router->get('/logout', ['FeideConnect\Controllers\Auth', 'logout']);
 
 

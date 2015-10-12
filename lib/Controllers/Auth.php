@@ -153,35 +153,4 @@ class Auth {
 
     }
 
-    public static function authinfo() {
-
-        $storage = StorageProvider::getStorage();
-
-        $apiprotector = OAuth\APIProtector::get();
-        $user = $apiprotector
-            ->requireClient()->requireUser()->requireScopes(['userinfo'])
-            ->getUser();
-        // $client = $apiprotector->getClient();
-
-        $allowseckeys = ['userid'];
-        $allowseckeys[] = 'p';
-        $allowseckeys[] = 'feide';
-
-        // $includeEmail = true;
-
-        $authorizations = $storage->getAuthorizationsByUser($user);
-
-        $data = [
-            "authorizations" => [],
-            "tokens" => [],
-        ];
-        foreach ($authorizations as $auth) {
-            $data["authorizations"][] = $auth->getAsArray();
-        }
-
-        return new JSONResponse($data);
-
-    }
-
-
 }
