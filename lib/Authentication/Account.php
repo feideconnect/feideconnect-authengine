@@ -39,16 +39,7 @@ class Account {
         $this->yob    = $this->get("yob");
         $this->sourceID = $this->obtainSourceID();
 
-        // echo '<pre>'; print_r($this); exit;
-
         $this->photo  = $this->obtainPhoto();
-
-        // echo '<pre>We got this account map rules: ' . "\n";
-        // // print_r($accountMapRules);
-        // // print_r($this->attributes);
-        // echo var_dump($this);
-        // echo "Age: " . $this->aboveAgeLimit(35) . ".";
-        // exit;
 
     }
 
@@ -81,10 +72,6 @@ class Account {
     }
 
     public static function compareType($candidate, $match) {
-
-        // echo '<p>Compare candidate'; var_dump($candidate);
-        // echo '<p>with match'; var_dump($match);
-
         for ($i = 0; $i < count($match); $i++) {
             if ($match[$i] === 'all') {
                 return true;
@@ -105,28 +92,9 @@ class Account {
 
         $tag = $this->getVisualTag();
         return $tag["def"];
-
-        // var_dump($tag);
-        // if (!empty($tag["def"])) {
-        //     foreach($tag["def"] as $d) {
-        //         // var_dump("TAG"); var_dump($d);
-        //         // $s =
-        //         // $def[] = explode(':', $d);
-        //         echo 'fooo'; var_dump($d);
-        //         array_push($def, explode(':', $d));
-        //         $def[] = explode(':', $d);
-        //         var_dump(explode(':', $d));
-        //     }
-
-
-        // }
-        // var_dump($def);
-        // return $def;
     }
 
     public function validateAuthProvider($authproviders) {
-        // echo '<h1>validateAuthProvider()</h1>';
-        // var_dump($authproviders);
 
         if (empty($authproviders)) {
             return true;
@@ -299,7 +267,6 @@ class Account {
         }
 
         $value = file_get_contents($url);
-        // echo $value; exit;
 
         return $value;
 
@@ -325,7 +292,6 @@ class Account {
             return $this->getComplexJoinAttrnames($rule["joinattrnames"]);
         }
 
-        // echo '<pre>'; var_dump($rule); var_dump($default); var_dump($required); exit;
         throw new Exception("Unreckognized complex attribute mapping ruleset");
 
     }
@@ -450,8 +416,6 @@ class Account {
 
         $age = $thisyear - $year;
 
-        // echo "Reqired age is  " . $requiredAge . " ";
-        // echo "Age is " . $age;
         if ($age >= $requiredAge) {
             $res = true;
         } else {
@@ -471,18 +435,6 @@ class Account {
     public function getOrg() {
         return $this->org;
     }
-
-    //     $userids = array();
-    //     foreach($this->accountmap as $prefix => $attrname) {
-    //         if (isset($this->attributes[$attrname])) {
-    //             $userids[] = $prefix . ':' . $this->attributes[$attrname][0];
-    //         }
-    //     }
-    //     if (count($userids) == 0) {
-    //         throw new Exception('Could not get any userids from this authenticated account.');
-    //     }
-    //     return $userids;
-    // }
 
     public function getRealm() {
         return $this->realm;
