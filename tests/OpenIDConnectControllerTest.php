@@ -22,7 +22,7 @@ class OpenIDConnectControllerTest extends DBHelper {
             'jwks_uri' => 'http://localhost/openid/jwks',
             'issuer' => 'https://sa-test-auth.feideconnect.no',
             'service_documentation' => 'http://feideconnect.no/docs/gettingstarted/',
-            'token_endpoint_auth_methods_supported' => ['client_secret_basic'],
+            'token_endpoint_auth_methods_supported' => ['client_secret_basic', 'client_secret_post'],
             'token_endpoint_auth_signing_alg_values_supported' => ['RS256'],
             'ui_locales_supported' => ['en', 'no', 'nb', 'nn'],
         ], $response->getData());
