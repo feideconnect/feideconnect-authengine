@@ -46,7 +46,7 @@ class OpenIDConnect {
             'issuer' => Config::getValue('connect.issuer'),
             'authorization_endpoint' => $base . 'authorization',
             'token_endpoint' => $base . 'token',
-            'token_endpoint_auth_methods_supported' => ['client_secret_basic'],
+            'token_endpoint_auth_methods_supported' => ['client_secret_basic', 'client_secret_post'],
             'token_endpoint_auth_signing_alg_values_supported' => ['RS256'],
             'userinfo_endpoint' =>  $base . 'userinfo',
             'ui_locales_supported' => ["en", "no", "nb", "nn"],
