@@ -282,13 +282,6 @@ class Server {
             $response = new Messages\ErrorResponse($msg);
             return $response->sendBodyJSON($e->httpcode);
 
-
         }
-
-
-
     }
-
-
-
 }
