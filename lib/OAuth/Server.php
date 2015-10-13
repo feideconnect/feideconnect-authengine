@@ -63,18 +63,10 @@ class Server {
              *
              */
 
-            // Decide whether to run in passive mode. In passive mode no UI is displayed to the enduser.
-            $passive = false;
-            if (isset($_REQUEST["passive"]) && $_REQUEST["passive"] === 'true') {
-                $passive = true;
-            }
-
-
             // Parse the incomming Authorization Request.
             $request = new Messages\AuthorizationRequest($_REQUEST);
             Logger::debug('Successfully parsed OAuth Authorization Request. Next up: resolve client.', array(
                 'authorization_request' => $request,
-                'passive' => $passive
             ));
 
             $pAuthorization = new OAuthAuthorization($request);
