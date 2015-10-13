@@ -162,7 +162,7 @@ class AuthorizationEvaluator {
         $configuredRedirectURI = $this->client->redirect_uri;
         $requestedRedirectURI = $this->request->redirect_uri;
 
-
+        $uri = null;
         if (empty($this->request->redirect_uri)) {
             // Use the first of the configured redirectURIs if multiple are configured.
             $uri = $configuredRedirectURI[0];
