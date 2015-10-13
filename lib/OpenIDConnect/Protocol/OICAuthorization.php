@@ -78,7 +78,7 @@ class OICAuthorization extends OAuthAuthorization {
 
         $authorizationresponse = Messages\AuthorizationResponse::generate($this->request, $code);
 
-        Logger::info('OAuth Authorization Code is now stored, and may be fetched via the token endpoint.', array(
+        Logger::debug('OAuth Authorization Code is now stored, and may be fetched via the token endpoint.', array(
             'user' => $this->user,
             'client' => $this->client,
             'code' => $code,

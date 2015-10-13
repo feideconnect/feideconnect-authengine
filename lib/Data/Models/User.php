@@ -184,7 +184,7 @@ class User extends \FeideConnect\Data\Model {
         $salt = Config::getValue('salt', null, true);
         $rawstr = 'consent' . '|' . $salt . '|' . $this->userid;
 
-        Logger::info('Calculating verifier from this string', array(
+        Logger::debug('Calculating verifier from this string', array(
             'rawstring' => 'consent' . '|{salt:hidden}|' . $this->userid
         ));
         return sha1($rawstr);

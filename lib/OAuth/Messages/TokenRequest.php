@@ -33,4 +33,13 @@ class TokenRequest extends Message {
         return $this->scope;
     }
 
+    public function toLog() {
+        $data = parent::toLog();
+        foreach (['client_secret', 'username', 'password'] as $key) {
+            if (isset($data[$key])) {
+                unset($data[$key]);
+            }
+        }
+        return $data;
+    }
 }

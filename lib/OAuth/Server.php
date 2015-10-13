@@ -72,7 +72,7 @@ class Server {
 
             // Parse the incomming Authorization Request.
             $request = new Messages\AuthorizationRequest($_REQUEST);
-            Logger::info('Successfully parsed OAuth Authorization Request. Next up: resolve client.', array(
+            Logger::debug('Successfully parsed OAuth Authorization Request. Next up: resolve client.', array(
                 'authorization_request' => $request,
                 'passive' => $passive
             ));
@@ -177,10 +177,6 @@ class Server {
     }
 
     protected function tokenFromCode($tokenrequest) {
-        Logger::info('OAuth Processing an authorization_code request.', array(
-            'tokenrequest' => $tokenrequest,
-            'rawrequest' => $_REQUEST,
-        ));
 
         if (empty($tokenrequest->code)) {
             throw new OAuthException('invalid_request', 'Request was missing the required code parameter');
@@ -252,10 +248,7 @@ class Server {
             $tokenrequest = new Messages\TokenRequest($_REQUEST);
             // $tokenrequest->parseServer($_SERVER);
 
-            Logger::info('OAuth Received incomming AccessTokenRequest.', array(
-                'tokenrequest' => $tokenrequest,
-                'rawrequest' => $_REQUEST,
-            ));
+            Logger::debug('OAuth Received incomming AccessTokenRequest.', $tokenrequest->toLog());
 
             if ($tokenrequest->grant_type === 'authorization_code') {
                 return $this->tokenFromCode($tokenrequest);

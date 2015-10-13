@@ -94,7 +94,7 @@ class AuthorizationEvaluator {
             $this->scopesRemaining = $this->authorization->remainingScopes($this->scopesInQuestion);
         }
 
-        Logger::info('OAuth AuthorizationEvaluator evaluateScopes()', array(
+        Logger::debug('OAuth AuthorizationEvaluator evaluateScopes()', array(
             'clientScopes' => $this->client->getScopeList(),
             'requestedScopes' => $this->request->getScopeList(),
             'requestedScopesStr' => $this->request->scope,
@@ -163,19 +163,20 @@ class AuthorizationEvaluator {
         $requestedRedirectURI = $this->request->redirect_uri;
 
 
-        Logger::info('OAuth AuthorizationEvaluator getValidatedRedirectURI()', array(
-            'configuredRedirectURI' => $configuredRedirectURI,
-            'requestedRedirectURI' => $requestedRedirectURI,
-        ));
-
         if (empty($this->request->redirect_uri)) {
             // Use the first of the configured redirectURIs if multiple are configured.
-            return $configuredRedirectURI[0];
+            $uri = $configuredRedirectURI[0];
+        } else if (in_array($requestedRedirectURI, $configuredRedirectURI)) {
+            $uri = $requestedRedirectURI;
         }
 
-
-        if (in_array($requestedRedirectURI, $configuredRedirectURI)) {
-            return $requestedRedirectURI;
+        if ($uri !== null) {
+            Logger::debug('OAuth AuthorizationEvaluator getValidatedRedirectURI()', array(
+                'configuredRedirectURI' => $configuredRedirectURI,
+                'requestedRedirectURI' => $requestedRedirectURI,
+                'effectiveRedirectURI' => $uri,
+            ));
+            return $uri;
         }
 
         Logger::error('OAuth AuthorizationEvaluator not able to resolve a valid redirect_uri for client', array(

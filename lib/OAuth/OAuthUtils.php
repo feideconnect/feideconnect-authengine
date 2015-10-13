@@ -67,7 +67,7 @@ class OAuthUtils {
         if ($feideuser) {
             $logdata['user_realms'] = $realms;
         }
-        Logger::info('Evaluated scopes', $logdata);
+        Logger::debug('Evaluated scopes', $logdata);
         return $result;
     }
 

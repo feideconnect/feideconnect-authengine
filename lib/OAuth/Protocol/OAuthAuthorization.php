@@ -66,7 +66,7 @@ class OAuthAuthorization {
         if ($aevaluator->hasScopeInQuestion('openid')) {
             // Parse the incomming Authorization Request.
             $request = new \FeideConnect\OpenIDConnect\Messages\AuthorizationRequest($_REQUEST);
-            Logger::info('Successfully parsed OpenID Connect Authorization Request.', array(
+            Logger::debug('Successfully parsed OpenID Connect Authorization Request.', array(
                 'request' => $request->asArray()
             ));
             $pAuthorization = new \FeideConnect\OpenIDConnect\Protocol\OICAuthorization($request);
@@ -90,7 +90,7 @@ class OAuthAuthorization {
             throw new OAuthException('invalid_client', 'Could not look up the specified client.');
         }
 
-        Logger::info('OAuth Processing Authorization request, resolved client of the request.', array(
+        Logger::debug('OAuth Processing Authorization request, resolved client of the request.', array(
             'client' => $this->client
         ));
 
@@ -116,7 +116,7 @@ class OAuthAuthorization {
 
         // echo '<pre>'; print_r($user); exit;
 
-        Logger::info('OAuth Processing Authorization request, user is authenticated', array(
+        Logger::debug('OAuth Processing Authorization request, user is authenticated', array(
             'user' => $this->user
         ));
 
@@ -251,7 +251,10 @@ class OAuthAuthorization {
 
 
 
-
+        Logger::info("User authenticated", [
+            'client' => $this->client,
+            'source' => implode($this->account->getDef()[0], ":"),
+        ]);
 
 
         switch ($this->request->response_type) {
@@ -302,11 +305,10 @@ class OAuthAuthorization {
 
         $authorizationresponse = Messages\AuthorizationResponse::generate($this->request, $code);
 
-        Logger::info('OAuth Authorization Code is now stored, and may be fetched via the token endpoint.', array(
+        Logger::debug('OAuth Authorization Code is now stored, and may be fetched via the token endpoint.', array(
             'user' => $this->user,
             'client' => $this->client,
             'code' => $code,
-            'authorizationresponse' => $authorizationresponse,
         ));
 
         return $authorizationresponse->sendRedirect($redirectURI);

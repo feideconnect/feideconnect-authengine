@@ -185,7 +185,9 @@ class AuthorizationUI {
 
 
         Logger::info('OAuth About to present authorization dialog.', array(
-            'authorizationDialogData' => $data
+            'client' => $this->client,
+            'user' => $this->user,
+            'scopes' => $this->scopesInQuestion,
         ));
 
 
