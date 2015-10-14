@@ -253,6 +253,7 @@ class OAuthAuthorization {
 
         Logger::info("User authenticated", [
             'client' => $this->client,
+            'user' => $this->user,
             'source' => implode($this->account->getDef()[0], ":"),
         ]);
 
