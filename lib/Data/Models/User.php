@@ -392,7 +392,9 @@ class User extends \FeideConnect\Data\Model {
 
 
     public function toLog() {
-        return $this->getAsArrayLimited(["userid", "userid_sec", "name"]);
+        $logdata = $this->getBasicUserInfo(false,  ['uuid']);
+        unset($logdata['userid_sec']);
+        return $logdata;
     }
 
 }
