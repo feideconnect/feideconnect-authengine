@@ -125,6 +125,6 @@ class Client extends \FeideConnect\Data\Model {
 
 
     public function toLog() {
-        return $this->getAsArrayLimited(["id", "name", "redirect_uri"]);
+        return $this->getAsArrayLimited(["id", "name"]);
     }
 }
