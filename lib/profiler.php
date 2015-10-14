@@ -12,11 +12,12 @@ $rustart = getrusage();
 
 
 
-function profiler_status() {
+function profiler_status($method) {
     global $rustart;
     $ru = getrusage();
 
     \FeideConnect\Logger::info('Profiler stats', array(
+        'method' => $method,
         'profiler' => [
             'computation_duration' => rutime($ru, $rustart, "utime"),
             'system_call_duration' => rutime($ru, $rustart, "stime"),

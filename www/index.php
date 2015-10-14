@@ -93,4 +93,4 @@ echo $response->send();
 
 
 
-profiler_status();
+profiler_status($_SERVER['REQUEST_METHOD']);
