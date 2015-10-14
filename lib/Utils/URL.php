@@ -110,16 +110,25 @@ class URL {
         }
         return $port;
     }
+
+    /**
+     * Will return /universities/ruc/baz/simplesaml/saml2/SSOService.php
+     */
+    public static function selfPathNoQuery() {
+        $path = $_SERVER['SCRIPT_NAME'];
+        if (isset($_SERVER['PATH_INFO'])) {
+            $path .= $_SERVER['PATH_INFO'];
+        }
+        return $path;
+    }
+
     /**
      * Will return https://sp.example.org/universities/ruc/baz/simplesaml/saml2/SSOService.php
      */
     public static function selfURLNoQuery() {
 
         $selfURLhost = self::selfURLhost();
-        $selfURLhost .= $_SERVER['SCRIPT_NAME'];
-        if (isset($_SERVER['PATH_INFO'])) {
-            $selfURLhost .= $_SERVER['PATH_INFO'];
-        }
+        $selfURLhost .= self::selfPathNoQuery();
         return $selfURLhost;
 
     }

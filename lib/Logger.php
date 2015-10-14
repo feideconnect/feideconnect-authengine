@@ -51,8 +51,9 @@ class Logger {
         // Fix easier parsing by the monolog laas parser.
         $str = str_replace(['{', '}'], ['[', ']'], $str);
 
-        if (isset($_SERVER['REQUEST_URI'])) {
-            $data['path'] = $_SERVER['REQUEST_URI'];
+        $path = Utils\URL::selfPathNoQuery();
+        if (!empty($path)) {
+            $data['path'] = $path;
         }
         if (isset($_SERVER['REMOTE_ADDR'])) {
             $data['src_ip'] = $_SERVER['REMOTE_ADDR'];
