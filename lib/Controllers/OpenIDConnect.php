@@ -82,7 +82,7 @@ class OpenIDConnect {
             $response["email_verified"] = true;
         }
         if (isset($userinfo["profilephoto"])) {
-            $response["picture"] = Config::getValue("endpoints.core") . '/userinfo/user/media/' . $userinfo["profilephoto"];
+            $response["picture"] = Config::getValue("endpoints.core") . '/userinfo/v1/user/media/' . $userinfo["profilephoto"];
         }
 
         // $response["userinfo"] = $userinfo;

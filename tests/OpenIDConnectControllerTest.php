@@ -96,7 +96,7 @@ class OpenIDConnectControllerTest extends DBHelper {
             'email' => 'test.user@example.org',
             'email_verified' => true,
             'name' => 'Test User',
-            'picture' => 'https://api.feideconnect.no/userinfo/user/media/' . $this->user->getProfileAccess(),
+            'picture' => 'https://api.feideconnect.no/userinfo/v1/user/media/' . $this->user->getProfileAccess(),
         ], $data);
     }
 
