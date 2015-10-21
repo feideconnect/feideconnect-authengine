@@ -18,7 +18,7 @@ class OpenIDConnectControllerTest extends DBHelper {
         $this->assertEquals([
             'authorization_endpoint' => 'http://localhost/oauth/authorization',
             'token_endpoint' => 'http://localhost/oauth/token',
-            'userinfo_endpoint' => 'http://localhost/oauth/userinfo',
+            'userinfo_endpoint' => 'http://localhost/openid/userinfo',
             'jwks_uri' => 'http://localhost/openid/jwks',
             'issuer' => 'https://sa-test-auth.feideconnect.no',
             'service_documentation' => 'http://feideconnect.no/docs/gettingstarted/',
