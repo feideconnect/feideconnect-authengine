@@ -233,6 +233,10 @@ if ($command[0] === 'user') {
         $service = $command[3];
         $includetext = $command[4];
 
+        if (empty($service) || is_null($includetext)) {
+            throw new \Exception('Missing parameters for which service to SET or REMOVE');
+        }
+
         $include = ($includetext === '1');
 
         $cli->info( "About to service for [" . $orgid . "] [" . $service . "] " . ($include ? 'SET':'REMOVE'));

@@ -648,12 +648,12 @@ class Cassandra2 extends \FeideConnect\Data\Repository {
     public function updateOrgServiceStatus(Models\Organization $org, $service, $include) {
 
         $operator = ($include ? '+' : '-');
-        $query = 'UPDATE "organizations" SET services = services ' . $operator . ' {\':service\'} ' .
+        $query = 'UPDATE "organizations" SET services = services ' . $operator . ' :service ' .
             'WHERE id = :id';
 
         $params = [
             'id' => $org->id,
-            'service' => $service
+            'service' => new CollectionSet([$service], Base::ASCII)
         ];
         $this->execute($query, $params, __FUNCTION__);
 
