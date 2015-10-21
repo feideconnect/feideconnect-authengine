@@ -158,6 +158,7 @@ CREATE TABLE group_members (
     groupid uuid,
     type text,
     status text,
+    added_by uuid,
     added timestamp,
     PRIMARY KEY (userid, groupid)
 );
