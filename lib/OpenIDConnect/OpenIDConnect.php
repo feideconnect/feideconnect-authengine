@@ -48,7 +48,7 @@ class OpenIDConnect {
             'token_endpoint' => $base . 'token',
             'token_endpoint_auth_methods_supported' => ['client_secret_basic', 'client_secret_post'],
             'token_endpoint_auth_signing_alg_values_supported' => ['RS256'],
-            'userinfo_endpoint' =>  $base . 'userinfo',
+            'userinfo_endpoint' =>  $base2 . 'userinfo',
             'ui_locales_supported' => ["en", "no", "nb", "nn"],
             'service_documentation' => 'http://feideconnect.no/docs/gettingstarted/',
             'jwks_uri' => $base2 . 'jwks'
