@@ -234,6 +234,9 @@ class Cassandra2 extends \FeideConnect\Data\Repository {
      */
     public function saveUser(Models\User $user) {
         $data = $user->getStorableArray();
+        if (!isset($data['updated'])) {
+            $data['updated'] = (new \FeideConnect\Data\Types\Timestamp())->getCassandraTimestamp();
+        }
         $query = self::generateInsert('users', $data);
         $this->execute($query, $data, __FUNCTION__);
 

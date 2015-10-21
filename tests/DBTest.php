@@ -296,6 +296,7 @@ class DBTest extends \PHPUnit_Framework_TestCase {
 
         $u2 = $this->db->getUserByUserID($uuid);
 
+        $this->assertTrue(isset($u2->updated), 'Should set updated timestamp when saving user');
         $this->assertTrue($u2 !== null, 'Should return match when looking up stored user object');
         $this->assertInstanceOf('FeideConnect\Data\Models\User', $u2, 'Should return an user object of correct object type');
 
