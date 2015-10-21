@@ -228,7 +228,18 @@ if ($command[0] === 'user') {
     }
 
 
+    if (isset($command[2]) && $command[2] === 'service' ) {
 
+        $service = $command[3];
+        $includetext = $command[4];
+
+        $include = ($includetext === '1');
+
+        $cli->info( "About to service for [" . $orgid . "] [" . $service . "] " . ($include ? 'SET':'REMOVE'));
+        $cli->updateOrgService($org, $service, $include);
+
+
+    }
 
 
 

@@ -15,6 +15,12 @@ Get information about users
 
 
 
+## Listing information about an organization
+
+
+Get info about one organization by ID:
+
+	f org fc:org:uninett.no
 
 ## Updating information about organizations
 
@@ -25,4 +31,11 @@ Setting a logo
 Updating uiinfo from `var/orginfo.json`
 
 	bin/feideconnect.php orgs update	
+
+
+Updating the service set for an organization:
+
+	f org fc:org:uninett.no service avtale 1
+
+These are the service tags that have been used so far: `["auth","avtale","pilot"]`
 

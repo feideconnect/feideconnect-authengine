@@ -316,6 +316,9 @@ class CLI {
 
     }
 
+    public function updateOrgService($org, $service, $include) {
+        $this->storage->updateOrgServiceStatus($org, $service, $include);
+    }
 
 
 
