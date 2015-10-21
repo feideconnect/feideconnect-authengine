@@ -415,7 +415,7 @@ class CLI {
             "cyan" => '36',
             "white" => '37'
         ];
-        return "\033[". $colors[$c] ."m" . $str . "\033[30m";
+        return "\033[". $colors[$c] ."m" . $str . "\033[39m";
     }
 
 }
