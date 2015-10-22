@@ -27,7 +27,7 @@ class OpenIDConnect {
         $jwks = $openid->getJWKs();
 
         $data = [
-            "jwk" => $jwks
+            "keys" => $jwks
         ];
 
 

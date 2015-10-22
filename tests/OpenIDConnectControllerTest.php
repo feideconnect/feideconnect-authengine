@@ -32,8 +32,8 @@ class OpenIDConnectControllerTest extends DBHelper {
         $response = OpenIDConnect::getJWKs();
         $this->assertInstanceOf('\FeideConnect\HTTP\JSONResponse', $response);
         $data = $response->getData();
-        $this->assertArrayHasKey('jwk', $data);
-        $jwk = $data['jwk'];
+        $this->assertArrayHasKey('keys', $data);
+        $jwk = $data['keys'];
         foreach ($jwk as $d) {
             $this->assertArrayHasKey('kty', $d);
             $this->assertArrayHasKey('n', $d);
