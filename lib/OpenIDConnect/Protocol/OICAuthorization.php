@@ -51,7 +51,7 @@ class OICAuthorization extends OAuthAuthorization {
             $scopesInQuestion,
             "OpenID Connect implicit grant",
             $this->request->state,
-            $idtoken
+            $idtoken->getEncoded()
         );
 
 

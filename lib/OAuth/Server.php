@@ -221,11 +221,12 @@ class Server {
         // Now, we consider us completed with this code, and we ensure that it cannot be used again
         $this->storage->removeAuthorizationCode($code);
 
-        $tokenresponse = OAuthUtils::generateTokenResponse($client, $user, $code->scope, "authorization code");
-
-        if (isset($code->idtoken) && $code->idtoken !== null) {
-            $tokenresponse->idtoken = $code->idtoken;
+        $idtoken = null;
+        if (isset($code->idtoken)) {
+            $idtoken = $code->idtoken;
         }
+
+        $tokenresponse = OAuthUtils::generateTokenResponse($client, $user, $code->scope, "authorization code", null, $idtoken);
 
         return $tokenresponse->sendBodyJSON();
     }

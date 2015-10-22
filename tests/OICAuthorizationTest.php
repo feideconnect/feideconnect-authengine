@@ -23,6 +23,6 @@ class OICAuthorizationTest extends OAuthAuthorizationTest {
 
     public function testAuthorizationToToken() {
         $params = parent::testAuthorizationToToken();
-        $this->assertArrayHasKey('idtoken', $params);
+        $this->assertArrayHasKey('id_token', $params);
     }
 }

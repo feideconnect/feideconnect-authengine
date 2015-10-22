@@ -20,7 +20,7 @@ class TokenResponse extends Message {
         $this->state            = Message::optional($message, 'state');
 
         // Used with OpenID Connect
-        $this->idtoken            = Message::optional($message, 'idtoken');
+        $this->id_token            = Message::optional($message, 'idtoken');
 
     }
 
@@ -45,7 +45,7 @@ class TokenResponse extends Message {
             $a["state"] = $state;
         }
         if ($idtoken !== null) {
-            $a["idtoken"] = $idtoken->getEncoded();
+            $a["idtoken"] = $idtoken;
         }
 
         $n = new self($a);
