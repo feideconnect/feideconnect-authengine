@@ -131,7 +131,7 @@ class AuthorizationUI {
             'visualTag' => json_encode($visualTag),
             'rememberme' => false,
         ];
-
+        $data['show_userinfo'] = isset($data['perms']['global']['userinfo']) || isset($data['perms']['global']['openid']);
 
         // var_dump($visualTag); exit;
 
