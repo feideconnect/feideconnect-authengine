@@ -259,6 +259,7 @@ CREATE TABLE apigk (
 );
 CREATE INDEX apigk_owner_idx ON apigk(owner);
 CREATE INDEX apigk_organization_idx ON apigk(organization);
+CREATE INDEX apigk_status_idx ON apigk(status);
 
 CREATE TABLE grep_codes (
 	id text PRIMARY KEY,
