@@ -12,13 +12,14 @@ use Cassandra\Type\Blob;
 
 class Client extends \FeideConnect\Data\Model {
 
-    public $id, $client_secret, $created, $descr, $name, $owner, $organization, $logo, $redirect_uri, $scopes, $scopes_requested, $status, $type, $updated, $authproviders, $orgauthorization;
+    public $id, $client_secret, $created, $descr, $name, $owner, $organization, $logo, $redirect_uri, $scopes, $scopes_requested, $status, $type, $updated, $authproviders, $orgauthorization, $authoptions;
 
 
     protected static $_properties = array(
         "id", "client_secret", "created", "descr", "name", "owner", "organization",
         "logo",
         "redirect_uri", "scopes", "scopes_requested", "status", "type", "updated", "authproviders", "orgauthorization",
+        "authoptions", "systemdescr", "supporturl", "loginurl", "homepageurl", "privacypolicyurl",
     );
     protected static $_types = [
         "created" => "timestamp",
@@ -36,7 +37,12 @@ class Client extends \FeideConnect\Data\Model {
             }
             unset($props["orgauthorization"]);
         }
-
+        if (isset($props["authoptions"])) {
+            $this->authoptions = json_decode($props["authoptions"], true);
+            unset($props["authoptions"]);
+        } else {
+            $this->authoptions = [];
+        }
 
     }
 
@@ -79,6 +85,12 @@ class Client extends \FeideConnect\Data\Model {
         return $this->orgauthorization[$realm];
     }
 
+    public function requireInteraction() {
+        if (!isset($this->authoptions["requireInteraction"])) {
+            return true;
+        }
+        return $this->authoptions["requireInteraction"];
+    }
 
     public function getStorableArray() {
 
@@ -115,6 +127,10 @@ class Client extends \FeideConnect\Data\Model {
                 $encoded[$realm] = json_encode($authz);
             }
             $prepared["orgauthorization"] = new CollectionMap($encoded, Base::ASCII, BASE::ASCII);
+        }
+
+        if (isset($this->authoptions)) {
+            $prepared["authoptions"] = json_encode($this->authoptions);
         }
 
 

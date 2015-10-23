@@ -178,6 +178,7 @@ class DBTest extends \PHPUnit_Framework_TestCase {
         $client2 = new Models\Client();
         $client2->id = $c2;
         $client2->name = 'name2';
+        $client2->authoptions['requireInteraction'] = false;
 
 
         $this->db->saveClient($client);
@@ -192,6 +193,7 @@ class DBTest extends \PHPUnit_Framework_TestCase {
         $c = $this->db->getClient($c2);
         $this->assertInstanceOf('FeideConnect\Data\Models\Client', $c, 'Returned client from storage query is instance of correct class');
         $this->assertTrue($c->id === $c2, 'Read client has same ID as written');
+        $this->assertFalse($c->requireInteraction());
 
 
         $list1 = $this->db->getClients();
