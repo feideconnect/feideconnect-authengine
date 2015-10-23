@@ -62,7 +62,7 @@ class Auth {
 
 
 
-        $auth->requireAuthentication(false); // require($isPassive = false, $allowRedirect = false, $return = null
+        $auth->requireAuthentication(false);
 
         $account = $auth->getAccount();
 
