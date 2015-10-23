@@ -117,7 +117,7 @@ class AuthenticatorRequireAuthenticationTest extends DBHelper {
         $as->getAttributes()->willReturn(MockAuthSource::$attributes)->shouldBeCalled();
         MockAuthSource::set('default-sp', $as->reveal());
         $authenticator = new Authenticator();
-        $this->assertNull($authenticator->requireAuthentication(false, true, null, 60));
+        $this->assertNull($authenticator->requireAuthentication(false, true, 60));
     }
 
     public function testActiveRedirectMaxagePassed() {
@@ -134,7 +134,7 @@ class AuthenticatorRequireAuthenticationTest extends DBHelper {
         ])->shouldBeCalled();
         MockAuthSource::set('default-sp', $as->reveal());
         $authenticator = new Authenticator();
-        $this->assertNull($authenticator->requireAuthentication(false, true, null, 60));
+        $this->assertNull($authenticator->requireAuthentication(false, true, 60));
     }
 
     public function testPassiveRedirectMaxagePassed() {
@@ -157,6 +157,6 @@ class AuthenticatorRequireAuthenticationTest extends DBHelper {
         ])->shouldBeCalled();
         MockAuthSource::set('default-sp', $as->reveal());
         $authenticator = new Authenticator();
-        $this->assertNull($authenticator->requireAuthentication(true, true, null, 60));
+        $this->assertNull($authenticator->requireAuthentication(true, true, 60));
     }
 }

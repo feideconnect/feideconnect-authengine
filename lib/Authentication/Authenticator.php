@@ -93,10 +93,9 @@ class Authenticator {
      *
      * @param  boolean $isPassive     [description]
      * @param  boolean $allowRedirect Set to false if using on an API where user cannot be redirected.
-     * @param  [type]  $return        URL to return to after login.
      * @return void
      */
-    public function requireAuthentication($isPassive = false, $allowRedirect = false, $return = null, $maxage = null) {
+    public function requireAuthentication($isPassive = false, $allowRedirect = false, $maxage = null) {
 
         $accountchooser = new Authentication\AccountChooserProtocol();
 
@@ -159,10 +158,6 @@ class Authenticator {
                 )));
             }
             return;
-        }
-
-        if ($return === null) {
-            $return = \SimpleSAML_Utilities::selfURL();
         }
 
         $options = array();
