@@ -62,7 +62,7 @@ class Auth {
 
 
 
-        $auth->requireAuthentication(false);
+        $auth->requireAuthentication();
 
         $account = $auth->getAccount();
 

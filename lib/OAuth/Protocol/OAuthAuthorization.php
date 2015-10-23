@@ -106,7 +106,11 @@ class OAuthAuthorization {
             return;
         }
 
-        $this->auth->requireAuthentication($this->isPassive, $this->maxage);
+        if ($this->isPassive) {
+            $this->auth->passiveAuthentication($this->client, $this->maxage);
+        } else {
+            $this->auth->requireAuthentication($this->maxage);
+        }
         $this->account = $this->auth->getAccount();
 
         $this->organization = $this->account->getOrg();

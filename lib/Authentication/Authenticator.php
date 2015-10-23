@@ -39,33 +39,6 @@ class Authenticator {
         $this->clientid = $clientid;
     }
 
-    protected static function getIdP($authconfig) {
-
-        if (isset($authConfig["idp"])) {
-            return $authConfig["idp"];
-        }
-        return Config::getValue("defaultIdP");
-
-    }
-
-
-    /**
-     * Assumes the user is not logged in, and performs a isPassive=true login request against the IdP
-     * @return [type] [description]
-     */
-    protected function authenticatePassive($as, $authconfig) {
-
-        $as->login([
-            'isPassive' => true,
-            'saml:idp' => $this->getIdP($authconfig),
-            'ErrorURL' => \SimpleSAML_Utilities::addURLparameter(\SimpleSAML_Utilities::selfURL(), array(
-                "error" => 1,
-            )),
-        ]);
-
-    }
-
-
     protected function verifyMaxAge($authninstant, $maxage) {
         if ($maxage === null) {
             return true;
@@ -88,17 +61,47 @@ class Authenticator {
         return false;
     }
 
+    protected function failPassive() {
+        throw new RedirectException(\SimpleSAML_Utilities::addURLparameter(\SimpleSAML_Utilities::selfURL(), array(
+            "error" => 1,
+        )));
+    }
+
+    public function passiveAuthentication($client, $maxage = null) {
+        if ($client->requireInteraction()) {
+            $this->failPassive();
+        }
+        foreach ($this->authSources as $authType => $as) {
+            if ($as->isAuthenticated()) {
+                if ($this->verifyMaxAge($as->getAuthData("AuthnInstant"), $maxage)) {
+                    $this->activeAuthType = $authType;
+                    return;
+                }
+            }
+        }
+        $as = $this->authSources['saml'];
+        $as->login([
+            'isPassive' => true,
+            'saml:idp' => Config::getValue("defaultIdP"),
+            'ErrorURL' => \SimpleSAML_Utilities::addURLparameter(\SimpleSAML_Utilities::selfURL(), array(
+                "error" => 1,
+            )),
+        ]);
+        if ($this->verifyMaxAge($as->getAuthData("AuthnInstant"), $maxage)) {
+            $this->activeAuthType = $authType;
+            return;
+        }
+        $this->failPassive();
+    }
+
     /**
      * Require authentication of the user. This is meant to be used with user frontend access.
      *
-     * @param  boolean $isPassive     [description]
      * @return void
      */
-    public function requireAuthentication($isPassive = false, $maxage = null) {
+    public function requireAuthentication($maxage = null) {
 
         $accountchooser = new Authentication\AccountChooserProtocol();
-
-
 
         $accountchooser->setClientID($this->clientid);
         // $accountchooser->debug();
@@ -142,21 +145,7 @@ class Authenticator {
 
         }
 
-        // User is not authenticated locally.
-        // If allowed, attempt is passive authentiation.
-        if ($isPassive) {
-            // TODO: add info about selected IdP here as well..
-            $this->authenticatePassive($as, $authconfig);
-            if (!$this->verifyMaxAge($as->getAuthData("AuthnInstant"), $maxage)) {
-                throw new RedirectException(\SimpleSAML_Utilities::addURLparameter(\SimpleSAML_Utilities::selfURL(), array(
-                    "error" => 1,
-                )));
-            }
-            return;
-        }
-
         $options = array();
-
 
         if (isset($authconfig["idp"])) {
             $options["saml:idp"] = $authconfig["idp"];

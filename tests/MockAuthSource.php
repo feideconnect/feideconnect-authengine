@@ -54,4 +54,8 @@ class MockAuthSource {
         self::set($type, new MockAuthSource($type));
         return self::$sources[$type];
     }
+
+    public static function clear() {
+        self::$sources = array();
+    }
 }
