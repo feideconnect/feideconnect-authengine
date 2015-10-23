@@ -106,7 +106,7 @@ class OAuthAuthorization {
             return;
         }
 
-        $this->auth->requireAuthentication($this->isPassive, true, $this->maxage); // require($isPassive = false, $allowRedirect = false, $return = null
+        $this->auth->requireAuthentication($this->isPassive, $this->maxage); // require($isPassive = false, $allowRedirect = false, $return = null
         $this->account = $this->auth->getAccount();
 
         $this->organization = $this->account->getOrg();

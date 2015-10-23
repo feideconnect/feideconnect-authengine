@@ -22,35 +22,16 @@ class AuthenticatorRequireAuthenticationTest extends DBHelper {
         $authenticator->requireAuthentication();
     }
 
-    public function testDefaultLoggedIn() {
+    public function testActiveLoggedIn() {
         $_REQUEST['acresponse'] = '{"id": "https://idp.feide.no","subid":"example.org"}';
 
         $as = AuthSource::create('default-sp');
         $as->authenticated = true;
         $authenticator = new Authenticator();
-        $this->assertNull($authenticator->requireAuthentication());
+        $this->assertNull($authenticator->requireAuthentication(false));
     }
 
-    public function testDefaultNotLoggedIn() {
-        $this->setExpectedException('\Exception');
-        $_REQUEST['acresponse'] = '{"id": "https://idp.feide.no","subid":"example.org"}';
-
-        $as = AuthSource::create('default-sp');
-        $as->authenticated = false;
-        $authenticator = new Authenticator();
-        $authenticator->requireAuthentication();
-    }
-
-    public function testActiveRedirectLoggedIn() {
-        $_REQUEST['acresponse'] = '{"id": "https://idp.feide.no","subid":"example.org"}';
-
-        $as = AuthSource::create('default-sp');
-        $as->authenticated = true;
-        $authenticator = new Authenticator();
-        $this->assertNull($authenticator->requireAuthentication(false, true));
-    }
-
-    public function testActiveRedirectNotLoggedIn() {
+    public function testActiveNotLoggedIn() {
         $_REQUEST['acresponse'] = '{"id": "https://idp.feide.no","subid":"example.org"}';
 
         $as = $this->prophesize('\tests\MockAuthSource');
@@ -58,10 +39,10 @@ class AuthenticatorRequireAuthenticationTest extends DBHelper {
         $as->isAuthenticated()->willReturn(false)->shouldBeCalled();
         MockAuthSource::set('default-sp', $as->reveal());
         $authenticator = new Authenticator();
-        $authenticator->requireAuthentication(false, true);
+        $authenticator->requireAuthentication(false);
     }
 
-    public function testPassiveNoRedirectLoggedIn() {
+    public function testPassiveLoggedIn() {
         $_REQUEST['acresponse'] = '{"id": "https://idp.feide.no","subid":"example.org"}';
 
         $as = new MockAuthSource('default-sp');
@@ -71,27 +52,7 @@ class AuthenticatorRequireAuthenticationTest extends DBHelper {
         $this->assertNull($authenticator->requireAuthentication(true));
     }
 
-    public function testPassiveNoRedirectNotLoggedIn() {
-        $this->setExpectedException('\Exception');
-        $_REQUEST['acresponse'] = '{"id": "https://idp.feide.no","subid":"example.org"}';
-
-        $as = AuthSource::create('default-sp');
-        $as->authenticated = false;
-        $authenticator = new Authenticator();
-        $authenticator->requireAuthentication(true);
-    }
-
-    public function testPassiveRedirectLoggedIn() {
-        $_REQUEST['acresponse'] = '{"id": "https://idp.feide.no","subid":"example.org"}';
-
-        $as = new MockAuthSource('default-sp');
-        $as->authenticated = true;
-        MockAuthSource::set('default-sp', $as);
-        $authenticator = new Authenticator();
-        $this->assertNull($authenticator->requireAuthentication(true, true));
-    }
-
-    public function testPassiveRedirectNotLoggedIn() {
+    public function testPassiveNotLoggedIn() {
         $_REQUEST['acresponse'] = '{"id": "https://idp.feide.no","subid":"example.org"}';
 
         $as = $this->prophesize('\tests\MockAuthSource');
@@ -104,10 +65,10 @@ class AuthenticatorRequireAuthenticationTest extends DBHelper {
         $as->isAuthenticated()->willReturn(false)->shouldBeCalled();
         MockAuthSource::set('default-sp', $as->reveal());
         $authenticator = new Authenticator();
-        $this->assertNull($authenticator->requireAuthentication(true, true));
+        $this->assertNull($authenticator->requireAuthentication(true));
     }
 
-    public function testActiveRedirectMaxageOK() {
+    public function testActiveMaxageOK() {
         $_REQUEST['acresponse'] = '{"id": "https://idp.feide.no","subid":"example.org"}';
 
         $as = $this->prophesize('\tests\MockAuthSource');
@@ -117,10 +78,10 @@ class AuthenticatorRequireAuthenticationTest extends DBHelper {
         $as->getAttributes()->willReturn(MockAuthSource::$attributes)->shouldBeCalled();
         MockAuthSource::set('default-sp', $as->reveal());
         $authenticator = new Authenticator();
-        $this->assertNull($authenticator->requireAuthentication(false, true, 60));
+        $this->assertNull($authenticator->requireAuthentication(false, 60));
     }
 
-    public function testActiveRedirectMaxagePassed() {
+    public function testActiveMaxagePassed() {
         $_REQUEST['acresponse'] = '{"id": "https://idp.feide.no","subid":"example.org"}';
 
         $as = $this->prophesize('\tests\MockAuthSource');
@@ -134,10 +95,10 @@ class AuthenticatorRequireAuthenticationTest extends DBHelper {
         ])->shouldBeCalled();
         MockAuthSource::set('default-sp', $as->reveal());
         $authenticator = new Authenticator();
-        $this->assertNull($authenticator->requireAuthentication(false, true, 60));
+        $this->assertNull($authenticator->requireAuthentication(false, 60));
     }
 
-    public function testPassiveRedirectMaxagePassed() {
+    public function testPassiveMaxagePassed() {
         $this->setExpectedException(
             'FeideConnect\Exceptions\RedirectException',
             'http://localhost/foo?error=1'
@@ -157,6 +118,6 @@ class AuthenticatorRequireAuthenticationTest extends DBHelper {
         ])->shouldBeCalled();
         MockAuthSource::set('default-sp', $as->reveal());
         $authenticator = new Authenticator();
-        $this->assertNull($authenticator->requireAuthentication(true, true, 60));
+        $this->assertNull($authenticator->requireAuthentication(true, 60));
     }
 }

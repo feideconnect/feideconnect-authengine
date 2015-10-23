@@ -92,10 +92,9 @@ class Authenticator {
      * Require authentication of the user. This is meant to be used with user frontend access.
      *
      * @param  boolean $isPassive     [description]
-     * @param  boolean $allowRedirect Set to false if using on an API where user cannot be redirected.
      * @return void
      */
-    public function requireAuthentication($isPassive = false, $allowRedirect = false, $maxage = null) {
+    public function requireAuthentication($isPassive = false, $maxage = null) {
 
         $accountchooser = new Authentication\AccountChooserProtocol();
 
@@ -141,10 +140,6 @@ class Authenticator {
 
             $forceauthn = true;
 
-        }
-
-        if (!$allowRedirect) {
-            throw new \Exception('User is not authenticated. Authentication is required for this operation.');
         }
 
         // User is not authenticated locally.
