@@ -69,6 +69,7 @@ class Authenticator {
 
     public function passiveAuthentication($client, $maxage = null) {
         if ($client->requireInteraction()) {
+            Logger::info("Passive authentication rejected due to client configuration", ['client' => $client]);
             $this->failPassive();
         }
         foreach ($this->authSources as $authType => $as) {
@@ -77,10 +78,12 @@ class Authenticator {
                     $this->activeAuthType = $authType;
                     return;
                 } else {
+                    Logger::info("Passive authentication rejected due to max age", ['client' => $client]);
                     $this->failPassive();
                 }
             }
         }
+        Logger::debug("Sending passive authentication request", ['client' => $client]);
         $as = $this->authSources['saml'];
         $as->login([
             'isPassive' => true,
