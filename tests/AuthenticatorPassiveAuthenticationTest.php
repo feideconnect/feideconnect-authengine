@@ -56,11 +56,6 @@ class AuthenticatorPassiveAuthenticationTest extends DBHelper {
         $as->getAuthData('AuthnInstant')->willReturn(time() - 90)->shouldBeCalled();
         $as->getAuthData('saml:sp:IdP')->willReturn("https://idp.feide.no");
         $as->getAttributes()->willReturn(MockAuthSource::$attributes);
-        $as->login([
-            'isPassive' => true,
-            'saml:idp' => 'https://idp.feide.no',
-            'ErrorURL' => "http://localhost/foo?error=1",
-        ])->shouldBeCalled();
         MockAuthSource::set('default-sp', $as->reveal());
         $authenticator = new Authenticator();
         $this->assertNull($authenticator->passiveAuthentication($this->client, 60));
