@@ -89,11 +89,6 @@ class Authenticator {
                 "error" => 1,
             )),
         ]);
-        if ($this->verifyMaxAge($as->getAuthData("AuthnInstant"), $maxage)) {
-            $this->activeAuthType = $authType;
-            return;
-        }
-        $this->failPassive();
     }
 
     /**
