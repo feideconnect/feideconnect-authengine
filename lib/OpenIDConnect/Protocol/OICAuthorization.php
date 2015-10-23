@@ -36,6 +36,9 @@ class OICAuthorization extends OAuthAuthorization {
         $iat = $this->account->getAuthInstant();
         // echo '<pre>iat'; print_r($iat); exit;
         $idtoken = $openid->getIDtoken($this->user->userid, $this->client->id, $iat);
+        if (isset($this->request->nonce)) {
+            $idtoken->set('nonce', $this->request->nonce);
+        }
         return $idtoken;
     }
 
