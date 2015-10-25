@@ -17,18 +17,10 @@ class AccountChooser {
 
     public static function process() {
 
-
-
         $discoveryConfig = Config::readJSONfile("disco2.json");
         $config = Config::getInstance();
 
         $data = array();
-
-        // $data["disco"] = Config::readJSONfile("disco.json");
-        // $data["return"] = $_REQUEST["return"];
-        // $data["returnIDParam"] = $_REQUEST["returnIDParam"];
-
-
 
         $request = [];
         if (isset($_REQUEST['request'])) {
@@ -41,12 +33,7 @@ class AccountChooser {
             }
         }
 
-        // $countries = Config::readJSONfile("countries.json");
-
-
         $baseURL = $request["return"];
-
-
 
 
         $noscriptdata = [];
@@ -82,19 +69,12 @@ class AccountChooser {
 
 
 
-
-
         $l = new GeoLocation();
         $data["location"] = $l->getLocation();
-        $data["extra"] = $discoveryConfig;
-        // $data["countries"] = $countries;
-        // $data["countriesJSON"] = json_encode($countries);
         $data["request"] = $request;
         $data["requestJSON"] = json_encode($request);
 
         $data["noscriptentries"] = $noscriptdata;
-
-        // $data["noscriptjson"] = json_encode(Config::getInstance()->get(""), JSON_PRETTY_PRINT);
 
         if (isset($_REQUEST["isPassive"]) && $_REQUEST["isPassive"] === "true") {
             // The correct behaviour of the IdP Discovery Protocol will be to return
