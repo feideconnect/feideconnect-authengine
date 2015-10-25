@@ -1,29 +1,62 @@
 # Accountchooser
 
 
-Located at `/accountchooser`.
+The Account Chooser runs at `/accountchooser`.
+
+You can access the Account chooser directly without any specified incoming request, but then it does not makes any sense to select anything – and it will give you an error message when you attempt to do so.
+
+
+The account chooser takes an incomming **AccountChooser Request**, requests the user to select which Identity Provider to use for authentication, and then redirects back to the requestor with a **AccountChooser Response**.
 
 
 
-## The request
+
+## The AccountChooser Request
+
+
+
+The request object have two defined parameters:
+
+* `return` is the URL of where to return after asking the user to select provider. There is a strict limitation on what `return` URLs that are allowed.
+* `clientid` is the identifier of the client asking for authentication through Feide Connect.
+
+
+Here is an example of a request:	
+
+	{
+	    "return": "https://auth.feideconnect.no/oauth/authorization?response_type=token&state=....",
+	    "clientid": "6ed0879a-4c79-4714-94d4-6ef42ae6caf0"
+	}
 
 
 The request is sent as a urlencoded JSON encoded object as the query string parameter with name `request`.
 
-The request object may look like this:
+
+## Presenting the account chooser dialog for the end user
+
+The AccountChooser fetches data from:
+
+* `api.feideconnect.no/clientadm/clients/{client id}` - Information about the requesting client.
+* `/accountchooser/config` - configuration of the account chooser
+* `/orgs` - a list of all Feide institutions
+* `/accountchooser/extra` - All extra providers, such as guest users, ID-porten and social networks (from the configuration file `etc/disco2.json`)
+* `api.discojuice.org/feed/edugain` - a list of all eduGAIN providers (international identity providers). *Authentication with international providers is not yet enabled.*
 
 
-	{
-		"return": "https://auth.dev.feideconnect.no/foo"		
-	}
+The `authproviders` property from the client configuration is used to filter the allowed providers.
 
 
-## The response
+The AccountChooser uses HTML5 geo location and IP-based geo location to sort the available entries by an estimated physical distance to the user. 
 
 
-The request is sent as a urlencoded JSON encoded object as the query string parameter with name `response`.
+When the user selects a provider, the user is redirected back to the `return` URL with an **AccountChooser Response**.
 
 
+
+## The AccountChooser Response
+
+
+An example of an AccountChooser Response:
 
 	{
 		"type": "saml",
@@ -31,6 +64,10 @@ The request is sent as a urlencoded JSON encoded object as the query string para
 		"subid": "ntnu.no"
 	}
 
+If selecting an Feide institution, the subid specifies which instituion in addition to the entityID in the id parameter.
+
+
+The request is sent as a urlencoded JSON encoded object as the query string parameter with name `acresponse`.
 
 
 
