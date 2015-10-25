@@ -51,6 +51,20 @@ The AccountChooser uses HTML5 geo location and IP-based geo location to sort the
 
 When the user selects a provider, the user is redirected back to the `return` URL with an **AccountChooser Response**.
 
+If the selected provider is an Feide account, a hidden iframe is first loaded to remotely set the correct provider at the Feide IdP.
+
+
+
+### When pre-selected accounts available
+
+The browser may keep a set of preselected accounts in `document.localStorage` in an entry with property `accounts`. If such an entry was found, the user will be presented with a list of previously seleted accounts. The user may choose to discard this previously selected accounts and instead show the provider list as described below.
+
+
+
+### Storing a new preseleted account
+
+Adding an authenticated account to the list of previously-selected accounts is performed after authentication at the oauth grant page. There a visual tag of the authenticated user is stored for later quicker selection.
+
 
 
 ## The AccountChooser Response
