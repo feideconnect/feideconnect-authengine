@@ -76,13 +76,6 @@ class AccountChooser {
 
         $data["noscriptentries"] = $noscriptdata;
 
-        if (isset($_REQUEST["isPassive"]) && $_REQUEST["isPassive"] === "true") {
-            // The correct behaviour of the IdP Discovery Protocol will be to return
-            // without the "returnIDParam" parameter set to anything.
-            // If the disco stores preferences, we might return that instead.
-            return new Redirect($data["return"]);
-        }
-
         return (new LocalizedTemplatedHTMLResponse('accountchooser'))->setData($data);
 
     }
