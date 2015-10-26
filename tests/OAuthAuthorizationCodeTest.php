@@ -92,13 +92,13 @@ class OAuthAuthorizationCodeTest extends DBHelper {
         $this->assertInstanceOf('FeideConnect\HTTP\JSONResponse', $response, 'Expected /oauth/token endpoint to return json');
 
         $data = $response->getData();
-        $this->assertEquals($response->getStatus(), 200);
+        $this->assertEquals(200, $response->getStatus());
 
         $this->assertArrayHasKey('access_token', $data);
         $this->assertArrayHasKey('token_type', $data);
         $this->assertArrayHasKey('expires_in', $data);
         $this->assertArrayHasKey('scope', $data);
-        $this->assertEquals($data['token_type'], 'Bearer');
+        $this->assertEquals('Bearer', $data['token_type']);
     }
 
     public function testTokenBasicAuthWrongClientId() {
@@ -114,7 +114,7 @@ class OAuthAuthorizationCodeTest extends DBHelper {
         $this->assertInstanceOf('FeideConnect\HTTP\JSONResponse', $response, 'Expected /oauth/token endpoint to return json');
 
         $data = $response->getData();
-        $this->assertEquals($response->getStatus(), 401);
+        $this->assertEquals(401, $response->getStatus());
 
     }
 
@@ -131,7 +131,7 @@ class OAuthAuthorizationCodeTest extends DBHelper {
         $this->assertInstanceOf('FeideConnect\HTTP\JSONResponse', $response, 'Expected /oauth/token endpoint to return json');
 
         $data = $response->getData();
-        $this->assertEquals($response->getStatus(), 401);
+        $this->assertEquals(401, $response->getStatus());
 
     }
 
@@ -148,7 +148,7 @@ class OAuthAuthorizationCodeTest extends DBHelper {
         $this->assertInstanceOf('FeideConnect\HTTP\JSONResponse', $response, 'Expected /oauth/token endpoint to return json');
 
         $data = $response->getData();
-        $this->assertEquals($response->getStatus(), 200);
+        $this->assertEquals(200, $response->getStatus());
 
         $this->assertArrayHasKey('access_token', $data);
         $this->assertArrayHasKey('token_type', $data);
