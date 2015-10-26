@@ -13,16 +13,16 @@ class OAuthPasswordTest extends DBHelper {
         parent::setUp();
         $_SERVER['REMOTE_ADDR'] = '127.0.0.1';
         $_SERVER['REQUEST_URI'] = '/foo';
-        $_SERVER['REQUEST_METHOD'] = 'GET';
+        $_SERVER['REQUEST_METHOD'] = 'POST';
         $_SERVER['SERVER_PROTOCOL'] = 'HTTP/1.1';
         $_SERVER['HTTP_ACCEPT_LANGUAGE'] = 'en-US';
 
-        $_REQUEST['grant_type'] = 'password';
+        $_POST['grant_type'] = 'password';
         $users = Config::getValue('testUsers');
         foreach ($users as $userid => $data) {
             $userid_sec = $userid;
-            $_REQUEST['username'] = $userid;
-            $_REQUEST['password'] = $data['password'];
+            $_POST['username'] = $userid;
+            $_POST['password'] = $data['password'];
         }
 
         $this->client = $this->client();
@@ -35,7 +35,7 @@ class OAuthPasswordTest extends DBHelper {
     public function testGetToken() {
         $router = new Router();
 
-        $response = $router->dispatchCustom('GET', '/oauth/token');
+        $response = $router->dispatchCustom('POST', '/oauth/token');
 
         $this->assertInstanceOf('FeideConnect\HTTP\JSONResponse', $response, 'Expected /oauth/token endpoint to return json');
 
@@ -53,7 +53,7 @@ class OAuthPasswordTest extends DBHelper {
         $router = new Router();
         $_SERVER['PHP_AUTH_PW'] = 'wrong';
 
-        $response = $router->dispatchCustom('GET', '/oauth/token');
+        $response = $router->dispatchCustom('POST', '/oauth/token');
 
         $this->assertInstanceOf('FeideConnect\HTTP\JSONResponse', $response, 'Expected /oauth/token endpoint to return json');
 
@@ -66,7 +66,7 @@ class OAuthPasswordTest extends DBHelper {
         $router = new Router();
         $_SERVER['PHP_AUTH_USER'] = 'wrong';
 
-        $response = $router->dispatchCustom('GET', '/oauth/token');
+        $response = $router->dispatchCustom('POST', '/oauth/token');
 
         $this->assertInstanceOf('FeideConnect\HTTP\JSONResponse', $response, 'Expected /oauth/token endpoint to return json');
 
@@ -77,9 +77,9 @@ class OAuthPasswordTest extends DBHelper {
 
     public function testWrongUserPW() {
         $router = new Router();
-        $_REQUEST['password'] = 'wrong';
+        $_POST['password'] = 'wrong';
 
-        $response = $router->dispatchCustom('GET', '/oauth/token');
+        $response = $router->dispatchCustom('POST', '/oauth/token');
 
         $this->assertInstanceOf('FeideConnect\HTTP\JSONResponse', $response, 'Expected /oauth/token endpoint to return json');
 
@@ -90,9 +90,9 @@ class OAuthPasswordTest extends DBHelper {
 
     public function testWrongUsername() {
         $router = new Router();
-        $_REQUEST['username'] = 'wrong';
+        $_POST['username'] = 'wrong';
 
-        $response = $router->dispatchCustom('GET', '/oauth/token');
+        $response = $router->dispatchCustom('POST', '/oauth/token');
 
         $this->assertInstanceOf('FeideConnect\HTTP\JSONResponse', $response, 'Expected /oauth/token endpoint to return json');
 

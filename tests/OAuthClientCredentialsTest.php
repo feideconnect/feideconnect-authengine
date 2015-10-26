@@ -11,11 +11,11 @@ class OAuthClientCredentialsTest extends DBHelper {
         parent::setUp();
         $_SERVER['REMOTE_ADDR'] = '127.0.0.1';
         $_SERVER['REQUEST_URI'] = '/foo';
-        $_SERVER['REQUEST_METHOD'] = 'GET';
+        $_SERVER['REQUEST_METHOD'] = 'POST';
         $_SERVER['SERVER_PROTOCOL'] = 'HTTP/1.1';
         $_SERVER['HTTP_ACCEPT_LANGUAGE'] = 'en-US';
 
-        $_REQUEST['grant_type'] = 'client_credentials';
+        $_POST['grant_type'] = 'client_credentials';
 
 
         $this->client = $this->client();
@@ -27,7 +27,7 @@ class OAuthClientCredentialsTest extends DBHelper {
     public function testGetToken() {
         $router = new Router();
 
-        $response = $router->dispatchCustom('GET', '/oauth/token');
+        $response = $router->dispatchCustom('POST', '/oauth/token');
 
         $this->assertInstanceOf('FeideConnect\HTTP\JSONResponse', $response, 'Expected /oauth/token endpoint to return json');
 
@@ -45,7 +45,7 @@ class OAuthClientCredentialsTest extends DBHelper {
         $router = new Router();
         $_SERVER['PHP_AUTH_PW'] = 'wrong';
 
-        $response = $router->dispatchCustom('GET', '/oauth/token');
+        $response = $router->dispatchCustom('POST', '/oauth/token');
 
         $this->assertInstanceOf('FeideConnect\HTTP\JSONResponse', $response, 'Expected /oauth/token endpoint to return json');
 
@@ -58,7 +58,7 @@ class OAuthClientCredentialsTest extends DBHelper {
         $router = new Router();
         $_SERVER['PHP_AUTH_USER'] = 'wrong';
 
-        $response = $router->dispatchCustom('GET', '/oauth/token');
+        $response = $router->dispatchCustom('POST', '/oauth/token');
 
         $this->assertInstanceOf('FeideConnect\HTTP\JSONResponse', $response, 'Expected /oauth/token endpoint to return json');
 

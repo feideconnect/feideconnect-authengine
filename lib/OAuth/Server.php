@@ -232,7 +232,7 @@ class Server {
     public function token() {
 
         try {
-            $tokenrequest = new Messages\TokenRequest($_REQUEST);
+            $tokenrequest = new Messages\TokenRequest($_POST);
             // $tokenrequest->parseServer($_SERVER);
 
             Logger::debug('OAuth Received incomming AccessTokenRequest.', $tokenrequest->toLog());

@@ -37,7 +37,7 @@ class Router {
         $this->router->get('/oauth/config', ['FeideConnect\Controllers\OAuth', 'providerconfig']);
         $this->router->get('/oauth/authorization', ['FeideConnect\Controllers\OAuth', 'authorization']);
         $this->router->post('/oauth/authorization', ['FeideConnect\Controllers\OAuth', 'authorization']);
-        $this->router->any('/oauth/token', ['FeideConnect\Controllers\OAuth', 'token']);
+        $this->router->post('/oauth/token', ['FeideConnect\Controllers\OAuth', 'token']);
 
 
         // Informatio about authentication.
