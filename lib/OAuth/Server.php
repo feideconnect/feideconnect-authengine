@@ -173,16 +173,10 @@ class Server {
         if (empty($tokenrequest->code)) {
             throw new OAuthException('invalid_request', 'Request was missing the required code parameter');
         }
-        if (empty($tokenrequest->client_id)) {
-            throw new OAuthException('invalid_request', 'Request was missing the required client_id parameter');
-        }
 
         if (!empty($_SERVER['PHP_AUTH_PW'])) {
             $client = $this->validateClientAuthorization();
-            if ($client->id !== $tokenrequest->client_id) {
-                throw new OAuthException('invalid_client', 'Wrong client credentials. Client id does not match the request.');
-            }
-        } elseif (isset($tokenrequest->client_secret)) {
+        } elseif (isset($tokenrequest->client_id) && isset($tokenrequest->client_secret)) {
             $password = $tokenrequest->client_secret;
             $client = $this->validateClientCredentials($tokenrequest->client_id, $password);
         } else {
