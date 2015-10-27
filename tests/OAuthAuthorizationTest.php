@@ -22,7 +22,7 @@ class OAuthAuthorizationTest extends DBHelper {
         AuthSource::setFactory(['\tests\MockAuthSource', 'create']);
     }
 
-    private function doRun() {
+    protected function doRun() {
         $request = new Messages\AuthorizationRequest($_REQUEST);
         $auth = new OAuthAuthorization($request);
         return $auth->process();
@@ -110,13 +110,13 @@ class OAuthAuthorizationTest extends DBHelper {
         return $params;
     }
 
-    public function testAuthorizationToToken() {
+    public function testAuthorizationToToken($type = 'token') {
         $_REQUEST['acresponse'] = '{"id": "https://idp.feide.no","subid":"example.org"}';
         $_REQUEST['verifier'] = $this->user->getVerifier();
         $_REQUEST['bruksvilkar'] = 'yes';
         $_REQUEST['redirect_uri'] = 'http://example.org';
         $_REQUEST['state'] = '12354';
-        $_REQUEST['response_type'] = 'token';
+        $_REQUEST['response_type'] = $type;
 
         $response = $this->doRun();
         $this->assertInstanceOf('FeideConnect\HTTP\Redirect', $response, 'Expected /oauth/authorization endpoint to redirect');

@@ -60,24 +60,6 @@ class OAuthAuthorization {
 
     }
 
-    protected function evaluateStepUp($aevaluator) {
-
-        // We are in the mid of processing the OAuth authorization
-        if ($aevaluator->hasScopeInQuestion('openid')) {
-            // Parse the incomming Authorization Request.
-            $request = new \FeideConnect\OpenIDConnect\Messages\AuthorizationRequest($_REQUEST);
-            Logger::debug('Successfully parsed OpenID Connect Authorization Request.', array(
-                'request' => $request->asArray()
-            ));
-            $pAuthorization = new \FeideConnect\OpenIDConnect\Protocol\OICAuthorization($request);
-
-            return $pAuthorization->process();
-
-        }
-        return null;
-    }
-
-
     protected function checkClient() {
 
 
@@ -197,12 +179,7 @@ class OAuthAuthorization {
     }
 
 
-    public function process() {
-
-
-
-
-
+    protected function preProcess() {
         $this->checkClient();
 
         if ($this->aevaluator === null) {
@@ -226,13 +203,6 @@ class OAuthAuthorization {
             // The most likely error is that we are not able to perform passive authentication.
             throw new OAuthException('access_denied', 'Unable to perform passive authentication [2]', $state, $redirect_uri, $this->request->useHashFragment());
         }
-
-
-        $stepup = $this->evaluateStepUp($this->aevaluator);
-        if ($stepup !== null) {
-            return $stepup;
-        }
-
 
 
         $this->authenticateUser();
@@ -260,7 +230,14 @@ class OAuthAuthorization {
             'user' => $this->user,
             'source' => implode($this->account->getDef()[0], ":"),
         ]);
+    }
 
+    public function process() {
+
+        $res = $this->preProcess();
+        if ($res !== null) {
+            return $res;
+        }
 
         switch ($this->request->response_type) {
             case 'token':

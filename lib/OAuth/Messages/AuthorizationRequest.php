@@ -8,10 +8,12 @@ namespace FeideConnect\OAuth\Messages;
 */
 class AuthorizationRequest extends Message {
 
+    protected static $response_types = ['code', 'token'];
+
     public function __construct($message) {
 
         parent::__construct($message);
-        $this->response_type    = Message::prequire($message, 'response_type', ['code', 'token'], true);
+        $this->response_type    = Message::prequire($message, 'response_type', static::$response_types, false);
         $this->client_id        = Message::prequire($message, 'client_id');
         $this->redirect_uri     = Message::optional($message, 'redirect_uri');
         $this->scope            = Message::spacelist(Message::optional($message, 'scope'));

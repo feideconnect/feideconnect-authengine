@@ -9,6 +9,8 @@ use FeideConnect\OAuth\Messages\Message;
 */
 class AuthorizationRequest extends \FeideConnect\OAuth\Messages\AuthorizationRequest {
 
+    protected static $response_types = [ 'code', 'id_token token' ];
+
     public function __construct($message) {
 
         parent::__construct($message);

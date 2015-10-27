@@ -1,8 +1,8 @@
 <?php
 namespace tests;
 
-use FeideConnect\OAuth\Messages;
-use FeideConnect\OAuth\Protocol\OAuthAuthorization;
+use FeideConnect\OpenIDConnect\Messages;
+use FeideConnect\OpenIDConnect\Protocol\OICAuthorization;
 use FeideConnect\Authentication\AuthSource;
 
 function base64url_decode($data) {
@@ -21,6 +21,13 @@ class OICAuthorizationTest extends OAuthAuthorizationTest {
         $this->client->scopes[] = 'openid';
         $this->db->saveClient($this->client);
         AuthSource::setFactory(['\tests\MockAuthSource', 'create']);
+        $_REQUEST['scopes'] = 'openid';
+    }
+
+    protected function doRun() {
+        $request = new Messages\AuthorizationRequest($_REQUEST);
+        $auth = new OICAuthorization($request);
+        return $auth->process();
     }
 
     public function testAuthorizationToCode() {
@@ -44,7 +51,7 @@ class OICAuthorizationTest extends OAuthAuthorizationTest {
     }
 
     public function testAuthorizationToToken() {
-        $params = parent::testAuthorizationToToken();
+        $params = parent::testAuthorizationToToken('id_token token');
         $this->assertArrayHasKey('id_token', $params);
     }
 }

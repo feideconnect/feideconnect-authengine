@@ -63,16 +63,16 @@ class Server {
              *
              */
 
-            // Parse the incomming Authorization Request.
+            // Parse the incoming Authorization Request.
             $request = new Messages\AuthorizationRequest($_REQUEST);
-            Logger::debug('Successfully parsed OAuth Authorization Request. Next up: resolve client.', array(
-                'authorization_request' => $request,
-            ));
+            if (in_array('openid', $request->getScopeList())) {
+                $request = new OpenIDConnect\Messages\AuthorizationRequest($_REQUEST);
+                $pAuthorization = new OpenIDConnect\Protocol\OICAuthorization($request);
+            } else {
+                $pAuthorization = new OAuthAuthorization($request);
+            }
 
-            $pAuthorization = new OAuthAuthorization($request);
             return $pAuthorization->process();
-
-
 
         } catch (UserCannotAuthorizeException $e) {
             $data = array();

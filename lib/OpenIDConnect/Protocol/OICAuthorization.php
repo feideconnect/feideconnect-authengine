@@ -111,11 +111,25 @@ class OICAuthorization extends OAuthAuthorization {
             if ($this->maxage < 10) {
                 $this->maxage = 10;
             }
+        }
+
+        $res = $this->preProcess();
+        if ($res !== null) {
+            return $res;
+        }
+
+        switch ($this->request->response_type) {
+            case 'id_token token':
+
+                return $this->processToken();
+
+            case 'code':
+
+                return $this->processCode();
 
         }
 
-
-        return parent::process();
+        throw new OAuthException('invalid_request', 'Unsupported response_type ' . $this->request->response_type . ". Supported values are 'id_token token' and 'code'");
 
     }
 
