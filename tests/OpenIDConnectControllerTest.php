@@ -25,6 +25,9 @@ class OpenIDConnectControllerTest extends DBHelper {
             'token_endpoint_auth_methods_supported' => ['client_secret_basic', 'client_secret_post'],
             'token_endpoint_auth_signing_alg_values_supported' => ['RS256'],
             'ui_locales_supported' => ['en', 'no', 'nb', 'nn'],
+            'response_types_supported' => ['code', 'id_token token'],
+            'subject_types_supported' => ['public'],
+            'id_token_signing_alg_values_supported' => ['RS256'],
         ], $response->getData());
     }
 

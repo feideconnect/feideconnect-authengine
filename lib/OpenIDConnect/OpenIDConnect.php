@@ -51,7 +51,10 @@ class OpenIDConnect {
             'userinfo_endpoint' =>  $base2 . 'userinfo',
             'ui_locales_supported' => ["en", "no", "nb", "nn"],
             'service_documentation' => 'http://feideconnect.no/docs/gettingstarted/',
-            'jwks_uri' => $base2 . 'jwks'
+            'jwks_uri' => $base2 . 'jwks',
+            'response_types_supported' => ['code', 'id_token token'],
+            'subject_types_supported' => ['public'],
+            'id_token_signing_alg_values_supported' => ['RS256'],
         ];
         return $config;
 
