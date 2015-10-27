@@ -22,12 +22,22 @@ class OICAuthorizationTest extends OAuthAuthorizationTest {
         $this->db->saveClient($this->client);
         AuthSource::setFactory(['\tests\MockAuthSource', 'create']);
         $_REQUEST['scopes'] = 'openid';
+        $_REQUEST['redirect_uri'] = $this->client->redirect_uri[0];
     }
 
     protected function doRun() {
         $request = new Messages\AuthorizationRequest($_REQUEST);
         $auth = new OICAuthorization($request);
         return $auth->process();
+    }
+
+    public function testMissingRedirectUri() {
+        $this->setExpectedExceptionRegExp(
+            'FeideConnect\OAuth\Exceptions\OAuthException',
+            '/redirect_uri/'
+        );
+        unset($_REQUEST['redirect_uri']);
+        $this->doRun();
     }
 
     public function testAuthorizationToCode() {

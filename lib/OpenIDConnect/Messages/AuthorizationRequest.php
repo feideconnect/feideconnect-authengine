@@ -15,6 +15,7 @@ class AuthorizationRequest extends \FeideConnect\OAuth\Messages\AuthorizationReq
 
         parent::__construct($message);
 
+        $this->redirect_uri        = Message::prequire($message, 'redirect_uri');
         $this->response_mode    = Message::optional($message, 'response_mode');
         $this->nonce            = Message::optional($message, 'nonce');
         $this->display            = Message::optional($message, 'display');
@@ -28,7 +29,6 @@ class AuthorizationRequest extends \FeideConnect\OAuth\Messages\AuthorizationReq
 
         // $this->response_type    = Message::prequire($message, 'response_type', ['code', 'token'], true);
         // $this->client_id         = Message::prequire($message, 'client_id');
-        // $this->redirect_uri        = Message::optional($message, 'redirect_uri');
         // $this->scope            = Message::spacelist(Message::optional($message, 'scope'));
         // $this->state            = Message::optional($message, 'state');
 

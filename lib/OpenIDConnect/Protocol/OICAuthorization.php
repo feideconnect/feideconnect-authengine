@@ -95,8 +95,6 @@ class OICAuthorization extends OAuthAuthorization {
 
     public function process() {
 
-        // TODO: Implement strictly require the redirect_uri to be present.
-
         if ($this->request->isPassiveRequest()) {
             $this->isPassive = true;
         }
