@@ -66,7 +66,6 @@ class UserMapper {
 
         $this->repo->saveUser($user);
 
-
         // echo "about to create a new user";
         // $user->debug();
         // exit;

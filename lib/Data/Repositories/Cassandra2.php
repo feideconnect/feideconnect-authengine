@@ -271,6 +271,24 @@ class Cassandra2 extends \FeideConnect\Data\Repository {
         $this->execute($query, $params, __FUNCTION__);
 
     }
+    
+
+    /*
+     * Takes a User object, and a secondary userid that will be updated with a fresh timestamp.
+     */
+    public function updateUserIDsecLastSeen(Models\User $user, $useridsec) {
+
+        $query = 'UPDATE "users" SET userid_sec_seen[:useridsec] = :updated ' .
+            'WHERE userid = :userid';
+        $params = [
+            'updated' => (new \FeideConnect\Data\Types\Timestamp())->getCassandraTimestamp(),
+            'userid' => new Uuid($user->userid),
+            'useridsec' => $useridsec,
+        ];
+
+        // var_dump($query); var_dump($params); exit;
+        $this->execute($query, $params, __FUNCTION__);
+    }
 
 
     public function updateUserInfo(Models\User $user, $sourceID, $props = []) {
@@ -304,9 +322,6 @@ class Cassandra2 extends \FeideConnect\Data\Repository {
     }
 
     public function updateProfilePhoto(Models\User $user, $sourceID) {
-
-
-
 
         $userinfo = $user->getUserInfo($sourceID);
 

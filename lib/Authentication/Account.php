@@ -21,7 +21,6 @@ class Account {
         $this->attributes = $attributes;
         $this->accountMapRules = $accountMapRules;
 
-
         if (empty($attributes)) {
             throw new Exception("Loading an account with an empty set of attributes");
         }

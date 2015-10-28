@@ -20,9 +20,6 @@ class Authenticator {
 
     public function __construct() {
 
-
-
-
         $this->authTypes = Config::getValue("authTypes");
         $this->authSources = [];
         $this->clientid = null;
@@ -152,7 +149,6 @@ class Authenticator {
         }
 
         // echo '<pre>Options:' ; print_r($options); exit;
-
         // echo "about to auth " . var_export($options, true); exit;
 
         if ($forceauthn) {
@@ -190,8 +186,6 @@ class Authenticator {
 
     public function getAccount() {
 
-
-
         if (empty($this->activeAuthType) || !isset($this->authSources[$this->activeAuthType])) {
             throw new \Exception("Attempting to getAccount() when there is no active auth source");
         }
@@ -202,13 +196,8 @@ class Authenticator {
         $attributes['authSource'] = $this->authTypes[$this->activeAuthType]["authSource"];
         $attributes['AuthnInstant'] = $as->getAuthData("AuthnInstant");
 
-
         $attributeMapper = new AttributeMapper();
 
-
-
-
-        // print_r($as); exit;
         $account = $attributeMapper->getAccount($attributes);
 
 

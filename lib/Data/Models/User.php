@@ -309,6 +309,17 @@ class User extends \FeideConnect\Data\Model {
         $existing = $this->getUserInfo($sourceID);
 
 
+
+        /*
+         * For each authenticated secondary key, update a timestamp on the user object.
+         * The way it is implemented now, it is updated each time the user logs in.
+         */
+        $userids = $a->getUserIDs();
+        foreach($userids AS $userid) {
+            $this->_repo->updateUserIDsecLastSeen($this, $userid);    
+        }
+
+
         /*
          * ----- SECTION Check if userinfo name and email needs to be updated
          *
