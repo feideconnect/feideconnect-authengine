@@ -29,7 +29,7 @@ abstract class Model implements Utils\Loggable {
             // Force specified typed attributes to be of correct type class.
             if (isset(static::$_types[$k])) {
                 if (static::$_types[$k] === 'timestamp') {
-                    if (!($v instanceof Timestamp)) {
+                    if (!($v instanceof Timestamp) && !(is_null($v))) {
                         error_log(get_class($this) . ": Trying to set property [" . $k . "] with an invalid timestamp type");
                         continue;
                     }
@@ -45,6 +45,9 @@ abstract class Model implements Utils\Loggable {
 
         if (isset(static::$_types[$key])) {
             if (static::$_types[$key] === 'timestamp') {
+                if ($value === null) {
+                    return null;
+                }
                 return Timestamp::fromCassandraTimestamp($value);
             } else if (static::$_types[$key] === 'blob') {
                 return substr($value, 4);
