@@ -97,7 +97,6 @@ class AuthorizationUI {
         // echo '<pre>'; print_r($userinfo); exit;
 
         $visualTag = $this->account->getVisualTag();
-        $visualTag["photo"] = '/user/media/' . $userinfo["p"];
         $visualTag["photo"] = Config::dir('userinfo/v1/user/media/' . $userinfo["p"], "", "core");
         $visualTag['rememberme'] = false;
 
