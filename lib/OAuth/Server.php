@@ -6,6 +6,7 @@ use FeideConnect\OAuth\Exceptions\OAuthException;
 use FeideConnect\OAuth\Exceptions\UserCannotAuthorizeException;
 
 use FeideConnect\OAuth\Protocol\OAuthAuthorization;
+use FeideConnect\OpenIDConnect;
 
 use FeideConnect\HTTP\TemplatedHTMLResponse;
 use FeideConnect\HTTP\JSONResponse;
