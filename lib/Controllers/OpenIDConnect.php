@@ -55,10 +55,10 @@ class OpenIDConnect {
         if ($apiprotector->hasScopes(['userinfo-feide'])) {
             $allowseckeys[] = 'feide';
         }
-        if ($apiprotector->hasScopes(['userinfo-photo'])) {
+        if ($apiprotector->hasScopes(['userinfo-photo']) || $apiprotector->hasScopes(['profile'])) {
             $allowseckeys[] = 'p';
         }
-        if ($apiprotector->hasScopes(['userinfo-mail'])) {
+        if ($apiprotector->hasScopes(['userinfo-mail']) || $apiprotector->hasScopes(['email'])) {
             $includeEmail = true;
         }
 
@@ -71,8 +71,10 @@ class OpenIDConnect {
         if (isset($userinfo["userid_sec"])) {
             $response["connect-userid_sec"] = $userinfo["userid_sec"];
         }
-        if (isset($userinfo["name"])) {
-            $response["name"] = $userinfo["name"];
+        if ($apiprotector->hasScopes(['profile'])) {
+            if (isset($userinfo["name"])) {
+                $response["name"] = $userinfo["name"];
+            }
         }
         if (isset($userinfo["email"])) {
             $response["email"] = $userinfo["email"];
