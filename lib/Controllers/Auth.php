@@ -133,7 +133,7 @@ class Auth {
         if ($apiprotector->hasScopes(['userinfo-photo'])) {
             $allowseckeys[] = 'p';
         }
-        if ($apiprotector->hasScopes(['userinfo-mail'])) {
+        if ($apiprotector->hasScopes(['email']) || $apiprotector->hasScopes(['userinfo-mail'])) {
             $includeEmail = true;
         }
 
