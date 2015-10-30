@@ -26,15 +26,11 @@ class ScopesInspectorTest extends DBHelper {
             'allScopes' => ['userinfo'],
             'unknown' => [],
             'apis' => [],
-            'global' => array(
-                'userinfo' => array(
-                    'title' => 'Brukerinfo',
-                    'descr' => 'Basisinformasjon om brukere. BrukerID og navn.',
-                    'public' => true,
-                    'policy' => array('auto' => true),
-                    'scope' => 'userinfo',
-                ),
-            ),
+            'userinfo' => [
+                'userid' => 'userid',
+                'name' => 'name',
+            ],
+            'global' => [],
         ));
     }
 
@@ -47,6 +43,7 @@ class ScopesInspectorTest extends DBHelper {
             'unknown' => ['ugle'],
             'apis' => [],
             'global' => [],
+            'userinfo' => [],
         ));
     }
 
@@ -59,6 +56,7 @@ class ScopesInspectorTest extends DBHelper {
             'unknown' => ['gk_ugle'],
             'apis' => [],
             'global' => [],
+            'userinfo' => [],
         ));
     }
 

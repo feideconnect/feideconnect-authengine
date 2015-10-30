@@ -5,6 +5,7 @@ namespace FeideConnect\Controllers;
 use FeideConnect\HTTP\HTTPResponse;
 use FeideConnect\HTTP\JSONResponse;
 use FeideConnect\OAuth\APIProtector;
+use FeideConnect\OAuth\ScopesInspector;
 
 use FeideConnect\Config;
 
@@ -46,23 +47,9 @@ class OpenIDConnect {
         // $client = $apiprotector->getClient();
 
 
-        $hasScopes = $apiprotector->getScopes();
+        $accesses = ScopesInspector::scopesToAccesses($apiprotector->getScopes());
 
-
-        $allowseckeys = ['userid'];
-        $includeEmail = false;
-
-        if ($apiprotector->hasScopes(['userinfo-feide'])) {
-            $allowseckeys[] = 'feide';
-        }
-        if ($apiprotector->hasScopes(['userinfo-photo']) || $apiprotector->hasScopes(['profile'])) {
-            $allowseckeys[] = 'p';
-        }
-        if ($apiprotector->hasScopes(['userinfo-mail']) || $apiprotector->hasScopes(['email'])) {
-            $includeEmail = true;
-        }
-
-        $userinfo = $user->getBasicUserInfo($includeEmail, $allowseckeys);
+        $userinfo = $user->getAccessibleUserInfo($accesses);
 
         $response = [];
         if (isset($userinfo["userid"])) {
@@ -71,10 +58,8 @@ class OpenIDConnect {
         if (isset($userinfo["userid_sec"])) {
             $response["connect-userid_sec"] = $userinfo["userid_sec"];
         }
-        if ($apiprotector->hasScopes(['profile'])) {
-            if (isset($userinfo["name"])) {
-                $response["name"] = $userinfo["name"];
-            }
+        if (isset($userinfo["name"])) {
+            $response["name"] = $userinfo["name"];
         }
         if (isset($userinfo["email"])) {
             $response["email"] = $userinfo["email"];
@@ -83,17 +68,6 @@ class OpenIDConnect {
         if (isset($userinfo["profilephoto"])) {
             $response["picture"] = Config::getValue("endpoints.core") . '/userinfo/v1/user/media/' . $userinfo["profilephoto"];
         }
-
-        // $response["userinfo"] = $userinfo;
-
-
-
-
-        // $data = [
-        //     'user' => $userinfo,
-        //     'audience' => $client->id,
-        // ];
-
 
         return new JSONResponse($response);
 

@@ -242,14 +242,16 @@ class User extends \FeideConnect\Data\Model {
     }
 
 
-    public function getBasicUserInfo($includeEmail = false, $allowseckeys = ['uuid', 'p']) {
+    public function getBasicUserInfo($includeEmail = false, $allowseckeys = ['uuid', 'p'], $includeName = true) {
 
         $ui = $this->getUserInfo();
         $userinfo = [
             'userid' => $this->userid,
-            'userid_sec' => [],
-            'name' => $ui['name'],
+            'userid_sec' => []
         ];
+        if ($includeName) {
+            $userinfo['name'] = $ui['name'];
+        }
         if ($includeEmail) {
             $userinfo['email'] = $ui['email'];
         }
@@ -273,15 +275,29 @@ class User extends \FeideConnect\Data\Model {
                 }
             }
         }
-
-
-
-
         return $userinfo;
-
-
     }
 
+    public function getAccessibleUserInfo($accesses) {
+        $allowseckeys = [];
+        if (in_array('userid', $accesses)) {
+            $allowseckeys = ['userid'];
+        } else {
+            $allowseckeys = [];
+        }
+
+        if (in_array('userid-feide', $accesses)) {
+            $allowseckeys[] = 'feide';
+        }
+        if (in_array('photo', $accesses)) {
+            $allowseckeys[] = 'p';
+        }
+
+        $includeEmail = in_array('email', $accesses);
+        $includeName = in_array('name', $accesses);
+
+        return $this->getBasicUserInfo($includeEmail, $allowseckeys, $includeName);
+    }
 
     public function getFeideRealms() {
         $feideids = $this->getUserIDsecPrefixed('feide');

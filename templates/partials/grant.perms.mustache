@@ -1,6 +1,6 @@
 
 
-{{#show_userinfo}}
+{{#perms.userinfo}}
 	<div class="list-group-item  grantEntry grantEntryActive">
 
 
@@ -14,48 +14,47 @@
 		<div class="grantDetails">
 
 
+			{{#perms.userinfo.userid}}
 			<p class="userInfoEntry">
-				<span class="fa fa-user"></span> 
+				<span class="fa fa-user"></span>
 					<abbr title="{{user.userid}}">{{_.userid}}</abbr> &nbsp; &nbsp;
 			</p>
-
+			{{/perms.userinfo.userid}}
+			{{#perms.userinfo.name}}
 			<p class="userInfoEntry">
-				{{#perms.global.userinfo-photo}}
-					<span  class="fa fa-user"></span> 
+				<span class="fa fa-user"></span>
+					<abbr title="{{user.name}}">{{_.name}}</abbr> &nbsp; &nbsp;
+			</p>
+			{{/perms.userinfo.name}}
+
+			{{#perms.userinfo.photo}}
+			<p class="userInfoEntry">
+					<span class="fa fa-user"></span>
 						<span style="">{{_.profilephoto}}</span> &nbsp; &nbsp;
-				{{/perms.global.userinfo-photo}}
 			</p>
+			{{/perms.userinfo.photo}}
 
 
 
+			{{#perms.userinfo.userid-feide}}
 			<p class="userInfoEntry">
-				{{#perms.global.userinfo-feide}}
-					<span  class="fa fa-user"></span> 
+					<span  class="fa fa-user"></span>
 						<span style="">{{_.feideid}}</span> &nbsp; &nbsp;
-				{{/perms.global.userinfo-feide}}
 			</p>
+			{{/perms.userinfo.userid-feide}}
 
+			{{#perms.userinfo.email}}
 			<p class="userInfoEntry">
-				{{#perms.global.userinfo-mail}}
-					<span  class="fa fa-envelope-o"></span> 
+					<span  class="fa fa-envelope-o"></span>
 						<span style="">{{_.email}}: <tt>{{user.email}}</tt></span>
-				{{/perms.global.userinfo-mail}}
 			</p>
-
-
-			{{#perms.global.openid}}
-			<!--
-			<p class="userInfoEntry openid">
-				<i class="fa fa-openid" style="color: #800"></i> OpenID Connect
-			</p> 
-			-->
-			{{/perms.global.openid}}
+			{{/perms.userinfo.email}}
 			
 
 		</div>
 
 	</div><!-- panel -->
-{{/show_userinfo}}
+{{/perms.userinfo}}
 
 
 

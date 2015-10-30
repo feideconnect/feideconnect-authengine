@@ -110,10 +110,10 @@ class ScopesInspector {
     }
 
     public function getInfo() {
-
-
+        $allaccesses = [ 'userid', 'email', 'name', 'photo', 'userid-feide'];
         $apis = [];
         $data = [
+            "userinfo" => [],
             "global" => [],
             "apis" => [],
             "unknown" => [],
@@ -121,28 +121,25 @@ class ScopesInspector {
         ];
 
         $scope_apis = $this->getScopeAPIGKs();
+        $accesses = self::scopesToAccesses($this->scopes);
 
-        foreach ($this->scopes as $scope) {
-            if (isset($scope_apis[$scope])) {
-                $apiInfo = $scope_apis[$scope];
+        foreach ($accesses as $access) {
+            if (isset($scope_apis[$access])) {
+                $apiInfo = $scope_apis[$access];
                 $apis[$apiInfo['apigk']->id] = $apiInfo;
 
             } else {
-                if (isset($this->globalScopes[$scope])) {
-                    $ne = $this->globalScopes[$scope];
-                    $ne["scope"] = $scope;
-                    $data['global'][$scope] = $ne;
-
-
+                if (in_array($access, $allaccesses)) {
+                    $data['userinfo'][$access] = $access;
+                } else if (isset($this->globalScopes[$access])) {
+                    $ne = $this->globalScopes[$access];
+                    $ne["scope"] = $access;
+                    $data['global'][$access] = $ne;
                 } else {
-                    $data["unknown"][] = $scope;
-
+                    $data["unknown"][] = $access;
                 }
-
             }
-
         }
-
 
         foreach ($apis as $apigkid => $api) {
             $apiEntry = [
@@ -160,10 +157,7 @@ class ScopesInspector {
             foreach ($api["localScopes"] as $ls) {
                 $apiEntry["scopes"][] = $api["apigk"]->getSubScopeView($ls);
             }
-
             $data["apis"][] = $apiEntry;
-
-
         }
 
         $data["hasAPIs"] = (count($data["apis"]) > 0);
@@ -172,4 +166,28 @@ class ScopesInspector {
 
     }
 
+    public static function scopesToAccesses($scopes) {
+        $lookuptable = [
+            'openid' => ['userid'],
+            'userid' => ['userid'],
+            'email' => ['email'],
+            'userinfo-mail' => ['email'],
+            'userinfo' => ['userid', 'name'],
+            'userinfo-photo' => ['photo'],
+            'profile' => ['name', 'photo'],
+            'userinfo-feide' => ['userid-feide'],
+            'userid-feide' => ['userid-feide'],
+        ];
+        $accesses = [];
+        foreach ($scopes as $scope) {
+            if (isset($lookuptable[$scope])) {
+                foreach ($lookuptable[$scope] as $access) {
+                    $accesses[$access] = true;
+                }
+            } else {
+                $accesses[$scope] = true;
+            }
+        }
+        return array_keys($accesses);
+    }
 }

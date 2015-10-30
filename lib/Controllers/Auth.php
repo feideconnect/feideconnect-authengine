@@ -8,6 +8,7 @@ use FeideConnect\HTTP\JSONResponse;
 use FeideConnect\HTTP\Redirect;
 use FeideConnect\Authentication;
 use FeideConnect\OAuth\APIProtector;
+use FeideConnect\OAuth\ScopesInspector;
 use FeideConnect\Data\StorageProvider;
 use FeideConnect\Utils\URL;
 
@@ -112,33 +113,16 @@ class Auth {
 
     public static function userinfo() {
 
-
-
         $apiprotector = APIProtector::get();
         $user = $apiprotector
-            ->requireClient()->requireUser()->requireScopes(['userinfo'])
+            ->requireClient()->requireUser()
             ->getUser();
         $client = $apiprotector->getClient();
 
 
-        $hasScopes = $apiprotector->getScopes();
+        $accesses = ScopesInspector::scopesToAccesses($apiprotector->getScopes());
 
-
-        $allowseckeys = ['userid'];
-        $includeEmail = false;
-
-        if ($apiprotector->hasScopes(['userinfo-feide'])) {
-            $allowseckeys[] = 'feide';
-        }
-        if ($apiprotector->hasScopes(['userinfo-photo'])) {
-            $allowseckeys[] = 'p';
-        }
-        if ($apiprotector->hasScopes(['email']) || $apiprotector->hasScopes(['userinfo-mail'])) {
-            $includeEmail = true;
-        }
-
-        $userinfo = $user->getBasicUserInfo($includeEmail, $allowseckeys);
-
+        $userinfo = $user->getAccessibleUserInfo($accesses);
 
         $data = [
             'user' => $userinfo,
