@@ -3,6 +3,7 @@ namespace tests;
 
 use FeideConnect\Controllers\OpenIDConnect;
 use Prophecy;
+use Prophecy\Argument;
 
 
 class OpenIDConnectControllerTest extends DBHelper {
@@ -53,6 +54,10 @@ class OpenIDConnectControllerTest extends DBHelper {
         $apiprotector->requireScopes(['openid'])->will($returnThis)->shouldBeCalled();
         $apiprotector->getUser()->will([$this, "getUser"])->shouldBeCalled();
         $apiprotector->getScopes()->willReturn($scopes)->shouldBeCalled();
+        foreach ($scopes as $scope) {
+            $apiprotector->hasScopes([$scope])->willReturn(true);
+        }
+        $apiprotector->hasScopes(Argument::any())->willReturn(false);
         \FeideConnect\OAuth\APIProtector::$instance = $apiprotector->reveal();
     }
 

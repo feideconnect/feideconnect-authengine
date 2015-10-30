@@ -127,17 +127,14 @@ class Auth {
         $allowseckeys = ['userid'];
         $includeEmail = false;
 
-        foreach ($hasScopes as $scope) {
-            $data[$scope] = true;
-            if ($scope === 'userinfo-feide') {
-                $allowseckeys[] = 'feide';
-            }
-            if ($scope === 'userinfo-photo') {
-                $allowseckeys[] = 'p';
-            }
-            if ($scope === 'userinfo-mail') {
-                $includeEmail = true;
-            }
+        if ($apiprotector->hasScopes(['userinfo-feide'])) {
+            $allowseckeys[] = 'feide';
+        }
+        if ($apiprotector->hasScopes(['userinfo-photo'])) {
+            $allowseckeys[] = 'p';
+        }
+        if ($apiprotector->hasScopes(['userinfo-mail'])) {
+            $includeEmail = true;
         }
 
         $userinfo = $user->getBasicUserInfo($includeEmail, $allowseckeys);

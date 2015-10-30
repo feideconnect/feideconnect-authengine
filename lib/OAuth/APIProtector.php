@@ -165,6 +165,11 @@ class APIProtector {
         return $this->accesstoken->scope;
     }
 
+    public function hasScopes($scopes) {
+        $this->requireToken();
+        return $this->accesstoken->hasScopes($scopes);
+    }
+
     public function requireScopes($scopes) {
         assert('is_array($scopes)');
         $this->requireToken();
