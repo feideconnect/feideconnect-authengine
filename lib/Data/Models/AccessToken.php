@@ -49,14 +49,6 @@ class AccessToken extends \FeideConnect\Data\Model {
     }
 
 
-
-    public static function generateFromCode(Models\AuthorizationCode $code) {
-
-
-
-    }
-
-
     public function hasExactScopes($scopes) {
         assert('is_array($scopes)');
 
