@@ -54,20 +54,23 @@ class AccessTokenPool {
     }
 
 
-    private function getSelectedCandidate($scopesInQuestion) {
+    private function getSelectedCandidate($scopesInQuestion, $expires_in) {
         $candidates = $this->getCandidates($scopesInQuestion);
         if (empty($candidates)) {
             return null;
         }
 
-        // TODO Implement policy on which token to select.
-        // TODO Also require that the token is valid significantly long into the future
-        return $candidates[0];
+        usort($candidates, ['\FeideConnect\Data\Models\AccessToken', 'lifetimeCmp']);
+        $candidate = $candidates[0];
+        if ($candidate->validuntil->getInSeconds() < $expires_in/2) {
+            return null;
+        }
+        return $candidate;
     }
 
 
     public function getToken($scopesInQuestion, $refreshToken, $expires_in) {
-        $candidate = $this->getSelectedCandidate($scopesInQuestion);
+        $candidate = $this->getSelectedCandidate($scopesInQuestion, $expires_in);
 
         if ($candidate !== null) {
             return $candidate;
@@ -78,8 +81,5 @@ class AccessTokenPool {
 
         return $accesstoken;
     }
-
-
-
 
 }

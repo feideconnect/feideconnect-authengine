@@ -60,5 +60,10 @@ class Timestamp {
         return date('c', $this->_value);
     }
 
-
+    public static function cmp(Timestamp $a, Timestamp $b) {
+        if ($a->_value == $b->_value) {
+            return 0;
+        }
+        return ($a->_value < $b->_value) ? -1 : 1;
+    }
 }

@@ -3,11 +3,11 @@
 namespace FeideConnect\Data\Models;
 
 use FeideConnect\Data\StorageProvider;
+use FeideConnect\Data\Types\Timestamp;
 use Cassandra\Type\Uuid;
 use Cassandra\Type\CollectionMap;
 use Cassandra\Type\CollectionSet;
 use Cassandra\Type\Base;
-use Cassandra\Type\Timestamp;
 
 class AccessToken extends \FeideConnect\Data\Model {
 
@@ -48,6 +48,9 @@ class AccessToken extends \FeideConnect\Data\Model {
         return $prepared;
     }
 
+    public static function lifetimeCmp($a, $b) {
+        return -Timestamp::cmp($a->validuntil, $b->validuntil);
+    }
 
     public function hasExactScopes($scopes) {
         assert('is_array($scopes)');
@@ -115,8 +118,8 @@ class AccessToken extends \FeideConnect\Data\Model {
             $n->userid = $user->userid;
         }
 
-        $n->issued = new \FeideConnect\Data\Types\Timestamp();
-        $n->validuntil = (new \FeideConnect\Data\Types\Timestamp())->addSeconds($expires_in);
+        $n->issued = new Timestamp();
+        $n->validuntil = (new Timestamp())->addSeconds($expires_in);
 
         $n->access_token = self::genUUID();
 

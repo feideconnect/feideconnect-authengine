@@ -122,4 +122,10 @@ class DBHelper extends \PHPUnit_Framework_TestCase {
         $this->db->saveOrganization($org);
         return $org;
     }
+
+    public function token($client, $user, $scopes, $expire_in) {
+       $a = Models\AccessToken::generate($client, $user, $scopes, null, $expire_in);
+       $this->db->saveToken($a);
+       return $a;
+    }
 }
