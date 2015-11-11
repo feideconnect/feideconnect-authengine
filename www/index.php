@@ -67,6 +67,7 @@ try {
         'stacktrace' => $e->getTrace(),
         'errordetails' => $data,
     ));
+    $response->setStatus(500);
 
 } catch (\Exception $e) {
     $data = array();
@@ -80,6 +81,7 @@ try {
     ));
 
     $response = (new TemplatedHTMLResponse('exception'))->setData($data);
+    $response->setStatus(500);
 }
 
 
