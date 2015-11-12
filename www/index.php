@@ -47,6 +47,18 @@ try {
     $response = (new TemplatedHTMLResponse('exception'))->setData($data);
     $response->setStatus(404);
 
+} catch (Phroute\Exception\HttpMethodNotAllowedException $e) {
+    $response = new TemplatedHTMLResponse('exception');
+    $response->setData([
+        'code' => '405',
+        'head' => 'Method not allowed',
+        'message' => 'Unsupported HTTP message used',
+    ]);
+    $header = $e->getMessage();
+    $parts = explode(": ", $header);
+    $response->setHeader($parts[0], $parts[1]);
+    $response->setStatus(405);
+
 } catch (RedirectException $e) {
     $response = $e->getHTTPResponse();
 
