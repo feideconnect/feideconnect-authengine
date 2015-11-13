@@ -325,7 +325,6 @@ class User extends \FeideConnect\Data\Model {
         $existing = $this->getUserInfo($sourceID);
 
 
-
         /*
          * For each authenticated secondary key, update a timestamp on the user object.
          * The way it is implemented now, it is updated each time the user logs in.
@@ -349,6 +348,7 @@ class User extends \FeideConnect\Data\Model {
             $modified = true;
         }
 
+
         if ($modified) {
             Logger::info('Updating userinfo', [
                 'userid' => $this->userid,
@@ -364,7 +364,15 @@ class User extends \FeideConnect\Data\Model {
             ]);
 
             $this->setUserInfo($sourceID, $a->getName(), $a->getMail());
+            // If the user object was completely empty (user removed)
+            // and were adding the first userinfo values, we also se the
+            // selected source to be the current sourceid
+            if (empty($this->selectedsource)) {
+                $this->selectedsource = $sourceID;
+            }
+
             $this->_repo->updateUserInfo($this, $sourceID, ["name", "email"]);
+
 
         }
 

@@ -296,6 +296,7 @@ class Cassandra2 extends \FeideConnect\Data\Repository {
 
         $assignments = [];
         $assignments[] = 'updated = :updated';
+        $assignments[] = 'selectedsource = :selectedsource';
 
         $userinfo = $user->getUserInfo($sourceID);
         $params = [
@@ -303,6 +304,7 @@ class Cassandra2 extends \FeideConnect\Data\Repository {
             'userid' => new Uuid($user->userid),
             'name' => $userinfo['name'],
             'email' => $userinfo['email'],
+            'selectedsource' => $user->selectedsource
         ];
 
 
