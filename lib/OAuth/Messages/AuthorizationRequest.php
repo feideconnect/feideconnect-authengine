@@ -8,7 +8,7 @@ namespace FeideConnect\OAuth\Messages;
 */
 class AuthorizationRequest extends Message {
 
-    protected static $response_types = ['code', 'token'];
+    protected static $response_types = ['code', 'token', 'id_token token'];
 
     public function __construct($message) {
 
