@@ -188,7 +188,7 @@ define(function(require, exports, module) {
 							'<i style="float: right; margin-top: 20px" class="fa fa-chevron-right fa-2x hideOnRemove"></i>' +
 							(isActive ? '<i style="color: #6a6; float: right; margin-top: 20px; margin-right: 12px" class="fa fa-circle fa-2x"></i>' : '') +
 							'<p style="font-size: 140%; margin: 0px">' + Utils.quoteattr(a.name) + '</p>' + 
-							'<p style="font-size: 100%; margin: 0px; margin-top: -6px">' + Utils.quoteattr(a.title) + '</p>' + 
+							(a.title !== null ? '<p style="font-size: 100%; margin: 0px; margin-top: -6px">' + Utils.quoteattr(a.title) + '</p>' : '' )+ 
 							'<p style="font-size: 70%; color: #aaa; margin: 0px">' + Utils.quoteattr(userid) + '</p>' + 
 						'</div>' +
 					'</div>' +
