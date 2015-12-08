@@ -6,6 +6,7 @@ use FeideConnect\HTTP\HTTPResponse;
 use FeideConnect\HTTP\Redirect;
 use FeideConnect\HTTP\TemplatedHTMLResponse;
 use FeideConnect\HTTP\LocalizedTemplatedHTMLResponse;
+use FeideConnect\Authentication\Authenticator;
 use FeideConnect\Config;
 use FeideConnect\GeoLocation;
 use FeideConnect\Localization;
@@ -16,6 +17,10 @@ class AccountChooser {
 
 
     public static function process() {
+
+
+        $auth = new Authenticator();
+        $accounts = $auth->getAllAccountsVisualTags();
 
         $discoveryConfig = Config::readJSONfile("disco2.json");
         $config = Config::getInstance();
@@ -34,7 +39,6 @@ class AccountChooser {
         }
 
         $baseURL = $request["return"];
-
 
         $noscriptdata = [];
 
@@ -63,18 +67,19 @@ class AccountChooser {
                 $responseURL->query->set("acresponse", json_encode($response));
                 $noscriptentry["url"] = $responseURL->getURL();
             }
-
             $noscriptdata[] = $noscriptentry;
         }
-
 
 
         $l = new GeoLocation();
         $data["location"] = $l->getLocation();
         $data["request"] = $request;
         $data["requestJSON"] = json_encode($request);
-
         $data["noscriptentries"] = $noscriptdata;
+        $data["activeAccounts"] = $accounts;
+        $data["activeAccountsJSON"] = json_encode($accounts);
+
+        // echo '<pre>'; print_r($data); exit;
 
         return (new LocalizedTemplatedHTMLResponse('accountchooser'))->setData($data);
 
