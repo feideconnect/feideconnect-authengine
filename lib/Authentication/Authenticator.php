@@ -183,26 +183,47 @@ class Authenticator {
 
     }
 
+    /*
+     * Returns a list of accounts from all authsources.
+     */
+    public function getAllAccountsVisualTags() {
 
+        $accounts = [];
+        foreach($this->authSources AS $authSourceType => $authSource) {
+            
+            if ($authSource->isAuthenticated()) {
+                // $this->logoutAS($authSource);
+                $acct = $this->getAccountFromAuthSource($authSourceType);
+                $accounts[] = $acct->getVisualTag();
+            }
+        
+        }
+        return $accounts;
+    }
+
+    /*
+     * Returns a single account if authenticated, for the current actice authentication source
+     */
     public function getAccount() {
 
         if (empty($this->activeAuthType) || !isset($this->authSources[$this->activeAuthType])) {
             throw new \Exception("Attempting to getAccount() when there is no active auth source");
         }
-        $as = $this->authSources[$this->activeAuthType];
+        return $this->getAccountFromAuthSource($this->activeAuthType);
+    }
 
+
+    protected function getAccountFromAuthSource($activeAuthType) {
+
+        $as = $this->authSources[$activeAuthType];
         $attributes = $as->getAttributes();
         $attributes['idp'] = $as->getAuthData('saml:sp:IdP');
-        $attributes['authSource'] = $this->authTypes[$this->activeAuthType]["authSource"];
+        $attributes['authSource'] = $this->authTypes[$activeAuthType]["authSource"];
         $attributes['AuthnInstant'] = $as->getAuthData("AuthnInstant");
 
         $attributeMapper = new AttributeMapper();
-
         $account = $attributeMapper->getAccount($attributes);
-
-
         return $account;
-
     }
 
 
