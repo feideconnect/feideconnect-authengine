@@ -122,6 +122,36 @@ define(function(require, exports, module) {
 		},
 
 
+		"hasSameUserID": function(a, b) {
+			if (!a.userids) { 
+				return false;
+			}
+			if (!b.userids) {
+				return false;
+			}
+			for (var i = 0; i < a.userids.length; i++) {
+				for (var j = 0; j < b.userids.length; j++) {
+					if (a.userids[i] === b.userids[j]) {
+						return true;
+					}
+				}
+			}
+			return false;
+		},
+
+		"isActiveAccount": function(a) {
+			if (!window.activeAccounts) {
+				return false;
+			}
+			for (var i = 0; i < window.activeAccounts.length; i++) {
+				var x = window.activeAccounts[i];
+				if (this.hasSameUserID(a, x)) {
+					return true;
+				}
+			}
+			return false;
+		},
+
 
 		"draw": function() {
 			var txt = '';
@@ -143,7 +173,10 @@ define(function(require, exports, module) {
 				var classes = ['list-group-item', 'accountentry'];
 				if (!allowed) { classes.push('disabled'); }
 
-				// console.log("Foo", classes);
+				var isActive = this.isActiveAccount(a);
+
+				// console.log("Processing", a);
+				// console.log("Active accounts", window.activeAccounts);
 
 				txt += '<a href="#" class="' + classes.join(' ') + '" data-userid="' + Utils.quoteattr(userid) + '" style="">' +
 					'<div class="media"><div class="media-left media-middle">' + 
@@ -151,7 +184,9 @@ define(function(require, exports, module) {
 						'</div>' +
 						'<div class="media-body">' + 
 							'<p class="showOnRemove" style=""><button class="btn btn-danger actRemove" style="float: right">' + this.app.dictionary.remove + '</button></p>' + 
+
 							'<i style="float: right; margin-top: 20px" class="fa fa-chevron-right fa-2x hideOnRemove"></i>' +
+							(isActive ? '<i style="color: #6a6; float: right; margin-top: 20px; margin-right: 12px" class="fa fa-circle fa-2x"></i>' : '') +
 							'<p style="font-size: 140%; margin: 0px">' + Utils.quoteattr(a.name) + '</p>' + 
 							'<p style="font-size: 100%; margin: 0px; margin-top: -6px">' + Utils.quoteattr(a.title) + '</p>' + 
 							'<p style="font-size: 70%; color: #aaa; margin: 0px">' + Utils.quoteattr(userid) + '</p>' + 
