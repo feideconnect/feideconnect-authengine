@@ -141,6 +141,7 @@ class Account {
 
             if ($org === 'feide.no') {
                 $tag["def"][] = ["other", "feidetest"];
+                $tag["title"] = 'Feide testbruker';
             } else {
                 $storage = StorageProvider::getStorage();
 
