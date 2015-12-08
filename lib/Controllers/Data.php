@@ -94,11 +94,6 @@ class Data {
         usort($data, ["\FeideConnect\Controllers\Data", "scmp"]);
 
 
-
-
-
-
-
         // echo '<pre>';
         // foreach($data as $d) {
         //     echo join(',', $d["type"]) . "\n";
@@ -116,15 +111,12 @@ class Data {
 
     public static function accountchooserConfig() {
 
-
         $config = [];
         $config['feideIdP'] = Config::getValue('feideIdP');
-
-
+        $config['endpoints'] = Config::getValue('endpoints');
 
         // $ldata = Localization::localizeList($data, ['title', 'descr']);
         return new JSONResponse($config);
-
     }
 
 
