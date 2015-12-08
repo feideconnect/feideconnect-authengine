@@ -8,21 +8,8 @@ define(function(require, exports, module) {
 	var LanguageSelector = require('./LanguageSelector');
 	var Controller = require('./Controller');
 
+	var Utils = require('./Utils');
 
-	var customEscape = function(s, forAttribute) {
-		var r = ((forAttribute !== false) ? 
-			new RegExp('[&<>\'"]', 'g') : 
-			new RegExp('[&<>]', 'g'));
-		var MAP = { '&': '&amp;',
-					'<': '&lt;',
-					'>': '&gt;',
-					'"': '&quot;',
-					"'": '&#39;'};
-		var p = s.replace(r, function(c) {
-			return MAP[c];
-		});
-		return p;
-	}
 
 
 	var App = Controller.extend({
@@ -32,7 +19,6 @@ define(function(require, exports, module) {
 			that.config = null;
 
 			this.client = null;
-
 
 			this.lang = new LanguageSelector($("#langselector"), true);
 			this.disco = new DiscoveryController(this);
@@ -77,18 +63,16 @@ define(function(require, exports, module) {
 			var that = this;
 			type = (type ? type : "danger");
 
-			console.error("Error: ", msg.stack);
-
 			var pmsg = '';
 			if (typeof msg === 'object' && msg.hasOwnProperty("message")) {
-				pmsg = '<p>' + customEscape(msg.message, false).replace("\n", "<br />") + '</p>';
+				pmsg = '<p>' + Utils.quoteattr(msg.message, false).replace("\n", "<br />") + '</p>';
 			} else if (typeof msg === 'string') {
-				pmsg = '<p>' + customEscape(msg, false).replace("\n", "<br />") + '</p>';
+				pmsg = '<p>' + Utils.quoteattr(msg, false).replace("\n", "<br />") + '</p>';
 			}
 
 			var str = '<div class="alert alert-' + type + ' alert-dismissible" role="alert">' +
 				' <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>' +
-				(title ? '<strong>' + customEscape(title, false).replace("\n", "<br />") + '</strong>' : '') +
+				(title ? '<strong>' + Utils.quoteattr(title, false).replace("\n", "<br />") + '</strong>' : '') +
 				pmsg +
 				'</div>';
 
@@ -101,8 +85,6 @@ define(function(require, exports, module) {
 			}, 10000);
 
 			$("#errorcontainer").empty().append(str);
-
-			console.error("Error2: ", msg.stack);
 
 		},
 
@@ -150,7 +132,7 @@ define(function(require, exports, module) {
 
 		"loadClientInfo": function() {
 			var that = this;
-			console.log("Loading client info", this.request);
+			// console.log("Loading client info", this.request);
 
 			// console.error("Draw");
 			// 
@@ -192,7 +174,7 @@ define(function(require, exports, module) {
 					that.client = data;
 					that.drawClientInfo();
 
-					console.log("Loading client info", this.request);
+					// console.log("Loading client info", this.request);
 					resolve();
 				});
 
