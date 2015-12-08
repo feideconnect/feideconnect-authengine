@@ -8,6 +8,23 @@ define(function(require, exports, module) {
 	var LanguageSelector = require('./LanguageSelector');
 	var Controller = require('./Controller');
 
+
+	var customEscape = function(s, forAttribute) {
+		var r = ((forAttribute !== false) ? 
+			new RegExp('[&<>\'"]', 'g') : 
+			new RegExp('[&<>]', 'g'));
+		var MAP = { '&': '&amp;',
+					'<': '&lt;',
+					'>': '&gt;',
+					'"': '&quot;',
+					"'": '&#39;'};
+		var p = s.replace(r, function(c) {
+			return MAP[c];
+		});
+		return p;
+	}
+
+
 	var App = Controller.extend({
 		"init": function() {
 			var that = this;
@@ -23,7 +40,6 @@ define(function(require, exports, module) {
 			this.selector = new AccountSelector(this, this.accountstore);
 
 			this.parseRequest();
-
 			this._super(undefined, true);            
 
 		},
@@ -33,33 +49,60 @@ define(function(require, exports, module) {
 			var that = this;
 			return Promise.resolve()
 				.then(function() {
-
-					// console.error("App is loading...")
-					
+					return that.loadConfig();
 				})
 				.then(function() {
 					return Promise.all([
 						that.loadClientInfo(),
-						that.loadDictionary(),
-						that.loadConfig()
+						that.loadDictionary()
 					]);
 				})
 				.then(function() {
-
-
-					// console.error("App is completed loading..");
-
 					if (that.accountstore.hasAny())  {
 						that.selector.activate();
 					} else {
 						that.disco.activate();
 					}
-					// console.error("App is completed (2)");
-	
-
-	
 				})
-				.then(that.proxy("_initLoaded"));
+				.then(that.proxy("_initLoaded"))
+				.catch(function(err) {
+					console.error("Error loading AccountChooser", err);
+					that.setErrorMessage("Error loading AccountChooser", "danger", err);
+				});
+
+		},
+
+		"setErrorMessage": function(title, type, msg) {
+
+			var that = this;
+			type = (type ? type : "danger");
+
+			console.error("Error: ", msg.stack);
+
+			var pmsg = '';
+			if (typeof msg === 'object' && msg.hasOwnProperty("message")) {
+				pmsg = '<p>' + customEscape(msg.message, false).replace("\n", "<br />") + '</p>';
+			} else if (typeof msg === 'string') {
+				pmsg = '<p>' + customEscape(msg, false).replace("\n", "<br />") + '</p>';
+			}
+
+			var str = '<div class="alert alert-' + type + ' alert-dismissible" role="alert">' +
+				' <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>' +
+				(title ? '<strong>' + customEscape(title, false).replace("\n", "<br />") + '</strong>' : '') +
+				pmsg +
+				'</div>';
+
+			if (this.hasOwnProperty("errorClearCallback")) {
+				clearTimeout(this.errorClearCallback);
+			}
+
+			this.errorClearCallback = setTimeout(function() {
+				$("#errorcontainer").empty();
+			}, 10000);
+
+			$("#errorcontainer").empty().append(str);
+
+			console.error("Error2: ", msg.stack);
 
 		},
 
@@ -101,10 +144,16 @@ define(function(require, exports, module) {
 			}
 		},
 
+		"getCoreURL": function(url) {
+			return this.config.endpoints.core + url;
+		},
+
 		"loadClientInfo": function() {
 			var that = this;
-			// console.log("Loading client info", this.request);
+			console.log("Loading client info", this.request);
 
+			// console.error("Draw");
+			// 
 			if (!this.request.clientid) {
 				return Promise.resolve();
 			}
@@ -119,7 +168,7 @@ define(function(require, exports, module) {
 			return new Promise(function(resolve, reject) {
 				
 				// console.error("About to load config");
-				var url = 'https://api.feideconnect.no/clientadm/clients/' + that.request.clientid;
+				var url = that.getCoreURL('/clientadm/clients/') + that.request.clientid;
 				// console.log("Contacting url", url);
 				$.getJSON(url,function(data) {
 					// data.authproviders = [];
@@ -142,6 +191,8 @@ define(function(require, exports, module) {
 					// console.error("Got clientinfo data:", data);
 					that.client = data;
 					that.drawClientInfo();
+
+					console.log("Loading client info", this.request);
 					resolve();
 				});
 
@@ -149,9 +200,12 @@ define(function(require, exports, module) {
 		},
 
 		"drawClientInfo": function() {
+			// console.error("Draw");
+			var logourl = this.getCoreURL('/clientadm/clients/' + this.client.id + '/logo');
+
 			$(".clientinfo").show();
 			$(".clientname").empty().append(this.client.name);
-			$(".clientlogo").empty().append('<img style="max-height: 64px; max-width: 64px" src="https://api.feideconnect.no/clientadm/clients/' + this.client.id + '/logo" />')
+			$(".clientlogo").empty().append('<img style="max-height: 64px; max-width: 64px" src="' + logourl + '" />');
 		},
 
 		"loadConfig": function() {
@@ -162,7 +216,7 @@ define(function(require, exports, module) {
 				// console.error("About to load config");
 				$.getJSON('/accountchooser/config',function(data) {
 					that.config = data;
-					// console.error("Config was loaded");
+					// console.error("Config was loaded", that.config);
 					// that.initAfterLoad();
 					resolve();
 				});
