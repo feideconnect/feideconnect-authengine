@@ -251,7 +251,7 @@ class AccountTest extends DBHelper {
             'type' => 'saml',
             'id' => self::$feideidp,
             'subid' => 'feide.no',
-            'title' => null,
+            'title' => 'Feide testbruker',
             'userids' => ['feide:test@feide.no'],
             'def' => [
                 ['other', 'feidetest'],
