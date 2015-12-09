@@ -6,20 +6,30 @@ class Misc {
 
     protected static $langCache = [];
 
+    public static function reset() {
+        self::$langCache = [];
+    }
+
+
     /*
      * Source:
      * http://codereview.stackexchange.com/questions/9141/language-detection-php-script
      */
     public static function getBrowserLanguage($available_languages, $http_accept_language = 'auto') {
 
-
-
-
-
         $cachestr = join('|', $available_languages);
         if (isset(self::$langCache[$cachestr])) {
             return self::$langCache[$cachestr];
         }
+
+
+        $aliases = [
+            "no" => "nb"
+        ];
+        if (in_array("nb", $available_languages)) {
+            $available_languages[] = 'no';
+        }
+
 
         // TODO : an accept header of 'no' should aid in preferring 'nb'.
         // Need to support some kind of alias for this
@@ -65,7 +75,6 @@ class Misc {
         }
 
 
-        // var_dump($_COOKIE["lang"]);
         // var_dump($available_languages);
         // var_dump($hits);
         // var_dump($bestlang);
@@ -73,6 +82,11 @@ class Misc {
 
 
         self::$langCache[$cachestr] = $bestlang;
+
+        if (isset($aliases[$bestlang])) {
+            return $aliases[$bestlang];
+        }
+
         return $bestlang;
     }
 

@@ -11,10 +11,6 @@ class Localization {
     protected static $langCache = [];
 
 
-    protected static $aliases = [
-        "no" => "nb"
-    ];
-
     public static function getDictionary() {
 
         if (Config::getValue('enableLocalization', false)) {
@@ -24,9 +20,6 @@ class Localization {
         } else {
             $dictionaryFile = Config::filepath('dictionaries/dictionary.en.json');
         }
-
-
-
 
         if (!file_exists($dictionaryFile)) {
             throw new \Exception('Cannot locate dictionary file: ' . $dictionaryFile);
