@@ -28,6 +28,10 @@ class AccountChooserProtocol {
 
     }
 
+    public function getResponse() {
+        return $this->response;
+    }
+
     public function setClientID($clientid) {
         $this->clientid = $clientid;
     }
