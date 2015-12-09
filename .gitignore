@@ -2,6 +2,7 @@ etc/config.json
 etc/simplesamlphp-config
 etc/simplesamlphp-metadata
 etc/apache.conf
+dictionaries/transifex
 vendor
 composer.lock
 www/static/components
