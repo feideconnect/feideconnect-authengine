@@ -30,7 +30,6 @@ class AuthorizationUI {
         $this->organization = $organization;
         $this->storage = StorageProvider::getStorage();
 
-
     }
 
 
@@ -75,35 +74,13 @@ class AuthorizationUI {
             $bypass = false;
         }
 
-        // echo '<p>Is mandatory'; var_dump($isMandatory);
-        // echo '<p>needs'; var_dump($needs);
-        // echo '<p>firsttime'; var_dump($firsttime);
-        // echo '<p>Simple view '; var_dump($simpleView);
-        // echo '<p>bypass '; var_dump($bypass);
-        // // echo '<p>Client '; var_dump($this->client);
-        // exit;
-
-
-        // echo 'Realm is ' . $account->getRealm(); exit;
-
-
-        // $isMandatory = MandatoryClientInspector::isClientMandatory($account, $client);
-
-
         $userinfo = $this->user->getBasicUserInfo(true);
         $userinfo['userid'] = $this->user->userid;
         $userinfo['p'] = $this->user->getProfileAccess();
 
-        // echo '<pre>'; print_r($userinfo); exit;
-
         $visualTag = $this->account->getVisualTag();
         $visualTag["photo"] = Config::dir('userinfo/v1/user/media/' . $userinfo["p"], "", "core");
         $visualTag['rememberme'] = false;
-
-
-
-        // echo 'Visual tag'; var_dump($visualTag); exit;
-
 
         $acresponse = [];
         if (isset($_REQUEST['acresponse'])) {
@@ -113,11 +90,6 @@ class AuthorizationUI {
         if (isset($acresponse["rememberme"]) && $acresponse["rememberme"]) {
             $visualTag['rememberme'] = true;
         }
-
-
-
-        // echo '<pre>'; print_r($visualTag); exit;
-
 
         $data = [
             'perms' => $scopesInspector->getInfo(),
@@ -130,8 +102,6 @@ class AuthorizationUI {
             'visualTag' => json_encode($visualTag),
             'rememberme' => false,
         ];
-
-        // var_dump($visualTag); exit;
 
         $data['needsAuthorization'] = $needs;
 
