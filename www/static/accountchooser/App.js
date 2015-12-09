@@ -162,7 +162,7 @@ define(function(require, exports, module) {
 					// data.authproviders.push('other|all');
 					// data.authproviders.push('other|idporten');
 					// data.authproviders.push('other|openidp');
-					// // data.authproviders.push('other|openidp');
+					// data.authproviders.push('other|openidp');
 					// data.authproviders.push('other|feidetest');
 					// data.authproviders.push('feide|all');
 					// data.authproviders.push('feide|go');
