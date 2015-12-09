@@ -96,10 +96,20 @@ Initalize Cassandra schema
 	bin/feideconnect.php --help
 
 
-## Test
+## Run test suite with ant
 
 
-	phpunit --bootstrap lib/_autoload.php tests
+	ant
+
+## Run phpunit
+
+
+	./vendor/bin/phpunit
+
+
+## Test with automated clients
+
+
 	casperjs test tests-casperjs/index.js
 	phantomjs tests-phantomjs/main.js
 	mocha --no-timeouts  tests-phantomjs-node/index.js
