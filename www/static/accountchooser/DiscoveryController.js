@@ -159,8 +159,6 @@ define(function(require, exports, module) {
 
 			var that = this;
 
-
-
     		this.location = new LocationController();
     		this.location.onUpdate(function(loc) {
     			that.loadData();
@@ -169,12 +167,8 @@ define(function(require, exports, module) {
     		
 			this.updateLocationView();
 
-
 			return this.app.onLoaded()
 				.then(function() {
-
-					// console.error("DiscoveryController is waiting for app to load completed... Now it is. Setting Feide IDP to " + that.app.config.feideIdP );
-					that.feideid = that.app.config.feideIdP;
 					that.updateCurrentCountry('no');
 					that.drawBasics();
 		    		that.loadData();
@@ -182,6 +176,11 @@ define(function(require, exports, module) {
 				})
 				.then(this.proxy("_initLoaded"));
 
+		},
+
+
+		"setFeideIdP": function(idp) {
+			this.feideid = idp;
 		},
 
     	"updateCurrentCountry": function(c) {
@@ -210,12 +209,11 @@ define(function(require, exports, module) {
 
 			if (that.feideid === so.id) {
 
-				var f = (new FeideWriter(so.subid, that.feideid))
+				var f = (new FeideWriter(this.app, so.subid, that.feideid))
 					.onLoad( function() {
 						window.location = url;	
 					})
 					.load();
-
 
 			} else {
 				window.location = url;	
@@ -225,7 +223,6 @@ define(function(require, exports, module) {
 
     	"updateLocationView": function() {
     		var loc = this.location.getLocation();
-    		// console.error("Location is ", loc);
 			$("#locationtitle").empty().append(loc.title);
 			if (loc.stored) {
 				$("#removelocation").show();
@@ -271,8 +268,6 @@ define(function(require, exports, module) {
 		"matchAuthProviderFilterExtra": function(item) {
 
 			var providers = this.app.getAuthProviderDef();
-
-			// console.error("Maching auth providers: ", providers);
 
 			for(var i = 0; i < providers.length; i++) {
 
@@ -335,7 +330,6 @@ define(function(require, exports, module) {
 
 
     		if (item.title === null) {
-    			// console.error("Title is empty", item); 
     			return false;
     		}
     		if (item.title.toLowerCase().indexOf(searchTerm) !== -1) {

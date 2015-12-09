@@ -11,13 +11,19 @@ define(function(require, exports, module) {
 	var Utils = require('./Utils');
 
 
-
+	/*
+	 *  This is the main App controlling the acountchooser and discovery
+	 *
+	 * It loads two panes, one with the accountchooser and one with the discovery and lets the user switch between them.
+	 * It activates the chooser if there exists some stored accounts
+	 * If the user selets to go to an account that is representing Feide, the FeideWriter 
+	 * will load a cookie writer that preselects oranization in Feide
+	 */
 	var App = Controller.extend({
 		"init": function() {
 			var that = this;
 			
 			that.config = null;
-
 			this.client = null;
 
 			this.lang = new LanguageSelector($("#langselector"), true);
@@ -38,6 +44,7 @@ define(function(require, exports, module) {
 					return that.loadConfig();
 				})
 				.then(function() {
+					that.disco.setFeideIdP(that.config.feideIdP);
 					return Promise.all([
 						that.loadClientInfo(),
 						that.loadDictionary()
@@ -50,7 +57,9 @@ define(function(require, exports, module) {
 						that.disco.activate();
 					}
 				})
-				.then(that.proxy("_initLoaded"))
+				.then(function() {
+					that._initLoaded();
+				})
 				.catch(function(err) {
 					console.error("Error loading AccountChooser", err);
 					that.setErrorMessage("Error loading AccountChooser", "danger", err);

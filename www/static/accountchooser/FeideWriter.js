@@ -5,7 +5,10 @@ define(function(require, exports, module) {
 
 	var FeideWriter = Class.extend({
 
-		"init": function(org, feideid) {
+		"init": function(app, org, feideid) {
+
+			this.org = org;
+			this.app = app;
 			this.feideid = feideid;
 
 			var feideIdPEndpoints = {
@@ -22,8 +25,11 @@ define(function(require, exports, module) {
 
 			var that = this;
 
+			// console.error("SETTTING FeideWriter to ", org, feideid);
+
 			this._callback = null;
 			$("#iloaded").on("click", function() {
+				// console.error(" ---- Detected click on iloaded...");
 				if (that._callback) {
 					that._callback();
 					that._callback = null;
@@ -41,17 +47,23 @@ define(function(require, exports, module) {
 
 			setTimeout(function() {
 
-				if (that._callback) {
-					that._callback();
-					that._callback = null;
-				}
+				that.app.setErrorMessage("Unable to preselect organization at Feide", "warning");
 
-			}, 1200);
+				setTimeout(function() {
+
+					if (that._callback) {
+						that._callback();
+						that._callback = null;
+					}
+				}, 1500);
+
+			}, 1500);
 
 			return this;
 
 	    },
 	    "onLoad": function(callback) {
+	    	// console.error(" ---- Setting onload callback");
 	    	this._callback = callback;
 	    	return this;
 	    }

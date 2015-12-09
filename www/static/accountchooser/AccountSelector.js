@@ -31,8 +31,10 @@ define(function(require, exports, module) {
 					return;
 				}
 			
-				that.app.disco.go(that.store.accts[userid]);
+
 				// console.log("Selected to login using", userid, that.store.accts[userid]);
+				that.app.disco.go(that.store.accts[userid]);
+
 			});
 			$("#accounts").on("click", ".actRemove", function(e) {
 				e.preventDefault(); e.stopPropagation();
