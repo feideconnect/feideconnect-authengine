@@ -9,6 +9,8 @@ www/static/components
 node_modules
 cache.properties
 build
+cert
+var
 etc/ci/simplesamlphp-config/simplesamlphp-config
 etc/ci/simplesamlphp-metadata/simplesamlphp-metadata
 www/static/media/default-profile.png
