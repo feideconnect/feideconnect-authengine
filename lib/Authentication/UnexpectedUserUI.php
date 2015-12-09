@@ -19,6 +19,10 @@ use FeideConnect\Logger;
 
 class UnexpectedUserUI {
 
+    protected $authenticatedAccount;
+    protected $expected;
+    protected $storage;
+
 
     /**
      * @param [type] $authenticatedAccount Authenticated Account
