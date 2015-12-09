@@ -72,4 +72,10 @@ class AuthenticatorRequireAuthenticationTest extends DBHelper {
         $this->assertNull($authenticator->requireAuthentication(60));
     }
 
+    public function tearDown() {
+        MockAuthSource::clear();
+        parent::tearDown();
+    }
+
+
 }
