@@ -85,6 +85,35 @@ class Account {
         return true;
     }
 
+    public function hasAnyOfUserIDs($userids) {
+
+        if (empty($userids)) {
+            return false;
+        }
+        foreach($userids AS $u) {
+            $has = $this->hasUserID($u);
+            if ($has) {
+                return true;
+            }
+        }
+        return false;
+
+    }
+
+    public function hasUserID($userid) {
+
+        if (empty($this->userids)) {
+            return false;
+        }
+        foreach ($this->userids AS $u) {
+            if ($userid === $u) {
+                return true;
+            }
+        }
+        return false;
+
+    }
+
     public function getDef() {
 
         $def = [];
