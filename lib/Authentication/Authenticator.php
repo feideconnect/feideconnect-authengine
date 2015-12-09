@@ -108,6 +108,9 @@ class Authenticator {
         }
         $authconfig = $accountchooser->getAuthConfig();
 
+        $response = $accountchooser->getResponse();
+
+
         if (!isset($this->authSources[$authconfig["type"]])) {
             throw new \Exception("Attempting to authenticate using an authentication source that is not initialized.");
         }
@@ -121,21 +124,44 @@ class Authenticator {
         $forceauthn = false;
 
         if ($as->isAuthenticated()) {
+
+
+            $mismatchingAccounts = false;
+
             // First check if we are authenticated using the expected IdP, as the user has seleted some.
             if (isset($authconfig['idp'])) {
                 $account = $this->getAccount();
-                // var_dump($account); var_dump($authconfig); exit;
+
                 if ($account->idp !== $authconfig['idp']) {
-                    $this->logoutAS($as);
+                    // We have logged in with another IdP, and we need to logout.
+                    $mismatchingAccounts = true;
+
                 } else if (isset($authconfig['subid']) && $authconfig['subid'] !== $account->realm) {
-                    // TODO: This can cause problems for users that does not want to login to the service...
-                    // $this->logoutAS($as);
+                    // If the user is logged in with another Feide realm than the correct one.
+                    // Logout the user, before logging in again.
+                    $mismatchingAccounts = true;
+
+                } else if (isset($authconfig['subid']) && isset($response["userids"]) && !$account->hasAnyOfUserIDs($response["userids"]) ) {
+                    // We are authenticated, but requested to authenticate with a specific userid...
+                    $mismatchingAccounts = true;
+                }
+
+                if ($mismatchingAccounts) {
+                    if (!isset($_REQUEST['strict'])) {
+
+                        $unexpectedUser = new UnexpectedUserUI($account, $response);
+                        return $unexpectedUser->show();
+
+                    } else if (isset($_REQUEST['strict']) && $_REQUEST['strict'] === '1') {
+
+                        $this->logoutAS($as);
+                    } 
                 }
 
             }
 
             if ($this->verifyMaxAge($as->getAuthData("AuthnInstant"), $maxage)) {
-                return;
+                return null;
             }
 
             $forceauthn = true;
@@ -158,7 +184,7 @@ class Authenticator {
             $as->requireAuth($options);
         }
 
-        return;
+        return null;
 
     }
 

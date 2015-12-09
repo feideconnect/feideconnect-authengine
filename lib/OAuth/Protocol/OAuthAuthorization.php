@@ -41,7 +41,6 @@ class OAuthAuthorization {
 
         $this->storage = StorageProvider::getStorage();
 
-
         $this->request = $request;
         $this->auth = new Authenticator();
 
@@ -85,14 +84,18 @@ class OAuthAuthorization {
     protected function authenticateUser() {
 
         if ($this->user !== null) {
-            return;
+            return null;
         }
 
         if ($this->isPassive) {
             $this->auth->passiveAuthentication($this->client, $this->maxage);
         } else {
-            $this->auth->requireAuthentication($this->maxage);
+            $response = $this->auth->requireAuthentication($this->maxage);
+            if ($response !== null) {
+                return $response;
+            }
         }
+
         $this->account = $this->auth->getAccount();
 
         $this->organization = $this->account->getOrg();
@@ -106,6 +109,7 @@ class OAuthAuthorization {
             'user' => $this->user
         ));
 
+        return null;
     }
 
 
@@ -187,10 +191,8 @@ class OAuthAuthorization {
         }
 
 
-
         $redirect_uri = $this->aevaluator->getValidatedRedirectURI();
         $state = $this->request->getState();
-
 
 
         // If SimpleSAML_Auth_State_exceptionId query parameter is set, then something failed
@@ -205,10 +207,12 @@ class OAuthAuthorization {
         }
 
 
-        $this->authenticateUser();
+        $res = $this->authenticateUser();
+        if ($res !== null) {
+            return $res;
+        }
+
         $this->aevaluator->setUser($this->user);
-
-
 
         try {
             $this->validateAuthProvider();
@@ -221,9 +225,6 @@ class OAuthAuthorization {
         if ($res !== null) {
             return $res;
         }
-
-
-
 
         Logger::info("User authenticated", [
             'client' => $this->client,

@@ -21,7 +21,6 @@ class OAuthAuthorizationCodeTest extends DBHelper {
         $_REQUEST['state'] = '06dad165-7d22-4dcf-bda9-38f4048b9e3d';
         $_POST['redirect_uri'] = 'http://example.org';
 
-
         $this->client = $this->client();
         $_REQUEST['client_id'] = $this->client->id;
 
@@ -37,13 +36,12 @@ class OAuthAuthorizationCodeTest extends DBHelper {
         $router = new Router();
 
         $response = $router->dispatchCustom('GET', '/oauth/authorization');
-
     }
 
     public function testAuthorizationToConsent() {
         $router = new Router();
 
-        $_REQUEST['acresponse'] = '{"id": "https://idp.feide.no","subid":"example.org"}';
+        $_REQUEST['acresponse'] = '{"id": "https://idp.feide.no","subid":"example.org", "userids": ["feide:testuser@example.org"]}';
 
         $response = $router->dispatchCustom('GET', '/oauth/authorization');
         $this->assertInstanceOf('FeideConnect\HTTP\LocalizedTemplatedHTMLResponse', $response, 'Expected /oauth/authorization endpoint to return html');
@@ -58,7 +56,7 @@ class OAuthAuthorizationCodeTest extends DBHelper {
     public function testAuthorizationToCode() {
         $router = new Router();
 
-        $_REQUEST['acresponse'] = '{"id": "https://idp.feide.no","subid":"example.org"}';
+        $_REQUEST['acresponse'] = '{"id": "https://idp.feide.no","subid":"example.org", "userids": ["feide:testuser@example.org"]}';
         $_REQUEST['verifier'] = $this->user->getVerifier();
         $_REQUEST['bruksvilkar'] = 'yes';
 

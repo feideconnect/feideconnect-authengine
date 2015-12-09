@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<title>{{_.unexpecteduser}}</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<meta name="description" content="{{_.unexpecteduser}}" />
+		<meta name="author" content="UNINETT AS" />
+
+		<link rel="shortcut icon" href="/static/components/uninett-bootstrap-theme/ico/favicon.ico" />
+
+		<!-- Bootstrap core CSS -->
+		<link type="text/css" href="/static/components/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet" />
+		<link type="text/css" href="/static/components/uninett-bootstrap-theme/css/uninett.css" rel="stylesheet" />
+		<link type="text/css" href="/static/components/font-awsome/css/font-awesome.min.css" rel="stylesheet"  />
+
+		<!-- Custom styles for this page -->
+		<link type="text/css" href="/static/css/grant.css" rel="stylesheet" />
+
+		<!-- Javascript libraries -->
+<!--		
+		<script type="text/javascript" src="/static/components/jquery/dist/jquery.min.js"></script>
+		<script type="text/javascript" src="/static/components/bootstrap/dist/js/bootstrap.min.js"></script>
+
+		<script type="text/javascript">
+			var visualTag = {{{visualTag}}};
+			var require = {
+				paths: {
+					"components": "../components"
+				}
+			};
+		</script>
+		<script data-main="/static/oauthgrant/main" src="/static/components/requirejs/require.js"></script>
+-->
+	</head>
+
+
+	<body class="{{bodyclass}}" >
+
+		<div id="mcontent" style="">
+
+
+			<div class="container" style="margin-top: 1em" >
+				<div id="langselector" style="float: right; font-size: 95%"></div>
+			</div>
+
+
+			<div class="container xmainContainer" style="margin-top: 5em">
+
+
+
+				<div class="row ">
+					<div class="col-md-6 col-md-offset-3" style=" ">
+
+
+						<p>{{_.loggedinas}} <strong>{{current.name}}</strong>. {{_.doesnotmatch}}.</p>
+
+						<div id="accounts" style="margin-top: 1.2em" class="list-group">
+						    <a href="{{urllogout}}" class="list-group-item accountentry" >
+							    <p style="font-size: 120%; margin: 0px"><i class="fa fa-sign-out"></i> {{_.logoutandswitch}}</p>
+						    </a>
+						    <a href="{{urlcontinue}}" class="list-group-item accountentry">
+
+				                <i style="float: right; margin-top: 30px" class="fa fa-chevron-right fa-2x hideOnRemove"></i>
+				                <i style="color: #6a6; float: right; margin-top: 30px; margin-right: 12px" class="fa fa-circle fa-2x"></i>
+				                <p style="font-size: 85%; color: #393; margin: 0px">{{_.continueas}}</p>
+				                <p style="font-size: 140%; margin: 0px">{{current.name}}</p>
+				                <p style="font-size: 100%; margin: 0px; margin-top: -6px">{{current.title}}</p>
+				                <p style="font-size: 70%; color: #aaa; margin: 0px">{{current.userids.0}}</p>
+						    </a>
+						</div>
+
+
+					</div><!-- column -->
+
+
+				</div><!-- row -->
+
+
+			</div><!-- container -->
+
+			<div class="container" style="color: #bba; margin-top: 4em;" >
+				
+				<p style="text-align: right; font-size: 80%; margin-bottom: 0px; padding-bottom: 0px">
+					<a target="_blank" href="http://feideconnect.no/sluttbrukere/">
+						{{_.readmoreconnect}}
+						<i class="fa fa-chevron-left"></i>
+					</a>
+				</p>
+				<p style="text-align: right; font-size: 80%; margin-top: 0px; padding-top: 0px">
+					<a target="_blank" href="http://feideconnect.no/personvern/">
+						{{_.connectpersonvern}}
+						<i class="fa fa-chevron-left"></i>
+					</a>
+				</p>
+
+			</div>
+
+
+
+		</div>
+
+	</body>
+
+</html>
+
+
+
+

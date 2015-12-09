@@ -16,6 +16,12 @@
 	"showall": "show all",
 	"hidden": "items hidden",
 
+	"unexpecteduser": "Unexpected user",
+	"loggedinas": "You are currently logged in as",
+	"doesnotmatch": "This does not match with the requested user, and you would need to logout from this before switching account",
+	"logoutandswitch": "Logout and switch to the requested user",
+	"continueas": "Continue as",
+
 	"servicenotaccessible": "Application not accessible",
 	"authprovidernotaccepted": "You have logged in with an authentication provider that was not allowed by this application. Please return to the application and try again, selecting another login provider. If problem consists contact the application owner.",
 
@@ -48,7 +54,7 @@
 	"applicationreadmore": "Read more about this application",
 	"accesstouserinfo": "Access to information about who you are",
 	"userid": "User ID",
-	"name": "Navn",
+	"name": "Name",
 	"profilephoto": "Profile photo",
 	"feideid": "Feide ID",
 	"email": "Email address",

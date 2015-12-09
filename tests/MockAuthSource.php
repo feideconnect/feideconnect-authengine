@@ -22,6 +22,10 @@ class MockAuthSource {
         return;
     }
 
+    public function logout() {
+        return;
+    }
+
     public function getAttributes() {
         return self::$attributes;
     }

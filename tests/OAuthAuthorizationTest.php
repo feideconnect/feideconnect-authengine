@@ -50,6 +50,34 @@ class OAuthAuthorizationTest extends DBHelper {
         $this->assertEquals($data['needsAuthorization'], true);
     }
 
+    /*
+     * When a user is requested to authenticate as X, and is already authenticated as Y, display a user dialog.
+     * First check that we can bypass the dialog by setting strict=1
+     */
+    public function testAuthorizationUnexpectedUserStrict() {
+        $_REQUEST['acresponse'] = '{"id": "https://idp.feide.no","subid":"another.org", "userids": ["feide:testuser@example.org"]}';
+        $_REQUEST['strict'] = '1';
+
+        $response = $this->doRun();
+        $this->assertInstanceOf('FeideConnect\HTTP\LocalizedTemplatedHTMLResponse', $response, 'Expected /oauth/authorization endpoint to return html');
+
+        $data = $response->getData();
+        $this->assertArrayHasKey('posturl', $data);
+        $this->assertEquals($data['posturl'], 'http://localhost/oauth/authorization');
+        $this->assertArrayHasKey('needsAuthorization', $data);
+        $this->assertEquals($data['needsAuthorization'], true);
+    }
+
+    public function testAuthorizationUnexpectedUser() {
+        $_REQUEST['acresponse'] = '{"id": "https://idp.feide.no","subid":"another.org", "userids": ["feide:testuser@example.org"]}';
+
+        $response = $this->doRun();
+        $this->assertInstanceOf('FeideConnect\HTTP\LocalizedTemplatedHTMLResponse', $response, 'Expected /oauth/authorization endpoint to return html');
+
+        $data = $response->getData();
+        $this->assertArrayHasKey('urllogout', $data);
+    }
+
     public function testAuthorizationBadClientID() {
         $_REQUEST['client_id'] = '00000000-0000-0000-0000-000000000000';
         try {
