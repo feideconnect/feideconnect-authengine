@@ -53,6 +53,15 @@ class Client extends \FeideConnect\Data\Model {
         return $this->scopes;
     }
 
+    public function getScopeQueue() {
+        if (empty($this->scopes_requested)) {
+            return [];
+        }
+
+        $hasScopes = $this->getScopeList();
+        return array_values(array_diff($this->scopes_requested, $hasScopes));
+    }
+
     public function hasStatus($status) {
 
         if ($this->status === null) {

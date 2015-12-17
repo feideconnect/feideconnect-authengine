@@ -146,7 +146,18 @@ if ($command[0] === 'user') {
 
 } else if ($command[0] === 'clients') {
 
-    $cli->getClients();
+    $opt = $command[1];
+
+    if ($opt === 'queue') {
+
+        $cli->getClientsQueue();
+
+    } else {
+        $cli->getClients();    
+    }
+
+
+    
 
     // $clientlist = $c->getClients();
 

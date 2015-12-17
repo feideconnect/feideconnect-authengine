@@ -249,7 +249,7 @@ class CLI {
 
     public function getClients() {
 
-        $clients = $this->storage->getClients(200);
+        $clients = $this->storage->getClients(500);
         $this->header("List clients");
         $c = 0;
         foreach ($clients as $client) {
@@ -274,6 +274,36 @@ class CLI {
 
     }
 
+
+    public function getClientsQueue() {
+
+
+        $clientslist = $this->storage->getClients(500);
+
+
+        $this->header("List clients");
+        $c = 0;
+        
+        foreach($clientslist AS $client) {
+            $queue = $client->getScopeQueue();
+            if (empty($queue)) { continue; }
+
+            $cinfo = $client->getAsArray();
+            $cinfo["c"] = ++$c;
+            $cinfo["queue"] = $queue;
+
+            echo $this->l($cinfo, [
+                "c" => ["%3d", "red"],
+                "id" => ["%38s", "black", 38 ],
+                "name" => ["%30s", "green", 30],
+                "queue" => ["%-200s", "purple", 90],
+            ]);
+        }
+
+
+
+
+    }
 
     public function getOrgs() {
 
