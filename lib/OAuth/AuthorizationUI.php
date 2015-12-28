@@ -17,6 +17,8 @@ class AuthorizationUI {
 
     // TODO: Remove scopesinquestion, remainingscopes og organization.
 
+    protected $disallowBypass = false;
+
     protected $data;
 
     // $client, $request, $account, $user, $redirect_uri, $scopesInQuestion, $ae->getRemainingScopes(), $organization
@@ -35,6 +37,11 @@ class AuthorizationUI {
         $this->remainingScopes = $ae->getRemainingScopes();
         $this->organization = $organization;
         
+    }
+
+    public function setDisallowBypass($en) {
+        $this->disallowBypass = $en;
+        return $this;
     }
 
 
@@ -162,6 +169,9 @@ class AuthorizationUI {
 
         $bypass = $simpleView;
         if ($this->isFirstTime()) {
+            $bypass = false;
+        }
+        if ($this->disallowBypass) {
             $bypass = false;
         }
 
