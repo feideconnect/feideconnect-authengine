@@ -15,9 +15,15 @@ use FeideConnect\Logger;
 
 class AuthorizationUI {
 
+    // TODO: Remove scopesinquestion, remainingscopes og organization.
+
+    protected $data;
 
     // $client, $request, $account, $user, $redirect_uri, $scopesInQuestion, $ae->getRemainingScopes(), $organization
     public function __construct($client, $request, $account, $user, $redirect_uri, $scopesInQuestion, $ae, $organization) {
+
+
+        $this->storage = StorageProvider::getStorage();
 
         $this->client = $client;
         $this->request = $request;
@@ -28,50 +34,55 @@ class AuthorizationUI {
         $this->ae = $ae; // ->getRemainingScopes()
         $this->remainingScopes = $ae->getRemainingScopes();
         $this->organization = $organization;
-        $this->storage = StorageProvider::getStorage();
-
+        
     }
 
 
-    public function show() {
+    /*
+     * Is this the first time the user is authenticating to a Connect service?
+     */
+    protected function isFirstTime() {
+        return !($this->user->usageterms);
+    }
 
 
-
+    /*
+     * Post data is a set of key -> value pairs that will be parmaeters to the HTML form that 
+     * represent the Grant dialog.
+     */
+    public function getPostData(&$data) {
         $postattrs = $_REQUEST;
         $postattrs['client_id'] = $this->client->id;
         $postattrs['verifier'] = $this->user->getVerifier();
         // $postattrs['scopes'] = $scopestr;
         // $postattrs['return'] = Utils\URL::selfURL();
 
-        $firsttime = !($this->user->usageterms); // || true;
-        if (!$firsttime) {
+        if (!$this->isFirstTime()) {
             $postattrs['bruksvilkar'] = 'yes';
         }
-
 
         $postdata = array();
         foreach ($postattrs as $k => $v) {
             $postdata[] = array('key' => $k, 'value' => $v);
         }
 
+        $data['postdata'] = $postdata;
+        $data['posturl']  = Utils\URL::selfURLhost() . '/oauth/authorization';
+    }
 
-        $scopesInspector = new ScopesInspector($this->scopesInQuestion);
 
-        $isMandatory = MandatoryClientInspector::isClientMandatory($this->account, $this->client);
-        $needs = $this->ae->needsAuthorization();
+    /*
+     * Get all neccessary info related to the authenticated user.
+     * Includes information to display about the user
+     * and information to store in the visual tag for the accountchooser.
+     */
+    public function getUserinfo(&$data) {
 
-        if (!$isMandatory && $this->user->isBelowAgeLimit()) {
-            throw new UserCannotAuthorizeException();
-        }
 
-        $simpleView = $isMandatory;
-        if (!$needs) {
-            $simpleView = true;
-        }
-
-        $bypass = $simpleView;
-        if ($firsttime) {
-            $bypass = false;
+        // AccountChooser Response Protocol message.
+        $acresponse = [];
+        if (isset($_REQUEST['acresponse'])) {
+            $acresponse = json_decode($_REQUEST['acresponse'], true);
         }
 
         $userinfo = $this->user->getBasicUserInfo(true);
@@ -81,60 +92,40 @@ class AuthorizationUI {
         $visualTag = $this->account->getVisualTag();
         $visualTag["photo"] = Config::dir('userinfo/v1/user/media/' . $userinfo["p"], "", "core");
         $visualTag['rememberme'] = false;
-
-        $acresponse = [];
-        if (isset($_REQUEST['acresponse'])) {
-            $acresponse = json_decode($_REQUEST['acresponse'], true);
-        }
         // echo '<pre>'; var_dump($acresponse); exit;
         if (isset($acresponse["rememberme"]) && $acresponse["rememberme"]) {
             $visualTag['rememberme'] = true;
         }
 
-        $data = [
-            'perms' => $scopesInspector->getInfo(),
-            'user' => $userinfo,
-            // 'posturl_' => Utils\URL::selfURLNoQuery(), // Did not work with php-fpm, needs to check out.
-            'posturl' => Utils\URL::selfURLhost() . '/oauth/authorization',
-            'postdata' => $postdata,
-            'client' => $this->client->getAsArrayLimited(["id", "name", "descr", "redirect_uri", "scopes"]),
-            'HOST' => Utils\URL::selfURLhost(),
-            'visualTag' => json_encode($visualTag),
-            'rememberme' => false,
-        ];
-
-        $data['needsAuthorization'] = $needs;
+        $data['user'] = $userinfo;
+        $data['organization'] = $this->organization;
+        $data['visualTag'] = json_encode($visualTag);
+    }
 
 
+
+    /*
+     * Get all information related to the client that needs to be displayed 
+     */
+    public function getClientInfo(&$data) {
+        $data['client'] = $this->client->getAsArrayLimited(["id", "name", "descr", "redirect_uri", "scopes"]);
         $data['client']['host'] = Utils\URL::getURLhostPart($this->redirect_uri);
         $data['client']['isSecure'] = Utils\URL::isSecure($this->redirect_uri); // $oauthclient->isRedirectURISecured();
 
-        $data['simpleView'] = $simpleView;
-        $data['bodyclass'] = '';
-        if ($simpleView) {
-            $data['bodyclass'] = 'simpleGrant';
-        }
-        if ($bypass) {
-            $data['bodyclass'] .= ' bypass';
-        }
-        $data['firsttime'] = $firsttime;
-        $data['organization'] = $this->organization;
-        $data['validated'] = $isMandatory;
-
-        $data["apibase"] = Config::getValue("endpoints.core");
+    }
 
 
-        // echo '<pre>';
-        // var_dump($this->account);
-        // var_dump($visualTag);
-        // exit;
-
+    /*
+     * Get all information related to the client owner that needs to be displayed 
+     */
+    public function getClientOwnerInfo(&$data) {
 
         if ($this->client->has('organization')) {
             $org = $this->storage->getOrg($this->client->organization);
             if ($org !== null) {
                 $orginfo = $org->getAsArray();
                 $orginfo["logoURL"] = Config::dir("orgs/" . $org->id . "/logo", "", "core");
+
                 $data['ownerOrg'] = true;
                 $data['org'] = $orginfo;
             }
@@ -148,9 +139,60 @@ class AuthorizationUI {
             }
 
         }
+    }
 
 
 
+    public function getAuthorizationInfo(&$data) {
+
+
+        $scopesInspector = new ScopesInspector($this->scopesInQuestion);
+        $isMandatory = MandatoryClientInspector::isClientMandatory($this->account, $this->client);
+        $needs = $this->ae->needsAuthorization();
+
+
+        if (!$isMandatory && $this->user->isBelowAgeLimit()) {
+            throw new UserCannotAuthorizeException();
+        }
+
+        $simpleView = $isMandatory;
+        if (!$needs) {
+            $simpleView = true;
+        }
+
+        $bypass = $simpleView;
+        if ($this->isFirstTime()) {
+            $bypass = false;
+        }
+
+        $data['perms'] = $scopesInspector->getInfo();
+        $data['needsAuthorization'] = $needs;
+        $data['simpleView'] = $simpleView;
+        $data['bodyclass'] = '';
+        if ($simpleView) {
+            $data['bodyclass'] = 'simpleGrant';
+        }
+        if ($bypass) {
+            $data['bodyclass'] .= ' bypass';
+        }
+        $data['firsttime'] = $this->isFirstTime();
+        $data['validated'] = $isMandatory;
+    }
+
+
+
+    public function process() {
+               
+        $data = [];
+        $data['rememberme'] = false;
+        $data['HOST'] = Utils\URL::selfURLhost();
+        $data["apibase"] = Config::getValue("endpoints.core");
+
+        $this->getPostData($data);
+        $this->getUserinfo($data);
+        $this->getClientinfo($data);
+        $this->getClientOwnerInfo($data);
+        $this->getAuthorizationInfo($data);
 
         Logger::info('OAuth About to present authorization dialog.', array(
             'client' => $this->client,
@@ -158,7 +200,14 @@ class AuthorizationUI {
             'scopes' => $this->scopesInQuestion,
         ));
 
+        return $data;
 
+    }
+
+
+    public function show() {
+
+        $data = $this->process();
 
         if (isset($_REQUEST['debug'])) {
             return (new JSONResponse($data))->setCORS(false);
