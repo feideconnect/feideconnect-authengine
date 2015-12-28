@@ -35,7 +35,7 @@ class Misc {
         // Need to support some kind of alias for this
 
         if ($http_accept_language == 'auto') {
-            $http_accept_language = $_SERVER['HTTP_ACCEPT_LANGUAGE'];
+            $http_accept_language = (isset($_SERVER['HTTP_ACCEPT_LANGUAGE']) ? $_SERVER['HTTP_ACCEPT_LANGUAGE'] : '' );
         }
 
         $pattern = '/([[:alpha:]]{1,8})(-([[:alpha:]|-]{1,8}))?(\s*;\s*q\s*=\s*(1\.0{0,3}|0\.\d{0,3}))?\s*(,|$)/i';
