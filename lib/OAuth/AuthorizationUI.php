@@ -17,7 +17,8 @@ class AuthorizationUI {
 
     // TODO: Remove scopesinquestion, remainingscopes og organization.
 
-    protected $disallowBypass = false;
+    protected $fixedBypass = null;
+    protected $fixedFirstTime = null;
 
     protected $data;
 
@@ -39,8 +40,13 @@ class AuthorizationUI {
         
     }
 
-    public function setDisallowBypass($en) {
-        $this->disallowBypass = $en;
+    public function setFixedBypass($en) {
+        $this->fixedBypass = $en;
+        return $this;
+    }
+
+    public function setFixedFirstTime($en) {
+        $this->fixedFirstTime = $en;
         return $this;
     }
 
@@ -49,6 +55,9 @@ class AuthorizationUI {
      * Is this the first time the user is authenticating to a Connect service?
      */
     protected function isFirstTime() {
+        if ($this->fixedFirstTime !== null) {
+            return $this->fixedFirstTime;
+        }
         return !($this->user->usageterms);
     }
 
@@ -171,8 +180,8 @@ class AuthorizationUI {
         if ($this->isFirstTime()) {
             $bypass = false;
         }
-        if ($this->disallowBypass) {
-            $bypass = false;
+        if ($this->fixedBypass !== null) {
+            $bypass = $this->fixedBypass;
         }
 
         $data['perms'] = $scopesInspector->getInfo();
