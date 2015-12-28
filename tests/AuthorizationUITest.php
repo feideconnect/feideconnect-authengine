@@ -93,7 +93,15 @@ class AuthorizationUITest extends DBHelper {
         $this->assertEquals($data['simpleView'], false, 'simpleView is false');
         $this->assertEquals($data['validated'], false, 'validated is false');
 
+        $this->assertEquals(strpos($data['bodyclass'], 'bypass') !== FALSE, false, 'bodyclass does not contain bypass');
+
+        $data2 = $aui
+            ->setDisallowBypass(true)
+            ->process();
     
+
+        // print_r($data2);
+
 
     }
 
