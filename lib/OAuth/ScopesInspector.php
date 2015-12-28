@@ -8,8 +8,11 @@ use FeideConnect\Data\StorageProvider;
 use FeideConnect\Logger;
 
 /**
- *
  * ScopesInspector
+ *
+ * The scopesinspector takes a list of scope strings as input, typically the ones authorized to a client
+ * and returns detailed structued information about the permissions inherited from those scopes.
+ * This includes information about the Gatekeeper APIs that is represented by gk_api(_subscope) scopes types. 
  */
 class ScopesInspector {
 
@@ -109,15 +112,18 @@ class ScopesInspector {
         return $apis;
     }
 
+
+
     public function getInfo() {
+
         $allaccesses = [ 'userid', 'email', 'name', 'photo', 'userid-feide'];
         $apis = [];
         $data = [
-            "userinfo" => [],
-            "global" => [],
-            "apis" => [],
-            "unknown" => [],
-            "allScopes" => $this->scopes
+            "userinfo" => [],                   // Specific handling of userinfo.
+            "global" => [],                     // All global scopes without special handling, like userinfo
+            "apis" => [],                       // All APIs behind API GKs that is represented.
+            "unknown" => [],                    // Unkown scopes
+            "allScopes" => $this->scopes        // All the requested scopes
         ];
 
         $scope_apis = $this->getScopeAPIGKs();
@@ -143,7 +149,7 @@ class ScopesInspector {
 
         foreach ($apis as $apigkid => $api) {
             $apiEntry = [
-                "info" => $api["apigk"]->getAsArray(),
+                "info" => $api["apigk"]->getBasicView(),
                 "scopes" => []
             ];
             if (isset($api["ownerInfo"])) {
@@ -165,6 +171,8 @@ class ScopesInspector {
         return $data;
 
     }
+
+
 
     public static function scopesToAccesses($scopes) {
         $lookuptable = [
