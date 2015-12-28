@@ -19,6 +19,8 @@ class AuthorizationUI {
 
     protected $fixedBypass = null;
     protected $fixedFirstTime = null;
+    protected $fixedSimpleView = null;
+    protected $fixedMandatory = null;
 
     protected $data;
 
@@ -47,6 +49,16 @@ class AuthorizationUI {
 
     public function setFixedFirstTime($en) {
         $this->fixedFirstTime = $en;
+        return $this;
+    }
+
+    public function setFixedSimpleView($en) {
+        $this->fixedSimpleView = $en;
+        return $this;
+    }
+
+    public function setFixedMandatory($en) {
+        $this->fixedMandatory = $en;
         return $this;
     }
 
@@ -166,10 +178,15 @@ class AuthorizationUI {
         $isMandatory = MandatoryClientInspector::isClientMandatory($this->account, $this->client);
         $needs = $this->ae->needsAuthorization();
 
+        if ($this->fixedMandatory !== null) {
+            $isMandatory = $this->fixedMandatory;
+        }
+
 
         if (!$isMandatory && $this->user->isBelowAgeLimit()) {
             throw new UserCannotAuthorizeException();
         }
+
 
         $simpleView = $isMandatory;
         if (!$needs) {
@@ -183,6 +200,11 @@ class AuthorizationUI {
         if ($this->fixedBypass !== null) {
             $bypass = $this->fixedBypass;
         }
+
+        if ($this->fixedSimpleView !== null) {
+            $simpleView = $this->fixedSimpleView;
+        }
+
 
         $data['perms'] = $scopesInspector->getInfo();
         $data['needsAuthorization'] = $needs;
