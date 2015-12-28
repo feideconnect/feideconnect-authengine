@@ -77,6 +77,15 @@ class APIGK extends \FeideConnect\Data\Model {
         return $orgadminpolicy['moderate'] === true;
     }
 
+    public function getBasicView() {
+        $attrs = [
+            "id", "name", "descr",
+            "owner", "organization", "scopedef", 
+            "status", "created", "updated"
+        ];
+        return $this->getAsArrayLimited($attrs);
+    }
+
     public function getBasicScopeView() {
         $sd = [
             "title" => "Basic access",
