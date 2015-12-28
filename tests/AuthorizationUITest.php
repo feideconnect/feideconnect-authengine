@@ -90,10 +90,13 @@ class AuthorizationUITest extends DBHelper {
         $this->assertEquals($data['client']['host'], 'example.org', 'Client host provided');
         $this->assertEquals($data['rememberme'], false, 'Rememberme is false');
 
-        print_r($data);
+        $this->assertEquals($data['simpleView'], false, 'simpleView is false');
+        $this->assertEquals($data['validated'], false, 'validated is false');
 
+    
 
     }
+
 
 
 }
