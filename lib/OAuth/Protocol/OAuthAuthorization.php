@@ -123,7 +123,7 @@ class OAuthAuthorization {
         $scopesInQuestion = $this->aevaluator->getScopesInQuestion();
 
 
-        $aui = new AuthorizationUI($this->client, $this->request, $this->account, $this->user, $redirect_uri, $scopesInQuestion, $this->aevaluator, $this->organization);
+        $aui = new AuthorizationUI($this->client, $this->request, $this->account, $this->user, $this->aevaluator);
 
         if ($this->aevaluator->needsAuthorization() ) {
             if ($this->isPassive) {

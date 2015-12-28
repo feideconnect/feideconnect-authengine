@@ -72,13 +72,10 @@ class AuthorizationUITest extends DBHelper {
 
 
         $ae = new AuthorizationEvaluator($storage, $this->client, $request, $this->user);
-        $redirect_uri = $ae->getValidatedRedirectURI();
-        $scopesInQuestion = $ae->getScopesInQuestion();
-
 
 
         # $client, $request, $account, $user, $redirect_uri, $scopesInQuestion, $ae, $organization) {
-        $aui = new AuthorizationUI($this->client, $request, $account, $this->user, $redirect_uri, $scopesInQuestion, $ae, $org);
+        $aui = new AuthorizationUI($this->client, $request, $account, $this->user, $ae);
 
         $data = $aui
             // ->setDisallowBypass(true)

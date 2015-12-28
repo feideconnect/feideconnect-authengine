@@ -25,8 +25,8 @@ class AuthorizationUI {
     protected $data;
 
     // $client, $request, $account, $user, $redirect_uri, $scopesInQuestion, $ae->getRemainingScopes(), $organization
-    public function __construct($client, $request, $account, $user, $redirect_uri, $scopesInQuestion, $ae, $organization) {
-
+    // public function __construct($client, $request, $account, $user, $redirect_uri, $scopesInQuestion, $ae, $organization) {
+    public function __construct($client, $request, $account, $user, $ae) {
 
         $this->storage = StorageProvider::getStorage();
 
@@ -34,11 +34,13 @@ class AuthorizationUI {
         $this->request = $request;
         $this->account = $account;
         $this->user = $user;
-        $this->redirect_uri = $redirect_uri;
-        $this->scopesInQuestion = $scopesInQuestion;
-        $this->ae = $ae; // ->getRemainingScopes()
+
+        $this->redirect_uri = $ae->getValidatedRedirectURI();
+        $this->needsAuthorization = $ae->needsAuthorization();
+        $this->scopesInQuestion = $ae->getScopesInQuestion();
         $this->remainingScopes = $ae->getRemainingScopes();
-        $this->organization = $organization;
+
+        $this->organization = $account->getOrg();
         
     }
 
@@ -176,7 +178,6 @@ class AuthorizationUI {
 
         $scopesInspector = new ScopesInspector($this->scopesInQuestion);
         $isMandatory = MandatoryClientInspector::isClientMandatory($this->account, $this->client);
-        $needs = $this->ae->needsAuthorization();
 
         if ($this->fixedMandatory !== null) {
             $isMandatory = $this->fixedMandatory;
@@ -189,7 +190,7 @@ class AuthorizationUI {
 
 
         $simpleView = $isMandatory;
-        if (!$needs) {
+        if (!$this->needsAuthorization) {
             $simpleView = true;
         }
 
@@ -207,7 +208,7 @@ class AuthorizationUI {
 
 
         $data['perms'] = $scopesInspector->getInfo();
-        $data['needsAuthorization'] = $needs;
+        $data['needsAuthorization'] = $this->needsAuthorization;
         $data['simpleView'] = $simpleView;
         $data['bodyclass'] = '';
         if ($simpleView) {
@@ -252,6 +253,9 @@ class AuthorizationUI {
 
         if (isset($_REQUEST['debug'])) {
             return (new JSONResponse($data))->setCORS(false);
+        }
+        if (isset($_REQUEST['debugperms'])) {
+            return (new JSONResponse($data['perms']))->setCORS(false);
         }
 
         $response = new LocalizedTemplatedHTMLResponse('oauthgrant');
