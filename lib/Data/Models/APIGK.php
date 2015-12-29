@@ -6,7 +6,7 @@ use Cassandra\Type\Uuid;
 
 class APIGK extends \FeideConnect\Data\Model {
 
-    public $id, $name, $descr, $owner, $organization, $endpoints, $expose, $httpscertpinned, $requireuser, $scopedef, $trust, $logo, $status, $created, $updated;
+    public $id, $name, $descr, $owner, $organization, $scopes, $scopes_requested, $endpoints, $expose, $httpscertpinned, $requireuser, $scopedef, $trust, $logo, $status, $created, $updated;
 
     protected static $_properties = array(
         "id", "name", "descr",
@@ -28,7 +28,14 @@ class APIGK extends \FeideConnect\Data\Model {
             unset($props["scopedef"]);
         }
 
+    }
 
+    public function getScopeList() {
+        return ['userinfo', 'userid', 'email', 'groups'];
+        if (empty($this->scopes)) {
+            return [];
+        }
+        return $this->scopes;
     }
 
     public function getStorableArray() {
@@ -62,6 +69,7 @@ class APIGK extends \FeideConnect\Data\Model {
         return $output;
     }
 
+
     public function isOrgModerated($scope) {
         $scopedef = $this->getScopeDef($scope);
         if (!isset($scopedef['policy'])) {
@@ -81,7 +89,8 @@ class APIGK extends \FeideConnect\Data\Model {
         $attrs = [
             "id", "name", "descr",
             "owner", "organization", "scopedef", 
-            "status", "created", "updated"
+            "status", "created", "updated",
+            "scopes"
         ];
         return $this->getAsArrayLimited($attrs);
     }
