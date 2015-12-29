@@ -91,6 +91,17 @@ Initalize Cassandra schema
 
 
 
+## Managing translations
+
+
+
+To update main dictionary content, upload `dictionaries/dictionary.en.json` to transifex.
+
+To download translations run:
+
+	grunt lang
+
+
 ## CLI
 
 	bin/feideconnect.php --help
