@@ -68,7 +68,12 @@ class ScopesInspector {
         $apiInfo = array(
             'apigk' => $apigk,
             'localScopes' => [],
+            'nestedPermissions' => [],
         );
+
+        $nsi = new ScopesInspector($apigk->getScopeList());
+        $apiInfo['nestedPermissions'] = $nsi->getInfo();
+
         try {
             if ($apigk->has('organization')) {
                 $orgObj = $this->getOrg($apigk->organization);
@@ -126,8 +131,15 @@ class ScopesInspector {
             "allScopes" => $this->scopes        // All the requested scopes
         ];
 
+
         $scope_apis = $this->getScopeAPIGKs();
         $accesses = self::scopesToAccesses($this->scopes);
+
+        // echo '<h2>Scope apis</h2><pre>';
+        // print_r($scope_apis);
+        // echo '<h2>accesses</h2><pre>';
+        // print_r($accesses);
+        // exit;
 
         foreach ($accesses as $access) {
             if (isset($scope_apis[$access])) {
@@ -157,6 +169,9 @@ class ScopesInspector {
             }
             if (isset($api["orgInfo"])) {
                 $apiEntry["org"] = $api["orgInfo"];
+            }
+            if (isset($api["nestedPermissions"])) {
+                $apiEntry["nestedPermissions"] = $api["nestedPermissions"];
             }
 
             $apiEntry["scopes"][] = $api["apigk"]->getBasicScopeView();
