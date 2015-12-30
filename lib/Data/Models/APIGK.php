@@ -11,6 +11,7 @@ class APIGK extends \FeideConnect\Data\Model {
     protected static $_properties = array(
         "id", "name", "descr",
         "owner", "organization",  "endpoints", "expose", "httpscertpinned", "requireuser", "scopedef", "trust", "logo",
+        "privacypolicyurl", "systemdescr",
         "status", "created", "updated"
     );
     protected static $_types = [
@@ -90,9 +91,13 @@ class APIGK extends \FeideConnect\Data\Model {
             "id", "name", "descr",
             "owner", "organization", "scopedef", 
             "status", "created", "updated",
+            "privacypolicyurl",
             "scopes"
         ];
-        return $this->getAsArrayLimited($attrs);
+        $info = $this->getAsArrayLimited($attrs);
+
+        $info['APIownerOrg'] = isset($info['organization']);
+        return $info;
     }
 
     public function getBasicScopeView() {
