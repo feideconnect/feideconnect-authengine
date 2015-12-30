@@ -543,7 +543,7 @@ class Cassandra2 extends \FeideConnect\Data\Repository {
     }
 
     public function getAPIGK($id) {
-        $query = 'SELECT id, descr, endpoints, expose, httpscertpinned, name, owner, organization, requireuser, scopedef, status, created, updated FROM "apigk" WHERE "id" = :id';
+        $query = 'SELECT id, descr, endpoints, expose, httpscertpinned, name, owner, organization, requireuser, scopedef, privacypolicyurl, status, created, updated FROM "apigk" WHERE "id" = :id';
         $params = ['id' => $id];
         return $this->query($query, $params, __FUNCTION__, 'FeideConnect\Data\Models\APIGK', false);
     }
