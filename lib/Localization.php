@@ -8,10 +8,14 @@ use FeideConnect\Utils\Misc;
 
 class Localization {
 
-    protected static $langCache = [];
+    protected static $dict = null;
 
 
-    public static function getDictionary() {
+    public static function load() {
+
+        if (self::$dict !== null) {
+            return self::$dict;
+        }
 
         if (Config::getValue('enableLocalization', false)) {
             $availableLanguages = Config::getValue('availableLanguages', ['en']);
@@ -25,12 +29,30 @@ class Localization {
             throw new \Exception('Cannot locate dictionary file: ' . $dictionaryFile);
         }
         $dictionaryContent = file_get_contents($dictionaryFile);
-        $dict = json_decode($dictionaryContent, true);
-        if (empty($dict)) {
+        self::$dict = json_decode($dictionaryContent, true);
+        if (empty(self::$dict)) {
             throw new \Exception('Dictionary file was empty or not properly formatted JSON');
         }
+        return self::$dict;
+    }
 
-        return $dict;
+
+    public static function getDictionary() {
+        self::load();
+        return self::$dict;
+    }
+
+
+    public static function getTerm($term, $required = false) {
+        self::load();
+
+        if (isset(self::$dict[$term])) {
+            return self::$dict[$term];
+        }
+        if ($required === true) {
+            throw new \Exception('Missing translation term [' . $term . ']');
+        }
+        return $term;
     }
 
 
