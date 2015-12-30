@@ -20,7 +20,7 @@ class TOU {
 
         $data = [
             "auth" => false,
-            "organization" => 'din organisasjon',
+            "organization" => 'din organisasjon'
         ];
         return (new LocalizedTemplatedHTMLResponse('tou'))->setData($data);
 
@@ -28,8 +28,6 @@ class TOU {
 
     public static function showAuthenticated() {
 
-
-        $storage = StorageProvider::getStorage();
         $auth = new Authentication\Authenticator();
         $auth->requireAuthentication();
         $account = $auth->getAccount();
