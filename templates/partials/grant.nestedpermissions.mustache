@@ -1,0 +1,33 @@
+
+<div class="list-group">
+{{#perms.view}}
+
+	<div class="list-group-item">
+
+
+		<p class="" style="margin-bottom: 0px">
+			{{#icon}}<span style="" class="fa fa-{{.}}"></span> {{/icon}} 
+			{{title}}</p>
+
+		{{#descr}}
+			<p class="" style="margin-bottom: 0px">{{.}}</p>
+		{{/descr}}
+	
+
+		<div class="">
+
+			<ul class="grantItemList">
+			{{#items}}
+				<li class="">
+					{{#icon}}<span class="fa fa-{{.}}"></span>{{/icon}}
+						{{title}} &nbsp; &nbsp;
+				</li>
+			{{/items}}
+			</ul>
+
+		</div>
+
+	</div><!-- panel -->
+
+{{/perms.view}}
+</div>

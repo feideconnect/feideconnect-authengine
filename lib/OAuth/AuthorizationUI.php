@@ -138,7 +138,7 @@ class AuthorizationUI {
      * Get all information related to the client that needs to be displayed 
      */
     public function getClientInfo(&$data) {
-        $data['client'] = $this->client->getAsArrayLimited(["id", "name", "descr", "redirect_uri", "scopes"]);
+        $data['client'] = $this->client->getAsArrayLimited(["id", "name", "descr", "redirect_uri", "scopes", "supporturl", "privacypolicyurl", "homepageurl"]);
         $data['client']['host'] = Utils\URL::getURLhostPart($this->redirect_uri);
         $data['client']['isSecure'] = Utils\URL::isSecure($this->redirect_uri); // $oauthclient->isRedirectURISecured();
 
@@ -207,7 +207,7 @@ class AuthorizationUI {
         }
 
 
-        $data['perms'] = $scopesInspector->getInfo();
+        $data['perms'] = $scopesInspector->getView();
         $data['needsAuthorization'] = $this->needsAuthorization;
         $data['simpleView'] = $simpleView;
         $data['bodyclass'] = '';

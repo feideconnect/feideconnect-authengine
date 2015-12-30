@@ -6,6 +6,7 @@ namespace FeideConnect\OAuth;
 use FeideConnect\Config;
 use FeideConnect\Data\StorageProvider;
 use FeideConnect\Logger;
+use FeideConnect\Localization;
 
 /**
  * ScopesInspector
@@ -16,10 +17,10 @@ use FeideConnect\Logger;
  */
 class ScopesInspector {
 
+    protected $userinfopermissions = [ 'userid', 'email', 'name', 'photo', 'userid-feide'];
+
     protected $scopes;
-
     protected $globalScopes;
-
     protected $storage;
 
     protected $apis = [], $owners = [], $orgs = [];
@@ -72,7 +73,7 @@ class ScopesInspector {
         );
 
         $nsi = new ScopesInspector($apigk->getScopeList());
-        $apiInfo['nestedPermissions'] = $nsi->getInfo();
+        $apiInfo['nestedPermissions'] = $nsi->getView();
 
         try {
             if ($apigk->has('organization')) {
@@ -121,7 +122,7 @@ class ScopesInspector {
 
     public function getInfo() {
 
-        $allaccesses = [ 'userid', 'email', 'name', 'photo', 'userid-feide'];
+        
         $apis = [];
         $data = [
             "userinfo" => [],                   // Specific handling of userinfo.
@@ -147,7 +148,7 @@ class ScopesInspector {
                 $apis[$apiInfo['apigk']->id] = $apiInfo;
 
             } else {
-                if (in_array($access, $allaccesses)) {
+                if (in_array($access, $this->userinfopermissions)) {
                     $data['userinfo'][$access] = $access;
                 } else if (isset($this->globalScopes[$access])) {
                     $ne = $this->globalScopes[$access];
@@ -184,6 +185,104 @@ class ScopesInspector {
         $data["hasAPIs"] = (count($data["apis"]) > 0);
 
         return $data;
+
+    }
+
+
+
+    /*
+     * Generates a complete view (with translations) for permissions.
+     * Based upon the info array returned by getInfo().
+     * 
+     * The api list is not handled here.
+     */
+    public function getView() {
+
+
+        $info = $this->getInfo();
+        $info['view'] = [];
+
+        $permissionInfo = [
+            'userid' => [
+                'title' => Localization::getTerm('userid'),
+                'icon' => 'key'
+            ],
+            'email' => [
+                'title' => Localization::getTerm('email'),
+                'icon' => 'envelope-o'
+            ],
+            'name' => [
+                'title' => Localization::getTerm('name'),
+                'icon' => 'tag'
+            ],
+            'photo' => [
+                'title' => Localization::getTerm('profilephoto'),
+                'icon' => 'camera-retro'
+            ],
+            'userid-feide' => [
+                'title' => Localization::getTerm('feideid'),
+                'icon' => 'key'
+            ],
+
+            'groups' => [
+                'title' => Localization::getTerm('perm-groups'),
+                'descr' => Localization::getTerm('perm-groups-descr'),
+                'icon' => 'users',
+                'expanded' => true
+            ],
+            'clientadmin' => [
+                'title' => Localization::getTerm('perm-clientadmin'),
+                'descr' => Localization::getTerm('perm-clientadmin-descr'),
+                'icon' => 'cog'
+            ],
+            'apigkadmin' => [
+                'title' => Localization::getTerm('perm-apigkadmin'),
+                'descr' => Localization::getTerm('perm-apigkadmin-descr'),
+                'icon' => 'cog'
+            ],
+            'orgadmin' => [
+                'title' => Localization::getTerm('perm-orgadmin'),
+                'descr' => Localization::getTerm('perm-orgadmin-descr'),
+                'icon' => 'cog'
+            ],
+            'peoplesearch' => [
+                'title' => Localization::getTerm('perm-peoplesearch'),
+                'descr' => Localization::getTerm('perm-peoplesearch-descr'),
+                'icon' => 'search'
+            ],
+            'longterm' => [
+                'title' => Localization::getTerm('perm-longterm'),
+                'descr' => Localization::getTerm('perm-longterm-descr'),
+                'icon' => 'clock-o'
+            ],
+        ];
+
+        if (!empty($info['userinfo'])) {
+            $item = [
+                'title' => Localization::getTerm('accesstouserinfo'),
+                // 'descr' => '',
+                'icon' => 'user',
+                'items' => [],
+                'expanded' => true
+            ];
+            foreach($info['userinfo'] AS $userinfoperm) {
+                if (isset($permissionInfo[$userinfoperm])) {
+                    $item['items'][] = $permissionInfo[$userinfoperm];
+                }
+            }
+            $info['view'][] = $item;
+        }
+
+
+        foreach($info['global'] AS $globalperm => $globalpermdata) {
+
+            if (isset($permissionInfo[$globalperm])) {
+                $info['view'][] = $permissionInfo[$globalperm];
+            }
+        }
+
+
+        return $info;
 
     }
 

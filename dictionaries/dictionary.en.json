@@ -37,7 +37,8 @@
 	"service": "The application",
 	"requestsperms": "requests the following permissions on behalf of you:",
 	"requeststhirdperms": "In addition the application requests these permissions to third party services on behalf of you:",
-	"thirdpermuserinfo": "These third party services will get access to your userID and group memberships.",
+	
+
 	"readmoreconnect": "Read more about Feide and Connect",
 	"connectpersonvern": "Connect privacy policy",
 	"thisisfirsttime": "This is the first time you login to an application using Feide / Connect. To continue you need to accept the Connect Terms of Use.",
@@ -51,7 +52,19 @@
 	"notvalidated2": " has no contract with the application provider, and has not accepted use of this application on behalf of its users. You may still choose to use the application on your own initiative.",
 	"needsauthz1": "You have already accepted these permissions for ",
 	"needsauthz2": ". The application now wants to use these permissions in a new user session.",
-	"applicationreadmore": "Read more about this application",
+
+	"insecurewarning": "Warning: Application is insecure (not running on HTTPS)",
+
+	"appprovidedby": "This application is provided by",
+	"providedby": "This service is provided by",
+	"applicationsupport": "Application Support",
+	"applicationprivacy": "Application Privacy Policy",
+	"serviceprivacy": "Service Privacy Policy",
+	"applicationhomepage": "Application Homepage",
+
+	"withpermissions": "with the following permissions",
+	"willgetaccessto": "The service will then get access to: ",
+
 	"accesstouserinfo": "Access to information about who you are",
 	"userid": "User ID",
 	"name": "Name",
@@ -59,10 +72,27 @@
 	"feideid": "Feide ID",
 	"email": "Email address",
 
+	"perm-groups": "Groups",
+	"perm-groups-descr": "Access to your group memberships, organization, organization unit, courses, class, program, cohort, study and ad-hoc groups.",
+	"perm-clientadmin": "Client administration",
+	"perm-clientadmin-descr": "Manage your clients on the platform",
+	"perm-apigkadmin": "API GK administration",
+	"perm-apigkadmin-descre": "Manage your APIs on the platform",
+	"perm-orgadmin": "Organization administration",
+	"perm-orgadmin-descr": "Manage your organization.",
+	"perm-peoplesearch": "Peoplesearch",
+	"perm-peoplesearch-descr": "Search for basic information about other users.",
+	"perm-longterm": "Longterm",
+	"perm-longterm-descr": "Permissions will be granted for a long period of time. Until the user is rejecting them.",
+
 	"stillok": "Is this still ok?",
 	"doyouaccept": "Do you accept this?",
 	"yesaccept": "Yes, I accept",
 	"no": "No",
+
+	"connecttou": "Connect terms of use",
+	"close": "Close",
+	"acceptou": "Accept the terms of use",
 
 	"cno": "Norway",
 	"cdk": "Denmark",

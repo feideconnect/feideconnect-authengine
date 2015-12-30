@@ -19,7 +19,7 @@
 
 		<!-- Javascript libraries -->
 		<script type="text/javascript" src="/static/components/jquery/dist/jquery.min.js"></script>
-<!-- 		<script type="text/javascript" src="/static/js/grant.js"></script> -->
+		<!-- <script type="text/javascript" src="/static/js/grant.js"></script> -->
 		<script type="text/javascript" src="/static/components/bootstrap/dist/js/bootstrap.min.js"></script>
 
 
@@ -61,15 +61,10 @@
 			<div class="container mainContainer" >
 
 
-
 				<div class="row grantUserLine">
 
 					<div class="media grantDetails">
 						<div class="pull-right userExtraBox" >
-							<p><a href="http://min.feideconnect.no/#!/">
-								{{_.support}}
-								<i class="fa fa-chevron-left"></i>
-							</a></p>
 							<p><a href="http://min.feideconnect.no/#!/">
 								{{_.myservices}}
 								<i class="fa fa-chevron-left"></i>
@@ -114,7 +109,6 @@
 						<p class="simpleSkip">{{_.requestsperms}}</p>
 
 
-
 						<div class="list-group simpleSkip">
 
 							{{> grant.perms}}
@@ -124,18 +118,13 @@
 
 
 						{{#perms.hasAPIs}}
-
 							<p class="simpleSkip">{{_.requeststhirdperms}}</p>
-							<p class="simpleSkip">{{_.thirdpermuserinfo}}</p>
-
 						{{/perms.hasAPIs}}
 
 
 
 						<div class="list-group simpleSkip">
-
 							{{> grant.perms-apis}}
-
 						</div>
 
 
@@ -257,11 +246,7 @@
 					</a>
 				</p>
 
-
 			</div>
-
-
-
 
 
 			<!-- Modal -->
@@ -270,14 +255,14 @@
 					<div class="modal-content">
 						<div class="modal-header">
 							<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-							<h4 class="modal-title" id="myModalLabel">Connect Bruksvikår</h4>
+							<h4 class="modal-title" id="myModalLabel">{{_.connecttou}}</h4>
 						</div>
 						<div class="modal-body">
 							{{> grant.bruksvilkar}}
 						</div>
 						<div class="modal-footer">
-							<button type="button" class="btn btn-default" data-dismiss="modal">Lukk</button>
-							<button type="button" id="actAcceptBrVilk" class="btn btn-primary">Aksepter bruksvilkår</button>
+							<button type="button" class="btn btn-default" data-dismiss="modal">{{_.close}}</button>
+							<button type="button" id="actAcceptBrVilk" class="btn btn-primary">{{_.acceptou}}</button>
 						</div>
 					</div>
 				</div>

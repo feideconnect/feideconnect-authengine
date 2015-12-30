@@ -92,17 +92,17 @@ body.simpleGrant .simpleOnly {
 	color: #600;
 }
 
-.grantEntry .ownerbox {
-	text-align: right; 
+.grantEntry .ownerbox2 {
+	/*text-align: right; */
 	color: #333;
 }
-.grantEntry .ownerbox p {
+.grantEntry .ownerbox2 p {
 	margin: 0px 5px 0px 5px;
 }
-.grantEntry .ownerbox .ownerMail {
+.grantEntry .ownerbox2 .ownerMail {
 	font-size: 74%;
 }
-.grantEntry .ownerbox .ownerMail a {
+.grantEntry .ownerbox2 .ownerMail a {
 	color: inherit;
 }
 .grantEntry .ownerbox .ownerlogo img {
@@ -130,6 +130,19 @@ body.simpleGrant .simpleOnly {
 }
 /*  */
 
+ul.grantItemList {
+	list-style-position: inside; list-style-type: none; 
+}
+ul.grantItemList li {
+	list-style-position: inside; list-style-type: none; display: inline; margin-right: .3em;
+}
+
+.ownerbox2 {
+	margin: 0px !important;
+	padding: 15px 15px 0px 15px;
+	border-top: 1px solid #ddd;
+	background-color: #f5f5f5;
+}
 
 
 img.profileImage {

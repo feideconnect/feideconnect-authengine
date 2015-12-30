@@ -15,79 +15,80 @@
 
 			<h3 class="media-heading" style="padding: 0px">{{client.name}}</h3>
 
-
 			<div class="grantDetails" style="">
 
-			
 				<div class="row" style="">
-						
 
-
-					<div class="col-md-6">
+					<div class="col-md-12">
 
 						{{#client.descr}}
 							<p style="margin: 0px">{{.}}</p>
 						{{/client.descr}}
 
-						<p class="simpleSkip"><code>{{client.host}}</code></p>
 
 						{{^client.isSecure}}
-							<p><span class="label label-danger">Warning: Application is insucure (not running on HTTPS)</span></p>
+							<p><span class="label label-danger"><i class="fa fa-warning"></i> {{_.insecurewarning}}</span></p>
 						{{/client.isSecure}}
-
-						<p class="simpleSkip"><a target="_blank" href="#">{{_.applicationreadmore}}</a></p>
 
 					</div>
 					
-
-
-
-
-					<div class="col-md-6 ownerbox">
-
-
-						{{#ownerOrg}}
-
-							<p class="ownerName" style="clear: right">{{org.name.nb}} </p>
-							<div style="clear: right" class="pull-right orglogo orglogoSmall">
-								<img style="" 
-									src="{{org.logoURL}}">
-							</div>
-							
-						{{/ownerOrg}}
-
-
-
-						{{#owner}}
-
-							<div class="pull-right ownerlogo">
-								<img style="" 
-									src="{{apibase}}/userinfo/v1/user/media/{{owner.p}}">
-							</div>
-							<p class="ownerName">{{owner.name}} </p>
-							<p class="ownerMail">
-								<a href="mailto:{{owner.mail}}">{{owner.email}}</a>
-							</p>
-
-						{{/owner}}
-
-
-
-					</div>
-
-
-
-
 				</div>
 				
-
 			</div>
-
-
 
 		</div><!-- media body -->
 	</div><!-- media -->
 
+
+	<div class="ownerbox2 grantDetails" style="margin: 8px">
+
+		<div class="row">
+			
+			<div class="col-md-5" style="text-align: left">
+				<ul class="uninett-ul simpleSkip" style="padding: 0px">
+					{{#client.privacypolicyurl}}
+						<li class="uninett-ul-li"><a target="_blank" href="{{.}}">{{_.applicationprivacy}}</a></li>
+					{{/client.privacypolicyurl}}
+					{{#client.supporturl}}
+						<li class="uninett-ul-li"><a target="_blank" href="{{.}}">{{_.applicationsupport}}</a></li>
+					{{/client.supporturl}}
+					{{#client.homepageurl}}
+						<li class="uninett-ul-li"><a target="_blank" href="{{.}}">{{_.applicationhomepage}}</a></li>
+					{{/client.homepageurl}}
+				</ul>
+			</div>
+
+			{{#ownerOrg}}
+				<div class="col-md-5" style="text-align: right">
+					<p style="font-style: italic; font-size: 95%">{{_.appprovidedby}}</p>
+					<p class=" ownerName" style=""><strong>{{org.name.nb}}</strong></p>
+
+					<p class="simpleSkip"><code>{{client.host}}</code></p>
+				</div>
+
+				<div class="col-md-2" style="text-align: left">
+					<img class="orglogo orglogoSmall" style="max-height: 64px; max-width: 64px" src="{{org.logoURL}}">
+				</div>
+			{{/ownerOrg}}
+
+			{{#owner}}
+				<div class="col-md-10">
+					<p style="font-style: italic; font-size: 95%">{{_.appprovidedby}}</p>
+					<p class="ownerName"><strong>{{owner.name}}</strong></p>
+					<p class="ownerMail">
+						<a href="mailto:{{owner.mail}}">{{owner.email}}</a>
+					</p>
+
+					<p class="simpleSkip"><code>{{client.host}}</code></p>
+
+				</div>
+				<div class="col-md-2">
+					<img class="orglogo orglogoSmall" style="max-height: 64px; max-width: 64px" src="/user/media/{{owner.profilephoto}}">
+				</div>
+			{{/owner}}
+		</div>
+
+	</div>
 
 
 </div><!-- Panel -->
