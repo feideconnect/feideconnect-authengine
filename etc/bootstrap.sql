@@ -36,6 +36,8 @@ DROP INDEX IF EXISTS oauth_authorizations_scopes_idx;
 DROP TABLE IF EXISTS apigk;
 DROP INDEX IF EXISTS apigk_owner_idx;
 DROP INDEX IF EXISTS apigk_organization_idx;
+DROP INDEX IF EXISTS apigk_scopes_idx;
+DROP INDEX IF EXISTS apigk_scopes_requested_idx;
 
 DROP TABLE IF EXISTS group_members;
 DROP INDEX IF EXISTS group_members_groupid_idx;
@@ -239,6 +241,9 @@ CREATE TABLE apigk (
 	systemdescr text,
 	logo blob,
 
+	scopes set<text>,
+	scopes_requested set<text>,
+
 	endpoints list<text>,
 
 	trust text, 		-- JSON Structure
@@ -260,6 +265,8 @@ CREATE TABLE apigk (
 CREATE INDEX apigk_owner_idx ON apigk(owner);
 CREATE INDEX apigk_organization_idx ON apigk(organization);
 CREATE INDEX apigk_status_idx ON apigk(status);
+CREATE INDEX apigk_scopes_idx 			ON apigk(scopes);
+CREATE INDEX apigk_scopes_requested_idx 	ON apigk(scopes_requested);
 
 CREATE TABLE grep_codes (
 	id text PRIMARY KEY,
