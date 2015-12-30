@@ -1,7 +1,8 @@
 language: php
 php:
 # - 5.4
-- 5.5
+ - 5.5
+ - 7.0
 # - 5.6
 services:
 - cassandra
@@ -14,9 +15,9 @@ before_install:
 install:
 - composer install
 before_script:
-- cqlsh 127.0.0.1 -f etc/bootstrap.init-keyspace-ci.sql
-- cqlsh 127.0.0.1 -f etc/bootstrap.sql -k feideconnect
-- cqlsh 127.0.0.1 -f etc/ci/testdata.sql
+# - cqlsh 127.0.0.1 -f etc/bootstrap.init-keyspace-ci.sql
+# - cqlsh 127.0.0.1 -f etc/bootstrap.sql -k feideconnect
+# - cqlsh 127.0.0.1 -f etc/ci/testdata.sql
 - sudo ln -s ../../../etc/ci/simplesamlphp-metadata vendor/andreassolberg/simplesamlphp/metadata
 - sudo ln -s ../../../etc/ci/simplesamlphp-config vendor/andreassolberg/simplesamlphp/config
 - sudo cp ~/.phpenv/versions/$(phpenv version-name)/etc/php-fpm.conf.default ~/.phpenv/versions/$(phpenv version-name)/etc/php-fpm.conf
@@ -33,7 +34,8 @@ before_script:
 script:
 #- phpunit --debug -v --coverage-clover build/logs/clover.xml --bootstrap lib/_autoload.php tests
 # - phpunit --debug -v --bootstrap lib/_autoload.php tests/OAuth.php
-- phantomjs tests-phantomjs/main.js
+# - phantomjs tests-phantomjs/main.js
+- phpunit
 # Run PHPinfo
 # - curl http://127.0.0.1/phpinfo
 - cat logs/error.log
