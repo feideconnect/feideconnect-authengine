@@ -15,17 +15,25 @@ use FeideConnect\Logger;
 
 class AuthorizationUI {
 
-    // TODO: Remove scopesinquestion, remainingscopes og organization.
-
     protected $fixedBypass = null;
     protected $fixedFirstTime = null;
     protected $fixedSimpleView = null;
     protected $fixedMandatory = null;
 
-    protected $data;
+    protected $storage;
 
-    // $client, $request, $account, $user, $redirect_uri, $scopesInQuestion, $ae->getRemainingScopes(), $organization
-    // public function __construct($client, $request, $account, $user, $redirect_uri, $scopesInQuestion, $ae, $organization) {
+    protected $client;
+    protected $request;
+    protected $account;
+    protected $user;
+
+    protected $redirect_uri;
+    protected $needsAuthorization;
+    protected $scopesInQuestion;
+    protected $remainingScopes;
+
+    protected $organization;
+
     public function __construct($client, $request, $account, $user, $ae) {
 
         $this->storage = StorageProvider::getStorage();
@@ -263,8 +271,6 @@ class AuthorizationUI {
         return $response;
 
     }
-
-
 
 
 
