@@ -72,6 +72,8 @@ class ScopesInspector {
             'nestedPermissions' => [],
         );
 
+        // echo '<pre>'; print_r($apigk); print_r($apigk->getScopeList()); exit;
+
         $nsi = new ScopesInspector($apigk->getScopeList());
         $apiInfo['nestedPermissions'] = $nsi->getView();
 

@@ -191,7 +191,6 @@ class AuthorizationUI {
             $isMandatory = $this->fixedMandatory;
         }
 
-
         if (!$isMandatory && $this->user->isBelowAgeLimit()) {
             throw new UserCannotAuthorizeException();
         }

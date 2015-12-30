@@ -11,6 +11,7 @@ class APIGK extends \FeideConnect\Data\Model {
     protected static $_properties = array(
         "id", "name", "descr",
         "owner", "organization",  "endpoints", "expose", "httpscertpinned", "requireuser", "scopedef", "trust", "logo",
+        "scopes", "scopes_requested",
         "privacypolicyurl", "systemdescr",
         "status", "created", "updated"
     );
@@ -32,7 +33,6 @@ class APIGK extends \FeideConnect\Data\Model {
     }
 
     public function getScopeList() {
-        return ['userinfo', 'userid', 'email', 'groups'];
         if (empty($this->scopes)) {
             return [];
         }
