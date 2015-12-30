@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<title>TOU</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<meta name="description" content="Feide Connect Grant" />
+		<meta name="author" content="UNINETT AS" />
+
+		<link rel="shortcut icon" href="/static/components/uninett-bootstrap-theme/ico/favicon.ico" />
+
+		<!-- Bootstrap core CSS -->
+		<link type="text/css" href="/static/components/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet" />
+		<link type="text/css" href="/static/components/uninett-bootstrap-theme/css/uninett.css" rel="stylesheet" />
+		<link type="text/css" href="/static/components/font-awsome/css/font-awesome.min.css" rel="stylesheet"  />
+
+		<!-- Custom styles for this page -->
+		<link type="text/css" href="/static/css/grant.css" rel="stylesheet" />
+
+		<!-- Javascript libraries -->
+		<script type="text/javascript" src="/static/components/jquery/dist/jquery.min.js"></script>
+		<script type="text/javascript" src="/static/components/bootstrap/dist/js/bootstrap.min.js"></script>
+
+
+	</head>
+
+
+	<body>
+
+
+		<div id="" style="">
+
+		<!--
+			<div class="container" style="margin-top: 1em" >
+				<div id="langselector" style="float: right; font-size: 95%"></div>
+			</div>
+		-->
+
+			<div class="container mainContainer" >
+
+
+				<div class="row grantUserLine">
+
+					<div class="media grantDetails">
+						<div class="pull-right userExtraBox" >
+							<p><a href="http://min.feideconnect.no/#!/">
+								{{_.myservices}}
+								<i class="fa fa-chevron-left"></i>
+							</a></p>
+							<p><a href="https://auth.feideconnect.no/logout">
+								{{_.logout}}
+								<i class="fa fa-chevron-left"></i>
+							</a></p>
+						</div>
+
+
+						{{#auth}}
+						<div class="media-body" style="padding: 5px">
+							<h4 class="media-heading">
+								<!-- <span class="glyphicon glyphicon-user"></span> -->
+								{{name}}
+							</h4>
+
+							<p class="org">
+								{{organization}}
+							</p>
+
+						</div><!-- media-body -->
+						{{/auth}}
+						
+					</div><!-- media -->
+
+				</div>
+
+
+
+
+				<div class="row uninett-padded">
+					<div class="col-md-12" id="tousection">
+
+
+					{{> grant.bruksvilkar}}
+
+
+					</div><!-- column -->
+
+
+				</div><!-- row -->
+
+
+			</div><!-- container -->
+
+
+
+			<div class="container" style="color: #bba; margin-top: 4em;" >
+				
+				<p style="text-align: right; font-size: 80%; margin-bottom: 0px; padding-bottom: 0px">
+					<a target="_blank" href="http://feideconnect.no/sluttbrukere/">
+						{{_.readmoreconnect}}
+						<i class="fa fa-chevron-left"></i>
+					</a>
+				</p>
+				<p style="text-align: right; font-size: 80%; margin-top: 0px; padding-top: 0px">
+					<a target="_blank" href="http://feideconnect.no/personvern/">
+						{{_.connectpersonvern}}
+						<i class="fa fa-chevron-left"></i>
+					</a>
+				</p>
+
+			</div>
+
+
+
+		</div>
+
+	</body>
+
+</html>
+
+
+
+

@@ -48,7 +48,16 @@ body.simpleGrant .simpleOnly {
 
 
 
-
+#tousection h3 {
+	margin-top: 1em;
+}
+#tousection a {
+	border-bottom: 1px dotted #006;
+}
+#tousection a:hover {
+	border-bottom: 1px solid #006;
+	text-decoration: none;
+}
 
 
 /* Grant Entry */

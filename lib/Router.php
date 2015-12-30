@@ -40,6 +40,10 @@ class Router {
         $this->router->post('/oauth/token', ['FeideConnect\Controllers\OAuth', 'token']);
 
 
+        // $this->router->get('/oauth/authorizationui', ['FeideConnect\Controllers\GrantDebug', 'debug']);
+        $this->router->get('/tou', ['FeideConnect\Controllers\TOU', 'showAuthenticated']);
+        $this->router->get('/tou/generic', ['FeideConnect\Controllers\TOU', 'showGeneric']);
+
         // Informatio about authentication.
         $this->router->get('/auth', ['FeideConnect\Controllers\Auth', 'userdebug']);
         $this->router->get('/userinfo', ['FeideConnect\Controllers\Auth', 'userinfo']);
