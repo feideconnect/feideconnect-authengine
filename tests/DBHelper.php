@@ -78,6 +78,7 @@ class DBHelper extends \PHPUnit_Framework_TestCase {
             'id' => $apiid,
             'name' => 'Test API',
             'owner' => $user->userid,
+            'scopes' => ['userid', 'name', 'email', 'userid-feide'],
             'scopedef' => json_encode(array(
                 'title' => 'Basic',
                 'descr' => 'Test api',
