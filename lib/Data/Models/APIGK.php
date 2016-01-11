@@ -21,7 +21,7 @@ class APIGK extends \FeideConnect\Data\Model {
         "created" => "timestamp",
         "updated" => "timestamp"
     ];
-
+    private static $apiScopeRE = '/^gk_([a-z0-9\-]+)(_([a-z0-9\-]+))?$/';
 
     public function __construct($props) {
 
@@ -32,6 +32,22 @@ class APIGK extends \FeideConnect\Data\Model {
             unset($props["scopedef"]);
         }
 
+    }
+
+    public static function isApiScope($scope) {
+        return preg_match(self::$apiScopeRE, $scope, $matches);
+    }
+
+    public static function parseScope($scope) {
+        if (!preg_match(self::$apiScopeRE, $scope, $matches)) {
+            throw new UnexpectedValueException("Not a api scope");
+        }
+        $apigkid = $matches[1];
+        $subscope = NULL;
+        if (isset($matches[3])) {
+            $subscope = $matches[3];
+        }
+        return [$apigkid, $subscope];
     }
 
     public function getScopeList() {

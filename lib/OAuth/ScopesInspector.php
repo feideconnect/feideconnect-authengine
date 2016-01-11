@@ -5,6 +5,7 @@ namespace FeideConnect\OAuth;
 
 use FeideConnect\Config;
 use FeideConnect\Data\StorageProvider;
+use FeideConnect\Data\Models\APIGK;
 use FeideConnect\Logger;
 use FeideConnect\Localization;
 
@@ -102,18 +103,18 @@ class ScopesInspector {
     public function getScopeAPIGKs() {
         $apis = [];
         foreach ($this->scopes as $scope) {
-            if (!preg_match('/^gk_([a-z0-9\-]+)(_([a-z0-9\-]+))?$/', $scope, $matches)) {
+            if (!APIGK::isApiScope($scope)) {
                 continue;
             }
 
-            $apigkid = $matches[1];
+            list($apigkid, $subscope) = APIGK::parseScope($scope);
             try {
                 $apiInfo = $this->getAPI($apigkid);
             } catch (\Exception $e) {
                 continue;
             }
-            if (isset($matches[3])) {
-                $apiInfo['localScopes'][] = $matches[3];
+            if (isset($subscope)) {
+                $apiInfo['localScopes'][] = $subscope;
             }
             $apis[$scope] = $apiInfo;
         }
