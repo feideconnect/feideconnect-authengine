@@ -26,13 +26,14 @@ class ScopesInspector {
 
     protected $apis = [], $owners = [], $orgs = [];
 
-    public function __construct($scopes) {
+    public function __construct($scopes, $authorizationEvaluator) {
         $this->scopes = $scopes;
         $this->globalScopes = Config::readJSONfile('scopedef.json');
 
         $this->storage = StorageProvider::getStorage();
 
         $this->apis = [];
+        $this->authorizationEvaluator = $authorizationEvaluator;
     }
 
     protected function getOwner($ownerid) {
@@ -51,20 +52,13 @@ class ScopesInspector {
         return $this->orgs[$orgid];
     }
 
-    protected function getAPI($apigkid) {
+    protected function getAPIinfo($apigk) {
 
-        if (isset($this->apis[$apigkid])) {
-            if ($this->apis[$apigkid] === null) {
+        if (isset($this->apis[$apigk->id])) {
+            if ($this->apis[$apigk->id] === null) {
                 throw new \Exception("APIGK not found " . $apigkid);
             }
-            return $this->apis[$apigkid];
-        }
-
-        $apigk = $this->storage->getAPIGK($apigkid);
-
-        if ($apigk === null) {
-            $this->apis[$apigkid] = null;
-            throw new \Exception("APIGK not found " . $apigkid);
+            return $this->apis[$apigk->id];
         }
 
         $apiInfo = array(
@@ -75,7 +69,7 @@ class ScopesInspector {
 
         // echo '<pre>'; print_r($apigk); print_r($apigk->getScopeList()); exit;
 
-        $nsi = new ScopesInspector($apigk->getScopeList());
+        $nsi = new ScopesInspector($apigk->getScopeList(), $this->authorizationEvaluator);
         $apiInfo['nestedPermissions'] = $nsi->getView();
 
         try {
@@ -93,23 +87,21 @@ class ScopesInspector {
                 }
             }
         } catch (\Exception $e) {
-            $this->apis[$apigkid] = null;
-            throw new \Exception("APIGK not found " . $apigkid);
+            $this->apis[$apigk->id] = null;
+            throw new \Exception("APIGK owner/org not found " . $apigkid);
         }
-        $this->apis[$apigkid] = $apiInfo;
+        $this->apis[$apigk->id] = $apiInfo;
         return $apiInfo;
     }
 
     public function getScopeAPIGKs() {
         $apis = [];
-        foreach ($this->scopes as $scope) {
-            if (!APIGK::isApiScope($scope)) {
-                continue;
-            }
+        $scopeApis = $this->authorizationEvaluator->getScopeAPIGKs($this->scopes);
+        foreach ($scopeApis as $scope => $apigk) {
 
             list($apigkid, $subscope) = APIGK::parseScope($scope);
             try {
-                $apiInfo = $this->getAPI($apigkid);
+                $apiInfo = $this->getAPIinfo($apigk);
             } catch (\Exception $e) {
                 continue;
             }

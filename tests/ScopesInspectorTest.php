@@ -2,6 +2,8 @@
 
 namespace tests;
 
+use FeideConnect\OAuth\AuthorizationEvaluator;
+use FeideConnect\OAuth\Messages\AuthorizationRequest;
 use FeideConnect\OAuth\ScopesInspector;
 
 class ScopesInspectorTest extends DBHelper {
@@ -9,6 +11,13 @@ class ScopesInspectorTest extends DBHelper {
 
     public function setUp() {
         $this->api = $this->apigk();
+        $this->client = $this->client();
+        $req = new AuthorizationRequest([
+            "response_type" => "code",
+            "scope" => "",
+            "client_id" => "f1343f3a-79cc-424f-9233-5fe33f8bbd56"
+        ]);
+        $this->aevaluator = new AuthorizationEvaluator($this->db, $this->client, $req);
     }
 
     public function myAssertSubset($a, $b) {
@@ -19,7 +28,7 @@ class ScopesInspectorTest extends DBHelper {
     }
 
     public function testGlobalScope() {
-        $test = new ScopesInspector(['userinfo']);
+        $test = new ScopesInspector(['userinfo'], $this->aevaluator);
         $res = $test->getInfo();
         $this->assertEquals($res, array(
             'hasAPIs' => false,
@@ -35,7 +44,7 @@ class ScopesInspectorTest extends DBHelper {
     }
 
     public function testUnknownScope() {
-        $test = new ScopesInspector(['ugle']);
+        $test = new ScopesInspector(['ugle'], $this->aevaluator);
         $res = $test->getInfo();
         $this->assertEquals($res, array(
             'hasAPIs' => false,
@@ -48,7 +57,7 @@ class ScopesInspectorTest extends DBHelper {
     }
 
     public function testUnknownGKScope() {
-        $test = new ScopesInspector(['gk_ugle']);
+        $test = new ScopesInspector(['gk_ugle'], $this->aevaluator);
         $res = $test->getInfo();
         $this->assertEquals($res, array(
             'hasAPIs' => false,
@@ -61,7 +70,7 @@ class ScopesInspectorTest extends DBHelper {
     }
 
     public function testApiBasic() {
-        $test = new ScopesInspector(['gk_test']);
+        $test = new ScopesInspector(['gk_test'], $this->aevaluator);
         $res = $test->getInfo();
         $this->myAssertSubset(array(
             'hasAPIs' => true,
@@ -93,7 +102,7 @@ class ScopesInspectorTest extends DBHelper {
     }
 
     public function testApiSubscope() {
-        $test = new ScopesInspector(['gk_test', 'gk_test_a']);
+        $test = new ScopesInspector(['gk_test', 'gk_test_a'], $this->aevaluator);
         $res = $test->getInfo();
         $this->myAssertSubset(array(
             'hasAPIs' => true,
@@ -136,7 +145,7 @@ class ScopesInspectorTest extends DBHelper {
         $this->api->organization = $org->id;
         $this->db->saveAPIGK($this->api);
 
-        $test = new ScopesInspector(['gk_test']);
+        $test = new ScopesInspector(['gk_test'], $this->aevaluator);
         $res = $test->getInfo();
         $this->assertArrayHasKey('apis', $res);
         $apis = $res['apis'];

@@ -6,6 +6,7 @@ namespace FeideConnect\OAuth;
 use FeideConnect\Logger;
 use FeideConnect\OAuth\Exceptions;
 use FeideConnect\Data\Models\Authorization;
+use FeideConnect\Data\Models\APIGK;
 
 /**
 *
@@ -50,8 +51,6 @@ class AuthorizationEvaluator {
             $scopes[$scope] = true;
         }
 
-        $scopesinspector = new ScopesInspector($scopelist);
-
         $feideuser = false;
         if ($this->user !== null) {
             $realms = $this->user->getFeideRealms();
@@ -62,8 +61,7 @@ class AuthorizationEvaluator {
 
         $orgmoderatedscopes = array();
 
-        foreach ($scopesinspector->getScopeAPIGKs($scopelist) as $scope => $apigkinfo) {
-            $apigk = $apigkinfo['apigk'];
+        foreach ($this->getScopeAPIGKs($scopelist) as $scope => $apigk) {
             if ($apigk->isOrgModerated($scope)) {
                 $orgmoderatedscopes[] = $scope;
             }
@@ -209,6 +207,46 @@ class AuthorizationEvaluator {
         return $this->scopesRemaining;
     }
 
+
+    protected function getAPI($apigkid) {
+
+        if (isset($this->apis[$apigkid])) {
+            if ($this->apis[$apigkid] === null) {
+                throw new \Exception("APIGK not found " . $apigkid);
+            }
+            return $this->apis[$apigkid];
+        }
+
+        $apigk = $this->storage->getAPIGK($apigkid);
+
+        if ($apigk === null) {
+            $this->apis[$apigkid] = null;
+            throw new \Exception("APIGK not found " . $apigkid);
+        }
+        $this->apis[$apigkid] = $apigk;
+        return $apigk;
+
+    }
+
+    public function getScopeAPIGKs($scopes) {
+        $apis = [];
+        foreach ($scopes as $scope) {
+            if (!APIGK::isApiScope($scope)) {
+                continue;
+            }
+            // echo "Processing " . $matches[1];
+
+            $apigkid = APIGK::parseScope($scope)[0];
+            try {
+                $apigk = $this->getAPI($apigkid);
+            } catch (\Exception $e) {
+
+                continue;
+            }
+            $apis[$scope] = $apigk;
+        }
+        return $apis;
+    }
 
     /**
      * Does the user needs to perform a new authorization?

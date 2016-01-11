@@ -43,6 +43,7 @@ class AuthorizationUI {
         $this->account = $account;
         $this->user = $user;
 
+        $this->authorizationEvaluator = $ae;
         $this->redirect_uri = $ae->getValidatedRedirectURI();
         $this->needsAuthorization = $ae->needsAuthorization();
         $this->scopesInQuestion = $ae->getScopesInQuestion();
@@ -184,7 +185,7 @@ class AuthorizationUI {
     public function getAuthorizationInfo(&$data) {
 
 
-        $scopesInspector = new ScopesInspector($this->scopesInQuestion);
+        $scopesInspector = new ScopesInspector($this->scopesInQuestion, $this->authorizationEvaluator);
         $isMandatory = MandatoryClientInspector::isClientMandatory($this->account, $this->client);
 
         if ($this->fixedMandatory !== null) {
