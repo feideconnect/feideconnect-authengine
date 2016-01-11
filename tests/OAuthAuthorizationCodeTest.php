@@ -59,6 +59,7 @@ class OAuthAuthorizationCodeTest extends DBHelper {
         $_REQUEST['acresponse'] = '{"id": "https://idp.feide.no","subid":"example.org", "userids": ["feide:testuser@example.org"]}';
         $_REQUEST['verifier'] = $this->user->getVerifier();
         $_REQUEST['bruksvilkar'] = 'yes';
+        $_REQUEST['approved_scopes'] = 'userinfo groups';
 
         $response = $router->dispatchCustom('GET', '/oauth/authorization');
         $this->assertInstanceOf('FeideConnect\HTTP\Redirect', $response, 'Expected /oauth/authorization endpoint to redirect');

@@ -153,7 +153,8 @@ class OAuthAuthorization {
                 throw new \Exception('Bruksvilkår not accepted.');
             }
 
-            $authorization = $this->aevaluator->getUpdatedAuthorization();
+            $scopes_approved = explode(' ', $_REQUEST['approved_scopes']);
+            $authorization = $this->aevaluator->getUpdatedAuthorization($scopes_approved);
 
             // echo "<pre>";
             // print_r($user->getBasicUserInfo());
@@ -163,6 +164,11 @@ class OAuthAuthorization {
             $this->user->updateUserBasics($this->account);
 
             $this->storage->saveAuthorization($authorization);
+
+            $this->aevaluator->getAuthorization();
+            if ($this->aevaluator->needsAuthorization() ) {
+                return $aui->show();
+            }
 
 
         } else {

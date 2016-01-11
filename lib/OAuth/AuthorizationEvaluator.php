@@ -26,11 +26,14 @@ class AuthorizationEvaluator {
         $this->user = $user;
 
         $this->authorization = null;
+        $this->getAuthorization();
+    }
 
-        if ($user !== null) {
+    public function getAuthorization() {
+        $this->authorization = null;
+        if ($this->user !== null) {
             $this->authorization = $this->storage->getAuthorization($this->user->userid, $this->client->id);
         }
-
         $this->evaluateScopes();
     }
 
@@ -41,11 +44,7 @@ class AuthorizationEvaluator {
      */
     public function setUser($user) {
         $this->user = $user;
-        $this->authorization = null;
-        if ($user !== null) {
-            $this->authorization = $this->storage->getAuthorization($this->user->userid, $this->client->id);
-        }
-        $this->evaluateScopes();
+        $this->getAuthorization();
     }
 
     /**
@@ -63,7 +62,7 @@ class AuthorizationEvaluator {
      * Will add all remaining scopes from scopesinquestion to the authorization object.
      * @return [type] [description]
      */
-    public function getUpdatedAuthorization() {
+    public function getUpdatedAuthorization($scopes) {
         $this->requireUser();
         $a = $this->authorization;
         if ($a === null) {
@@ -75,7 +74,13 @@ class AuthorizationEvaluator {
             ]);
         }
         $q = $this->getScopesInQuestion();
-        $a->addScopes($q);
+        $good_scopes = [];
+        foreach ($scopes as $scope) {
+            if (in_array($scope, $q)) {
+                $good_scopes[] = $scope;
+            }
+        }
+        $a->addScopes($good_scopes);
         return $a;
     }
 

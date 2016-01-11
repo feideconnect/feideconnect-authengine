@@ -92,7 +92,7 @@ class AuthorizationUI {
         $postattrs = $_REQUEST;
         $postattrs['client_id'] = $this->client->id;
         $postattrs['verifier'] = $this->user->getVerifier();
-        // $postattrs['scopes'] = $scopestr;
+        $postattrs['approved_scopes'] = join(" ", $this->scopesInQuestion);
         // $postattrs['return'] = Utils\URL::selfURL();
 
         if (!$this->isFirstTime()) {

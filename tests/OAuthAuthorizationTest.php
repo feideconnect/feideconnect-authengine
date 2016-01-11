@@ -119,11 +119,12 @@ class OAuthAuthorizationTest extends DBHelper {
         $this->doRun();
     }
 
-    public function testAuthorizationToCode() {
+    public function testAuthorizationToCode($approved_scopes = 'userinfo groups') {
         $_REQUEST['acresponse'] = '{"id": "https://idp.feide.no","subid":"example.org"}';
         $_REQUEST['verifier'] = $this->user->getVerifier();
         $_REQUEST['bruksvilkar'] = 'yes';
         $_REQUEST['redirect_uri'] = 'http://example.org';
+        $_REQUEST['approved_scopes'] = $approved_scopes;
 
         $response = $this->doRun();
         $this->assertInstanceOf('FeideConnect\HTTP\Redirect', $response, 'Expected /oauth/authorization endpoint to redirect');
@@ -138,13 +139,14 @@ class OAuthAuthorizationTest extends DBHelper {
         return $params;
     }
 
-    public function testAuthorizationToToken($type = 'token') {
+    public function testAuthorizationToToken($type = 'token', $approved_scopes = 'userinfo groups') {
         $_REQUEST['acresponse'] = '{"id": "https://idp.feide.no","subid":"example.org"}';
         $_REQUEST['verifier'] = $this->user->getVerifier();
         $_REQUEST['bruksvilkar'] = 'yes';
         $_REQUEST['redirect_uri'] = 'http://example.org';
         $_REQUEST['state'] = '12354';
         $_REQUEST['response_type'] = $type;
+        $_REQUEST['approved_scopes'] = $approved_scopes;
 
         $response = $this->doRun();
         $this->assertInstanceOf('FeideConnect\HTTP\Redirect', $response, 'Expected /oauth/authorization endpoint to redirect');
@@ -164,4 +166,22 @@ class OAuthAuthorizationTest extends DBHelper {
         $this->assertEquals($params['token_type'], 'Bearer');
         return $params;
     }
+
+    public function testAuthorizationNotAllScopesAuthorized() {
+        $_REQUEST['acresponse'] = '{"id": "https://idp.feide.no","subid":"example.org"}';
+        $_REQUEST['verifier'] = $this->user->getVerifier();
+        $_REQUEST['bruksvilkar'] = 'yes';
+        $_REQUEST['redirect_uri'] = 'http://example.org';
+        $_REQUEST['approved_scopes'] = 'userinfo';
+
+        $response = $this->doRun();
+        $this->assertInstanceOf('FeideConnect\HTTP\LocalizedTemplatedHTMLResponse', $response, 'Expected /oauth/authorization endpoint to return html');
+
+        $data = $response->getData();
+        $this->assertArrayHasKey('posturl', $data);
+        $this->assertEquals($data['posturl'], 'http://localhost/oauth/authorization');
+        $this->assertArrayHasKey('needsAuthorization', $data);
+        $this->assertEquals($data['needsAuthorization'], true);
+    }
+
 }
