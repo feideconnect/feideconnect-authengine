@@ -79,11 +79,11 @@ class APIGK extends \FeideConnect\Data\Model {
             throw new \Exception("APIGK does not have scopedef set" . $this->id);
         }
         $scopedef = $this->scopedef;
-        if (!preg_match('/^gk_([a-z0-9\-]+)(_([a-z0-9\-]+))?$/', $scope, $matches)) {
+        list($apigkid, $subscope) = self::parseScope($scope);
+        if ($apigkid != $this->id) {
             throw new \Exception("Incorrect APIGK (" . $this->id . ") for scope: " . $scope);
         }
-        if (isset($matches[3])) {
-            $subscope = $matches[3];
+        if (isset($subscope)) {
             if (isset($scopedef["subscopes"]) && isset($this->scopedef["subscopes"][$subscope])) {
                 return $this->scopedef["subscopes"][$subscope];
             }
