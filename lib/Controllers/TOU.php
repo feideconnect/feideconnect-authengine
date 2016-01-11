@@ -3,14 +3,7 @@
 
 namespace FeideConnect\Controllers;
 
-use FeideConnect\HTTP\HTTPResponse;
-use FeideConnect\HTTP\JSONResponse;
-use FeideConnect\HTTP\Redirect;
 use FeideConnect\Authentication;
-use FeideConnect\OAuth\APIProtector;
-use FeideConnect\OAuth\ScopesInspector;
-use FeideConnect\Data\StorageProvider;
-use FeideConnect\Utils\URL;
 use FeideConnect\HTTP\LocalizedTemplatedHTMLResponse;
 
 
