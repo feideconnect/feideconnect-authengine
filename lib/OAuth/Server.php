@@ -255,7 +255,9 @@ class Server {
                 throw new OAuthException('unsupported_grant_type', 'Invalid [grant_type] provided to token endpoint.');
             }
 
-            $requestedScopes = OAuthUtils::evaluateScopes($client, $user, $tokenrequest->scope);
+            $aevaluator = new AuthorizationEvaluator($this->storage, $client, $tokenrequest, $user);
+
+            $requestedScopes = $aevaluator->getScopesInQuestion();
             $tokenresponse = OAuthUtils::generateTokenResponse($client, $user, $requestedScopes, $tokenrequest->grant_type);
             return $tokenresponse->sendBodyJSON();
 
