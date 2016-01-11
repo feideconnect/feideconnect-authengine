@@ -29,6 +29,74 @@ class AuthorizationEvaluator {
         $this->getAuthorization();
     }
 
+    /**
+     * Return list ov valid scopes for the given user, client and list of requested scopes
+     *
+     * Verifies that the requested scopes are valid for the given
+     * client, and that any organization moderated scopes are approved
+     * for the relevant organizations of the given user
+     *
+     * @return array list of valid scopes
+     */
+    public function getEffectiveScopes() {
+        $scopelist = $clientscopes = $this->client->getScopeList();
+        $requestedScopes = $this->request->scope;
+        if (!empty($requestedScopes)) {
+            // Only consider scopes that the client is authorized to ask for.
+            $scopelist = array_intersect($requestedScopes, $scopelist);
+        }
+        $scopes = array();
+        foreach ($scopelist as $scope) {
+            $scopes[$scope] = true;
+        }
+
+        $scopesinspector = new ScopesInspector($scopelist);
+
+        $feideuser = false;
+        if ($this->user !== null) {
+            $realms = $this->user->getFeideRealms();
+            if (count($realms) > 0) {
+                $feideuser = true;
+            }
+        }
+
+        $orgmoderatedscopes = array();
+
+        foreach ($scopesinspector->getScopeAPIGKs($scopelist) as $scope => $apigkinfo) {
+            $apigk = $apigkinfo['apigk'];
+            if ($apigk->isOrgModerated($scope)) {
+                $orgmoderatedscopes[] = $scope;
+            }
+        }
+        if (!$feideuser) {
+            foreach ($orgmoderatedscopes as $scope) {
+                unset($scopes[$scope]);
+            }
+        } else {
+            foreach ($orgmoderatedscopes as $scope) {
+                foreach ($realms as $realm) {
+                    if (array_search($scope, $this->client->getOrgAuthorization($realm)) === false) {
+                        unset($scopes[$scope]);
+                    }
+                }
+            }
+        }
+
+        $result = array_keys($scopes);
+        $logdata = array(
+            'requested_scopes' => $requestedScopes,
+            'client_scopes' => $clientscopes,
+            'org_moderated_scopes' => $orgmoderatedscopes,
+            'feideuser' => $feideuser,
+            'result_scopes' => $result,
+        );
+        if ($feideuser) {
+            $logdata['user_realms'] = $realms;
+        }
+        Logger::debug('Evaluated scopes', $logdata);
+        return $result;
+    }
+
     public function getAuthorization() {
         $this->authorization = null;
         if ($this->user !== null) {
@@ -87,7 +155,7 @@ class AuthorizationEvaluator {
 
     private function evaluateScopes() {
 
-        $this->scopesInQuestion = OAuthUtils::evaluateScopes($this->client, $this->user, $this->request->scope);
+        $this->scopesInQuestion = $this->getEffectiveScopes();
 
         if ($this->user === null) {
             return;
