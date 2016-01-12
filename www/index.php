@@ -15,6 +15,7 @@ use FeideConnect\HTTP\HTTPResponse;
 use FeideConnect\HTTP\EmptyResponse;
 use FeideConnect\HTTP\TemplatedHTMLResponse;
 use FeideConnect\Router;
+use FeideConnect\Logger;
 use Phroute\Phroute;
 
 require_once(dirname(dirname(__FILE__)) . '/lib/_autoload.php');
@@ -103,6 +104,7 @@ if (!($response instanceof HTTPResponse)) {
     ]);
 }
 
+$response->setHeader('X-Request-Id', Logger::requestId());
 echo $response->send();
 
 

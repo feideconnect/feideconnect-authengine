@@ -39,7 +39,7 @@ class Logger {
         }
     }
 
-    protected static function requestId() {
+    public static function requestId() {
         if (self::$requestId === null) {
             self::$requestId = Utils\Misc::genUUID();
         }
