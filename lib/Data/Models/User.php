@@ -6,6 +6,7 @@ use FeideConnect\Logger;
 use FeideConnect\Config;
 use FeideConnect\Authentication\Account;
 use FeideConnect\Data\Model;
+use FeideConnect\Utils\Strings;
 use Cassandra\Type\Uuid;
 use Cassandra\Type\CollectionMap;
 use Cassandra\Type\CollectionSet;
@@ -116,13 +117,6 @@ class User extends \FeideConnect\Data\Model {
     }
 
 
-    public static function startsWith($haystack, $needle) {
-        $length = strlen($needle);
-        return (substr($haystack, 0, $length) === $needle);
-    }
-
-
-
     public function getUserIDsecPrefixed($prefix) {
         $res = [];
         if (empty($this->userid_sec)) {
@@ -130,7 +124,7 @@ class User extends \FeideConnect\Data\Model {
             return $res;
         }
         foreach ($this->userid_sec as $k) {
-            if (self::startsWith($k, $prefix)) {
+            if (Strings::startsWith($k, $prefix)) {
                 $res[] = $k;
             }
         }
