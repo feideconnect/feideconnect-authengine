@@ -41,6 +41,10 @@ define(function(require, exports, module) {
 				$("#mcontent").show();
 			}
 
+			// Uncomment this to force "samtykkeerklæring" to show immediately. 
+			// Used for debugging.
+			// $('#myModal').modal('show');
+
 			this.loadDictionary();
 
     	},
