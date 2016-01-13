@@ -127,4 +127,40 @@ class AuthorizationEvaluatorTest extends DBHelper {
         $this->assertEquals(['userinfo'], $this->aevaluator->getEffectiveScopes());
     }
 
+    public function testNeedsAuthorizationNoAuthorization() {
+        $this->aevaluator = new AuthorizationEvaluator($this->db, $this->client, $this->getRequest(), $this->user);
+        $this->assertTrue($this->aevaluator->needsAuthorization());
+    }
+
+    public function testNeedsAuthorizationMissingScopes() {
+        $authz = $this->authorization($this->client, $this->user, [], []);
+        $this->aevaluator = new AuthorizationEvaluator($this->db, $this->client, $this->getRequest(), $this->user);
+        $this->assertTrue($this->aevaluator->needsAuthorization());
+    }
+
+    public function testNeedsAuthorizationMissingAPIGKScopes() {
+        $scopes = ['gk_test', 'userinfo'];
+        $this->client->scopes = $scopes;
+        $authz = $this->authorization($this->client, $this->user, $scopes, []);
+        $this->aevaluator = new AuthorizationEvaluator($this->db, $this->client, $this->getRequest(null, $scopes), $this->user);
+        $this->assertTrue($this->aevaluator->needsAuthorization());
+        $authz = $this->authorization($this->client, $this->user, $scopes, ["test" => ["groups"]]);
+        $this->aevaluator->getAuthorization();
+        $this->assertTrue($this->aevaluator->needsAuthorization());        
+    }
+
+    public function testNeedsAuthorizationOKNoApis() {
+        $authz = $this->authorization($this->client, $this->user, $this->client->scopes, []);
+        $this->aevaluator = new AuthorizationEvaluator($this->db, $this->client, $this->getRequest(), $this->user);
+        $this->assertFalse($this->aevaluator->needsAuthorization());
+    }
+
+    public function testNeedsAuthorizationOKWithApis() {
+        $scopes = ['gk_test', 'userinfo'];
+        $this->client->scopes = $scopes;
+        $authz = $this->authorization($this->client, $this->user, $scopes, ["test" => ['userid', 'name', 'email', 'userid-feide']]);
+        $this->aevaluator = new AuthorizationEvaluator($this->db, $this->client, $this->getRequest(null, $scopes), $this->user);
+        $this->assertFalse($this->aevaluator->needsAuthorization());
+    }
+        
 }

@@ -129,4 +129,15 @@ class DBHelper extends \PHPUnit_Framework_TestCase {
        $this->db->saveToken($a);
        return $a;
     }
+
+    public function authorization($client, $user, $scopes=[], $apigk_scopes=[]) {
+        $authz = new Models\Authorization([
+            "clientid" => $client->id,
+            "userid" => $user->userid,
+            "scopes" => $scopes,
+            "apigk_scopes" => $apigk_scopes,
+        ]);
+        $this->db->saveAuthorization($authz);
+        return $authz;
+    }
 }
