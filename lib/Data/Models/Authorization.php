@@ -10,10 +10,10 @@ use Cassandra\Type\Timestamp;
 
 class Authorization extends \FeideConnect\Data\Model {
 
-    public $clientid, $userid, $scopes, $issued;
+    public $clientid, $userid, $scopes, $issued, $apigk_scopes;
 
     protected static $_properties = array(
-        "clientid", "userid", "scopes", "issued"
+        "clientid", "userid", "scopes", "issued", "apigk_scopes"
     );
     protected static $_types = [
         "issued" => "timestamp"
@@ -35,6 +35,9 @@ class Authorization extends \FeideConnect\Data\Model {
         }
         if (isset($this->userid)) {
             $prepared["userid"] = new Uuid($this->userid);
+        }
+        if (isset($this->apigk_scopes)) {
+            $prepared["apigk_scopes"] = new CollectionMap($this->apigk_scopes, Base::ASCII, ["type" => Base::COLLECTION_SET, "value" => Base::ASCII]);
         }
 
         return $prepared;
@@ -74,6 +77,7 @@ class Authorization extends \FeideConnect\Data\Model {
         }
         return true;
     }
+
     public function remainingScopes($requiredscopes) {
         $myScopes = $this->getScopeList();
         return array_diff($requiredscopes, $myScopes);

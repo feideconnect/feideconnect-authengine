@@ -48,6 +48,7 @@ class AuthorizationUI {
         $this->needsAuthorization = $ae->needsAuthorization();
         $this->scopesInQuestion = $ae->getScopesInQuestion();
         $this->remainingScopes = $ae->getRemainingScopes();
+        $this->apigkScopes = $ae->getAPIGKscopes();
 
         $this->organization = $account->getOrg();
         
@@ -94,6 +95,9 @@ class AuthorizationUI {
         $postattrs['client_id'] = $this->client->id;
         $postattrs['verifier'] = $this->user->getVerifier();
         $postattrs['approved_scopes'] = join(" ", $this->scopesInQuestion);
+        foreach ($this->apigkScopes as $apigk => $scopes) {
+            $postattrs['gk_approved_scopes_' . $apigk] = join(" ", $scopes);
+        }
         // $postattrs['return'] = Utils\URL::selfURL();
 
         if (!$this->isFirstTime()) {

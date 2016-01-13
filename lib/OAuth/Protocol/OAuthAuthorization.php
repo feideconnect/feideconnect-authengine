@@ -151,7 +151,13 @@ class OAuthAuthorization {
             }
 
             $scopes_approved = explode(' ', $_REQUEST['approved_scopes']);
-            $authorization = $this->aevaluator->getUpdatedAuthorization($scopes_approved);
+            $apigkScopesApproved = [];
+            foreach ($_REQUEST as $name => $value) {
+                if (preg_match('/^gk_approved_scopes_(.*)$/', $name, $matches)) {
+                    $apigkScopesApproved[$matches[1]] = explode(' ', $value);
+                }
+            }
+            $authorization = $this->aevaluator->getUpdatedAuthorization($scopes_approved, $apigkScopesApproved);
 
             // echo "<pre>";
             // print_r($user->getBasicUserInfo());

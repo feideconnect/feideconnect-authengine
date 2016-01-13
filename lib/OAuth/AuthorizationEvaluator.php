@@ -128,7 +128,7 @@ class AuthorizationEvaluator {
      * Will add all remaining scopes from scopesinquestion to the authorization object.
      * @return [type] [description]
      */
-    public function getUpdatedAuthorization($scopes) {
+    public function getUpdatedAuthorization($scopes, $apigkScopes) {
         $this->requireUser();
         $a = $this->authorization;
         if ($a === null) {
@@ -147,6 +147,16 @@ class AuthorizationEvaluator {
             }
         }
         $a->addScopes($good_scopes);
+
+        if (isset($apigkScopes)) {
+            $requestedApigkScopes = $this->getAPIGKscopes();
+            foreach ($apigkScopes as $apigkid => $gkscopes) {
+                if (isset($requestedApigkScopes[$apigkid])) {
+                    $apigkScopes[$apigkid] = array_intersect($requestedApigkScopes[$apigkid], $gkscopes);
+                }
+            }
+        }
+        $a->apigk_scopes = $apigkScopes;
         return $a;
     }
 
@@ -248,6 +258,15 @@ class AuthorizationEvaluator {
         return $apis;
     }
 
+    public function getAPIGKscopes() {
+        $scopes = $this->scopesInQuestion;
+        $apigkScopes = [];
+        foreach ($this->getScopeAPIGKs($scopes) as $scope => $apigk) {
+            $apigkScopes[$apigk->id] = $apigk->scopes;
+        }
+        return $apigkScopes;
+    }
+
     /**
      * Does the user needs to perform a new authorization?
      * @return [type] [description]
@@ -261,6 +280,16 @@ class AuthorizationEvaluator {
         }
         if (!empty($this->scopesRemaining)) {
             return true;
+        }
+        foreach ($this->getAPIGKscopes() as $apigkid => $scopes) {
+            if (isset($scopes) && count($scopes) > 0) {
+                if (!isset($this->authorization->apigk_scopes) || !isset($this->authorization->apigk_scopes[$apigkid])) {
+                    return true;
+                }
+                if (array_intersect($scopes, $this->authorization->apigk_scopes[$apigkid]) !== $scopes) {
+                    return true;
+                }
+            }
         }
 
         return false;
