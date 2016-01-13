@@ -57,7 +57,7 @@ class AuthorizationCode extends \FeideConnect\Data\Model {
 
 
 
-    public static function generate(Client $client, User $user, $redirect_uri, $scope = null, IDToken $idtoken = null) {
+    public static function generate(Client $client, User $user, $redirect_uri, $scope, IDToken $idtoken = null) {
 
         $expires_in = \FeideConnect\Config::getValue('oauth.code.lifetime', 5*60);
 
@@ -79,9 +79,8 @@ class AuthorizationCode extends \FeideConnect\Data\Model {
 
         $n->redirect_uri = $redirect_uri;
 
-        if ($scope !== null) {
-            $n->scope = $scope;
-        }
+        $n->scope = $scope;
+
         return $n;
     }
 
