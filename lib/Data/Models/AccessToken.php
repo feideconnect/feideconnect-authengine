@@ -104,7 +104,7 @@ class AccessToken extends \FeideConnect\Data\Model {
 
 
 
-    public static function generate($client, $user, $scope = null, $refreshtoken = true, $expires_in = 3600) {
+    public static function generate($client, $user, $scope = null, $expires_in = 3600) {
 
         // $expires_in = \FeideConnect\Config::getValue('oauth.token.lifetime', 3600);
 
@@ -122,10 +122,6 @@ class AccessToken extends \FeideConnect\Data\Model {
         $n->validuntil = (new Timestamp())->addSeconds($expires_in);
 
         $n->access_token = self::genUUID();
-
-        if ($refreshtoken) {
-            $n->refresh_token = self::genUUID();
-        }
 
         $n->token_type = 'Bearer';
 

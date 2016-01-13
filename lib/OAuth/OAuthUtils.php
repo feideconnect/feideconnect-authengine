@@ -13,7 +13,7 @@ class OAuthUtils {
         }
 
         $pool = new AccessTokenPool($client, $user);
-        $accesstoken = $pool->getToken($scopes, false, $expires_in);
+        $accesstoken = $pool->getToken($scopes, $expires_in);
         // TODO Verify that this saveToken was successfull before continuing.
 
         $tokenresponse = Messages\TokenResponse::generate($accesstoken, $state, $idtoken);

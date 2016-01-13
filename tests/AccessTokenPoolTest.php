@@ -22,18 +22,18 @@ class AccessTokenPoolTest extends DBHelper {
     public function testBasicRecycleToken() {
         $pool = new AccessTokenPool($this->client, $this->user);
         $this->assertEquals([], $pool->getAllTokens());
-        $a = $pool->getToken(['scope1', 'scope2'], null, 1000);
+        $a = $pool->getToken(['scope1', 'scope2'], 1000);
         $pool = new AccessTokenPool($this->client, $this->user);
-        $b = $pool->getToken(['scope1', 'scope2'], null, 1000);
+        $b = $pool->getToken(['scope1', 'scope2'], 1000);
         $this->assertEquals($a->access_token, $b->access_token);
     }
 
     public function testDontRecycleOld() {
         $pool = new AccessTokenPool($this->client, $this->user);
         $this->assertEquals([], $pool->getAllTokens());
-        $a = $pool->getToken(['scope1', 'scope2'], null, 500);
+        $a = $pool->getToken(['scope1', 'scope2'], 500);
         $pool = new AccessTokenPool($this->client, $this->user);
-        $b = $pool->getToken(['scope1', 'scope2'], null, 1001);
+        $b = $pool->getToken(['scope1', 'scope2'], 1001);
         $this->assertNotEquals($a->access_token, $b->access_token);
     }
 
@@ -42,7 +42,7 @@ class AccessTokenPoolTest extends DBHelper {
         $b = $this->token($this->client, $this->user, ['scope1', 'scope2'], 2000);
         $c = $this->token($this->client, $this->user, ['scope1', 'scope2'], 100);
         $pool = new AccessTokenPool($this->client, $this->user);
-        $d = $pool->getToken(['scope1', 'scope2'], null, 2000);
+        $d = $pool->getToken(['scope1', 'scope2'], 2000);
         $this->assertNotEquals($a->access_token, $d->access_token);
         $this->assertNotEquals($c->access_token, $d->access_token);
         $this->assertEquals($b->access_token, $d->access_token);
@@ -52,7 +52,7 @@ class AccessTokenPoolTest extends DBHelper {
     public function testDontRecycleMoreScopes() {
         $a = $this->token($this->client, $this->user, ['scope1', 'scope2'], 1000);
         $pool = new AccessTokenPool($this->client, $this->user);
-        $b = $pool->getToken(['scope1'], null, 2000);
+        $b = $pool->getToken(['scope1'], 2000);
         $this->assertNotEquals($a->access_token, $b->access_token);
         $this->assertEquals(['scope1'], $b->scope);
     }
