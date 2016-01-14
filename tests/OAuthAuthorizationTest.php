@@ -4,6 +4,7 @@ namespace tests;
 use FeideConnect\OAuth\Messages;
 use FeideConnect\OAuth\Protocol\OAuthAuthorization;
 use FeideConnect\Authentication\AuthSource;
+use FeideConnect\Utils\Misc;
 
 class OAuthAuthorizationTest extends DBHelper {
 
@@ -136,6 +137,34 @@ class OAuthAuthorizationTest extends DBHelper {
         $query = parse_url($url, PHP_URL_QUERY);
         parse_str($query, $params);
         $this->assertArrayHasKey('code', $params);
+        return $params;
+    }
+
+    public function testAuthorizationToCodeSubtoken($approved_scopes = 'gk_test groups') {
+        $apigk = $this->apigk();
+        $this->client->scopes = ['groups', 'gk_test'];
+        $this->db->saveClient($this->client);
+        $_REQUEST['acresponse'] = '{"id": "https://idp.feide.no","subid":"example.org"}';
+        $_REQUEST['verifier'] = $this->user->getVerifier();
+        $_REQUEST['bruksvilkar'] = 'yes';
+        $_REQUEST['redirect_uri'] = 'http://example.org';
+        $_REQUEST['approved_scopes'] = $approved_scopes;
+        $_REQUEST['gk_approved_scopes_test'] = 'userid name email userid-feide';
+
+        $response = $this->doRun();
+        $this->assertInstanceOf('FeideConnect\HTTP\Redirect', $response, 'Expected /oauth/authorization endpoint to redirect');
+
+//        var_export($response);
+        $url = $response->getURL();
+        $this->assertEquals("http", parse_url($url, PHP_URL_SCHEME));
+        $this->assertEquals("example.org", parse_url($url, PHP_URL_HOST));
+        $query = parse_url($url, PHP_URL_QUERY);
+        parse_str($query, $params);
+        $this->assertArrayHasKey('code', $params);
+        $code = $this->db->getAuthorizationCode($params['code']);
+        $this->assertEquals(1, count($code->apigk_scopes));
+        $this->assertArrayHasKey('test', $code->apigk_scopes);
+        $this->assertTrue(Misc::containsSameElements(['userid', 'name', 'email', 'userid-feide'], $code->apigk_scopes['test']));
         return $params;
     }
 

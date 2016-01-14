@@ -80,6 +80,44 @@ class OAuthImplicitGrantTest extends DBHelper {
         $this->assertEquals($params['token_type'], 'Bearer');
     }
 
+    public function testAuthorizationToTokenSubtoken() {
+        $apigk = $this->apigk();
+        $this->client->scopes = ['groups', 'gk_test'];
+        $this->db->saveClient($this->client);
+
+        $router = new Router();
+
+        $_REQUEST['acresponse'] = '{"id": "https://idp.feide.no","subid":"example.org"}';
+        $_REQUEST['verifier'] = $this->user->getVerifier();
+        $_REQUEST['bruksvilkar'] = 'yes';
+        $_REQUEST['approved_scopes'] = 'gk_test groups';
+        $_REQUEST['gk_approved_scopes_test'] = 'userid name email userid-feide';
+
+        $response = $router->dispatchCustom('GET', '/oauth/authorization');
+        $this->assertInstanceOf('FeideConnect\HTTP\Redirect', $response, 'Expected /oauth/authorization endpoint to redirect');
+
+        $url = $response->getURL();
+        $this->assertEquals(parse_url($url, PHP_URL_SCHEME), "http");
+        $this->assertEquals(parse_url($url, PHP_URL_HOST), "example.org");
+        $fragment = parse_url($url, PHP_URL_FRAGMENT);
+        parse_str($fragment, $params);
+        $this->assertArrayHasKey('access_token', $params);
+        $this->assertArrayHasKey('token_type', $params);
+        $this->assertArrayHasKey('expires_in', $params);
+        $this->assertArrayHasKey('scope', $params);
+        $this->assertArrayHasKey('state', $params);
+        $this->assertEquals($params['state'], $_REQUEST['state']);
+        $this->assertEquals($params['token_type'], 'Bearer');
+        $this->assertArrayNotHasKey('subtokens', $params);
+        $token = $this->db->getAccessToken($params['access_token']);
+        $this->assertEquals(1, count($token->subtokens));
+        $this->assertArrayHasKey('test', $token->subtokens);
+        $subtoken = $this->db->getAccessToken($token->subtokens['test']);
+        $this->assertEquals(null, $subtoken->subtokens);
+        $this->assertEquals('test', $subtoken->apigkid);
+        $this->assertTrue($subtoken->hasExactScopes(['userid', 'name', 'email', 'userid-feide']));
+    }
+
     public function tearDown() {
 
         parent::tearDown();
