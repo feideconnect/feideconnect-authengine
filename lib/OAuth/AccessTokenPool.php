@@ -75,7 +75,7 @@ class AccessTokenPool {
         }
 
         if (!empty($candidate->subtokens)) {
-            foreach($candidate->subtokens as $apigkid => $subtokenid) {
+            foreach ($candidate->subtokens as $apigkid => $subtokenid) {
                 $subtoken = $this->storage->getAccessToken($subtokenid);
                 if (!$subtoken->hasExactScopes($apigkScopes[$apigkid])) {
                     return null;

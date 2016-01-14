@@ -124,8 +124,6 @@ class Authenticator {
         $forceauthn = false;
 
         if ($as->isAuthenticated()) {
-
-
             $mismatchingAccounts = false;
 
             // First check if we are authenticated using the expected IdP, as the user has seleted some.
@@ -148,14 +146,12 @@ class Authenticator {
 
                 if ($mismatchingAccounts) {
                     if (!isset($_REQUEST['strict'])) {
-
                         $unexpectedUser = new UnexpectedUserUI($account, $response);
                         return $unexpectedUser->show();
 
                     } else if (isset($_REQUEST['strict']) && $_REQUEST['strict'] === '1') {
-
                         $this->logoutAS($as);
-                    } 
+                    }
                 }
 
             }
@@ -215,8 +211,7 @@ class Authenticator {
     public function getAllAccountsVisualTags() {
 
         $accounts = [];
-        foreach($this->authSources AS $authSourceType => $authSource) {
-            
+        foreach ($this->authSources as $authSourceType => $authSource) {
             if ($authSource->isAuthenticated()) {
                 // $this->logoutAS($authSource);
                 $acct = $this->getAccountFromAuthSource($authSourceType);

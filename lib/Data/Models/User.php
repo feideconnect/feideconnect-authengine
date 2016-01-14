@@ -324,8 +324,8 @@ class User extends \FeideConnect\Data\Model {
          * The way it is implemented now, it is updated each time the user logs in.
          */
         $userids = $a->getUserIDs();
-        foreach($userids AS $userid) {
-            $this->_repo->updateUserIDsecLastSeen($this, $userid);    
+        foreach ($userids as $userid) {
+            $this->_repo->updateUserIDsecLastSeen($this, $userid);
         }
 
 
@@ -421,7 +421,7 @@ class User extends \FeideConnect\Data\Model {
 
 
     public function toLog() {
-        $logdata = $this->getBasicUserInfo(false,  ['uuid']);
+        $logdata = $this->getBasicUserInfo(false, ['uuid']);
         unset($logdata['userid_sec']);
         return $logdata;
     }

@@ -250,7 +250,6 @@ class AuthorizationEvaluator {
             try {
                 $apigk = $this->getAPI($apigkid);
             } catch (\Exception $e) {
-
                 continue;
             }
             $apis[$scope] = $apigk;

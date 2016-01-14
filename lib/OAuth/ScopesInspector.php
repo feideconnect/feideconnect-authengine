@@ -14,7 +14,7 @@ use FeideConnect\Localization;
  *
  * The scopesinspector takes a list of scope strings as input, typically the ones authorized to a client
  * and returns detailed structued information about the permissions inherited from those scopes.
- * This includes information about the Gatekeeper APIs that is represented by gk_api(_subscope) scopes types. 
+ * This includes information about the Gatekeeper APIs that is represented by gk_api(_subscope) scopes types.
  */
 class ScopesInspector {
 
@@ -97,9 +97,10 @@ class ScopesInspector {
     public function getScopeAPIGKs() {
         $apis = [];
         $scopeApis = $this->authorizationEvaluator->getScopeAPIGKs($this->scopes);
-        foreach ($scopeApis as $scope => $apigk) {
 
+        foreach ($scopeApis as $scope => $apigk) {
             list($apigkid, $subscope) = APIGK::parseScope($scope);
+
             try {
                 $apiInfo = $this->getAPIinfo($apigk);
             } catch (\Exception $e) {
@@ -260,7 +261,7 @@ class ScopesInspector {
                 'items' => [],
                 'expanded' => true
             ];
-            foreach($info['userinfo'] AS $userinfoperm) {
+            foreach ($info['userinfo'] as $userinfoperm) {
                 if (isset($permissionInfo[$userinfoperm])) {
                     $item['items'][] = $permissionInfo[$userinfoperm];
                 }
@@ -269,8 +270,7 @@ class ScopesInspector {
         }
 
 
-        foreach($info['global'] AS $globalperm => $globalpermdata) {
-
+        foreach ($info['global'] as $globalperm => $globalpermdata) {
             if (isset($permissionInfo[$globalperm])) {
                 $info['view'][] = $permissionInfo[$globalperm];
             }

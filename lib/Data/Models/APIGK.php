@@ -43,7 +43,7 @@ class APIGK extends \FeideConnect\Data\Model {
             throw new UnexpectedValueException("Not a api scope");
         }
         $apigkid = $matches[1];
-        $subscope = NULL;
+        $subscope = null;
         if (isset($matches[3])) {
             $subscope = $matches[3];
         }
@@ -113,7 +113,7 @@ class APIGK extends \FeideConnect\Data\Model {
     public function getBasicView() {
         $attrs = [
             "id", "name", "descr",
-            "owner", "organization", "scopedef", 
+            "owner", "organization", "scopedef",
             "status", "created", "updated",
             "privacypolicyurl",
             "scopes"
