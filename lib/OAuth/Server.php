@@ -221,7 +221,7 @@ class Server {
             $idtoken = $code->idtoken;
         }
 
-        $tokenresponse = OAuthUtils::generateTokenResponse($client, $user, $code->scope, "authorization code", null, $idtoken);
+        $tokenresponse = OAuthUtils::generateTokenResponse($client, $user, $code->scope, $code->apigk_scopes, "authorization code", null, $idtoken);
 
         return $tokenresponse->sendBodyJSON();
     }
@@ -258,7 +258,7 @@ class Server {
             $aevaluator = new AuthorizationEvaluator($this->storage, $client, $tokenrequest, $user);
 
             $requestedScopes = $aevaluator->getScopesInQuestion();
-            $tokenresponse = OAuthUtils::generateTokenResponse($client, $user, $requestedScopes, $tokenrequest->grant_type);
+            $tokenresponse = OAuthUtils::generateTokenResponse($client, $user, $requestedScopes, $aevaluator->getAPIGKscopes(), $tokenrequest->grant_type);
             return $tokenresponse->sendBodyJSON();
 
         } catch (OAuthException $e) {

@@ -13,13 +13,13 @@ use Cassandra\Type\Timestamp;
 
 class AuthorizationCode extends \FeideConnect\Data\Model {
 
-    public $code, $clientid, $userid, $scope, $token_type, $redirect_uri, $idtoken, $issued, $validuntil;
+    public $code, $clientid, $userid, $scope, $token_type, $redirect_uri, $idtoken, $issued, $validuntil, $apigk_scopes;
 
     protected static $_properties = array(
         "code", "clientid", "userid",
         "scope", "token_type", "redirect_uri",
         "idtoken",
-        "issued", "validuntil"
+        "issued", "validuntil", "apigk_scopes"
     );
     protected static $_types = [
         "issued" => "timestamp",
@@ -45,6 +45,9 @@ class AuthorizationCode extends \FeideConnect\Data\Model {
         if (isset($this->scope)) {
             $prepared["scope"] = new CollectionSet($this->scope, Base::ASCII);
         }
+        if (isset($this->apigk_scopes)) {
+            $prepared["apigk_scopes"] = new CollectionMap($this->apigk_scopes, Base::ASCII, ["type" => Base::COLLECTION_SET, "value" => Base::ASCII]);
+        }
 
 
         return $prepared;
@@ -57,7 +60,7 @@ class AuthorizationCode extends \FeideConnect\Data\Model {
 
 
 
-    public static function generate(Client $client, User $user, $redirect_uri, $scope, IDToken $idtoken = null) {
+    public static function generate(Client $client, User $user, $redirect_uri, $scope, $apigkScopes, IDToken $idtoken = null) {
 
         $expires_in = \FeideConnect\Config::getValue('oauth.code.lifetime', 5*60);
 
@@ -80,6 +83,7 @@ class AuthorizationCode extends \FeideConnect\Data\Model {
         $n->redirect_uri = $redirect_uri;
 
         $n->scope = $scope;
+        $n->apigk_scopes = $apigkScopes;
 
         return $n;
     }

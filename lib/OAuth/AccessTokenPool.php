@@ -5,6 +5,7 @@ namespace FeideConnect\OAuth;
 use FeideConnect\Data\StorageProvider;
 use FeideConnect\Data\Types\Timestamp;
 use FeideConnect\Data\Models;
+use FeideConnect\Utils\Misc;
 
 class AccessTokenPool {
 
@@ -55,7 +56,7 @@ class AccessTokenPool {
     }
 
 
-    private function getSelectedCandidate($scopesInQuestion, $expires_in) {
+    private function getSelectedCandidate($scopesInQuestion, $apigkScopes, $expires_in) {
         $candidates = $this->getCandidates($scopesInQuestion);
         if (empty($candidates)) {
             return null;
@@ -66,19 +67,45 @@ class AccessTokenPool {
         if ($candidate->validuntil->getInSeconds() < $expires_in/2) {
             return null;
         }
+        $requestApigkids = array_keys(Misc::ensureArray($apigkScopes));
+        $tokenApigkids = array_keys(Misc::ensureArray($candidate->subtokens));
+
+        if (!Misc::containsSameElements($requestApigkids, $tokenApigkids)) {
+            return null;
+        }
+
+        if (!empty($candidate->subtokens)) {
+            foreach($candidate->subtokens as $apigkid => $subtokenid) {
+                $subtoken = $this->storage->getAccessToken($subtokenid);
+                if (!$subtoken->hasExactScopes($apigkScopes[$apigkid])) {
+                    return null;
+                }
+            }
+        }
         return $candidate;
     }
 
 
-    public function getToken($scopesInQuestion, $expires_in) {
-        $candidate = $this->getSelectedCandidate($scopesInQuestion, $expires_in);
+    public function getToken($scopesInQuestion, $apigkScopes, $expires_in) {
+        $candidate = $this->getSelectedCandidate($scopesInQuestion, $apigkScopes, $expires_in);
 
         if ($candidate !== null) {
             return $candidate;
         }
 
         $validUntil = (new Timestamp())->addSeconds($expires_in);
-        $accesstoken = Models\AccessToken::generate($this->client, $this->user, $scopesInQuestion, $validUntil);
+        $accesstoken = Models\AccessToken::generate($this->client, $this->user, null, $scopesInQuestion, $validUntil);
+
+        if (!empty($apigkScopes)) {
+            $subtokens = [];
+            foreach ($apigkScopes as $apigkid => $scopes) {
+                $subtoken = Models\AccessToken::generate($this->client, $this->user, $apigkid, $scopes, $validUntil);
+                $subtokens[$apigkid] = $subtoken->access_token;
+                $this->storage->saveToken($subtoken);
+            }
+            $accesstoken->subtokens = $subtokens;
+        }
+
         $this->storage->saveToken($accesstoken);
 
         return $accesstoken;

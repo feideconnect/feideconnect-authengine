@@ -705,8 +705,12 @@ class Cassandra2 extends \FeideConnect\Data\Repository {
 
     public function getAccessTokens($userid, $clientid) {
 
-        $query = 'SELECT * FROM "oauth_tokens" WHERE "userid" = :userid AND "clientid" = :clientid ALLOW FILTERING';
-        $params = ['userid' => new Uuid($userid), 'clientid' => new Uuid($clientid)];
+        $query = 'SELECT * FROM "oauth_tokens" WHERE "userid" = :userid AND "clientid" = :clientid  AND "apigkid" = :apigkid ALLOW FILTERING';
+        $params = [
+            'userid' => new Uuid($userid),
+            'clientid' => new Uuid($clientid),
+            'apigkid' => '',
+        ];
 
         // print_r($params); exit;
 

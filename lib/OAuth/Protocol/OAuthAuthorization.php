@@ -269,11 +269,13 @@ class OAuthAuthorization {
 
         $redirect_uri = $this->aevaluator->getValidatedRedirectURI();
         $scopesInQuestion = $this->aevaluator->getScopesInQuestion();
+        $apigkScopes = $this->aevaluator->getAPIGKscopes();
 
         $tokenresponse = OAuthUtils::generateTokenResponse(
             $this->client,
             $this->user,
             $scopesInQuestion,
+            $apigkScopes,
             "implicit grant",
             $this->request->state
         );
@@ -290,9 +292,10 @@ class OAuthAuthorization {
 
 
         $scopesInQuestion = $this->aevaluator->getScopesInQuestion();
+        $apigkScopes = $this->aevaluator->getAPIGKscopes();
         $redirectURI = $this->aevaluator->getValidatedRedirectURI();
 
-        $code = Models\AuthorizationCode::generate($this->client, $this->user, $redirectURI, $scopesInQuestion);
+        $code = Models\AuthorizationCode::generate($this->client, $this->user, $redirectURI, $scopesInQuestion, $apigkScopes);
         $this->storage->saveAuthorizationCode($code);
 
         $authorizationresponse = Messages\AuthorizationResponse::generate($this->request, $code);

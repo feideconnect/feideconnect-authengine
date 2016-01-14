@@ -12,11 +12,12 @@ use Cassandra\Type\Base;
 
 class AccessToken extends \FeideConnect\Data\Model {
 
-    public $access_token, $clientid, $userid, $issued, $scope, $token_type, $validuntil, $lastuse;
+    public $access_token, $clientid, $userid, $issued, $scope, $token_type, $validuntil, $lastuse, $apigkid, $subtokens;
 
     protected static $_properties = array(
         "access_token", "clientid", "userid", "issued",
-        "scope", "token_type", "validuntil", "lastuse"
+        "scope", "token_type", "validuntil", "lastuse",
+        "apigkid", "subtokens"
     );
     protected static $_types = [
         "issued" => "timestamp",
@@ -44,7 +45,12 @@ class AccessToken extends \FeideConnect\Data\Model {
         if (isset($this->scope)) {
             $prepared["scope"] = new CollectionSet($this->scope, Base::ASCII);
         }
-
+        if (empty($this->apigkid)) {
+            $prepared["apigkid"] = '';
+        }
+        if (isset($this->subtokens)) {
+            $prepared["subtokens"] = new CollectionMap($this->subtokens, Base::ASCII, Base::UUID);
+        }
 
         return $prepared;
     }
@@ -85,7 +91,7 @@ class AccessToken extends \FeideConnect\Data\Model {
 
 
 
-    public static function generate($client, $user, $scope, $validuntil) {
+    public static function generate($client, $user, $apigkid, $scope, $validuntil) {
 
         // $expires_in = \FeideConnect\Config::getValue('oauth.token.lifetime', 3600);
 
@@ -98,6 +104,8 @@ class AccessToken extends \FeideConnect\Data\Model {
         if ($user !== null) {
             $n->userid = $user->userid;
         }
+
+        $n->apigkid = $apigkid;
 
         $n->issued = new Timestamp();
         $n->validuntil = $validuntil;

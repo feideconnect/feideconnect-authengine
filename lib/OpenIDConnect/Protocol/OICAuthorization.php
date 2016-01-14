@@ -46,12 +46,14 @@ class OICAuthorization extends OAuthAuthorization {
 
         $redirect_uri = $this->aevaluator->getValidatedRedirectURI();
         $scopesInQuestion = $this->aevaluator->getScopesInQuestion();
+        $apigkScopes = $this->aevaluator->getAPIGKscopes();
 
         $idtoken = $this->getIDToken();
         $tokenresponse = OAuthUtils::generateTokenResponse(
             $this->client,
             $this->user,
             $scopesInQuestion,
+            $apigkScopes,
             "OpenID Connect implicit grant",
             $this->request->state,
             $idtoken->getEncoded()
@@ -67,6 +69,7 @@ class OICAuthorization extends OAuthAuthorization {
     protected function processCode() {
 
         $scopesInQuestion = $this->aevaluator->getScopesInQuestion();
+        $apigkScopes = $this->aevaluator->getAPIGKscopes();
 
         if (empty($this->request->redirect_uri)) {
             throw new \Exception("Missing OpenID Connect required parameter [redirect_uri] at the authorization endpoint");
@@ -76,7 +79,7 @@ class OICAuthorization extends OAuthAuthorization {
 
 
         $idtoken = $this->getIDToken();
-        $code = AuthorizationCode::generate($this->client, $this->user, $redirect_uri, $scopesInQuestion, $idtoken);
+        $code = AuthorizationCode::generate($this->client, $this->user, $redirect_uri, $scopesInQuestion, $apigkScopes, $idtoken);
         $this->storage->saveAuthorizationCode($code);
 
         $authorizationresponse = Messages\AuthorizationResponse::generate($this->request, $code);

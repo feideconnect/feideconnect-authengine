@@ -5,7 +5,7 @@ namespace FeideConnect\OAuth;
 use FeideConnect\Logger;
 
 class OAuthUtils {
-    public static function generateTokenResponse($client, $user, $scopes, $flow, $state = null, $idtoken = null) {
+    public static function generateTokenResponse($client, $user, $scopes, $apigk_scopes, $flow, $state = null, $idtoken = null) {
 
         $expires_in = 3600*8; // 8 hours
         if (in_array('longterm', $scopes, true)) {
@@ -13,7 +13,7 @@ class OAuthUtils {
         }
 
         $pool = new AccessTokenPool($client, $user);
-        $accesstoken = $pool->getToken($scopes, $expires_in);
+        $accesstoken = $pool->getToken($scopes, $apigk_scopes, $expires_in);
         // TODO Verify that this saveToken was successfull before continuing.
 
         $tokenresponse = Messages\TokenResponse::generate($accesstoken, $state, $idtoken);

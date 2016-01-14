@@ -127,7 +127,7 @@ class DBHelper extends \PHPUnit_Framework_TestCase {
 
     public function token($client, $user, $scopes, $expire_in) {
         $validUntil = (new Timestamp())->addSeconds($expire_in);
-        $a = Models\AccessToken::generate($client, $user, $scopes, $validUntil);
+        $a = Models\AccessToken::generate($client, $user, null, $scopes, $validUntil);
         $this->db->saveToken($a);
         return $a;
     }
