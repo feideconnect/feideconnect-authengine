@@ -125,9 +125,9 @@ class DBHelper extends \PHPUnit_Framework_TestCase {
     }
 
     public function token($client, $user, $scopes, $expire_in) {
-       $a = Models\AccessToken::generate($client, $user, $scopes, $expire_in);
-       $this->db->saveToken($a);
-       return $a;
+        $a = Models\AccessToken::generate($client, $user, $scopes, $expire_in);
+        $this->db->saveToken($a);
+        return $a;
     }
 
     public function authorization($client, $user, $scopes=[], $apigk_scopes=[]) {
