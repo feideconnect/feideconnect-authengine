@@ -149,4 +149,15 @@ class Misc {
             mt_rand(0, 0xffff)
         );
     }
+
+    public static function ensureArray($data) {
+        if ($data === null) {
+            return [];
+        }
+        return $data;
+    }
+
+    public static function containsSameElements($a, $b) {
+        return count(array_diff($a, $b)) === 0 && count(array_diff($b, $a)) === 0;
+    }
 }

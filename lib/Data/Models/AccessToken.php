@@ -4,6 +4,7 @@ namespace FeideConnect\Data\Models;
 
 use FeideConnect\Data\StorageProvider;
 use FeideConnect\Data\Types\Timestamp;
+use FeideConnect\Utils\Misc;
 use Cassandra\Type\Uuid;
 use Cassandra\Type\CollectionMap;
 use Cassandra\Type\CollectionSet;
@@ -55,27 +56,7 @@ class AccessToken extends \FeideConnect\Data\Model {
     public function hasExactScopes($scopes) {
         assert('is_array($scopes)');
 
-        if (empty($scopes) && empty($this->scope)) {
-            return true;
-        }
-        if (empty($scopes)) {
-            return false;
-        }
-        if (empty($this->scope)) {
-            return false;
-        }
-
-        $r1 = array_diff($scopes, $this->scope);
-        if (!empty($r1)) {
-            return false;
-        }
-
-        $r2 = array_diff($this->scope, $scopes);
-        if (!empty($r2)) {
-            return false;
-        }
-
-        return true;
+        return Misc::containsSameElements(Misc::ensureArray($this->scope), $scopes);
     }
 
 
