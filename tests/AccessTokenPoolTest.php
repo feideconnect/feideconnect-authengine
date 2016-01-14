@@ -77,7 +77,6 @@ class AccessTokenPoolTest extends DBHelper {
     }
 
     public function testDontRecycleMoreApiScopes() {
-        error_log("Start");
         $pool = new AccessTokenPool($this->client, $this->user);
         $t1 = $pool->getToken(['scope1'], ['api1' => ['scope2', 'scope3']], 1000);
         $pool = new AccessTokenPool($this->client, $this->user);
