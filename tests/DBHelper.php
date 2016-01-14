@@ -132,7 +132,7 @@ class DBHelper extends \PHPUnit_Framework_TestCase {
         return $a;
     }
 
-    public function authorization($client, $user, $scopes=[], $apigk_scopes=[]) {
+    public function authorization($client, $user, $scopes = [], $apigk_scopes = []) {
         $authz = new Models\Authorization([
             "clientid" => $client->id,
             "userid" => $user->userid,

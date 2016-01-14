@@ -29,7 +29,7 @@ class LocalizationTest extends \PHPUnit_Framework_TestCase {
         $availableLanguages = Config::getValue('availableLanguages', ['en']);
         $lang = Misc::getBrowserLanguage($availableLanguages);
         
-        $this->assertEquals($lang, 'nb' );
+        $this->assertEquals($lang, 'nb');
     }
 
     public function testLocalizeEntry() {
@@ -42,7 +42,7 @@ class LocalizationTest extends \PHPUnit_Framework_TestCase {
             'nb' => 'bil'
         ];
         $result = Localization::localizeEntry($data);
-        $this->assertEquals($result, 'car' );
+        $this->assertEquals($result, 'car');
     }
 
     public function testLocalizeEntryNo() {
@@ -54,7 +54,7 @@ class LocalizationTest extends \PHPUnit_Framework_TestCase {
             'nb' => 'bil'
         ];
         $result = Localization::localizeEntry($data);
-        $this->assertEquals($result, 'bil' );
+        $this->assertEquals($result, 'bil');
     }
 
     public function testLocalizeEntryNo2() {
@@ -67,7 +67,7 @@ class LocalizationTest extends \PHPUnit_Framework_TestCase {
             'nb' => 'bil'
         ];
         $result = Localization::localizeEntry($data);
-        $this->assertEquals($result, 'bil' );
+        $this->assertEquals($result, 'bil');
     }
 
     public function testLocalizeEntryNo3() {
@@ -80,7 +80,7 @@ class LocalizationTest extends \PHPUnit_Framework_TestCase {
             'nb' => 'bil'
         ];
         $result = Localization::localizeEntry($data);
-        $this->assertEquals($result, 'bil' );
+        $this->assertEquals($result, 'bil');
     }
 
     public function testLocalizeList() {
@@ -99,9 +99,9 @@ class LocalizationTest extends \PHPUnit_Framework_TestCase {
 
         $result = Localization::localizeList($data, ['title', 'descr']);
 
-        $this->assertEquals($result[0]['title'], 'foo' );
-        $this->assertEquals($result[0]['anything'], 'will' );
-        $this->assertEquals($result[0]['descr'], 'car' );
+        $this->assertEquals($result[0]['title'], 'foo');
+        $this->assertEquals($result[0]['anything'], 'will');
+        $this->assertEquals($result[0]['descr'], 'car');
 
     }
 

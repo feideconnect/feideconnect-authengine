@@ -17,7 +17,7 @@ class APIProtector {
     protected $client = null;
     protected $user = null;
 
-    public function __construct($headers=null) {
+    public function __construct($headers = null) {
         if ($headers===null) {
             $headers = getallheaders();
         }

@@ -284,9 +284,11 @@ class CLI {
         $this->header("List clients");
         $c = 0;
         
-        foreach($clientslist AS $client) {
+        foreach ($clientslist as $client) {
             $queue = $client->getScopeQueue();
-            if (empty($queue)) { continue; }
+            if (empty($queue)) {
+                continue;
+            }
 
             $cinfo = $client->getAsArray();
             $cinfo["c"] = ++$c;

@@ -90,7 +90,7 @@ class Account {
         if (empty($userids)) {
             return false;
         }
-        foreach($userids AS $u) {
+        foreach ($userids as $u) {
             $has = $this->hasUserID($u);
             if ($has) {
                 return true;
@@ -105,7 +105,7 @@ class Account {
         if (empty($this->userids)) {
             return false;
         }
-        foreach ($this->userids AS $u) {
+        foreach ($this->userids as $u) {
             if ($userid === $u) {
                 return true;
             }

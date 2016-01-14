@@ -17,7 +17,8 @@ class APIProtectorTest extends DBHelper {
     public function testNoToken() {
         $this->setExpectedExceptionRegExp(
             '\FeideConnect\OAuth\Exceptions\APIAuthorizationException',
-            '/not present in request/');
+            '/not present in request/'
+        );
         $apiprotector = new APIProtector([]);
         $apiprotector->requireToken();
     }
@@ -25,7 +26,8 @@ class APIProtectorTest extends DBHelper {
     public function testMalformedToken1() {
         $this->setExpectedExceptionRegExp(
             '\FeideConnect\OAuth\Exceptions\APIAuthorizationException',
-            '/invalid format/');
+            '/invalid format/'
+        );
         $apiprotector = new APIProtector(['Authorization' => 'Bearer øgle']);
         $apiprotector->requireToken();
     }
@@ -33,7 +35,8 @@ class APIProtectorTest extends DBHelper {
     public function testMalformedToken2() {
         $this->setExpectedExceptionRegExp(
             '\FeideConnect\OAuth\Exceptions\APIAuthorizationException',
-            '/invalid format/');
+            '/invalid format/'
+        );
         $apiprotector = new APIProtector(['Authorization' => 'Bearer f6773b2a-94af-4019-a54b-150a50c5ff']);
         $apiprotector->requireToken();
     }
@@ -41,7 +44,8 @@ class APIProtectorTest extends DBHelper {
     public function testNonExistingToken() {
         $this->setExpectedExceptionRegExp(
             '\FeideConnect\OAuth\Exceptions\APIAuthorizationException',
-            '/not valid/');
+            '/not valid/'
+        );
         $apiprotector = new APIProtector(['Authorization' => 'Bearer ac868d52-139e-43c1-975a-075e8dc93746']);
         $apiprotector->requireToken();
     }
@@ -49,7 +53,8 @@ class APIProtectorTest extends DBHelper {
     public function testExpiredToken() {
         $this->setExpectedExceptionRegExp(
             '\FeideConnect\OAuth\Exceptions\APIAuthorizationException',
-            '/expired/');
+            '/expired/'
+        );
         $pool = new AccessTokenPool($this->client, $this->user);
         $token = $pool->getToken(['userinfo'], null, 100);
         $token->validuntil->addSeconds(-1000);
@@ -83,7 +88,8 @@ class APIProtectorTest extends DBHelper {
     public function testRequireScopesFail() {
         $this->setExpectedExceptionRegExp(
             '\FeideConnect\OAuth\Exceptions\APIAuthorizationException',
-            '/does not have sufficient scope/');
+            '/does not have sufficient scope/'
+        );
         $pool = new AccessTokenPool($this->client, $this->user);
         $token = $pool->getToken(['scope1', 'scope2', 'scope3'], null, 100);
         $apiprotector = new APIProtector(['Authorization' => 'Bearer ' . $token->access_token]);
@@ -100,7 +106,8 @@ class APIProtectorTest extends DBHelper {
     public function testRequireUserUserlessToken() {
         $this->setExpectedExceptionRegExp(
             '\FeideConnect\OAuth\Exceptions\APIAuthorizationException',
-            '/not associated with an authenticated user/');
+            '/not associated with an authenticated user/'
+        );
         $pool = new AccessTokenPool($this->client, null);
         $token = $pool->getToken(['userinfo'], null, 100);
         $apiprotector = new APIProtector(['Authorization' => 'Bearer ' . $token->access_token]);

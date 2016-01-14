@@ -15,7 +15,7 @@ class AuthorizationEvaluatorTest extends DBHelper {
         $this->apigk = $this->apigk();
     }
 
-    private function getRequest($redirect_uri = null, $scopes=["userinfo-mail", "userinfo"]) {
+    private function getRequest($redirect_uri = null, $scopes = ["userinfo-mail", "userinfo"]) {
 
         $req = [
             "response_type" => "code",
@@ -146,7 +146,7 @@ class AuthorizationEvaluatorTest extends DBHelper {
         $this->assertTrue($this->aevaluator->needsAuthorization());
         $authz = $this->authorization($this->client, $this->user, $scopes, ["test" => ["groups"]]);
         $this->aevaluator->getAuthorization();
-        $this->assertTrue($this->aevaluator->needsAuthorization());        
+        $this->assertTrue($this->aevaluator->needsAuthorization());
     }
 
     public function testNeedsAuthorizationOKNoApis() {

@@ -11,7 +11,7 @@ function base64url_decode($data) {
 
 function JWT_decode($data) {
     $elements = explode('.', $data);
-    return json_decode(base64url_decode($elements[1]), True);
+    return json_decode(base64url_decode($elements[1]), true);
 }
 
 class OICAuthorizationTest extends OAuthAuthorizationTest {
