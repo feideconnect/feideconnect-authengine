@@ -104,7 +104,7 @@ class AccessToken extends \FeideConnect\Data\Model {
 
 
 
-    public static function generate($client, $user, $scope, $expires_in) {
+    public static function generate($client, $user, $scope, $validuntil) {
 
         // $expires_in = \FeideConnect\Config::getValue('oauth.token.lifetime', 3600);
 
@@ -119,7 +119,7 @@ class AccessToken extends \FeideConnect\Data\Model {
         }
 
         $n->issued = new Timestamp();
-        $n->validuntil = (new Timestamp())->addSeconds($expires_in);
+        $n->validuntil = $validuntil;
 
         $n->access_token = self::genUUID();
 

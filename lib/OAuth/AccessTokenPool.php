@@ -3,6 +3,7 @@
 namespace FeideConnect\OAuth;
 
 use FeideConnect\Data\StorageProvider;
+use FeideConnect\Data\Types\Timestamp;
 use FeideConnect\Data\Models;
 
 class AccessTokenPool {
@@ -76,7 +77,8 @@ class AccessTokenPool {
             return $candidate;
         }
 
-        $accesstoken = Models\AccessToken::generate($this->client, $this->user, $scopesInQuestion, $expires_in);
+        $validUntil = (new Timestamp())->addSeconds($expires_in);
+        $accesstoken = Models\AccessToken::generate($this->client, $this->user, $scopesInQuestion, $validUntil);
         $this->storage->saveToken($accesstoken);
 
         return $accesstoken;
