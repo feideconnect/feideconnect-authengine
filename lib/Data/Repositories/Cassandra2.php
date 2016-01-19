@@ -56,10 +56,13 @@ class Cassandra2 extends \FeideConnect\Data\Repository {
             throw new StorageException('Invalid timestamp (in the past) for expiration provided');
         }
         $skew = \FeideConnect\Config::getValue('storage.ttlskew', 60);
-        // echo "ABOUT TO WIPE IN " . ($validuntil->getInSeconds() + $skew) . "\n\n"; exit;
-        return $validuntil->getInSeconds() + $skew;
+        return intval($validuntil->getInSeconds() + $skew);
     }
 
+    /*
+     * A helper function that generates a INSERT statement based upon an incomming array.
+     * The $ttl parameter is optional, and may be a number of seconds before the object should expire
+     */
     protected static function generateInsert($table, $data, $ttl = null) {
 
         $keys = array_keys($data);
@@ -76,10 +79,7 @@ class Cassandra2 extends \FeideConnect\Data\Repository {
             $ttltext = ' USING TTL ' . $ttl;
         }
 
-
-
         $query = 'INSERT INTO "' . $table . '" (' . $keystr . ') VALUES (' . $keyval . ')' . $ttltext . "\n\n";
-
         return $query;
     }
 
