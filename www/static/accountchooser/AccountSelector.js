@@ -26,28 +26,29 @@ define(function(require, exports, module) {
 					return;
 				}
 
-				if  ($("#accounts").hasClass("modeRemove")) {
+				if ($("#accounts").hasClass("modeRemove")) {
 					// console.log("Ignoring, since in remove mode...");
 					return;
 				}
-			
+
 
 				// console.log("Selected to login using", userid, that.store.accts[userid]);
 				that.app.disco.go(that.store.accts[userid]);
 
 			});
 			$("#accounts").on("click", ".actRemove", function(e) {
-				e.preventDefault(); e.stopPropagation();
+				e.preventDefault();
+				e.stopPropagation();
 				var userid = $(e.currentTarget).closest('.accountentry').data("userid");
 				that.store.removeAccountTag(userid);
-				if (that.store.hasAny() ) {
-					that.draw();    
+				if (that.store.hasAny()) {
+					that.draw();
 				} else {
 					$("#paneselector").hide();
 					that.app.disco.activate();
 				}
-				
-			
+
+
 				// that.app.disco.go(that.store.accts[userid]);
 				// console.log("About to remove", userid);
 			});
@@ -65,7 +66,7 @@ define(function(require, exports, module) {
 
 			$("body").on("click", "#altlogin", function(e) {
 				e.preventDefault();
-				 $("#paneselector").hide();
+				$("#paneselector").hide();
 				that.app.disco.activate();
 			});
 
@@ -75,17 +76,17 @@ define(function(require, exports, module) {
 			this.draw();
 			$("#paneselector").show();
 		},
-		
+
 
 		"matchOneDefType": function(accepteddef, accountdef) {
-			for(var i = 0; i < accepteddef.length; i++) {
+			for (var i = 0; i < accepteddef.length; i++) {
 
 				// console.error("  >>>>  CHECK if " + accepteddef[i] + ' matches ' + accountdef[i] );
 
 				if (accepteddef[i] === 'all') {
 					return true;
 
-				} else if (i > (accountdef.length-1)) {
+				} else if (i > (accountdef.length - 1)) {
 
 					return false;
 
@@ -104,7 +105,9 @@ define(function(require, exports, module) {
 			for (var i = 0; i < accepteddefs.length; i++) {
 
 				var x = this.matchOneDefType(accepteddefs[i], accountdef);
-				if (x) { return true; }
+				if (x) {
+					return true;
+				}
 
 			}
 			return false;
@@ -112,20 +115,21 @@ define(function(require, exports, module) {
 
 
 
-
-		"matchAnyType": function(types) {			
+		"matchAnyType": function(types) {
 			var accepteddefs = this.app.getAuthProviderDef();
 			// console.error("  ›  CHECK if \n" + JSON.stringify(types) + ' does match the legal ' + "\n" + JSON.stringify(accepteddefs));
 			for (var i = 0; i < types.length; i++) {
 				var x = this.matchType(types[i]);
-				if (x) {return true; }
+				if (x) {
+					return true;
+				}
 			}
 			return false;
 		},
 
 
 		"hasSameUserID": function(a, b) {
-			if (!a.userids) { 
+			if (!a.userids) {
 				return false;
 			}
 			if (!b.userids) {
@@ -161,7 +165,7 @@ define(function(require, exports, module) {
 			var def = this.app.getAuthProviderDef();
 			var allowed;
 
-			for(var userid in this.store.accts) {
+			for (var userid in this.store.accts) {
 
 				var a = this.store.accts[userid];
 
@@ -173,7 +177,9 @@ define(function(require, exports, module) {
 					// console.error("Check match any type", allowed);
 				}
 				var classes = ['list-group-item', 'accountentry'];
-				if (!allowed) { classes.push('disabled'); }
+				if (!allowed) {
+					classes.push('disabled');
+				}
 
 				var isActive = this.isActiveAccount(a);
 
@@ -181,26 +187,26 @@ define(function(require, exports, module) {
 				// console.log("Active accounts", window.activeAccounts);
 
 				txt += '<a href="#" class="' + classes.join(' ') + '" data-userid="' + Utils.quoteattr(userid) + '" style="">' +
-					'<div class="media"><div class="media-left media-middle">' + 
-							'<img class="media-object" style="width: 64px; height: 64px" src="' + Utils.quoteattr(a.photo) + '" alt="...">' + 
-						'</div>' +
-						'<div class="media-body">' + 
-							'<p class="showOnRemove" style=""><button class="btn btn-danger actRemove" style="float: right">' + this.app.dictionary.remove + '</button></p>' + 
-
-							'<i style="float: right; margin-top: 20px" class="fa fa-chevron-right fa-2x hideOnRemove"></i>' +
-							(isActive ? '<i style="color: #6a6; float: right; margin-top: 20px; margin-right: 12px" class="fa fa-circle fa-2x"></i>' : '') +
-							'<p style="font-size: 140%; margin: 0px">' + Utils.quoteattr(a.name) + '</p>' + 
-							(a.title !== null ? '<p style="font-size: 100%; margin: 0px; margin-top: -6px">' + Utils.quoteattr(a.title) + '</p>' : '' )+ 
-							'<p style="font-size: 70%; color: #aaa; margin: 0px">' + Utils.quoteattr(userid) + '</p>' + 
-						'</div>' +
+					'<div class="media"><div class="media-left media-middle">' +
+					'<img class="media-object" style="width: 64px; height: 64px" src="' + Utils.quoteattr(a.photo) + '" alt="...">' +
 					'</div>' +
-				'</a>';
+					'<div class="media-body">' +
+					'<p class="showOnRemove" style=""><button class="btn btn-danger actRemove" style="float: right">' + this.app.dictionary.remove + '</button></p>' +
+
+					'<i style="float: right; margin-top: 20px" class="fa fa-chevron-right fa-2x hideOnRemove"></i>' +
+					(isActive ? '<i style="color: #6a6; float: right; margin-top: 20px; margin-right: 12px" class="fa fa-circle fa-2x"></i>' : '') +
+					'<p style="font-size: 140%; margin: 0px">' + Utils.quoteattr(a.name) + '</p>' +
+					(a.title !== null ? '<p style="font-size: 100%; margin: 0px; margin-top: -6px">' + Utils.quoteattr(a.title) + '</p>' : '') +
+					'<p style="font-size: 70%; color: #aaa; margin: 0px">' + Utils.quoteattr(userid) + '</p>' +
+					'</div>' +
+					'</div>' +
+					'</a>';
 			}
 
-			txt += '<div class="list-group-item">' + 
+			txt += '<div class="list-group-item">' +
 				'<p style="text-align: right; font-size: 80%; marging-top: 2em">' +
-					'   <a id="removeacct" class="hideOnRemove" href="" style="color: #888; "><i class="fa fa-times"></i>' + this.app.dictionary.removeacct + ' </a>' +
-					'   <a class="showOnRemove" id="removedone" href="" style="color: #888"><i class="fa fa-check"></i> ' + this.app.dictionary.done + '</a>' + 
+				'   <a id="removeacct" class="hideOnRemove" href="" style="color: #888; "><i class="fa fa-times"></i>' + this.app.dictionary.removeacct + ' </a>' +
+				'   <a class="showOnRemove" id="removedone" href="" style="color: #888"><i class="fa fa-check"></i> ' + this.app.dictionary.done + '</a>' +
 				'</p>' +
 				'<p style="text-align: center; marging-top: 1em"><a id="altlogin" href="">' + this.app.dictionary.oranotheraccount + '</a></p>' +
 				'</div>';
@@ -211,7 +217,6 @@ define(function(require, exports, module) {
 
 	});
 	return AccountSelector;
-
 
 
 

@@ -17,6 +17,7 @@ define(function(require, exports, module) {
 			};
 
 			if (!feideIdPEndpoints.hasOwnProperty(this.feideid)) {
+				console.error("Trying to look up ", this.feideid, "from ", feideIdPEndpoints);
 				throw new Error("Bad Feide entityID. No configuration found.");
 			}
 
@@ -24,8 +25,6 @@ define(function(require, exports, module) {
 			this.url = feideIdPEndpoints[this.feideid] + '?HomeOrg=' + encodeURIComponent(org) + '&ReturnTo=' + encodeURIComponent(returnURL);
 
 			var that = this;
-
-			// console.error("SETTTING FeideWriter to ", org, feideid);
 
 			this._callback = null;
 			$("#iloaded").on("click", function() {
@@ -37,11 +36,11 @@ define(function(require, exports, module) {
 
 			});
 
-	    },
+		},
 
-	    "load": function() {
+		"load": function() {
 
-	    	var that = this;
+			var that = this;
 			var iframe = '<iframe style="display: none" src="' + this.url + '"></iframe>';
 			$("body").prepend(iframe);
 
@@ -61,12 +60,12 @@ define(function(require, exports, module) {
 
 			return this;
 
-	    },
-	    "onLoad": function(callback) {
-	    	// console.error(" ---- Setting onload callback");
-	    	this._callback = callback;
-	    	return this;
-	    }
+		},
+		"onLoad": function(callback) {
+			// console.error(" ---- Setting onload callback");
+			this._callback = callback;
+			return this;
+		}
 
 	});
 
