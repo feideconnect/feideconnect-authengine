@@ -13,6 +13,7 @@ use FeideConnect\Exceptions\Exception;
 use FeideConnect\Exceptions\StorageException;
 
 use Cassandra\Connection;
+use Cassandra\Request\Request;
 use Cassandra\Type\Uuid;
 use Cassandra\Type\Timestamp;
 use Cassandra\Type\Blob;
@@ -44,10 +45,7 @@ class Cassandra2 extends \FeideConnect\Data\Repository {
         // $this->db = new \evseevnn\Cassandra\Database($config['nodes'], $config['keyspace']);
         $this->db = new Connection($config['nodes'], $config['keyspace']);
         $this->db->connect();
-
-        // Set consistency level for farther requests (default is CONSISTENCY_ONE)
-        // $connection->setConsistency(Request::CONSISTENCY_QUORUM);
-
+        $this->db->setConsistency(Request::CONSISTENCY_LOCAL_QUORUM);
     }
 
     protected function getTTLskew(\FeideConnect\Data\Types\Timestamp $validuntil) {
