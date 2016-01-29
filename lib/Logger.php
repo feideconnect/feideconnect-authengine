@@ -44,6 +44,14 @@ class Logger {
                 $this->baseData[strtolower($var)] = $val;
             }
         }
+        $path = Utils\URL::selfPathNoQuery();
+        if (!empty($path)) {
+            $this->baseData['path'] = $path;
+        }
+        if (isset($_SERVER['REMOTE_ADDR'])) {
+            $this->baseData['src_ip'] = $_SERVER['REMOTE_ADDR'];
+        }
+        $this->baseData['request'] = self::requestId();
     }
 
     public static function requestId() {
@@ -59,15 +67,6 @@ class Logger {
         $str = str_replace(['{', '}'], ['[', ']'], $str);
 
         $data = array_merge($this->baseData, $data);
-        $path = Utils\URL::selfPathNoQuery();
-        if (!empty($path)) {
-            $data['path'] = $path;
-        }
-        if (isset($_SERVER['REMOTE_ADDR'])) {
-            $data['src_ip'] = $_SERVER['REMOTE_ADDR'];
-        }
-        $data['request'] = self::requestId();
-
         foreach ($data as $key => &$value) {
             if ($value instanceof Utils\Loggable) {
                 $value = $value->toLog();
