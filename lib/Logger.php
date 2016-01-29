@@ -18,6 +18,7 @@ class Logger {
 
     protected $log;
     protected static $instance = null;
+    protected $baseData = [];
     protected static $requestId;
 
 
@@ -37,6 +38,12 @@ class Logger {
         if (Config::getValue('logging.errorlog', true)) {
             $this->log->pushHandler(new ErrorLogHandler());
         }
+        foreach(['DOCKER_SERVICE', 'DOCKER_HOST', 'DOCKER_INSTANCE'] as $var) {
+            $val = getenv($var);
+            if ($val) {
+                $this->baseData[strtolower($var)] = $val;
+            }
+        }
     }
 
     public static function requestId() {
@@ -51,6 +58,7 @@ class Logger {
         // Fix easier parsing by the monolog laas parser.
         $str = str_replace(['{', '}'], ['[', ']'], $str);
 
+        $data = array_merge($this->baseData, $data);
         $path = Utils\URL::selfPathNoQuery();
         if (!empty($path)) {
             $data['path'] = $path;
