@@ -39,11 +39,29 @@ class Cassandra2 extends \FeideConnect\Data\Repository {
         if (empty($config['nodes'])) {
             throw new FeideConnectException('Required config not set');
         }
+        $hostprefix = '';
+        if (!empty($config['use_ssl']) and $config['use_ssl']) {
+            $hostprefix = 'ssl://';
+        }
+        $username = getenv('CASSANDRA_USERNAME');
+        $password = getenv('CASSANDRA_PASSWORD');
 
-
+        $nodes = [];
+        foreach ($config['nodes'] as $node) {
+            $node_data = [
+                'host' => $hostprefix . $node,
+                'port' => 9042,
+                'class'    => 'Cassandra\Connection\Stream',
+            ];
+            if ($username and $password) {
+                $node_data['username'] = $username;
+                $node_data['password'] = $password;
+            }
+            $nodes[] = $node_data;
+        }
 
         // $this->db = new \evseevnn\Cassandra\Database($config['nodes'], $config['keyspace']);
-        $this->db = new Connection($config['nodes'], $config['keyspace']);
+        $this->db = new Connection($nodes, $config['keyspace']);
         $this->db->connect();
         $this->db->setConsistency(Request::CONSISTENCY_LOCAL_QUORUM);
     }
