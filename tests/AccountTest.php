@@ -49,7 +49,7 @@ class AccountTest extends DBHelper {
         'authSource' => 'default-sp',
         'idp' =>
         array (
-            0 => 'idporten.difi.no-v2',
+            0 => 'idporten.difi.no-v3',
         ),
         'sourceID' =>
         array (
@@ -274,17 +274,17 @@ class AccountTest extends DBHelper {
     public function testGetVisualTagIDPorten() {
         $account = new Account([
             'uid' => ['01020312345'],
-            'idp' => 'idporten.difi.no-v2',
+            'idp' => 'idporten.difi.no-v3',
         ], self::$idportenAM);
         $tag = $account->getVisualTag();
         $this->assertEquals([
             'name' => 'IDporten user',
             'type' => 'saml',
-            'id' => 'idporten.difi.no-v2',
+            'id' => 'idporten.difi.no-v3',
             'title' => 'IDporten',
             'userids' => ['nin:0102.......'],
             'def' => [
-                ['other', 'idporten'],
+                ['idporten'],
             ]
         ], $tag);
     }
@@ -363,13 +363,6 @@ class AccountTest extends DBHelper {
         ], $tag);
     }
 
-    public function testAllowAll() {
-        $this->assertTrue(Account::allowAll([['all']]));
-        $this->assertTrue(Account::allowAll([['ugle'], ['all']]));
-        $this->assertTrue(Account::allowAll([['all'], ['ugle']]));
-        $this->assertFalse(Account::allowAll([]));
-        $this->assertFalse(Account::allowAll([['all', 'ugle']]));
-    }
 
     public function testCompareType() {
         $this->assertTrue(Account::compareType(['ugle'], []));

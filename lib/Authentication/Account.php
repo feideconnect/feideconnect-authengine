@@ -60,15 +60,6 @@ class Account {
 
     }
 
-    // public static function allowAll($authproviders) {
-
-    //     foreach ($authproviders as $ap) {
-    //         if (count($ap) === 1 && $ap[0] === 'all') {
-    //             return true;
-    //         }
-    //     }
-    //     return false;
-    // }
 
     public static function compareType($candidate, $match) {
         for ($i = 0; $i < count($match); $i++) {
@@ -134,20 +125,12 @@ class Account {
             return true;
         }
 
-        // if ($this->allowAll($authproviders)) {
-        //     return true;
-        // }
 
         $def = $this->getDef();
 
         if (empty($def)) {
             throw new \Exception('Unable to detect where this user can login.');
         }
-
-        // echo '<pre>About to validate auth providers'; 
-        // print_r($def);
-        // print_r($authproviders);
-        // exit;
 
         foreach ($def as $d) {
             foreach ($authproviders as $ap) {
