@@ -50,7 +50,7 @@ class OpenIDConnect {
             'token_endpoint_auth_signing_alg_values_supported' => ['RS256'],
             'userinfo_endpoint' =>  $base2 . 'userinfo',
             'ui_locales_supported' => ["en", "no", "nb", "nn"],
-            'service_documentation' => 'http://feideconnect.no/docs/gettingstarted/',
+            'service_documentation' => 'https://docs.dataporten.no',
             'jwks_uri' => $base2 . 'jwks',
             'response_types_supported' => ['code', 'id_token token'],
             'subject_types_supported' => ['public'],

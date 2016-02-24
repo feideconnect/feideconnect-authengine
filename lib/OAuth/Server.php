@@ -84,7 +84,7 @@ class Server {
             $msg = array(
                 'error' => $e->code,
                 'error_description' => $e->getMessage(),
-                'error_uri' => 'https://feideconnect.no',
+                'error_uri' => 'https://docs.dataporten.no',
             );
             Logger::error('OAuth Error Response at Authorization endpoint.', $msg);
 
@@ -265,7 +265,7 @@ class Server {
             $msg = array(
                 'error' => $e->code,
                 'error_description' => $e->getMessage(),
-                'error_uri' => 'https://feideconnect.no',
+                'error_uri' => 'https://docs.dataporten.no',
             );
             Logger::error('OAuth Error Response at Token endpoint.', $msg);
 

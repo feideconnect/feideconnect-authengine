@@ -1,26 +1,25 @@
 {
-	"name": "feideconnect",
-	"description": "Feide Connect Auth Engine",
-	"version": "0.1.0",
+	"name": "dataporten-authengine",
+	"description": "Dataporten Auth Engine",
+	"version": "1.0.0",
 	"keywords": [
 		"groups",
 		"authorization"
 	],
-	"homepage": "http://feideconnect.no",
+	"homepage": "https://www.uninett.no/tjenester/dataporten",
 	"author": "Andreas Åkre Solberg",
 	"scripts": {
 		"test": "phpunit --bootstrap lib/_autoload.php tests"
 	},
 	"repository": {
 		"type": "git",
-		"url": "https://github.com/andreassolberg/feideconnect-authengine.git"
+		"url": "https://github.com/feideconnect/feideconnect-authengine.git"
 	},
 	"bugs": {
-		"url": "https://github.com/andreassolberg/feideconnect-authengine/issues"
+		"url": "https://github.com/feideconnect/feideconnect-authengine/issues"
 	},
 	"devDependencies": {
 		"bower": "*",
-
 		"grunt": "*",
 		"grunt-cli": "*",
 		"grunt-contrib-jshint": "*",

@@ -1,9 +1,9 @@
 {
-	"name": "andreassolberg/feide-connect-auth-engine",
-	"description": "Feide Connect Auth Engine.",
+	"name": "feideconnect/feide-connect-auth-engine",
+	"description": "Dataporten Auth Engine",
 	"type": "project",
 	"keywords": [ "saml2", "authentication", "oauth", "openidconnect" ],
-	"homepage": "http://feideconnect.no",
+	"homepage": "https://www.uninett.no/tjenester/dataporten",
 	"license": "LGPL-2.1",
 	"authors": [
 		{

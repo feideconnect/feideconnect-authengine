@@ -1,5 +1,5 @@
 {
-  "name": "feideconnect-authengine",
+  "name": "dataporten-authengine",
   "private": true,
   "dependencies": {
     "es6-promise": "*",

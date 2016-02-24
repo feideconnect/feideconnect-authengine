@@ -54,7 +54,7 @@ define(function(require, exports, module) {
 			var datastr = 'data-id="' + Utils.quoteattr(feideIdP) + '" data-subid="' + Utils.quoteattr(this.id) + '" data-type="saml"';
 			txt += '<a href="#" class="list-group-item idpentry' + classes + '" ' + datastr + '>' +
 				'<div class="media"><div class="media-left media-middle">' + 
-						'<img class="media-object" style="width: 48px; height: 48px" src="https://api.feideconnect.no/orgs/fc:org:' + this.id + '/logo" alt="...">' + 
+						'<img class="media-object" style="width: 48px; height: 48px" src="https://api.dataporten.no/orgs/fc:org:' + this.id + '/logo" alt="...">' + 
 					'</div>' +
 					'<div class="media-body"><p>' + this.title + '</p></div>' +
 				'</div>' +
