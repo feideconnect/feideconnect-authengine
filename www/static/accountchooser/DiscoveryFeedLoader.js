@@ -1,58 +1,56 @@
 define(function(require, exports, module) {
 	"use strict";
 
-	var Class = require('./Class');
+	var Controller = require('./Controller');
+	var Provider = require('./models/Provider');
 
-
-
-    var DiscoveryFeedLoader = Class.extend({
+    var DiscoveryFeedLoader = Controller.extend({
     	"init": function() {
     		var that = this;
 
+    		this._callback = null;
     		this.providers = [];
 
-    		// console.log("INITING DiscoveryFeedLoader");
-
-    		this.initialized = false;
-    		this.initialize();
-
+    		this._super(undefined, true);
     	},
 
-
-    	"initialize": function() {
-    		var that = this;
-    		this.initialized = true;
-    		this.loadData();
-
-    	},
-
+		"initLoad": function() {
+			var that = this;
+			return this.loadData()
+				.then(this.proxy("_initLoaded"));
+		},
     	"loadData": function() {
-    		
     		var that = this;
-    		var url = 'https://api.discojuice.org/feed/edugain';
-    		$.ajax({
-				dataType: "json",
-				url: url,
-				success: function(data) {
-					
-					that.providers = data;
-					that.executeCallback();
 
-				},
-				error: function(err, a, b) {
-					console.error("error ", err, a, b);
-				}
-			});
+    		return Promise.resolve([]);
+    		
+			// return new Promise(function(resolve, reject) {
+			// 	var url = 'https://api.discojuice.org/feed/edugain';
+			// 	$.ajax({
+			// 		dataType: "json",
+			// 		url: url,
+			// 		success: function(data) {
+			// 			for(var i = 0; i < data.length; i++) {
+			// 				that.providers.push(new Provider(data[i]));
+			// 			}
+			// 			// that.providers = data;
+			// 			resolve(data);
+			// 		},
+			// 		error: function(err, a, b) {
+			// 			console.error("error ", err, a, b);
+			// 			reject(err);
+			// 		}
+			// 	});
+			// });
+
     	},
-
 		"executeCallback": function() {
 			if (this._callback !== null) {
 				this._callback(this.providers);
 			}
 		},
-
-		"onUpdate": function(callback) {
-			this._callback = callback;
+		"getData": function() {
+			return this.providers;
 		}
 
     });

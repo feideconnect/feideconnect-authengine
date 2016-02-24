@@ -70,17 +70,15 @@ define(function(require, exports, module) {
     		});
 
 			this.dfl = new DiscoveryFeedLoader();
-			this.dfl.onUpdate(function(providers) {
-				that.providers = [];
-				for(var i = 0; i < providers.length; i++) {
-					that.providers.push(new Provider(providers[i]));
-				}
 
-				// console.error("Received", that.country);
-				if (that.country !== "no") {
-					that.drawData();
-				}
-			});
+			this.dfl.onLoaded()
+				.then(function() {
+					that.providers = that.dfl.getData();
+					if (that.country !== "no") {
+						that.drawData();
+					}
+				});
+
 
 
             this._super(undefined, false);
@@ -438,11 +436,7 @@ define(function(require, exports, module) {
 				showit.sort(sf);
 			}
 
-
-			// console.error("dict", this.app.dictionary);
-
 			for (i = 0; i < showit.length; i++) {
-
 
 				if (c > (this.maxshow - 1)) {
 					var remaining = it.length - missed - c;
@@ -459,7 +453,7 @@ define(function(require, exports, module) {
 				txt += showit[i].getHTML(that.app.config.feideIdP);
 			}
 			$("#idplist").empty().append(txt);
-			if (cc === 0) {
+			if (cc === 0 && this.country === 'no') {
 				$(".orgchoices").hide();
 				$(".altchoices").removeClass("col-md-4").addClass("col-md-12");
 			}
