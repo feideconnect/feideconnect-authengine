@@ -60,18 +60,21 @@ class Account {
 
     }
 
-    public static function allowAll($authproviders) {
+    // public static function allowAll($authproviders) {
 
-        foreach ($authproviders as $ap) {
-            if (count($ap) === 1 && $ap[0] === 'all') {
-                return true;
-            }
-        }
-        return false;
-    }
+    //     foreach ($authproviders as $ap) {
+    //         if (count($ap) === 1 && $ap[0] === 'all') {
+    //             return true;
+    //         }
+    //     }
+    //     return false;
+    // }
 
     public static function compareType($candidate, $match) {
         for ($i = 0; $i < count($match); $i++) {
+            if ($candidate[$i] === 'idporten' && $match[$i] !== 'idporten') {
+                return false;
+            }
             if ($match[$i] === 'all') {
                 return true;
             }
@@ -124,19 +127,27 @@ class Account {
 
     public function validateAuthProvider($authproviders) {
 
+
+
+
         if (empty($authproviders)) {
             return true;
         }
 
-        if ($this->allowAll($authproviders)) {
-            return true;
-        }
+        // if ($this->allowAll($authproviders)) {
+        //     return true;
+        // }
 
         $def = $this->getDef();
 
         if (empty($def)) {
             throw new \Exception('Unable to detect where this user can login.');
         }
+
+        // echo '<pre>About to validate auth providers'; 
+        // print_r($def);
+        // print_r($authproviders);
+        // exit;
 
         foreach ($def as $d) {
             foreach ($authproviders as $ap) {
@@ -193,9 +204,9 @@ class Account {
         $sourceData = [
             'idporten' => [
                 "type" => "saml",
-                "id" => "idporten.difi.no-v2",
+                "id" => "idporten.difi.no-v3",
                 "title" => 'IDporten',
-                "def" => [["other", "idporten"]],
+                "def" => [["idporten"]],
             ],
             'openidp' => [
                 "type" => "saml",

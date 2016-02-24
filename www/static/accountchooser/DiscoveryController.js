@@ -84,8 +84,6 @@ define(function(require, exports, module) {
 
 
             this._super(undefined, false);
-
-
 			
 			$('.dropdown-toggle').dropdown();
 			$('[data-toggle="tooltip"]').tooltip();
@@ -145,7 +143,7 @@ define(function(require, exports, module) {
 				}
 
 				if (t.hasClass("disabled")) {
-					return alert("This provider is not yet technically connected to the Connect pilot.");
+					return alert("This provider is not yet enabled on Dataporten.");
 				}
 
 				that.go(so);
@@ -285,6 +283,12 @@ define(function(require, exports, module) {
 		"matchAuthProviderFilter": function(item) {
 			
 			var providers = this.app.getAuthProviderDef();
+
+			// console.log("---- MATCHING");
+			// console.log(item);
+			// console.log(providers);
+
+
 			for(var i = 0; i < providers.length; i++) {
 				// console.log("Compare", JSON.stringify(providers[i]), item);
 				if (providers[i][0] === 'all') {

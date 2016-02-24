@@ -22,10 +22,18 @@ define(function(require, exports, module) {
 
 		"matchType": function(type) {
 
+			// console.error("MATCH TYPE", type, this.def);
+
 			var def = this.def;
 			for (var i = 0; i < type.length; i++) {
-				if (type[i] === 'all') {
+
+				// Reject idporten with higher priority than accept with 'all'.
+				if (def[i] === 'idporten' && type[i] !== 'idporten') {
+					return false;
+
+				} else if (type[i] === 'all') {
 					return true;
+
 				} else if (i > (def.length-1)) {
 
 					return false;
