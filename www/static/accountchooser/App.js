@@ -163,22 +163,6 @@ define(function(require, exports, module) {
 				var url = that.getCoreURL('/clientadm/clients/') + that.request.clientid;
 				// console.log("Contacting url", url);
 				$.getJSON(url,function(data) {
-					// data.authproviders = [];
-					// data.authproviders.push('all');
-					// data.authproviders.push('social|all');
-					// data.authproviders.push('social|facebook');
-					// data.authproviders.push('social|twitter');
-					// data.authproviders.push('social|linkedin');
-					// data.authproviders.push('other|all');
-					// data.authproviders.push('other|idporten');
-					// data.authproviders.push('other|openidp');
-					// data.authproviders.push('other|openidp');
-					// data.authproviders.push('other|feidetest');
-					// data.authproviders.push('feide|all');
-					// data.authproviders.push('feide|go');
-					// data.authproviders.push('feide|he');
-					// data.authproviders.push('feide|realm|uninett.no');
-					// data.authproviders.push('feide|realm|iktsenteret.no');
 
 					// console.error("Got clientinfo data:", data);
 					that.client = data;
