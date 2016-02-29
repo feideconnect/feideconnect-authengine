@@ -131,9 +131,10 @@ class OAuthAuthorization {
             }
 
         } else {
-            return null;
+            if ($this->isPassive) {
+                return null;      
+            }
         }
-
 
         if (isset($_REQUEST["verifier"])) {
             $verifier = $this->user->getVerifier();
