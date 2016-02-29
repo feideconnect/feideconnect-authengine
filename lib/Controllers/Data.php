@@ -78,7 +78,7 @@ class Data {
         }
 
         $storage = StorageProvider::getStorage();
-        $orgs = $storage->getOrgsByService('pilot');
+        $orgs = $storage->getOrgsByService('auth');
         $data = [];
 
         foreach ($orgs as $org) {
