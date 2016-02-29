@@ -39,11 +39,11 @@
 	"requeststhirdperms": "In addition the application requests these permissions to third party services on behalf of you:",
 	
 
-	"readmoreconnect": "Read more about Feide and Connect",
-	"connectpersonvern": "Connect privacy policy",
-	"thisisfirsttime": "This is the first time you login to an application using Feide / Connect. To continue you need to accept the Connect Terms of Use.",
+	"readmoreconnect": "Read more about Dataporten",
+	"connectpersonvern": "Dataporten privacy policy",
+	"thisisfirsttime": "This is the first time you login to an application using Dataporten. To continue you need to accept the Dataporten Privacy Policy.",
 	"iaccept": "I accept",
-	"userterms": "Connect Terms of Use",
+	"userterms": "Dataporten Privacy Policy",
 	"showmore": "Show more information",
 	"okcontinue": "OK, continue to the application",
 	"validated1": " is an official application used at ",
@@ -90,9 +90,8 @@
 	"yesaccept": "Yes, I accept",
 	"no": "No",
 
-	"connecttou": "Connect terms of use",
 	"close": "Close",
-	"acceptou": "Accept the terms of use",
+	"acceptou": "Accept the privacy policy",
 
 	"cno": "Norway",
 	"cdk": "Denmark",
