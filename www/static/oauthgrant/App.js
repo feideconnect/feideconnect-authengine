@@ -18,7 +18,7 @@ define(function(require, exports, module) {
 			this.lang = new LanguageSelector($("#langselector"), true);
 
 			$(".grantEntry").on("click", function(item) {
-				console.log("Click");
+				// console.log("Click");
 				$(item.currentTarget).toggleClass("grantEntryActive");
 			});
 

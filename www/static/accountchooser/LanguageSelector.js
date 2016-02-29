@@ -16,7 +16,7 @@ define(function(require, exports, module) {
 			};
 			this.selected = 'nn';
 
-
+			this.config = {};
 
 			// console.error("Lang setup");
 			this._super(el, false);
@@ -28,9 +28,17 @@ define(function(require, exports, module) {
 				that.setLang(s);
 			});
 		},
+		"setConfig": function(config) {
+			this.config = config;
+		},
 		"setLang": function(lang) {
 
-			Cookies.set('lang', lang, {'path': '/', 'domain': '.dataporten.no', 'expires': (365*10)});
+			var langCookieDomain = '.dataporten.no';
+			if (this.config.hasOwnProperty('langCookieDomain')) {
+				langCookieDomain = this.config.langCookieDomain;
+			}
+
+			Cookies.set('lang', lang, {'path': '/', 'domain': langCookieDomain, 'expires': (365*10)});
 			window.location.reload();
 
 		},

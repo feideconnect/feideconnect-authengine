@@ -45,6 +45,7 @@ define(function(require, exports, module) {
 				})
 				.then(function() {
 					that.disco.setFeideIdP(that.config.feideIdP);
+					that.lang.setConfig(that.config);
 					return Promise.all([
 						that.loadClientInfo(),
 						that.loadDictionary()

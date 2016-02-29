@@ -114,6 +114,7 @@ class Data {
         $config = [];
         $config['feideIdP'] = Config::getValue('feideIdP');
         $config['endpoints'] = Config::getValue('endpoints');
+        $config['langCookieDomain'] = Config::getValue('langCookieDomain', '.dataporten.no');
 
         // $ldata = Localization::localizeList($data, ['title', 'descr']);
         return new JSONResponse($config);

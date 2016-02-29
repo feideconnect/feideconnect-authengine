@@ -8,6 +8,7 @@
 		"nodes": ["158.38.213.74", "158.38.213.91", "158.38.213.87"]		
 	},
 
+	"langCookieDomain": ".dataporten.no",
 	"endpoints": {
 		"core": "https://api.dev.feideconnect.no",
 		"groups": "https://groups-api.dev.feideconnect.no"
