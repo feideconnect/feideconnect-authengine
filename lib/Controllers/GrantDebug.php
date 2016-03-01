@@ -27,7 +27,7 @@ class GrantDebug {
 
         // $test = new ScopesInspector(['gk_foodle']);
         // echo '<pre>';
-        // print_r($test->getInfo()); 
+        // print_r($test->getInfo());
         // exit;
 
 

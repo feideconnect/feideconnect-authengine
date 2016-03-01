@@ -132,7 +132,7 @@ class OAuthAuthorization {
 
         } else {
             if ($this->isPassive) {
-                return null;      
+                return null;
             }
         }
 

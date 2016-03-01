@@ -38,7 +38,7 @@ class Logger {
         if (Config::getValue('logging.errorlog', true)) {
             $this->log->pushHandler(new ErrorLogHandler());
         }
-        foreach(['DOCKER_SERVICE', 'DOCKER_HOST', 'DOCKER_INSTANCE'] as $var) {
+        foreach (['DOCKER_SERVICE', 'DOCKER_HOST', 'DOCKER_INSTANCE'] as $var) {
             $val = getenv($var);
             if ($val) {
                 $this->baseData[strtolower($var)] = $val;
