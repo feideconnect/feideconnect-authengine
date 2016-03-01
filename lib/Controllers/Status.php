@@ -17,10 +17,10 @@ class Status {
             'DOCKER_INSTANCE',
         ];
 
-        if (!empty($_SERVER['HTTP_X_DP_STATUS_TOKEN']) and 
+        if (!empty($_SERVER['HTTP_X_DP_STATUS_TOKEN']) and
             $_SERVER['HTTP_X_DP_STATUS_TOKEN'] === getenv('FC_STATUS_TOKEN')) {
             $data = [];
-            foreach( $STATUS_VARS as $var) {
+            foreach ($STATUS_VARS as $var) {
                 $val = getenv($var);
                 if ($val) {
                     $data[$var] = $val;
