@@ -14,12 +14,14 @@ class StatusTest extends \PHPUnit_Framework_TestCase {
     public function testStatus() {
         $_SERVER['HTTP_X_DP_STATUS_TOKEN'] = 'foo';
         $res = Status::status();
+        $data = $res->getData();
+        unset($data['info']['GIT_COMMIT']);
         $this->assertEquals([
             'info' => [
                 'JENKINS_BUILD_NUMBER' => '1',
                 'DOCKER_INSTANCE' => 'green',
             ],
-        ], $res->getData());
+        ], $data);
     }
 
     public function testBadToken() {
