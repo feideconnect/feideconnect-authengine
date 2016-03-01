@@ -33,9 +33,14 @@ define(function(require, exports, module) {
 				$("body").toggleClass("simpleGrant");
 			});
 
+			$(".touOpen").on("click", function(e) {
+				e.preventDefault(); e.stopPropagation();
+				$('#myModal').modal('show');
+			});
+
 			if ($("body").hasClass("bypass")) {
 				$("#submit").click();
-				console.error("Bypass simplegrant");
+				// console.error("Bypass simplegrant");
 				// $("body").show();
 			} else {
 				$("#mcontent").show();
