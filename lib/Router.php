@@ -70,6 +70,8 @@ class Router {
         // Robots
         $this->router->get('/robots.txt', ['FeideConnect\Controllers\Pages', 'robot']);
 
+        // Status for monitoring
+        $this->router->get('/status', ['FeideConnect\Controllers\Status', 'status']);
 
         // NB. You can cache the return value from $router->getData()
         //  so you don't have to create the routes each request - massive speed gains
