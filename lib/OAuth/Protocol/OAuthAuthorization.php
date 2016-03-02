@@ -241,6 +241,8 @@ class OAuthAuthorization {
             'user' => $this->user,
             'source' => $this->account->getSourceID(),
         ]);
+
+        $this->storage->updateLoginStats($this->client, $this->account->getSourceID());
     }
 
     public function process() {

@@ -829,6 +829,22 @@ class Cassandra2 extends \FeideConnect\Data\Repository {
         $this->execute($query, $params, __FUNCTION__);
     }
 
+    public function updateLoginStats(Models\Client $client, $authsource) {
+        $timeslot = new \FeideConnect\Data\Types\Timestamp();
+        $timeslot->roundseconds(60);
+        $date = $timeslot->datestring();
+        
+        $query = 'UPDATE "logins_stats" SET login_count = login_count + 1 WHERE "clientid" = :clientid';
+        $query .= ' AND "date" = :date AND "timeslot" = :timeslot AND "authsource" = :authsource';
+        $params = [
+            'clientid' => new Uuid($client->id),
+            'date' => $date,
+            'timeslot' => $timeslot->getCassandraTimestamp(),
+            'authsource' => $authsource,
+        ];
+        $this->execute($query, $params, __FUNCTION__);
+    }
+
 
 
 

@@ -66,4 +66,13 @@ class Timestamp {
         }
         return ($a->_value < $b->_value) ? -1 : 1;
     }
+
+    public function datestring() {
+        return date('Y-m-d', $this->_value);
+    }
+
+    public function roundseconds($seconds) {
+        $value = intval($this->_value);
+        $this->_value = $value - $value % $seconds;
+    }
 }
