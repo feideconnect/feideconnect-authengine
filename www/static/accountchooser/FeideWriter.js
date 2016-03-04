@@ -56,7 +56,7 @@ define(function(require, exports, module) {
 					}
 				}, 1500);
 
-			}, 1500);
+			}, 3000);
 
 			return this;
 
