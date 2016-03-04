@@ -61,7 +61,7 @@ define(function(require, exports, module) {
 				.then(function() {
 					that._initLoaded();
 				})
-				.catch(function(err) {
+				.then(undefined, function(err) {
 					console.error("Error loading AccountChooser", err);
 					that.setErrorMessage("Error loading AccountChooser", "danger", err);
 				});
