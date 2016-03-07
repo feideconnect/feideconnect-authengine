@@ -27,6 +27,7 @@ class TemplatedHTMLResponse extends HTTPResponse {
         $this->setCORS(false);
 
         $this->data = null;
+        $this->setHeader('X-Frame-Options', 'DENY');
     }
 
 
