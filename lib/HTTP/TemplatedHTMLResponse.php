@@ -27,9 +27,12 @@ class TemplatedHTMLResponse extends HTTPResponse {
         $this->setCORS(false);
 
         $this->data = null;
-        $this->setHeader('X-Frame-Options', 'DENY');
+        $this->denyFrame = true;
     }
 
+    public function setDenyFrame($deny) {
+        $this->denyFrame = $deny;
+    }
 
     public function setData($data) {
         $this->data = $data;
@@ -46,5 +49,10 @@ class TemplatedHTMLResponse extends HTTPResponse {
 
     }
 
-
+    protected function preprocess() {
+        parent::preprocess();
+        if ($this->denyFrame) {
+            $this->setHeader('X-Frame-Options', 'DENY');
+        }
+    }
 }

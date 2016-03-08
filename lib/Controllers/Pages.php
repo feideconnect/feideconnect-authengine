@@ -35,7 +35,9 @@ class Pages {
 
     public static function emptyResponse() {
 
-        return (new TemplatedHTMLResponse('emptyresponsee'));
+        $res = new TemplatedHTMLResponse('emptyresponsee');
+        $res->setDenyFrame(false);
+        return $res;
 
     }
 

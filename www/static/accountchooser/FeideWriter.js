@@ -10,6 +10,7 @@ define(function(require, exports, module) {
 			this.org = org;
 			this.app = app;
 			this.feideid = feideid;
+			this.timer = null;
 
 			var feideIdPEndpoints = {
 				'https://idp-test.feide.no': 'https://idp-test.feide.no/simplesaml/module.php/feide/preselectOrg.php',
@@ -28,6 +29,9 @@ define(function(require, exports, module) {
 
 			this._callback = null;
 			$("#iloaded").on("click", function() {
+				if (this.timer) {
+					clearTimeout(this.timer);
+				}
 				// console.error(" ---- Detected click on iloaded...");
 				if (that._callback) {
 					that._callback();
@@ -44,7 +48,7 @@ define(function(require, exports, module) {
 			var iframe = '<iframe style="display: none" src="' + this.url + '"></iframe>';
 			$("body").prepend(iframe);
 
-			setTimeout(function() {
+			this.timer = setTimeout(function() {
 
 				that.app.setErrorMessage("Unable to preselect organization at Feide", "warning");
 
