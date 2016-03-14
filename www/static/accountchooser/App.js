@@ -180,7 +180,7 @@ define(function(require, exports, module) {
 			var logourl = this.getCoreURL('/clientadm/clients/' + this.client.id + '/logo');
 
 			$(".clientinfo").show();
-			$(".clientname").empty().append(this.client.name);
+			$(".clientname").empty().append(Utils.quoteattr(this.client.name + 'd'));
 			$(".clientlogo").empty().append('<img style="max-height: 64px; max-width: 64px" src="' + logourl + '" />');
 		},
 
