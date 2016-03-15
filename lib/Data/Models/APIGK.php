@@ -21,7 +21,7 @@ class APIGK extends \FeideConnect\Data\Model {
         "created" => "timestamp",
         "updated" => "timestamp"
     ];
-    private static $apiScopeRE = '/^gk_([a-z0-9\-]+)(_([a-z0-9\-]+))?$/';
+    private static $apiScopeRE = '/^gk_([a-z0-9\-]+)(_([a-z0-9\-]+))?$/D';
 
     public function __construct($props) {
 
