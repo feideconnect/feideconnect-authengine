@@ -56,7 +56,7 @@ define(function(require, exports, module) {
 				'<div class="media"><div class="media-left media-middle">' + 
 						'<img class="media-object" style="width: 48px; height: 48px" src="https://api.dataporten.no/orgs/fc:org:' + this.id + '/logo" alt="...">' + 
 					'</div>' +
-					'<div class="media-body"><p>' + this.title + '</p></div>' +
+					'<div class="media-body"><p>' + Utils.quoteattr(this.title) + '</p></div>' +
 				'</div>' +
 			'</a>';
 			return txt;
