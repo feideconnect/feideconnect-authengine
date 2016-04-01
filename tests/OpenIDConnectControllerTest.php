@@ -63,7 +63,7 @@ class OpenIDConnectControllerTest extends DBHelper {
 
     public function testUserInfoBasic() {
         $this->user = $this->user();
-        $this->protector(['profile']);
+        $this->protector(['openid', 'profile']);
         $response = OpenIDConnect::userinfo();
         $this->assertInstanceOf('\FeideConnect\HTTP\JSONResponse', $response);
         $data = $response->getData();
@@ -75,7 +75,7 @@ class OpenIDConnectControllerTest extends DBHelper {
 
     public function testUserInfoBasicScopesNoInfo() {
         $this->user = $this->user();
-        $this->protector(['profile', 'userinfo-mail', 'userinfo-photo', 'userinfo-feide']);
+        $this->protector(['openid', 'profile', 'userinfo-mail', 'userinfo-photo', 'userinfo-feide']);
         $response = OpenIDConnect::userinfo();
         $this->assertInstanceOf('\FeideConnect\HTTP\JSONResponse', $response);
         $data = $response->getData();
@@ -94,7 +94,7 @@ class OpenIDConnectControllerTest extends DBHelper {
 
     public function testUserInfoFull() {
         $this->fullUser();
-        $this->protector(['profile', 'userinfo-mail', 'userinfo-photo', 'userinfo-feide']);
+        $this->protector(['openid', 'profile', 'userinfo-mail', 'userinfo-photo', 'userinfo-feide']);
         $response = OpenIDConnect::userinfo();
         $this->assertInstanceOf('\FeideConnect\HTTP\JSONResponse', $response);
         $data = $response->getData();
@@ -110,7 +110,7 @@ class OpenIDConnectControllerTest extends DBHelper {
 
     public function testUserInfoFiltered() {
         $this->fullUser();
-        $this->protector([]);
+        $this->protector(['openid']);
         $response = OpenIDConnect::userinfo();
         $this->assertInstanceOf('\FeideConnect\HTTP\JSONResponse', $response);
         $data = $response->getData();

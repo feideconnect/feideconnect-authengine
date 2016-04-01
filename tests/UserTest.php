@@ -132,6 +132,11 @@ class UserTest extends DBHelper {
         $this->assertEquals($user->getFeideRealms(), []);
     }
 
+    public function testGetAccessibleUserInfo() {
+        $user = $this->user();
+        $accesses = [];
+        $this->assertEquals(['userid_sec' => []], $user->getAccessibleUserInfo($accesses));
+    }
     // public function testUsers() {
     //     // return;
     //     $user = new Models\User();
