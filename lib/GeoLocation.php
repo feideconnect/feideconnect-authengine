@@ -45,6 +45,7 @@ class GeoLocation {
             $code = null;
             $title = '';
             if (isset($record->country)) {
+                
                 if (isset($record->country->isoCode)) {
                     $code = strtolower($record->country->isoCode);
                 }
@@ -75,7 +76,7 @@ class GeoLocation {
             // $obj['tz'] = $record->location->timeZone;
             // $tz = $obj['tz'];
 
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             // $tz = 'Europe/Amsterdam';
             error_log("Error looking up GeoIP for address: " . $ip);
         }
