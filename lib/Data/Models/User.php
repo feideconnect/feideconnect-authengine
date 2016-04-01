@@ -282,6 +282,9 @@ class User extends \FeideConnect\Data\Model {
         if (in_array('userid-feide', $accesses)) {
             $allowseckeys[] = 'feide';
         }
+        if (in_array('userid-nin', $accesses)) {
+            $allowseckeys[] = 'nin';
+        }
         if (in_array('photo', $accesses)) {
             $allowseckeys[] = 'p';
         }
