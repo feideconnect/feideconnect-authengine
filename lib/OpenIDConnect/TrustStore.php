@@ -86,6 +86,13 @@ class TrustStore {
                 $result[$key] = $value;
             }
         }
+        $x509c = '';
+        openssl_x509_export($certificate, $x509c, true);
+        $pattern = '/^-----BEGIN CERTIFICATE-----([^-]*)^-----END CERTIFICATE-----/m';
+        if (!preg_match($pattern, $x509c, $matches)) {
+            throw new \Exception('Could not export PEM encoded certificate');
+        }
+        $result['x5c'] = [$matches[1]];
         return $result;
     }
 

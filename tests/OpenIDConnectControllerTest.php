@@ -43,6 +43,7 @@ class OpenIDConnectControllerTest extends DBHelper {
             $this->assertArrayHasKey('n', $d);
             $this->assertArrayHasKey('e', $d);
             $this->assertEquals('RSA', $d['kty']);
+            $this->assertArrayHasKey('x5c', $d);
         }
     }
 
