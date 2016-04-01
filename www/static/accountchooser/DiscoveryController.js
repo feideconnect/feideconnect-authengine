@@ -141,7 +141,8 @@ define(function(require, exports, module) {
 				}
 
 				if (t.hasClass("disabled")) {
-					return alert("This provider is not yet enabled on Dataporten.");
+					alert("This provider is not yet enabled on Dataporten.");
+					return;
 				}
 
 				that.go(so);
@@ -374,7 +375,7 @@ define(function(require, exports, module) {
 
     			if (dista === distb) { return 0; }
 				return ((dista < distb) ? -1 : 1);
-    		}
+    		};
 
     	},
 
@@ -444,7 +445,7 @@ define(function(require, exports, module) {
 					if (remaining > 0) {
 						txt += '<p style="font-size: 94%; text-align: center"><a style="color: #777" id="actshowall" href="#"><i class="fa fa-chevron-down"></i> ' +
 						  this.app.dictionary.showall + '  &nbsp;' + 
-							'('  + remaining + ' ' + this.app.dictionary.hidden +')</a>'
+							'('  + remaining + ' ' + this.app.dictionary.hidden +')</a>';
 
 					}
 					break;

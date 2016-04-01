@@ -29,8 +29,8 @@ define(function(require, exports, module) {
 
 			this._callback = null;
 			$("#iloaded").on("click", function() {
-				if (this.timer) {
-					clearTimeout(this.timer);
+				if (that.timer) {
+					clearTimeout(that.timer);
 				}
 				// console.error(" ---- Detected click on iloaded...");
 				if (that._callback) {

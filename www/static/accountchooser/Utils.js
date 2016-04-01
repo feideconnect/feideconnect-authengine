@@ -46,7 +46,7 @@ define(function(require, exports, module) {
             return null;
         }
         return x;
-    }
+    };
 
     // Is search length ok?
     Utils.stok = function(str) {
@@ -54,7 +54,7 @@ define(function(require, exports, module) {
         if (str === null) {return true;}
         if (str.length > 2) { return true; }
         return false;
-    }
+    };
 
 
 
