@@ -134,8 +134,21 @@ class UserTest extends DBHelper {
 
     public function testGetAccessibleUserInfo() {
         $user = $this->user();
+        $user->email = ['feide:example.org' => 'test.user@example.org'];
+        $user->name = ['feide:example.org' => 'Test User'];
+        $user->userid_sec[] = 'p:abcde12345';
         $accesses = [];
         $this->assertEquals(['userid_sec' => []], $user->getAccessibleUserInfo($accesses));
+        $accesses = ['userid'];
+        $this->assertEquals(['userid_sec' => [], 'userid' => $user->userid], $user->getAccessibleUserInfo($accesses));
+        $accesses = ['name'];
+        $this->assertEquals(['userid_sec' => [], 'name' => 'Test User'], $user->getAccessibleUserInfo($accesses));
+        $accesses = ['email'];
+        $this->assertEquals(['userid_sec' => [], 'email' => 'test.user@example.org'], $user->getAccessibleUserInfo($accesses));
+        $accesses = ['photo'];
+        $this->assertEquals(['userid_sec' => [], 'profilephoto' => 'p:abcde12345'], $user->getAccessibleUserInfo($accesses));
+        $accesses = ['userid-feide'];
+        $this->assertEquals(['userid_sec' => ['feide:testuser@example.org']], $user->getAccessibleUserInfo($accesses));
     }
     // public function testUsers() {
     //     // return;
