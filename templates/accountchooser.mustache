@@ -29,15 +29,10 @@
 		<script type="text/javascript" src="/static/components/bootstrap/dist/js/bootstrap.min.js"></script>
 		<script type="text/javascript" src="/static/components/bootstrap/js/tooltip.js"></script>
 		
-
 		<script type="text/javascript">
 			var acrequest = {{{requestJSON}}};
 			window.activeAccounts = {{{activeAccountsJSON}}};
-			window.loc = {
-				"lat": {{location.lat}},
-				"lon": {{location.lon}},
-				"title": "{{location.title}}"
-			};
+			window.loc = {{{locationJSON}}};
 			var require = {
 				// baseUrl: "/another/path",
 				paths: {

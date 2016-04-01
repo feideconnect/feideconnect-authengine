@@ -70,9 +70,12 @@ class AccountChooser {
             $noscriptdata[] = $noscriptentry;
         }
 
-
         $l = new GeoLocation();
-        $data["location"] = $l->getLocation();
+        $loc = $l->getLocation();
+
+
+        $data["location"] = $loc;
+        $data["locationJSON"] = json_encode($loc);
         $data["request"] = $request;
         $data["requestJSON"] = json_encode($request);
         $data["noscriptentries"] = $noscriptdata;
