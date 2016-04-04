@@ -14,6 +14,16 @@ SimpleSAMLphp certs
 	cd var/simplesamlphp-certs
 	openssl req -new -x509 -days 3652 -nodes -out saml.crt -keyout saml.pem
 
+HTTPS certs
+
+	mkdir -p var/web-certs
+	cd var/web-certs
+
+
+	openssl genrsa -des3 -passout pass:x -out server.pass.key 2048
+	openssl rsa -passin pass:x -in server.pass.key -out server.key
+	openssl req -new -key server.key -out server.csr
+	openssl x509 -req -days 999 -in server.csr -signkey server.key -out server.crt
 
 ## Building
 
@@ -58,8 +68,11 @@ Prepare an ENV file:
 
 Then run container:
 
-	docker run -p 80:80 --name dae --env-file=./ENV -t andreassolberg/dataporten-authengine
+	docker run -p 80:80 -d --name dae --env-file=./ENV -t andreassolberg/dataporten-authengine
 
+Debug container
+
+	docker exec -i -t dae bash
 
 ## Running Docker for Development
 
