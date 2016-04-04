@@ -74,6 +74,21 @@ Debug container
 
 	docker exec -i -t dae bash
 
+
+## Accessing the instance
+
+Add to your `/etc/hosts`
+
+	192.168.99.100 auth.dataporten.no 
+
+Access in your browser:
+
+	https://auth.dataporten.no/auth
+
+Make sure you accept the self signed certificate.
+
+
+
 ## Running Docker for Development
 
 Mount source code from local computer.
