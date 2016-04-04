@@ -1,0 +1,216 @@
+{
+	"_idp": "https://idp.feide.no",
+	"defaultIdP": "https://idp.feide.no",
+	"feideIdP": "https://idp.feide.no",
+	"storage": {
+		"type": "cassandra",
+		"keyspace": null,
+		"nodes": null,
+		"use_ssl": true
+	},
+	"endpoints": {
+		"core": null,
+		"groups": null
+	},
+	"debug": true,
+	"logging": {
+		"file": false,
+		"errorlog": false,
+		"syslog": {
+			"ident": "authengine",
+			"facility": "local0"
+		}
+	},
+	"salt": null,
+
+	"connect": {
+		"issuer": "https://auth.dataporten.no"
+	},
+
+	"pocEndpoint": {
+		"enable": false
+	},
+	"availableLanguages": ["en", "nb", "nn"],
+	"enableLocalization": true,
+
+	"geodb": "etc/GeoIP2-City.mmdb",
+
+	"testUsers": {},
+
+
+	"authTypes": {
+		"saml": {
+			"authSource": "default-sp"
+		},
+		"twitter": {
+			"authSource": "twitter"
+		},
+		"linkedin": {
+			"authSource": "linkedin"
+		},
+		"facebook": {
+			"authSource": "facebook"
+		}
+	},
+
+	"accountMaps": [
+		{
+			"_title": "IDporten accountmapper",
+			"authSource": "default-sp",
+			"idp": ["idporten.difi.no-v3"],
+			"sourceID": {
+				"type": "sourceID",
+				"prefix": "idporten",
+				"realm": false
+			},
+			"userid": {
+				"nin": "uid"
+			},
+			"realm": null,
+			"name": {
+				"type": "fixed",
+				"value": "IDporten user"
+			},
+			"mail": null,
+			"org": null,
+			"photo": null,
+			"yob": null
+		},
+		{
+			"_title": "IDporten accountmapper (verifikasjonsmijo)",
+			"authSource": "default-sp",
+			"idp": ["idporten-ver2.difi.no-v2"],
+			"sourceID": {
+				"type": "sourceID",
+				"prefix": "idporten",
+				"realm": false
+			},
+			"userid": {
+				"nin": "uid"
+			},
+			"realm": null,
+			"name": {
+				"type": "fixed",
+				"value": "IDporten user"
+			},
+			"mail": null,
+			"org": null,
+			"photo": null,
+			"yob": null
+		},
+		{
+			"_title": "Feide OpenIdP",
+			"authSource": "default-sp",
+			"idp": ["https://openidp.feide.no"],
+			"sourceID": {
+				"type": "sourceID",
+				"prefix": "openidp",
+				"realm": false
+			},
+			"userid": {
+				"feide": "eduPersonPrincipalName"
+			},
+			"realm": null,
+			"name": {
+				"attrnames": ["displayName", "cn"]
+			},
+			"mail": "mail",
+			"org": null,
+			"photo": "jpegPhoto",
+			"yob": null
+		},
+		{
+			"_title": "Feide account mapper",
+			"authSource": "default-sp",
+			"idp": ["https://idp-test.feide.no", "https://idp.feide.no"],
+			"sourceID": {
+				"type": "sourceID",
+				"prefix": "feide",
+				"realm": true
+			},
+			"userid": {
+				"feide": "eduPersonPrincipalName"
+			},
+			"realm": {
+				"attrname": "eduPersonPrincipalName",
+				"type" : "realm"
+			},
+			"name": {
+				"attrnames": ["displayName", "cn"]
+			},
+			"mail": "mail",
+			"org": "o",
+			"photo": "jpegPhoto",
+			"yob": "feideYearOfBirth"
+		},
+		{
+			"_title": "Twitter accountmapper",
+			"authSource": "twitter",
+			"sourceID": {
+				"type": "sourceID",
+				"prefix": "twitter",
+				"realm": false
+			},
+			"userid": {
+				"twitter": "twitter.id_str"
+			},
+			"realm": null,
+			"name": {
+				"attrnames": ["twitter.name", "twitter_at_screen_name"]
+			},
+			"mail": null,
+			"org": null,
+			"photo": {
+				"type" : "urlref",
+				"attrname": "twitter.profile_image_url"
+			},
+			"yob": null
+		},
+		{
+			"_title": "Linkedin accountmapper",
+			"authSource": "linkedin",
+			"sourceID": {
+				"type": "sourceID",
+				"prefix": "linkedin",
+				"realm": false
+			},
+			"userid": {
+				"linkedin": "linkedin.id"
+			},
+			"realm": null,
+			"name": {
+				"joinattrnames": ["linkedin.firstName", "linkedin.lastName"]
+			},
+			"mail": null,
+			"org": null,
+			"photo": {
+				"type" : "urlref",
+				"attrname": "linkedin.pictureUrl"
+			},
+			"yob": null
+		},
+		{
+			"_title": "Facebook accountmapper",
+			"authSource": "facebook",
+			"sourceID": {
+				"type": "sourceID",
+				"prefix": "facebook",
+				"realm": false
+			},
+			"userid": {
+				"facebook": "facebook.id"
+			},
+			"realm": null,
+			"name": {
+				"attrnames": ["facebook.name"]
+			},
+			"mail": null,
+			"org": null,
+			"photo": null,
+			"yob": null
+		}
+
+
+	]
+
+}

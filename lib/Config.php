@@ -107,6 +107,27 @@ class Config {
             throw new \Exception('Config file was not properly encoded JSON');
         }
 
+        if (getenv("FC_CASSANDRA_CONTACTPOINTS") !== false) {
+            $config['storage']['nodes'] = explode(',', getenv("FC_CASSANDRA_CONTACTPOINTS"));
+        }
+        if (getenv("FC_CASSANDRA_KEYSPACE") !== false) {
+            $config['storage']['keyspace'] = getenv("FC_CASSANDRA_KEYSPACE");
+        }
+        if (getenv("FC_CASSANDRA_USESSL") !== false) {
+            $config['storage']['use_ssl'] = (getenv("FC_CASSANDRA_USESSL") === "true");
+        }
+        if (getenv("FC_ENDPOINT_GROUPS") !== false) {
+             $config['endpoints']['groups'] = getenv("FC_ENDPOINT_GROUPS");
+        }
+        if (getenv("FC_ENDPOINT_CORE") !== false) {
+             $config['endpoints']['core'] = getenv("FC_ENDPOINT_CORE");
+        }
+        if (getenv("DEFAULT_IDP") !== false) {
+             $config['defaultIdP'] = getenv("DEFAULT_IDP");
+             $config['feideIdP'] = getenv("DEFAULT_IDP");
+        }
+
+
         self::$instance = new Config($config);
         return self::$instance;
     }

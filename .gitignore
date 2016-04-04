@@ -1,7 +1,5 @@
-etc/config.json
 etc/simplesamlphp-config
 etc/simplesamlphp-metadata
-etc/apache.conf
 dictionaries/transifex
 vendor
 composer.lock
@@ -11,6 +9,7 @@ cache.properties
 build
 cert
 var
+ENV
 etc/ci/simplesamlphp-config/simplesamlphp-config
 etc/ci/simplesamlphp-metadata/simplesamlphp-metadata
 www/static/media/default-profile.png

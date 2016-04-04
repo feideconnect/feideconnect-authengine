@@ -2,7 +2,7 @@
 	"userinfo": {
 		"title": "Brukerinfo",
 		"descr": "Basisinformasjon om brukere. BrukerID og navn.",
-		"public": true,
+		"public": false,
 		"policy": {
 			"auto": true
 		}
@@ -10,12 +10,28 @@
 	"userinfo-mail": {
 		"title": "E-post",
 		"descr": "Brukerens e-postadresse",
+		"public": false,
+		"policy": {
+			"auto": true
+		}
+	},
+	"email": {
+		"title": "E-post",
+		"descr": "Brukerens e-postadresse",
 		"public": true,
 		"policy": {
-			"auto": false
+			"auto": true
 		}
 	},
 	"userinfo-feide": {
+		"title": "Feide-navn",
+		"descr": "Brukerens identifikator i Feide. Tilsvarende eduPersonPrincipalName.",
+		"public": false,
+		"policy": {
+			"auto": true
+		}
+	},
+	"userid-feide": {
 		"title": "Feide-navn",
 		"descr": "Brukerens identifikator i Feide. Tilsvarende eduPersonPrincipalName.",
 		"public": true,
@@ -24,8 +40,64 @@
 		}
 	},
 	"userinfo-photo": {
-		"title": "Profile Photo",
-		"descr": "The profile photo of the user.",
+		"title": "profilbilde",
+		"descr": "Brukerens profilbilde",
+		"public": false,
+		"policy": {
+			"auto": true
+		}
+	},
+	"userid": {
+		"title": "Bruker-ID",
+		"descr": "Brukerens ID i dataporten",
+		"public": true,
+		"policy": {
+			"auto": true
+		}
+	},
+	"userid-nin": {
+		"title": "Personnummer",
+		"descr": "Brukerens personnummer",
+		"public": false,
+		"policy": {
+			"auto": false
+		}
+	},
+	"userinfo-entitlement": {
+		"title": "Feide rettighet",
+		"descr": "rettighetsdata fra feide-katalogen",
+		"public": false,
+		"policy": {
+			"auto": false
+		}
+	},
+	"userinfo-extra": {
+		"title": "Annen informasjon fra feide-katalogen",
+		"descr": "Feide-attributtene eduPersonAssurance, eduPersonNickname, labeledURI, cn, norEduPersonBirthDate, norEduPersonLIN, norEduPersonLegalName og preferredLanguage",
+		"public": false,
+		"policy": {
+			"auto": false
+		}
+	},
+	"phone": {
+		"title": "Telefonnummer",
+		"descr": "Brukerens telefon, fax og mobilnummer",
+		"public": false,
+		"policy": {
+			"auto": false
+		}
+	},
+	"address": {
+		"title": "Addresse",
+		"descr": "Brukerens address, postnummer og lignende",
+		"public": false,
+		"policy": {
+			"auto": false
+		}
+	},
+	"profile": {
+		"title": "Profilinfo",
+		"descr": "Brukerens navn og profilbilde.",
 		"public": true,
 		"policy": {
 			"auto": true
@@ -33,7 +105,7 @@
 	},
 	"openid": {
 		"title": "OpenID Connect",
-		"descr": "Klienten vil få utstedt en id_token og kunne bruke OpenID Connect for autentisering.",
+		"descr": "Klienten vil få utstedt en id_token og kunne bruke OpenID Connect for autentisering. Klienten vil få tilgang til bruker-ID",
 		"public": true,
 		"policy": {
 			"auto": true
@@ -42,9 +114,36 @@
 	"longterm": {
 		"title": "Longterm",
 		"descr": "Langvarig tilgang. Tilgang inntil brukeren trekker rettighetene tilbake.",
-		"public": true
+		"public": true,
+		"policy": {
+			"auto": true
+		}
 	},
-	"clientadmin": {	
+	"peoplesearch": {
+		"title": "Personsøk",
+		"descr": "Tilgang til personsøk-funksjonaliteten",
+		"public": true,
+		"policy": {
+			"auto": true
+		}
+	},
+	"groups": {
+		"title": "Grupper",
+		"descr": "Tilgang til basis gruppeinfo",
+		"public": true,
+		"policy": {
+			"auto": true
+		}
+	},
+	"groups-memberids": {
+		"title": "Grupper - bruker-ID",
+		"descr": "Tilgang til bruker-ID for medlemmer av grupper",
+		"public": false,
+		"policy": {
+			"auto": false
+		}
+	},
+	"clientadmin": {
 		"title": "Klient Admin",
 		"descr": "Adminsitrer klienter",
 		"public": false,
@@ -52,7 +151,7 @@
 			"auto": false
 		}
 	},
-	"apigkadmin": {	
+	"apigkadmin": {
 		"title": "API Gatekeeper Admin",
 		"descr": "Administrer API Gatekeeper instanser.",
 		"public": false,
@@ -62,31 +161,7 @@
 	},
 	"orgadmin": {
 		"title": "Org Admin",
-		"descr": "Manage mandatory clients for an organization",
-		"public": false,
-		"policy": {
-			"auto": false
-		}
-	},
-	"peoplesearch": {
-		"title": "PeopleSearch",
-		"descr": "Search for users",
-		"public": true,
-		"policy": {
-			"auto": false
-		}
-	},
-	"groups": {	
-		"title": "Grupper",
-		"descr": "Tilgang til basis gruppeinfo",
-		"public": true,
-		"policy": {
-			"auto": true
-		}
-	},
-	"groups-orgadmin": {	
-		"title": "Grupper - Connect Admin",
-		"descr": "Egne administratorgrupper for tjenester og institusjoner i Connect.",
+		"descr": "Styre obligatiske klienter for en organisasjon",
 		"public": false,
 		"policy": {
 			"auto": false
