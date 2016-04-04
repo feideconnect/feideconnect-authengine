@@ -12,14 +12,13 @@ RUN RUNLEVEL=1 DEBIAN_FRONTEND=noninteractive apt-get install -y curl git
 
 # Apache and php
 RUN RUNLEVEL=1 DEBIAN_FRONTEND=noninteractive apt-get install -y apache2 php5 php5-cli php5-mcrypt php5-imagick php5-curl php5-gmp php5-sqlite
-#RUN a2enmod ssl
+RUN a2enmod ssl
 
 # Nodejs and npm
 RUN RUNLEVEL=1 DEBIAN_FRONTEND=noninteractive apt-get install -y nodejs nodejs-legacy
 RUN curl https://www.npmjs.com/install.sh | sh
 
 # ADD known_hosts /etc/ssh/ssh_known_hosts
-
 
 # Start installing the app...
 RUN mkdir -p /dataporten
@@ -49,7 +48,7 @@ RUN mkdir -p /var/log/simplesamlphp
 RUN touch /var/log/simplesamlphp/simplesamlphp.log
 RUN chown www-data /var/log/simplesamlphp/simplesamlphp.log
 ADD etc/simplesamlphp-config config
-ADD etc/simplesamlphp-metadata-dev metadata
+ADD etc/simplesamlphp-metadata metadata
 ADD var/simplesamlphp-certs cert
 
 # Install Auth engine
@@ -79,8 +78,9 @@ ADD var/fonts /dataporten/feideconnect-authengine/www/static/components/uninett-
 
 # Setup apache
 RUN rm /etc/apache2/sites-enabled/000-default.conf /etc/apache2/conf-enabled/other-vhosts-access-log.conf
-ADD etc/apache/site.conf /etc/apache2/sites-enabled/dataporten.conf
+ADD etc/apache/site-ssl.conf /etc/apache2/sites-enabled/dataporten.conf
 ADD etc/apache/apache.conf /etc/apache2/apache2.conf
+ADD var/web-certs /etc/apache2/certs
 RUN a2enmod remoteip
 RUN rm /etc/localtime && ln -s /usr/share/zoneinfo/Europe/Oslo /etc/localtime
 
@@ -89,6 +89,7 @@ RUN rm /etc/localtime && ln -s /usr/share/zoneinfo/Europe/Oslo /etc/localtime
 CMD /usr/sbin/apache2ctl -D FOREGROUND
 #VOLUME /var/log
 EXPOSE 80
+EXPOSE 443
 #ARG JENKINS_BUILD_NUMBER
 #ENV JENKINS_BUILD_NUMBER ${JENKINS_BUILD_NUMBER}
 #LABEL no.uninett.dataporten.jenkins_build="${JENKINS_BUILD_NUMBER}"
