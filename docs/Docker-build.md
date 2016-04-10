@@ -30,8 +30,15 @@ HTTPS certs
 
 To build a new docker image:
 
-	docker stop dae && docker rm dae
-	docker build -t andreassolberg/dataporten-authengine .
+	docker build -t eu.gcr.io/turnkey-cocoa-720/dataporten-authengine .
+
+## Publishing docker iamge
+
+To publish to Google Cloud Private Registry:
+
+	gcloud docker push eu.gcr.io/turnkey-cocoa-720/dataporten-authengine
+
+
 
 
 ## Running Docker image
@@ -68,7 +75,11 @@ Prepare an ENV file:
 
 Then run container:
 
-	docker run -p 80:80 -d --name dae --env-file=./ENV -t andreassolberg/dataporten-authengine
+	docker run -p 80:80 -p 443:443 -d --name dae --env-file=./ENV -t eu.gcr.io/turnkey-cocoa-720/dataporten-authengine
+
+Clean up before running a new container image:
+
+	docker stop dae && docker rm dae
 
 Debug container
 
@@ -92,4 +103,30 @@ Make sure you accept the self signed certificate.
 ## Running Docker for Development
 
 Mount source code from local computer.
+
+
+	docker run -p 80:80 -p 443:443 -d --name dae -v "$PWD":/dataporten/feideconnect-authengine --env-file=./ENV -t eu.gcr.io/turnkey-cocoa-720/dataporten-authengine
+
+
+## Running auth engine on Kubernetes - Google Container engine
+
+
+
+	kubectl create -f etc/kubecfg/rc.json
+	kubectl create -f etc/kubecfg/service.json
+
+	
+Specific for Google Container Engine, you will get output like this when creating the service:
+
+	You have exposed your service on an external port on all nodes in your
+	cluster.  If you want to expose this service to the external internet, you may
+	need to set up firewall rules for the service port(s) (tcp:30762,tcp:32509) to serve traffic.
+
+
+gcloud compute firewall-rules create dataporten-authengine-service-1 --allow=tcp:30762
+gcloud compute firewall-rules create dataporten-authengine-service-2 --allow=tcp:32509
+
+
+
+
 
