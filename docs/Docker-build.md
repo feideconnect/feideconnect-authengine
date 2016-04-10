@@ -102,10 +102,24 @@ Make sure you accept the self signed certificate.
 
 ## Running Docker for Development
 
+
+Files not checked in to repo yet, needs to be copied from elsewhere:
+
+* ENV
+* etc/config.json
+* etc/simplesamlphp-config
+* etc/simplesamlphp-metadata
+* var/
+
+
 Mount source code from local computer.
 
 
 	docker run -p 80:80 -p 443:443 -d --name dae -v "$PWD":/dataporten/feideconnect-authengine --env-file=./ENV -t eu.gcr.io/turnkey-cocoa-720/dataporten-authengine
+
+Mount source code from a different folder / branch:
+
+	docker run -p 80:80 -p 443:443 -d --name dae -v "$PWD/../feideconnect-authengine":/dataporten/feideconnect-authengine --env-file=./ENV -t eu.gcr.io/turnkey-cocoa-720/dataporten-authengine
 
 
 ## Running auth engine on Kubernetes - Google Container engine
