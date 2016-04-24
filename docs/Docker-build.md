@@ -6,7 +6,10 @@
 ## Preparations before build
 
 
-Load `var/fonts` and `var/GeoIP2-City.mmdb`.
+Load licenced resources and config from separate repos:
+
+	bin/build-prepare.sh
+
 
 SimpleSAMLphp certs
 
@@ -83,7 +86,7 @@ Clean up before running a new container image:
 
 Debug container
 
-	docker exec -i -t dae bash
+	docker exec -ti dae bash
 
 
 ## Accessing the instance
@@ -94,7 +97,10 @@ Add to your `/etc/hosts`
 
 Access in your browser:
 
+	
 	https://auth.dataporten.no/auth
+
+
 
 Make sure you accept the self signed certificate.
 
@@ -106,6 +112,13 @@ Mount source code from local computer.
 
 
 	docker run -p 80:80 -p 443:443 -d --name dae -v "$PWD":/dataporten/feideconnect-authengine --env-file=./ENV -t eu.gcr.io/turnkey-cocoa-720/dataporten-authengine
+
+Mount source code from master branch, located elsewhere (mounting the lib, templates and www folder only):
+
+	export SRCF=/Users/andreas/wc/fc/feideconnect-authengine-master
+	export DSTF=/dataporten/feideconnect-authengine
+
+	docker run -p 80:80 -p 443:443 -d --name dae -v "$SRCF":"$DSTF" --env-file=./ENV -t eu.gcr.io/turnkey-cocoa-720/dataporten-authengine
 
 
 ## Running auth engine on Kubernetes - Google Container engine
