@@ -34,10 +34,10 @@ class Cassandra2 extends \FeideConnect\Data\Repository {
         $config = \FeideConnect\Config::getValue('storage');
 
         if (empty($config['keyspace'])) {
-            throw new FeideConnectException('Required config not set');
+            throw new Exception('Required config [keyspace] not set');
         }
         if (empty($config['nodes'])) {
-            throw new FeideConnectException('Required config not set');
+            throw new Exception('Required config [nodes] not set');
         }
         $hostprefix = '';
         if (!empty($config['use_ssl']) and $config['use_ssl']) {
