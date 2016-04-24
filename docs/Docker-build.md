@@ -129,7 +129,7 @@ Mount source code from master branch, located elsewhere (mounting the lib, templ
 	export SRCF=/Users/andreas/wc/fc/feideconnect-authengine-master
 	export DSTF=/dataporten/feideconnect-authengine
 
-	docker run -p 80:80 -p 443:443 -d --name dae -v "$SRCF":"$DSTF" --env-file=./ENV -t eu.gcr.io/turnkey-cocoa-720/dataporten-authengine
+	docker run -p 80:80 -p 443:443 -d --name dae -v "$SRCF/dictionaries":"$DSTF/dictionaries" -v "$SRCF/lib":"$DSTF/lib" -v "$SRCF/templates":"$DSTF/templates" -v "$SRCF/vendor":"$DSTF/vendor" -v "$SRCF/www":"$DSTF/www" --env-file=./ENV -t eu.gcr.io/turnkey-cocoa-720/dataporten-authengine
 
 
 ## Running auth engine on Kubernetes - Google Container engine
