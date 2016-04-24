@@ -71,10 +71,11 @@ RUN node_modules/bower/bin/bower install --allow-root
 
 ADD . /dataporten/feideconnect-authengine
 
-ADD var/GeoIP2-City.mmdb etc/GeoIP2-City.mmdb
-ADD var/fonts /dataporten/feideconnect-authengine/www/static/components/uninett-bootstrap-theme/fonts
+ADD dataporten-resources/GeoIP2-City.mmdb etc/GeoIP2-City.mmdb
+ADD dataporten-resources/fonts /dataporten/feideconnect-authengine/www/static/components/uninett-bootstrap-theme/fonts
 # RUN ln -s /conf/config.json /conf/disco.json /conf/cert/jwt-cert.pem /conf/cert/jwt-key.pem /conf/disco2.json /conf/GeoIP2-City.mmdb etc
 
+ADD dataporten-config/authengine/config.json etc/config.json
 
 # Setup apache
 RUN rm /etc/apache2/sites-enabled/000-default.conf /etc/apache2/conf-enabled/other-vhosts-access-log.conf
@@ -85,6 +86,9 @@ RUN a2enmod remoteip
 RUN rm /etc/localtime && ln -s /usr/share/zoneinfo/Europe/Oslo /etc/localtime
 
 #RUN curl -sS https://vault.uninett.no:8200/v1/dpcassandra/ca/pem > /etc/ssl/certs/cassandraca.pem && c_rehash
+
+
+
 
 CMD /usr/sbin/apache2ctl -D FOREGROUND
 #VOLUME /var/log
