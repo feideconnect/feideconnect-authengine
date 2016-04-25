@@ -56,7 +56,7 @@ class OpenIDConnect {
             $response["sub"] = $userinfo["userid"];
         }
         if (isset($userinfo["userid_sec"])) {
-            $response["connect-userid_sec"] = $userinfo["userid_sec"];
+            $response["dataporten-userid_sec"] = $userinfo["userid_sec"];
         }
         if (isset($userinfo["name"])) {
             $response["name"] = $userinfo["name"];

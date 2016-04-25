@@ -70,7 +70,7 @@ class OpenIDConnectControllerTest extends DBHelper {
         $data = $response->getData();
         $this->assertEquals([
             'sub' => $this->user->userid,
-            'connect-userid_sec' => [],
+            'dataporten-userid_sec' => [],
         ], $data);
     }
 
@@ -82,7 +82,7 @@ class OpenIDConnectControllerTest extends DBHelper {
         $data = $response->getData();
         $this->assertEquals([
             'sub' => $this->user->userid,
-            'connect-userid_sec' => ['feide:testuser@example.org'],
+            'dataporten-userid_sec' => ['feide:testuser@example.org'],
         ], $data);
     }
 
@@ -101,7 +101,7 @@ class OpenIDConnectControllerTest extends DBHelper {
         $data = $response->getData();
         $this->assertEquals([
             'sub' => $this->user->userid,
-            'connect-userid_sec' => ['feide:testuser@example.org'],
+            'dataporten-userid_sec' => ['feide:testuser@example.org'],
             'email' => 'test.user@example.org',
             'email_verified' => true,
             'name' => 'Test User',
@@ -117,7 +117,7 @@ class OpenIDConnectControllerTest extends DBHelper {
         $data = $response->getData();
         $this->assertEquals([
             'sub' => $this->user->userid,
-            'connect-userid_sec' => [],
+            'dataporten-userid_sec' => [],
         ], $data);
     }
     
