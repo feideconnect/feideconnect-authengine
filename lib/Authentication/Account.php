@@ -162,7 +162,7 @@ class Account {
                 "def" => []
             ];
 
-            if ($org === 'feide.no') {
+            if ($org === 'spusers.feide.no') {
                 $tag["def"][] = ["other", "feidetest"];
                 $tag["title"] = 'Feide testbruker';
             } else {

@@ -253,7 +253,7 @@ class AccountTest extends DBHelper {
 
     public function testGetVisualTagFeideTest() {
         $account = new Account([
-            'eduPersonPrincipalName' => ['test@feide.no'],
+            'eduPersonPrincipalName' => ['test@spusers.feide.no'],
             'idp' => self::$feideidp,
         ], self::$feideAM);
         $tag = $account->getVisualTag();
@@ -261,9 +261,9 @@ class AccountTest extends DBHelper {
             'name' => '',
             'type' => 'saml',
             'id' => self::$feideidp,
-            'subid' => 'feide.no',
+            'subid' => 'spusers.feide.no',
             'title' => 'Feide testbruker',
-            'userids' => ['feide:test@feide.no'],
+            'userids' => ['feide:test@spusers.feide.no'],
             'def' => [
                 ['other', 'feidetest'],
             ]
