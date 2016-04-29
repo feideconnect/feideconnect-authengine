@@ -295,6 +295,18 @@ class User extends \FeideConnect\Data\Model {
         return $this->getBasicUserInfo($includeEmail, $allowseckeys, $includeName, $includeUserid);
     }
 
+    public function isFeideUser() {
+        $nonRealms = ["spusers.feide.no", "feide.no", "rnd.feide.no"];
+        $realms = $this->getFeideRealms();
+        // echo '<pre>'; print_r($realms);
+        foreach($realms AS $realm) {
+            if (!in_array($realm, $nonRealms)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     public function getFeideRealms() {
         $feideids = $this->getUserIDsecPrefixed('feide');
         $realms = array();
