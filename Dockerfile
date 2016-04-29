@@ -72,7 +72,9 @@ RUN node_modules/bower/bin/bower install --allow-root
 ADD . /dataporten/feideconnect-authengine
 
 ADD dataporten-resources/GeoIP2-City.mmdb etc/GeoIP2-City.mmdb
-ADD dataporten-resources/fonts /dataporten/feideconnect-authengine/www/static/components/uninett-bootstrap-theme/fonts
+RUN rm -rf /dataporten/feideconnect-authengine/www/static/components/uninett-bootstrap-theme/fonts
+COPY dataporten-resources/fonts /dataporten/feideconnect-authengine/www/static/components/uninett-bootstrap-theme/fonts
+RUN ls -la /dataporten/feideconnect-authengine/www/static/components/uninett-bootstrap-theme/fonts
 # RUN ln -s /conf/config.json /conf/disco.json /conf/cert/jwt-cert.pem /conf/cert/jwt-key.pem /conf/disco2.json /conf/GeoIP2-City.mmdb etc
 
 ADD dataporten-config/authengine/config.json etc/config.json
