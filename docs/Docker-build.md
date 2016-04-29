@@ -100,6 +100,9 @@ Access in your browser:
 	
 	https://auth.dataporten.no/auth
 
+Or something like this to initiate a login flow:
+
+	https://auth.dataporten.no/oauth/authorization?response_type=token&state=3a92bee8-0462-4c29-b607-ff6cbb3908d1&redirect_uri=https%3A%2F%2Fcal.uninett.no%2F&client_id=b3dc2e62-32a5-4bd4-886e-b9afc12650ed
 
 
 Make sure you accept the self signed certificate.
@@ -130,6 +133,8 @@ Mount source code from master branch, located elsewhere (mounting the lib, templ
 	export DSTF=/dataporten/feideconnect-authengine
 
 	docker run -p 80:80 -p 443:443 -d --name dae -v "$SRCF/dictionaries":"$DSTF/dictionaries" -v "$SRCF/lib":"$DSTF/lib" -v "$SRCF/templates":"$DSTF/templates" -v "$SRCF/vendor":"$DSTF/vendor" -v "$SRCF/www":"$DSTF/www" --env-file=./ENV -t eu.gcr.io/turnkey-cocoa-720/dataporten-authengine
+
+
 
 
 ## Running auth engine on Kubernetes - Google Container engine
