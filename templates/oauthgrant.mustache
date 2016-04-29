@@ -30,6 +30,9 @@
 					"components": "../components"
 				}
 			};
+
+
+
 		</script>
 		<script data-main="/static/oauthgrant/main" src="/static/components/requirejs/require.js"></script>
 
@@ -164,13 +167,32 @@
 						<form  id="login" method="post" action="{{posturl}}">
 
 							{{#firsttime}}
-							<div style="padding-left: .9em; margin-left: .9em; border-left: 5px solid #a55; ">
-								<p>{{_.thisisfirsttime}}</p>
 
-								<p>
-									<input type="checkbox" id="bruksvilkar" name="bruksvilkar" value="yes" checked="checked" />
-									<label for="bruksvilkar">{{_.iaccept}} <a class="touOpen" href="/tou">{{_.userterms}}</a></label>
-								</p>
+
+
+
+							<div style="padding-left: .9em; margin-left: .9em; border-left: 5px solid #a55; ">
+								
+
+
+								{{#user.isFeideUser}}
+									<p>{{_.thisisfirsttimefeide}} 
+										<a class="touOpen" href="/tou">{{_.userterms}} <i class="fa fa-external-link" aria-hidden="true"></i> </a>
+										<input type="hidden" name="bruksvilkar" value="yes"></input>
+									</p>
+								{{/user.isFeideUser}}
+								{{^user.isFeideUser}}
+									<p>{{_.thisisfirsttimeother}}</p>
+
+									<p>
+										<label for="bruksvilkar">
+											<input type="checkbox" id="bruksvilkar" name="bruksvilkar" value="yes" />
+											{{_.iaccept}} <a class="touOpen" href="/tou">{{_.userterms}}</a></label>
+									</p>
+
+								{{/user.isFeideUser}}
+
+
 									
 							</div>
 

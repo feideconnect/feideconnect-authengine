@@ -115,15 +115,26 @@
 
 
 
-<h3>Kontaktinformasjon</h3>
 
-<p>Kontaktinformasjon til behandlingsansvarlig for Dataporten er</p>
 
-<blockquote>
-	<p>UNINETT AS<br />
-Postboks 4769 Sluppen<br />
-7465 Trondheim</p>
-</blockquote>
+
+{{#user.isFeideUser}}
+	<h3>Kontaktpunkt behandlingsansvarlig</h3>
+	<p>Din utdanningsinstitusjon er behandlingsansvarlig for din bruk av Dataporten.</p>
+{{/user.isFeideUser}}
+{{^user.isFeideUser}}
+
+	<h3>Kontaktinformasjon</h3>
+	<p>Kontaktinformasjon til behandlingsansvarlig for Dataporten er</p>
+
+	<blockquote>
+		<p>UNINETT AS<br />
+	Postboks 4769 Sluppen<br />
+	7465 Trondheim</p>
+	</blockquote>
+
+{{/user.isFeideUser}}
+
 
 
 
