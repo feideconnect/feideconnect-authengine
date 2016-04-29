@@ -140,6 +140,8 @@ class AuthorizationUI {
             $visualTag['rememberme'] = true;
         }
 
+        $userinfo['isFeideUser'] = $this->user->isFeideUser();
+
         $data['user'] = $userinfo;
         $data['organization'] = $this->organization;
         $data['visualTag'] = json_encode($visualTag);
