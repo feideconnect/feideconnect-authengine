@@ -236,7 +236,9 @@ class Server {
             $tokenrequest = new Messages\TokenRequest($_POST);
             // $tokenrequest->parseServer($_SERVER);
 
-            Logger::debug('OAuth Received incomming AccessTokenRequest.', $tokenrequest->toLog());
+            Logger::debug('OAuth Received incomming AccessTokenRequest.', {
+                'tokenrequest' => $tokenrequest,
+            });
 
             if ($tokenrequest->grant_type === 'authorization_code') {
                 return $this->tokenFromCode($tokenrequest);
