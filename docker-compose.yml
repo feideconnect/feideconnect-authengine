@@ -1,0 +1,15 @@
+version: '2'
+services:
+  cassandra:
+    image: cassandra:2.2
+    ports:
+      - "9042"
+  dataportenschemas:
+    image: uninett-docker-uninett.bintray.io/feideconnect/dataportenschemas
+    links:
+      - cassandra:cassandra
+    environment:
+      - CASSANDRA_NODE=cassandra
+      - CASSANDRA_KEYSPACE=dataporten
+      - TESTDATA=true
+    command: up
