@@ -22,17 +22,6 @@ Make parent folder for Feide Connect.
 	mkdir -p /var/feideconnect
 
 
-Download SimpleSAMLphp
-
-	cd /var/feideconnect
-	wget https://simplesamlphp.org/res/downloads/simplesamlphp-1.13.2.tar.gz
-	tar zxf simplesamlphp-1.13.2.tar.gz
-	ln -s simplesamlphp-1.13.2 simplesamlphp 
-
-	cd simplesamlphp
-	composer require duoshuo/php-cassandra dev-master
-	composer require feideconnect/simplesamlphp-module-cassandrastore dev-master
-
 Install Connect Auth Engine
 
 	cd /var/feideconnect
@@ -40,6 +29,17 @@ Install Connect Auth Engine
 
 	cd feideconnect-authengine
 	composer update
+
+Download SimpleSAMLphp
+
+	cd /var/feideconnect/feideconnect-authengine
+	wget https://simplesamlphp.org/res/downloads/simplesamlphp-1.13.2.tar.gz
+	tar zxf simplesamlphp-1.13.2.tar.gz
+	ln -s simplesamlphp-1.13.2 simplesamlphp 
+
+	cd simplesamlphp
+	composer require duoshuo/php-cassandra dev-master
+	composer require feideconnect/simplesamlphp-module-cassandrastore dev-master
 
 Setup configuration files:
 
