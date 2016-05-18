@@ -34,9 +34,7 @@
 	"myservices": "My services",
 	"logout": "Logout",
 
-	"service": "The application",
 	"requestsperms": "requests the following permissions on behalf of you:",
-	"requeststhirdperms": "In addition the application requests these permissions to third party services on behalf of you:",
 	
 
 	"readmoreconnect": "Read more about Dataporten",
@@ -48,17 +46,27 @@
 	"userterms": "Dataporten Privacy Policy",
 	"showmore": "Show more information",
 	"okcontinue": "OK, continue to the application",
-	"validated1": " is an official application used at ",
-	"validated2": " has accepted the use of this application on behalf of its users, and has made a contract with the application provider.",
-	"notvalidated1": "Your organization ",
-	"notvalidated2": " has no contract with the application provider, and has not accepted use of this application on behalf of its users. You may still choose to use the application on your own initiative.",
-	"needsauthz1": "You have already accepted these permissions for ",
-	"needsauthz2": ". The application now wants to use these permissions in a new user session.",
+
+	"permshort": "Permissions will only be granted for 8 hours after each login.",
+	"permlong": "Permissions will be granted permanently but may be manually revoked.",
+
+	"notvalidated10short": "This is not an official application at {ORG}.",
+	"notvalidated10": "The application has not been controlled nor accepted by {ORG}. You may still choose to use the application on your own risk.",
+
+	"validated10short": "An official application at {ORG}",
+	"validated10": "{ORG} has accepted the use of this application on behalf of its users, and has made a contract with the application provider.",
+
+	"needsauthz10short": "Already accepted application",
+	"needsauthz10": "You have already accepted these permissions for this application. The application now wants to use these permissions in a new user session.",
+
 
 	"insecurewarning": "Warning: Application is insecure (not running on HTTPS)",
 
 	"appprovidedby": "This application is provided by",
 	"providedby": "This service is provided by",
+	"provby": "provided by",
+
+
 	"applicationsupport": "Application Support",
 	"applicationprivacy": "Application Privacy Policy",
 	"serviceprivacy": "Service Privacy Policy",
@@ -73,6 +81,7 @@
 	"profilephoto": "Profile photo",
 	"feideid": "Feide ID",
 	"email": "Email address",
+	"nin": "National identity number",
 
 	"perm-groups": "Groups",
 	"perm-groups-descr": "Access to your group memberships, organization, organization unit, courses, class, program, cohort, study and ad-hoc groups.",
@@ -86,6 +95,7 @@
 	"perm-peoplesearch-descr": "Search for basic information about other users.",
 	"perm-longterm": "Longterm",
 	"perm-longterm-descr": "Permissions will be granted for a long period of time. Until the user is rejecting them.",
+	"perm-groups-orgadmin": "Groups for administrators of organizations",
 
 	"stillok": "Is this still ok?",
 	"doyouaccept": "Do you accept this?",
