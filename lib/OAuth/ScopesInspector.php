@@ -9,6 +9,8 @@ use FeideConnect\Data\Models\APIGK;
 use FeideConnect\Logger;
 use FeideConnect\Localization;
 
+
+
 /**
  * ScopesInspector
  *
@@ -18,7 +20,8 @@ use FeideConnect\Localization;
  */
 class ScopesInspector {
 
-    protected $userinfopermissions = [ 'userid', 'email', 'name', 'photo', 'userid-feide'];
+    // protected $userinfopermissions = [ 'userid', 'email', 'name', 'photo', 'userid-feide', 'userid-nin'];
+    protected $specialScopes = ['longterm'];
 
     protected $scopes;
     protected $globalScopes;
@@ -30,10 +33,21 @@ class ScopesInspector {
         $this->scopes = $scopes;
         $this->globalScopes = Config::readJSONfile('scopedef.json');
 
+
         $this->storage = StorageProvider::getStorage();
 
         $this->apis = [];
         $this->authorizationEvaluator = $authorizationEvaluator;
+    }
+
+    public static function sortByScore($a, $b) {
+
+        $x = isset($a["score"]) ? $a["score"] : 0;
+        $y = isset($b["score"]) ? $b["score"] : 0;
+        if ($x == $y) {
+            return 0;
+        }
+        return ($x < $y) ? 1 : -1;
     }
 
     protected function getOwner($ownerid) {
@@ -67,7 +81,6 @@ class ScopesInspector {
             'nestedPermissions' => [],
         );
 
-        // echo '<pre>'; print_r($apigk); print_r($apigk->getScopeList()); exit;
 
         $nsi = new ScopesInspector($apigk->getScopeList(), $this->authorizationEvaluator);
         $apiInfo['nestedPermissions'] = $nsi->getView();
@@ -121,8 +134,7 @@ class ScopesInspector {
         
         $apis = [];
         $data = [
-            "userinfo" => [],                   // Specific handling of userinfo.
-            "global" => [],                     // All global scopes without special handling, like userinfo
+            "global" => [],                     // All global scopes without special handling.
             "apis" => [],                       // All APIs behind API GKs that is represented.
             "unknown" => [],                    // Unkown scopes
             "allScopes" => $this->scopes        // All the requested scopes
@@ -136,23 +148,30 @@ class ScopesInspector {
         // print_r($scope_apis);
         // echo '<h2>accesses</h2><pre>';
         // print_r($accesses);
-        // exit;
+
+        // echo '<h2>global</h2><pre>';
+        // print_r($this->globalScopes);
+
 
         foreach ($accesses as $access) {
             if (isset($scope_apis[$access])) {
+
                 $apiInfo = $scope_apis[$access];
                 $apis[$apiInfo['apigk']->id] = $apiInfo;
 
             } else {
-                if (in_array($access, $this->userinfopermissions)) {
-                    $data['userinfo'][$access] = $access;
-                } else if (isset($this->globalScopes[$access])) {
+
+                if (isset($this->globalScopes[$access])) {
                     $ne = $this->globalScopes[$access];
                     $ne["scope"] = $access;
                     $data['global'][$access] = $ne;
                 } else {
-                    $data["unknown"][] = $access;
+                    $data["global"][$access] = [
+                        "title" => "Unknown permission",
+                        "scope" => $access
+                    ];
                 }
+
             }
         }
 
@@ -180,8 +199,25 @@ class ScopesInspector {
 
         $data["hasAPIs"] = (count($data["apis"]) > 0);
 
+        
+
         return $data;
 
+    }
+
+
+    public function hasScope($scope) {
+        foreach($this->scopes AS $s) {
+            if ($s === $scope) {
+                return true;
+            }
+
+        }
+        return false;
+    }
+
+    public function isLongTerm() {
+        return $this->hasScope('longterm');
     }
 
 
@@ -201,30 +237,40 @@ class ScopesInspector {
         $permissionInfo = [
             'userid' => [
                 'title' => Localization::getTerm('userid'),
-                'icon' => 'key'
-            ],
-            'email' => [
-                'title' => Localization::getTerm('email'),
-                'icon' => 'envelope-o'
-            ],
-            'name' => [
-                'title' => Localization::getTerm('name'),
-                'icon' => 'tag'
-            ],
-            'photo' => [
-                'title' => Localization::getTerm('profilephoto'),
-                'icon' => 'camera-retro'
+                'icon' => 'key',
+                'score' => 100,
             ],
             'userid-feide' => [
                 'title' => Localization::getTerm('feideid'),
-                'icon' => 'key'
+                'icon' => 'key',
+                'score' => 100,
             ],
-
+            'userid-nin' => [
+                'title' => Localization::getTerm('nin'),
+                'icon' => 'key',
+                'score' => 100,
+            ],
+            'email' => [
+                'title' => Localization::getTerm('email'),
+                'icon' => 'envelope-o',
+                'score' => 90,
+            ],
+            'name' => [
+                'title' => Localization::getTerm('name'),
+                'icon' => 'tag',
+                'score' => 80,
+            ],
+            'photo' => [
+                'title' => Localization::getTerm('profilephoto'),
+                'icon' => 'camera-retro',
+                'score' => 70,
+            ],
             'groups' => [
                 'title' => Localization::getTerm('perm-groups'),
                 'descr' => Localization::getTerm('perm-groups-descr'),
                 'icon' => 'users',
-                'expanded' => true
+                'expanded' => true,
+                'score' => 60,
             ],
             'clientadmin' => [
                 'title' => Localization::getTerm('perm-clientadmin'),
@@ -241,33 +287,33 @@ class ScopesInspector {
                 'descr' => Localization::getTerm('perm-orgadmin-descr'),
                 'icon' => 'cog'
             ],
+            'groups-orgadmin' => [
+                'title' => Localization::getTerm('perm-groups-orgadmin'),
+                'icon' => 'users',
+                'score' => 59,
+            ],
             'peoplesearch' => [
                 'title' => Localization::getTerm('perm-peoplesearch'),
                 'descr' => Localization::getTerm('perm-peoplesearch-descr'),
                 'icon' => 'search'
-            ],
-            'longterm' => [
-                'title' => Localization::getTerm('perm-longterm'),
-                'descr' => Localization::getTerm('perm-longterm-descr'),
-                'icon' => 'clock-o'
-            ],
+            ]
         ];
 
-        if (!empty($info['userinfo'])) {
-            $item = [
-                'title' => Localization::getTerm('accesstouserinfo'),
-                // 'descr' => '',
-                'icon' => 'user',
-                'items' => [],
-                'expanded' => true
-            ];
-            foreach ($info['userinfo'] as $userinfoperm) {
-                if (isset($permissionInfo[$userinfoperm])) {
-                    $item['items'][] = $permissionInfo[$userinfoperm];
-                }
-            }
-            $info['view'][] = $item;
-        }
+        // if (!empty($info['userinfo'])) {
+        //     $item = [
+        //         'title' => Localization::getTerm('accesstouserinfo'),
+        //         // 'descr' => '',
+        //         'icon' => 'user',
+        //         'items' => [],
+        //         'expanded' => true
+        //     ];
+        //     foreach ($info['userinfo'] as $userinfoperm) {
+        //         if (isset($permissionInfo[$userinfoperm])) {
+        //             $item['items'][] = $permissionInfo[$userinfoperm];
+        //         }
+        //     }
+        //     $info['view'][] = $item;
+        // }
 
 
         foreach ($info['global'] as $globalperm => $globalpermdata) {
@@ -277,10 +323,21 @@ class ScopesInspector {
         }
 
 
+        foreach($info["view"] AS $key => $item) {
+            $info["view"][$key]["expandable"] = !empty($item["descr"]);
+        }
+
+
+
+
+        usort($info["view"], ['FeideConnect\OAuth\ScopesInspector', 'sortByScore']);
+
+        // echo '<pre>'; print_r($info); exit;
+
+
         return $info;
 
     }
-
 
 
     public static function scopesToAccesses($scopes) {
@@ -294,6 +351,7 @@ class ScopesInspector {
             'profile' => ['name', 'photo'],
             'userinfo-feide' => ['userid-feide'],
             'userid-feide' => ['userid-feide'],
+            'userid-nin' => ['userid-nin'],
         ];
         $accesses = [];
         foreach ($scopes as $scope) {
