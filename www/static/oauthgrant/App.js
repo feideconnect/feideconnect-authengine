@@ -1,4 +1,4 @@
-define(function(require, exports, module) {
+	define(function(require, exports, module) {
 	"use strict";
 
 	var Class = require('../accountchooser/Class');
@@ -13,8 +13,6 @@ define(function(require, exports, module) {
     		var that = this;
 			
 			this.accountstore = new AccountStore(visualTag);
-
-
 			this.lang = new LanguageSelector($("#langselector"), true);
 
 			$(".grantEntry").on("click", function(item) {
@@ -26,6 +24,7 @@ define(function(require, exports, module) {
 				// console.log("Click");
 				$('#myModal').modal('hide');
 				$('#bruksvilkar').prop('checked', true);
+				that.updateAcceptRequirement();
 			});
 
 			$("body").on("click", ".tglSimple", function(e) {
@@ -46,6 +45,20 @@ define(function(require, exports, module) {
 				$("#mcontent").show();
 			}
 
+
+
+
+			$("body").on("change", "#bruksvilkar", function(e) {
+				// e.preventDefault();
+				that.updateAcceptRequirement();
+
+				// $("body").toggleCl
+				// ass("simpleGrant");
+			});
+
+			this.updateAcceptRequirement();
+
+
 			// Uncomment this to force "samtykkeerklæring" to show immediately. 
 			// Used for debugging.
 			// $('#myModal').modal('show');
@@ -53,6 +66,24 @@ define(function(require, exports, module) {
 			this.loadDictionary();
 
     	},
+
+    	"updateAcceptRequirement": function() {
+
+
+    		if ($("input#bruksvilkar").length === 1) {
+	    		var val = $("input#bruksvilkar").is(":checked");
+				if (val) {
+					$(".reqAccept").removeAttr("disabled");
+				} else {
+					$(".reqAccept").attr("disabled", "disabled");
+				}
+    		}
+
+			
+
+    	},
+
+
 		"loadDictionary": function() {
 			var that = this;
 
