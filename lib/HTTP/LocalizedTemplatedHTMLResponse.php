@@ -14,29 +14,30 @@ class LocalizedTemplatedHTMLResponse extends TemplatedHTMLResponse {
 
     protected $dictionary;
 
+    protected $replacementIndexes, $replacementData;
+
 
     public function __construct($templateName) {
         parent::__construct($templateName);
 
-
+        $this->replacementIndexes = [];
+        $this->replacementData = [];
         // Localization::debug();
-
-        // echo "availableLanguages: "; var_dump($this->dictionary); exit;
-
         $this->dictionary = Localization::getDictionary();
+    }
 
-        // $templateDir = Config::dir('templates');
-        // $partialsDir = Config::dir('templates/partials');
-        // $mustache = new \Mustache_Engine(array(
-        //     'loader' => new \Mustache_Loader_FilesystemLoader($templateDir),
-        //     // 'cache' => '/tmp/uwap-mustache',
-        //     'partials_loader' => new \Mustache_Loader_FilesystemLoader($partialsDir),
-        // ));
-        // $this->template = $mustache->loadTemplate($templateName);
+    /*
+     * Needs to be called before setData. 
+     * USe this to add replacedment set for in example:
+     * {ORG}  => UNINETT
+     * {LOCATION}  => Trondheim
+     *
+     * Will only be applied to the dictionary keys provided at indexes.
+     */
+    public function setReplacements($indexes, $data) {
+        $this->replacementIndexes = $indexes;
+        $this->replacementData = $data;
 
-        // $this->setCORS(false);
-
-        // $this->data = null;
     }
 
 
@@ -45,21 +46,16 @@ class LocalizedTemplatedHTMLResponse extends TemplatedHTMLResponse {
 
         $this->data['_'] = $this->dictionary;
 
-        // var_dump($this->data['_']); exit;
+        // Apply replacementsets if available. Should be set with setReplacements
+        foreach($this->replacementIndexes AS $idx) {
+            if (isset($this->data['_'][$idx])) {
+                foreach($this->replacementData AS $from => $to) {
+                    $this->data['_'][$idx] = str_replace('{' . $from . '}', $to, $this->data['_'][$idx]);
+                }
+            }
+
+        }
         return $this;
     }
-
-
-
-
-
-    // protected function sendBody() {
-
-    //     echo "Debug dictionary and data objet: \n\n"; var_dump($this->data); exit;
-
-    //     echo $this->template->render($this->data);
-
-    // }
-
 
 }
