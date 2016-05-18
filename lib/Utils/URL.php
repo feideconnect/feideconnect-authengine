@@ -12,7 +12,18 @@ class URL {
 
     public static function isSecure($url) {
         $prot = parse_url($url, PHP_URL_SCHEME);
-        return ($prot === 'https');
+        $host = parse_url($url, PHP_URL_HOST);
+
+        if ($prot === 'http') {
+            if ($host === '127.0.0.1') {
+                return true;
+            }
+            if ($host === 'localhost') {
+                return true;
+            }
+            return false;
+        }
+        return true;
     }
 
     /**
