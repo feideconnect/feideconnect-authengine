@@ -1,27 +1,33 @@
 
 {{#perms.apis}}
 
-
-
 	<div class="list-group-item grantEntry apiEntry">
-		<div class="pull-right grantDetails selectIndicator" style="font-size: 200%"><i class="glyphicon glyphicon-chevron-down "></i></div>
-		<div class="pull-right grantDetailsHide selectIndicator" style="font-size: 200%"><i class="glyphicon glyphicon-chevron-left "></i></div>
+		<div class="pull-right grantDetails selectIndicator" style="font-size: 100%"><i class="glyphicon glyphicon-chevron-down "></i></div>
+		<div class="pull-right grantDetailsHide selectIndicator" style="font-size: 100%"><i class="glyphicon glyphicon-chevron-left "></i></div>
 
-		<div class="media grantEntryContent" style="">
+		<div class="media grantEntryContent" style="margin: 0px; padding: 0px">
 			<div class="media-left ">
 				<img class="media-object grantDetails" style="max-height: 64px; max-width: 64px" src="{{apibase}}/apigkadm/apigks/{{info.id}}/logo" alt="...">
-				<img class="media-object grantDetailsHide" style="max-height: 32px; max-width: 32px" src="{{apibase}}/apigkadm/apigks/{{info.id}}/logo" alt="...">
+				<img class="media-object grantDetailsHide" style="max-height: 16px; max-width: 16px; margin-top: 5px" src="{{apibase}}/apigkadm/apigks/{{info.id}}/logo" alt="...">
 			</div>
 
 
 			<div class="media-body">
 
+				<div class="grantDetails">
+					<h3 class="media-heading" style="padding: 0px">{{info.name}}</h3>
+				</div>
 
-				<h3 class="media-heading" style="padding: 0px">{{info.name}}
-				</h3>
+				<div class="grantDetailsHide">
+					<p class="media-heading" style="padding: 0px">{{info.name}} <span style="font-weight: normal; color: #888">{{_.provby}} {{ownerDisplay}}</span></p>
+				</div>
+
+
+				<!--
+
 				<p class="grantDetailsHide" style="color: #555; font-size: 75%">
 					{{#scopes}}
-						<i class="fa fa-check"></i>&nbsp;{{title}}&nbsp; 
+						<i class="fa fa-fw fa-check"></i>&nbsp;{{title}}&nbsp; 
 					{{/scopes}}
 				</p>
 
@@ -31,7 +37,7 @@
 				</p>
 				{{/nestedPermissions}}
 
-
+-->
 				<div class="grantDetails">
 
 					{{#info.descr}}
@@ -56,52 +62,52 @@
 				</div>
 
 
-
 			</div><!-- media body -->
 		</div><!-- media -->
-	<div class="ownerbox2 grantDetails" style="margin: 8px">
 
-		<div class="row">
-			
-			<div class="col-md-5" style="text-align: left">
-				<ul class="uninett-ul simpleSkip" style="padding: 0px">
-					{{#info.privacypolicyurl}}
-						<li class="uninett-ul-li"><a target="_blank" href="{{.}}">{{_.serviceprivacy}}</a></li>
-					{{/info.privacypolicyurl}}
-				</ul>
+		<div class="ownerbox2 grantDetails" style="margin: 8px">
+
+			<div class="row">
+				
+				<div class="col-md-5" style="text-align: left">
+					<ul class="uninett-ul simpleSkip" style="padding: 0px">
+						{{#info.privacypolicyurl}}
+							<li class="uninett-ul-li"><a target="_blank" href="{{.}}">{{_.serviceprivacy}}</a></li>
+						{{/info.privacypolicyurl}}
+					</ul>
+				</div>
+
+
+
+
+				{{#info.APIownerOrg}}
+					<div class="col-md-5" style="text-align: right">
+						<p style="font-style: italic; font-size: 95%">{{_.providedby}}</p>
+						<p class=" ownerName" style=""><strong>{{org.name.nb}}</strong></p>
+					</div>
+
+					<div class="col-md-2" style="text-align: left">
+						<img class="orglogo orglogoSmall" style="max-height: 64px; max-width: 64px" src="{{org.logoURL}}">
+					</div>
+				{{/info.APIownerOrg}}
+
+				{{^info.APIownerOrg}}
+					<div class="col-md-10">
+						<p style="font-style: italic; font-size: 95%">{{_.providedby}}</p>
+						<p class="ownerName"><strong>{{owner.name}}</strong></p>
+						<p class="ownerMail">
+							<a href="mailto:{{owner.mail}}">{{owner.email}}</a>
+						</p>
+
+
+					</div>
+					<div class="col-md-2">
+						<img class="orglogo orglogoSmall" style="max-height: 64px; max-width: 64px" src="/user/media/{{owner.profilephoto}}">
+					</div>
+				{{/info.APIownerOrg}}
 			</div>
 
-
-
-
-			{{#info.APIownerOrg}}
-				<div class="col-md-5" style="text-align: right">
-					<p style="font-style: italic; font-size: 95%">{{_.providedby}}</p>
-					<p class=" ownerName" style=""><strong>{{org.name.nb}}</strong></p>
-				</div>
-
-				<div class="col-md-2" style="text-align: left">
-					<img class="orglogo orglogoSmall" style="max-height: 64px; max-width: 64px" src="{{org.logoURL}}">
-				</div>
-			{{/info.APIownerOrg}}
-
-			{{^info.APIownerOrg}}
-				<div class="col-md-10">
-					<p style="font-style: italic; font-size: 95%">{{_.providedby}}</p>
-					<p class="ownerName"><strong>{{owner.name}}</strong></p>
-					<p class="ownerMail">
-						<a href="mailto:{{owner.mail}}">{{owner.email}}</a>
-					</p>
-
-
-				</div>
-				<div class="col-md-2">
-					<img class="orglogo orglogoSmall" style="max-height: 64px; max-width: 64px" src="/user/media/{{owner.profilephoto}}">
-				</div>
-			{{/info.APIownerOrg}}
 		</div>
-
-	</div>
 
 
 	</div><!-- Panel -->

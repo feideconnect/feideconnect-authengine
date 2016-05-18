@@ -144,6 +144,7 @@ class AuthorizationUI {
 
         $data['user'] = $userinfo;
         $data['organization'] = $this->organization;
+        $data['hasOrg'] = ($this->organization !== null);
         $data['visualTag'] = json_encode($visualTag);
     }
 
@@ -173,6 +174,7 @@ class AuthorizationUI {
 
                 $data['ownerOrg'] = true;
                 $data['org'] = $orginfo;
+                $data['ownerDisplay'] = $orginfo["name"]["nb"];
             }
 
         } else if ($this->client->has('owner')) {
@@ -181,6 +183,7 @@ class AuthorizationUI {
                 $oinfo = $owner->getBasicUserInfo(true);
                 $oinfo['p'] = $owner->getProfileAccess();
                 $data['owner'] = $oinfo;
+                $data['ownerDisplay'] = $oinfo["name"];
             }
 
         }
@@ -202,7 +205,6 @@ class AuthorizationUI {
             throw new UserCannotAuthorizeException();
         }
 
-
         $simpleView = $isMandatory;
         if (!$this->needsAuthorization) {
             $simpleView = true;
@@ -222,6 +224,7 @@ class AuthorizationUI {
 
 
         $data['perms'] = $scopesInspector->getView();
+        $data['permsLongTerm'] = $scopesInspector->isLongTerm();
         $data['needsAuthorization'] = $this->needsAuthorization;
         $data['simpleView'] = $simpleView;
         $data['bodyclass'] = '';
@@ -243,6 +246,7 @@ class AuthorizationUI {
         $data['rememberme'] = false;
         $data['HOST'] = Utils\URL::selfURLhost();
         $data["apibase"] = Config::getValue("endpoints.core");
+
 
         $this->getPostData($data);
         $this->getUserinfo($data);
@@ -273,6 +277,9 @@ class AuthorizationUI {
         }
 
         $response = new LocalizedTemplatedHTMLResponse('oauthgrant');
+        $response->setReplacements(['notvalidated10short', 'notvalidated10', 'validated10short', 'validated10'], [
+            "ORG" => $this->organization
+        ]);
         $response->setData($data);
         return $response;
 

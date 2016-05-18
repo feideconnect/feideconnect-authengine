@@ -100,101 +100,65 @@
 
 
 
-
 				<div class="row uninett-padded">
 					<div class="col-md-12" style=" ">
 
-
-						<p class="simpleSkip">{{_.service}} </p>
 
 						{{> grant.service}}
 
 						<p class="simpleSkip">{{_.requestsperms}}</p>
 
 
-						<div class="list-group simpleSkip">
+						<div class="list-group simpleSkip" id="grantpermissionlist">
 
 							{{> grant.perms}}
+							{{> grant.perms-apis}}
 
 						</div><!-- End of list-group -->
 
 
-
-						{{#perms.hasAPIs}}
-							<p class="simpleSkip">{{_.requeststhirdperms}}</p>
-						{{/perms.hasAPIs}}
-
-
-
-						<div class="list-group simpleSkip">
-							{{> grant.perms-apis}}
-						</div>
-
-
-
-						{{#needsAuthorization}}
-
-
-							{{#validated}}
-								<div class="simpleSkip" style="margin-bottom: 2em">
-									<i style="color: #363" class="fa fa-check fa-3x pull-left"></i>
-									{{client.name}} {{_.validated1}} {{organization}}. {{organization}} {{_.validated2}}
-								</div>
-							{{/validated}}
-							{{^validated}}
-								<div class="simpleSkip" style="margin-bottom: 2em">
-									<i style="color: #643" class="fa fa-question fa-3x pull-left"></i>
-									{{_.notvalidated1}} {{organization}} {{_.notvalidated2}}
-
-								</div>
-							{{/validated}}
-
-
-
-						{{/needsAuthorization}}
-						{{^needsAuthorization}}
-								<div class="simpleSkip" style="margin-bottom: 2em">
-									<i style="color: #363" class="fa fa-check fa-3x pull-left"></i>
-									{{_.needsauthz1}} {{client.name}} {{_.needsauthz2}}
-								</div>
-						{{/needsAuthorization}}
-
-
-
+						{{#permsLongTerm}}
+							<p class="simpleSkip" style="color: #300; margin-top: 0px"><i class="fa fa-clock-o" aria-hidden="true"></i> {{_.permlong}}</p>
+						{{/permsLongTerm}}
+							
+						{{^permsLongTerm}}
+							<p class="simpleSkip"><i class="fa fa-clock-o" aria-hidden="true"></i> {{_.permshort}}</p>
+						{{/permsLongTerm}}
+						
 
 
 
 						<form  id="login" method="post" action="{{posturl}}">
 
+
+							<div class="center-block simpleSkip" >
+								<p>{{_.doyouaccept}}</p>
+							</div>
+
+
 							{{#firsttime}}
 
 
-
-
-							<div style="padding-left: .9em; margin-left: .9em; border-left: 5px solid #a55; ">
-								
-
-
-								{{#user.isFeideUser}}
-									<p>{{_.thisisfirsttimefeide}} 
-										<a class="touOpen" href="/tou">{{_.userterms}} <i class="fa fa-external-link" aria-hidden="true"></i> </a>
-										<input type="hidden" name="bruksvilkar" value="yes"></input>
-									</p>
-								{{/user.isFeideUser}}
-								{{^user.isFeideUser}}
-									<p>{{_.thisisfirsttimeother}}</p>
-
-									<p>
-										<label for="bruksvilkar">
-											<input type="checkbox" id="bruksvilkar" name="bruksvilkar" value="yes" />
-											{{_.iaccept}} <a class="touOpen" href="/tou">{{_.userterms}}</a></label>
-									</p>
-
-								{{/user.isFeideUser}}
-
-
+								<div style="padding-left: .9em; margin-left: .9em; border-left: 5px solid #a55; ">
 									
-							</div>
+									{{#user.isFeideUser}}
+										<p>{{_.thisisfirsttimefeide}} 
+											<a class="touOpen" href="/tou">{{_.userterms}} <i class="fa fa-external-link" aria-hidden="true"></i> </a>
+											<input type="hidden" name="bruksvilkar" value="yes"></input>
+										</p>
+									{{/user.isFeideUser}}
+									{{^user.isFeideUser}}
+										<p>{{_.thisisfirsttimeother}}</p>
+
+										<p>
+											<label for="bruksvilkar">
+												<input type="checkbox" id="bruksvilkar" name="bruksvilkar" value="yes" />
+												{{_.iaccept}} <a class="touOpen" href="/tou">{{_.userterms}}</a></label>
+										</p>
+
+									{{/user.isFeideUser}}
+
+								</div>
 
 							{{/firsttime}}
 
@@ -205,9 +169,9 @@
 
 
 							<div class="center-block simpleSkip" >
-								<p>{{_.doyouaccept}}</p>
+								
 								<fieldset id="actions" style=" text-align: center ">
-									<button type="submit" id="submit" tabindex="1" class="btn btn-primary">
+									<button type="submit" id="submit" tabindex="1" class="btn btn-default reqAccept">
 										<span class="glyphicon glyphicon-ok"></span>
 										{{_.yesaccept}}
 									</button>
@@ -228,7 +192,7 @@
 										{{_.showmore}}
 									</a>
 
-									<button type="submit" id="submit" tabindex="1" class="btn btn-success">
+									<button type="submit" id="submit" tabindex="1" class="btn btn-success reqAccept">
 										<span class="glyphicon glyphicon-chevron-right"></span>
 										{{_.okcontinue}}
 									</button>

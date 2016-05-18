@@ -4,53 +4,36 @@
 
 	<div class="list-group-item  grantEntry {{#expanded}}grantEntryActive{{/expanded}}">
 
-		<div class="pull-right grantDetails selectIndicator" style="font-size: 150%"><i class="glyphicon glyphicon-chevron-down "></i></div>
-		<div class="pull-right grantDetailsHide selectIndicator" style="font-size: 150%"><i class="glyphicon glyphicon-chevron-left "></i></div>
+
+		{{#expandable}}
+		<div class="pull-right grantDetails selectIndicator" style="font-size: 100%"><i class="glyphicon glyphicon-chevron-down "></i></div>
+		<div class="pull-right grantDetailsHide selectIndicator" style="font-size: 100%"><i class="glyphicon glyphicon-chevron-left "></i></div>
+		{{/expandable}}
 
 		<p class="" style="margin-bottom: 0px">
-			{{#icon}}<span style="" class="fa fa-{{.}}"></span> {{/icon}} 
+			{{#icon}}<span style="color: #565" class="fa fa-fw fa-{{.}}"></span> {{/icon}} 
 			{{title}}</p>
 
 		{{#descr}}
 			<p class="grantDetails" style="margin-bottom: 0px">{{.}}</p>
 		{{/descr}}
 	
-
+		{{#expandable}}
 		<div class="grantDetails">
 
 			<ul class="grantItemList">
 			{{#items}}
 				<li class="">
-					{{#icon}}<span class="fa fa-{{.}}"></span>{{/icon}}
+					{{#icon}}<span class="fa fa-fw fa-{{.}}"></span>{{/icon}}
 						{{title}} &nbsp; &nbsp;
 				</li>
 			{{/items}}
 			</ul>
 
 		</div>
+		{{/expandable}}
 
 	</div><!-- panel -->
 
 {{/perms.view}}
 
-
-
-
-<!-- TODO This is not in use currently. Fix or remove -->
-
-{{#perm.unknown}}
-	<div class="panel panel-default">
-		<div class="panel-body" style="">
-
-			<p>
-				<span style="font-size: 150%" class="glyphicon glyphicon-time"></span>
-				<b>There is a number of unknown permissions that you are requested to accept:</b></p>
-
-				<ul>
-				{{#items}}
-					<li>{{.}}</li>
-				{{/items}}
-				</ul>
-		</div>
-	</div>
-{{/perm.unknown}}

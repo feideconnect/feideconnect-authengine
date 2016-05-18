@@ -1,4 +1,4 @@
-<div class="panel panel-default grantEntry grantEntryActive ">
+<div class="panel panel-default grantEntry  ">
 
 
 	<div class="pull-right grantDetails selectIndicator" style="font-size: 200%"><i class="glyphicon glyphicon-chevron-down "></i></div>
@@ -8,12 +8,46 @@
 	<div class="media grantEntryContent" style="">
 		<div class="media-left ">
 			<img class="media-object grantDetails" style="max-height: 64px; max-width: 64px" src="{{apibase}}/clientadm/clients/{{client.id}}/logo" alt="...">
-			<img class="media-object grantDetailsHide" style="max-height: 32px; max-width: 32px" src="{{apibase}}/clientadm/clients/{{client.id}}/logo" alt="...">
+			<img class="media-object grantDetailsHide" style="max-height: 64px; max-width: 64px" src="{{apibase}}/clientadm/clients/{{client.id}}/logo" alt="...">
 		</div>
 
 		<div class="media-body" style="" >
 
-			<h3 class="media-heading" style="padding: 0px">{{client.name}}</h3>
+			<div class="grantDetails">
+				<h3 class="media-heading" style="padding: 0px">{{client.name}}</h3>
+			</div>
+
+			<div class="grantDetailsHide">
+				<h3 class="media-heading" style="padding: 0px">{{client.name}} <span style="font-weight: normal; color: #888">{{_.provby}} {{ownerDisplay}}</span></h3>
+
+
+				{{#user.isFeideUser}}
+
+					{{#needsAuthorization}}
+
+						{{#validated}}
+							<div class="simpleSkip">
+								<i style="color: #363; margin-top: 4px" class="fa fa-certificate"></i>
+								{{_.validated10short}}
+							</div>
+						{{/validated}}
+						{{^validated}}
+							<div class="simpleSkip">
+								<i style="color: #643" class="fa fa-exclamation-circle" aria-hidden="true"></i>
+								{{_.notvalidated10short}}
+							</div>
+						{{/validated}}
+
+					{{/needsAuthorization}}
+					{{^needsAuthorization}}
+							<div class="simpleSkip">
+								<i style="color: #363" class="fa fa-check fa-3x pull-left"></i>
+								{{_.needsauthz10short}}
+							</div>
+					{{/needsAuthorization}}
+				{{/user.isFeideUser}}
+
+			</div>
 
 			<div class="grantDetails" style="">
 
@@ -29,6 +63,35 @@
 						{{^client.isSecure}}
 							<p><span class="label label-danger"><i class="fa fa-warning"></i> {{_.insecurewarning}}</span></p>
 						{{/client.isSecure}}
+
+
+
+						{{#user.isFeideUser}}
+							{{#needsAuthorization}}
+
+								{{#validated}}
+									<div class="simpleSkip" style="margin-bottom: 2em">
+										<i style="color: #363" class="fa fa-check fa-3x pull-left"></i>
+										{{_.validated10}}
+									</div>
+								{{/validated}}
+								{{^validated}}
+									<div class="simpleSkip" style="margin-bottom: 2em">
+										<i style="color: #643" class="fa fa-exclamation-circle fa-3x pull-left"></i>
+										{{_.notvalidated10}}
+									</div>
+								{{/validated}}
+
+							{{/needsAuthorization}}
+							{{^needsAuthorization}}
+									<div class="simpleSkip" style="margin-bottom: 2em">
+										<i style="color: #363" class="fa fa-check fa-3x pull-left"></i>
+										{{_.needsauthz10}}
+									</div>
+							{{/needsAuthorization}}
+						{{/user.isFeideUser}}
+
+
 
 					</div>
 					

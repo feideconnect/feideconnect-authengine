@@ -78,8 +78,17 @@ body.simpleGrant .simpleOnly {
 
 }
 
+div.grantEntry:hover { 
+	background-color: #fafafa; 
+}
+
 .selectIndicator {
 	color: #ddd;
+}
+
+#grantpermissionlist .grantEntry {
+	padding-top: 7px;
+	padding-bottom: 7px;
 }
 
 .grantEntry {
@@ -88,7 +97,7 @@ body.simpleGrant .simpleOnly {
 
 
 .grantEntry.apiEntry {
-	padding: 0px;
+	/*padding: 0px;*/
 }
 
 .grantEntry .userInfoEntry {
