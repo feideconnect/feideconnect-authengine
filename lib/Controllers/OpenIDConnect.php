@@ -48,7 +48,6 @@ class OpenIDConnect {
 
 
         $accesses = ScopesInspector::scopesToAccesses($apiprotector->getScopes());
-
         $userinfo = $user->getAccessibleUserInfo($accesses);
 
         $response = [];

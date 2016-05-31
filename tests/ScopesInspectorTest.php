@@ -33,13 +33,11 @@ class ScopesInspectorTest extends DBHelper {
         $this->assertEquals($res, array(
             'hasAPIs' => false,
             'allScopes' => ['userinfo'],
-            'unknown' => [],
             'apis' => [],
-            'userinfo' => [
-                'userid' => 'userid',
-                'name' => 'name',
+            'global' => [
+                'userid' => true,
+                'name' => true,
             ],
-            'global' => [],
         ));
     }
 
@@ -49,10 +47,10 @@ class ScopesInspectorTest extends DBHelper {
         $this->assertEquals($res, array(
             'hasAPIs' => false,
             'allScopes' => ['ugle'],
-            'unknown' => ['ugle'],
             'apis' => [],
-            'global' => [],
-            'userinfo' => [],
+            'global' => [
+                'ugle' => true
+            ],
         ));
     }
 
@@ -62,10 +60,11 @@ class ScopesInspectorTest extends DBHelper {
         $this->assertEquals($res, array(
             'hasAPIs' => false,
             'allScopes' => ['gk_ugle'],
-            'unknown' => ['gk_ugle'],
             'apis' => [],
+            'unknownAPI' => [
+                'gk_ugle' => true
+            ],
             'global' => [],
-            'userinfo' => [],
         ));
     }
 
@@ -75,7 +74,6 @@ class ScopesInspectorTest extends DBHelper {
         $this->myAssertSubset(array(
             'hasAPIs' => true,
             'allScopes' => ['gk_test'],
-            'unknown' => [],
             'global' => [],
         ), $res);
         $this->assertArrayHasKey('apis', $res);
@@ -107,7 +105,6 @@ class ScopesInspectorTest extends DBHelper {
         $this->myAssertSubset(array(
             'hasAPIs' => true,
             'allScopes' => ['gk_test', 'gk_test_a'],
-            'unknown' => [],
             'global' => [],
         ), $res);
         $this->assertArrayHasKey('apis', $res);

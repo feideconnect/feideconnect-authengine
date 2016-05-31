@@ -20,19 +20,15 @@ use FeideConnect\Localization;
  */
 class ScopesInspector {
 
-    // protected $userinfopermissions = [ 'userid', 'email', 'name', 'photo', 'userid-feide', 'userid-nin'];
-    protected $specialScopes = ['longterm'];
+    protected static $specialScopes = ['longterm'];
 
     protected $scopes;
-    protected $globalScopes;
     protected $storage;
 
     protected $apis = [], $owners = [], $orgs = [];
 
     public function __construct($scopes, $authorizationEvaluator) {
         $this->scopes = $scopes;
-        $this->globalScopes = Config::readJSONfile('scopedef.json');
-
 
         $this->storage = StorageProvider::getStorage();
 
@@ -129,29 +125,21 @@ class ScopesInspector {
 
 
 
+    /*
+     * Returns a list of access rather than scopes.
+     * And also obtains all neccessary info about scopes to Gatekeepers and subscopes.
+     */
     public function getInfo() {
 
-        
         $apis = [];
         $data = [
             "global" => [],                     // All global scopes without special handling.
             "apis" => [],                       // All APIs behind API GKs that is represented.
-            "unknown" => [],                    // Unkown scopes
             "allScopes" => $this->scopes        // All the requested scopes
         ];
 
-
         $scope_apis = $this->getScopeAPIGKs();
         $accesses = self::scopesToAccesses($this->scopes);
-
-        // echo '<h2>Scope apis</h2><pre>';
-        // print_r($scope_apis);
-        // echo '<h2>accesses</h2><pre>';
-        // print_r($accesses);
-
-        // echo '<h2>global</h2><pre>';
-        // print_r($this->globalScopes);
-
 
         foreach ($accesses as $access) {
             if (isset($scope_apis[$access])) {
@@ -159,21 +147,13 @@ class ScopesInspector {
                 $apiInfo = $scope_apis[$access];
                 $apis[$apiInfo['apigk']->id] = $apiInfo;
 
+            } else if (APIGK::isApiScope($access)) {
+                $data['unknownAPI'][$access] = true;
             } else {
-
-                if (isset($this->globalScopes[$access])) {
-                    $ne = $this->globalScopes[$access];
-                    $ne["scope"] = $access;
-                    $data['global'][$access] = $ne;
-                } else {
-                    $data["global"][$access] = [
-                        "title" => "Unknown permission",
-                        "scope" => $access
-                    ];
-                }
-
+                $data['global'][$access] = true; 
             }
         }
+
 
         foreach ($apis as $apigkid => $api) {
             $apiEntry = [
@@ -198,9 +178,6 @@ class ScopesInspector {
         }
 
         $data["hasAPIs"] = (count($data["apis"]) > 0);
-
-        
-
         return $data;
 
     }
@@ -299,27 +276,19 @@ class ScopesInspector {
             ]
         ];
 
-        // if (!empty($info['userinfo'])) {
-        //     $item = [
-        //         'title' => Localization::getTerm('accesstouserinfo'),
-        //         // 'descr' => '',
-        //         'icon' => 'user',
-        //         'items' => [],
-        //         'expanded' => true
-        //     ];
-        //     foreach ($info['userinfo'] as $userinfoperm) {
-        //         if (isset($permissionInfo[$userinfoperm])) {
-        //             $item['items'][] = $permissionInfo[$userinfoperm];
-        //         }
-        //     }
-        //     $info['view'][] = $item;
-        // }
-
+        
 
         foreach ($info['global'] as $globalperm => $globalpermdata) {
+
             if (isset($permissionInfo[$globalperm])) {
                 $info['view'][] = $permissionInfo[$globalperm];
-            }
+
+            } else if (!in_array($globalperm, self::$specialScopes)) {
+
+                $info['view'][] = [
+                    'title' => 'Unknown permission [' . htmlspecialchars($globalperm) . ']',
+                ];
+            } 
         }
 
 
@@ -327,13 +296,7 @@ class ScopesInspector {
             $info["view"][$key]["expandable"] = !empty($item["descr"]);
         }
 
-
-
-
         usort($info["view"], ['FeideConnect\OAuth\ScopesInspector', 'sortByScore']);
-
-        // echo '<pre>'; print_r($info); exit;
-
 
         return $info;
 
