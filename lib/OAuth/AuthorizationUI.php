@@ -103,6 +103,9 @@ class AuthorizationUI {
         if (!$this->isFirstTime()) {
             $postattrs['bruksvilkar'] = 'yes';
         }
+        if ($this->user->isFeideUser()) {
+            $postattrs['bruksvilkar'] = 'yes';
+        }
 
         $postdata = array();
         foreach ($postattrs as $k => $v) {
@@ -190,9 +193,7 @@ class AuthorizationUI {
     }
 
 
-
     public function getAuthorizationInfo(&$data) {
-
 
         $scopesInspector = new ScopesInspector($this->scopesInQuestion, $this->authorizationEvaluator);
         $isMandatory = MandatoryClientInspector::isClientMandatory($this->account, $this->client);
@@ -211,9 +212,10 @@ class AuthorizationUI {
         }
 
         $bypass = $simpleView;
-        if ($this->isFirstTime()) {
+        if ($this->isFirstTime() && !$this->user->isFeideUser()) {
             $bypass = false;
         }
+
         if ($this->fixedBypass !== null) {
             $bypass = $this->fixedBypass;
         }
@@ -221,7 +223,6 @@ class AuthorizationUI {
         if ($this->fixedSimpleView !== null) {
             $simpleView = $this->fixedSimpleView;
         }
-
 
         $data['perms'] = $scopesInspector->getView();
         $data['permsLongTerm'] = $scopesInspector->isLongTerm();
@@ -246,7 +247,6 @@ class AuthorizationUI {
         $data['rememberme'] = false;
         $data['HOST'] = Utils\URL::selfURLhost();
         $data["apibase"] = Config::getValue("endpoints.core");
-
 
         $this->getPostData($data);
         $this->getUserinfo($data);
