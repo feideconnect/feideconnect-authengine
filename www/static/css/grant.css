@@ -1,22 +1,21 @@
+@import url('./style.css');
 
-body {
-	padding-top: 0px;
-}
-
-
-.container.mainContainer {
-	max-width: 860px;
-	margin-top: 0px;
-	border-radius: 5px;
-	background-color: white;
-}
 
 /* Small devices (tablets, 768px and up) */
 @media (min-width: 992px) {
 	.container.mainContainer {
 		margin-top: 7em;
 	}
+
 }
+
+/* Small devices (tablets, 768px and up) */
+@media (max-width: 768px) {
+	.uninett-padded {
+		padding: 10px 0px 0px 0px! important;
+	}
+}
+
 
 
 
@@ -29,8 +28,6 @@ div.row.grantServiceLine {
 	/*border-bottom: 3px solid #eeebe8;*/
 	padding: 25px 5px 0px 5px;
 }
-
-
 
 
 
