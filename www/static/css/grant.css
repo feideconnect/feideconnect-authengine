@@ -31,6 +31,11 @@ div.row.grantServiceLine {
 
 
 
+form#login {
+	margin-bottom: .4em;
+}
+
+
 body.simpleGrant .simpleSkip {
 	display: none;
 }
