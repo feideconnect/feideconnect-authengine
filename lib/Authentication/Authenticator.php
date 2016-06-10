@@ -102,6 +102,8 @@ class Authenticator {
 
         $accountchooser->setClientID($this->clientid);
         // $accountchooser->debug();
+
+
         if (!$accountchooser->hasResponse()) {
             $requestURL = $accountchooser->getRequest();
             throw new RedirectException($requestURL);
@@ -172,6 +174,39 @@ class Authenticator {
 
         // echo '<pre>Options:' ; print_r($options); exit;
         // echo "about to auth " . var_export($options, true); exit;
+
+
+        $preselectEndpoints = [
+            'https://idp-test.feide.no' => 'https://idp-test.feide.no/simplesaml/module.php/feide/preselectOrg.php',
+            'https://idp.feide.no' => 'https://idp.feide.no/simplesaml/module.php/feide/preselectOrg.php'
+        ];
+
+
+        /*
+         * Make sure we handle preselet org with Feide.
+         * Will only execute if not already authenticated, and if Feide is selected and a preselect endpoint is configured.
+         */
+        if (!$as->isAuthenticated() && $authconfig["idp"] && $authconfig["idp"] === Config::getValue('feideIdP') && $preselectEndpoints[$authconfig["idp"]]) {
+
+            $preselectEndpoint = $preselectEndpoints[$authconfig["idp"]];
+
+            // Prevent redirect loop. Only execute if not already executed.
+            if (!isset($_REQUEST['preselected']) && isset($authconfig["subid"])) {
+
+                $returnTo = \SimpleSAML_Utilities::addURLparameter(\SimpleSAML_Utilities::selfURL(), array(
+                    "preselected" => "1"
+                ));
+                $preselectAction = \SimpleSAML_Utilities::addURLparameter($preselectEndpoint, array(
+                    "HomeOrg" => $authconfig["subid"],
+                    "ReturnTo" => $returnTo,
+                ));
+                throw new RedirectException($preselectAction);
+
+            }
+
+
+        }
+
 
         if ($forceauthn) {
             $options['ForceAuthn'] = true;
