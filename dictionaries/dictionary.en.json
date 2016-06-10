@@ -34,7 +34,7 @@
 	"myservices": "My services",
 	"logout": "Logout",
 
-	"requestsperms": "requests the following permissions on behalf of you:",
+	"requestsperms": "This service requests the following accesses on behalf of you:",
 	
 
 	"readmoreconnect": "Read more about Dataporten",
@@ -50,8 +50,11 @@
 	"permshort": "Permissions will only be granted for 8 hours after each login.",
 	"permlong": "Permissions will be granted permanently but may be manually revoked.",
 
-	"notvalidated10short": "This is not an official application at {ORG}.",
-	"notvalidated10": "The application has not been controlled nor accepted by {ORG}. You may still choose to use the application on your own risk.",
+	"_notvalidated10short": "This is not an official application at {ORG}.",
+	"notvalidated10short": "{ORG} does not have a contract with this service provider.",
+
+	"_notvalidated10": "The application has not been controlled nor accepted by {ORG}. You may still choose to use the application on your own risk.",
+	"notvalidated10": "{ORG} does not have a contract with this service provider. You may still choose to use the application on your own risk.",
 
 	"validated10short": "An official application at {ORG}",
 	"validated10": "{ORG} has accepted the use of this application on behalf of its users, and has made a contract with the application provider.",
@@ -100,6 +103,7 @@
 	"stillok": "Is this still ok?",
 	"doyouaccept": "Do you accept this?",
 	"yesaccept": "Yes, I accept",
+	"yes": "Yes",
 	"no": "No",
 
 	"close": "Close",
