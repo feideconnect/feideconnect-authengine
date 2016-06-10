@@ -48,6 +48,12 @@ body.simpleGrant .simpleOnly {
 }
 
 
+.nestedpermissions .list-group-item {
+	padding: 0px 0px 0px 5px;
+
+	background-color: inherit;
+	border: none;
+}
 
 
 #tousection h3 {
@@ -119,6 +125,11 @@ div.grantEntry:hover {
 .grantEntry .ownerbox2 p {
 	margin: 0px 5px 0px 5px;
 }
+
+.grantEntry .ownerboxnested p {
+	margin: 0px 5px 0px 5px;
+}
+
 .grantEntry .ownerbox2 .ownerMail {
 	font-size: 74%;
 }

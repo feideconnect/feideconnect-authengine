@@ -38,34 +38,37 @@
 				{{/nestedPermissions}}
 
 -->
-				<div class="grantDetails">
-
-					{{#info.descr}}
-						<p style="margin: 0px">{{.}}</p>
-					{{/info.descr}}
-
-
-					<p style="margin-top: 1em">{{_.withpermissions}}</p>
-
-					<ul class="uninett-ul" style="padding-top: 0px">
-					{{#scopes}}
-						<li class="uninett-ul-li">{{title}} – <span style="color: #555;">{{descr}}</span></li>
-					{{/scopes}}
-					</ul>
-
-					<p style="margin-top: 1em">{{_.willgetaccessto}}</p>
-
-					{{#nestedPermissions}}
-						{{> grant.nestedpermissions }}
-					{{/nestedPermissions}}
-
-				</div>
 
 
 			</div><!-- media body -->
 		</div><!-- media -->
 
-		<div class="ownerbox2 grantDetails" style="margin: 8px">
+
+		<div class="grantDetails">
+
+			{{#info.descr}}
+				<p style="margin: 0px">{{.}}</p>
+			{{/info.descr}}
+
+
+			<p style="margin-top: 1em">{{_.withpermissions}}</p>
+
+			<ul class="uninett-ul" style="padding-top: 0px">
+			{{#scopes}}
+				<li class="uninett-ul-li">{{title}} – <span style="color: #555;">{{descr}}</span></li>
+			{{/scopes}}
+			</ul>
+
+			<p style="margin-top: 1em">{{_.willgetaccessto}}</p>
+
+			{{#nestedPermissions}}
+				{{> grant.nestedpermissions }}
+			{{/nestedPermissions}}
+
+		</div>
+
+
+		<div class="ownerboxnested grantDetails" style="margin: 8px">
 
 			<div class="row">
 				
@@ -76,35 +79,38 @@
 						{{/info.privacypolicyurl}}
 					</ul>
 				</div>
+				<div class="col-md-7">
+
+					<div class="row">
+					{{#info.APIownerOrg}}
+						<div class="col-xs-8" style="text-align: right">
+							<p style="font-style: italic; font-size: 95%">{{_.providedby}}</p>
+							<p class=" ownerName" style=""><strong>{{org.name.nb}}</strong></p>
+						</div>
+
+						<div class="col-xs-4" style="text-align: left">
+							<img class="orglogo orglogoSmall" style="max-height: 64px; max-width: 64px" src="{{org.logoURL}}">
+						</div>
+					{{/info.APIownerOrg}}
+
+					{{^info.APIownerOrg}}
+						<div class="col-xs-8">
+							<p style="font-style: italic; font-size: 95%">{{_.providedby}}</p>
+							<p class="ownerName"><strong>{{owner.name}}</strong></p>
+							<p class="ownerMail">
+								<a href="mailto:{{owner.mail}}">{{owner.email}}</a>
+							</p>
 
 
-
-
-				{{#info.APIownerOrg}}
-					<div class="col-md-5" style="text-align: right">
-						<p style="font-style: italic; font-size: 95%">{{_.providedby}}</p>
-						<p class=" ownerName" style=""><strong>{{org.name.nb}}</strong></p>
+						</div>
+						<div class="col-xs-4">
+							<img class="orglogo orglogoSmall" style="max-height: 64px; max-width: 64px" src="/user/media/{{owner.profilephoto}}">
+						</div>
+					{{/info.APIownerOrg}}
 					</div>
 
-					<div class="col-md-2" style="text-align: left">
-						<img class="orglogo orglogoSmall" style="max-height: 64px; max-width: 64px" src="{{org.logoURL}}">
-					</div>
-				{{/info.APIownerOrg}}
+				</div>
 
-				{{^info.APIownerOrg}}
-					<div class="col-md-10">
-						<p style="font-style: italic; font-size: 95%">{{_.providedby}}</p>
-						<p class="ownerName"><strong>{{owner.name}}</strong></p>
-						<p class="ownerMail">
-							<a href="mailto:{{owner.mail}}">{{owner.email}}</a>
-						</p>
-
-
-					</div>
-					<div class="col-md-2">
-						<img class="orglogo orglogoSmall" style="max-height: 64px; max-width: 64px" src="/user/media/{{owner.profilephoto}}">
-					</div>
-				{{/info.APIownerOrg}}
 			</div>
 
 		</div>
