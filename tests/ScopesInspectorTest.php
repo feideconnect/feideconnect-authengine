@@ -100,11 +100,11 @@ class ScopesInspectorTest extends DBHelper {
     }
 
     public function testApiSubscope() {
-        $test = new ScopesInspector(['gk_test', 'gk_test_a'], $this->aevaluator);
+        $test = new ScopesInspector(['gk_test', 'gk_test_a', 'gk_test_b'], $this->aevaluator);
         $res = $test->getInfo();
         $this->myAssertSubset(array(
             'hasAPIs' => true,
-            'allScopes' => ['gk_test', 'gk_test_a'],
+            'allScopes' => ['gk_test', 'gk_test_a', 'gk_test_b'],
             'global' => [],
         ), $res);
         $this->assertArrayHasKey('apis', $res);
@@ -133,6 +133,11 @@ class ScopesInspectorTest extends DBHelper {
                 'title' => 'scope a',
                 'descr' => 'test scope a',
                 'policy' => array('auto' => true),
+            ),
+            array(
+                'title' => 'scope b',
+                'descr' => 'test scope b',
+                'policy' => array('auto' => false),
             ),
         ], $api['scopes']);
     }

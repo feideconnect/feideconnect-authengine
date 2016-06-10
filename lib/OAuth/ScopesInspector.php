@@ -105,19 +105,24 @@ class ScopesInspector {
 
     public function getScopeAPIGKs() {
         $apis = [];
+        $apisById = [];
         $scopeApis = $this->authorizationEvaluator->getScopeAPIGKs($this->scopes);
 
         foreach ($scopeApis as $scope => $apigk) {
             list($apigkid, $subscope) = APIGK::parseScope($scope);
-
-            try {
-                $apiInfo = $this->getAPIinfo($apigk);
-            } catch (\Exception $e) {
-                continue;
+            if (array_key_exists($apigkid, $apisById)) {
+                $apiInfo = $apisById[$apigkid];
+            } else {
+               try {
+                    $apiInfo = $this->getAPIinfo($apigk);
+                } catch (\Exception $e) {
+                    continue;
+                }
             }
             if (isset($subscope)) {
                 $apiInfo['localScopes'][] = $subscope;
             }
+            $apisById[$apigkid] = $apiInfo;
             $apis[$scope] = $apiInfo;
         }
         return $apis;
