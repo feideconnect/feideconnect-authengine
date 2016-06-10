@@ -27,7 +27,7 @@ define(function(require, exports, module) {
 
 	var Controller = require('./Controller');
 
-	var FeideWriter = require('./FeideWriter');
+	// var FeideWriter = require('./FeideWriter');
 	var LocationController = require('./LocationController');
 	var DiscoveryFeedLoader = require('./DiscoveryFeedLoader');
 
@@ -203,18 +203,19 @@ define(function(require, exports, module) {
 			var url = that.request.return;
 			var sep = (url.indexOf('?') > -1) ? '&' : '?';
 			url += sep + 'acresponse=' + encodeURIComponent(JSON.stringify(so));
+			window.location = url;
 
-			if (that.feideid === so.id) {
+			// if (that.feideid === so.id) {
 
-				var f = (new FeideWriter(this.app, so.subid, that.feideid))
-					.onLoad( function() {
-						window.location = url;	
-					})
-					.load();
+			// 	var f = (new FeideWriter(this.app, so.subid, that.feideid))
+			// 		.onLoad( function() {
+			// 			window.location = url;
+			// 		})
+			// 		.load();
 
-			} else {
-				window.location = url;	
-			}
+			// } else {
+			// 	window.location = url;
+			// }
     	},
 
 
