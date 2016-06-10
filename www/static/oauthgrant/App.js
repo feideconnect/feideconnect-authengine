@@ -63,7 +63,9 @@ define(function(require, exports, module) {
 			// Used for debugging.
 			// $('#myModal').modal('show');
 
-			this.loadDictionary();
+			this.loadConfig().then(function() {
+				that.loadDictionary();
+			});
 
     	},
 
@@ -82,6 +84,22 @@ define(function(require, exports, module) {
 			
 
     	},
+
+
+		"loadConfig": function() {
+			var that = this;
+
+			return new Promise(function(resolve, reject) {
+
+				// console.error("About to load config");
+				$.getJSON('/accountchooser/config',function(data) {
+					that.lang.setConfig(data);
+					resolve();
+				});
+
+			});
+
+		},
 
 
 		"loadDictionary": function() {
