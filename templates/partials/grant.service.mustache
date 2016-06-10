@@ -21,31 +21,7 @@
 				<h3 class="media-heading" style="padding: 0px">{{client.name}} <span style="font-weight: normal; color: #888">{{_.provby}} {{ownerDisplay}}</span></h3>
 
 
-				{{#user.isFeideUser}}
-
-					{{#needsAuthorization}}
-
-						{{#validated}}
-							<div class="simpleSkip">
-								<i style="color: #363; margin-top: 4px" class="fa fa-certificate"></i>
-								{{_.validated10short}}
-							</div>
-						{{/validated}}
-						{{^validated}}
-							<div class="simpleSkip">
-								<i style="color: #643" class="fa fa-exclamation-circle" aria-hidden="true"></i>
-								{{_.notvalidated10short}}
-							</div>
-						{{/validated}}
-
-					{{/needsAuthorization}}
-					{{^needsAuthorization}}
-							<div class="simpleSkip">
-								<i style="color: #363" class="fa fa-check fa-3x pull-left"></i>
-								{{_.needsauthz10short}}
-							</div>
-					{{/needsAuthorization}}
-				{{/user.isFeideUser}}
+				{{>contractsummary }}
 
 			</div>
 
@@ -66,30 +42,7 @@
 
 
 
-						{{#user.isFeideUser}}
-							{{#needsAuthorization}}
-
-								{{#validated}}
-									<div class="simpleSkip" style="margin-bottom: 2em">
-										<i style="color: #363" class="fa fa-check fa-3x pull-left"></i>
-										{{_.validated10}}
-									</div>
-								{{/validated}}
-								{{^validated}}
-									<div class="simpleSkip" style="margin-bottom: 2em">
-										<i style="color: #643" class="fa fa-exclamation-circle fa-3x pull-left"></i>
-										{{_.notvalidated10}}
-									</div>
-								{{/validated}}
-
-							{{/needsAuthorization}}
-							{{^needsAuthorization}}
-									<div class="simpleSkip" style="margin-bottom: 2em">
-										<i style="color: #363" class="fa fa-check fa-3x pull-left"></i>
-										{{_.needsauthz10}}
-									</div>
-							{{/needsAuthorization}}
-						{{/user.isFeideUser}}
+						{{! <div class="hidden-xs"> }}
 
 
 
@@ -103,11 +56,22 @@
 	</div><!-- media -->
 
 
+	<div class="grantDetails" style="">
+
+		{{! <div class="visible-xs-block" style="padding: .2em"> }}
+		<div style="padding: 2px 10px">
+			{{>contractdetails}}
+		</div>
+
+	</div>
+
+
 	<div class="ownerbox2 grantDetails" style="margin: 8px">
 
 		<div class="row">
 			
 			<div class="col-md-5" style="text-align: left">
+			
 				<ul class="uninett-ul simpleSkip" style="padding: 0px">
 					{{#client.privacypolicyurl}}
 						<li class="uninett-ul-li"><a target="_blank" href="{{.}}">{{_.applicationprivacy}}</a></li>
@@ -119,37 +83,49 @@
 						<li class="uninett-ul-li"><a target="_blank" href="{{.}}">{{_.applicationhomepage}}</a></li>
 					{{/client.homepageurl}}
 				</ul>
+
+
+			</div>
+			<div class="col-md-7">
+
+				<div class="row">
+				{{#ownerOrg}}
+					<div class="col-xs-8" style="text-align: right">
+						<p style="font-style: italic; font-size: 95%">{{_.appprovidedby}}</p>
+						<p class=" ownerName" style=""><strong>{{org.name.nb}}</strong></p>
+
+						<p class="simpleSkip"><code>{{client.host}}</code></p>
+					</div>
+
+					<div class="col-xs-4" style="text-align: left">
+						<img class="orglogo orglogoSmall" style="max-height: 64px; max-width: 64px" src="{{org.logoURL}}">
+					</div>
+				{{/ownerOrg}}
+				{{#owner}}
+					<div class="col-xs-8">
+						<p style="font-style: italic; font-size: 95%">{{_.appprovidedby}}</p>
+						<p class="ownerName"><strong>{{owner.name}}</strong></p>
+						<p class="ownerMail">
+							<a href="mailto:{{owner.mail}}">{{owner.email}}</a>
+						</p>
+
+						<p class="simpleSkip"><code>{{client.host}}</code></p>
+
+					</div>
+					<div class="col-xs-4">
+						<img class="orglogo orglogoSmall" style="max-height: 64px; max-width: 64px" src="/user/media/{{owner.profilephoto}}">
+					</div>
+				{{/owner}}
+
+				</div>
+
+
 			</div>
 
-			{{#ownerOrg}}
-				<div class="col-md-5" style="text-align: right">
-					<p style="font-style: italic; font-size: 95%">{{_.appprovidedby}}</p>
-					<p class=" ownerName" style=""><strong>{{org.name.nb}}</strong></p>
-
-					<p class="simpleSkip"><code>{{client.host}}</code></p>
-				</div>
-
-				<div class="col-md-2" style="text-align: left">
-					<img class="orglogo orglogoSmall" style="max-height: 64px; max-width: 64px" src="{{org.logoURL}}">
-				</div>
-			{{/ownerOrg}}
-
-			{{#owner}}
-				<div class="col-md-10">
-					<p style="font-style: italic; font-size: 95%">{{_.appprovidedby}}</p>
-					<p class="ownerName"><strong>{{owner.name}}</strong></p>
-					<p class="ownerMail">
-						<a href="mailto:{{owner.mail}}">{{owner.email}}</a>
-					</p>
-
-					<p class="simpleSkip"><code>{{client.host}}</code></p>
-
-				</div>
-				<div class="col-md-2">
-					<img class="orglogo orglogoSmall" style="max-height: 64px; max-width: 64px" src="/user/media/{{owner.profilephoto}}">
-				</div>
-			{{/owner}}
 		</div>
+
+
+
 
 	</div>
 
