@@ -277,8 +277,10 @@ class AuthorizationUI {
         }
 
         $response = new LocalizedTemplatedHTMLResponse('oauthgrant');
-        $response->setReplacements(['notvalidated10short', 'notvalidated10', 'validated10short', 'validated10'], [
-            "ORG" => $this->organization
+        $response->setReplacements(['notvalidated10short', 'notvalidated10', 'validated10short', 'validated10', 'permshort', 'permlong'], [
+            "ORG" => $this->organization,
+            "A1" => '<a target="_blank" href="https://minside.dataporten.no">',
+            "A1_" => '</a>'
         ]);
         $response->setData($data);
         return $response;
