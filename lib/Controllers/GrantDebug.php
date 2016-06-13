@@ -59,11 +59,6 @@ class GrantDebug {
 
 
 
-
-
-
-
-
         $clientid = '74b8b784-5350-41de-adf8-2b83dcecd34e'; // Foodle
 
 
@@ -99,6 +94,7 @@ class GrantDebug {
             ->setFixedFirstTime(true)
             ->setFixedSimpleView(false)
             ->setFixedMandatory(false)
+            ->setFixedFeideUser(false)
             ->show();
 
         return $response;

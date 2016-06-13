@@ -19,6 +19,7 @@ class AuthorizationUI {
     protected $fixedFirstTime = null;
     protected $fixedSimpleView = null;
     protected $fixedMandatory = null;
+    protected $fixedFeideUser = null;
 
     protected $storage;
 
@@ -75,6 +76,12 @@ class AuthorizationUI {
     }
 
 
+    public function setFixedFeideUser($en) {
+        $this->fixedFeideUser = $en;
+        return $this;
+    }
+
+
     /*
      * Is this the first time the user is authenticating to a Connect service?
      */
@@ -103,7 +110,7 @@ class AuthorizationUI {
         if (!$this->isFirstTime()) {
             $postattrs['bruksvilkar'] = 'yes';
         }
-        if ($this->user->isFeideUser()) {
+        if ($this->isFeideUser()) {
             $postattrs['bruksvilkar'] = 'yes';
         }
 
@@ -143,7 +150,7 @@ class AuthorizationUI {
             $visualTag['rememberme'] = true;
         }
 
-        $userinfo['isFeideUser'] = $this->user->isFeideUser();
+        $userinfo['isFeideUser'] = $this->isFeideUser();
 
         $data['user'] = $userinfo;
         $data['organization'] = $this->organization;
@@ -151,6 +158,13 @@ class AuthorizationUI {
         $data['visualTag'] = json_encode($visualTag);
     }
 
+
+    public function isFeideUser() {
+        if ($this->fixedFeideUser !== null) {
+            return $this->fixedFeideUser;
+        }
+        return $this->user->isFeideUser();
+    }
 
 
     /*
@@ -212,7 +226,7 @@ class AuthorizationUI {
         }
 
         $bypass = $simpleView;
-        if ($this->isFirstTime() && !$this->user->isFeideUser()) {
+        if ($this->isFirstTime() && !$this->isFeideUser()) {
             $bypass = false;
         }
 
