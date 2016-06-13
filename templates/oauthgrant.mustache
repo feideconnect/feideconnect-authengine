@@ -51,6 +51,8 @@
 
 		<div id="mcontent" style="display: none">
 
+			<form  id="login" method="post" action="{{posturl}}">
+
 
 			<div class="container" style="margin-top: 1em" >
 				<div id="langselector" style="float: right; font-size: 95%"></div>
@@ -100,6 +102,35 @@
 					<div class="col-md-12" style=" ">
 
 
+
+						{{#firsttime}}
+
+
+							<div style="padding-left: .9em; margin-left: .9em; border-left: 5px solid #a55; ">
+								
+								{{#user.isFeideUser}}
+									<p>{{_.thisisfirsttimefeide}} 
+										<a class="touOpen" href="/tou">{{_.userterms}} <i class="fa fa-external-link" aria-hidden="true"></i> </a>
+										<input type="hidden" name="bruksvilkar" value="yes"></input>
+									</p>
+								{{/user.isFeideUser}}
+								{{^user.isFeideUser}}
+									<p>{{_.thisisfirsttimeother}}</p>
+
+									<p>
+										<label for="bruksvilkar">
+											<input type="checkbox" id="bruksvilkar" name="bruksvilkar" value="yes" />
+											{{_.iaccept}} <a class="touOpen" href="/tou">{{_.userterms}}</a></label>
+									</p>
+
+								{{/user.isFeideUser}}
+
+							</div>
+
+						{{/firsttime}}
+
+
+
 						{{> grant.service}}
 
 						<p class="simpleSkip">{{_.requestsperms}}</p>
@@ -114,17 +145,15 @@
 
 
 						{{#permsLongTerm}}
-							<p class="simpleSkip" style="color: #300; margin-top: 0px"><i class="fa fa-clock-o" aria-hidden="true"></i> {{_.permlong}}</p>
+							<p class="simpleSkip" style="color: #300; margin-top: 0px"><i class="fa fa-clock-o" aria-hidden="true"></i> {{{_.permlong}}}</p>
 						{{/permsLongTerm}}
 							
 						{{^permsLongTerm}}
-							<p class="simpleSkip"><i class="fa fa-clock-o" aria-hidden="true"></i> {{_.permshort}}</p>
+							<p class="simpleSkip"><i class="fa fa-clock-o" aria-hidden="true"></i> {{{_.permshort}}}</p>
 						{{/permsLongTerm}}
+
+
 						
-
-
-
-						<form  id="login" method="post" action="{{posturl}}">
 
 
 							<div class="center-block simpleSkip" >
@@ -132,31 +161,6 @@
 							</div>
 
 
-							{{#firsttime}}
-
-
-								<div style="padding-left: .9em; margin-left: .9em; border-left: 5px solid #a55; ">
-									
-									{{#user.isFeideUser}}
-										<p>{{_.thisisfirsttimefeide}} 
-											<a class="touOpen" href="/tou">{{_.userterms}} <i class="fa fa-external-link" aria-hidden="true"></i> </a>
-											<input type="hidden" name="bruksvilkar" value="yes"></input>
-										</p>
-									{{/user.isFeideUser}}
-									{{^user.isFeideUser}}
-										<p>{{_.thisisfirsttimeother}}</p>
-
-										<p>
-											<label for="bruksvilkar">
-												<input type="checkbox" id="bruksvilkar" name="bruksvilkar" value="yes" />
-												{{_.iaccept}} <a class="touOpen" href="/tou">{{_.userterms}}</a></label>
-										</p>
-
-									{{/user.isFeideUser}}
-
-								</div>
-
-							{{/firsttime}}
 
 
 							{{#postdata}}
@@ -199,7 +203,7 @@
 
 
 
-						</form>
+						
 
 
 
@@ -230,6 +234,8 @@
 
 			</div>
 
+			</form>
+
 
 			<!-- Modal -->
 			<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
@@ -249,6 +255,8 @@
 					</div>
 				</div>
 			</div>
+
+
 
 
 

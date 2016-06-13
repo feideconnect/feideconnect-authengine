@@ -11,7 +11,7 @@ define(function(require, exports, module) {
 			var that = this;
 			this.languages = {
 				"nb": "Bokmål",
-				"nn": "Nynorsk",
+				// "nn": "Nynorsk",
 				"en": "English"
 			};
 			this.selected = 'nn';
