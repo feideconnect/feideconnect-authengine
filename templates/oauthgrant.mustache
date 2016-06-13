@@ -131,29 +131,28 @@
 
 
 
-						{{> grant.service}}
-
-						<p class="simpleSkip">{{_.requestsperms}}</p>
+						<div id="servicecontent">
 
 
-						<div class="list-group simpleSkip" id="grantpermissionlist">
+							{{> grant.service}}
 
-							{{> grant.perms}}
-							{{> grant.perms-apis}}
-
-						</div><!-- End of list-group -->
+							<p class="simpleSkip">{{_.requestsperms}}</p>
 
 
-						{{#permsLongTerm}}
-							<p class="simpleSkip" style="margin-top: 0px"><i class="fa fa-clock-o" aria-hidden="true"></i> {{{_.permlong}}}</p>
-						{{/permsLongTerm}}
-							
-						{{^permsLongTerm}}
-							<p class="simpleSkip"><i class="fa fa-clock-o" aria-hidden="true"></i> {{{_.permshort}}}</p>
-						{{/permsLongTerm}}
+							<div class="list-group simpleSkip" id="grantpermissionlist">
 
+								{{> grant.perms}}
+								{{> grant.perms-apis}}
 
-						
+							</div><!-- End of list-group -->
+
+							{{#permsLongTerm}}
+								<p class="simpleSkip" style="margin-top: 0px"><i class="fa fa-clock-o" aria-hidden="true"></i> {{{_.permlong}}}</p>
+							{{/permsLongTerm}}
+
+							{{^permsLongTerm}}
+								<p class="simpleSkip"><i class="fa fa-clock-o" aria-hidden="true"></i> {{{_.permshort}}}</p>
+							{{/permsLongTerm}}
 
 
 							<div class="center-block simpleSkip" >
@@ -168,9 +167,9 @@
 							{{/postdata}}
 
 
-							<div class="center-block simpleSkip" style="margin-bottom: 5px" >
+							<div class="center-block simpleSkip" style="" >
 								
-								<fieldset id="actions" style=" text-align: center ">
+								<fieldset id="actions" style=" text-align: center; margin-bottom: 5px ">
 									<button type="submit" id="submit" tabindex="1" class="btn btn-default reqAccept">
 										<span class="glyphicon glyphicon-ok"></span>
 										{{_.yes}}
@@ -180,6 +179,7 @@
 										{{_.no}}
 									</a>
 								</fieldset>
+
 							</div>
 
 
@@ -202,8 +202,8 @@
 							</div>
 
 
+						</div>
 
-						
 
 
 

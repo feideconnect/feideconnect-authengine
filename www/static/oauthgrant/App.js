@@ -46,8 +46,6 @@ define(function(require, exports, module) {
 			}
 
 
-
-
 			$("body").on("change", "#bruksvilkar", function(e) {
 				// e.preventDefault();
 				that.updateAcceptRequirement();
@@ -76,8 +74,10 @@ define(function(require, exports, module) {
 	    		var val = $("input#bruksvilkar").is(":checked");
 				if (val) {
 					$(".reqAccept").removeAttr("disabled");
+					$("#servicecontent").show();
 				} else {
 					$(".reqAccept").attr("disabled", "disabled");
+					$("#servicecontent").hide();
 				}
     		}
 
