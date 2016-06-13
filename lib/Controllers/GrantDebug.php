@@ -29,7 +29,7 @@ class GrantDebug {
         // exit;
         // http://localhost/
 
-        $userid = '07a97f30-4f90-4870-9190-a7ec0bc88dba'; // Andreas
+        $userid = '8e2528b2-f8b0-45f7-9f2a-70feb3b4b57e'; // Andreas
         $attributes = [
             "eduPersonPrincipalName" => ["andreas@uninett.no"],
             "jpegPhoto" => null,
