@@ -75,9 +75,23 @@ class Misc {
         }
 
 
+        if ($bestqval === 0) {
+            foreach (['nb', 'nn', 'en', 'se'] AS $ql) {
+                if (in_array($ql, $available_languages)) {
+                    $bestlang = $ql;
+                    break;
+                }
+            }
+        }
+
+        // echo '<pre>';
+        // echo "Available\n";
         // var_dump($available_languages);
+        // echo "Hits\n";
         // var_dump($hits);
+        // echo "BEst lang\n";
         // var_dump($bestlang);
+        // var_dump($bestqval);
         // exit;
 
 
