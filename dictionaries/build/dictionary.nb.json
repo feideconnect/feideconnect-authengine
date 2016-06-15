@@ -68,6 +68,7 @@
   "perm-orgadmin-descr": "Administrer din organisasjon på plattformen.",
   "logoutandswitch": "Logg ut og bytt til forespurt bruker",
   "oranotheraccount": "eller velg en annen brukerkonto",
+  "hiddenorgs": "flere organisasjoner",
   "perm-peoplesearch": "Personsøk",
   "applicationhomepage": "Tjenestens hjemmeside",
   "willgetaccessto": "Tredjepartstjenestsen vil da få tilgang til ",
@@ -91,5 +92,6 @@
   "sharedcomputer": "Fjern krysset hvis du benytter en delt datamaskin.",
   "doesnotmatch": "Dette passer ikke med den forespurte brukerkontoen, og du blir nødt til å først logge ut før du kan bytte konto.",
   "tologin1": "For å logge inn på tjenesten ",
+  "moreorgs": "more organizations",
   "_lang": "nb"
 }
