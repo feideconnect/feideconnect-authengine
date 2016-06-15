@@ -33,6 +33,7 @@ class AuthenticatorRequireAuthenticationTest extends DBHelper {
 
     public function testActiveNotLoggedIn() {
         $_REQUEST['acresponse'] = '{"id": "https://idp.feide.no","subid":"example.org"}';
+        $_REQUEST['preselected'] = '1';
 
         $as = $this->prophesize('\tests\MockAuthSource');
         $as->requireAuth(['saml:idp' => 'https://idp.feide.no'])->shouldBeCalled();
