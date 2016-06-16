@@ -444,9 +444,9 @@ define(function(require, exports, module) {
 					var remaining = it.length - missed - c;
 
 					if (remaining > 0) {
-						txt += '<p style="font-size: 94%; text-align: center"><a style="color: #777" id="actshowall" href="#"><i class="fa fa-chevron-down"></i> ' +
+						txt += '<a class="list-group-item" id="actshowall" href="#"><p style="text-align: center"><i class="fa fa-chevron-down"></i> ' +
 						  this.app.dictionary.showall + '  &nbsp;' + 
-							'('  + remaining + ' ' + this.app.dictionary.moreorgs +')</a>';
+							'('  + remaining + ' ' + this.app.dictionary.moreorgs +')</p></a>';
 
 					}
 					break;
