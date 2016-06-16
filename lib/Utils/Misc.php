@@ -70,10 +70,6 @@ class Misc {
         }
 
 
-        if (isset($_COOKIE["lang"]) && in_array($_COOKIE["lang"], $available_languages)) {
-            $bestlang = $_COOKIE["lang"];
-        }
-
 
         if ($bestqval === 0) {
             foreach (['nb', 'nn', 'en', 'se'] AS $ql) {
@@ -83,6 +79,12 @@ class Misc {
                 }
             }
         }
+
+        if (isset($_COOKIE["lang"]) && in_array($_COOKIE["lang"], $available_languages)) {
+            $bestlang = $_COOKIE["lang"];
+        }
+
+
 
         // echo '<pre>';
         // echo "Available\n";
