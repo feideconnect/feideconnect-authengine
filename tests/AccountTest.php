@@ -22,6 +22,7 @@ class AccountTest extends DBHelper {
             'prefix' => 'feide',
             'realm' => true,
         ),
+        'useridNormalize' => true,
         'userid' =>
         array (
             'feide' => 'eduPersonPrincipalName',
@@ -230,6 +231,14 @@ class AccountTest extends DBHelper {
         $this->assertFalse($account->hasUserID('feide:nobody@example.net'));
         $this->assertTrue($account->hasAnyOfUserIDs(['feide:anyone@example.net', 'feide:test@example.net']));
         $this->assertFalse($account->hasAnyOfUserIDs(['feide:anyone@example.net', 'feide:nobody@example.net']));
+
+        $fbaccount = new Account([
+            'facebook.name' => ['fb user'],
+            'facebook.id' => [ 'sdlkfjsdfX' ],
+            'idp' => null,
+        ], self::$facebookAM);
+        $this->assertTrue($fbaccount->hasUserID('facebook:sdlkfjsdfX'));
+        $this->assertFalse($fbaccount->hasUserID('facebook:sdlkfjsdfx'));
     }
 
     public function testGetVisualTagFeideOrg() {

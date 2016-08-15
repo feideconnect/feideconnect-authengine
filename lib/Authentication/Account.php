@@ -385,10 +385,15 @@ class Account {
 
         $useridMap = $this->getRule($property);
         $userids = [];
+        $doNormalize = (isset($this->accountMapRules["useridNormalize"]) && $this->accountMapRules["useridNormalize"]);
 
         foreach ($useridMap as $prefix => $attrname) {
             if (isset($this->attributes[$attrname])) {
-                $userids[] = $prefix . ':' . mb_strtolower($this->attributes[$attrname][0]);
+                if ($doNormalize) {
+                  $userids[] = $prefix . ':' . mb_strtolower($this->attributes[$attrname][0]);
+                } else {
+                  $userids[] = $prefix . ':' . $this->attributes[$attrname][0];
+                }
             }
         }
 
