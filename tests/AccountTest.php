@@ -222,10 +222,11 @@ class AccountTest extends DBHelper {
 
     public function testUserIDs() {
         $account = new Account([
-            'eduPersonPrincipalName' => ['test@example.net'],
+            'eduPersonPrincipalName' => ['teST@example.net'],
             'idp' => self::$feideidp,
         ], self::$feideAM);
         $this->assertTrue($account->hasUserID('feide:test@example.net'));
+        $this->assertFalse($account->hasUserID('feide:teST@example.net'));
         $this->assertFalse($account->hasUserID('feide:nobody@example.net'));
         $this->assertTrue($account->hasAnyOfUserIDs(['feide:anyone@example.net', 'feide:test@example.net']));
         $this->assertFalse($account->hasAnyOfUserIDs(['feide:anyone@example.net', 'feide:nobody@example.net']));

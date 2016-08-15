@@ -388,7 +388,7 @@ class Account {
 
         foreach ($useridMap as $prefix => $attrname) {
             if (isset($this->attributes[$attrname])) {
-                $userids[] = $prefix . ':' . $this->attributes[$attrname][0];
+                $userids[] = $prefix . ':' . mb_strtolower($this->attributes[$attrname][0]);
             }
         }
 
