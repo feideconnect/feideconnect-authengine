@@ -20,7 +20,7 @@ done
 echo "Done"
 
 if [ ! -d simplesamlphp ]; then
-    curl https://simplesamlphp.org/res/downloads/simplesamlphp-1.14.0.tar.gz | tar xz
+    curl -sSL https://simplesamlphp.org/res/downloads/simplesamlphp-1.14.0.tar.gz | tar xz
     mv simplesamlphp-1.14.0 simplesamlphp
 fi
 
