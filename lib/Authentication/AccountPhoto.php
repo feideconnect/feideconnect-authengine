@@ -60,7 +60,7 @@ class AccountPhoto {
             // Writes resultant image to output directory
             // $image->writeImage('output_image_filename_and_location');
 
-            $result = $image->getImageBlob();
+            $result = (string)$image;
 
             // Destroys Imagick object, freeing allocated resources in the process
             $image->destroy();
