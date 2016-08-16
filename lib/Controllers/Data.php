@@ -69,12 +69,10 @@ class Data {
 
     public static function getOrgs() {
 
-
-        if (isset($_REQUEST['lat']) && isset($_REQUEST['lon'])) {
-            $lat = $_REQUEST['lat'];
-            $lon = $_REQUEST['lon'];
-        } else {
-            $lat = $lon = null;
+        $lat = $lon = null;
+        if (isset($_REQUEST['lat']) && is_numeric($_REQUEST['lat']) && isset($_REQUEST['lon']) && is_numeric($_REQUEST['lon'])) {
+            $lat = floatval($_REQUEST['lat']);
+            $lon = floatval($_REQUEST['lon']);
         }
 
         $storage = StorageProvider::getStorage();
@@ -89,7 +87,6 @@ class Data {
             $di = $org->getOrgInfo($lat, $lon);
             $data[] = $di;
         }
-
 
         usort($data, ["\FeideConnect\Controllers\Data", "scmp"]);
 
