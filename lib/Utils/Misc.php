@@ -85,7 +85,6 @@ class Misc {
         }
 
 
-
         // echo '<pre>';
         // echo "Available\n";
         // var_dump($available_languages);
@@ -97,11 +96,11 @@ class Misc {
         // exit;
 
 
-        self::$langCache[$cachestr] = $bestlang;
-
         if (isset($aliases[$bestlang])) {
-            return $aliases[$bestlang];
+            $bestlang = $aliases[$bestlang];
         }
+
+        self::$langCache[$cachestr] = $bestlang;
 
         return $bestlang;
     }
