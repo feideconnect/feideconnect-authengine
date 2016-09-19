@@ -75,6 +75,38 @@ class Cassandra2Test extends DBHelper {
         $this->assertLessThan($currentTime+5000, $storedUser['userid_sec_seen']['foo']);
     }
 
+    /**
+     * @covers \FeideConnect\Data\Repositories\Cassandra2::updateUserInfo
+     */
+    public function testUpdateUserInfo() {
+        $userid = Models\User::genUUID();
+
+        $this->db->rawExecute('INSERT INTO "users" ("userid", "name", "email") VALUES(:userid, :name, :email)', [
+            'userid' => new \Cassandra\Type\Uuid($userid),
+            'name' => new \Cassandra\Type\CollectionMap([ 'foo' => 'Foo Testesen', 'bar' => 'Bar Testesen' ], \Cassandra\Type\Base::ASCII, \Cassandra\Type\Base::ASCII),
+            'email' => new \Cassandra\Type\CollectionMap([ 'foo' => 'foo@example.org', 'bar' => 'bar@example.org' ], \Cassandra\Type\Base::ASCII, \Cassandra\Type\Base::ASCII),
+        ]);
+
+        $user = $this->db->getUserByUserid($userid);
+        $user->setUserInfo('foo', 'Test Testesen', 'test@example.org', null, null);
+        $user->selectedsource = 'foo';
+        $this->db->updateUserInfo($user, 'foo', ['name', 'email']);
+
+        $results = $this->db->rawQuery('SELECT updated, name, email, selectedsource FROM "users" WHERE userid = :userid', ['userid' => new \Cassandra\Type\Uuid($userid)]);
+        $this->assertCount(1, $results);
+        $storedUser = $results[0];
+        $this->assertNotNull($storedUser['updated']);
+        $this->assertArrayHasKey('foo', $storedUser['name']);
+        $this->assertEquals('Test Testesen', $storedUser['name']['foo']);
+        $this->assertArrayHasKey('foo', $storedUser['email']);
+        $this->assertEquals('test@example.org', $storedUser['email']['foo']);
+        $this->assertArrayHasKey('bar', $storedUser['name']);
+        $this->assertEquals('Bar Testesen', $storedUser['name']['bar']);
+        $this->assertArrayHasKey('bar', $storedUser['email']);
+        $this->assertEquals('bar@example.org', $storedUser['email']['bar']);
+        $this->assertEquals('foo', $storedUser['selectedsource']);
+    }
+
     /*
 
     function getAuthorization($userid, $clientid) {
