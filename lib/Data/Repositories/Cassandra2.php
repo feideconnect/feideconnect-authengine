@@ -495,12 +495,6 @@ class Cassandra2 extends \FeideConnect\Data\Repository {
      *   trust text,
      *   updated timestamp
      */
-    public function getAPIGKs($count = 100) {
-        $query = 'SELECT * FROM "apigk" LIMIT :count';
-        $params = ['count' => $count];
-        return $this->query($query, $params, __FUNCTION__, 'FeideConnect\Data\Models\APIGK', true);
-    }
-
     public function getAPIGK($id) {
         $query = 'SELECT id, descr, endpoints, expose, httpscertpinned, name, owner, organization, scopes, requireuser, scopedef, privacypolicyurl, status, created, updated FROM "apigk" WHERE "id" = :id';
         $params = ['id' => $id];
