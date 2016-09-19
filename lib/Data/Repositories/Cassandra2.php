@@ -368,23 +368,6 @@ class Cassandra2 extends \FeideConnect\Data\Repository {
 
 
 
-    public function updateClientScopes(Models\Client $client, $scopes_requested, $scopes) {
-
-        $query = 'UPDATE "clients" SET ' .
-            'scopes = :scopes, scopes_requested = :scopes_requested, updated = :updated ' .
-            'WHERE id = :id';
-
-        $params = [
-            'id' => $client->id,
-            'scopes' => $scopes,
-            'scopes_requested' => $scopes_requested,
-            'updated' => (new \FeideConnect\Data\Types\Timestamp())->getCassandraTimestamp(),
-        ];
-        $this->execute($query, $params, __FUNCTION__);
-
-    }
-
-
     public function addUserIDsec($userid, $userid_sec) {
         $query  = 'UPDATE "users" SET userid_sec = userid_sec + :useridsec  WHERE userid = :userid';
         $query2 = 'INSERT INTO "userid_sec" (userid_sec, userid) VALUES (:useridsec, :userid)';
