@@ -382,23 +382,6 @@ class Cassandra2 extends \FeideConnect\Data\Repository {
         ], __FUNCTION__);
     }
 
-    public function removeUserIDsec($userid, $userid_sec) {
-
-        $query  = 'UPDATE "users" SET userid_sec = userid_sec - :useridsec  WHERE userid = :userid';
-        $query2 = 'DELETE FROM "userid_sec" WHERE (userid_sec = :useridsec)';
-
-        $this->execute($query, [
-            'userid' => $userid,
-            'useridsec' => [$userid_sec]
-        ], __FUNCTION__);
-
-        $this->execute($query2, [
-            'useridsec' => $userid_sec,
-            'userid' => $userid,
-        ], __FUNCTION__);
-
-    }
-
     public function deleteUser(Models\User $user) {
 
         // Logger::debug('DELETING USER ()', array(
