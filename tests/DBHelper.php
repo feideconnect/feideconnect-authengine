@@ -2,7 +2,6 @@
 
 namespace tests;
 
-use FeideConnect\Data\StorageProvider;
 use FeideConnect\Data\Types\Timestamp;
 use FeideConnect\Data\Models;
 
@@ -12,7 +11,7 @@ class DBHelper extends \PHPUnit_Framework_TestCase {
     protected $db, $_SERVER, $_REQUEST;
 
     public function __construct() {
-        $this->db = StorageProvider::getStorage();
+        $this->db = new RawCassandra2();
         $this->_SERVER = $_SERVER;
         $this->_REQUEST = $_REQUEST;
     }
