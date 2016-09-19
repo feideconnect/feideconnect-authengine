@@ -5,7 +5,7 @@ namespace tests;
 use FeideConnect\Data\Models;
 use FeideConnect\Data\StorageProvider;
 
-class DBTest extends \PHPUnit_Framework_TestCase {
+class Cassandra2Test extends \PHPUnit_Framework_TestCase {
 
 
     protected $db;
