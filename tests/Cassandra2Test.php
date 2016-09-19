@@ -3,19 +3,8 @@
 namespace tests;
 
 use FeideConnect\Data\Models;
-use FeideConnect\Data\StorageProvider;
 
-class Cassandra2Test extends \PHPUnit_Framework_TestCase {
-
-
-    protected $db;
-
-    public function __construct() {
-
-        // $config = json_decode(file_get_contents(__DIR__ . '/../etc/ci/config.json'), true);
-        $this->db = StorageProvider::getStorage();
-
-    }
+class Cassandra2Test extends DBHelper {
 
 
     /*
