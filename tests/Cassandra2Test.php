@@ -107,6 +107,36 @@ class Cassandra2Test extends DBHelper {
         $this->assertEquals('foo', $storedUser['selectedsource']);
     }
 
+    /**
+     * @covers \FeideConnect\Data\Repositories\Cassandra2::updateProfilePhoto
+     */
+    public function testUpdateProfilePhoto() {
+        $userid = Models\User::genUUID();
+
+        $this->db->rawExecute('INSERT INTO "users" ("userid", "profilephoto", "profilephotohash") VALUES(:userid, :profilephoto, :profilephotohash)', [
+            'userid' => new \Cassandra\Type\Uuid($userid),
+            'profilephoto' => new \Cassandra\Type\CollectionMap([ 'foo' => 'fooimg', 'bar' => 'barimg' ], \Cassandra\Type\Base::ASCII, \Cassandra\Type\Base::BLOB),
+            'profilephotohash' => new \Cassandra\Type\CollectionMap([ 'foo' => 'foohash', 'bar' => 'barhash' ], \Cassandra\Type\Base::ASCII, \Cassandra\Type\Base::ASCII),
+        ]);
+
+        $user = $this->db->getUserByUserid($userid);
+        $user->setUserInfo('foo', null, null, 'newfooimg', 'newfoohash');
+        $this->db->updateProfilePhoto($user, 'foo');
+
+        $results = $this->db->rawQuery('SELECT updated, profilephoto, profilephotohash FROM "users" WHERE userid = :userid', ['userid' => new \Cassandra\Type\Uuid($userid)]);
+        $this->assertCount(1, $results);
+        $storedUser = $results[0];
+        $this->assertNotNull($storedUser['updated']);
+        $this->assertArrayHasKey('foo', $storedUser['profilephoto']);
+        $this->assertEquals('newfooimg', $storedUser['profilephoto']['foo']);
+        $this->assertArrayHasKey('foo', $storedUser['profilephotohash']);
+        $this->assertEquals('newfoohash', $storedUser['profilephotohash']['foo']);
+        $this->assertArrayHasKey('bar', $storedUser['profilephoto']);
+        $this->assertEquals('barimg', $storedUser['profilephoto']['bar']);
+        $this->assertArrayHasKey('bar', $storedUser['profilephotohash']);
+        $this->assertEquals('barhash', $storedUser['profilephotohash']['bar']);
+    }
+
     /*
 
     function getAuthorization($userid, $clientid) {
