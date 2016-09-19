@@ -137,6 +137,34 @@ class Cassandra2Test extends DBHelper {
         $this->assertEquals('barhash', $storedUser['profilephotohash']['bar']);
     }
 
+    /**
+     * @covers \FeideConnect\Data\Repositories\Cassandra2::addUserIDsec
+     */
+    public function testAddUserIDsec() {
+        $userid = Models\User::genUUID();
+        $userid_sec_orig = bin2hex(openssl_random_pseudo_bytes(8)) . '@example.org';
+        $userid_sec_new = bin2hex(openssl_random_pseudo_bytes(8)) . '@example.org';
+
+        $this->db->rawExecute('INSERT INTO "users" ("userid", "userid_sec") VALUES(:userid, :userid_sec)', [
+            'userid' => new \Cassandra\Type\Uuid($userid),
+            'userid_sec' => new \Cassandra\Type\CollectionSet([ $userid_sec_orig ], \Cassandra\Type\Base::ASCII),
+        ]);
+
+        $this->db->addUserIDsec($userid, $userid_sec_new);
+
+        $results = $this->db->rawQuery('SELECT userid_sec FROM "users" WHERE userid = :userid', ['userid' => new \Cassandra\Type\Uuid($userid)]);
+        $this->assertCount(1, $results);
+        $storedUser = $results[0];
+        $this->assertContains($userid_sec_orig, $storedUser['userid_sec']);
+        $this->assertContains($userid_sec_new, $storedUser['userid_sec']);
+
+        $results = $this->db->rawQuery('SELECT userid_sec, userid FROM "userid_sec" WHERE userid_sec = :userid_sec', ['userid_sec' => $userid_sec_new]);
+        $this->assertCount(1, $results);
+        $storedUserIDSec = $results[0];
+        $this->assertEquals($userid_sec_new, $storedUserIDSec['userid_sec']);
+        $this->assertEquals(new \Cassandra\Type\Uuid($userid), $storedUserIDSec['userid']);
+    }
+
     /*
 
     function getAuthorization($userid, $clientid) {
