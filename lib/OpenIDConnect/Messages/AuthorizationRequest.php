@@ -23,7 +23,7 @@ class AuthorizationRequest extends \FeideConnect\OAuth\Messages\AuthorizationReq
         $this->max_age            = Message::optional($message, 'max_age');
         $this->id_token_hint    = Message::optional($message, 'id_token_hint');
         $this->login_hint        = Message::optional($message, 'login_hint');
-        $this->acr_values        = Message::optional($message, 'acr_values');
+        $this->acr_values        = Message::spacelist(Message::optional($message, 'acr_values'));
 
         // These parameters are inherited from the OAuth request.
 
