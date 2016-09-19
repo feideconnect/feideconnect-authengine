@@ -579,25 +579,6 @@ class Cassandra2 extends \FeideConnect\Data\Repository {
         return $this->query($query, $params, __FUNCTION__, 'FeideConnect\Data\Models\Organization', false);
     }
 
-
-    /*
-     * Add or remove a "service" tag for an org entry.
-     * The service column is a set in cassandra.
-     */
-    public function updateOrgServiceStatus(Models\Organization $org, $service, $include) {
-
-        $operator = ($include ? '+' : '-');
-        $query = 'UPDATE "organizations" SET services = services ' . $operator . ' :service ' .
-            'WHERE id = :id';
-
-        $params = [
-            'id' => $org->id,
-            'service' => new CollectionSet([$service], Base::ASCII)
-        ];
-        $this->execute($query, $params, __FUNCTION__);
-
-    }
-
     public function saveOrganization(Models\Organization $org) {
         $data = $org->getStorableArray();
         $query = self::generateInsert('organizations', $data);
