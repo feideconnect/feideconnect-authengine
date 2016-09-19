@@ -32,6 +32,27 @@ class Cassandra2Test extends DBHelper {
         $this->assertEquals(new \Cassandra\Type\Uuid($userid), $storedUserIDSec['userid']);
     }
 
+    /**
+     * @covers \FeideConnect\Data\Repositories\Cassandra2::updateUserBasics
+     */
+    public function testUpdateUserBasics() {
+        $userid = Models\User::genUUID();
+
+        $this->db->rawExecute('INSERT INTO "users" ("userid", "aboveagelimit", "usageterms") VALUES(:userid, FALSE, FALSE)', ['userid' => new \Cassandra\Type\Uuid($userid)]);
+
+        $user = $this->db->getUserByUserid($userid);
+        $user->aboveagelimit = true;
+        $user->usageterms = true;
+        $this->db->updateUserBasics($user);
+
+        $results = $this->db->rawQuery('SELECT updated, aboveagelimit, usageterms FROM "users" WHERE userid = :userid', ['userid' => new \Cassandra\Type\Uuid($userid)]);
+        $this->assertCount(1, $results);
+        $storedUser = $results[0];
+        $this->assertNotNull($storedUser['updated']);
+        $this->assertEquals(true, $storedUser['aboveagelimit']);
+        $this->assertEquals(true, $storedUser['usageterms']);
+    }
+
     /*
 
     function getAuthorization($userid, $clientid) {
