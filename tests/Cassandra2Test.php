@@ -165,6 +165,38 @@ class Cassandra2Test extends DBHelper {
         $this->assertEquals(new \Cassandra\Type\Uuid($userid), $storedUserIDSec['userid']);
     }
 
+    /**
+     * @covers \FeideConnect\Data\Repositories\Cassandra2::deleteUser
+     */
+    public function testDeleteUser() {
+        $userid = Models\User::genUUID();
+        $userid_sec_a = bin2hex(openssl_random_pseudo_bytes(8)) . '@example.org';
+        $userid_sec_b = bin2hex(openssl_random_pseudo_bytes(8)) . '@example.org';
+
+        $this->db->rawExecute('INSERT INTO "users" ("userid", "userid_sec") VALUES(:userid, :userid_sec)', [
+            'userid' => new \Cassandra\Type\Uuid($userid),
+            'userid_sec' => new \Cassandra\Type\CollectionSet([ $userid_sec_a, $userid_sec_b ], \Cassandra\Type\Base::ASCII),
+        ]);
+        $this->db->rawExecute('INSERT INTO "userid_sec" ("userid_sec", "userid") VALUES(:userid_sec, :userid)', [
+            'userid_sec' => $userid_sec_a,
+            'userid' => new \Cassandra\Type\Uuid($userid),
+        ]);
+        $this->db->rawExecute('INSERT INTO "userid_sec" ("userid_sec", "userid") VALUES(:userid_sec, :userid)', [
+            'userid_sec' => $userid_sec_b,
+            'userid' => new \Cassandra\Type\Uuid($userid),
+        ]);
+
+        $user = $this->db->getUserByUserid($userid);
+        $this->db->deleteUser($user);
+
+        $results = $this->db->rawQuery('SELECT userid FROM "users" WHERE userid = :userid', ['userid' => new \Cassandra\Type\Uuid($userid)]);
+        $this->assertCount(0, $results);
+        $results = $this->db->rawQuery('SELECT userid_sec, userid FROM "userid_sec" WHERE userid_sec = :userid_sec', ['userid_sec' => $userid_sec_a]);
+        $this->assertCount(0, $results);
+        $results = $this->db->rawQuery('SELECT userid_sec, userid FROM "userid_sec" WHERE userid_sec = :userid_sec', ['userid_sec' => $userid_sec_b]);
+        $this->assertCount(0, $results);
+    }
+
     /*
 
     function getAuthorization($userid, $clientid) {
