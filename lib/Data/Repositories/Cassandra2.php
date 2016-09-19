@@ -368,21 +368,6 @@ class Cassandra2 extends \FeideConnect\Data\Repository {
 
 
 
-    public function updateClientLogo(Models\Client $client, $logo) {
-
-        $query = 'UPDATE "clients" SET logo = :logo, updated = :updated ' .
-            'WHERE id = :id';
-
-        $params = [
-            'id' => $client->id,
-            'logo' => $logo,
-            'updated' => (new \FeideConnect\Data\Types\Timestamp())->getCassandraTimestamp(),
-        ];
-        $this->execute($query, $params, __FUNCTION__);
-
-    }
-
-
     public function updateClientScopes(Models\Client $client, $scopes_requested, $scopes) {
 
         $query = 'UPDATE "clients" SET ' .
