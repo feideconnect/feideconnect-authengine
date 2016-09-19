@@ -1,7 +1,7 @@
 define(function(require, exports, module) {
 	"use strict";
 
-	require('components/es6-promise/promise.min');
+	require('components/es6-promise/es6-promise.min');
 
 
 	// Configure console if not defined. A fix for IE <= 9.
