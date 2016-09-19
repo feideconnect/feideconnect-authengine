@@ -580,20 +580,6 @@ class Cassandra2 extends \FeideConnect\Data\Repository {
     }
 
 
-    public function updateOrgUIinfo(Models\Organization $org, $uiinfo) {
-
-        $query = 'UPDATE "organizations" SET uiinfo = :uiinfo, logo_updated = :updated ' .
-            'WHERE id = :id';
-
-        $params = [
-            'id' => $org->id,
-            'uiinfo' => $uiinfo,
-            'updated' => (new \FeideConnect\Data\Types\Timestamp())->getCassandraTimestamp(),
-        ];
-        $this->execute($query, $params, __FUNCTION__);
-
-    }
-
     /*
      * Add or remove a "service" tag for an org entry.
      * The service column is a set in cassandra.
