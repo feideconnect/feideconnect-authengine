@@ -6,6 +6,31 @@ use FeideConnect\Data\Models;
 
 class Cassandra2Test extends DBHelper {
 
+    /**
+     * @covers \FeideConnect\Data\Repositories\Cassandra2::saveUser
+     */
+    public function testSaveUser() {
+        $userid = Models\User::genUUID();
+        $userid_sec = bin2hex(openssl_random_pseudo_bytes(8)) . '@example.org';
+
+        $user = new Models\User($this->db);
+        $user->userid = $userid;
+        $user->userid_sec = [$userid_sec];
+        $this->db->saveUser($user);
+
+        $results = $this->db->rawQuery('SELECT userid, updated, userid_sec FROM "users" WHERE userid = :userid', ['userid' => new \Cassandra\Type\Uuid($userid)]);
+        $this->assertCount(1, $results);
+        $storedUser = $results[0];
+        $this->assertEquals($userid, $storedUser['userid']);
+        $this->assertNotNull($storedUser['updated']);
+        $this->assertEquals([$userid_sec], $storedUser['userid_sec']);
+
+        $results = $this->db->rawQuery('SELECT userid_sec, userid FROM "userid_sec" WHERE userid_sec = :userid_sec', ['userid_sec' => $userid_sec]);
+        $this->assertCount(1, $results);
+        $storedUserIDSec = $results[0];
+        $this->assertEquals($userid_sec, $storedUserIDSec['userid_sec']);
+        $this->assertEquals(new \Cassandra\Type\Uuid($userid), $storedUserIDSec['userid']);
+    }
 
     /*
 
