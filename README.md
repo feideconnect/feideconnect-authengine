@@ -102,11 +102,6 @@ To download translations run:
 	grunt lang
 
 
-## CLI
-
-	bin/feideconnect.php --help
-
-
 ## Run test suite with ant
 
 

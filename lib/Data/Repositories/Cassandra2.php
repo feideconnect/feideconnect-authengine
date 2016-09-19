@@ -368,38 +368,6 @@ class Cassandra2 extends \FeideConnect\Data\Repository {
 
 
 
-    public function updateClientLogo(Models\Client $client, $logo) {
-
-        $query = 'UPDATE "clients" SET logo = :logo, updated = :updated ' .
-            'WHERE id = :id';
-
-        $params = [
-            'id' => $client->id,
-            'logo' => $logo,
-            'updated' => (new \FeideConnect\Data\Types\Timestamp())->getCassandraTimestamp(),
-        ];
-        $this->execute($query, $params, __FUNCTION__);
-
-    }
-
-
-    public function updateClientScopes(Models\Client $client, $scopes_requested, $scopes) {
-
-        $query = 'UPDATE "clients" SET ' .
-            'scopes = :scopes, scopes_requested = :scopes_requested, updated = :updated ' .
-            'WHERE id = :id';
-
-        $params = [
-            'id' => $client->id,
-            'scopes' => $scopes,
-            'scopes_requested' => $scopes_requested,
-            'updated' => (new \FeideConnect\Data\Types\Timestamp())->getCassandraTimestamp(),
-        ];
-        $this->execute($query, $params, __FUNCTION__);
-
-    }
-
-
     public function addUserIDsec($userid, $userid_sec) {
         $query  = 'UPDATE "users" SET userid_sec = userid_sec + :useridsec  WHERE userid = :userid';
         $query2 = 'INSERT INTO "userid_sec" (userid_sec, userid) VALUES (:useridsec, :userid)';
@@ -412,23 +380,6 @@ class Cassandra2 extends \FeideConnect\Data\Repository {
             'useridsec' => $userid_sec,
             'userid' => new Uuid($userid),
         ], __FUNCTION__);
-    }
-
-    public function removeUserIDsec($userid, $userid_sec) {
-
-        $query  = 'UPDATE "users" SET userid_sec = userid_sec - :useridsec  WHERE userid = :userid';
-        $query2 = 'DELETE FROM "userid_sec" WHERE (userid_sec = :useridsec)';
-
-        $this->execute($query, [
-            'userid' => $userid,
-            'useridsec' => [$userid_sec]
-        ], __FUNCTION__);
-
-        $this->execute($query2, [
-            'useridsec' => $userid_sec,
-            'userid' => $userid,
-        ], __FUNCTION__);
-
     }
 
     public function deleteUser(Models\User $user) {
@@ -525,14 +476,6 @@ class Cassandra2 extends \FeideConnect\Data\Repository {
         return $this->query($query, $params, __FUNCTION__, 'FeideConnect\Data\Models\User', true);
     }
 
-    public function getUserIDsecList($count = 100) {
-        $query = 'SELECT * FROM "userid_sec" LIMIT :count';
-        $params = ['count' => $count];
-        return $this->query($query, $params, __FUNCTION__, null, true);
-    }
-
-
-
     /*
      * --- Database handling of the 'apigk' column family
      *
@@ -552,12 +495,6 @@ class Cassandra2 extends \FeideConnect\Data\Repository {
      *   trust text,
      *   updated timestamp
      */
-    public function getAPIGKs($count = 100) {
-        $query = 'SELECT * FROM "apigk" LIMIT :count';
-        $params = ['count' => $count];
-        return $this->query($query, $params, __FUNCTION__, 'FeideConnect\Data\Models\APIGK', true);
-    }
-
     public function getAPIGK($id) {
         $query = 'SELECT id, descr, endpoints, expose, httpscertpinned, name, owner, organization, scopes, requireuser, scopedef, privacypolicyurl, status, created, updated FROM "apigk" WHERE "id" = :id';
         $params = ['id' => $id];
@@ -627,14 +564,8 @@ class Cassandra2 extends \FeideConnect\Data\Repository {
 
 
     /*
-     * --- Database handling of the 'client' column family
+     * --- Database handling of the 'organization' column family
      */
-    public function getOrgs($count = 500) {
-        $query = 'SELECT id,name,realm,type,uiinfo,services FROM "organizations" LIMIT :count';
-        $params = ['count' => $count];
-        return $this->query($query, $params, __FUNCTION__, 'FeideConnect\Data\Models\Organization', true);
-    }
-
     public function getOrgsByService($service = 'auth') {
         $count = 500;
         $query = 'SELECT id,name,realm,type,uiinfo,services FROM "organizations" WHERE (services CONTAINS :service) LIMIT :count';
@@ -646,53 +577,6 @@ class Cassandra2 extends \FeideConnect\Data\Repository {
         $query = 'SELECT id,name,realm,type,uiinfo,services FROM "organizations" WHERE "id" = :orgid';
         $params = ['orgid' => $orgid];
         return $this->query($query, $params, __FUNCTION__, 'FeideConnect\Data\Models\Organization', false);
-    }
-
-
-    public function updateOrgLogo(Models\Organization $org, $logo) {
-
-        $query = 'UPDATE "organizations" SET logo = :logo, logo_updated = :updated ' .
-            'WHERE id = :id';
-
-        $params = [
-            'id' => $org->id,
-            'logo' => $logo,
-            'updated' => (new \FeideConnect\Data\Types\Timestamp())->getCassandraTimestamp(),
-        ];
-        $this->execute($query, $params, __FUNCTION__);
-
-    }
-
-    public function updateOrgUIinfo(Models\Organization $org, $uiinfo) {
-
-        $query = 'UPDATE "organizations" SET uiinfo = :uiinfo, logo_updated = :updated ' .
-            'WHERE id = :id';
-
-        $params = [
-            'id' => $org->id,
-            'uiinfo' => $uiinfo,
-            'updated' => (new \FeideConnect\Data\Types\Timestamp())->getCassandraTimestamp(),
-        ];
-        $this->execute($query, $params, __FUNCTION__);
-
-    }
-
-    /*
-     * Add or remove a "service" tag for an org entry.
-     * The service column is a set in cassandra.
-     */
-    public function updateOrgServiceStatus(Models\Organization $org, $service, $include) {
-
-        $operator = ($include ? '+' : '-');
-        $query = 'UPDATE "organizations" SET services = services ' . $operator . ' :service ' .
-            'WHERE id = :id';
-
-        $params = [
-            'id' => $org->id,
-            'service' => new CollectionSet([$service], Base::ASCII)
-        ];
-        $this->execute($query, $params, __FUNCTION__);
-
     }
 
     public function saveOrganization(Models\Organization $org) {
