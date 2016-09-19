@@ -53,6 +53,28 @@ class Cassandra2Test extends DBHelper {
         $this->assertEquals(true, $storedUser['usageterms']);
     }
 
+    /**
+     * @covers \FeideConnect\Data\Repositories\Cassandra2::updateUserIDsecLastSeen
+     */
+    public function testUpdateUserIDsecLastSeen() {
+        $userid = Models\User::genUUID();
+
+        $this->db->rawExecute('INSERT INTO "users" ("userid") VALUES(:userid)', ['userid' => new \Cassandra\Type\Uuid($userid)]);
+
+        $user = $this->db->getUserByUserid($userid);
+        $this->db->updateUserIDsecLastSeen($user, 'foo');
+
+        $results = $this->db->rawQuery('SELECT userid_sec_seen FROM "users" WHERE userid = :userid', ['userid' => new \Cassandra\Type\Uuid($userid)]);
+        $this->assertCount(1, $results);
+        $storedUser = $results[0];
+        $this->assertArrayHasKey('foo', $storedUser['userid_sec_seen']);
+
+        /* Make sure that userid_sec_seen is close to "now". */
+        $currentTime = (int)(microtime(true)*1000);
+        $this->assertGreaterThan($currentTime-5000, $storedUser['userid_sec_seen']['foo']);
+        $this->assertLessThan($currentTime+5000, $storedUser['userid_sec_seen']['foo']);
+    }
+
     /*
 
     function getAuthorization($userid, $clientid) {
