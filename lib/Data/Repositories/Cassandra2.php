@@ -580,20 +580,6 @@ class Cassandra2 extends \FeideConnect\Data\Repository {
     }
 
 
-    public function updateOrgLogo(Models\Organization $org, $logo) {
-
-        $query = 'UPDATE "organizations" SET logo = :logo, logo_updated = :updated ' .
-            'WHERE id = :id';
-
-        $params = [
-            'id' => $org->id,
-            'logo' => $logo,
-            'updated' => (new \FeideConnect\Data\Types\Timestamp())->getCassandraTimestamp(),
-        ];
-        $this->execute($query, $params, __FUNCTION__);
-
-    }
-
     public function updateOrgUIinfo(Models\Organization $org, $uiinfo) {
 
         $query = 'UPDATE "organizations" SET uiinfo = :uiinfo, logo_updated = :updated ' .
