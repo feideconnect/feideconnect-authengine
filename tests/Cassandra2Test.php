@@ -486,6 +486,38 @@ class Cassandra2Test extends DBHelper {
         $this->assertCount(0, $result);
     }
 
+    /**
+     * @covers \FeideConnect\Data\Repositories\Cassandra2::getOrg
+     */
+    public function testGetOrg() {
+        $orgid = bin2hex(openssl_random_pseudo_bytes(8));
+
+        $this->db->rawExecute('INSERT INTO "organizations" ("id", "name", "realm", "type", "uiinfo", "services") VALUES(:id, :name, :realm, :type, :uiinfo, :services)', [
+            'id' => $orgid,
+            'name' => new \Cassandra\Type\CollectionMap([
+                'nb' => 'Organisasjonsnavn',
+                'en' => 'Organization name',
+            ], \Cassandra\Type\Base::ASCII, \Cassandra\Type\Base::ASCII),
+            'realm' => 'example.org',
+            'type' => new \Cassandra\Type\CollectionSet([ 'type-value' ], \Cassandra\Type\Base::ASCII),
+            'uiinfo' => json_encode(['uiinfo-key' => 'uiinfo-value']),
+            'services' => new \Cassandra\Type\CollectionSet([ 'service-value' ], \Cassandra\Type\Base::ASCII),
+        ]);
+
+        $org = $this->db->getOrg($orgid);
+        $this->assertNotNull($org);
+        $this->assertEquals($orgid, $org->id);
+        $this->assertArrayHasKey('nb', $org->name);
+        $this->assertEquals('Organisasjonsnavn', $org->name['nb']);
+        $this->assertArrayHasKey('en', $org->name);
+        $this->assertEquals('Organization name', $org->name['en']);
+        $this->assertEquals('example.org', $org->realm);
+        $this->assertEquals(['type-value'], $org->type);
+        $this->assertArrayHasKey('uiinfo-key', $org->uiinfo);
+        $this->assertEquals('uiinfo-value', $org->uiinfo['uiinfo-key']);
+        $this->assertEquals(['service-value'], $org->services);
+    }
+
     /*
 
     function getAuthorization($userid, $clientid) {
