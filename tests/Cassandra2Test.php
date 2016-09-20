@@ -640,6 +640,39 @@ class Cassandra2Test extends DBHelper {
         $this->assertEquals(1, $counters['count_tokens']);
     }
 
+    /**
+     * @covers \FeideConnect\Data\Repositories\Cassandra2::getAuthorization
+     */
+    public function testGetAuthorization() {
+        $clientid = Models\Client::genUUID();
+        $userid = Models\User::genUUID();
+
+        $this->db->rawExecute('INSERT INTO "oauth_authorizations" ("clientid", "userid", "scopes", "issued", "apigk_scopes") VALUES(:clientid, :userid, :scopes, :issued, :apigk_scopes)', [
+            'clientid' => new \Cassandra\Type\Uuid($clientid),
+            'userid' => new \Cassandra\Type\Uuid($userid),
+            'scopes' => new \Cassandra\Type\CollectionSet([ 'scopes-value' ], \Cassandra\Type\Base::ASCII),
+            'issued' => new \Cassandra\Type\Timestamp(1000000000000),
+            'apigk_scopes' => new \Cassandra\Type\CollectionMap([
+                'foo' => [ 'foo-value' ],
+            ], \Cassandra\Type\Base::ASCII, ["type" => \Cassandra\Type\Base::COLLECTION_SET, "value" => \Cassandra\Type\Base::ASCII]),
+        ]);
+
+        $auth = $this->db->getAuthorization($userid, $clientid);
+        $this->assertNotNull($auth);
+        $this->assertEquals($clientid, $auth->clientid);
+        $this->assertEquals($userid, $auth->userid);
+        $this->assertEquals(['scopes-value'], $auth->scopes);
+        $this->assertInstanceOf(\FeideConnect\Data\Types\Timestamp::class, $auth->issued);
+        $this->assertEquals(1000000000000, (int)($auth->issued->getValue()*1000));
+        $this->assertArrayHasKey('foo', $auth->apigk_scopes);
+        $this->assertEquals(['foo-value'], $auth->apigk_scopes['foo']);
+
+        $auth = $this->db->getAccessToken($userid, Models\Client::genUUID());
+        $this->assertNull($auth);
+        $auth = $this->db->getAccessToken(Models\User::genUUID(), $clientid);
+        $this->assertNull($auth);
+    }
+
     /*
 
     function getAuthorization($userid, $clientid) {
