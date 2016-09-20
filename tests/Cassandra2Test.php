@@ -372,6 +372,68 @@ class Cassandra2Test extends DBHelper {
         $this->assertEquals(1234567890123, (int)($gk->updated->getValue()*1000));
     }
 
+    /**
+     * @covers \FeideConnect\Data\Repositories\Cassandra2::getClient
+     */
+    public function testGetClient() {
+        $id = Models\Client::genUUID();
+        $owner_uuid = \FeideConnect\Data\Model::genUUID();
+
+        $this->db->rawExecute('INSERT INTO "clients" ("id", "client_secret", "created", "descr", "name", "owner", "organization", "authproviders", "logo", "redirect_uri", "scopes", "scopes_requested", "status", "type", "updated", "orgauthorization", "authoptions", "supporturl", "privacypolicyurl", "homepageurl") VALUES(:id, :client_secret, :created, :descr, :name, :owner, :organization, :authproviders, :logo, :redirect_uri, :scopes, :scopes_requested, :status, :type, :updated, :orgauthorization, :authoptions, :supporturl, :privacypolicyurl, :homepageurl)', [
+            'id' => new \Cassandra\Type\Uuid($id),
+            'client_secret' => 'secret',
+            'created' => new \Cassandra\Type\Timestamp(1122334455667),
+            'descr' => 'Client description',
+            'name' => 'Client name',
+            'owner' => new \Cassandra\Type\Uuid($owner_uuid),
+            'organization' => 'Foo Inc.',
+            'authproviders' => new \Cassandra\Type\CollectionSet([ 'some-provider' ], \Cassandra\Type\Base::ASCII),
+            'logo' => 'client-logo',
+            'redirect_uri' => new \Cassandra\Type\CollectionList([ 'https://foo.example.org/redirect' ], \Cassandra\Type\Base::ASCII),
+            'scopes' => new \Cassandra\Type\CollectionSet([ 'foo-scope' ], \Cassandra\Type\Base::ASCII),
+            'scopes_requested' => new \Cassandra\Type\CollectionSet([ 'foo-scope-requested' ], \Cassandra\Type\Base::ASCII),
+            'status' => new \Cassandra\Type\CollectionSet([ 'some-status' ], \Cassandra\Type\Base::ASCII),
+            'type' => 'type-value',
+            'updated' => new \Cassandra\Type\Timestamp(1234567890123),
+            'orgauthorization' => new \Cassandra\Type\CollectionMap([
+                'example.org' => json_encode(['orgauthorization-value']),
+            ], \Cassandra\Type\Base::ASCII, \Cassandra\Type\Base::ASCII),
+            'authoptions' => json_encode(['authoptions-key' => 'authoptions-value']),
+            'supporturl' => 'https://foo.example.org/support',
+            'privacypolicyurl' => 'https://foo.example.org/privacy-policy',
+            'homepageurl' => 'https://foo.example.org/',
+        ]);
+
+        $client = $this->db->getClient($id);
+        $this->assertNotNull($client);
+        $this->assertEquals('secret', $client->client_secret);
+        $this->assertInstanceOf(\FeideConnect\Data\Types\Timestamp::class, $client->created);
+        $this->assertEquals(1122334455667, (int)($client->created->getValue()*1000));
+        $this->assertEquals('Client description', $client->descr);
+        $this->assertEquals('Client name', $client->name);
+        $this->assertEquals($owner_uuid, $client->owner);
+        $this->assertEquals('Foo Inc.', $client->organization);
+        $this->assertEquals('client-logo', $client->logo);
+        $this->assertEquals(['https://foo.example.org/redirect'], $client->redirect_uri);
+        $this->assertEquals(['foo-scope'], $client->scopes);
+        $this->assertEquals(['foo-scope-requested'], $client->scopes_requested);
+        $this->assertEquals(['some-status'], $client->status);
+        $this->assertEquals('type-value', $client->type);
+        $this->assertInstanceOf(\FeideConnect\Data\Types\Timestamp::class, $client->updated);
+        $this->assertEquals(1234567890123, (int)($client->updated->getValue()*1000));
+        $this->assertEquals(['some-provider'], $client->authproviders);
+        $this->assertArrayHasKey('example.org', $client->orgauthorization);
+        $this->assertEquals(['orgauthorization-value'], $client->orgauthorization['example.org']);
+        $this->assertArrayHasKey('authoptions-key', $client->authoptions);
+        $this->assertEquals('authoptions-value', $client->authoptions['authoptions-key']);
+
+        // TODO: These fields do not actually exist in the Client object -- they are just fetched.
+        // Nevertheless, storing them to the object works, since this is PHP.
+        $this->assertEquals('https://foo.example.org/support', $client->supporturl);
+        $this->assertEquals('https://foo.example.org/privacy-policy', $client->privacypolicyurl);
+        $this->assertEquals('https://foo.example.org/', $client->homepageurl);
+    }
+
     /*
 
     function getAuthorization($userid, $clientid) {
