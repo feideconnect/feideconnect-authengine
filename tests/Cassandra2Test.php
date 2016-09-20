@@ -673,6 +673,47 @@ class Cassandra2Test extends DBHelper {
         $this->assertNull($auth);
     }
 
+    /**
+     * @covers \FeideConnect\Data\Repositories\Cassandra2::saveAuthorization
+     */
+    public function testSaveAuthorization() {
+        $id = Models\AccessToken::genUUID();
+        $clientid = Models\Client::genUUID();
+        $userid = Models\User::genUUID();
+        $subtoken_id = Models\AccessToken::genUUID();
+
+        $auth = new Models\Authorization([
+            'clientid' => $clientid,
+            'userid' => $userid,
+            'issued' => new \FeideConnect\Data\Types\Timestamp(1000000000),
+            'scopes' => ['scopes-value'],
+            'apigk_scopes' => [
+                'foo' => [ 'foo-value' ],
+            ],
+        ]);
+        $this->db->saveAuthorization($auth);
+
+        $results = $this->db->rawQuery('SELECT * FROM "oauth_authorizations" WHERE "userid" = :userid AND "clientid" = :clientid', [
+            'userid' => new \Cassandra\Type\Uuid($userid),
+            'clientid' => new \Cassandra\Type\Uuid($clientid),
+        ]);
+        $this->assertCount(1, $results);
+        $storedAuth = $results[0];
+        $this->assertEquals($clientid, $storedAuth['clientid']);
+        $this->assertEquals($userid, $storedAuth['userid']);
+        $this->assertEquals(1000000000000, $storedAuth['issued']);
+        $this->assertEquals(['scopes-value'], $storedAuth['scopes']);
+        $this->assertArrayHasKey('foo', $storedAuth['apigk_scopes']);
+        $this->assertEquals(['foo-value'], $storedAuth['apigk_scopes']['foo']);
+
+        $results = $this->db->rawQuery('SELECT count_users FROM "clients_counters" WHERE id = :id', [
+            'id' => new \Cassandra\Type\Uuid($clientid),
+        ]);
+        $this->assertCount(1, $results);
+        $counters = $results[0];
+        $this->assertEquals(1, $counters['count_users']);
+    }
+
     /*
 
     function getAuthorization($userid, $clientid) {
