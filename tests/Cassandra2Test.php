@@ -714,6 +714,49 @@ class Cassandra2Test extends DBHelper {
         $this->assertEquals(1, $counters['count_users']);
     }
 
+    /**
+     * @covers \FeideConnect\Data\Repositories\Cassandra2::getAuthorizationCode
+     */
+    public function testGetAuthorizationCode() {
+        $code = Models\AuthorizationCode::genUUID();
+        $clientid = Models\Client::genUUID();
+        $userid = Models\User::genUUID();
+
+        $this->db->rawExecute('INSERT INTO "oauth_codes" ("code", "clientid", "userid", "scope", "token_type", "redirect_uri", "idtoken", "issued", "validuntil", "apigk_scopes") VALUES(:code, :clientid, :userid, :scope, :token_type, :redirect_uri, :idtoken, :issued, :validuntil, :apigk_scopes)', [
+            'code' => new \Cassandra\Type\Uuid($code),
+            'clientid' => new \Cassandra\Type\Uuid($clientid),
+            'userid' => new \Cassandra\Type\Uuid($userid),
+            'scope' => new \Cassandra\Type\CollectionSet([ 'scope-value' ], \Cassandra\Type\Base::ASCII),
+            'token_type' => 'token-type-value',
+            'redirect_uri' => 'https://foo.example.org/redirect',
+            'idtoken' => 'idtoken-value',
+            'issued' => new \Cassandra\Type\Timestamp(1000000000000),
+            'validuntil' => new \Cassandra\Type\Timestamp(1234567890123),
+            'apigk_scopes' => new \Cassandra\Type\CollectionMap([
+                'foo' => [ 'foo-value' ],
+            ], \Cassandra\Type\Base::ASCII, ["type" => \Cassandra\Type\Base::COLLECTION_SET, "value" => \Cassandra\Type\Base::ASCII]),
+        ]);
+
+        $authcode = $this->db->getAuthorizationCode($code);
+        $this->assertNotNull($authcode);
+        $this->assertEquals($code, $authcode->code);
+        $this->assertEquals($clientid, $authcode->clientid);
+        $this->assertEquals($userid, $authcode->userid);
+        $this->assertEquals(['scope-value'], $authcode->scope);
+        $this->assertEquals('token-type-value', $authcode->token_type);
+        $this->assertEquals('https://foo.example.org/redirect', $authcode->redirect_uri);
+        $this->assertEquals('idtoken-value', $authcode->idtoken);
+        $this->assertInstanceOf(\FeideConnect\Data\Types\Timestamp::class, $authcode->issued);
+        $this->assertEquals(1000000000000, (int)($authcode->issued->getValue()*1000));
+        $this->assertInstanceOf(\FeideConnect\Data\Types\Timestamp::class, $authcode->validuntil);
+        $this->assertEquals(1234567890123, (int)($authcode->validuntil->getValue()*1000));
+        $this->assertArrayHasKey('foo', $authcode->apigk_scopes);
+        $this->assertEquals(['foo-value'], $authcode->apigk_scopes['foo']);
+
+        $authcode = $this->db->getAuthorizationCode(Models\AuthorizationCode::genUUID());
+        $this->assertNull($authcode);
+    }
+
     /*
     function getAuthorizationCode($code) {
     function saveAuthorizationCode(Models\AuthorizationCode $code) {
