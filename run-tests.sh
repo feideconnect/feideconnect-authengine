@@ -7,7 +7,10 @@ function clean-docker() {
     docker-compose kill
     docker-compose rm --force --all
 }
-trap clean-docker EXIT
+if test -z "${NOCLEAN}"
+then
+    trap clean-docker EXIT
+fi
 
 CASSANDRA_PORT=$(docker-compose port cassandra 9042 | sed 's@.*:@@')
 CASSANDRA="localhost:${CASSANDRA_PORT}"
