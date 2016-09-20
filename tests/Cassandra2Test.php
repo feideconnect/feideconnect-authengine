@@ -518,6 +518,51 @@ class Cassandra2Test extends DBHelper {
         $this->assertEquals(['service-value'], $org->services);
     }
 
+    /**
+     * @covers \FeideConnect\Data\Repositories\Cassandra2::getAccessToken
+     */
+    public function testGetAccessToken() {
+        $id = Models\AccessToken::genUUID();
+        $clientid = Models\Client::genUUID();
+        $userid = Models\User::genUUID();
+        $subtoken_id = Models\AccessToken::genUUID();
+
+        $this->db->rawExecute('INSERT INTO "oauth_tokens" ("access_token", "clientid", "userid", "issued", "scope", "token_type", "validuntil", "lastuse", "apigkid", "subtokens") VALUES(:access_token, :clientid, :userid, :issued, :scope, :token_type, :validuntil, :lastuse, :apigkid, :subtokens)', [
+            'access_token' => new \Cassandra\Type\Uuid($id),
+            'clientid' => new \Cassandra\Type\Uuid($clientid),
+            'userid' => new \Cassandra\Type\Uuid($userid),
+            'issued' => new \Cassandra\Type\Timestamp(1000000000000),
+            'scope' => new \Cassandra\Type\CollectionSet([ 'scope-value' ], \Cassandra\Type\Base::ASCII),
+            'token_type' => 'token-type-value',
+            'validuntil' => new \Cassandra\Type\Timestamp(1234567890123),
+            'lastuse' => new \Cassandra\Type\Timestamp(1122334455667),
+            'apigkid' => 'apigkid-value',
+            'subtokens' => new \Cassandra\Type\CollectionMap([
+                'foo' => $subtoken_id,
+            ], \Cassandra\Type\Base::ASCII, \Cassandra\Type\Base::UUID),
+        ]);
+
+        $token = $this->db->getAccessToken($id);
+        $this->assertNotNull($token);
+        $this->assertEquals($id, $token->access_token);
+        $this->assertEquals($clientid, $token->clientid);
+        $this->assertEquals($userid, $token->userid);
+        $this->assertInstanceOf(\FeideConnect\Data\Types\Timestamp::class, $token->issued);
+        $this->assertEquals(1000000000000, (int)($token->issued->getValue()*1000));
+        $this->assertEquals(['scope-value'], $token->scope);
+        $this->assertEquals('token-type-value', $token->token_type);
+        $this->assertInstanceOf(\FeideConnect\Data\Types\Timestamp::class, $token->validuntil);
+        $this->assertEquals(1234567890123, (int)($token->validuntil->getValue()*1000));
+        $this->assertInstanceOf(\FeideConnect\Data\Types\Timestamp::class, $token->lastuse);
+        $this->assertEquals(1122334455667, (int)($token->lastuse->getValue()*1000));
+        $this->assertEquals('apigkid-value', $token->apigkid);
+        $this->assertArrayHasKey('foo', $token->subtokens);
+        $this->assertEquals($subtoken_id, $token->subtokens['foo']);
+
+        $token = $this->db->getAccessToken(Models\AccessToken::genUUID());
+        $this->assertNull($token);
+    }
+
     /*
 
     function getAuthorization($userid, $clientid) {
