@@ -819,4 +819,41 @@ class Cassandra2Test extends DBHelper {
         $this->assertCount(0, $results);
     }
 
+    /**
+     * @covers \FeideConnect\Data\Repositories\Cassandra2::updateLoginStats
+     */
+    public function testUpdateLoginStats() {
+
+        // We wrap the insertion code in a loop to ensure that we can tell the exact time the data
+        // was stored in.
+        do {
+            $start = new \FeideConnect\Data\Types\Timestamp();
+            $start->roundseconds(60);
+
+            // We generate a new client id for each loop, so that we can ensure that the counter is zero.
+            $clientid = Models\Client::genUUID();
+            $this->db->rawExecute('INSERT INTO "clients" ("id") VALUES(:id)', [
+                'id' => new \Cassandra\Type\Uuid($clientid),
+            ]);
+            $client = $this->db->getClient($clientid);
+
+            $this->db->updateLoginStats($client, 'foo-auth');
+
+            $end = new \FeideConnect\Data\Types\Timestamp();
+            $end->roundseconds(60);
+            // Loop if the time slot has changed. If it is different we can't tell
+            // what time slot updateLoginStats() has updated.
+        } while ($start->getValue() !== $end->getValue());
+
+        $results = $this->db->rawQuery('SELECT login_count FROM logins_stats WHERE clientid = :clientid AND date = :date AND authsource = :authsource AND timeslot = :timeslot', [
+            'clientid' => new \Cassandra\Type\Uuid($clientid),
+            'date' => $start->datestring(),
+            'authsource' => 'foo-auth',
+            'timeslot' => $start->getCassandraTimestamp(),
+        ]);
+        $this->assertCount(1, $results);
+        $result = $results[0];
+        $this->assertEquals(1, $result['login_count']);
+    }
+
 }
