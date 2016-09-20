@@ -532,12 +532,6 @@ class Cassandra2 extends \FeideConnect\Data\Repository {
         $this->execute($query, $data, __FUNCTION__);
     }
 
-    public function getClients($count = 100) {
-        $query = 'SELECT * FROM "clients" LIMIT :count';
-        $params = ['count' => $count];
-        return $this->query($query, $params, __FUNCTION__, 'FeideConnect\Data\Models\Client', true);
-    }
-
     public function removeClient(Models\Client $client) {
         $query = 'DELETE FROM "clients" WHERE "id" = :id';
         $params = ['id' => new Uuid($client->id)];
