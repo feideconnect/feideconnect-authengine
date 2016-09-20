@@ -197,6 +197,73 @@ class Cassandra2Test extends DBHelper {
         $this->assertCount(0, $results);
     }
 
+    /**
+     * @covers \FeideConnect\Data\Repositories\Cassandra2::getUserByUserID
+     */
+    public function testGetUserByUserID() {
+        $userid = Models\User::genUUID();
+        $userid_sec = bin2hex(openssl_random_pseudo_bytes(8)) . '@example.org';
+
+        $this->db->rawExecute('INSERT INTO "users" ("userid", "created", "updated", "name", "email", "profilephoto", "profilephotohash", "selectedsource", "aboveagelimit", "usageterms", "userid_sec", "userid_sec_seen") VALUES(:userid, :created, :updated, :name, :email, :profilephoto, :profilephotohash, :selectedsource, :aboveagelimit, :usageterms, :userid_sec, :userid_sec_seen)', [
+            'userid' => new \Cassandra\Type\Uuid($userid),
+            'created' => new \Cassandra\Type\Timestamp(1122334455667),
+            'updated' => new \Cassandra\Type\Timestamp(1234567890123),
+            'name' => new \Cassandra\Type\CollectionMap([
+                'foo' => 'Foo Testesen',
+                'bar' => 'Bar Testesen',
+            ], \Cassandra\Type\Base::ASCII, \Cassandra\Type\Base::ASCII),
+            'email' => new \Cassandra\Type\CollectionMap([
+                'foo' => 'foo@example.org',
+                'bar' => 'bar@example.org',
+            ], \Cassandra\Type\Base::ASCII, \Cassandra\Type\Base::ASCII),
+            'profilephoto' => new \Cassandra\Type\CollectionMap([
+                'foo' => 'fooimg',
+                'bar' => 'barimg',
+            ], \Cassandra\Type\Base::ASCII, \Cassandra\Type\Base::BLOB),
+            'profilephotohash' => new \Cassandra\Type\CollectionMap([
+                'foo' => 'foohash',
+                'bar' => 'barhash',
+            ], \Cassandra\Type\Base::ASCII, \Cassandra\Type\Base::ASCII),
+            'selectedsource' => 'foo',
+            'aboveagelimit' => false,
+            'usageterms' => false,
+            'userid_sec' => new \Cassandra\Type\CollectionSet([ $userid_sec ], \Cassandra\Type\Base::ASCII),
+            'userid_sec_seen' => new \Cassandra\Type\CollectionMap([
+                $userid_sec => 1234567890123,
+            ], \Cassandra\Type\Base::ASCII, \Cassandra\Type\Base::TIMESTAMP),
+        ]);
+
+        $user = $this->db->getUserByUserID($userid);
+
+        $this->assertNotNull($user);
+        $this->assertEquals($userid, $user->userid);
+        $this->assertArrayHasKey('foo', $user->name);
+        $this->assertEquals('Foo Testesen', $user->name['foo']);
+        $this->assertArrayHasKey('bar', $user->name);
+        $this->assertEquals('Bar Testesen', $user->name['bar']);
+        $this->assertArrayHasKey('foo', $user->email);
+        $this->assertEquals('foo@example.org', $user->email['foo']);
+        $this->assertArrayHasKey('bar', $user->email);
+        $this->assertEquals('bar@example.org', $user->email['bar']);
+        $this->assertArrayHasKey('foo', $user->profilephoto);
+        $this->assertEquals('fooimg', $user->profilephoto['foo']);
+        $this->assertArrayHasKey('bar', $user->profilephoto);
+        $this->assertEquals('barimg', $user->profilephoto['bar']);
+        $this->assertArrayHasKey('foo', $user->profilephotohash);
+        $this->assertEquals('foohash', $user->profilephotohash['foo']);
+        $this->assertArrayHasKey('bar', $user->profilephotohash);
+        $this->assertEquals('barhash', $user->profilephotohash['bar']);
+        $this->assertEquals([$userid_sec], $user->userid_sec);
+        $this->assertEquals([$userid_sec => 1234567890123], $user->userid_sec_seen);
+        $this->assertEquals('foo', $user->selectedsource);
+        $this->assertEquals(false, $user->aboveagelimit);
+        $this->assertEquals(false, $user->usageterms);
+        $this->assertInstanceOf(\FeideConnect\Data\Types\Timestamp::class, $user->created);
+        $this->assertEquals(1122334455667, (int)($user->created->getValue()*1000));
+        $this->assertInstanceOf(\FeideConnect\Data\Types\Timestamp::class, $user->updated);
+        $this->assertEquals(1234567890123, (int)($user->updated->getValue()*1000));
+    }
+
     /*
 
     function getAuthorization($userid, $clientid) {
