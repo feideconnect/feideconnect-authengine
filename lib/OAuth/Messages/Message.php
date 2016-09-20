@@ -30,16 +30,6 @@ class Message implements Utils\Loggable {
         return join('&', $qs);
     }
 
-    public function asArray() {
-        $qs = array();
-        foreach ($this as $key => $value) {
-            $qs[$key] = $value;
-        }
-        return $qs;
-    }
-
-
-
     public function getAsArray() {
         $arr = array();
         foreach ($this as $k => $v) {
