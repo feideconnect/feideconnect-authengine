@@ -800,6 +800,25 @@ class Cassandra2Test extends DBHelper {
         $this->assertEquals(['foo-value'], $storedCode['apigk_scopes']['foo']);
     }
 
+    /**
+     * @covers \FeideConnect\Data\Repositories\Cassandra2::removeAuthorizationCode
+     */
+    public function testRemoveAuthorizationCode() {
+        $code = Models\AuthorizationCode::genUUID();
+
+        $this->db->rawExecute('INSERT INTO "oauth_codes" ("code") VALUES(:code)', [
+            'code' => new \Cassandra\Type\Uuid($code),
+        ]);
+
+        $authcode = $this->db->getAuthorizationCode($code);
+        $this->db->removeAuthorizationCode($authcode);
+
+        $results = $this->db->rawQuery('SELECT code FROM "oauth_codes" WHERE code = :code', [
+            'code' => new \Cassandra\Type\Uuid($code),
+        ]);
+        $this->assertCount(0, $results);
+    }
+
     /*
     function getAuthorizationCode($code) {
     function saveAuthorizationCode(Models\AuthorizationCode $code) {
