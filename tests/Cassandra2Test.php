@@ -456,6 +456,36 @@ class Cassandra2Test extends DBHelper {
         $this->assertNull($result);
     }
 
+    /**
+     * @covers \FeideConnect\Data\Repositories\Cassandra2::getOrgsByService
+     */
+    public function testGetOrgsByService() {
+        $orgid_a = bin2hex(openssl_random_pseudo_bytes(8));
+        $orgid_b = bin2hex(openssl_random_pseudo_bytes(8));
+
+        $this->db->rawExecute('TRUNCATE organizations', []);
+        $this->db->rawExecute('INSERT INTO "organizations" ("id", "services") VALUES(:id, :services)', [
+            'id' => $orgid_a,
+            'services' => new \Cassandra\Type\CollectionSet([ 'service-1' ], \Cassandra\Type\Base::ASCII),
+        ]);
+        $this->db->rawExecute('INSERT INTO "organizations" ("id", "services") VALUES(:id, :services)', [
+            'id' => $orgid_b,
+            'services' => new \Cassandra\Type\CollectionSet([ 'service-1', 'service-2' ], \Cassandra\Type\Base::ASCII),
+        ]);
+
+        $result = $this->db->getOrgsByService('service-1');
+        $this->assertCount(2, $result);
+        $this->assertTrue($result[0]->id === $orgid_a || $result[1]->id === $orgid_a);
+        $this->assertTrue($result[0]->id === $orgid_b || $result[1]->id === $orgid_b);
+
+        $result = $this->db->getOrgsByService('service-2');
+        $this->assertCount(1, $result);
+        $this->assertEquals($orgid_b, $result[0]->id);
+
+        $result = $this->db->getOrgsByService('service-wrong');
+        $this->assertCount(0, $result);
+    }
+
     /*
 
     function getAuthorization($userid, $clientid) {
