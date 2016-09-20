@@ -17,6 +17,10 @@ class Timestamp {
 
     }
 
+    public function getValue() {
+        return $this->_value;
+    }
+
     private function setNow() {
         $this->_value = microtime(true);
         return $this;
