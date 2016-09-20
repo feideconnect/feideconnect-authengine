@@ -690,55 +690,6 @@ class Cassandra2Test extends DBHelper {
 
 
     /*
-
-    function getAccessToken($accesstoken) {
-    function getAccessTokens($userid, $clientid) {
-    function saveToken(Models\AccessToken $token) {
-     */
-    public function testTokens() {
-
-        $clientid = Models\Client::genUUID();
-        $userid = Models\User::genUUID();
-
-        $user = new Models\User();
-        $user->userid = $userid;
-
-
-        $token = new Models\AccessToken();
-        $token->access_token = Models\AccessToken::genUUID();
-        $token->clientid = $clientid;
-        $token->userid = $userid;
-        $token->scope = ['userinfo', 'groups'];
-        $token->token_type = 'Bearer';
-
-        $token->issued = new \FeideConnect\Data\Types\Timestamp();
-        $token->validuntil = (new \FeideConnect\Data\Types\Timestamp())->addSeconds(3600);
-        $token->lastuse = (new \FeideConnect\Data\Types\Timestamp())->addSeconds(5);
-
-
-        $this->db->saveToken($token);
-
-
-        $token2 = $this->db->getAccessToken($token->access_token);
-        $this->assertTrue($token2->hasExactScopes(['userinfo', 'groups']), 'Retrieved stored item, check scopes');
-        $this->assertFalse($token2->hasExactScopes(['userinfo']), 'Retrieved stored item, check scopes');
-        $this->assertTrue($token2->hasScopes(['userinfo', 'groups']), 'Retrieved stored item, check scopes');
-        $this->assertTrue($token2->stillValid(), 'Retrieved stored item, check scopes');
-
-
-        $tokenSearched = $this->db->getAccessTokens($userid, $clientid);
-        $this->assertTrue(count($tokenSearched) === 1, 'Should find tokens for this user');
-
-
-        $this->db->removeAccessToken($token);
-        $token3 = $this->db->getAccessToken($token->access_token);
-        $this->assertNull($token3, 'Token should now have been deleted');
-
-
-    }
-
-
-    /*
     function getAuthorizationCode($code) {
     function saveAuthorizationCode(Models\AuthorizationCode $code) {
     function removeAuthorizationCode(Models\AuthorizationCode $code) {
