@@ -42,7 +42,7 @@ class OICAuthorizationTest extends OAuthAuthorizationTest {
     }
 
     public function testAuthorizationToCode() {
-        $params = parent::testAuthorizationToCode('openid userinfo groups');
+        $params = parent::codeFlowHelper('openid userinfo groups');
         $code = $this->db->getAuthorizationCode($params['code']);
         $this->assertTrue(isset($code->idtoken));
         $this->assertNotNull($code->idtoken);
@@ -52,7 +52,7 @@ class OICAuthorizationTest extends OAuthAuthorizationTest {
 
     public function testAuthorizationToCodeWithNonce() {
         $_REQUEST['nonce'] = 'ugle';
-        $params = parent::testAuthorizationToCode('openid userinfo groups');
+        $params = parent::codeFlowHelper('openid userinfo groups');
         $code = $this->db->getAuthorizationCode($params['code']);
         $this->assertTrue(isset($code->idtoken));
         $this->assertNotNull($code->idtoken);
@@ -62,7 +62,7 @@ class OICAuthorizationTest extends OAuthAuthorizationTest {
     }
 
     public function testAuthorizationToToken() {
-        $params = parent::testAuthorizationToToken('id_token token', 'openid userinfo groups');
+        $params = parent::tokenFlowHelper('id_token token', 'openid userinfo groups');
         $this->assertArrayHasKey('id_token', $params);
     }
 }
