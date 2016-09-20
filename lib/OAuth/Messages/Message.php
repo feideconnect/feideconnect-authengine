@@ -33,8 +33,8 @@ class Message implements Utils\Loggable {
     public function getAsArray() {
         $arr = array();
         foreach ($this as $k => $v) {
-            if (isset($this->{$k})) {
-                $arr[$k] = $this->{$k};
+            if ($v !== NULL) {
+                $arr[$k] = $v;
             }
         }
         return $arr;
@@ -71,13 +71,7 @@ class Message implements Utils\Loggable {
 
     public function sendBodyJSON($httpcode = 200) {
 
-        $body = array();
-        foreach ($this as $key => $value) {
-            if (empty($value)) {
-                continue;
-            }
-            $body[$key] = $value;
-        }
+        $body = $this->getAsArray();
         $response = new JSONResponse($body);
         $response->setStatus($httpcode);
         return $response;
