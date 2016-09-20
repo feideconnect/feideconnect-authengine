@@ -470,12 +470,6 @@ class Cassandra2 extends \FeideConnect\Data\Repository {
         return $res;
     }
 
-    public function getUsers($count = 100) {
-        $query = 'SELECT * FROM "users" LIMIT :count';
-        $params = ['count' => $count];
-        return $this->query($query, $params, __FUNCTION__, 'FeideConnect\Data\Models\User', true);
-    }
-
     /*
      * --- Database handling of the 'apigk' column family
      *
