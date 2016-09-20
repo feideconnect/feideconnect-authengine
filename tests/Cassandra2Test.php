@@ -434,6 +434,28 @@ class Cassandra2Test extends DBHelper {
         $this->assertEquals('https://foo.example.org/', $client->homepageurl);
     }
 
+    /**
+     * @covers \FeideConnect\Data\Repositories\Cassandra2::checkMandatory
+     */
+    public function testCheckMandatory() {
+        $clientid = Models\Client::genUUID();
+
+        $this->db->rawExecute('INSERT INTO "clients" ("id") VALUES(:id)', [
+            'id' => new \Cassandra\Type\Uuid($clientid),
+        ]);
+        $this->db->rawExecute('INSERT INTO "mandatory_clients" ("realm", "clientid") VALUES(:realm, :clientid)', [
+            'realm' => 'example.org',
+            'clientid' => new \Cassandra\Type\Uuid($clientid),
+        ]);
+
+        $client = $this->db->getClient($clientid);
+        $result = $this->db->checkMandatory('example.org', $client);
+        $this->assertNotNull($result);
+
+        $result = $this->db->checkMandatory('not.example.org', $client);
+        $this->assertNull($result);
+    }
+
     /*
 
     function getAuthorization($userid, $clientid) {
