@@ -819,42 +819,4 @@ class Cassandra2Test extends DBHelper {
         $this->assertCount(0, $results);
     }
 
-    /*
-    function getAuthorizationCode($code) {
-    function saveAuthorizationCode(Models\AuthorizationCode $code) {
-    function removeAuthorizationCode(Models\AuthorizationCode $code) {
-     */
-    public function testCodes() {
-
-        $cid = Models\AuthorizationCode::genUUID();
-        $code = new Models\AuthorizationCode();
-
-        $code->code = $cid;
-        $code->clientid = Models\AuthorizationCode::genUUID();
-        $code->userid = Models\AuthorizationCode::genUUID();
-
-        $code->issued = new \FeideConnect\Data\Types\Timestamp();
-        $code->validuntil = (new \FeideConnect\Data\Types\Timestamp())->addSeconds(3600);
-
-        $code->token_type = "Bearer";
-
-        $code->redirect_uri = 'http://example.org';
-        $code->scope = ['userinfo', 'groups'];
-
-
-        $this->db->saveAuthorizationCode($code);
-
-
-        $code2 = $this->db->getAuthorizationCode($cid);
-
-        $this->assertEquals($code->redirect_uri, $code2->redirect_uri, 'redirect_uri of code object fetched from db should be equal to the one put in.');
-
-
-        $this->db->removeAuthorizationCode($code);
-
-        $res = $this->db->getAuthorizationCode($cid);
-        $this->assertNull($res, 'Should not be able to retrieve authorizationcode that should have been deleted. Should return null.');
-
-    }
-
 }
