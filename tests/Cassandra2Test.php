@@ -285,6 +285,45 @@ class Cassandra2Test extends DBHelper {
         $this->assertEquals($userid, $user->userid);
     }
 
+    /**
+     * @covers \FeideConnect\Data\Repositories\Cassandra2::getUserByUserIDsecList
+     */
+    public function testGetUserByUserIDsecList() {
+        $userid_a = Models\User::genUUID();
+        $userid_sec_a = bin2hex(openssl_random_pseudo_bytes(8)) . '@example.org';
+        $userid_b = Models\User::genUUID();
+        $userid_sec_b = bin2hex(openssl_random_pseudo_bytes(8)) . '@example.org';
+
+        $this->db->rawExecute('INSERT INTO "users" ("userid", "userid_sec") VALUES(:userid, :userid_sec)', [
+            'userid' => new \Cassandra\Type\Uuid($userid_a),
+            'userid_sec' => new \Cassandra\Type\CollectionSet([ $userid_sec_a ], \Cassandra\Type\Base::ASCII),
+        ]);
+        $this->db->rawExecute('INSERT INTO "userid_sec" ("userid_sec", "userid") VALUES(:userid_sec, :userid)', [
+            'userid_sec' => $userid_sec_a,
+            'userid' => new \Cassandra\Type\Uuid($userid_a),
+        ]);
+        $this->db->rawExecute('INSERT INTO "users" ("userid", "userid_sec") VALUES(:userid, :userid_sec)', [
+            'userid' => new \Cassandra\Type\Uuid($userid_b),
+            'userid_sec' => new \Cassandra\Type\CollectionSet([ $userid_sec_b ], \Cassandra\Type\Base::ASCII),
+        ]);
+        $this->db->rawExecute('INSERT INTO "userid_sec" ("userid_sec", "userid") VALUES(:userid_sec, :userid)', [
+            'userid_sec' => $userid_sec_b,
+            'userid' => new \Cassandra\Type\Uuid($userid_b),
+        ]);
+
+        $users = $this->db->getUserByUserIDsecList([$userid_sec_a, $userid_sec_b]);
+        $this->assertCount(2, $users);
+        $this->assertTrue($users[0]->userid === $userid_a || $users[1]->userid === $userid_a);
+        $this->assertTrue($users[0]->userid === $userid_b || $users[1]->userid === $userid_b);
+
+        $users = $this->db->getUserByUserIDsecList(['incorrect_userid_here']);
+        $this->assertNull($users);
+
+        $users = $this->db->getUserByUserIDsecList([$userid_sec_a, 'incorrect_userid_here']);
+        $this->assertCount(1, $users);
+        $this->assertEquals($userid_a, $users[0]->userid);
+    }
+
     /*
 
     function getAuthorization($userid, $clientid) {
