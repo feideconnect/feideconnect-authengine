@@ -598,6 +598,48 @@ class Cassandra2Test extends DBHelper {
         $this->assertCount(0, $tokens);
     }
 
+    /**
+     * @covers \FeideConnect\Data\Repositories\Cassandra2::saveToken
+     */
+    public function testSaveToken() {
+        $id = Models\AccessToken::genUUID();
+        $clientid = Models\Client::genUUID();
+        $userid = Models\User::genUUID();
+        $subtoken_id = Models\AccessToken::genUUID();
+        $validuntil = time() + 600;
+        $token = new Models\AccessToken();
+        $token->clientid = $clientid;
+        $token->userid = $userid;
+        $token->apigkid = 'apigkid-value';
+        $token->issued = new \FeideConnect\Data\Types\Timestamp(1000000000.000);
+        $token->validuntil = new \FeideConnect\Data\Types\Timestamp($validuntil);
+        $token->access_token = $id;
+        $token->token_type = 'token-type-value';
+        $token->scope = [ 'scope-value' ];
+        $this->db->saveToken($token);
+
+        $results = $this->db->rawQuery('SELECT * FROM "oauth_tokens" WHERE access_token = :id', [
+            'id' => new \Cassandra\Type\Uuid($id),
+        ]);
+        $this->assertCount(1, $results);
+        $storedToken = $results[0];
+        $this->assertEquals($clientid, $storedToken['clientid']);
+        $this->assertEquals($userid, $storedToken['userid']);
+        $this->assertEquals('apigkid-value', $storedToken['apigkid']);
+        $this->assertEquals(1000000000000, $storedToken['issued']);
+        $this->assertEquals($validuntil*1000, $storedToken['validuntil']);
+        $this->assertEquals($id, $storedToken['access_token']);
+        $this->assertEquals('token-type-value', $storedToken['token_type']);
+        $this->assertEquals(['scope-value'], $storedToken['scope']);
+
+        $results = $this->db->rawQuery('SELECT count_tokens FROM "clients_counters" WHERE id = :id', [
+            'id' => new \Cassandra\Type\Uuid($clientid),
+        ]);
+        $this->assertCount(1, $results);
+        $counters = $results[0];
+        $this->assertEquals(1, $counters['count_tokens']);
+    }
+
     /*
 
     function getAuthorization($userid, $clientid) {
