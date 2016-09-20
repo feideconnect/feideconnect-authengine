@@ -264,6 +264,27 @@ class Cassandra2Test extends DBHelper {
         $this->assertEquals(1234567890123, (int)($user->updated->getValue()*1000));
     }
 
+    /**
+     * @covers \FeideConnect\Data\Repositories\Cassandra2::getUserByUserIDsec
+     */
+    public function testGetUserByUserIDsec() {
+        $userid = Models\User::genUUID();
+        $userid_sec = bin2hex(openssl_random_pseudo_bytes(8)) . '@example.org';
+
+        $this->db->rawExecute('INSERT INTO "users" ("userid", "userid_sec") VALUES(:userid, :userid_sec)', [
+            'userid' => new \Cassandra\Type\Uuid($userid),
+            'userid_sec' => new \Cassandra\Type\CollectionSet([ $userid_sec ], \Cassandra\Type\Base::ASCII),
+        ]);
+        $this->db->rawExecute('INSERT INTO "userid_sec" ("userid_sec", "userid") VALUES(:userid_sec, :userid)', [
+            'userid_sec' => $userid_sec,
+            'userid' => new \Cassandra\Type\Uuid($userid),
+        ]);
+
+        $user = $this->db->getUserByUserIDsec($userid_sec);
+        $this->assertNotNull($user);
+        $this->assertEquals($userid, $user->userid);
+    }
+
     /*
 
     function getAuthorization($userid, $clientid) {
