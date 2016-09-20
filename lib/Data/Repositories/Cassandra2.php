@@ -626,13 +626,6 @@ class Cassandra2 extends \FeideConnect\Data\Repository {
         $this->execute($query, $data, __FUNCTION__);
     }
 
-    public function removeAccessToken(Models\AccessToken $token) {
-        $query = 'DELETE FROM "oauth_tokens" WHERE "access_token" = :access_token';
-        $params = ['access_token' => new Uuid($token->access_token)];
-        $this->execute($query, $params, __FUNCTION__);
-    }
-
-
 
     /*
      * --- Database handling of the 'oauth_authorizations' column family
