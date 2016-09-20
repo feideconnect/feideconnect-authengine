@@ -715,55 +715,6 @@ class Cassandra2Test extends DBHelper {
     }
 
     /*
-
-    function getAuthorization($userid, $clientid) {
-    function getAuthorizationsByUser(Models\User $user) {
-    function saveAuthorization(Models\Authorization $authorization) {
-    function removeAuthorization($userid, $clientid) {
-     */
-    public function testAuthorizations() {
-
-        $clientid = Models\Client::genUUID();
-        $userid = Models\User::genUUID();
-
-        $user = new Models\User();
-        $user->userid = $userid;
-
-
-        $authorization = new Models\Authorization();
-        $authorization->issued = new \FeideConnect\Data\Types\Timestamp();
-
-        $authorization->clientid = $clientid;
-        $authorization->userid = $userid;
-        $authorization->scopes = ['userinfo', 'groups'];
-
-        $this->db->saveAuthorization($authorization);
-
-
-        $authorization2 = $this->db->getAuthorization($userid, $clientid);
-
-        $this->assertTrue($authorization2->includeScopes(['userinfo', 'groups']), 'Retrieved stored item, check scopes');
-        $this->assertFalse($authorization2->includeScopes(['xxxxx']), 'Retrieved stored item, check scopes');
-
-
-
-        $authorization4 = $this->db->getAuthorizationsByUser($user);
-        $this->assertTrue(count($authorization4) === 1, 'Should find authorizations for this user');
-
-
-        $this->db->removeAuthorizations($userid, $clientid);
-
-        $authorization3 = $this->db->getAuthorization($userid, $clientid);
-        $this->assertNull($authorization3, 'Authorization should now have been deleted');
-
-
-
-
-
-    }
-
-
-    /*
     function getAuthorizationCode($code) {
     function saveAuthorizationCode(Models\AuthorizationCode $code) {
     function removeAuthorizationCode(Models\AuthorizationCode $code) {
