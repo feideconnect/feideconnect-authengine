@@ -17,7 +17,8 @@
     },
     "debug": true,
     "logging": {
-        "file": false,
+        "file": true,
+        "filename": "unit-test.log",
         "errorlog": false
     },
     "salt": "506cbcc8-cf56-4d74-904f-dbcba10b8eda",
