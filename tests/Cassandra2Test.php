@@ -563,6 +563,41 @@ class Cassandra2Test extends DBHelper {
         $this->assertNull($token);
     }
 
+    /**
+     * @covers \FeideConnect\Data\Repositories\Cassandra2::getAccessToken
+     */
+    public function testGetAccessTokens() {
+        $id_a = Models\AccessToken::genUUID();
+        $id_b = Models\AccessToken::genUUID();
+        $clientid = Models\Client::genUUID();
+        $userid = Models\User::genUUID();
+
+        $this->db->rawExecute('INSERT INTO "oauth_tokens" ("access_token", "clientid", "userid", "apigkid") VALUES(:access_token, :clientid, :userid, :apigkid)', [
+            'access_token' => new \Cassandra\Type\Uuid($id_a),
+            'clientid' => new \Cassandra\Type\Uuid($clientid),
+            'userid' => new \Cassandra\Type\Uuid($userid),
+            'apigkid' => '',
+        ]);
+
+        $this->db->rawExecute('INSERT INTO "oauth_tokens" ("access_token", "clientid", "userid", "apigkid") VALUES(:access_token, :clientid, :userid, :apigkid)', [
+            'access_token' => new \Cassandra\Type\Uuid($id_b),
+            'clientid' => new \Cassandra\Type\Uuid($clientid),
+            'userid' => new \Cassandra\Type\Uuid($userid),
+            'apigkid' => '',
+        ]);
+
+        $tokens = $this->db->getAccessTokens($userid, $clientid);
+        $this->assertCount(2, $tokens);
+        $this->assertTrue($tokens[0]->access_token === $id_a || $tokens[1]->access_token === $id_a);
+        $this->assertTrue($tokens[0]->access_token === $id_b || $tokens[1]->access_token === $id_b);
+
+        $tokens = $this->db->getAccessTokens($userid, Models\Client::genUUID());
+        $this->assertCount(0, $tokens);
+
+        $tokens = $this->db->getAccessTokens(Models\User::genUUID(), $clientid);
+        $this->assertCount(0, $tokens);
+    }
+
     /*
 
     function getAuthorization($userid, $clientid) {
