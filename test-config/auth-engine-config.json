@@ -4,67 +4,67 @@
 			"lo": 3
 		}
 	},
-        "defaultIdP": "https://idp.feide.no",
-        "feideIdP": "https://idp.feide.no",
-        "storage": {
-                "type": "cassandra",
-                "keyspace": "dataporten",
-                "nodes": ["@@CASSANDRA@@"]
-        },
-        "endpoints": {
-                "core": "https://api.feideconnect.no",
-                "groups": "https://groups-api.feideconnect.no"
-        },
-        "debug": true,
-        "logging": {
-                "file": false,
-                "errorlog": false
-        },
-        "salt": "506cbcc8-cf56-4d74-904f-dbcba10b8eda",
+    "defaultIdP": "https://idp.feide.no",
+    "feideIdP": "https://idp.feide.no",
+    "storage": {
+        "type": "cassandra",
+        "keyspace": "dataporten",
+        "nodes": ["@@CASSANDRA@@"]
+    },
+    "endpoints": {
+        "core": "https://api.feideconnect.no",
+        "groups": "https://groups-api.feideconnect.no"
+    },
+    "debug": true,
+    "logging": {
+        "file": false,
+        "errorlog": false
+    },
+    "salt": "506cbcc8-cf56-4d74-904f-dbcba10b8eda",
 
-        "connect": {
-                "issuer": "https://sa-test-auth.feideconnect.no"
-        },
-        "availableLanguages": ["en", "nb", "nn"],
+    "connect": {
+        "issuer": "https://sa-test-auth.feideconnect.no"
+    },
+    "availableLanguages": ["en", "nb", "nn"],
 
-        "testUsers": {
+    "testUsers": {
 		"feide:test@feide.no": {
-                        "password": "eLR4tamJ7fBoUt"
-                }
-        },
-        "authTypes": {
-                "saml": {
-                        "authSource": "default-sp"
-                }
-        },
+            "password": "eLR4tamJ7fBoUt"
+        }
+    },
+    "authTypes": {
+        "saml": {
+            "authSource": "default-sp"
+        }
+    },
 
-        "accountMaps": [
-                {
-                        "_title": "Feide account mapper",
-                        "authSource": "default-sp",
-                        "idp": ["https://idp-test.feide.no", "https://idp.feide.no"],
-                        "sourceID": {
-                                "type": "sourceID",
-                                "prefix": "feide",
-                                "realm": true
-                        },
-                        "userid": {
-                                "feide": "eduPersonPrincipalName"
-                        },
-                        "realm": {
-                                "attrname": "eduPersonPrincipalName",
-                                "type" : "realm"
-                        },
-                        "name": {
-                                "attrnames": ["displayName", "cn"]
-                        },
-                        "mail": "mail",
-                        "org": "o",
-                        "photo": "jpegPhoto",
-                        "yob": "feideYearOfBirth"
-                }
+    "accountMaps": [
+        {
+            "_title": "Feide account mapper",
+            "authSource": "default-sp",
+            "idp": ["https://idp-test.feide.no", "https://idp.feide.no"],
+            "sourceID": {
+                "type": "sourceID",
+                "prefix": "feide",
+                "realm": true
+            },
+            "userid": {
+                "feide": "eduPersonPrincipalName"
+            },
+            "realm": {
+                "attrname": "eduPersonPrincipalName",
+                "type" : "realm"
+            },
+            "name": {
+                "attrnames": ["displayName", "cn"]
+            },
+            "mail": "mail",
+            "org": "o",
+            "photo": "jpegPhoto",
+            "yob": "feideYearOfBirth"
+        }
 
 
-        ]
+    ]
 
 }
