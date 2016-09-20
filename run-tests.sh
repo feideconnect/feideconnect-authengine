@@ -31,6 +31,6 @@ mkdir -p etc/test
 sed "s/@@CASSANDRA@@/${CASSANDRA}/" <test-config/auth-engine-config.json >etc/test/config.json
 cp test-config/jwt-*.pem etc
 
-rm unit-test.log
+rm -f unit-test.log
 touch unit-test.log
 ant
