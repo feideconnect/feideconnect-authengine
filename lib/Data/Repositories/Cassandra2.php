@@ -652,21 +652,6 @@ class Cassandra2 extends \FeideConnect\Data\Repository {
         return $this->execute($query, $params, __FUNCTION__);
     }
 
-    public function removeAuthorizations($userid, $clientid) {
-        $query = 'DELETE FROM "oauth_authorizations" WHERE "userid" = :userid AND "clientid" = :clientid';
-        $params = [
-            'userid' => new Uuid($userid),
-            'clientid' => new Uuid($clientid)
-        ];
-        $this->execute($query, $params, __FUNCTION__);
-
-        $query = 'UPDATE "clients_counters" SET count_users = count_users - 1 WHERE "id" = :id';
-        $params = ['id' => new Uuid($clientid)];
-        return $this->execute($query, $params, __FUNCTION__);
-
-    }
-
-
 
     /*
      * --- Database handling of the 'oauth_codes' column family
