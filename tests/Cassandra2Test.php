@@ -757,6 +757,49 @@ class Cassandra2Test extends DBHelper {
         $this->assertNull($authcode);
     }
 
+    /**
+     * @covers \FeideConnect\Data\Repositories\Cassandra2::saveAuthorizationCode
+     */
+    public function testSaveAuthorizationCode() {
+        $code = Models\AuthorizationCode::genUUID();
+        $clientid = Models\Client::genUUID();
+        $userid = Models\User::genUUID();
+        $subtoken_id = Models\AccessToken::genUUID();
+        $validuntil = time() + 600;
+
+        $authcode = new Models\AuthorizationCode();
+        $authcode->code = $code;
+        $authcode->clientid = $clientid;
+        $authcode->userid = $userid;
+        $authcode->issued = new \FeideConnect\Data\Types\Timestamp(1000000000.000);
+        $authcode->validuntil = new \FeideConnect\Data\Types\Timestamp($validuntil);
+        $authcode->token_type = 'token-type-value';
+        $authcode->idtoken = 'idtoken-value';
+        $authcode->redirect_uri = 'https://foo.example.org/redirect';
+        $authcode->scope = [ 'scope-value' ];
+        $authcode->apigk_scopes = [
+            'foo' => [ 'foo-value' ],
+        ];
+        $this->db->saveAuthorizationCode($authcode);
+
+        $results = $this->db->rawQuery('SELECT * FROM "oauth_codes" WHERE code = :code', [
+            'code' => new \Cassandra\Type\Uuid($code),
+        ]);
+        $this->assertCount(1, $results);
+        $storedCode = $results[0];
+        $this->assertEquals($code, $storedCode['code']);
+        $this->assertEquals($clientid, $storedCode['clientid']);
+        $this->assertEquals($userid, $storedCode['userid']);
+        $this->assertEquals(1000000000000, $storedCode['issued']);
+        $this->assertEquals($validuntil*1000, $storedCode['validuntil']);
+        $this->assertEquals('token-type-value', $storedCode['token_type']);
+        $this->assertEquals('idtoken-value', $storedCode['idtoken']);
+        $this->assertEquals('https://foo.example.org/redirect', $storedCode['redirect_uri']);
+        $this->assertEquals(['scope-value'], $storedCode['scope']);
+        $this->assertArrayHasKey('foo', $storedCode['apigk_scopes']);
+        $this->assertEquals(['foo-value'], $storedCode['apigk_scopes']['foo']);
+    }
+
     /*
     function getAuthorizationCode($code) {
     function saveAuthorizationCode(Models\AuthorizationCode $code) {
