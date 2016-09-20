@@ -27,10 +27,8 @@ class DBHelper extends \PHPUnit_Framework_TestCase {
     }
 
     public function clearUsers() {
-        $users = $this->db->getUsers();
-        foreach ($users as $user) {
-            $this->db->deleteUser($user);
-        }
+        $this->db->rawExecute('TRUNCATE users', []);
+        $this->db->rawExecute('TRUNCATE userid_sec', []);
     }
 
     public function client() {
