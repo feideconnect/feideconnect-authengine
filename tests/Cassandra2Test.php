@@ -324,6 +324,54 @@ class Cassandra2Test extends DBHelper {
         $this->assertEquals($userid_a, $users[0]->userid);
     }
 
+    /**
+     * @covers \FeideConnect\Data\Repositories\Cassandra2::getAPIGK
+     */
+    public function testGetAPIGK() {
+        $id = bin2hex(openssl_random_pseudo_bytes(8));
+        $owner_uuid = \FeideConnect\Data\Model::genUUID();
+
+        $this->db->rawExecute('INSERT INTO "apigk" ("id", "descr", "endpoints", "expose", "httpscertpinned", "name", "owner", "organization", "scopes", "requireuser", "scopedef", "privacypolicyurl", "status", "created", "updated") VALUES(:id, :descr, :endpoints, :expose, :httpscertpinned, :name, :owner, :organization, :scopes, :requireuser, :scopedef, :privacypolicyurl, :status, :created, :updated)', [
+            'id' => $id,
+            'descr' => 'Test API GK description',
+            'endpoints' => new \Cassandra\Type\CollectionList([
+                'https://foo.example.org/bar'
+            ], \Cassandra\Type\Base::ASCII),
+            'expose' => 'expose-value',
+            'httpscertpinned' => 'httpscertpinned-value',
+            'name' => 'Test API GK name',
+            'owner' => new \Cassandra\Type\Uuid($owner_uuid),
+            'organization' => 'Foo Inc.',
+            'scopes' => new \Cassandra\Type\CollectionSet([ 'foo-scope' ], \Cassandra\Type\Base::ASCII),
+            'requireuser' => true,
+            'scopedef' => json_encode([ 'scopedef-key' => 'scopedef-value' ]),
+            'privacypolicyurl' => 'https://foo.example.org/privacy-policy',
+            'status' => new \Cassandra\Type\CollectionSet([ 'status-value' ], \Cassandra\Type\Base::ASCII),
+            'created' => new \Cassandra\Type\Timestamp(1122334455667),
+            'updated' => new \Cassandra\Type\Timestamp(1234567890123),
+        ]);
+
+        $gk = $this->db->getAPIGK($id);
+        $this->assertNotNull($gk);
+        $this->assertEquals('Test API GK name', $gk->name);
+        $this->assertEquals('Test API GK description', $gk->descr);
+        $this->assertEquals($owner_uuid, $gk->owner);
+        $this->assertEquals('Foo Inc.', $gk->organization);
+        $this->assertEquals(['https://foo.example.org/bar'], $gk->endpoints);
+        $this->assertEquals('expose-value', $gk->expose);
+        $this->assertEquals('httpscertpinned-value', $gk->httpscertpinned);
+        $this->assertTrue($gk->requireuser);
+        $this->assertArrayHasKey('scopedef-key', $gk->scopedef);
+        $this->assertEquals('scopedef-value', $gk->scopedef['scopedef-key']);
+        $this->assertEquals(['foo-scope'], $gk->scopes);
+        $this->assertEquals('https://foo.example.org/privacy-policy', $gk->privacypolicyurl);
+        $this->assertEquals(['status-value'], $gk->status);
+        $this->assertInstanceOf(\FeideConnect\Data\Types\Timestamp::class, $gk->created);
+        $this->assertEquals(1122334455667, (int)($gk->created->getValue()*1000));
+        $this->assertInstanceOf(\FeideConnect\Data\Types\Timestamp::class, $gk->updated);
+        $this->assertEquals(1234567890123, (int)($gk->updated->getValue()*1000));
+    }
+
     /*
 
     function getAuthorization($userid, $clientid) {
