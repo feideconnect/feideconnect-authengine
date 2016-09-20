@@ -538,13 +538,6 @@ class Cassandra2 extends \FeideConnect\Data\Repository {
         $this->execute($query, $params, __FUNCTION__);
     }
 
-    public function getClientsByOwner(Models\User $owner) {
-        $query = 'SELECT * FROM "clients" WHERE "owner" = :owner';
-        $params = ['owner' => new Uuid($owner->userid)];
-        return $this->query($query, $params, __FUNCTION__, 'FeideConnect\Data\Models\Client', true);
-    }
-
-
     /*
      * ---- MAndatory clients -----
      */
