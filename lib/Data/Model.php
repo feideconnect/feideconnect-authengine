@@ -42,11 +42,11 @@ abstract class Model implements Utils\Loggable {
         if (!array_key_exists($key, static::$_properties)) {
             throw new \Exception('Database field ' . var_export($key, true) . ' is not a valid field for the model ' . static::class . '.');
         }
+        if ($value === null) {
+            return null;
+        }
         switch (static::$_properties[$key]) {
         case 'timestamp':
-            if ($value === null) {
-                return null;
-            }
             return Timestamp::fromCassandraTimestamp($value);
         default:
             return $value;
