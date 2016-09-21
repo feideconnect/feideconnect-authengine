@@ -4,7 +4,6 @@ namespace FeideConnect\Data\Models;
 
 use Cassandra\Type\CollectionMap;
 use Cassandra\Type\Base;
-use Cassandra\Type\Blob;
 
 class Client extends \FeideConnect\Data\Model {
 
@@ -18,7 +17,7 @@ class Client extends \FeideConnect\Data\Model {
         'name' => 'default',
         'owner' => 'uuid',
         'organization' => 'default',
-        'logo' => 'default',
+        'logo' => 'blob',
         'redirect_uri' => 'list<text>',
         'scopes' => 'set<text>',
         'scopes_requested' => 'set<text>',
@@ -114,10 +113,6 @@ class Client extends \FeideConnect\Data\Model {
 
         $prepared = parent::getStorableArray();
 
-
-        if (isset($this->logo)) {
-            $prepared["logo"] =  new Blob($this->logo);
-        }
 
         if (isset($this->orgauthorization)) {
             $encoded = array();
