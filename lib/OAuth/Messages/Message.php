@@ -92,30 +92,6 @@ class Message implements Utils\Loggable {
     //     exit;
     // }
 
-
-
-    public function post($endpoint) {
-        error_log('posting to endpoint: ' . $endpoint);
-        $postdata = $this->asQS();
-
-        error_log('Sending body: ' . $postdata);
-
-        $opts = array('http' =>
-            array(
-                'method'  => 'POST',
-                'header'  => 'Content-type: application/x-www-form-urlencoded' . "\r\n",
-                'content' => $postdata
-            )
-        );
-        $context  = stream_context_create($opts);
-        $result = file_get_contents($endpoint, false, $context);
-        $resultobj = json_decode($result, true);
-
-
-        return $resultobj;
-    }
-
-
     public static function spacelist($arg) {
         if ($arg === null) {
             return null;
