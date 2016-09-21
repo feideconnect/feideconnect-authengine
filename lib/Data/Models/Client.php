@@ -7,7 +7,6 @@ use Cassandra\Type\CollectionList;
 use Cassandra\Type\CollectionSet;
 use Cassandra\Type\CollectionMap;
 use Cassandra\Type\Base;
-use Cassandra\Type\Timestamp;
 use Cassandra\Type\Blob;
 
 class Client extends \FeideConnect\Data\Model {
