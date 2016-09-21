@@ -46,6 +46,8 @@ abstract class Model implements Utils\Loggable {
             return null;
         }
         switch (static::$_properties[$key]) {
+        case 'json':
+            return json_decode($value, true);
         case 'timestamp':
             return Timestamp::fromCassandraTimestamp($value);
         default:
@@ -92,6 +94,9 @@ abstract class Model implements Utils\Loggable {
             switch ($type) {
             case 'blob':
                 $value = new \Cassandra\Type\Blob($value);
+                break;
+            case 'json':
+                $value = json_encode($value);
                 break;
             case 'list<text>':
                 $value = new \Cassandra\Type\CollectionList($value, \Cassandra\Type\Base::ASCII);

@@ -2,13 +2,6 @@
 
 namespace FeideConnect\Data\Models;
 
-use Cassandra\Type\Uuid;
-use Cassandra\Type\CollectionList;
-use Cassandra\Type\CollectionMap;
-use Cassandra\Type\Base;
-use Cassandra\Type\Timestamp;
-use Cassandra\Type\Blob;
-
 use FeideConnect\Utils\Misc;
 
 /*
@@ -33,23 +26,9 @@ class Organization extends \FeideConnect\Data\Model {
         'name' => 'map<text,text>',
         'realm' => 'default',
         'type' => 'set<text>',
-        'uiinfo' => 'default',
+        'uiinfo' => 'json',
         'services' => 'default',
     ];
-
-
-
-    public static function fromDB($key, $value) {
-        switch ($key) {
-        case 'uiinfo':
-            if (is_null($value)) {
-                return null;
-            }
-            return json_decode($value, true);
-        default:
-            return parent::fromDB($key, $value);
-        }
-    }
 
     public function getTypes() {
         $t = [];
@@ -129,14 +108,5 @@ class Organization extends \FeideConnect\Data\Model {
         }
         return in_array($type, $this->type);
     }
-
-    public function getStorableArray() {
-
-        $prepared = parent::getStorableArray();
-        $prepared["uiinfo"] = json_encode($this->uiinfo);
-        return $prepared;
-    }
-
-
 
 }

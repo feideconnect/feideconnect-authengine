@@ -26,7 +26,7 @@ class Client extends \FeideConnect\Data\Model {
         'updated' => 'timestamp',
         'authproviders' => 'default',
         'orgauthorization' => 'default',
-        'authoptions' => 'default',
+        'authoptions' => 'json',
         'systemdescr' => 'default',
         'supporturl' => 'default',
         'loginurl' => 'default',
@@ -45,11 +45,6 @@ class Client extends \FeideConnect\Data\Model {
                 $ret[$realm] = json_decode($authz);
             }
             return $ret;
-        case 'authoptions':
-            if (is_null($value)) {
-                return null;
-            }
-            return json_decode($value, true);
         default:
             return parent::fromDB($key, $value);
         }
@@ -122,11 +117,6 @@ class Client extends \FeideConnect\Data\Model {
             }
             $prepared["orgauthorization"] = new CollectionMap($encoded, Base::ASCII, BASE::ASCII);
         }
-
-        if (isset($this->authoptions)) {
-            $prepared["authoptions"] = json_encode($this->authoptions);
-        }
-
 
         // echo var_export($prepared, true);
 

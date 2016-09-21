@@ -16,7 +16,7 @@ class APIGK extends \FeideConnect\Data\Model {
         'expose' => 'default',
         'httpscertpinned' => 'default',
         'requireuser' => 'default',
-        'scopedef' => 'default',
+        'scopedef' => 'json',
         'trust' => 'default',
         'logo' => 'default',
         'scopes' => 'set<text>',
@@ -28,18 +28,6 @@ class APIGK extends \FeideConnect\Data\Model {
         'updated' => 'timestamp',
     ];
     private static $apiScopeRE = '/^gk_([a-z0-9\-]+)(_([a-z0-9\-]+))?$/D';
-
-    public static function fromDB($key, $value) {
-        switch ($key) {
-        case 'scopedef':
-            if (is_null($value)) {
-                return null;
-            }
-            return json_decode($value, true);
-        default:
-            return parent::fromDB($key, $value);
-        }
-    }
 
     public static function isApiScope($scope) {
         return preg_match(self::$apiScopeRE, $scope, $matches);
@@ -62,14 +50,6 @@ class APIGK extends \FeideConnect\Data\Model {
             return [];
         }
         return $this->scopes;
-    }
-
-    public function getStorableArray() {
-        $data = parent::getStorableArray();
-        if (isset($data['scopedef'])) {
-            $data['scopedef'] = json_encode($data['scopedef']);
-        }
-        return $data;
     }
 
     public function getScopeDef($scope) {
