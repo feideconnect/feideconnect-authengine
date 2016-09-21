@@ -53,12 +53,12 @@ class Message implements Utils\Loggable {
         return $redirurl;
     }
 
-    public function sendRedirect($endpoint, $hash = false) {
+    public function getRedirectResponse($endpoint, $hash = false) {
         $url = $this->getRedirectURL($endpoint, $hash);
         return new Redirect($url);
     }
 
-    public function sendBodyJSON($httpcode = 200) {
+    public function getJSONResponse($httpcode = 200) {
 
         $body = $this->getAsArray();
         $response = new JSONResponse($body);

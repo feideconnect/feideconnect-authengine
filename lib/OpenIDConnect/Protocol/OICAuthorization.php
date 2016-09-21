@@ -60,7 +60,7 @@ class OICAuthorization extends OAuthAuthorization {
         );
 
 
-        return $tokenresponse->sendRedirect($redirect_uri, true);
+        return $tokenresponse->getRedirectResponse($redirect_uri, true);
 
     }
 
@@ -91,7 +91,7 @@ class OICAuthorization extends OAuthAuthorization {
             'authorizationresponse' => $authorizationresponse,
         ));
 
-        return $authorizationresponse->sendRedirect($this->request->redirect_uri);
+        return $authorizationresponse->getRedirectResponse($this->request->redirect_uri);
 
     }
 

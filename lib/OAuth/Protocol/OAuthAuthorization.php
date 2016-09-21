@@ -284,7 +284,7 @@ class OAuthAuthorization {
         );
 
 
-        return $tokenresponse->sendRedirect($redirect_uri, true);
+        return $tokenresponse->getRedirectResponse($redirect_uri, true);
 
     }
 
@@ -309,7 +309,7 @@ class OAuthAuthorization {
             'code' => $code,
         ));
 
-        return $authorizationresponse->sendRedirect($redirectURI);
+        return $authorizationresponse->getRedirectResponse($redirectURI);
 
     }
 

@@ -18,7 +18,7 @@ class ErrorResponse extends Message {
         $this->state                = Message::optional($message, 'state');
     }
 
-    public function sendBodyJSON($httpcode = 200) {
+    public function getJSONResponse($httpcode = 200) {
 
         $body = array();
         foreach ($this as $key => $value) {

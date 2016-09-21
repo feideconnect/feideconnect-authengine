@@ -96,10 +96,10 @@ class Server {
                 $response->state = $e->state;
             }
             if ($e->redirectURI !== null) {
-                return $response->sendRedirect($e->redirectURI, $e->useHashFragment);
+                return $response->getRedirectResponse($e->redirectURI, $e->useHashFragment);
             }
 
-            return $response->sendBodyJSON($e->httpcode);
+            return $response->getJSONResponse($e->httpcode);
 
         }
 
@@ -223,7 +223,7 @@ class Server {
 
         $tokenresponse = OAuthUtils::generateTokenResponse($client, $user, $code->scope, $code->apigk_scopes, "authorization code", null, $idtoken);
 
-        return $tokenresponse->sendBodyJSON();
+        return $tokenresponse->getJSONResponse();
     }
 
     /**
@@ -261,7 +261,7 @@ class Server {
 
             $requestedScopes = $aevaluator->getScopesInQuestion();
             $tokenresponse = OAuthUtils::generateTokenResponse($client, $user, $requestedScopes, $aevaluator->getAPIGKscopes(), $tokenrequest->grant_type);
-            return $tokenresponse->sendBodyJSON();
+            return $tokenresponse->getJSONResponse();
 
         } catch (OAuthException $e) {
             $msg = array(
@@ -272,7 +272,7 @@ class Server {
             Logger::error('OAuth Error Response at Token endpoint.', $msg);
 
             $response = new Messages\ErrorResponse($msg);
-            return $response->sendBodyJSON($e->httpcode);
+            return $response->getJSONResponse($e->httpcode);
 
         }
     }
