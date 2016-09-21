@@ -95,13 +95,18 @@ abstract class Model implements Utils\Loggable {
 
         $a = array();
         foreach (static::$_properties as $k) {
-            if (isset($this->{$k})) {
-                if (isset(static::$_types[$k])) {
-                    $a[$k] = $this->{$k}->getDBobject();
-                } else {
-                    $a[$k] = $this->{$k};
-                }
+            if (!isset($this->{$k})) {
+                continue;
             }
+            $value = $this->{$k};
+            switch (static::getPropertyType($k)) {
+            case 'timestamp':
+                $value = $value->getDBobject();
+                break;
+            default:
+                break;
+            }
+            $a[$k] = $value;
         }
         return $a;
 
