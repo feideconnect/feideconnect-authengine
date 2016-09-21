@@ -39,18 +39,16 @@ class Organization extends \FeideConnect\Data\Model {
 
 
 
-    public function __construct($props) {
-
-        parent::__construct($props);
-
-        if (isset($props["uiinfo"])) {
-            $this->uiinfo = json_decode($props["uiinfo"], true);
-            unset($props["uiinfo"]);
+    public static function fromDB($key, $value) {
+        switch ($key) {
+        case 'uiinfo':
+            if (is_null($value)) {
+                return null;
+            }
+            return json_decode($value, true);
+        default:
+            return parent::fromDB($key, $value);
         }
-
-
-
-
     }
 
     public function getTypes() {
