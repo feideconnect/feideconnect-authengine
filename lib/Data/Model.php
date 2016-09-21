@@ -56,8 +56,6 @@ abstract class Model implements Utils\Loggable {
                     return null;
                 }
                 return Timestamp::fromCassandraTimestamp($value);
-            } else if (static::$_types[$key] === 'blob') {
-                return substr($value, 4);
             }
         }
         return $value;
