@@ -21,7 +21,9 @@ class ErrorResponse extends Message {
     public function getJSONResponse($httpcode = 200) {
         $response = parent::getJSONResponse();
 
-        $response->setHeader("WWW-Authenticate", 'Bearer realm="feideconnect", error="' . $this->error . '", error_description="' . urlencode($this->error_description));
+        if ($httpcode === 401) {
+            $response->setHeader("WWW-Authenticate", 'Basic realm="feideconnect", error="' . $this->error . '", error_description="' . urlencode($this->error_description));
+        }
         $response->setStatus($httpcode);
 
         return $response;
