@@ -163,5 +163,4 @@ class OAuthAuthorizationTest extends AuthorizationHelper {
         $this->assertArrayHasKey('needsAuthorization', $data);
         $this->assertEquals($data['needsAuthorization'], true);
     }
-
 }

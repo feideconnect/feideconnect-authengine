@@ -56,9 +56,14 @@ class AuthorizationFlowHelper extends DBHelper {
     public function testAuthorizationToConsent() {
         $router = new Router();
 
-
-        $response = $this->doAuthorizationRequest(['approved_scopes' => null, 'verifier' => null, 'bruksvilkår' => null]);
-        $this->assertInstanceOf('FeideConnect\HTTP\LocalizedTemplatedHTMLResponse', $response, 'Expected /oauth/authorization endpoint to return html');
+        $overrides = [
+            'approved_scopes' => null,
+            'verifier' => null,
+            'bruksvilkår' => null
+        ];
+        $response = $this->doAuthorizationRequest($overrides);
+        $this->assertInstanceOf('FeideConnect\HTTP\LocalizedTemplatedHTMLResponse', $response,
+                                'Expected /oauth/authorization endpoint to return html');
 
         $data = $response->getData();
         $this->assertArrayHasKey('posturl', $data);
@@ -69,7 +74,8 @@ class AuthorizationFlowHelper extends DBHelper {
 
     protected function getAuthorizationCode($overrides=null) {
         $response = $this->doAuthorizationRequest($overrides);
-        $this->assertInstanceOf('FeideConnect\HTTP\Redirect', $response, 'Expected /oauth/authorization endpoint to redirect');
+        $this->assertInstanceOf('FeideConnect\HTTP\Redirect', $response,
+                                'Expected /oauth/authorization endpoint to redirect');
 
 //        var_export($response);
         $url = $response->getURL();
@@ -93,7 +99,8 @@ class AuthorizationFlowHelper extends DBHelper {
 
         $response = $this->doAuthorizationRequest($overrides);
 
-        $this->assertInstanceOf('FeideConnect\HTTP\JSONResponse', $response, 'Expected /oauth/token endpoint to return json');
+        $this->assertInstanceOf('FeideConnect\HTTP\JSONResponse', $response,
+                                'Expected /oauth/token endpoint to return json');
 
         $this->assertEquals(400, $response->getStatus());
         $data = $response->getData();
@@ -101,7 +108,8 @@ class AuthorizationFlowHelper extends DBHelper {
     }
 
     protected function assertTokenEndpointResponseOK($response) {
-        $this->assertInstanceOf('FeideConnect\HTTP\JSONResponse', $response, 'Expected /oauth/token endpoint to return json');
+        $this->assertInstanceOf('FeideConnect\HTTP\JSONResponse', $response,
+                                'Expected /oauth/token endpoint to return json');
 
         $data = $response->getData();
         $this->assertEquals(200, $response->getStatus());
@@ -115,7 +123,8 @@ class AuthorizationFlowHelper extends DBHelper {
     }
 
     protected function assertTokenAccessDenied($response) {
-        $this->assertInstanceOf('FeideConnect\HTTP\JSONResponse', $response, 'Expected /oauth/token endpoint to return json');
+        $this->assertInstanceOf('FeideConnect\HTTP\JSONResponse', $response,
+                                'Expected /oauth/token endpoint to return json');
 
         $data = $response->getData();
         $this->assertEquals(401, $response->getStatus());
@@ -123,7 +132,8 @@ class AuthorizationFlowHelper extends DBHelper {
     }
 
     protected function assertTokenResponseOK($response) {
-        $this->assertInstanceOf('FeideConnect\HTTP\Redirect', $response, 'Expected /oauth/authorization endpoint to redirect');
+        $this->assertInstanceOf('FeideConnect\HTTP\Redirect', $response,
+                                'Expected /oauth/authorization endpoint to redirect');
 
         $url = $response->getURL();
         $this->assertEquals(parse_url($url, PHP_URL_SCHEME), "http");
