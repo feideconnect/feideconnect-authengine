@@ -5,8 +5,6 @@ namespace FeideConnect\Data\Models;
 use FeideConnect\Data\StorageProvider;
 use FeideConnect\Data\Types\Timestamp;
 use FeideConnect\Utils\Misc;
-use Cassandra\Type\CollectionMap;
-use Cassandra\Type\Base;
 
 class AccessToken extends \FeideConnect\Data\Model {
 
@@ -22,7 +20,7 @@ class AccessToken extends \FeideConnect\Data\Model {
         'validuntil' => 'timestamp',
         'lastuse' => 'timestamp',
         'apigkid' => 'default',
-        'subtokens' => 'default',
+        'subtokens' => 'map<text,uuid>',
     ];
 
 
@@ -32,9 +30,6 @@ class AccessToken extends \FeideConnect\Data\Model {
 
         if (empty($this->apigkid)) {
             $prepared["apigkid"] = '';
-        }
-        if (isset($this->subtokens)) {
-            $prepared["subtokens"] = new CollectionMap($this->subtokens, Base::ASCII, Base::UUID);
         }
 
         return $prepared;
