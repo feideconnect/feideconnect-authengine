@@ -7,9 +7,6 @@ use FeideConnect\Config;
 use FeideConnect\Authentication\Account;
 use FeideConnect\Data\Model;
 use FeideConnect\Utils\Strings;
-use Cassandra\Type\CollectionMap;
-use Cassandra\Type\Base;
-use Cassandra\Type\Timestamp;
 
 /**
  * User
@@ -25,7 +22,7 @@ class User extends \FeideConnect\Data\Model {
         'profilephoto' => 'map<text,blob>',
         'profilephotohash' => 'map<text,text>',
         'userid_sec' => 'set<text>',
-        'userid_sec_seen' => 'default',
+        'userid_sec_seen' => 'map<text,timestamp>',
         'selectedsource' => 'default',
         'aboveagelimit' => 'default',
         'usageterms' => 'default',
@@ -36,18 +33,6 @@ class User extends \FeideConnect\Data\Model {
     public function isBelowAgeLimit() {
         return $this->aboveagelimit === false;
     }
-
-    public function getStorableArray() {
-
-        $prepared = parent::getStorableArray();
-
-        if (isset($this->userid_sec_seen)) {
-            $prepared["userid_sec_seen"] =  new CollectionMap($this->userid_sec_seen, Base::ASCII, Base::TIMESTAMP);
-        }
-
-        return $prepared;
-    }
-
 
     /**
      * [setUserInfo description]
