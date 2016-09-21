@@ -200,10 +200,12 @@ class OAuthAuthorization {
             $this->aevaluator = new AuthorizationEvaluator($this->storage, $this->client, $this->request, $this->user);
         }
 
-
         $redirect_uri = $this->aevaluator->getValidatedRedirectURI();
         $state = $this->request->getState();
 
+        if ($this->aevaluator->getEffectiveScopes() === []) {
+            throw new OAuthException('invalid_scope', 'None of the requested scopes are approved for this client');
+        }
 
         // If SimpleSAML_Auth_State_exceptionId query parameter is set, then something failed
         // while performing authentication.

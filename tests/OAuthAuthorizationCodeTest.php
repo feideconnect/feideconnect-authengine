@@ -20,6 +20,7 @@ class OAuthAuthorizationCodeTest extends DBHelper {
         $_REQUEST['response_type'] = 'code';
         $_REQUEST['state'] = '06dad165-7d22-4dcf-bda9-38f4048b9e3d';
         $_POST['redirect_uri'] = 'http://example.org';
+        $_REQUEST['redirect_uri'] = 'http://example.org';
 
         $this->client = $this->client();
         $_REQUEST['client_id'] = $this->client->id;
@@ -75,6 +76,24 @@ class OAuthAuthorizationCodeTest extends DBHelper {
         $this->assertArrayHasKey('code', $params);
         return $params['code'];
 
+    }
+
+    public function testNoEffectiveScopes() {
+        $router = new Router();
+
+        $_REQUEST['acresponse'] = '{"id": "https://idp.feide.no","subid":"example.org", "userids": ["feide:testuser@example.org"]}';
+        $_REQUEST['verifier'] = $this->user->getVerifier();
+        $_REQUEST['bruksvilkar'] = 'yes';
+        $_REQUEST['approved_scopes'] = 'email';
+        $_REQUEST['scope'] = 'email';
+
+        $response = $router->dispatchCustom('GET', '/oauth/authorization');
+
+        $this->assertInstanceOf('FeideConnect\HTTP\JSONResponse', $response, 'Expected /oauth/token endpoint to return json');
+
+        $this->assertEquals(400, $response->getStatus());
+        $data = $response->getData();
+        $this->assertEquals('invalid_scope', $data['error']);
     }
 
     public function testTokenBasicAuthOK() {
