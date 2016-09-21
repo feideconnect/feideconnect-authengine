@@ -121,6 +121,24 @@ class AuthorizationFlowHelper extends DBHelper {
 
     }
 
+    protected function assertTokenResponseOK($response) {
+        $this->assertInstanceOf('FeideConnect\HTTP\Redirect', $response, 'Expected /oauth/authorization endpoint to redirect');
+
+        $url = $response->getURL();
+        $this->assertEquals(parse_url($url, PHP_URL_SCHEME), "http");
+        $this->assertEquals(parse_url($url, PHP_URL_HOST), "example.org");
+        $fragment = parse_url($url, PHP_URL_FRAGMENT);
+        parse_str($fragment, $params);
+        $this->assertArrayHasKey('access_token', $params);
+        $this->assertArrayHasKey('token_type', $params);
+        $this->assertArrayHasKey('expires_in', $params);
+        $this->assertArrayHasKey('scope', $params);
+        $this->assertArrayHasKey('state', $params);
+        $this->assertEquals($params['state'], $_REQUEST['state']);
+        $this->assertEquals($params['token_type'], 'Bearer');
+        return $params;
+    }
+
     public function tearDown() {
         parent::tearDown();
         $this->db->removeClient($this->client);
