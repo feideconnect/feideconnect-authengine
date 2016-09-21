@@ -2,10 +2,6 @@
 
 namespace FeideConnect\Data\Models;
 
-use Cassandra\Type\CollectionMap;
-use Cassandra\Type\Base;
-use Cassandra\Type\Timestamp;
-
 class Authorization extends \FeideConnect\Data\Model {
 
     public $clientid, $userid, $scopes, $issued, $apigk_scopes;
@@ -15,23 +11,8 @@ class Authorization extends \FeideConnect\Data\Model {
         'userid' => 'uuid',
         'scopes' => 'set<text>',
         'issued' => 'timestamp',
-        'apigk_scopes' => 'default',
+        'apigk_scopes' => 'map<text,set<text>>',
     ];
-
-
-    public function getStorableArray() {
-
-        $prepared = parent::getStorableArray();
-
-
-
-
-        if (isset($this->apigk_scopes)) {
-            $prepared["apigk_scopes"] = new CollectionMap($this->apigk_scopes, Base::ASCII, ["type" => Base::COLLECTION_SET, "value" => Base::ASCII]);
-        }
-
-        return $prepared;
-    }
 
     public function getScopeList() {
         if (empty($this->scopes)) {

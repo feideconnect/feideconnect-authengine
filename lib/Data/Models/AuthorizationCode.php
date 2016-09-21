@@ -5,10 +5,6 @@ namespace FeideConnect\Data\Models;
 use FeideConnect\Data\StorageProvider;
 use FeideConnect\OpenIDConnect\IDToken;
 
-use Cassandra\Type\CollectionMap;
-use Cassandra\Type\Base;
-use Cassandra\Type\Timestamp;
-
 class AuthorizationCode extends \FeideConnect\Data\Model {
 
     public $code, $clientid, $userid, $scope, $token_type, $redirect_uri, $idtoken, $issued, $validuntil, $apigk_scopes;
@@ -23,23 +19,8 @@ class AuthorizationCode extends \FeideConnect\Data\Model {
         'idtoken' => 'default',
         'issued' => 'timestamp',
         'validuntil' => 'timestamp',
-        'apigk_scopes' => 'default',
+        'apigk_scopes' => 'map<text,set<text>>',
     ];
-
-
-    public function getStorableArray() {
-
-        $prepared = parent::getStorableArray();
-
-
-        if (isset($this->apigk_scopes)) {
-            $prepared["apigk_scopes"] = new CollectionMap($this->apigk_scopes, Base::ASCII, ["type" => Base::COLLECTION_SET, "value" => Base::ASCII]);
-        }
-
-
-        return $prepared;
-    }
-
 
     public function stillValid() {
         return (!($this->validuntil->inPast()));
