@@ -38,16 +38,11 @@ abstract class Model implements Utils\Loggable {
 
     }
 
-    private static function getPropertyType($key) {
-        if (!isset(static::$_properties[$key])) {
-            return 'unknown';
-        }
-        return static::$_properties[$key];
-    }
-
     public static function fromDB($key, $value) {
-
-        switch (static::getPropertyType($key)) {
+        if (!array_key_exists($key, static::$_properties)) {
+            throw new \Exception('Database field ' . var_export($key, true) . ' is not a valid field for the model ' . static::class . '.');
+        }
+        switch (static::$_properties[$key]) {
         case 'timestamp':
             if ($value === null) {
                 return null;
