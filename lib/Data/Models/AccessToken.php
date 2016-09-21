@@ -23,18 +23,6 @@ class AccessToken extends \FeideConnect\Data\Model {
         'subtokens' => 'map<text,uuid>',
     ];
 
-
-    public function getStorableArray() {
-
-        $prepared = parent::getStorableArray();
-
-        if (empty($this->apigkid)) {
-            $prepared["apigkid"] = '';
-        }
-
-        return $prepared;
-    }
-
     public static function lifetimeCmp($a, $b) {
         return -Timestamp::cmp($a->validuntil, $b->validuntil);
     }
@@ -86,6 +74,9 @@ class AccessToken extends \FeideConnect\Data\Model {
         }
 
         $n->apigkid = $apigkid;
+        if (empty($n->apigkid)) {
+            $n->apigkid = '';
+        }
 
         $n->issued = new Timestamp();
         $n->validuntil = $validuntil;
