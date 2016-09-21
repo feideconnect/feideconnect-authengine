@@ -6,7 +6,6 @@ use FeideConnect\Data\StorageProvider;
 use FeideConnect\Data\Types\Timestamp;
 use FeideConnect\Utils\Misc;
 use Cassandra\Type\CollectionMap;
-use Cassandra\Type\CollectionSet;
 use Cassandra\Type\Base;
 
 class AccessToken extends \FeideConnect\Data\Model {
@@ -18,7 +17,7 @@ class AccessToken extends \FeideConnect\Data\Model {
         'clientid' => 'uuid',
         'userid' => 'uuid',
         'issued' => 'timestamp',
-        'scope' => 'default',
+        'scope' => 'set<text>',
         'token_type' => 'default',
         'validuntil' => 'timestamp',
         'lastuse' => 'timestamp',
@@ -31,9 +30,6 @@ class AccessToken extends \FeideConnect\Data\Model {
 
         $prepared = parent::getStorableArray();
 
-        if (isset($this->scope)) {
-            $prepared["scope"] = new CollectionSet($this->scope, Base::ASCII);
-        }
         if (empty($this->apigkid)) {
             $prepared["apigkid"] = '';
         }

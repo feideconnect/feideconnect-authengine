@@ -90,6 +90,9 @@ abstract class Model implements Utils\Loggable {
             }
             $value = $this->{$k};
             switch ($type) {
+            case 'set<text>':
+                $value = new \Cassandra\Type\CollectionSet($value, \Cassandra\Type\Base::ASCII);
+                break;
             case 'timestamp':
                 $value = $value->getDBobject();
                 break;

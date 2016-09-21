@@ -4,7 +4,6 @@ namespace FeideConnect\Data\Models;
 
 use Cassandra\Type\Uuid;
 use Cassandra\Type\CollectionList;
-use Cassandra\Type\CollectionSet;
 use Cassandra\Type\CollectionMap;
 use Cassandra\Type\Base;
 use Cassandra\Type\Timestamp;
@@ -33,7 +32,7 @@ class Organization extends \FeideConnect\Data\Model {
         'id' => 'default',
         'name' => 'default',
         'realm' => 'default',
-        'type' => 'default',
+        'type' => 'set<text>',
         'uiinfo' => 'default',
         'services' => 'default',
     ];
@@ -142,9 +141,6 @@ class Organization extends \FeideConnect\Data\Model {
             $prepared["name"] =  new CollectionMap($this->name, Base::ASCII, Base::ASCII);
         }
 
-        if (isset($this->type)) {
-            $prepared["type"] = new CollectionSet($this->type, Base::ASCII);
-        }
         return $prepared;
     }
 

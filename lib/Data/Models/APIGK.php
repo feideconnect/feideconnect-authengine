@@ -2,9 +2,6 @@
 
 namespace FeideConnect\Data\Models;
 
-use Cassandra\Type\CollectionSet;
-use Cassandra\Type\Base;
-
 class APIGK extends \FeideConnect\Data\Model {
 
     public $id, $name, $descr, $owner, $organization, $scopes, $scopes_requested, $endpoints, $expose, $httpscertpinned, $requireuser, $scopedef, $trust, $logo, $status, $created, $updated;
@@ -22,8 +19,8 @@ class APIGK extends \FeideConnect\Data\Model {
         'scopedef' => 'default',
         'trust' => 'default',
         'logo' => 'default',
-        'scopes' => 'default',
-        'scopes_requested' => 'default',
+        'scopes' => 'set<text>',
+        'scopes_requested' => 'set<text>',
         'privacypolicyurl' => 'default',
         'systemdescr' => 'default',
         'status' => 'default',
@@ -70,12 +67,6 @@ class APIGK extends \FeideConnect\Data\Model {
         $data = parent::getStorableArray();
         if (isset($data['scopedef'])) {
             $data['scopedef'] = json_encode($data['scopedef']);
-        }
-        if (isset($this->scopes)) {
-            $data["scopes"] =  new CollectionSet($this->scopes, Base::ASCII);
-        }
-        if (isset($this->scopes_requested)) {
-            $data["scopes_requested"] =  new CollectionSet($this->scopes_requested, Base::ASCII);
         }
         return $data;
     }

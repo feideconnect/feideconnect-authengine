@@ -6,7 +6,6 @@ use FeideConnect\Data\StorageProvider;
 use FeideConnect\OpenIDConnect\IDToken;
 
 use Cassandra\Type\CollectionMap;
-use Cassandra\Type\CollectionSet;
 use Cassandra\Type\Base;
 use Cassandra\Type\Timestamp;
 
@@ -18,7 +17,7 @@ class AuthorizationCode extends \FeideConnect\Data\Model {
         'code' => 'uuid',
         'clientid' => 'uuid',
         'userid' => 'uuid',
-        'scope' => 'default',
+        'scope' => 'set<text>',
         'token_type' => 'default',
         'redirect_uri' => 'default',
         'idtoken' => 'default',
@@ -33,9 +32,6 @@ class AuthorizationCode extends \FeideConnect\Data\Model {
         $prepared = parent::getStorableArray();
 
 
-        if (isset($this->scope)) {
-            $prepared["scope"] = new CollectionSet($this->scope, Base::ASCII);
-        }
         if (isset($this->apigk_scopes)) {
             $prepared["apigk_scopes"] = new CollectionMap($this->apigk_scopes, Base::ASCII, ["type" => Base::COLLECTION_SET, "value" => Base::ASCII]);
         }

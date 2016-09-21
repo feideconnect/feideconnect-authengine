@@ -3,7 +3,6 @@
 namespace FeideConnect\Data\Models;
 
 use Cassandra\Type\CollectionList;
-use Cassandra\Type\CollectionSet;
 use Cassandra\Type\CollectionMap;
 use Cassandra\Type\Base;
 use Cassandra\Type\Blob;
@@ -22,9 +21,9 @@ class Client extends \FeideConnect\Data\Model {
         'organization' => 'default',
         'logo' => 'default',
         'redirect_uri' => 'default',
-        'scopes' => 'default',
-        'scopes_requested' => 'default',
-        'status' => 'default',
+        'scopes' => 'set<text>',
+        'scopes_requested' => 'set<text>',
+        'status' => 'set<text>',
         'type' => 'default',
         'updated' => 'timestamp',
         'authproviders' => 'default',
@@ -123,15 +122,6 @@ class Client extends \FeideConnect\Data\Model {
 
         if (isset($this->redirect_uri)) {
             $prepared["redirect_uri"] =  new CollectionList($this->redirect_uri, Base::ASCII);
-        }
-        if (isset($this->scopes)) {
-            $prepared["scopes"] =  new CollectionSet($this->scopes, Base::ASCII);
-        }
-        if (isset($this->scopes_requested)) {
-            $prepared["scopes_requested"] =  new CollectionSet($this->scopes_requested, Base::ASCII);
-        }
-        if (isset($this->status)) {
-            $prepared["status"] =  new CollectionSet($this->status, Base::ASCII);
         }
 
         if (isset($this->orgauthorization)) {
