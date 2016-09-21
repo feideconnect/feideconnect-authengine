@@ -50,15 +50,15 @@ abstract class Model implements Utils\Loggable {
 
     public static function fromDB($key, $value) {
 
-        if (isset(static::$_types[$key])) {
-            if (static::$_types[$key] === 'timestamp') {
-                if ($value === null) {
-                    return null;
-                }
-                return Timestamp::fromCassandraTimestamp($value);
+        switch (static::getPropertyType($key)) {
+        case 'timestamp':
+            if ($value === null) {
+                return null;
             }
+            return Timestamp::fromCassandraTimestamp($value);
+        default:
+            return $value;
         }
-        return $value;
 
     }
 
