@@ -77,7 +77,7 @@ class DBHelper extends \PHPUnit_Framework_TestCase {
             'name' => 'Test API',
             'owner' => $user->userid,
             'scopes' => ['userid', 'name', 'email', 'userid-feide'],
-            'scopedef' => json_encode(array(
+            'scopedef' => array(
                 'title' => 'Basic',
                 'descr' => 'Test api',
                 'policy' => array('auto' => true),
@@ -103,7 +103,7 @@ class DBHelper extends \PHPUnit_Framework_TestCase {
                         ),
                     ),
                 ),
-            )),
+            ),
         ));
         $this->db->saveAPIGK($apigk);
         return $apigk;

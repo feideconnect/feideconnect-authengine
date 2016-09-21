@@ -29,15 +29,16 @@ class APIGK extends \FeideConnect\Data\Model {
     ];
     private static $apiScopeRE = '/^gk_([a-z0-9\-]+)(_([a-z0-9\-]+))?$/D';
 
-    public function __construct($props) {
-
-        parent::__construct($props);
-
-        if (isset($props["scopedef"])) {
-            $this->scopedef = json_decode($props["scopedef"], true);
-            unset($props["scopedef"]);
+    public static function fromDB($key, $value) {
+        switch ($key) {
+        case 'scopedef':
+            if (is_null($value)) {
+                return null;
+            }
+            return json_decode($value, true);
+        default:
+            return parent::fromDB($key, $value);
         }
-
     }
 
     public static function isApiScope($scope) {
