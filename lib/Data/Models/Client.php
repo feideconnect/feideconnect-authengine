@@ -2,9 +2,6 @@
 
 namespace FeideConnect\Data\Models;
 
-use Cassandra\Type\CollectionMap;
-use Cassandra\Type\Base;
-
 class Client extends \FeideConnect\Data\Model {
 
     public $id, $client_secret, $created, $descr, $name, $owner, $organization, $logo, $redirect_uri, $scopes, $scopes_requested, $status, $type, $updated, $authproviders, $orgauthorization, $authoptions;
@@ -25,7 +22,7 @@ class Client extends \FeideConnect\Data\Model {
         'type' => 'default',
         'updated' => 'timestamp',
         'authproviders' => 'default',
-        'orgauthorization' => 'default',
+        'orgauthorization' => 'map<text,json>',
         'authoptions' => 'json',
         'systemdescr' => 'default',
         'supporturl' => 'default',
@@ -33,22 +30,6 @@ class Client extends \FeideConnect\Data\Model {
         'homepageurl' => 'default',
         'privacypolicyurl' => 'default',
     ];
-
-    public static function fromDB($key, $value) {
-        switch ($key) {
-        case 'orgauthorization':
-            if (is_null($value)) {
-                return null;
-            }
-            $ret = [];
-            foreach ($value as $realm => $authz) {
-                $ret[$realm] = json_decode($authz);
-            }
-            return $ret;
-        default:
-            return parent::fromDB($key, $value);
-        }
-    }
 
     public function getScopeList() {
         if (empty($this->scopes)) {
@@ -104,25 +85,6 @@ class Client extends \FeideConnect\Data\Model {
         }
         return $this->authoptions["requireInteraction"];
     }
-
-    public function getStorableArray() {
-
-        $prepared = parent::getStorableArray();
-
-
-        if (isset($this->orgauthorization)) {
-            $encoded = array();
-            foreach ($this->orgauthorization as $realm => $authz) {
-                $encoded[$realm] = json_encode($authz);
-            }
-            $prepared["orgauthorization"] = new CollectionMap($encoded, Base::ASCII, BASE::ASCII);
-        }
-
-        // echo var_export($prepared, true);
-
-        return $prepared;
-    }
-
 
     public function toLog() {
         return $this->getAsArrayLimited(["id", "name"]);

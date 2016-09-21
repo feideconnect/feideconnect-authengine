@@ -48,6 +48,12 @@ abstract class Model implements Utils\Loggable {
         switch (static::$_properties[$key]) {
         case 'json':
             return json_decode($value, true);
+        case 'map<text,json>':
+            $ret = [];
+            foreach ($value as $k => $v) {
+                $ret[$k] = json_decode($v, true);
+            }
+            return $ret;
         case 'timestamp':
             return Timestamp::fromCassandraTimestamp($value);
         default:
@@ -103,6 +109,10 @@ abstract class Model implements Utils\Loggable {
                 break;
             case 'map<text,blob>':
                 $value = new \Cassandra\Type\CollectionMap($value, \Cassandra\Type\Base::ASCII, \Cassandra\Type\Base::BLOB);
+                break;
+            case 'map<text,json>':
+                $value = array_map('json_encode', $value);
+                $value = new \Cassandra\Type\CollectionMap($value, \Cassandra\Type\Base::ASCII, \Cassandra\Type\Base::ASCII);
                 break;
             case 'map<text,set<text>>':
                 $value = new \Cassandra\Type\CollectionMap($value, \Cassandra\Type\Base::ASCII, ['type' => \Cassandra\Type\Base::COLLECTION_SET, 'value' => \Cassandra\Type\Base::ASCII]);
