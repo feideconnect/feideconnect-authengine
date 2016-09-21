@@ -34,24 +34,25 @@ class Client extends \FeideConnect\Data\Model {
         'privacypolicyurl' => 'default',
     ];
 
-    public function __construct($props = array()) {
-
-        parent::__construct($props);
-
-        if (isset($props["orgauthorization"])) {
-            $this->orgauthorization = array();
-            foreach ($props["orgauthorization"] as $realm => $authz) {
-                $this->orgauthorization[$realm] = json_decode($authz);
+    public static function fromDB($key, $value) {
+        switch ($key) {
+        case 'orgauthorization':
+            if (is_null($value)) {
+                return null;
             }
-            unset($props["orgauthorization"]);
+            $ret = [];
+            foreach ($value as $realm => $authz) {
+                $ret[$realm] = json_decode($authz);
+            }
+            return $ret;
+        case 'authoptions':
+            if (is_null($value)) {
+                return null;
+            }
+            return json_decode($value, true);
+        default:
+            return parent::fromDB($key, $value);
         }
-        if (isset($props["authoptions"])) {
-            $this->authoptions = json_decode($props["authoptions"], true);
-            unset($props["authoptions"]);
-        } else {
-            $this->authoptions = [];
-        }
-
     }
 
     public function getScopeList() {
