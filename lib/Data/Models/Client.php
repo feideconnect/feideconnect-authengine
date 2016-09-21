@@ -2,7 +2,6 @@
 
 namespace FeideConnect\Data\Models;
 
-use Cassandra\Type\CollectionList;
 use Cassandra\Type\CollectionMap;
 use Cassandra\Type\Base;
 use Cassandra\Type\Blob;
@@ -20,7 +19,7 @@ class Client extends \FeideConnect\Data\Model {
         'owner' => 'uuid',
         'organization' => 'default',
         'logo' => 'default',
-        'redirect_uri' => 'default',
+        'redirect_uri' => 'list<text>',
         'scopes' => 'set<text>',
         'scopes_requested' => 'set<text>',
         'status' => 'set<text>',
@@ -118,10 +117,6 @@ class Client extends \FeideConnect\Data\Model {
 
         if (isset($this->logo)) {
             $prepared["logo"] =  new Blob($this->logo);
-        }
-
-        if (isset($this->redirect_uri)) {
-            $prepared["redirect_uri"] =  new CollectionList($this->redirect_uri, Base::ASCII);
         }
 
         if (isset($this->orgauthorization)) {

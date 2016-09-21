@@ -90,6 +90,9 @@ abstract class Model implements Utils\Loggable {
             }
             $value = $this->{$k};
             switch ($type) {
+            case 'list<text>':
+                $value = new \Cassandra\Type\CollectionList($value, \Cassandra\Type\Base::ASCII);
+                break;
             case 'map<text,set<text>>':
                 $value = new \Cassandra\Type\CollectionMap($value, \Cassandra\Type\Base::ASCII, ['type' => \Cassandra\Type\Base::COLLECTION_SET, 'value' => \Cassandra\Type\Base::ASCII]);
                 break;
