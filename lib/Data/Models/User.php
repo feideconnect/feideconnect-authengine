@@ -22,7 +22,7 @@ class User extends \FeideConnect\Data\Model {
         'userid' => 'uuid',
         'email' => 'map<text,text>',
         'name' => 'map<text,text>',
-        'profilephoto' => 'default',
+        'profilephoto' => 'map<text,blob>',
         'profilephotohash' => 'map<text,text>',
         'userid_sec' => 'set<text>',
         'userid_sec_seen' => 'default',
@@ -41,9 +41,6 @@ class User extends \FeideConnect\Data\Model {
 
         $prepared = parent::getStorableArray();
 
-        if (isset($this->profilephoto)) {
-            $prepared["profilephoto"] =  new CollectionMap($this->profilephoto, Base::ASCII, Base::BLOB);
-        }
         if (isset($this->userid_sec_seen)) {
             $prepared["userid_sec_seen"] =  new CollectionMap($this->userid_sec_seen, Base::ASCII, Base::TIMESTAMP);
         }

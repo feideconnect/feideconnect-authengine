@@ -96,6 +96,9 @@ abstract class Model implements Utils\Loggable {
             case 'list<text>':
                 $value = new \Cassandra\Type\CollectionList($value, \Cassandra\Type\Base::ASCII);
                 break;
+            case 'map<text,blob>':
+                $value = new \Cassandra\Type\CollectionMap($value, \Cassandra\Type\Base::ASCII, \Cassandra\Type\Base::BLOB);
+                break;
             case 'map<text,set<text>>':
                 $value = new \Cassandra\Type\CollectionMap($value, \Cassandra\Type\Base::ASCII, ['type' => \Cassandra\Type\Base::COLLECTION_SET, 'value' => \Cassandra\Type\Base::ASCII]);
                 break;
