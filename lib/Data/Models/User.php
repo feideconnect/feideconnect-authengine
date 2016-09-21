@@ -20,16 +20,19 @@ class User extends \FeideConnect\Data\Model {
 
     public $userid, $email, $name, $profilephoto, $profilephotohash, $userid_sec, $userid_sec_seen, $selectedsource, $aboveagelimit, $usageterms, $created, $updated;
 
-    protected static $_properties = array(
-        "userid", "email", "name",
-        "profilephoto", "profilephotohash",
-        "userid_sec", "userid_sec_seen", "selectedsource",
-        "aboveagelimit", "usageterms",
-        "created", "updated"
-    );
-    protected static $_types = [
-        "created" => "timestamp",
-        "updated" => "timestamp"
+    protected static $_properties = [
+        'userid' => 'default',
+        'email' => 'default',
+        'name' => 'default',
+        'profilephoto' => 'default',
+        'profilephotohash' => 'default',
+        'userid_sec' => 'default',
+        'userid_sec_seen' => 'default',
+        'selectedsource' => 'default',
+        'aboveagelimit' => 'default',
+        'usageterms' => 'default',
+        'created' => 'timestamp',
+        'updated' => 'timestamp',
     ];
 
     public function isBelowAgeLimit() {

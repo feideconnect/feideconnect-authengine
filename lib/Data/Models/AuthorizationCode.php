@@ -15,15 +15,17 @@ class AuthorizationCode extends \FeideConnect\Data\Model {
 
     public $code, $clientid, $userid, $scope, $token_type, $redirect_uri, $idtoken, $issued, $validuntil, $apigk_scopes;
 
-    protected static $_properties = array(
-        "code", "clientid", "userid",
-        "scope", "token_type", "redirect_uri",
-        "idtoken",
-        "issued", "validuntil", "apigk_scopes"
-    );
-    protected static $_types = [
-        "issued" => "timestamp",
-        "validuntil" => "timestamp"
+    protected static $_properties = [
+        'code' => 'default',
+        'clientid' => 'default',
+        'userid' => 'default',
+        'scope' => 'default',
+        'token_type' => 'default',
+        'redirect_uri' => 'default',
+        'idtoken' => 'default',
+        'issued' => 'timestamp',
+        'validuntil' => 'timestamp',
+        'apigk_scopes' => 'default',
     ];
 
 

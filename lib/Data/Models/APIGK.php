@@ -10,16 +10,26 @@ class APIGK extends \FeideConnect\Data\Model {
 
     public $id, $name, $descr, $owner, $organization, $scopes, $scopes_requested, $endpoints, $expose, $httpscertpinned, $requireuser, $scopedef, $trust, $logo, $status, $created, $updated;
 
-    protected static $_properties = array(
-        "id", "name", "descr",
-        "owner", "organization",  "endpoints", "expose", "httpscertpinned", "requireuser", "scopedef", "trust", "logo",
-        "scopes", "scopes_requested",
-        "privacypolicyurl", "systemdescr",
-        "status", "created", "updated"
-    );
-    protected static $_types = [
-        "created" => "timestamp",
-        "updated" => "timestamp"
+    protected static $_properties = [
+        'id' => 'default',
+        'name' => 'default',
+        'descr' => 'default',
+        'owner' => 'default',
+        'organization' => 'default',
+        'endpoints' => 'default',
+        'expose' => 'default',
+        'httpscertpinned' => 'default',
+        'requireuser' => 'default',
+        'scopedef' => 'default',
+        'trust' => 'default',
+        'logo' => 'default',
+        'scopes' => 'default',
+        'scopes_requested' => 'default',
+        'privacypolicyurl' => 'default',
+        'systemdescr' => 'default',
+        'status' => 'default',
+        'created' => 'timestamp',
+        'updated' => 'timestamp',
     ];
     private static $apiScopeRE = '/^gk_([a-z0-9\-]+)(_([a-z0-9\-]+))?$/D';
 

@@ -29,10 +29,13 @@ class Organization extends \FeideConnect\Data\Model {
 
     public $id, $name, $realm, $type, $uiinfo, $service;
 
-    protected static $_properties = array(
-        "id", "name", "realm", "type", "uiinfo", "services"
-    );
-    protected static $_types = [
+    protected static $_properties = [
+        'id' => 'default',
+        'name' => 'default',
+        'realm' => 'default',
+        'type' => 'default',
+        'uiinfo' => 'default',
+        'services' => 'default',
     ];
 
 

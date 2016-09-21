@@ -14,15 +14,17 @@ class AccessToken extends \FeideConnect\Data\Model {
 
     public $access_token, $clientid, $userid, $issued, $scope, $token_type, $validuntil, $lastuse, $apigkid, $subtokens;
 
-    protected static $_properties = array(
-        "access_token", "clientid", "userid", "issued",
-        "scope", "token_type", "validuntil", "lastuse",
-        "apigkid", "subtokens"
-    );
-    protected static $_types = [
-        "issued" => "timestamp",
-        "validuntil" => "timestamp",
-        "lastuse" => "timestamp"
+    protected static $_properties = [
+        'access_token' => 'default',
+        'clientid' => 'default',
+        'userid' => 'default',
+        'issued' => 'timestamp',
+        'scope' => 'default',
+        'token_type' => 'default',
+        'validuntil' => 'timestamp',
+        'lastuse' => 'timestamp',
+        'apigkid' => 'default',
+        'subtokens' => 'default',
     ];
 
 

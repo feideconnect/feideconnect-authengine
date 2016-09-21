@@ -10,29 +10,26 @@ abstract class Model implements Utils\Loggable {
 
     protected $_repo;
     protected static $_properties = [];
-    protected static $_types = [];
 
 
     public function __construct($props = array()) {
         $this->_repo = StorageProvider::getStorage();
 
-        foreach (static::$_properties as $k) {
+        foreach (static::$_properties as $k => $type) {
             $this->{$k} = null;
         }
 
         foreach ($props as $k => $v) {
-            if (!in_array($k, static::$_properties)) {
+            if (!array_key_exists($k, static::$_properties)) {
                 error_log(get_class($this) . ": Trying to set a property [" . $k . "] that is not legal.");
                 continue;
             }
 
             // Force specified typed attributes to be of correct type class.
-            if (isset(static::$_types[$k])) {
-                if (static::$_types[$k] === 'timestamp') {
-                    if (!($v instanceof Timestamp) && !(is_null($v))) {
-                        error_log(get_class($this) . ": Trying to set property [" . $k . "] with an invalid timestamp type");
-                        continue;
-                    }
+            if (static::$_properties[$k] === 'timestamp') {
+                if (!($v instanceof Timestamp) && !(is_null($v))) {
+                    error_log(get_class($this) . ": Trying to set property [" . $k . "] with an invalid timestamp type");
+                    continue;
                 }
             }
 
@@ -42,10 +39,10 @@ abstract class Model implements Utils\Loggable {
     }
 
     private static function getPropertyType($key) {
-        if (!isset(static::$_types[$key])) {
+        if (!isset(static::$_properties[$key])) {
             return 'unknown';
         }
-        return static::$_types[$key];
+        return static::$_properties[$key];
     }
 
     public static function fromDB($key, $value) {
@@ -70,9 +67,9 @@ abstract class Model implements Utils\Loggable {
     public function getAsArray() {
 
         $a = array();
-        foreach (static::$_properties as $k) {
+        foreach (static::$_properties as $k => $type) {
             if (isset($this->{$k})) {
-                if (static::getPropertyType($k) === 'timestamp') {
+                if ($type === 'timestamp') {
                     $a[$k] = $this->{$k}->format();
                     continue;
                 }
@@ -92,12 +89,12 @@ abstract class Model implements Utils\Loggable {
     public function getStorableArray() {
 
         $a = array();
-        foreach (static::$_properties as $k) {
+        foreach (static::$_properties as $k => $type) {
             if (!isset($this->{$k})) {
                 continue;
             }
             $value = $this->{$k};
-            switch (static::getPropertyType($k)) {
+            switch ($type) {
             case 'timestamp':
                 $value = $value->getDBobject();
                 break;

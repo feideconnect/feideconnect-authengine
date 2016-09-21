@@ -13,16 +13,29 @@ class Client extends \FeideConnect\Data\Model {
 
     public $id, $client_secret, $created, $descr, $name, $owner, $organization, $logo, $redirect_uri, $scopes, $scopes_requested, $status, $type, $updated, $authproviders, $orgauthorization, $authoptions;
 
-
-    protected static $_properties = array(
-        "id", "client_secret", "created", "descr", "name", "owner", "organization",
-        "logo",
-        "redirect_uri", "scopes", "scopes_requested", "status", "type", "updated", "authproviders", "orgauthorization",
-        "authoptions", "systemdescr", "supporturl", "loginurl", "homepageurl", "privacypolicyurl",
-    );
-    protected static $_types = [
-        "created" => "timestamp",
-        "updated" => "timestamp"
+    protected static $_properties = [
+        'id' => 'default',
+        'client_secret' => 'default',
+        'created' => 'timestamp',
+        'descr' => 'default',
+        'name' => 'default',
+        'owner' => 'default',
+        'organization' => 'default',
+        'logo' => 'default',
+        'redirect_uri' => 'default',
+        'scopes' => 'default',
+        'scopes_requested' => 'default',
+        'status' => 'default',
+        'type' => 'default',
+        'updated' => 'timestamp',
+        'authproviders' => 'default',
+        'orgauthorization' => 'default',
+        'authoptions' => 'default',
+        'systemdescr' => 'default',
+        'supporturl' => 'default',
+        'loginurl' => 'default',
+        'homepageurl' => 'default',
+        'privacypolicyurl' => 'default',
     ];
 
     public function __construct($props = array()) {

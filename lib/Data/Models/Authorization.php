@@ -12,11 +12,12 @@ class Authorization extends \FeideConnect\Data\Model {
 
     public $clientid, $userid, $scopes, $issued, $apigk_scopes;
 
-    protected static $_properties = array(
-        "clientid", "userid", "scopes", "issued", "apigk_scopes"
-    );
-    protected static $_types = [
-        "issued" => "timestamp"
+    protected static $_properties = [
+        'clientid' => 'default',
+        'userid' => 'default',
+        'scopes' => 'default',
+        'issued' => 'timestamp',
+        'apigk_scopes' => 'default',
     ];
 
 
