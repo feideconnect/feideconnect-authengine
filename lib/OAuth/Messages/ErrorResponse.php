@@ -19,25 +19,10 @@ class ErrorResponse extends Message {
     }
 
     public function getJSONResponse($httpcode = 200) {
+        $response = parent::getJSONResponse();
 
-        $body = array();
-        foreach ($this as $key => $value) {
-            if (empty($value)) {
-                continue;
-            }
-            $body[$key] = $value;
-        }
-
-//        header('x', true, $httpcode);
-
-        $response = new JSONResponse($body);
         $response->setHeader("WWW-Authenticate", 'Bearer realm="feideconnect", error="' . $this->error . '", error_description="' . urlencode($this->error_description));
         $response->setStatus($httpcode);
-        // if($this->error === 'invalid_client') {
-        //     $response->setStatus(401);
-        // } else {
-        //     $response->setStatus(400);
-        // }
 
         return $response;
 
