@@ -41,6 +41,13 @@ abstract class Model implements Utils\Loggable {
 
     }
 
+    private static function getPropertyType($key) {
+        if (!isset(static::$_types[$key])) {
+            return 'unknown';
+        }
+        return static::$_types[$key];
+    }
+
     public static function fromDB($key, $value) {
 
         if (isset(static::$_types[$key])) {
@@ -67,7 +74,7 @@ abstract class Model implements Utils\Loggable {
         $a = array();
         foreach (static::$_properties as $k) {
             if (isset($this->{$k})) {
-                if (isset(static::$_types[$k])) {
+                if (static::getPropertyType($k) === 'timestamp') {
                     $a[$k] = $this->{$k}->format();
                     continue;
                 }
