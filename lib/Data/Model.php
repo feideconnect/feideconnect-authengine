@@ -99,6 +99,9 @@ abstract class Model implements Utils\Loggable {
             case 'map<text,set<text>>':
                 $value = new \Cassandra\Type\CollectionMap($value, \Cassandra\Type\Base::ASCII, ['type' => \Cassandra\Type\Base::COLLECTION_SET, 'value' => \Cassandra\Type\Base::ASCII]);
                 break;
+            case 'map<text,text>':
+                $value = new \Cassandra\Type\CollectionMap($value, \Cassandra\Type\Base::ASCII, \Cassandra\Type\Base::ASCII);
+                break;
             case 'map<text,uuid>':
                 $value = new \Cassandra\Type\CollectionMap($value, \Cassandra\Type\Base::ASCII, \Cassandra\Type\Base::UUID);
                 break;

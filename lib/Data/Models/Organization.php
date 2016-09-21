@@ -30,7 +30,7 @@ class Organization extends \FeideConnect\Data\Model {
 
     protected static $_properties = [
         'id' => 'default',
-        'name' => 'default',
+        'name' => 'map<text,text>',
         'realm' => 'default',
         'type' => 'set<text>',
         'uiinfo' => 'default',
@@ -136,11 +136,6 @@ class Organization extends \FeideConnect\Data\Model {
 
         $prepared = parent::getStorableArray();
         $prepared["uiinfo"] = json_encode($this->uiinfo);
-
-        if (isset($this->name)) {
-            $prepared["name"] =  new CollectionMap($this->name, Base::ASCII, Base::ASCII);
-        }
-
         return $prepared;
     }
 

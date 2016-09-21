@@ -20,10 +20,10 @@ class User extends \FeideConnect\Data\Model {
 
     protected static $_properties = [
         'userid' => 'uuid',
-        'email' => 'default',
-        'name' => 'default',
+        'email' => 'map<text,text>',
+        'name' => 'map<text,text>',
         'profilephoto' => 'default',
-        'profilephotohash' => 'default',
+        'profilephotohash' => 'map<text,text>',
         'userid_sec' => 'set<text>',
         'userid_sec_seen' => 'default',
         'selectedsource' => 'default',
@@ -41,17 +41,8 @@ class User extends \FeideConnect\Data\Model {
 
         $prepared = parent::getStorableArray();
 
-        if (isset($this->name)) {
-            $prepared["name"] =  new CollectionMap($this->name, Base::ASCII, Base::ASCII);
-        }
-        if (isset($this->email)) {
-            $prepared["email"] =  new CollectionMap($this->email, Base::ASCII, Base::ASCII);
-        }
         if (isset($this->profilephoto)) {
             $prepared["profilephoto"] =  new CollectionMap($this->profilephoto, Base::ASCII, Base::BLOB);
-        }
-        if (isset($this->profilephotohash)) {
-            $prepared["profilephotohash"] =  new CollectionMap($this->profilephotohash, Base::ASCII, Base::ASCII);
         }
         if (isset($this->userid_sec_seen)) {
             $prepared["userid_sec_seen"] =  new CollectionMap($this->userid_sec_seen, Base::ASCII, Base::TIMESTAMP);
