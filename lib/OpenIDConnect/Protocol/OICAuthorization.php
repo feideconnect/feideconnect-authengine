@@ -26,11 +26,6 @@ class OICAuthorization extends OAuthAuthorization {
 
     }
 
-    protected function evaluateStepUp($aevaluator) {
-        return null;
-    }
-
-
     protected function getIDToken() {
         $openid = new \FeideConnect\OpenIDConnect\OpenIDConnect();
         $iat = $this->account->getAuthInstant();
