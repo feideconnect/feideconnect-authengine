@@ -28,7 +28,7 @@ class AuthorizationFlowHelper extends DBHelper {
         AuthSource::setFactory(['\tests\MockAuthSource', 'create']);
     }
 
-    protected function doAuthorizationRequest($overrides = null) {
+    protected function doAuthorizationRequest($overrides=null) {
         $_REQUEST['acresponse'] = '{"id": "https://idp.feide.no","subid":"example.org", "userids": ["feide:testuser@example.org"]}';
         $_REQUEST['verifier'] = $this->user->getVerifier();
         $_REQUEST['bruksvilkar'] = 'yes';
