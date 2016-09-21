@@ -14,6 +14,10 @@ class OAuthAuthorizationCodeTest extends AuthorizationFlowHelper {
         $_REQUEST['response_type'] = 'code';
     }
 
+    public function testNoEffectiveScopes() {
+        $this->doTestNoEffectiveScopes('email', 'email');
+    }
+
     public function testTokenBasicAuthOK() {
         $router = new Router();
         $code = $this->getAuthorizationCode();

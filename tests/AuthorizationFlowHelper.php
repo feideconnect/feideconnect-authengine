@@ -84,11 +84,11 @@ class AuthorizationFlowHelper extends DBHelper {
 
     }
 
-    public function testNoEffectiveScopes() {
+    public function doTestNoEffectiveScopes($scope, $approved_scopes) {
 
         $overrides = [
-            'approved_scopes' => 'email',
-            'scope' => 'email',
+            'approved_scopes' => $approved_scopes,
+            'scope' => $scope,
         ];
 
         $response = $this->doAuthorizationRequest($overrides);
@@ -111,6 +111,7 @@ class AuthorizationFlowHelper extends DBHelper {
         $this->assertArrayHasKey('expires_in', $data);
         $this->assertArrayHasKey('scope', $data);
         $this->assertEquals('Bearer', $data['token_type']);
+        return $data;
     }
 
     protected function assertTokenAccessDenied($response) {
