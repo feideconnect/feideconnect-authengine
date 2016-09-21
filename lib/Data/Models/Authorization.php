@@ -2,7 +2,6 @@
 
 namespace FeideConnect\Data\Models;
 
-use Cassandra\Type\Uuid;
 use Cassandra\Type\CollectionMap;
 use Cassandra\Type\CollectionSet;
 use Cassandra\Type\Base;
@@ -13,8 +12,8 @@ class Authorization extends \FeideConnect\Data\Model {
     public $clientid, $userid, $scopes, $issued, $apigk_scopes;
 
     protected static $_properties = [
-        'clientid' => 'default',
-        'userid' => 'default',
+        'clientid' => 'uuid',
+        'userid' => 'uuid',
         'scopes' => 'default',
         'issued' => 'timestamp',
         'apigk_scopes' => 'default',
@@ -30,12 +29,6 @@ class Authorization extends \FeideConnect\Data\Model {
 
         if (isset($this->scopes)) {
             $prepared["scopes"] = new CollectionSet($this->scopes, Base::ASCII);
-        }
-        if (isset($this->clientid)) {
-            $prepared["clientid"] = new Uuid($this->clientid);
-        }
-        if (isset($this->userid)) {
-            $prepared["userid"] = new Uuid($this->userid);
         }
         if (isset($this->apigk_scopes)) {
             $prepared["apigk_scopes"] = new CollectionMap($this->apigk_scopes, Base::ASCII, ["type" => Base::COLLECTION_SET, "value" => Base::ASCII]);

@@ -7,7 +7,6 @@ use FeideConnect\Config;
 use FeideConnect\Authentication\Account;
 use FeideConnect\Data\Model;
 use FeideConnect\Utils\Strings;
-use Cassandra\Type\Uuid;
 use Cassandra\Type\CollectionMap;
 use Cassandra\Type\CollectionSet;
 use Cassandra\Type\Base;
@@ -21,7 +20,7 @@ class User extends \FeideConnect\Data\Model {
     public $userid, $email, $name, $profilephoto, $profilephotohash, $userid_sec, $userid_sec_seen, $selectedsource, $aboveagelimit, $usageterms, $created, $updated;
 
     protected static $_properties = [
-        'userid' => 'default',
+        'userid' => 'uuid',
         'email' => 'default',
         'name' => 'default',
         'profilephoto' => 'default',
@@ -54,9 +53,6 @@ class User extends \FeideConnect\Data\Model {
         }
         if (isset($this->profilephotohash)) {
             $prepared["profilephotohash"] =  new CollectionMap($this->profilephotohash, Base::ASCII, Base::ASCII);
-        }
-        if (isset($this->userid)) {
-            $prepared["userid"] = new Uuid($this->userid);
         }
         if (isset($this->userid_sec)) {
             $prepared["userid_sec"] =  new CollectionSet($this->userid_sec, Base::ASCII);

@@ -5,7 +5,6 @@ namespace FeideConnect\Data\Models;
 use FeideConnect\Data\StorageProvider;
 use FeideConnect\OpenIDConnect\IDToken;
 
-use Cassandra\Type\Uuid;
 use Cassandra\Type\CollectionMap;
 use Cassandra\Type\CollectionSet;
 use Cassandra\Type\Base;
@@ -16,9 +15,9 @@ class AuthorizationCode extends \FeideConnect\Data\Model {
     public $code, $clientid, $userid, $scope, $token_type, $redirect_uri, $idtoken, $issued, $validuntil, $apigk_scopes;
 
     protected static $_properties = [
-        'code' => 'default',
-        'clientid' => 'default',
-        'userid' => 'default',
+        'code' => 'uuid',
+        'clientid' => 'uuid',
+        'userid' => 'uuid',
         'scope' => 'default',
         'token_type' => 'default',
         'redirect_uri' => 'default',
@@ -33,16 +32,6 @@ class AuthorizationCode extends \FeideConnect\Data\Model {
 
         $prepared = parent::getStorableArray();
 
-
-        if (isset($this->code)) {
-            $prepared["code"] = new Uuid($this->code);
-        }
-        if (isset($this->clientid)) {
-            $prepared["clientid"] = new Uuid($this->clientid);
-        }
-        if (isset($this->userid)) {
-            $prepared["userid"] = new Uuid($this->userid);
-        }
 
         if (isset($this->scope)) {
             $prepared["scope"] = new CollectionSet($this->scope, Base::ASCII);

@@ -2,7 +2,6 @@
 
 namespace FeideConnect\Data\Models;
 
-use Cassandra\Type\Uuid;
 use Cassandra\Type\CollectionList;
 use Cassandra\Type\CollectionSet;
 use Cassandra\Type\CollectionMap;
@@ -14,12 +13,12 @@ class Client extends \FeideConnect\Data\Model {
     public $id, $client_secret, $created, $descr, $name, $owner, $organization, $logo, $redirect_uri, $scopes, $scopes_requested, $status, $type, $updated, $authproviders, $orgauthorization, $authoptions;
 
     protected static $_properties = [
-        'id' => 'default',
+        'id' => 'uuid',
         'client_secret' => 'default',
         'created' => 'timestamp',
         'descr' => 'default',
         'name' => 'default',
-        'owner' => 'default',
+        'owner' => 'uuid',
         'organization' => 'default',
         'logo' => 'default',
         'redirect_uri' => 'default',
@@ -118,9 +117,6 @@ class Client extends \FeideConnect\Data\Model {
         $prepared = parent::getStorableArray();
 
 
-        if (isset($this->id)) {
-            $prepared["id"] = new Uuid($this->id);
-        }
         if (isset($this->logo)) {
             $prepared["logo"] =  new Blob($this->logo);
         }
@@ -136,10 +132,6 @@ class Client extends \FeideConnect\Data\Model {
         }
         if (isset($this->status)) {
             $prepared["status"] =  new CollectionSet($this->status, Base::ASCII);
-        }
-
-        if (isset($this->owner)) {
-            $prepared["owner"] =  new Uuid($this->owner);
         }
 
         if (isset($this->orgauthorization)) {

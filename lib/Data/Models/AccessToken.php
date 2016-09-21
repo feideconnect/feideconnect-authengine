@@ -5,7 +5,6 @@ namespace FeideConnect\Data\Models;
 use FeideConnect\Data\StorageProvider;
 use FeideConnect\Data\Types\Timestamp;
 use FeideConnect\Utils\Misc;
-use Cassandra\Type\Uuid;
 use Cassandra\Type\CollectionMap;
 use Cassandra\Type\CollectionSet;
 use Cassandra\Type\Base;
@@ -15,9 +14,9 @@ class AccessToken extends \FeideConnect\Data\Model {
     public $access_token, $clientid, $userid, $issued, $scope, $token_type, $validuntil, $lastuse, $apigkid, $subtokens;
 
     protected static $_properties = [
-        'access_token' => 'default',
-        'clientid' => 'default',
-        'userid' => 'default',
+        'access_token' => 'uuid',
+        'clientid' => 'uuid',
+        'userid' => 'uuid',
         'issued' => 'timestamp',
         'scope' => 'default',
         'token_type' => 'default',
@@ -32,14 +31,6 @@ class AccessToken extends \FeideConnect\Data\Model {
 
         $prepared = parent::getStorableArray();
 
-        if (isset($this->access_token)) {
-            $prepared["access_token"] = new Uuid($this->access_token);
-        }
-        if (isset($this->clientid)) {
-            $prepared["clientid"] = new Uuid($this->clientid);
-        }
-
-        $prepared["userid"] = new Uuid($this->userid);
         if (isset($this->scope)) {
             $prepared["scope"] = new CollectionSet($this->scope, Base::ASCII);
         }

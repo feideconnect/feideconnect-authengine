@@ -2,7 +2,6 @@
 
 namespace FeideConnect\Data\Models;
 
-use Cassandra\Type\Uuid;
 use Cassandra\Type\CollectionSet;
 use Cassandra\Type\Base;
 
@@ -14,7 +13,7 @@ class APIGK extends \FeideConnect\Data\Model {
         'id' => 'default',
         'name' => 'default',
         'descr' => 'default',
-        'owner' => 'default',
+        'owner' => 'uuid',
         'organization' => 'default',
         'endpoints' => 'default',
         'expose' => 'default',
@@ -71,9 +70,6 @@ class APIGK extends \FeideConnect\Data\Model {
         $data = parent::getStorableArray();
         if (isset($data['scopedef'])) {
             $data['scopedef'] = json_encode($data['scopedef']);
-        }
-        if (isset($this->owner)) {
-            $data["owner"] =  new Uuid($this->owner);
         }
         if (isset($this->scopes)) {
             $data["scopes"] =  new CollectionSet($this->scopes, Base::ASCII);

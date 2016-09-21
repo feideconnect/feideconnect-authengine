@@ -93,6 +93,9 @@ abstract class Model implements Utils\Loggable {
             case 'timestamp':
                 $value = $value->getDBobject();
                 break;
+            case 'uuid':
+                $value = new \Cassandra\Type\Uuid($value);
+                break;
             default:
                 break;
             }
