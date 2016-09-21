@@ -18,18 +18,6 @@ class Message implements Utils\Loggable {
 
     }
 
-
-    public function asQS() {
-        $qs = array();
-        foreach ($this as $key => $value) {
-            if (empty($value)) {
-                continue;
-            }
-            $qs[] = urlencode($key) . '=' . urlencode($value);
-        }
-        return join('&', $qs);
-    }
-
     public function getAsArray() {
         $arr = array();
         foreach ($this as $k => $v) {
@@ -51,13 +39,14 @@ class Message implements Utils\Loggable {
 
 
     public function getRedirectURL($endpoint, $hash = false) {
+        $qs = http_build_query($this->getAsArray());
         if ($hash) {
-            $redirurl = $endpoint . '#' . $this->asQS();
+            $redirurl = $endpoint . '#' . $qs;
         } else {
             if (strstr($endpoint, "?")) {
-                $redirurl = $endpoint . '&' . $this->asQS();
+                $redirurl = $endpoint . '&' . $qs;
             } else {
-                $redirurl = $endpoint . '?' . $this->asQS();
+                $redirurl = $endpoint . '?' . $qs;
             }
 
         }
