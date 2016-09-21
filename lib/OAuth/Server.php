@@ -66,12 +66,12 @@ class Server {
 
             // Parse the incoming Authorization Request.
             $request = new Messages\AuthorizationRequest($_REQUEST);
+            $openidConnect = false;
             if (in_array('openid', $request->getScopeList())) {
                 $request = new OpenIDConnect\Messages\AuthorizationRequest($_REQUEST);
-                $pAuthorization = new OpenIDConnect\Protocol\OICAuthorization($request);
-            } else {
-                $pAuthorization = new OAuthAuthorization($request);
+                $openidConnect = true;
             }
+            $pAuthorization = new OAuthAuthorization($request, $openidConnect);
 
             return $pAuthorization->process();
 

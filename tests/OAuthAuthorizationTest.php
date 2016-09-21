@@ -16,7 +16,7 @@ class OAuthAuthorizationTest extends AuthorizationHelper {
 
     protected function doRun() {
         $request = new Messages\AuthorizationRequest($_REQUEST);
-        $auth = new OAuthAuthorization($request);
+        $auth = new OAuthAuthorization($request, false);
         return $auth->process();
     }
 

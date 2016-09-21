@@ -2,7 +2,7 @@
 namespace tests;
 
 use FeideConnect\OpenIDConnect\Messages;
-use FeideConnect\OpenIDConnect\Protocol\OICAuthorization;
+use FeideConnect\OAuth\Protocol\OAuthAuthorization;
 use FeideConnect\Authentication\AuthSource;
 
 function base64url_decode($data) {
@@ -28,7 +28,7 @@ class OICAuthorizationTest extends OAuthAuthorizationTest {
 
     protected function doRun() {
         $request = new Messages\AuthorizationRequest($_REQUEST);
-        $auth = new OICAuthorization($request);
+        $auth = new OAuthAuthorization($request, true);
         return $auth->process();
     }
 

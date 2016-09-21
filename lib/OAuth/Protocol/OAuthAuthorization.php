@@ -35,13 +35,15 @@ class OAuthAuthorization {
     protected $account = null;
 
     protected $aevaluator = null;
+    protected $openidConnect;
 
-    public function __construct(Messages\Message $request) {
-
+    public function __construct(Messages\Message $request, $openidConnect) {
 
         $this->storage = StorageProvider::getStorage();
 
         $this->request = $request;
+        $this->openidConnect = $openidConnect;
+
         $this->auth = new Authenticator();
 
         // echo 'About to require authentication'; var_dump($this->request); Exit;
@@ -247,15 +249,45 @@ class OAuthAuthorization {
         $this->storage->updateLoginStats($this->client, $this->account->getSourceID());
     }
 
+    protected function getIDToken() {
+        $openid = new \FeideConnect\OpenIDConnect\OpenIDConnect();
+        $iat = $this->account->getAuthInstant();
+        // echo '<pre>iat'; print_r($iat); exit;
+        $idtoken = $openid->getIDtoken($this->user->userid, $this->client->id, $iat);
+        if (isset($this->request->nonce)) {
+            $idtoken->set('nonce', $this->request->nonce);
+        }
+        return $idtoken;
+    }
+
+
     public function process() {
 
+        if ($this->openidConnect) {
+            if ($this->request->isPassiveRequest()) {
+                $this->isPassive = true;
+            }
+
+            if ($this->request->loginPromptRequested()) {
+                // If forcer authentication is requested by prompt=login, we will transform this into an
+                // requirement about a less than 60 (+skew) seconds old authentication session.
+                $this->maxage = 60;
+
+            } else if ($this->request->max_age && is_int($this->request->max_age)) {
+                $this->maxage = $this->request->max_age;
+                if ($this->maxage < 10) {
+                    $this->maxage = 10;
+                }
+            }
+        }
         $res = $this->preProcess();
         if ($res !== null) {
             return $res;
         }
 
-        switch ($this->request->response_type) {
-            case 'token':
+        if ($this->openidConnect) {
+            switch ($this->request->response_type) {
+            case 'id_token token':
 
                 return $this->processToken();
 
@@ -263,9 +295,21 @@ class OAuthAuthorization {
 
                 return $this->processCode();
 
+            }
+            throw new OAuthException('invalid_request', 'Unsupported response_type ' . $this->request->response_type . ". Supported values are 'id_token token' and 'code'");
+        } else {
+            switch ($this->request->response_type) {
+            case 'token':
+                return $this->processToken();
+
+            case 'code':
+
+                return $this->processCode();
+
+            }
+            throw new Exception('Unsupported response_type in request. Only supported code and token.');
         }
 
-        throw new Exception('Unsupported response_type in request. Only supported code and token.');
 
     }
 
@@ -275,32 +319,42 @@ class OAuthAuthorization {
         $redirect_uri = $this->aevaluator->getValidatedRedirectURI();
         $scopesInQuestion = $this->aevaluator->getScopesInQuestion();
         $apigkScopes = $this->aevaluator->getAPIGKscopes();
+        if ($this->openidConnect) {
+            $flow = "OpenID Connect implicit grant";
+            $idtoken = $this->getIDToken();
+            $idtokenEnc = $idtoken->getEncoded();
+        } else {
+            $flow = "implicit grant";
+            $idtokenEnc = null;
+        }
 
         $tokenresponse = OAuthUtils::generateTokenResponse(
             $this->client,
             $this->user,
             $scopesInQuestion,
             $apigkScopes,
-            "implicit grant",
-            $this->request->state
+            $flow,
+            $this->request->state,
+            $idtokenEnc
         );
-
 
         return $tokenresponse->getRedirectResponse($redirect_uri, true);
 
     }
 
-
-
     protected function processCode() {
-
-
-
         $scopesInQuestion = $this->aevaluator->getScopesInQuestion();
         $apigkScopes = $this->aevaluator->getAPIGKscopes();
         $redirectURI = $this->aevaluator->getValidatedRedirectURI();
+        $idtoken = null;
+        if ($this->openidConnect) {
+            if (empty($this->request->redirect_uri)) {
+                throw new OAuthException("invalid_request", "Missing OpenID Connect required parameter [redirect_uri] at the authorization endpoint");
+            }
+            $idtoken = $this->getIDToken();
+        }
 
-        $code = Models\AuthorizationCode::generate($this->client, $this->user, $redirectURI, $scopesInQuestion, $apigkScopes);
+        $code = Models\AuthorizationCode::generate($this->client, $this->user, $redirectURI, $scopesInQuestion, $apigkScopes, $idtoken);
         $this->storage->saveAuthorizationCode($code);
 
         $authorizationresponse = Messages\AuthorizationResponse::generate($this->request, $code);
