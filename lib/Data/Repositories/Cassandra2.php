@@ -412,7 +412,7 @@ class Cassandra2 extends \FeideConnect\Data\Repository {
 
 
     public function getUserByUserIDsec($useridsec) {
-        $query = 'SELECT * FROM "userid_sec" WHERE "userid_sec" = :userid_sec';
+        $query = 'SELECT userid_sec, userid FROM "userid_sec" WHERE "userid_sec" = :userid_sec';
         $params = ['userid_sec' => $useridsec];
         $result = $this->query($query, $params, __FUNCTION__, null, false);
         if ($result === null) {
@@ -436,7 +436,7 @@ class Cassandra2 extends \FeideConnect\Data\Repository {
 
 
 
-        $query = 'SELECT * FROM "userid_sec" WHERE "userid_sec" IN :userid_sec';
+        $query = 'SELECT userid_sec, userid FROM "userid_sec" WHERE "userid_sec" IN :userid_sec';
         $params = ['userid_sec' => new CollectionSet($useridsec, Base::ASCII)];
 
         // echo var_export($params, true);
@@ -537,7 +537,7 @@ class Cassandra2 extends \FeideConnect\Data\Repository {
      */
 
     public function checkMandatory($realm, Models\Client $client) {
-        $query = 'SELECT * FROM "mandatory_clients" WHERE "realm" = :realm AND "clientid" = :clientid';
+        $query = 'SELECT realm, clientid FROM "mandatory_clients" WHERE "realm" = :realm AND "clientid" = :clientid';
         $params = ['realm' => $realm, 'clientid' => new Uuid($client->id)];
         return $this->query($query, $params, __FUNCTION__);
     }
@@ -579,14 +579,14 @@ class Cassandra2 extends \FeideConnect\Data\Repository {
      * --- Database handling of the 'accesstoken' column family
      */
     public function getAccessToken($accesstoken) {
-        $query = 'SELECT * FROM "oauth_tokens" WHERE "access_token" = :access_token';
+        $query = 'SELECT access_token, apigkid, clientid, issued, lastuse, scope, subtokens, token_type, userid, validuntil FROM "oauth_tokens" WHERE "access_token" = :access_token';
         $params = ['access_token' => new Uuid($accesstoken)];
         return $this->query($query, $params, __FUNCTION__, 'FeideConnect\Data\Models\AccessToken', false);
     }
 
     public function getAccessTokens($userid, $clientid) {
 
-        $query = 'SELECT * FROM "oauth_tokens" WHERE "userid" = :userid AND "clientid" = :clientid  AND "apigkid" = :apigkid ALLOW FILTERING';
+        $query = 'SELECT access_token, apigkid, clientid, issued, lastuse, scope, subtokens, token_type, userid, validuntil FROM "oauth_tokens" WHERE "userid" = :userid AND "clientid" = :clientid  AND "apigkid" = :apigkid ALLOW FILTERING';
         $params = [
             'userid' => new Uuid($userid),
             'clientid' => new Uuid($clientid),
@@ -625,13 +625,13 @@ class Cassandra2 extends \FeideConnect\Data\Repository {
      * --- Database handling of the 'oauth_authorizations' column family
      */
     public function getAuthorization($userid, $clientid) {
-        $query = 'SELECT * FROM "oauth_authorizations" WHERE "userid" = :userid AND "clientid" = :clientid';
+        $query = 'SELECT userid, clientid, apigk_scopes, issued, scopes FROM "oauth_authorizations" WHERE "userid" = :userid AND "clientid" = :clientid';
         $params = ['userid' => new Uuid($userid), 'clientid' => new Uuid($clientid)];
         return $this->query($query, $params, __FUNCTION__, 'FeideConnect\Data\Models\Authorization', false);
     }
 
     public function getAuthorizationsByUser(Models\User $user) {
-        $query = 'SELECT * FROM "oauth_authorizations" WHERE "userid" = :userid';
+        $query = 'SELECT userid, clientid, apigk_scopes, issued, scopes FROM "oauth_authorizations" WHERE "userid" = :userid';
         $params = ['userid' => new Uuid($user->userid)];
         return $this->query($query, $params, __FUNCTION__, 'FeideConnect\Data\Models\Authorization', true);
     }
@@ -651,7 +651,7 @@ class Cassandra2 extends \FeideConnect\Data\Repository {
      * --- Database handling of the 'oauth_codes' column family
      */
     public function getAuthorizationCode($code) {
-        $query = 'SELECT * FROM "oauth_codes" WHERE "code" = :code';
+        $query = 'SELECT code, apigk_scopes, clientid, idtoken, issued, redirect_uri, scope, token_type, userid, validuntil FROM "oauth_codes" WHERE "code" = :code';
         $params = ['code' => new Uuid($code)];
         return $this->query($query, $params, __FUNCTION__, 'FeideConnect\Data\Models\AuthorizationCode', false);
     }
