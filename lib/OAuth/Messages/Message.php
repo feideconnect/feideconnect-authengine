@@ -21,7 +21,7 @@ class Message implements Utils\Loggable {
     public function getAsArray() {
         $arr = array();
         foreach ($this as $k => $v) {
-            if ($v !== NULL) {
+            if ($v !== null) {
                 $arr[$k] = $v;
             }
         }
