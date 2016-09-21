@@ -39,11 +39,7 @@ class AccessToken extends \FeideConnect\Data\Model {
             $prepared["clientid"] = new Uuid($this->clientid);
         }
 
-        if (empty($this->userid)) {
-            $prepared["userid"] = new Uuid('00000000-0000-0000-0000-000000000000');
-        } else {
-            $prepared["userid"] = new Uuid($this->userid);
-        }
+        $prepared["userid"] = new Uuid($this->userid);
         if (isset($this->scope)) {
             $prepared["scope"] = new CollectionSet($this->scope, Base::ASCII);
         }
@@ -102,7 +98,7 @@ class AccessToken extends \FeideConnect\Data\Model {
 
         $n->clientid = $client->id;
 
-        $n->userid = null;
+        $n->userid = '00000000-0000-0000-0000-000000000000';
         if ($user !== null) {
             $n->userid = $user->userid;
         }
