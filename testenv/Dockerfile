@@ -12,6 +12,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
   make \
   php5-cli \
   php5-dev \
+  php5-xdebug \
   && rm -rf /var/lib/apt/lists/*
 RUN git clone https://github.com/datastax/php-driver.git /tmp/php-driver && \
   cd /tmp/php-driver && \
