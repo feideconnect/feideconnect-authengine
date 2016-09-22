@@ -15,15 +15,19 @@ class AuthorizationRequest extends \FeideConnect\OAuth\Messages\AuthorizationReq
 
         parent::__construct($message);
 
-        $this->redirect_uri        = Message::prequire($message, 'redirect_uri');
-        $this->response_mode    = Message::optional($message, 'response_mode');
-        $this->nonce            = Message::optional($message, 'nonce');
-        $this->display            = Message::optional($message, 'display');
-        $this->prompt            = Message::optional($message, 'prompt');
-        $this->max_age            = Message::optional($message, 'max_age');
-        $this->id_token_hint    = Message::optional($message, 'id_token_hint');
-        $this->login_hint        = Message::optional($message, 'login_hint');
-        $this->acr_values        = Message::spacelist(Message::optional($message, 'acr_values'));
+        try {
+            $this->redirect_uri        = Message::prequire($message, 'redirect_uri');
+            $this->response_mode    = Message::optional($message, 'response_mode');
+            $this->nonce            = Message::optional($message, 'nonce');
+            $this->display            = Message::optional($message, 'display');
+            $this->prompt            = Message::optional($message, 'prompt');
+            $this->max_age            = Message::optional($message, 'max_age');
+            $this->id_token_hint    = Message::optional($message, 'id_token_hint');
+            $this->login_hint        = Message::optional($message, 'login_hint');
+            $this->acr_values        = Message::spacelist(Message::optional($message, 'acr_values'));
+        } catch (OAuthException $exc) {
+            $this->exception = $exc;
+        }
 
         // These parameters are inherited from the OAuth request.
 

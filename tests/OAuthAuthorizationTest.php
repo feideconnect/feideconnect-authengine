@@ -76,7 +76,7 @@ class OAuthAuthorizationTest extends AuthorizationHelper {
             $this->doRun();
             $this->assertEquals(true, false, "Did not raise exception as expected");
         } catch (\FeideConnect\OAuth\Exceptions\OAuthException $e) {
-            $this->assertEquals('invalid_client', $e->code);
+            $this->assertEquals('invalid_request', $e->code);
         } catch (\Exception $f) {
             $this->assertEquals("", $f);
         }

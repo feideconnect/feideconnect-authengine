@@ -19,6 +19,7 @@ use FeideConnect\Authentication\UserMapper;
 
 use FeideConnect\Logger;
 use FeideConnect\Exceptions\AuthProviderNotAccepted;
+use FeideConnect\Utils\Validator;
 
 class OAuthAuthorization {
 
@@ -44,6 +45,9 @@ class OAuthAuthorization {
         $this->request = $request;
         $this->openidConnect = $openidConnect;
 
+        if (!Validator::validateUUID($request->client_id)) {
+            throw new OAuthException('invalid_request', 'Invalid client_id parameter');
+        }
         $this->auth = new Authenticator();
 
         // echo 'About to require authentication'; var_dump($this->request); Exit;
@@ -70,7 +74,7 @@ class OAuthAuthorization {
 
         $this->client = $this->storage->getClient($this->request->client_id);
         if ($this->client === null) {
-            throw new OAuthException('invalid_client', 'Could not look up the specified client.');
+            throw new OAuthException('invalid_request', 'Could not look up the specified client.');
         }
 
         Logger::debug('OAuth Processing Authorization request, resolved client of the request.', array(
@@ -203,6 +207,11 @@ class OAuthAuthorization {
         }
 
         $redirect_uri = $this->aevaluator->getValidatedRedirectURI();
+
+        // Validate request parameters only after validating redirect
+        // url, as we might want to implement oauth compliant error
+        // responses to the redirect uri
+        $this->request->validate();
         $state = $this->request->getState();
 
         if ($this->aevaluator->getEffectiveScopes() === []) {
@@ -285,31 +294,13 @@ class OAuthAuthorization {
             return $res;
         }
 
-        if ($this->openidConnect) {
-            switch ($this->request->response_type) {
-            case 'id_token token':
-
-                return $this->processToken();
-
-            case 'code':
-
-                return $this->processCode();
-
-            }
-            throw new OAuthException('invalid_request', 'Unsupported response_type ' . $this->request->response_type . ". Supported values are 'id_token token' and 'code'");
-        } else {
-            switch ($this->request->response_type) {
-            case 'token':
-                return $this->processToken();
-
-            case 'code':
-
-                return $this->processCode();
-
-            }
-            throw new Exception('Unsupported response_type in request. Only supported code and token.');
+        switch ($this->request->response_type) {
+        case 'token':
+        case 'id_token token':
+            return $this->processToken();
+        case 'code':
+            return $this->processCode();
         }
-
 
     }
 
