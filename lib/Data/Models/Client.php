@@ -21,7 +21,7 @@ class Client extends \FeideConnect\Data\Model {
         'status' => 'set<text>',
         'type' => 'default',
         'updated' => 'timestamp',
-        'authproviders' => 'default',
+        'authproviders' => 'set<text>',
         'orgauthorization' => 'map<text,json>',
         'authoptions' => 'json',
         'systemdescr' => 'default',
