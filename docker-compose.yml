@@ -13,3 +13,9 @@ services:
       - CASSANDRA_KEYSPACE=dataporten
       - TESTDATA=true
     command: up
+  testenv:
+    build: testenv
+    links:
+      - cassandra:cassandra
+    volumes:
+      - .:/authengine

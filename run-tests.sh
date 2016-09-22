@@ -26,9 +26,9 @@ if [ ! -d simplesamlphp ]; then
 fi
 
 mkdir -p etc/test
-sed "s/@@CASSANDRA@@/${CASSANDRA}/" <test-config/auth-engine-config.json >etc/test/config.json
+sed "s/@@CASSANDRA@@/cassandra:9042/" <test-config/auth-engine-config.json >etc/test/config.json
 cp test-config/jwt-*.pem etc
 
 rm -f unit-test.log
 touch unit-test.log
-ant
+docker-compose run testenv ant
