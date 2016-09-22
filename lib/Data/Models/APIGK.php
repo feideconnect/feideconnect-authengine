@@ -18,7 +18,7 @@ class APIGK extends \FeideConnect\Data\Model {
         'requireuser' => 'boolean',
         'scopedef' => 'json',
         'trust' => 'text',
-        'logo' => 'default',
+        'logo' => 'blob',
         'scopes' => 'set<text>',
         'scopes_requested' => 'set<text>',
         'privacypolicyurl' => 'text',
