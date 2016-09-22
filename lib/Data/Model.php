@@ -140,7 +140,7 @@ abstract class Model implements Utils\Loggable {
                 $value = new \Cassandra\Type\Uuid($value);
                 break;
             default:
-                break;
+                throw new \Exception('Database field ' . var_export($key, true) . ' has an invalid type for the model ' . static::class . '.');
             }
             $a[$k] = $value;
         }
