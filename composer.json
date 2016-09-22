@@ -18,7 +18,6 @@
 		"firebase/php-jwt": "~3.0.0",
 		"monolog/monolog": "~1.11.0",
 		"phroute/phroute": "~2.0.0",
-		"duoshuo/php-cassandra": "dev-master#c9485df6d6ed797bd472d6bea5370b486d1edcb0",
 		"spomky-labs/base64url": "~1.0.0",
 		"jwage/purl": "^0.0.6"
 	},

@@ -46,18 +46,60 @@ abstract class Model implements Utils\Loggable {
             return null;
         }
         switch (static::$_properties[$key]) {
+        case 'blob':
+            return $value->toBinaryString();
+        case 'boolean':
+            return $value; // Basic type -- nothing to change
         case 'json':
             return json_decode($value, true);
+        case 'list<text>':
+            return $value->values();
+        case 'map<text,blob>':
+            $ret = [];
+            foreach ($value as $k => $v) {
+                $ret[$k] = $v->toBinaryString();
+            }
+            return $ret;
         case 'map<text,json>':
             $ret = [];
             foreach ($value as $k => $v) {
                 $ret[$k] = json_decode($v, true);
             }
             return $ret;
+        case 'map<text,set<text>>':
+            $ret = [];
+            foreach ($value as $k => $v) {
+                $ret[$k] = $v->values();
+            }
+            return $ret;
+        case 'map<text,timestamp>':
+            $ret = [];
+            foreach ($value as $k => $v) {
+                $ret[$k] = $v->microtime(true) * 1000;
+            }
+            return $ret;
+        case 'map<text,text>':
+            $ret = [];
+            foreach ($value as $k => $v) {
+                $ret[$k] = $v;
+            }
+            return $ret;
+        case 'map<text,uuid>':
+            $ret = [];
+            foreach ($value as $k => $v) {
+                $ret[$k] = $v->uuid();
+            }
+            return $ret;
+        case 'set<text>':
+            return $value->values();
+        case 'text':
+            return $value; // Basic type -- nothing to change
         case 'timestamp':
             return Timestamp::fromCassandraTimestamp($value);
+        case 'uuid':
+            return $value->uuid();
         default:
-            return $value;
+            throw new \Exception('Database field ' . var_export($key, true) . ' has an invalid type for the model ' . static::class . '.');
         }
 
     }
@@ -89,6 +131,22 @@ abstract class Model implements Utils\Loggable {
         return $res;
     }
 
+    private static function createFromList(\Cassandra\Type $type, array $values) {
+        $ret = $type->create();
+        foreach ($values as $value) {
+            $ret->add($value);
+        }
+        return $ret;
+    }
+
+    private static function createFromMap(\Cassandra\Type $type, array $map) {
+        $ret = $type->create();
+        foreach ($map as $key => $value) {
+            $ret->set($key, $value);
+        }
+        return $ret;
+    }
+
     public function getStorableArray() {
 
         $a = array();
@@ -99,7 +157,7 @@ abstract class Model implements Utils\Loggable {
             $value = $this->{$k};
             switch ($type) {
             case 'blob':
-                $value = new \Cassandra\Type\Blob($value);
+                $value = new \Cassandra\Blob($value);
                 break;
             case 'boolean':
                 break; // Basic type -- nothing to change
@@ -107,29 +165,33 @@ abstract class Model implements Utils\Loggable {
                 $value = json_encode($value);
                 break;
             case 'list<text>':
-                $value = new \Cassandra\Type\CollectionList($value, \Cassandra\Type\Base::ASCII);
+                $value = self::createFromList(\Cassandra\Type::collection(\Cassandra\Type::text()), $value);
                 break;
             case 'map<text,blob>':
-                $value = new \Cassandra\Type\CollectionMap($value, \Cassandra\Type\Base::ASCII, \Cassandra\Type\Base::BLOB);
+                $value = array_map(function ($v) { return new \Cassandra\Blob($v); }, $value);
+                $value = self::createFromMap(\Cassandra\Type::map(\Cassandra\Type::text(), \Cassandra\Type::blob()), $value);
                 break;
             case 'map<text,json>':
                 $value = array_map('json_encode', $value);
-                $value = new \Cassandra\Type\CollectionMap($value, \Cassandra\Type\Base::ASCII, \Cassandra\Type\Base::ASCII);
+                $value = self::createFromMap(\Cassandra\Type::map(\Cassandra\Type::text(), \Cassandra\Type::text()), $value);
                 break;
             case 'map<text,set<text>>':
-                $value = new \Cassandra\Type\CollectionMap($value, \Cassandra\Type\Base::ASCII, ['type' => \Cassandra\Type\Base::COLLECTION_SET, 'value' => \Cassandra\Type\Base::ASCII]);
+                $value = array_map(function ($v) { return self::createFromList(\Cassandra\Type::set(\Cassandra\Type::text()), $v); }, $value);
+                $value = self::createFromMap(\Cassandra\Type::map(\Cassandra\Type::text(), \Cassandra\Type::set(\Cassandra\Type::text())), $value);
                 break;
             case 'map<text,text>':
-                $value = new \Cassandra\Type\CollectionMap($value, \Cassandra\Type\Base::ASCII, \Cassandra\Type\Base::ASCII);
+                $value = self::createFromMap(\Cassandra\Type::map(\Cassandra\Type::text(), \Cassandra\Type::text()), $value);
                 break;
             case 'map<text,timestamp>':
-                $value = new \Cassandra\Type\CollectionMap($value, \Cassandra\Type\Base::ASCII, \Cassandra\Type\Base::TIMESTAMP);
+                $value = array_map(function ($v) { $secs = (int)($v / 1000); $usecs = (int)(($v - $secs*1000)*1000); return new \Cassandra\Timestamp($secs, $usecs); }, $value);
+                $value = self::createFromMap(\Cassandra\Type::map(\Cassandra\Type::text(), \Cassandra\Type::timestamp()), $value);
                 break;
             case 'map<text,uuid>':
-                $value = new \Cassandra\Type\CollectionMap($value, \Cassandra\Type\Base::ASCII, \Cassandra\Type\Base::UUID);
+                $value = array_map(function ($v) { return new \Cassandra\Uuid($v); }, $value);
+                $value = self::createFromMap(\Cassandra\Type::map(\Cassandra\Type::text(), \Cassandra\Type::uuid()), $value);
                 break;
             case 'set<text>':
-                $value = new \Cassandra\Type\CollectionSet($value, \Cassandra\Type\Base::ASCII);
+                $value = self::createFromList(\Cassandra\Type::set(\Cassandra\Type::text()), $value);
                 break;
             case 'text':
                 break; // Basic type -- nothing to change
@@ -137,7 +199,7 @@ abstract class Model implements Utils\Loggable {
                 $value = $value->getDBobject();
                 break;
             case 'uuid':
-                $value = new \Cassandra\Type\Uuid($value);
+                $value = new \Cassandra\Uuid($value);
                 break;
             default:
                 throw new \Exception('Database field ' . var_export($key, true) . ' has an invalid type for the model ' . static::class . '.');
