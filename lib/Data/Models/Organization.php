@@ -27,7 +27,7 @@ class Organization extends \FeideConnect\Data\Model {
         'realm' => 'default',
         'type' => 'set<text>',
         'uiinfo' => 'json',
-        'services' => 'default',
+        'services' => 'set<text>',
     ];
 
     public function getTypes() {
