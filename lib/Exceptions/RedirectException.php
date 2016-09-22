@@ -7,7 +7,7 @@ use FeideConnect\HTTP\Redirect;
 /**
 *
 */
-class RedirectException extends \Exception {
+class RedirectException extends Exception {
 
     public function __construct($url) {
         parent::__construct($url);
