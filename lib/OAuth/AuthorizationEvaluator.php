@@ -203,15 +203,6 @@ class AuthorizationEvaluator {
         return $this->scopesInQuestion;
     }
 
-    public function hasScopeInQuestion($scope) {
-        foreach ($this->scopesInQuestion as $sc) {
-            if ($scope === $sc) {
-                return true;
-            }
-        }
-        return false;
-    }
-
     public function getRemainingScopes() {
         $this->requireUser();
         return $this->scopesRemaining;
