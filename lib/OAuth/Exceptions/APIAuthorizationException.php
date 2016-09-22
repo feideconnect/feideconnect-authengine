@@ -4,6 +4,7 @@ namespace FeideConnect\OAuth\Exceptions;
 
 use FeideConnect\Exceptions;
 use FeideConnect\HTTP\JSONResponse;
+use FeideConnect\Logger;
 
 /**
 *
@@ -50,7 +51,7 @@ class APIAuthorizationException extends Exceptions\Exception {
         return $data;
     }
 
-    public function getJSONResponse() {
+    public function getResponse() {
 
         $response = new JSONResponse($this->getData());
         $response->setStatus($this->httpcode);
@@ -61,6 +62,12 @@ class APIAuthorizationException extends Exceptions\Exception {
                 'Bearer realm="feideconnect", error="' . $this->type . '", error_description="' . urlencode($this->getMessage()) . '"'
             );
         }
+
+        Logger::error('Error processing request: ' . $this->getMessage(), array(
+            'stacktrace' => $this->getTrace(),
+            'errordetails' => $this->getData(),
+        ));
+
         return $response;
     }
 

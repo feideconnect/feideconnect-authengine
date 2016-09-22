@@ -14,7 +14,7 @@ class RedirectException extends \Exception {
         $this->response = new Redirect($url);
     }
 
-    public function getHTTPResponse() {
+    public function getResponse() {
         return $this->response;
     }
 

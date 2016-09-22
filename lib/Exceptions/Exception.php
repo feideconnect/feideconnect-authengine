@@ -2,6 +2,9 @@
 
 namespace FeideConnect\Exceptions;
 
+use FeideConnect\Logger;
+use FeideConnect\HTTP\TemplatedHTMLResponse;
+
 /**
 *
 */
@@ -14,16 +17,16 @@ class Exception extends \Exception {
         parent::__construct($message);
         $this->httpcode = $httpcode;
         $this->head = $head;
+        $this->classname = get_class($this);
     }
 
-    public function setHTTPcode() {
-        http_response_code($this->httpcode);
+    public static function fromException($e) {
+        $n = new self($e->getMessage());
+        $n->classname = get_class($e);
+        return $n;
     }
 
     public function prepareErrorMessage() {
-
-        $this->setHTTPcode();
-
         $data = array();
         $data['code'] = $this->httpcode;
         $data['head'] = $this->head;
@@ -32,6 +35,18 @@ class Exception extends \Exception {
 
     }
 
+    public function getResponse() {
+        $data = $this->prepareErrorMessage();
+        $response = (new TemplatedHTMLResponse('exception'))->setData($data);
 
+        Logger::error('Exception: ' . $this->getMessage(), array(
+            'exception_class' => $this->classname,
+            'stacktrace' => $this->getTrace(),
+            'errordetails' => $data,
+        ));
+
+        $response->setStatus($this->httpcode);
+        return $response;
+    }
 
 }

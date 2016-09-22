@@ -60,41 +60,10 @@ try {
     $response->setHeader($parts[0], $parts[1]);
     $response->setStatus(405);
 
-} catch (RedirectException $e) {
-    $response = $e->getHTTPResponse();
-
-} catch (APIAuthorizationException $e) {
-    $response = $e->getJSONResponse();
-
-    Logger::error('Error processing request: ' . $e->getMessage(), array(
-        'stacktrace' => $e->getTrace(),
-        'errordetails' => $e->getData(),
-    ));
-
-
 } catch (Exception $e) {
-    $data = $e->prepareErrorMessage();
-    $response = (new TemplatedHTMLResponse('exception'))->setData($data);
-
-    Logger::error('Feide Connect Exception: ' . $e->getMessage(), array(
-        'stacktrace' => $e->getTrace(),
-        'errordetails' => $data,
-    ));
-    $response->setStatus(500);
-
+    $response = $e->getResponse();
 } catch (\Exception $e) {
-    $data = array();
-    $data['code'] = '500';
-    $data['head'] = 'Internal Error';
-    $data['message'] = $e->getMessage();
-
-    Logger::error('General Exception: ' . $e->getMessage(), array(
-        'stacktrace' => $e->getTrace(),
-        'errordetails' => $data,
-    ));
-
-    $response = (new TemplatedHTMLResponse('exception'))->setData($data);
-    $response->setStatus(500);
+    $response = Exception::fromException($e)->getResponse();
 }
 
 
