@@ -23,9 +23,9 @@ class User extends \FeideConnect\Data\Model {
         'profilephotohash' => 'map<text,text>',
         'userid_sec' => 'set<text>',
         'userid_sec_seen' => 'map<text,timestamp>',
-        'selectedsource' => 'default',
-        'aboveagelimit' => 'default',
-        'usageterms' => 'default',
+        'selectedsource' => 'text',
+        'aboveagelimit' => 'boolean',
+        'usageterms' => 'boolean',
         'created' => 'timestamp',
         'updated' => 'timestamp',
     ];

@@ -22,9 +22,9 @@ class Organization extends \FeideConnect\Data\Model {
     public $id, $name, $realm, $type, $uiinfo, $service;
 
     protected static $_properties = [
-        'id' => 'default',
+        'id' => 'text',
         'name' => 'map<text,text>',
-        'realm' => 'default',
+        'realm' => 'text',
         'type' => 'set<text>',
         'uiinfo' => 'json',
         'services' => 'set<text>',

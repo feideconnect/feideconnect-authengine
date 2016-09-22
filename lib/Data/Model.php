@@ -101,6 +101,8 @@ abstract class Model implements Utils\Loggable {
             case 'blob':
                 $value = new \Cassandra\Type\Blob($value);
                 break;
+            case 'boolean':
+                break; // Basic type -- nothing to change
             case 'json':
                 $value = json_encode($value);
                 break;
@@ -129,6 +131,8 @@ abstract class Model implements Utils\Loggable {
             case 'set<text>':
                 $value = new \Cassandra\Type\CollectionSet($value, \Cassandra\Type\Base::ASCII);
                 break;
+            case 'text':
+                break; // Basic type -- nothing to change
             case 'timestamp':
                 $value = $value->getDBobject();
                 break;
