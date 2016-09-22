@@ -214,7 +214,7 @@ class OAuthAuthorization {
         $this->request->validate();
         $state = $this->request->getState();
 
-        if ($this->aevaluator->getEffectiveScopes() === []) {
+        if ($this->aevaluator->getScopesInQuestion() === []) {
             throw new OAuthException('invalid_scope', 'None of the requested scopes are approved for this client');
         }
 
