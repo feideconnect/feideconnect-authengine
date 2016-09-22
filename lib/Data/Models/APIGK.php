@@ -12,7 +12,7 @@ class APIGK extends \FeideConnect\Data\Model {
         'descr' => 'default',
         'owner' => 'uuid',
         'organization' => 'default',
-        'endpoints' => 'default',
+        'endpoints' => 'list<text>',
         'expose' => 'default',
         'httpscertpinned' => 'default',
         'requireuser' => 'default',
@@ -23,7 +23,7 @@ class APIGK extends \FeideConnect\Data\Model {
         'scopes_requested' => 'set<text>',
         'privacypolicyurl' => 'default',
         'systemdescr' => 'default',
-        'status' => 'default',
+        'status' => 'set<text>',
         'created' => 'timestamp',
         'updated' => 'timestamp',
     ];
