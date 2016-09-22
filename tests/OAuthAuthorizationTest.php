@@ -115,9 +115,9 @@ class OAuthAuthorizationTest extends AuthorizationHelper {
         $this->codeFlowHelper();
     }
 
-    public function testAuthorizationToCodeSubtoken($approved_scopes = 'gk_test groups') {
+    public function testAuthorizationToCodeSubtoken($approved_scopes = 'userinfo gk_test groups') {
         $apigk = $this->apigk();
-        $this->client->scopes = ['groups', 'gk_test'];
+        $this->client->scopes[] = 'gk_test';
         $this->db->saveClient($this->client);
         $_REQUEST['acresponse'] = '{"id": "https://idp.feide.no","subid":"example.org"}';
         $_REQUEST['verifier'] = $this->user->getVerifier();

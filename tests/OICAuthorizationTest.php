@@ -65,4 +65,9 @@ class OICAuthorizationTest extends OAuthAuthorizationTest {
         $params = parent::tokenFlowHelper('id_token token', 'openid userinfo groups');
         $this->assertArrayHasKey('id_token', $params);
     }
+
+    public function testAuthorizationToCodeSubtoken($approved_scopes = 'gk_test groups openid userinfo') {
+        parent::testAuthorizationToCodeSubtoken($approved_scopes);
+    }
+
 }

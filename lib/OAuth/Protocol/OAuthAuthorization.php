@@ -218,6 +218,10 @@ class OAuthAuthorization {
             throw new OAuthException('invalid_scope', 'None of the requested scopes are approved for this client');
         }
 
+        if ($this->openidConnect && !in_array('openid', $this->aevaluator->getScopesInQuestion())) {
+            throw new OAuthException('invalid_scope', 'OpenID Connect authentication request but openid scope not approved for client');
+        }
+
         // If SimpleSAML_Auth_State_exceptionId query parameter is set, then something failed
         // while performing authentication.
         if (!empty($_REQUEST['SimpleSAML_Auth_State_exceptionId'])) {

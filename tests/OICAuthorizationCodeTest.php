@@ -39,4 +39,16 @@ class OICAuthorizationCodeTest extends AuthorizationFlowHelper {
         $data = $this->assertTokenEndpointResponseOK($response);
         $this->assertArrayHasKey('id_token', $data);
     }
+
+    public function testOpenidScopeNotApproved() {
+        $this->client->scopes = ['groups'];
+        $this->db->saveClient($this->client);
+        $response = $this->doAuthorizationRequest();
+        $this->assertInstanceOf('FeideConnect\HTTP\JSONResponse', $response,
+                                'Expected /oauth/token endpoint to return json');
+
+        $this->assertEquals(400, $response->getStatus());
+        $data = $response->getData();
+        $this->assertEquals('invalid_scope', $data['error']);
+    }
 }
