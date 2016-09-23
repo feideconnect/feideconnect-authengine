@@ -61,15 +61,11 @@ class Client extends \FeideConnect\Data\Model {
     }
 
     public function getAuthProviders() {
-        $res = [];
-        if (empty($this->authproviders)) {
-            return [["all"]];
+        if (!empty($this->authproviders)) {
+            return $this->authproviders;
+        } else {
+            return ['all'];
         }
-        foreach ($this->authproviders as $a) {
-            $res[] = explode('|', $a);
-        }
-        return $res;
-
     }
 
     public function getOrgAuthorization($realm) {

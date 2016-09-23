@@ -374,24 +374,14 @@ class AccountTest extends DBHelper {
     }
 
 
-    public function testCompareType() {
-        $this->assertTrue(Account::compareType(['ugle'], []));
-        $this->assertTrue(Account::compareType(['ugle'], ['ugle']));
-        $this->assertTrue(Account::compareType(['ugle'], ['ugle', 'all']));
-        $this->assertTrue(Account::compareType(['ugle', 'foo'], ['ugle', 'all']));
-        $this->assertTrue(Account::compareType(['ugle', 'foo', 'bar'], ['ugle', 'all']));
-        $this->assertFalse(Account::compareType([], ['ugle']));
-        $this->assertFalse(Account::compareType(['foo'], ['ugle']));
-    }
-
     public function testValidateAuthProviderOK() {
         $account = new Account([
             'eduPersonPrincipalName' => ['test@example.org'],
             'idp' => self::$feideidp,
         ], self::$feideAM);
-        $this->assertTrue($account->validateAuthProvider([]));
-        $this->assertTrue($account->validateAuthProvider([['all']]));
-        $this->assertTrue($account->validateAuthProvider([['feide', 'all']]));
+        $this->assertTrue($account->validateAuthProvider(['all']));
+        $this->assertTrue($account->validateAuthProvider(['feide|all']));
+        $this->assertTrue($account->validateAuthProvider(['feide|realm|example.org']));
     }
 
     public function testValidateAuthProviderFail() {
@@ -400,7 +390,7 @@ class AccountTest extends DBHelper {
             'eduPersonPrincipalName' => ['test@example.org'],
             'idp' => self::$feideidp,
         ], self::$feideAM);
-        $account->validateAuthProvider([['social', 'facebook']]);
+        $account->validateAuthProvider(['social|facebook']);
     }
 
     public function testAgeLimit() {
