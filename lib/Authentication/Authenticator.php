@@ -124,6 +124,7 @@ class Authenticator {
 
 
         $forceauthn = false;
+        $authGood = true;
 
         if ($as->isAuthenticated()) {
             $mismatchingAccounts = false;
@@ -158,11 +159,22 @@ class Authenticator {
 
             }
 
-            if ($this->verifyMaxAge($as->getAuthData("AuthnInstant"), $maxage)) {
-                return null;
+            if (!$this->verifyMaxAge($as->getAuthData("AuthnInstant"), $maxage)) {
+                Logger::debug('Forcing new login because of maxage requirement');
+                $forceauthn = true;
+                $authGood = false;
+            }
+            if (!empty($acr_values) && !in_array($account->getAcr(), $acr_values)) {
+                Logger::debug('Force login due to acr', [
+                    'requested_acrs' => $acr_values,
+                    'current_acr' => $account->getAcr(),
+                ]);
+                $authGood = false;
             }
 
-            $forceauthn = true;
+            if ($authGood) {
+                return null;
+            }
 
         }
 
@@ -214,10 +226,8 @@ class Authenticator {
 
         if ($forceauthn) {
             $options['ForceAuthn'] = true;
-            $as->login($options);
-        } else {
-            $as->requireAuth($options);
         }
+        $as->login($options);
 
         return null;
 
