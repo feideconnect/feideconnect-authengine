@@ -96,7 +96,7 @@ class Authenticator {
      *
      * @return void
      */
-    public function requireAuthentication($maxage = null) {
+    public function requireAuthentication($maxage = null, $acr_values = null) {
 
         $accountchooser = new Authentication\AccountChooserProtocol();
 
@@ -207,6 +207,10 @@ class Authenticator {
 
         }
 
+        if ($acr_values != null && $authconfig["idp"] === Config::getValue('feideIdP')) {
+            $options['saml:AuthnContextClassRef'] = $acr_values;
+            Logger::info("added acr values", ['acr_values' => $acr_values ]);
+        }
 
         if ($forceauthn) {
             $options['ForceAuthn'] = true;

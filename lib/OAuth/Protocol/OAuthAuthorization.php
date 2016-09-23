@@ -37,11 +37,15 @@ class OAuthAuthorization {
 
     protected $aevaluator = null;
     protected $openidConnect;
+    protected $acr_values;
+    protected $acr;
 
     public function __construct(Messages\Message $request, $openidConnect) {
 
         $this->storage = StorageProvider::getStorage();
 
+        $this->acr_values = null;
+        $this->acr = null;
         $this->request = $request;
         $this->openidConnect = $openidConnect;
 
@@ -96,13 +100,23 @@ class OAuthAuthorization {
         if ($this->isPassive) {
             $this->auth->passiveAuthentication($this->client, $this->maxage);
         } else {
-            $response = $this->auth->requireAuthentication($this->maxage);
+            $response = $this->auth->requireAuthentication($this->maxage, $this->acr_values);
             if ($response !== null) {
                 return $response;
             }
         }
 
         $this->account = $this->auth->getAccount();
+
+        if (!empty($this->acr_values)) {
+            $this->acr = $this->account->getAcr();
+            if (!in_array($this->acr, $this->acr_values)) {
+                Logger::warning('Auth source did not return requested ACR', [
+                    'requested_acrs' => $this->acr_values,
+                    'resulting_acr' => $this->acr,
+                ]);
+            }
+        }
 
         $this->organization = $this->account->getOrg();
 
@@ -266,7 +280,7 @@ class OAuthAuthorization {
         $openid = new \FeideConnect\OpenIDConnect\OpenIDConnect();
         $iat = $this->account->getAuthInstant();
         // echo '<pre>iat'; print_r($iat); exit;
-        $idtoken = $openid->getIDtoken($this->user->userid, $this->client->id, $iat);
+        $idtoken = $openid->getIDtoken($this->user->userid, $this->client->id, $this->acr, $iat);
         if (isset($this->request->nonce)) {
             $idtoken->set('nonce', $this->request->nonce);
         }
@@ -292,6 +306,7 @@ class OAuthAuthorization {
                     $this->maxage = 10;
                 }
             }
+            $this->acr_values = $this->request->acr_values;
         }
         $res = $this->preProcess();
         if ($res !== null) {

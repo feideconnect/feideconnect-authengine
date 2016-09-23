@@ -73,7 +73,7 @@ class IDToken {
         return $this->object;
     }
 
-    public static function generate(TrustStore $trustStore, $iss, $sub, $aud, $expiresIn, $auth_time = null) {
+    public static function generate(TrustStore $trustStore, $iss, $sub, $aud, $expiresIn, $acr, $auth_time = null) {
 
         $now = time();
         $idtoken = new IDToken($trustStore);
@@ -85,6 +85,9 @@ class IDToken {
 
         if ($auth_time !== null) {
             $idtoken->set("auth_time", $auth_time);
+        }
+        if ($acr !== null) {
+            $idtoken->set("acr", $acr);
         }
 
         return $idtoken;
