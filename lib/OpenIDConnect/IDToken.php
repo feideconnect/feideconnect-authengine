@@ -49,27 +49,6 @@ class IDToken {
         $this->trustStore = $trustStore;
         $this->object = [];
 
-        // $this->object = array(
-        //     "iss" => "http://example.org",
-        //     "aud" => "http://example.com",
-        //     "iat" => 1356999524,
-        //     "nbf" => 1357000000
-        // );
-
-
-        // $decoded = JWT::decode($jwt, $key, array('HS256'));
-
-        // print_r($decoded);
-
-        /*
-         NOTE: This will now be an object instead of an associative array. To get
-         an associative array, you will need to cast it as such:
-        */
-
-        // $decoded_array = (array) $decoded;
-
-         // echo '<pre>'; print_r($jwt); exit;
-
     }
 
     public function set($key, $val) {
