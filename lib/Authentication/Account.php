@@ -61,24 +61,6 @@ class Account {
     }
 
 
-    public static function compareType($candidate, $match) {
-        for ($i = 0; $i < count($match); $i++) {
-            if ($candidate[$i] === 'idporten' && $match[$i] !== 'idporten') {
-                return false;
-            }
-            if ($match[$i] === 'all') {
-                return true;
-            }
-            if ($i > (count($candidate)- 1)) {
-                return false;
-            }
-            if ($match[$i] !== $candidate[$i]) {
-                return false;
-            }
-        }
-        return true;
-    }
-
     public function hasAnyOfUserIDs($userids) {
 
         if (empty($userids)) {
@@ -108,41 +90,61 @@ class Account {
 
     }
 
-    public function getDef() {
+    /**
+     * Get the account types for the current account.
+     *
+     * The account types returned by this function matches the account types you can
+     * allow access for in the Dataporten dashboard.
+     *
+     * @return array  List of account types for the current account.
+     */
+    private function getAccountTypes() {
 
-        $def = [];
+        // The simple account types. Here we can simply return a static array.
+        $accountTypes = [
+            'idporten' => [ 'idporten' ], // Note: Not account type "all", since "all" in dashboard does not include idporten.
+            'openidp' => [ 'all', 'other|openidp' ],
+            'twitter' => [ 'all', 'social|all', 'social|twitter' ],
+            'linkedin' => [ 'all', 'social|all', 'social|linkedin' ],
+            'facebook' => [ 'all', 'social|all', 'social|facebook' ],
+        ];
+        if (isset($accountTypes[$this->sourceID])) {
+            return $accountTypes[$this->sourceID];
+        }
 
-        $tag = $this->getVisualTag();
-        return $tag["def"];
+        if (preg_match("/^feide:(.*?)$/", $this->sourceID, $matches)) {
+            // A feide account.
+            $org = $matches[1];
+            if ($org === 'spusers.feide.no') {
+                // The service provider organization in Feide.
+                return [ 'all', 'other|feidetest' ];
+            }
+            // A normal Feide account.
+            $ret = [ 'all', 'feide|all', 'feide|realm|' . $org];
+            $storage = StorageProvider::getStorage();
+            $orginfo = $storage->getOrg('fc:org:' . $org);
+            if ($orginfo !== null) {
+                // Adds 'feide|uh', 'feide|vgs' and 'feide|go'.
+                foreach ($orginfo->getTypes() as $type) {
+                    $ret[] = 'feide|' . $type;
+                }
+            }
+            return $ret;
+        }
+
+        throw new \Exception('Unable to detect where this user can log in because the user account source was unknown.');
     }
 
     public function validateAuthProvider($authproviders) {
 
-
-
-
-        if (empty($authproviders)) {
-            return true;
+        // Intersect the account types allowed by the service with the account types of the current account.
+        // If the intersection isn't empty, the account has access to the service.
+        $matching_accounts = array_intersect($this->getAccountTypes(), $authproviders);
+        if (empty($matching_accounts)) {
+            throw new AuthProviderNotAccepted('Authentication provider is not accepted by requesting client. Return to application and try to login again selecting another provider.');
         }
 
-
-        $def = $this->getDef();
-
-        if (empty($def)) {
-            throw new \Exception('Unable to detect where this user can login.');
-        }
-
-        foreach ($def as $d) {
-            foreach ($authproviders as $ap) {
-                if ($this->compareType($d, $ap)) {
-                    // echo "<h2>Did match</h2>"; var_dump($d); var_dump($ap);
-                    return true;
-                }
-            }
-        }
-
-        throw new AuthProviderNotAccepted('Authentication provider is not accepted by requesting client. Return to application and try to login again selecting another provider.');
-
+        return true;
     }
 
     // TODO: Update this code to automatically
