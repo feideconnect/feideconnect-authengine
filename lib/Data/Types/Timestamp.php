@@ -45,11 +45,13 @@ class Timestamp {
 
 
     public function getCassandraTimestamp() {
-        return new \Cassandra\Type\Timestamp($this->_value * 1000);
+        $secs = (int)$this->_value;
+        $usecs = (int)(($this->_value - $secs) * 1000000);
+        return new \Cassandra\Timestamp($secs, $usecs);
     }
 
     public static function fromCassandraTimestamp($input) {
-        return new self($input / 1000.0);
+        return new self($input->microtime(true));
     }
 
     public function getDBobject() {

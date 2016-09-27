@@ -4,24 +4,20 @@ namespace tests;
 
 class RawCassandra2 extends \FeideConnect\Data\Repositories\Cassandra2 {
     public function rawExecute($query, $params) {
-        $this->db->querySync(
-            $query,
-            $params,
-            \Cassandra\Request\Request::CONSISTENCY_QUORUM,
-            [
-                'names_for_values' => true
-            ]
-        );
+        $statement = new \Cassandra\SimpleStatement($query);
+        $options = new \Cassandra\ExecutionOptions([
+            'arguments' => $params,
+            'consistency' => \Cassandra::CONSISTENCY_QUORUM,
+        ]);
+        $this->db->execute($statement, $options);
     }
     public function rawQuery($query, $params) {
-        $response = $this->db->querySync(
-            $query,
-            $params,
-            \Cassandra\Request\Request::CONSISTENCY_QUORUM,
-            [
-                'names_for_values' => true
-            ]
-        );
-        return $response->fetchAll();
+        $statement = new \Cassandra\SimpleStatement($query);
+        $options = new \Cassandra\ExecutionOptions([
+            'arguments' => $params,
+            'consistency' => \Cassandra::CONSISTENCY_QUORUM,
+        ]);
+        $response = $this->db->execute($statement, $options);
+        return $response;
     }
 }

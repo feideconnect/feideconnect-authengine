@@ -18,18 +18,18 @@ class Cassandra2Test extends DBHelper {
         $user->userid_sec = [$userid_sec];
         $this->db->saveUser($user);
 
-        $results = $this->db->rawQuery('SELECT userid, updated, userid_sec FROM "users" WHERE userid = :userid', ['userid' => new \Cassandra\Type\Uuid($userid)]);
+        $results = $this->db->rawQuery('SELECT userid, updated, userid_sec FROM "users" WHERE userid = :userid', ['userid' => new \Cassandra\Uuid($userid)]);
         $this->assertCount(1, $results);
         $storedUser = $results[0];
         $this->assertEquals($userid, $storedUser['userid']);
         $this->assertNotNull($storedUser['updated']);
-        $this->assertEquals([$userid_sec], $storedUser['userid_sec']);
+        $this->assertEquals([$userid_sec], $storedUser['userid_sec']->values());
 
         $results = $this->db->rawQuery('SELECT userid_sec, userid FROM "userid_sec" WHERE userid_sec = :userid_sec', ['userid_sec' => $userid_sec]);
         $this->assertCount(1, $results);
         $storedUserIDSec = $results[0];
         $this->assertEquals($userid_sec, $storedUserIDSec['userid_sec']);
-        $this->assertEquals(new \Cassandra\Type\Uuid($userid), $storedUserIDSec['userid']);
+        $this->assertEquals(new \Cassandra\Uuid($userid), $storedUserIDSec['userid']);
     }
 
     /**
@@ -38,14 +38,14 @@ class Cassandra2Test extends DBHelper {
     public function testUpdateUserBasics() {
         $userid = Models\User::genUUID();
 
-        $this->db->rawExecute('INSERT INTO "users" ("userid", "aboveagelimit", "usageterms") VALUES(:userid, FALSE, FALSE)', ['userid' => new \Cassandra\Type\Uuid($userid)]);
+        $this->db->rawExecute('INSERT INTO "users" ("userid", "aboveagelimit", "usageterms") VALUES(:userid, FALSE, FALSE)', ['userid' => new \Cassandra\Uuid($userid)]);
 
         $user = $this->db->getUserByUserid($userid);
         $user->aboveagelimit = true;
         $user->usageterms = true;
         $this->db->updateUserBasics($user);
 
-        $results = $this->db->rawQuery('SELECT updated, aboveagelimit, usageterms FROM "users" WHERE userid = :userid', ['userid' => new \Cassandra\Type\Uuid($userid)]);
+        $results = $this->db->rawQuery('SELECT updated, aboveagelimit, usageterms FROM "users" WHERE userid = :userid', ['userid' => new \Cassandra\Uuid($userid)]);
         $this->assertCount(1, $results);
         $storedUser = $results[0];
         $this->assertNotNull($storedUser['updated']);
@@ -59,20 +59,20 @@ class Cassandra2Test extends DBHelper {
     public function testUpdateUserIDsecLastSeen() {
         $userid = Models\User::genUUID();
 
-        $this->db->rawExecute('INSERT INTO "users" ("userid") VALUES(:userid)', ['userid' => new \Cassandra\Type\Uuid($userid)]);
+        $this->db->rawExecute('INSERT INTO "users" ("userid") VALUES(:userid)', ['userid' => new \Cassandra\Uuid($userid)]);
 
         $user = $this->db->getUserByUserid($userid);
         $this->db->updateUserIDsecLastSeen($user, 'foo');
 
-        $results = $this->db->rawQuery('SELECT userid_sec_seen FROM "users" WHERE userid = :userid', ['userid' => new \Cassandra\Type\Uuid($userid)]);
+        $results = $this->db->rawQuery('SELECT userid_sec_seen FROM "users" WHERE userid = :userid', ['userid' => new \Cassandra\Uuid($userid)]);
         $this->assertCount(1, $results);
         $storedUser = $results[0];
         $this->assertArrayHasKey('foo', $storedUser['userid_sec_seen']);
 
         /* Make sure that userid_sec_seen is close to "now". */
-        $currentTime = (int)(microtime(true)*1000);
-        $this->assertGreaterThan($currentTime-5000, $storedUser['userid_sec_seen']['foo']);
-        $this->assertLessThan($currentTime+5000, $storedUser['userid_sec_seen']['foo']);
+        $currentTime = microtime(true);
+        $this->assertGreaterThan($currentTime-5, $storedUser['userid_sec_seen']['foo']->microtime(true));
+        $this->assertLessThan($currentTime+5, $storedUser['userid_sec_seen']['foo']->microtime(true));
     }
 
     /**
@@ -82,9 +82,15 @@ class Cassandra2Test extends DBHelper {
         $userid = Models\User::genUUID();
 
         $this->db->rawExecute('INSERT INTO "users" ("userid", "name", "email") VALUES(:userid, :name, :email)', [
-            'userid' => new \Cassandra\Type\Uuid($userid),
-            'name' => new \Cassandra\Type\CollectionMap([ 'foo' => 'Foo Testesen', 'bar' => 'Bar Testesen' ], \Cassandra\Type\Base::ASCII, \Cassandra\Type\Base::ASCII),
-            'email' => new \Cassandra\Type\CollectionMap([ 'foo' => 'foo@example.org', 'bar' => 'bar@example.org' ], \Cassandra\Type\Base::ASCII, \Cassandra\Type\Base::ASCII),
+            'userid' => new \Cassandra\Uuid($userid),
+            'name' => \Cassandra\Type::map(\Cassandra\Type::text(), \Cassandra\Type::text())->create(
+                'foo', 'Foo Testesen',
+                'bar', 'Bar Testesen'
+            ),
+            'email' => \Cassandra\Type::map(\Cassandra\Type::text(), \Cassandra\Type::text())->create(
+                'foo', 'foo@example.org',
+                'bar', 'bar@example.org'
+            ),
         ]);
 
         $user = $this->db->getUserByUserid($userid);
@@ -92,7 +98,7 @@ class Cassandra2Test extends DBHelper {
         $user->selectedsource = 'foo';
         $this->db->updateUserInfo($user, 'foo', ['name', 'email']);
 
-        $results = $this->db->rawQuery('SELECT updated, name, email, selectedsource FROM "users" WHERE userid = :userid', ['userid' => new \Cassandra\Type\Uuid($userid)]);
+        $results = $this->db->rawQuery('SELECT updated, name, email, selectedsource FROM "users" WHERE userid = :userid', ['userid' => new \Cassandra\Uuid($userid)]);
         $this->assertCount(1, $results);
         $storedUser = $results[0];
         $this->assertNotNull($storedUser['updated']);
@@ -114,25 +120,31 @@ class Cassandra2Test extends DBHelper {
         $userid = Models\User::genUUID();
 
         $this->db->rawExecute('INSERT INTO "users" ("userid", "profilephoto", "profilephotohash") VALUES(:userid, :profilephoto, :profilephotohash)', [
-            'userid' => new \Cassandra\Type\Uuid($userid),
-            'profilephoto' => new \Cassandra\Type\CollectionMap([ 'foo' => 'fooimg', 'bar' => 'barimg' ], \Cassandra\Type\Base::ASCII, \Cassandra\Type\Base::BLOB),
-            'profilephotohash' => new \Cassandra\Type\CollectionMap([ 'foo' => 'foohash', 'bar' => 'barhash' ], \Cassandra\Type\Base::ASCII, \Cassandra\Type\Base::ASCII),
+            'userid' => new \Cassandra\Uuid($userid),
+            'profilephoto' => \Cassandra\Type::map(\Cassandra\Type::text(), \Cassandra\Type::blob())->create(
+                'foo', new \Cassandra\Blob('fooimg'),
+                'bar', new \Cassandra\Blob('barimg')
+            ),
+            'profilephotohash' => \Cassandra\Type::map(\Cassandra\Type::text(), \Cassandra\Type::text())->create(
+                'foo', 'foohash',
+                'bar', 'barhash'
+            ),
         ]);
 
         $user = $this->db->getUserByUserid($userid);
         $user->setUserInfo('foo', null, null, 'newfooimg', 'newfoohash');
         $this->db->updateProfilePhoto($user, 'foo');
 
-        $results = $this->db->rawQuery('SELECT updated, profilephoto, profilephotohash FROM "users" WHERE userid = :userid', ['userid' => new \Cassandra\Type\Uuid($userid)]);
+        $results = $this->db->rawQuery('SELECT updated, profilephoto, profilephotohash FROM "users" WHERE userid = :userid', ['userid' => new \Cassandra\Uuid($userid)]);
         $this->assertCount(1, $results);
         $storedUser = $results[0];
         $this->assertNotNull($storedUser['updated']);
         $this->assertArrayHasKey('foo', $storedUser['profilephoto']);
-        $this->assertEquals('newfooimg', $storedUser['profilephoto']['foo']);
+        $this->assertEquals('newfooimg', $storedUser['profilephoto']['foo']->toBinaryString());
         $this->assertArrayHasKey('foo', $storedUser['profilephotohash']);
         $this->assertEquals('newfoohash', $storedUser['profilephotohash']['foo']);
         $this->assertArrayHasKey('bar', $storedUser['profilephoto']);
-        $this->assertEquals('barimg', $storedUser['profilephoto']['bar']);
+        $this->assertEquals('barimg', $storedUser['profilephoto']['bar']->toBinaryString());
         $this->assertArrayHasKey('bar', $storedUser['profilephotohash']);
         $this->assertEquals('barhash', $storedUser['profilephotohash']['bar']);
     }
@@ -146,13 +158,13 @@ class Cassandra2Test extends DBHelper {
         $userid_sec_new = bin2hex(openssl_random_pseudo_bytes(8)) . '@example.org';
 
         $this->db->rawExecute('INSERT INTO "users" ("userid", "userid_sec") VALUES(:userid, :userid_sec)', [
-            'userid' => new \Cassandra\Type\Uuid($userid),
-            'userid_sec' => new \Cassandra\Type\CollectionSet([ $userid_sec_orig ], \Cassandra\Type\Base::ASCII),
+            'userid' => new \Cassandra\Uuid($userid),
+            'userid_sec' => \Cassandra\Type::set(\Cassandra\Type::text())->create($userid_sec_orig),
         ]);
 
         $this->db->addUserIDsec($userid, $userid_sec_new);
 
-        $results = $this->db->rawQuery('SELECT userid_sec FROM "users" WHERE userid = :userid', ['userid' => new \Cassandra\Type\Uuid($userid)]);
+        $results = $this->db->rawQuery('SELECT userid_sec FROM "users" WHERE userid = :userid', ['userid' => new \Cassandra\Uuid($userid)]);
         $this->assertCount(1, $results);
         $storedUser = $results[0];
         $this->assertContains($userid_sec_orig, $storedUser['userid_sec']);
@@ -162,7 +174,7 @@ class Cassandra2Test extends DBHelper {
         $this->assertCount(1, $results);
         $storedUserIDSec = $results[0];
         $this->assertEquals($userid_sec_new, $storedUserIDSec['userid_sec']);
-        $this->assertEquals(new \Cassandra\Type\Uuid($userid), $storedUserIDSec['userid']);
+        $this->assertEquals(new \Cassandra\Uuid($userid), $storedUserIDSec['userid']);
     }
 
     /**
@@ -174,22 +186,22 @@ class Cassandra2Test extends DBHelper {
         $userid_sec_b = bin2hex(openssl_random_pseudo_bytes(8)) . '@example.org';
 
         $this->db->rawExecute('INSERT INTO "users" ("userid", "userid_sec") VALUES(:userid, :userid_sec)', [
-            'userid' => new \Cassandra\Type\Uuid($userid),
-            'userid_sec' => new \Cassandra\Type\CollectionSet([ $userid_sec_a, $userid_sec_b ], \Cassandra\Type\Base::ASCII),
+            'userid' => new \Cassandra\Uuid($userid),
+            'userid_sec' => \Cassandra\Type::set(\Cassandra\Type::text())->create($userid_sec_a, $userid_sec_b),
         ]);
         $this->db->rawExecute('INSERT INTO "userid_sec" ("userid_sec", "userid") VALUES(:userid_sec, :userid)', [
             'userid_sec' => $userid_sec_a,
-            'userid' => new \Cassandra\Type\Uuid($userid),
+            'userid' => new \Cassandra\Uuid($userid),
         ]);
         $this->db->rawExecute('INSERT INTO "userid_sec" ("userid_sec", "userid") VALUES(:userid_sec, :userid)', [
             'userid_sec' => $userid_sec_b,
-            'userid' => new \Cassandra\Type\Uuid($userid),
+            'userid' => new \Cassandra\Uuid($userid),
         ]);
 
         $user = $this->db->getUserByUserid($userid);
         $this->db->deleteUser($user);
 
-        $results = $this->db->rawQuery('SELECT userid FROM "users" WHERE userid = :userid', ['userid' => new \Cassandra\Type\Uuid($userid)]);
+        $results = $this->db->rawQuery('SELECT userid FROM "users" WHERE userid = :userid', ['userid' => new \Cassandra\Uuid($userid)]);
         $this->assertCount(0, $results);
         $results = $this->db->rawQuery('SELECT userid_sec, userid FROM "userid_sec" WHERE userid_sec = :userid_sec', ['userid_sec' => $userid_sec_a]);
         $this->assertCount(0, $results);
@@ -205,32 +217,32 @@ class Cassandra2Test extends DBHelper {
         $userid_sec = bin2hex(openssl_random_pseudo_bytes(8)) . '@example.org';
 
         $this->db->rawExecute('INSERT INTO "users" ("userid", "created", "updated", "name", "email", "profilephoto", "profilephotohash", "selectedsource", "aboveagelimit", "usageterms", "userid_sec", "userid_sec_seen") VALUES(:userid, :created, :updated, :name, :email, :profilephoto, :profilephotohash, :selectedsource, :aboveagelimit, :usageterms, :userid_sec, :userid_sec_seen)', [
-            'userid' => new \Cassandra\Type\Uuid($userid),
-            'created' => new \Cassandra\Type\Timestamp(1122334455667),
-            'updated' => new \Cassandra\Type\Timestamp(1234567890123),
-            'name' => new \Cassandra\Type\CollectionMap([
-                'foo' => 'Foo Testesen',
-                'bar' => 'Bar Testesen',
-            ], \Cassandra\Type\Base::ASCII, \Cassandra\Type\Base::ASCII),
-            'email' => new \Cassandra\Type\CollectionMap([
-                'foo' => 'foo@example.org',
-                'bar' => 'bar@example.org',
-            ], \Cassandra\Type\Base::ASCII, \Cassandra\Type\Base::ASCII),
-            'profilephoto' => new \Cassandra\Type\CollectionMap([
-                'foo' => 'fooimg',
-                'bar' => 'barimg',
-            ], \Cassandra\Type\Base::ASCII, \Cassandra\Type\Base::BLOB),
-            'profilephotohash' => new \Cassandra\Type\CollectionMap([
-                'foo' => 'foohash',
-                'bar' => 'barhash',
-            ], \Cassandra\Type\Base::ASCII, \Cassandra\Type\Base::ASCII),
+            'userid' => new \Cassandra\Uuid($userid),
+            'created' => new \Cassandra\Timestamp(1122334455, 667000),
+            'updated' => new \Cassandra\Timestamp(1234567890, 123000),
+            'name' => \Cassandra\Type::map(\Cassandra\Type::text(), \Cassandra\Type::text())->create(
+                'foo', 'Foo Testesen',
+                'bar', 'Bar Testesen'
+            ),
+            'email' => \Cassandra\Type::map(\Cassandra\Type::text(), \Cassandra\Type::text())->create(
+                'foo', 'foo@example.org',
+                'bar', 'bar@example.org'
+            ),
+            'profilephoto' => \Cassandra\Type::map(\Cassandra\Type::text(), \Cassandra\Type::blob())->create(
+                'foo', new \Cassandra\Blob('fooimg'),
+                'bar', new \Cassandra\Blob('barimg')
+            ),
+            'profilephotohash' => \Cassandra\Type::map(\Cassandra\Type::text(), \Cassandra\Type::text())->create(
+                'foo', 'foohash',
+                'bar', 'barhash'
+            ),
             'selectedsource' => 'foo',
             'aboveagelimit' => false,
             'usageterms' => false,
-            'userid_sec' => new \Cassandra\Type\CollectionSet([ $userid_sec ], \Cassandra\Type\Base::ASCII),
-            'userid_sec_seen' => new \Cassandra\Type\CollectionMap([
-                $userid_sec => 1234567890123,
-            ], \Cassandra\Type\Base::ASCII, \Cassandra\Type\Base::TIMESTAMP),
+            'userid_sec' => \Cassandra\Type::set(\Cassandra\Type::text())->create($userid_sec),
+            'userid_sec_seen' => \Cassandra\Type::map(\Cassandra\Type::text(), \Cassandra\Type::timestamp())->create(
+                $userid_sec, new \Cassandra\Timestamp(1234567890, 123000)
+            ),
         ]);
 
         $user = $this->db->getUserByUserID($userid);
@@ -272,12 +284,12 @@ class Cassandra2Test extends DBHelper {
         $userid_sec = bin2hex(openssl_random_pseudo_bytes(8)) . '@example.org';
 
         $this->db->rawExecute('INSERT INTO "users" ("userid", "userid_sec") VALUES(:userid, :userid_sec)', [
-            'userid' => new \Cassandra\Type\Uuid($userid),
-            'userid_sec' => new \Cassandra\Type\CollectionSet([ $userid_sec ], \Cassandra\Type\Base::ASCII),
+            'userid' => new \Cassandra\Uuid($userid),
+            'userid_sec' => \Cassandra\Type::set(\Cassandra\Type::text())->create($userid_sec),
         ]);
         $this->db->rawExecute('INSERT INTO "userid_sec" ("userid_sec", "userid") VALUES(:userid_sec, :userid)', [
             'userid_sec' => $userid_sec,
-            'userid' => new \Cassandra\Type\Uuid($userid),
+            'userid' => new \Cassandra\Uuid($userid),
         ]);
 
         $user = $this->db->getUserByUserIDsec($userid_sec);
@@ -295,20 +307,20 @@ class Cassandra2Test extends DBHelper {
         $userid_sec_b = bin2hex(openssl_random_pseudo_bytes(8)) . '@example.org';
 
         $this->db->rawExecute('INSERT INTO "users" ("userid", "userid_sec") VALUES(:userid, :userid_sec)', [
-            'userid' => new \Cassandra\Type\Uuid($userid_a),
-            'userid_sec' => new \Cassandra\Type\CollectionSet([ $userid_sec_a ], \Cassandra\Type\Base::ASCII),
+            'userid' => new \Cassandra\Uuid($userid_a),
+            'userid_sec' => \Cassandra\Type::set(\Cassandra\Type::text())->create($userid_sec_a),
         ]);
         $this->db->rawExecute('INSERT INTO "userid_sec" ("userid_sec", "userid") VALUES(:userid_sec, :userid)', [
             'userid_sec' => $userid_sec_a,
-            'userid' => new \Cassandra\Type\Uuid($userid_a),
+            'userid' => new \Cassandra\Uuid($userid_a),
         ]);
         $this->db->rawExecute('INSERT INTO "users" ("userid", "userid_sec") VALUES(:userid, :userid_sec)', [
-            'userid' => new \Cassandra\Type\Uuid($userid_b),
-            'userid_sec' => new \Cassandra\Type\CollectionSet([ $userid_sec_b ], \Cassandra\Type\Base::ASCII),
+            'userid' => new \Cassandra\Uuid($userid_b),
+            'userid_sec' => \Cassandra\Type::set(\Cassandra\Type::text())->create($userid_sec_b),
         ]);
         $this->db->rawExecute('INSERT INTO "userid_sec" ("userid_sec", "userid") VALUES(:userid_sec, :userid)', [
             'userid_sec' => $userid_sec_b,
-            'userid' => new \Cassandra\Type\Uuid($userid_b),
+            'userid' => new \Cassandra\Uuid($userid_b),
         ]);
 
         $users = $this->db->getUserByUserIDsecList([$userid_sec_a, $userid_sec_b]);
@@ -334,21 +346,21 @@ class Cassandra2Test extends DBHelper {
         $this->db->rawExecute('INSERT INTO "apigk" ("id", "descr", "endpoints", "expose", "httpscertpinned", "name", "owner", "organization", "scopes", "requireuser", "scopedef", "privacypolicyurl", "status", "created", "updated") VALUES(:id, :descr, :endpoints, :expose, :httpscertpinned, :name, :owner, :organization, :scopes, :requireuser, :scopedef, :privacypolicyurl, :status, :created, :updated)', [
             'id' => $id,
             'descr' => 'Test API GK description',
-            'endpoints' => new \Cassandra\Type\CollectionList([
+            'endpoints' => \Cassandra\Type::collection(\Cassandra\Type::text())->create(
                 'https://foo.example.org/bar'
-            ], \Cassandra\Type\Base::ASCII),
+            ),
             'expose' => 'expose-value',
             'httpscertpinned' => 'httpscertpinned-value',
             'name' => 'Test API GK name',
-            'owner' => new \Cassandra\Type\Uuid($owner_uuid),
+            'owner' => new \Cassandra\Uuid($owner_uuid),
             'organization' => 'Foo Inc.',
-            'scopes' => new \Cassandra\Type\CollectionSet([ 'foo-scope' ], \Cassandra\Type\Base::ASCII),
+            'scopes' => \Cassandra\Type::set(\Cassandra\Type::text())->create('foo-scope'),
             'requireuser' => true,
             'scopedef' => json_encode([ 'scopedef-key' => 'scopedef-value' ]),
             'privacypolicyurl' => 'https://foo.example.org/privacy-policy',
-            'status' => new \Cassandra\Type\CollectionSet([ 'status-value' ], \Cassandra\Type\Base::ASCII),
-            'created' => new \Cassandra\Type\Timestamp(1122334455667),
-            'updated' => new \Cassandra\Type\Timestamp(1234567890123),
+            'status' => \Cassandra\Type::set(\Cassandra\Type::text())->create('status-value'),
+            'created' => new \Cassandra\Timestamp(1122334455, 667000),
+            'updated' => new \Cassandra\Timestamp(1234567890, 123000),
         ]);
 
         $gk = $this->db->getAPIGK($id);
@@ -380,24 +392,24 @@ class Cassandra2Test extends DBHelper {
         $owner_uuid = \FeideConnect\Data\Model::genUUID();
 
         $this->db->rawExecute('INSERT INTO "clients" ("id", "client_secret", "created", "descr", "name", "owner", "organization", "authproviders", "logo", "redirect_uri", "scopes", "scopes_requested", "status", "type", "updated", "orgauthorization", "authoptions", "supporturl", "privacypolicyurl", "homepageurl") VALUES(:id, :client_secret, :created, :descr, :name, :owner, :organization, :authproviders, :logo, :redirect_uri, :scopes, :scopes_requested, :status, :type, :updated, :orgauthorization, :authoptions, :supporturl, :privacypolicyurl, :homepageurl)', [
-            'id' => new \Cassandra\Type\Uuid($id),
+            'id' => new \Cassandra\Uuid($id),
             'client_secret' => 'secret',
-            'created' => new \Cassandra\Type\Timestamp(1122334455667),
+            'created' => new \Cassandra\Timestamp(1122334455, 667000),
             'descr' => 'Client description',
             'name' => 'Client name',
-            'owner' => new \Cassandra\Type\Uuid($owner_uuid),
+            'owner' => new \Cassandra\Uuid($owner_uuid),
             'organization' => 'Foo Inc.',
-            'authproviders' => new \Cassandra\Type\CollectionSet([ 'some-provider' ], \Cassandra\Type\Base::ASCII),
+            'authproviders' => \Cassandra\Type::set(\Cassandra\Type::text())->create('some-provider'),
             'logo' => 'client-logo',
-            'redirect_uri' => new \Cassandra\Type\CollectionList([ 'https://foo.example.org/redirect' ], \Cassandra\Type\Base::ASCII),
-            'scopes' => new \Cassandra\Type\CollectionSet([ 'foo-scope' ], \Cassandra\Type\Base::ASCII),
-            'scopes_requested' => new \Cassandra\Type\CollectionSet([ 'foo-scope-requested' ], \Cassandra\Type\Base::ASCII),
-            'status' => new \Cassandra\Type\CollectionSet([ 'some-status' ], \Cassandra\Type\Base::ASCII),
+            'redirect_uri' => \Cassandra\Type::collection(\Cassandra\Type::text())->create('https://foo.example.org/redirect'),
+            'scopes' => \Cassandra\Type::set(\Cassandra\Type::text())->create('foo-scope'),
+            'scopes_requested' => \Cassandra\Type::set(\Cassandra\Type::text())->create('foo-scope-requested'),
+            'status' => \Cassandra\Type::set(\Cassandra\Type::text())->create('some-status'),
             'type' => 'type-value',
-            'updated' => new \Cassandra\Type\Timestamp(1234567890123),
-            'orgauthorization' => new \Cassandra\Type\CollectionMap([
-                'example.org' => json_encode(['orgauthorization-value']),
-            ], \Cassandra\Type\Base::ASCII, \Cassandra\Type\Base::ASCII),
+            'updated' => new \Cassandra\Timestamp(1234567890, 123000),
+            'orgauthorization' => \Cassandra\Type::map(\Cassandra\Type::text(), \Cassandra\Type::text())->create(
+                'example.org', json_encode(['orgauthorization-value'])
+            ),
             'authoptions' => json_encode(['authoptions-key' => 'authoptions-value']),
             'supporturl' => 'https://foo.example.org/support',
             'privacypolicyurl' => 'https://foo.example.org/privacy-policy',
@@ -441,11 +453,11 @@ class Cassandra2Test extends DBHelper {
         $clientid = Models\Client::genUUID();
 
         $this->db->rawExecute('INSERT INTO "clients" ("id") VALUES(:id)', [
-            'id' => new \Cassandra\Type\Uuid($clientid),
+            'id' => new \Cassandra\Uuid($clientid),
         ]);
         $this->db->rawExecute('INSERT INTO "mandatory_clients" ("realm", "clientid") VALUES(:realm, :clientid)', [
             'realm' => 'example.org',
-            'clientid' => new \Cassandra\Type\Uuid($clientid),
+            'clientid' => new \Cassandra\Uuid($clientid),
         ]);
 
         $client = $this->db->getClient($clientid);
@@ -466,11 +478,11 @@ class Cassandra2Test extends DBHelper {
         $this->db->rawExecute('TRUNCATE organizations', []);
         $this->db->rawExecute('INSERT INTO "organizations" ("id", "services") VALUES(:id, :services)', [
             'id' => $orgid_a,
-            'services' => new \Cassandra\Type\CollectionSet([ 'service-1' ], \Cassandra\Type\Base::ASCII),
+            'services' => \Cassandra\Type::set(\Cassandra\Type::text())->create('service-1'),
         ]);
         $this->db->rawExecute('INSERT INTO "organizations" ("id", "services") VALUES(:id, :services)', [
             'id' => $orgid_b,
-            'services' => new \Cassandra\Type\CollectionSet([ 'service-1', 'service-2' ], \Cassandra\Type\Base::ASCII),
+            'services' => \Cassandra\Type::set(\Cassandra\Type::text())->create('service-1', 'service-2'),
         ]);
 
         $result = $this->db->getOrgsByService('service-1');
@@ -494,14 +506,14 @@ class Cassandra2Test extends DBHelper {
 
         $this->db->rawExecute('INSERT INTO "organizations" ("id", "name", "realm", "type", "uiinfo", "services") VALUES(:id, :name, :realm, :type, :uiinfo, :services)', [
             'id' => $orgid,
-            'name' => new \Cassandra\Type\CollectionMap([
-                'nb' => 'Organisasjonsnavn',
-                'en' => 'Organization name',
-            ], \Cassandra\Type\Base::ASCII, \Cassandra\Type\Base::ASCII),
+            'name' => \Cassandra\Type::map(\Cassandra\Type::text(), \Cassandra\Type::text())->create(
+                'nb', 'Organisasjonsnavn',
+                'en', 'Organization name'
+            ),
             'realm' => 'example.org',
-            'type' => new \Cassandra\Type\CollectionSet([ 'type-value' ], \Cassandra\Type\Base::ASCII),
+            'type' => \Cassandra\Type::set(\Cassandra\Type::text())->create('type-value'),
             'uiinfo' => json_encode(['uiinfo-key' => 'uiinfo-value']),
-            'services' => new \Cassandra\Type\CollectionSet([ 'service-value' ], \Cassandra\Type\Base::ASCII),
+            'services' => \Cassandra\Type::set(\Cassandra\Type::text())->create('service-value'),
         ]);
 
         $org = $this->db->getOrg($orgid);
@@ -528,18 +540,18 @@ class Cassandra2Test extends DBHelper {
         $subtoken_id = Models\AccessToken::genUUID();
 
         $this->db->rawExecute('INSERT INTO "oauth_tokens" ("access_token", "clientid", "userid", "issued", "scope", "token_type", "validuntil", "lastuse", "apigkid", "subtokens") VALUES(:access_token, :clientid, :userid, :issued, :scope, :token_type, :validuntil, :lastuse, :apigkid, :subtokens)', [
-            'access_token' => new \Cassandra\Type\Uuid($id),
-            'clientid' => new \Cassandra\Type\Uuid($clientid),
-            'userid' => new \Cassandra\Type\Uuid($userid),
-            'issued' => new \Cassandra\Type\Timestamp(1000000000000),
-            'scope' => new \Cassandra\Type\CollectionSet([ 'scope-value' ], \Cassandra\Type\Base::ASCII),
+            'access_token' => new \Cassandra\Uuid($id),
+            'clientid' => new \Cassandra\Uuid($clientid),
+            'userid' => new \Cassandra\Uuid($userid),
+            'issued' => new \Cassandra\Timestamp(1000000000, 0),
+            'scope' => \Cassandra\Type::set(\Cassandra\Type::text())->create('scope-value'),
             'token_type' => 'token-type-value',
-            'validuntil' => new \Cassandra\Type\Timestamp(1234567890123),
-            'lastuse' => new \Cassandra\Type\Timestamp(1122334455667),
+            'validuntil' => new \Cassandra\Timestamp(1234567890, 123000),
+            'lastuse' => new \Cassandra\Timestamp(1122334455, 667000),
             'apigkid' => 'apigkid-value',
-            'subtokens' => new \Cassandra\Type\CollectionMap([
-                'foo' => $subtoken_id,
-            ], \Cassandra\Type\Base::ASCII, \Cassandra\Type\Base::UUID),
+            'subtokens' => \Cassandra\Type::map(\Cassandra\Type::text(), \Cassandra\Type::uuid())->create(
+                'foo', new \Cassandra\Uuid($subtoken_id)
+            ),
         ]);
 
         $token = $this->db->getAccessToken($id);
@@ -573,16 +585,16 @@ class Cassandra2Test extends DBHelper {
         $userid = Models\User::genUUID();
 
         $this->db->rawExecute('INSERT INTO "oauth_tokens" ("access_token", "clientid", "userid", "apigkid") VALUES(:access_token, :clientid, :userid, :apigkid)', [
-            'access_token' => new \Cassandra\Type\Uuid($id_a),
-            'clientid' => new \Cassandra\Type\Uuid($clientid),
-            'userid' => new \Cassandra\Type\Uuid($userid),
+            'access_token' => new \Cassandra\Uuid($id_a),
+            'clientid' => new \Cassandra\Uuid($clientid),
+            'userid' => new \Cassandra\Uuid($userid),
             'apigkid' => '',
         ]);
 
         $this->db->rawExecute('INSERT INTO "oauth_tokens" ("access_token", "clientid", "userid", "apigkid") VALUES(:access_token, :clientid, :userid, :apigkid)', [
-            'access_token' => new \Cassandra\Type\Uuid($id_b),
-            'clientid' => new \Cassandra\Type\Uuid($clientid),
-            'userid' => new \Cassandra\Type\Uuid($userid),
+            'access_token' => new \Cassandra\Uuid($id_b),
+            'clientid' => new \Cassandra\Uuid($clientid),
+            'userid' => new \Cassandra\Uuid($userid),
             'apigkid' => '',
         ]);
 
@@ -619,25 +631,25 @@ class Cassandra2Test extends DBHelper {
         $this->db->saveToken($token);
 
         $results = $this->db->rawQuery('SELECT * FROM "oauth_tokens" WHERE access_token = :id', [
-            'id' => new \Cassandra\Type\Uuid($id),
+            'id' => new \Cassandra\Uuid($id),
         ]);
         $this->assertCount(1, $results);
         $storedToken = $results[0];
         $this->assertEquals($clientid, $storedToken['clientid']);
         $this->assertEquals($userid, $storedToken['userid']);
         $this->assertEquals('apigkid-value', $storedToken['apigkid']);
-        $this->assertEquals(1000000000000, $storedToken['issued']);
-        $this->assertEquals($validuntil*1000, $storedToken['validuntil']);
+        $this->assertEquals(1000000000.000, $storedToken['issued']->microtime(true));
+        $this->assertEquals($validuntil, $storedToken['validuntil']->microtime(true));
         $this->assertEquals($id, $storedToken['access_token']);
         $this->assertEquals('token-type-value', $storedToken['token_type']);
-        $this->assertEquals(['scope-value'], $storedToken['scope']);
+        $this->assertEquals(['scope-value'], $storedToken['scope']->values());
 
         $results = $this->db->rawQuery('SELECT count_tokens FROM "clients_counters" WHERE id = :id', [
-            'id' => new \Cassandra\Type\Uuid($clientid),
+            'id' => new \Cassandra\Uuid($clientid),
         ]);
         $this->assertCount(1, $results);
         $counters = $results[0];
-        $this->assertEquals(1, $counters['count_tokens']);
+        $this->assertEquals(1, $counters['count_tokens']->value());
     }
 
     /**
@@ -648,13 +660,13 @@ class Cassandra2Test extends DBHelper {
         $userid = Models\User::genUUID();
 
         $this->db->rawExecute('INSERT INTO "oauth_authorizations" ("clientid", "userid", "scopes", "issued", "apigk_scopes") VALUES(:clientid, :userid, :scopes, :issued, :apigk_scopes)', [
-            'clientid' => new \Cassandra\Type\Uuid($clientid),
-            'userid' => new \Cassandra\Type\Uuid($userid),
-            'scopes' => new \Cassandra\Type\CollectionSet([ 'scopes-value' ], \Cassandra\Type\Base::ASCII),
-            'issued' => new \Cassandra\Type\Timestamp(1000000000000),
-            'apigk_scopes' => new \Cassandra\Type\CollectionMap([
-                'foo' => [ 'foo-value' ],
-            ], \Cassandra\Type\Base::ASCII, ["type" => \Cassandra\Type\Base::COLLECTION_SET, "value" => \Cassandra\Type\Base::ASCII]),
+            'clientid' => new \Cassandra\Uuid($clientid),
+            'userid' => new \Cassandra\Uuid($userid),
+            'scopes' => \Cassandra\Type::set(\Cassandra\Type::text())->create('scopes-value'),
+            'issued' => new \Cassandra\Timestamp(1000000000, 0),
+            'apigk_scopes' => \Cassandra\Type::map(\Cassandra\Type::text(), \Cassandra\Type::set(\Cassandra\Type::text()))->create(
+                'foo', \Cassandra\Type::set(\Cassandra\Type::text())->create('foo-value')
+            ),
         ]);
 
         $auth = $this->db->getAuthorization($userid, $clientid);
@@ -694,24 +706,24 @@ class Cassandra2Test extends DBHelper {
         $this->db->saveAuthorization($auth);
 
         $results = $this->db->rawQuery('SELECT * FROM "oauth_authorizations" WHERE "userid" = :userid AND "clientid" = :clientid', [
-            'userid' => new \Cassandra\Type\Uuid($userid),
-            'clientid' => new \Cassandra\Type\Uuid($clientid),
+            'userid' => new \Cassandra\Uuid($userid),
+            'clientid' => new \Cassandra\Uuid($clientid),
         ]);
         $this->assertCount(1, $results);
         $storedAuth = $results[0];
         $this->assertEquals($clientid, $storedAuth['clientid']);
         $this->assertEquals($userid, $storedAuth['userid']);
-        $this->assertEquals(1000000000000, $storedAuth['issued']);
-        $this->assertEquals(['scopes-value'], $storedAuth['scopes']);
+        $this->assertEquals(1000000000, $storedAuth['issued']->microtime(true));
+        $this->assertEquals(['scopes-value'], $storedAuth['scopes']->values());
         $this->assertArrayHasKey('foo', $storedAuth['apigk_scopes']);
-        $this->assertEquals(['foo-value'], $storedAuth['apigk_scopes']['foo']);
+        $this->assertEquals(['foo-value'], $storedAuth['apigk_scopes']['foo']->values());
 
         $results = $this->db->rawQuery('SELECT count_users FROM "clients_counters" WHERE id = :id', [
-            'id' => new \Cassandra\Type\Uuid($clientid),
+            'id' => new \Cassandra\Uuid($clientid),
         ]);
         $this->assertCount(1, $results);
         $counters = $results[0];
-        $this->assertEquals(1, $counters['count_users']);
+        $this->assertEquals(1, $counters['count_users']->value());
     }
 
     /**
@@ -723,18 +735,18 @@ class Cassandra2Test extends DBHelper {
         $userid = Models\User::genUUID();
 
         $this->db->rawExecute('INSERT INTO "oauth_codes" ("code", "clientid", "userid", "scope", "token_type", "redirect_uri", "idtoken", "issued", "validuntil", "apigk_scopes") VALUES(:code, :clientid, :userid, :scope, :token_type, :redirect_uri, :idtoken, :issued, :validuntil, :apigk_scopes)', [
-            'code' => new \Cassandra\Type\Uuid($code),
-            'clientid' => new \Cassandra\Type\Uuid($clientid),
-            'userid' => new \Cassandra\Type\Uuid($userid),
-            'scope' => new \Cassandra\Type\CollectionSet([ 'scope-value' ], \Cassandra\Type\Base::ASCII),
+            'code' => new \Cassandra\Uuid($code),
+            'clientid' => new \Cassandra\Uuid($clientid),
+            'userid' => new \Cassandra\Uuid($userid),
+            'scope' => \Cassandra\Type::set(\Cassandra\Type::text())->create('scope-value'),
             'token_type' => 'token-type-value',
             'redirect_uri' => 'https://foo.example.org/redirect',
             'idtoken' => 'idtoken-value',
-            'issued' => new \Cassandra\Type\Timestamp(1000000000000),
-            'validuntil' => new \Cassandra\Type\Timestamp(1234567890123),
-            'apigk_scopes' => new \Cassandra\Type\CollectionMap([
-                'foo' => [ 'foo-value' ],
-            ], \Cassandra\Type\Base::ASCII, ["type" => \Cassandra\Type\Base::COLLECTION_SET, "value" => \Cassandra\Type\Base::ASCII]),
+            'issued' => new \Cassandra\Timestamp(1000000000, 0),
+            'validuntil' => new \Cassandra\Timestamp(1234567890, 123000),
+            'apigk_scopes' => \Cassandra\Type::map(\Cassandra\Type::text(), \Cassandra\Type::set(\Cassandra\Type::text()))->create(
+                'foo', \Cassandra\Type::set(\Cassandra\Type::text())->create('foo-value')
+            ),
         ]);
 
         $authcode = $this->db->getAuthorizationCode($code);
@@ -783,21 +795,21 @@ class Cassandra2Test extends DBHelper {
         $this->db->saveAuthorizationCode($authcode);
 
         $results = $this->db->rawQuery('SELECT * FROM "oauth_codes" WHERE code = :code', [
-            'code' => new \Cassandra\Type\Uuid($code),
+            'code' => new \Cassandra\Uuid($code),
         ]);
         $this->assertCount(1, $results);
         $storedCode = $results[0];
         $this->assertEquals($code, $storedCode['code']);
         $this->assertEquals($clientid, $storedCode['clientid']);
         $this->assertEquals($userid, $storedCode['userid']);
-        $this->assertEquals(1000000000000, $storedCode['issued']);
-        $this->assertEquals($validuntil*1000, $storedCode['validuntil']);
+        $this->assertEquals(1000000000.000, $storedCode['issued']->microtime(true));
+        $this->assertEquals($validuntil, $storedCode['validuntil']->microtime(true));
         $this->assertEquals('token-type-value', $storedCode['token_type']);
         $this->assertEquals('idtoken-value', $storedCode['idtoken']);
         $this->assertEquals('https://foo.example.org/redirect', $storedCode['redirect_uri']);
-        $this->assertEquals(['scope-value'], $storedCode['scope']);
+        $this->assertEquals(['scope-value'], $storedCode['scope']->values());
         $this->assertArrayHasKey('foo', $storedCode['apigk_scopes']);
-        $this->assertEquals(['foo-value'], $storedCode['apigk_scopes']['foo']);
+        $this->assertEquals(['foo-value'], $storedCode['apigk_scopes']['foo']->values());
     }
 
     /**
@@ -807,14 +819,14 @@ class Cassandra2Test extends DBHelper {
         $code = Models\AuthorizationCode::genUUID();
 
         $this->db->rawExecute('INSERT INTO "oauth_codes" ("code") VALUES(:code)', [
-            'code' => new \Cassandra\Type\Uuid($code),
+            'code' => new \Cassandra\Uuid($code),
         ]);
 
         $authcode = $this->db->getAuthorizationCode($code);
         $this->db->removeAuthorizationCode($authcode);
 
         $results = $this->db->rawQuery('SELECT code FROM "oauth_codes" WHERE code = :code', [
-            'code' => new \Cassandra\Type\Uuid($code),
+            'code' => new \Cassandra\Uuid($code),
         ]);
         $this->assertCount(0, $results);
     }
@@ -833,7 +845,7 @@ class Cassandra2Test extends DBHelper {
             // We generate a new client id for each loop, so that we can ensure that the counter is zero.
             $clientid = Models\Client::genUUID();
             $this->db->rawExecute('INSERT INTO "clients" ("id") VALUES(:id)', [
-                'id' => new \Cassandra\Type\Uuid($clientid),
+                'id' => new \Cassandra\Uuid($clientid),
             ]);
             $client = $this->db->getClient($clientid);
 
@@ -846,14 +858,14 @@ class Cassandra2Test extends DBHelper {
         } while ($start->getValue() !== $end->getValue());
 
         $results = $this->db->rawQuery('SELECT login_count FROM logins_stats WHERE clientid = :clientid AND date = :date AND authsource = :authsource AND timeslot = :timeslot', [
-            'clientid' => new \Cassandra\Type\Uuid($clientid),
+            'clientid' => new \Cassandra\Uuid($clientid),
             'date' => $start->datestring(),
             'authsource' => 'foo-auth',
             'timeslot' => $start->getCassandraTimestamp(),
         ]);
         $this->assertCount(1, $results);
         $result = $results[0];
-        $this->assertEquals(1, $result['login_count']);
+        $this->assertEquals(1, $result['login_count']->value());
     }
 
 }

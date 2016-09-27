@@ -12,17 +12,6 @@ use FeideConnect\Data\Models;
 use FeideConnect\Exceptions\Exception;
 use FeideConnect\Exceptions\StorageException;
 
-use Cassandra\Connection;
-use Cassandra\Request\Request;
-use Cassandra\Type\Uuid;
-use Cassandra\Type\Timestamp;
-use Cassandra\Type\Blob;
-use Cassandra\Type\CollectionMap;
-use Cassandra\Type\CollectionSet;
-use Cassandra\Type\Base;
-
-// use duoshuo\php-cassandra\Connection;
-
 // use \Exception;
 
 class Cassandra2 extends \FeideConnect\Data\Repository {
@@ -39,31 +28,47 @@ class Cassandra2 extends \FeideConnect\Data\Repository {
         if (empty($config['nodes'])) {
             throw new Exception('Required config [nodes] not set');
         }
-        $hostprefix = '';
-        if (!empty($config['use_ssl']) and $config['use_ssl']) {
-            $hostprefix = 'ssl://';
-        }
+        list($nodes, $port) = self::parseNodes($config);
         $username = getenv('CASSANDRA_USERNAME');
         $password = getenv('CASSANDRA_PASSWORD');
 
-        $nodes = [];
-        foreach ($config['nodes'] as $node) {
-            $node_data = [
-                'host' => $hostprefix . $node,
-                'port' => 9042,
-                'class'    => 'Cassandra\Connection\Stream',
-            ];
-            if ($username and $password) {
-                $node_data['username'] = $username;
-                $node_data['password'] = $password;
-            }
-            $nodes[] = $node_data;
+        $cluster = \Cassandra::cluster()
+                 ->withContactPoints(implode(',', $nodes))
+                 ->withPort($port)
+                 ->withDefaultConsistency(\Cassandra::CONSISTENCY_LOCAL_QUORUM);
+        if (!empty($username) && !empty($password)) {
+            $cluster = $cluster->withCredentials($username, $password);
         }
+        if (!empty($config['use_ssl']) and $config['use_ssl']) {
+            $ssl = \Cassandra::ssl()
+                 ->withVerifyFlags(\Cassandra::VERIFY_PEER_CERT)
+                 ->withTrustedCerts('/etc/ssl/certs/cassandraca.pem')
+                 ->build();
+            $cluster = $cluster->withSSL($ssl);
+        }
+        $cluster = $cluster->build();
+        $this->db = $cluster->connect($config['keyspace']);
+    }
 
-        // $this->db = new \evseevnn\Cassandra\Database($config['nodes'], $config['keyspace']);
-        $this->db = new Connection($nodes, $config['keyspace']);
-        $this->db->connect();
-        $this->db->setConsistency(Request::CONSISTENCY_LOCAL_QUORUM);
+    private static function parseNodes($config) {
+        $nodes = [];
+        $ports = [];
+        foreach ($config['nodes'] as $node) {
+            if (strpos($node, ':') !== false) {
+                list($node, $port) = explode(':', $node, 2);
+                $port = (int)$port;
+            } else {
+                $port = 9042;
+            }
+            $nodes[] = $node;
+            $ports[] = $port;
+        }
+        $ports = array_unique($ports);
+        if (count($ports) > 1) {
+            throw new Exception('The DataStax PHP driver does not allow connections to different nodes on different ports.');
+        }
+        $port = $ports[0];
+        return [$nodes, $port];
     }
 
     protected function getTTLskew(\FeideConnect\Data\Types\Timestamp $validuntil) {
@@ -120,17 +125,12 @@ class Cassandra2 extends \FeideConnect\Data\Repository {
 
 
         try {
-            // $this->db->beginBatch();
-            $this->db->querySync(
-                $query,
-                $data,
-                \Cassandra\Request\Request::CONSISTENCY_QUORUM,
-                [
-                    'names_for_values' => true
-                ]
-            );
-            // $result = $this->db->applyBatch();
-
+            $statement = new \Cassandra\SimpleStatement($query);
+            $options = new \Cassandra\ExecutionOptions([
+                'arguments' => $data,
+                'consistency' => \Cassandra::CONSISTENCY_QUORUM,
+            ]);
+            $response = $this->db->execute($statement, $options);
 
         } catch (StorageException $e) {
             // TODO catch only Cassandras own exception type
@@ -173,15 +173,12 @@ class Cassandra2 extends \FeideConnect\Data\Repository {
         $data = null;
 
         try {
-            $response = $this->db->querySync(
-                $query,
-                $params,
-                \Cassandra\Request\Request::CONSISTENCY_QUORUM,
-                [
-                    'names_for_values' => true
-                ]
-            );
-            $data = $response->fetchAll();
+            $statement = new \Cassandra\SimpleStatement($query);
+            $options = new \Cassandra\ExecutionOptions([
+                'arguments' => $params,
+                'consistency' => \Cassandra::CONSISTENCY_QUORUM,
+            ]);
+            $data = $this->db->execute($statement, $options);
 
         } catch (\Exception $e) {
             // TODO catch only Cassandras own exception type
@@ -199,9 +196,6 @@ class Cassandra2 extends \FeideConnect\Data\Repository {
         if ($data === null) {
             return null;
         }
-
-        // $data should be an SplFixedArray
-        assert('$data instanceof SplFixedArray');
 
         if ($multiple) {
             $res = [];
@@ -280,7 +274,7 @@ class Cassandra2 extends \FeideConnect\Data\Repository {
             'WHERE userid = :userid';
         $params = [
             'updated' => (new \FeideConnect\Data\Types\Timestamp())->getCassandraTimestamp(),
-            'userid' => new Uuid($user->userid),
+            'userid' => new \Cassandra\Uuid($user->userid),
             'aboveagelimit' => $user->aboveagelimit,
             'usageterms' => $user->usageterms
         ];
@@ -298,7 +292,7 @@ class Cassandra2 extends \FeideConnect\Data\Repository {
             'WHERE userid = :userid';
         $params = [
             'updated' => (new \FeideConnect\Data\Types\Timestamp())->getCassandraTimestamp(),
-            'userid' => new Uuid($user->userid),
+            'userid' => new \Cassandra\Uuid($user->userid),
             'useridsec' => $useridsec,
         ];
 
@@ -317,7 +311,7 @@ class Cassandra2 extends \FeideConnect\Data\Repository {
         $userinfo = $user->getUserInfo($sourceID);
         $params = [
             'updated' => (new \FeideConnect\Data\Types\Timestamp())->getCassandraTimestamp(),
-            'userid' => new Uuid($user->userid),
+            'userid' => new \Cassandra\Uuid($user->userid),
             'name' => $userinfo['name'],
             'email' => $userinfo['email'],
             'selectedsource' => $user->selectedsource
@@ -358,8 +352,8 @@ class Cassandra2 extends \FeideConnect\Data\Repository {
             'WHERE userid = :userid';
         $params = [
             'updated' => (new \FeideConnect\Data\Types\Timestamp())->getCassandraTimestamp(),
-            'userid' => new Uuid($user->userid),
-            'profilephoto' => new Blob($userinfo['profilephoto']),
+            'userid' => new \Cassandra\Uuid($user->userid),
+            'profilephoto' => new \Cassandra\Blob($userinfo['profilephoto']),
             'profilephotohash' => $userinfo['profilephotohash'],
         ];
         $this->execute($query, $params, __FUNCTION__);
@@ -372,13 +366,13 @@ class Cassandra2 extends \FeideConnect\Data\Repository {
         $query  = 'UPDATE "users" SET userid_sec = userid_sec + :useridsec  WHERE userid = :userid';
         $query2 = 'INSERT INTO "userid_sec" (userid_sec, userid) VALUES (:useridsec, :userid)';
         $this->execute($query, [
-            'userid' => new Uuid($userid),
-            'useridsec' => new CollectionSet([$userid_sec], Base::ASCII)
+            'userid' => new \Cassandra\Uuid($userid),
+            'useridsec' => \Cassandra\Type::set(\Cassandra\Type::text())->create($userid_sec),
         ], __FUNCTION__);
 
         $this->execute($query2, [
             'useridsec' => $userid_sec,
-            'userid' => new Uuid($userid),
+            'userid' => new \Cassandra\Uuid($userid),
         ], __FUNCTION__);
     }
 
@@ -392,10 +386,14 @@ class Cassandra2 extends \FeideConnect\Data\Repository {
         $query1 = 'DELETE FROM "users" WHERE ("userid" = :userid)';
         $query2 = 'DELETE FROM "userid_sec" WHERE ("userid_sec" IN :useridsecs) ';
 
-        $this->execute($query1, ['userid' => new Uuid($user->userid)], __FUNCTION__);
+        $this->execute($query1, ['userid' => new \Cassandra\Uuid($user->userid)], __FUNCTION__);
         if (!empty($user->userid_sec)) {
+            $useridsecs = \Cassandra\Type::set(\Cassandra\Type::text())->create();
+            foreach ($user->userid_sec as $userid_sec) {
+                $useridsecs->add($userid_sec);
+            }
             $this->execute($query2, [
-                'useridsecs' => new CollectionSet($user->userid_sec, Base::ASCII)
+                'useridsecs' => $useridsecs,
             ], __FUNCTION__);
         }
 
@@ -404,7 +402,7 @@ class Cassandra2 extends \FeideConnect\Data\Repository {
     public function getUserByUserID($userid) {
         $query = 'SELECT userid, created, updated, name, email, profilephoto, profilephotohash, selectedsource, aboveagelimit, usageterms, userid_sec, userid_sec_seen FROM "users" WHERE "userid" = :userid';
         // $query = 'SELECT * FROM "users" WHERE "userid" = :userid';
-        $params = ['userid' => new Uuid($userid)];
+        $params = ['userid' => new \Cassandra\Uuid($userid)];
         return $this->query($query, $params, __FUNCTION__, 'FeideConnect\Data\Models\User', false);
     }
 
@@ -434,10 +432,13 @@ class Cassandra2 extends \FeideConnect\Data\Repository {
      */
     public function getUserByUserIDsecList($useridsec) {
 
-
+        $useridsec_set = \Cassandra\Type::set(\Cassandra\Type::text())->create();
+        foreach ($useridsec as $u) {
+            $useridsec_set->add($u);
+        }
 
         $query = 'SELECT userid_sec, userid FROM "userid_sec" WHERE "userid_sec" IN :userid_sec';
-        $params = ['userid_sec' => new CollectionSet($useridsec, Base::ASCII)];
+        $params = ['userid_sec' => $useridsec_set];
 
         // echo var_export($params, true);
 
@@ -446,21 +447,17 @@ class Cassandra2 extends \FeideConnect\Data\Repository {
             return null;
         }
 
-
-        // Helper function to get an array with a list of userids
-        $func = function ($item) {
-            return $item['userid'];
-        };
-        $userids = array_unique(array_map($func, $data));
-
-
+        $userids_set = \Cassandra\Type::set(\Cassandra\Type::uuid())->create();
+        foreach ($data as $row) {
+            $userids_set->add(new \Cassandra\Uuid($row['userid']));
+        }
 
         // echo '<pre>About to lookup userids';
         // print_r($userids);
 
         // Retrieve the userids from the user table...
         $query2 = 'SELECT userid, created, updated, name, email, profilephoto, profilephotohash, selectedsource, aboveagelimit, usageterms, userid_sec, userid_sec_seen FROM "users" WHERE ("userid" IN :userids)';
-        $params2 = ['userids' => new CollectionSet($userids, Base::UUID)];
+        $params2 = ['userids' => $userids_set];
         // echo var_export($params2, true);
         $res = $this->query($query2, $params2, __FUNCTION__, 'FeideConnect\Data\Models\User', true);
 
@@ -514,7 +511,7 @@ class Cassandra2 extends \FeideConnect\Data\Repository {
      */
     public function getClient($id) {
         $query = 'SELECT id, client_secret, created, descr, name, owner, organization, authproviders, logo, redirect_uri, scopes, scopes_requested, status, type, updated, orgauthorization, authoptions, supporturl, privacypolicyurl, homepageurl FROM "clients" WHERE "id" = :id';
-        $params = ['id' => new Uuid($id)];
+        $params = ['id' => new \Cassandra\Uuid($id)];
         return $this->query($query, $params, __FUNCTION__, 'FeideConnect\Data\Models\Client', false);
     }
 
@@ -528,7 +525,7 @@ class Cassandra2 extends \FeideConnect\Data\Repository {
 
     public function removeClient(Models\Client $client) {
         $query = 'DELETE FROM "clients" WHERE "id" = :id';
-        $params = ['id' => new Uuid($client->id)];
+        $params = ['id' => new \Cassandra\Uuid($client->id)];
         $this->execute($query, $params, __FUNCTION__);
     }
 
@@ -538,7 +535,7 @@ class Cassandra2 extends \FeideConnect\Data\Repository {
 
     public function checkMandatory($realm, Models\Client $client) {
         $query = 'SELECT realm, clientid FROM "mandatory_clients" WHERE "realm" = :realm AND "clientid" = :clientid';
-        $params = ['realm' => $realm, 'clientid' => new Uuid($client->id)];
+        $params = ['realm' => $realm, 'clientid' => new \Cassandra\Uuid($client->id)];
         return $this->query($query, $params, __FUNCTION__);
     }
 
@@ -580,7 +577,7 @@ class Cassandra2 extends \FeideConnect\Data\Repository {
      */
     public function getAccessToken($accesstoken) {
         $query = 'SELECT access_token, apigkid, clientid, issued, lastuse, scope, subtokens, token_type, userid, validuntil FROM "oauth_tokens" WHERE "access_token" = :access_token';
-        $params = ['access_token' => new Uuid($accesstoken)];
+        $params = ['access_token' => new \Cassandra\Uuid($accesstoken)];
         return $this->query($query, $params, __FUNCTION__, 'FeideConnect\Data\Models\AccessToken', false);
     }
 
@@ -588,8 +585,8 @@ class Cassandra2 extends \FeideConnect\Data\Repository {
 
         $query = 'SELECT access_token, apigkid, clientid, issued, lastuse, scope, subtokens, token_type, userid, validuntil FROM "oauth_tokens" WHERE "userid" = :userid AND "clientid" = :clientid  AND "apigkid" = :apigkid ALLOW FILTERING';
         $params = [
-            'userid' => new Uuid($userid),
-            'clientid' => new Uuid($clientid),
+            'userid' => new \Cassandra\Uuid($userid),
+            'clientid' => new \Cassandra\Uuid($clientid),
             'apigkid' => '',
         ];
 
@@ -610,7 +607,7 @@ class Cassandra2 extends \FeideConnect\Data\Repository {
 
 
         $query = 'UPDATE "clients_counters" SET count_tokens = count_tokens + 1 WHERE "id" = :id';
-        $params = ['id' => new Uuid($token->clientid)];
+        $params = ['id' => new \Cassandra\Uuid($token->clientid)];
         $this->execute($query, $params, __FUNCTION__);
     }
 
@@ -626,13 +623,13 @@ class Cassandra2 extends \FeideConnect\Data\Repository {
      */
     public function getAuthorization($userid, $clientid) {
         $query = 'SELECT userid, clientid, apigk_scopes, issued, scopes FROM "oauth_authorizations" WHERE "userid" = :userid AND "clientid" = :clientid';
-        $params = ['userid' => new Uuid($userid), 'clientid' => new Uuid($clientid)];
+        $params = ['userid' => new \Cassandra\Uuid($userid), 'clientid' => new \Cassandra\Uuid($clientid)];
         return $this->query($query, $params, __FUNCTION__, 'FeideConnect\Data\Models\Authorization', false);
     }
 
     public function getAuthorizationsByUser(Models\User $user) {
         $query = 'SELECT userid, clientid, apigk_scopes, issued, scopes FROM "oauth_authorizations" WHERE "userid" = :userid';
-        $params = ['userid' => new Uuid($user->userid)];
+        $params = ['userid' => new \Cassandra\Uuid($user->userid)];
         return $this->query($query, $params, __FUNCTION__, 'FeideConnect\Data\Models\Authorization', true);
     }
 
@@ -642,7 +639,7 @@ class Cassandra2 extends \FeideConnect\Data\Repository {
         $this->execute($query, $data, __FUNCTION__);
 
         $query = 'UPDATE "clients_counters" SET count_users = count_users + 1 WHERE "id" = :id';
-        $params = ['id' => new Uuid($authorization->clientid)];
+        $params = ['id' => new \Cassandra\Uuid($authorization->clientid)];
         return $this->execute($query, $params, __FUNCTION__);
     }
 
@@ -652,7 +649,7 @@ class Cassandra2 extends \FeideConnect\Data\Repository {
      */
     public function getAuthorizationCode($code) {
         $query = 'SELECT code, apigk_scopes, clientid, idtoken, issued, redirect_uri, scope, token_type, userid, validuntil FROM "oauth_codes" WHERE "code" = :code';
-        $params = ['code' => new Uuid($code)];
+        $params = ['code' => new \Cassandra\Uuid($code)];
         return $this->query($query, $params, __FUNCTION__, 'FeideConnect\Data\Models\AuthorizationCode', false);
     }
 
@@ -668,7 +665,7 @@ class Cassandra2 extends \FeideConnect\Data\Repository {
 
     public function removeAuthorizationCode(Models\AuthorizationCode $code) {
         $query = 'DELETE FROM "oauth_codes" WHERE "code" = :code';
-        $params = ['code' => new Uuid($code->code)];
+        $params = ['code' => new \Cassandra\Uuid($code->code)];
         $this->execute($query, $params, __FUNCTION__);
     }
 
@@ -680,7 +677,7 @@ class Cassandra2 extends \FeideConnect\Data\Repository {
         $query = 'UPDATE "logins_stats" SET login_count = login_count + 1 WHERE "clientid" = :clientid';
         $query .= ' AND "date" = :date AND "timeslot" = :timeslot AND "authsource" = :authsource';
         $params = [
-            'clientid' => new Uuid($client->id),
+            'clientid' => new \Cassandra\Uuid($client->id),
             'date' => $date,
             'timeslot' => $timeslot->getCassandraTimestamp(),
             'authsource' => $authsource,

@@ -16,10 +16,10 @@ class AccessToken extends \FeideConnect\Data\Model {
         'userid' => 'uuid',
         'issued' => 'timestamp',
         'scope' => 'set<text>',
-        'token_type' => 'default',
+        'token_type' => 'text',
         'validuntil' => 'timestamp',
         'lastuse' => 'timestamp',
-        'apigkid' => 'default',
+        'apigkid' => 'text',
         'subtokens' => 'map<text,uuid>',
     ];
 

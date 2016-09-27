@@ -2,7 +2,7 @@
 set -e
 cd "$(dirname "${BASH_SOURCE[0]}")"
 
-docker-compose up -d
+docker-compose up -d cassandra
 function clean-docker() {
     docker-compose kill
     docker-compose rm --force --all
@@ -16,10 +16,8 @@ CASSANDRA_PORT=$(docker-compose port cassandra 9042 | sed 's@.*:@@')
 CASSANDRA="localhost:${CASSANDRA_PORT}"
 
 echo "Cassandra available on ${CASSANDRA}"
-echo "Waiting schema setup to complete"
-while ! docker-compose ps 2>/dev/null | grep -q 'dataportenschemas.*Exit'; do
-    sleep 0.1
-done
+echo "Running schema setup to complete"
+docker-compose run dataportenschemas
 echo "Done"
 
 if [ ! -d simplesamlphp ]; then
@@ -28,9 +26,9 @@ if [ ! -d simplesamlphp ]; then
 fi
 
 mkdir -p etc/test
-sed "s/@@CASSANDRA@@/${CASSANDRA}/" <test-config/auth-engine-config.json >etc/test/config.json
+sed "s/@@CASSANDRA@@/cassandra:9042/" <test-config/auth-engine-config.json >etc/test/config.json
 cp test-config/jwt-*.pem etc
 
 rm -f unit-test.log
 touch unit-test.log
-ant
+docker-compose run testenv ant
