@@ -136,8 +136,8 @@ define(function(require, exports, module) {
 			}
 		},
 
-		"getCoreURL": function(url) {
-			return this.config.endpoints.core + url;
+		"getClientsURL": function(url) {
+			return this.config.endpoints.clientadm + url;
 		},
 
 		"loadClientInfo": function() {
@@ -160,7 +160,7 @@ define(function(require, exports, module) {
 			return new Promise(function(resolve, reject) {
 				
 				// console.error("About to load config");
-				var url = that.getCoreURL('/clientadm/clients/') + that.request.clientid;
+				var url = that.getClientsURL('/clients/') + that.request.clientid;
 				// console.log("Contacting url", url);
 				$.getJSON(url,function(data) {
 
@@ -177,7 +177,7 @@ define(function(require, exports, module) {
 
 		"drawClientInfo": function() {
 			// console.error("Draw");
-			var logourl = this.getCoreURL('/clientadm/clients/' + this.client.id + '/logo');
+			var logourl = this.getClientsURL('/clients/' + this.client.id + '/logo');
 
 			$(".clientinfo").show();
 			$(".clientname").text(this.client.name);
