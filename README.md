@@ -84,13 +84,6 @@ Post-bower, fill in licenced fonts.
 
 
 
-Initalize Cassandra schema
-
-	cqlsh $HOST -f etc/bootstrap.init-keyspace.sql
-	cqlsh $HOST -f etc/bootstrap.sql
-
-
-
 ## Managing translations
 
 
