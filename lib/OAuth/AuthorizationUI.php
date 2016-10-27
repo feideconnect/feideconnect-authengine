@@ -261,6 +261,8 @@ class AuthorizationUI {
         $data['rememberme'] = false;
         $data['HOST'] = Utils\URL::selfURLhost();
         $data["apibase"] = Config::getValue("endpoints.core");
+        $data["apigkadm"] = Config::getValue("endpoints.apigkadm");
+        $data["clientadm"] = Config::getValue("endpoints.clientadm");
 
         $this->getPostData($data);
         $this->getUserinfo($data);
