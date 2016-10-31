@@ -77,7 +77,7 @@ class OpenIDConnectControllerTest extends DBHelper {
 
     public function testUserInfoBasicScopesNoInfo() {
         $this->user = $this->user();
-        $this->protector(['openid', 'profile', 'userinfo-mail', 'userinfo-photo', 'userinfo-feide']);
+        $this->protector(['openid', 'profile', 'email', 'userid-feide']);
         $response = OpenIDConnect::userinfo();
         $this->assertInstanceOf('\FeideConnect\HTTP\JSONResponse', $response);
         $data = $response->getData();
@@ -97,7 +97,7 @@ class OpenIDConnectControllerTest extends DBHelper {
 
     public function testUserInfoFull() {
         $this->fullUser();
-        $this->protector(['openid', 'profile', 'userinfo-mail', 'userinfo-photo', 'userinfo-feide']);
+        $this->protector(['openid', 'profile', 'email', 'userid-feide']);
         $response = OpenIDConnect::userinfo();
         $this->assertInstanceOf('\FeideConnect\HTTP\JSONResponse', $response);
         $data = $response->getData();

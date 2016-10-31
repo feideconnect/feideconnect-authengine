@@ -254,16 +254,6 @@ class ScopesInspector {
                 'expanded' => true,
                 'score' => 60,
             ],
-            'clientadmin' => [
-                'title' => Localization::getTerm('perm-clientadmin'),
-                'descr' => Localization::getTerm('perm-clientadmin-descr'),
-                'icon' => 'cog'
-            ],
-            'apigkadmin' => [
-                'title' => Localization::getTerm('perm-apigkadmin'),
-                'descr' => Localization::getTerm('perm-apigkadmin-descr'),
-                'icon' => 'cog'
-            ],
             'orgadmin' => [
                 'title' => Localization::getTerm('perm-orgadmin'),
                 'descr' => Localization::getTerm('perm-orgadmin-descr'),
@@ -313,11 +303,7 @@ class ScopesInspector {
             'openid' => ['userid'],
             'userid' => ['userid'],
             'email' => ['email'],
-            'userinfo-mail' => ['email'],
-            'userinfo' => ['userid', 'name'],
-            'userinfo-photo' => ['photo'],
             'profile' => ['name', 'photo'],
-            'userinfo-feide' => ['userid-feide'],
             'userid-feide' => ['userid-feide'],
             'userid-nin' => ['userid-nin'],
         ];

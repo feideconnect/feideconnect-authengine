@@ -23,7 +23,7 @@ class AuthorizationUITest extends DBHelper {
 
         $req = [
             "response_type" => "code",
-            "scope" => "userinfo-mail userinfo",
+            "scope" => "email userinfo",
             "client_id" => "f1343f3a-79cc-424f-9233-5fe33f8bbd56"
         ];
         if ($redirect_uri !== null) {

@@ -28,15 +28,15 @@ class ScopesInspectorTest extends DBHelper {
     }
 
     public function testGlobalScope() {
-        $test = new ScopesInspector(['userinfo'], $this->aevaluator);
+        $test = new ScopesInspector(['userid', 'email'], $this->aevaluator);
         $res = $test->getInfo();
         $this->assertEquals($res, array(
             'hasAPIs' => false,
-            'allScopes' => ['userinfo'],
+            'allScopes' => ['userid', 'email'],
             'apis' => [],
             'global' => [
                 'userid' => true,
-                'name' => true,
+                'email' => true,
             ],
         ));
     }

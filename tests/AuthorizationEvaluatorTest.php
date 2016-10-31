@@ -15,7 +15,7 @@ class AuthorizationEvaluatorTest extends DBHelper {
         $this->apigk = $this->apigk();
     }
 
-    private function getRequest($redirect_uri = null, $scopes = ["userinfo-mail", "userinfo"]) {
+    private function getRequest($redirect_uri = null, $scopes = ["email", "userinfo"]) {
 
         $req = [
             "response_type" => "code",

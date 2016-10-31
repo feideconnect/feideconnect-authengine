@@ -89,10 +89,6 @@
 
 	"perm-groups": "Groups",
 	"perm-groups-descr": "Access to your group memberships, organization, organization unit, courses, class, program, cohort, study and ad-hoc groups.",
-	"perm-clientadmin": "Client administration",
-	"perm-clientadmin-descr": "Manage your clients on the platform",
-	"perm-apigkadmin": "API GK administration",
-	"perm-apigkadmin-descre": "Manage your APIs on the platform",
 	"perm-orgadmin": "Organization administration",
 	"perm-orgadmin-descr": "Manage your organization.",
 	"perm-peoplesearch": "Peoplesearch",
