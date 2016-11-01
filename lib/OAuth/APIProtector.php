@@ -76,14 +76,14 @@ class APIProtector {
             throw new APIAuthorizationException('Authorization Bearer Token was not valid', 'invalid_token');
         }
 
-        Logger::info('Authenticated request using an Bearer Access Token', array(
-            'accesstoken' => $this->accesstoken,
-        ));
-
         if (!$this->accesstoken->stillValid()) {
             $this->accesstoken = null;
             throw new APIAuthorizationException('Authorization Bearer Token was expired', 'invalid_token');
         }
+
+        Logger::info('Authenticated request using an Bearer Access Token', array(
+            'accesstoken' => $this->accesstoken,
+        ));
 
         return $this;
 
