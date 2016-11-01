@@ -21,6 +21,7 @@ class APIProtector {
         if ($headers===null) {
             $headers = getallheaders();
         }
+        $this->found_in = null;
         $this->tokenvalue = $this->getBearerToken($headers);
         $this->storage = StorageProvider::getStorage();
 
@@ -42,6 +43,7 @@ class APIProtector {
         foreach ($hdrs as $h => $v) {
             if (strtolower($h) === 'authorization') {
                 if (preg_match('/^Bearer\s(.*?)$/i', $v, $matches)) {
+                    $this->found_in = 'header';
                     return trim($matches[1]);
                 }
             }
@@ -49,6 +51,7 @@ class APIProtector {
 
         // Optionally, but not reccomended access token may be provided as an query string parameter
         if (isset($_REQUEST['access_token']) && !empty($_REQUEST['access_token'])) {
+            $this->found_in = 'query_parameter';
             return trim($_REQUEST['access_token']);
         }
 
@@ -81,8 +84,10 @@ class APIProtector {
             throw new APIAuthorizationException('Authorization Bearer Token was expired', 'invalid_token');
         }
 
-        Logger::info('Authenticated request using an Bearer Access Token', array(
+        Logger::info('Authenticated request using an Access Token', array(
             'accesstoken' => $this->accesstoken,
+            'found_in' => $this->found_in,
+            'clientid' => $this->accesstoken->clientid,
         ));
 
         return $this;
