@@ -2,7 +2,7 @@
   "name": "dataporten-authengine",
   "private": true,
   "dependencies": {
-    "es6-promise": "*",
+    "es6-promise": "~3.3.1",
     "font-awsome": "~4.5.0",
     "jquery": "~1.12",
     "js-cookie": "~2.0.3",
