@@ -1,7 +1,7 @@
 define(function(require, exports, module) {
-	"use strict";
+    "use strict";
 
-	var Class = require('./Class');
+    var Class = require('./Class');
 
 
 

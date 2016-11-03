@@ -1,124 +1,124 @@
 define(function(require, exports, module) {
-	"use strict";
+    "use strict";
 
-	var Class = require('../accountchooser/Class');
+    var Class = require('../accountchooser/Class');
 
-	// var FeideWriter = require('./FeideWriter');
-	// var LocationController = require('./LocationController');
-	var LanguageSelector = require('../accountchooser/LanguageSelector');
-	var AccountStore = require('./AccountStore');
+    // var FeideWriter = require('./FeideWriter');
+    // var LocationController = require('./LocationController');
+    var LanguageSelector = require('../accountchooser/LanguageSelector');
+    var AccountStore = require('./AccountStore');
 
     var App = Class.extend({
-    	"init": function() {
-    		var that = this;
-			
-			this.accountstore = new AccountStore(visualTag);
-			this.lang = new LanguageSelector($("#langselector"), true);
+        "init": function() {
+            var that = this;
+            
+            this.accountstore = new AccountStore(visualTag);
+            this.lang = new LanguageSelector($("#langselector"), true);
 
-			$(".grantEntry").on("click", function(item) {
-				// console.log("Click");
-				$(item.currentTarget).toggleClass("grantEntryActive");
-			});
+            $(".grantEntry").on("click", function(item) {
+                // console.log("Click");
+                $(item.currentTarget).toggleClass("grantEntryActive");
+            });
 
-			$("body").on("click", "#actAcceptBrVilk", function(item) {
-				// console.log("Click");
-				$('#myModal').modal('hide');
-				$('#bruksvilkar').prop('checked', true);
-				that.updateAcceptRequirement();
-			});
+            $("body").on("click", "#actAcceptBrVilk", function(item) {
+                // console.log("Click");
+                $('#myModal').modal('hide');
+                $('#bruksvilkar').prop('checked', true);
+                that.updateAcceptRequirement();
+            });
 
-			$("body").on("click", ".tglSimple", function(e) {
-				e.preventDefault();
-				$("body").toggleClass("simpleGrant");
-			});
+            $("body").on("click", ".tglSimple", function(e) {
+                e.preventDefault();
+                $("body").toggleClass("simpleGrant");
+            });
 
-			$(".touOpen").on("click", function(e) {
-				e.preventDefault(); e.stopPropagation();
-				$('#myModal').modal('show');
-			});
+            $(".touOpen").on("click", function(e) {
+                e.preventDefault(); e.stopPropagation();
+                $('#myModal').modal('show');
+            });
 
-			if ($("body").hasClass("bypass")) {
-				$("#submit").click();
-				// console.error("Bypass simplegrant");
-				// $("body").show();
-			} else {
-				$("#mcontent").show();
-			}
-
-
-			$("body").on("change", "#bruksvilkar", function(e) {
-				// e.preventDefault();
-				that.updateAcceptRequirement();
-
-				// $("body").toggleCl
-				// ass("simpleGrant");
-			});
-
-			this.updateAcceptRequirement();
+            if ($("body").hasClass("bypass")) {
+                $("#submit").click();
+                // console.error("Bypass simplegrant");
+                // $("body").show();
+            } else {
+                $("#mcontent").show();
+            }
 
 
-			// Uncomment this to force "samtykkeerklæring" to show immediately. 
-			// Used for debugging.
-			// $('#myModal').modal('show');
+            $("body").on("change", "#bruksvilkar", function(e) {
+                // e.preventDefault();
+                that.updateAcceptRequirement();
 
-			this.loadConfig().then(function() {
-				that.loadDictionary();
-			});
+                // $("body").toggleCl
+                // ass("simpleGrant");
+            });
 
-    	},
-
-    	"updateAcceptRequirement": function() {
+            this.updateAcceptRequirement();
 
 
-    		if ($("input#bruksvilkar").length === 1) {
-	    		var val = $("input#bruksvilkar").is(":checked");
-				if (val) {
-					$(".reqAccept").removeAttr("disabled");
-					$("#servicecontent").show();
-				} else {
-					$(".reqAccept").attr("disabled", "disabled");
-					$("#servicecontent").hide();
-				}
-    		}
+            // Uncomment this to force "samtykkeerklæring" to show immediately. 
+            // Used for debugging.
+            // $('#myModal').modal('show');
 
-			
+            this.loadConfig().then(function() {
+                that.loadDictionary();
+            });
 
-    	},
+        },
+
+        "updateAcceptRequirement": function() {
 
 
-		"loadConfig": function() {
-			var that = this;
+            if ($("input#bruksvilkar").length === 1) {
+                var val = $("input#bruksvilkar").is(":checked");
+                if (val) {
+                    $(".reqAccept").removeAttr("disabled");
+                    $("#servicecontent").show();
+                } else {
+                    $(".reqAccept").attr("disabled", "disabled");
+                    $("#servicecontent").hide();
+                }
+            }
 
-			return new Promise(function(resolve, reject) {
+            
 
-				// console.error("About to load config");
-				$.getJSON('/accountchooser/config',function(data) {
-					that.lang.setConfig(data);
-					resolve();
-				});
-
-			});
-
-		},
+        },
 
 
-		"loadDictionary": function() {
-			var that = this;
+        "loadConfig": function() {
+            var that = this;
 
-			return new Promise(function(resolve, reject) {
-				
-				// console.error("About to load dictionary");
-				$.getJSON('/dictionary',function(data) {
-					that.dictionary = data;
-					// console.error("Dictionary was loaded", that.dictionary);
-					// that.initAfterLoad();
-					that.lang.initLoad(data._lang);
-					resolve();
-				});
+            return new Promise(function(resolve, reject) {
 
-			});
+                // console.error("About to load config");
+                $.getJSON('/accountchooser/config',function(data) {
+                    that.lang.setConfig(data);
+                    resolve();
+                });
 
-		}
+            });
+
+        },
+
+
+        "loadDictionary": function() {
+            var that = this;
+
+            return new Promise(function(resolve, reject) {
+                
+                // console.error("About to load dictionary");
+                $.getJSON('/dictionary',function(data) {
+                    that.dictionary = data;
+                    // console.error("Dictionary was loaded", that.dictionary);
+                    // that.initAfterLoad();
+                    that.lang.initLoad(data._lang);
+                    resolve();
+                });
+
+            });
+
+        }
 
     });
     return App;
