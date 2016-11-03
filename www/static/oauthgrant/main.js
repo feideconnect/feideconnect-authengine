@@ -5,8 +5,8 @@ define(function(require, exports, module) {
     if (!window.console) {
         window.console = {
             "log": function() {},
-            "error": function() {},
-        }
+            "error": function() {}
+        };
     }
 
     var App = require('App');

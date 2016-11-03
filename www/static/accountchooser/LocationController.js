@@ -100,7 +100,7 @@ define(function(require, exports, module) {
         "onUpdate": function(callback) {
             this._callback = callback;
         }
-    })
+    });
 
 
     return LocationController;

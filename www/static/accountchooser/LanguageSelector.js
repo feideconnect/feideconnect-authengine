@@ -70,7 +70,7 @@ define(function(require, exports, module) {
             this.el.empty().append(txt);
         }
 
-    })
+    });
 
 
     return LanguageSelector;

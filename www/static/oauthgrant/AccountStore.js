@@ -20,7 +20,7 @@ define(function(require, exports, module) {
                     if (visualTag.rememberme) {
                         this.saveAccountTag(visualTag);
                     } else {
-                        console.log("Visual account tag is not saved, because user did not select so.")
+                        console.log("Visual account tag is not saved, because user did not select so.");
                     }
             }
 
