@@ -35,12 +35,12 @@
 
 
 <ul class="uninett-ul">
-	<li class="uninett-ul-li">Brukernavn, epostadresse og portrettbilde.</li>
-	<li class="uninett-ul-li">Bruker-ID</li>
-	<li class="uninett-ul-li">Organisasjonstilhørighet.</li>
-	<li class="uninett-ul-li">Utvidet personinformasjon, for eksempel fødselsnummer, telefonnummer og organisasjonsrolle (ansatt, student/elev, osv.).</li>
-	<li class="uninett-ul-li">Gruppetilhørighet (emner, fag, studieretning, kull/klasse, faglærer).</li>
-	<li class="uninett-ul-li">Hvilke Dataporten-tjenester du bruker.</li>
+    <li class="uninett-ul-li">Brukernavn, epostadresse og portrettbilde.</li>
+    <li class="uninett-ul-li">Bruker-ID</li>
+    <li class="uninett-ul-li">Organisasjonstilhørighet.</li>
+    <li class="uninett-ul-li">Utvidet personinformasjon, for eksempel fødselsnummer, telefonnummer og organisasjonsrolle (ansatt, student/elev, osv.).</li>
+    <li class="uninett-ul-li">Gruppetilhørighet (emner, fag, studieretning, kull/klasse, faglærer).</li>
+    <li class="uninett-ul-li">Hvilke Dataporten-tjenester du bruker.</li>
 </ul>
 
 
@@ -119,22 +119,18 @@
 
 
 {{#user.isFeideUser}}
-	<h3>Kontaktpunkt behandlingsansvarlig</h3>
-	<p>Din utdanningsinstitusjon er behandlingsansvarlig for din bruk av Dataporten.</p>
+    <h3>Kontaktpunkt behandlingsansvarlig</h3>
+    <p>Din utdanningsinstitusjon er behandlingsansvarlig for din bruk av Dataporten.</p>
 {{/user.isFeideUser}}
 {{^user.isFeideUser}}
 
-	<h3>Kontaktinformasjon</h3>
-	<p>Kontaktinformasjon til behandlingsansvarlig for Dataporten er</p>
+    <h3>Kontaktinformasjon</h3>
+    <p>Kontaktinformasjon til behandlingsansvarlig for Dataporten er</p>
 
-	<blockquote>
-		<p>UNINETT AS<br />
-	Postboks 4769 Sluppen<br />
-	7465 Trondheim</p>
-	</blockquote>
+    <blockquote>
+        <p>UNINETT AS<br />
+    Postboks 4769 Sluppen<br />
+    7465 Trondheim</p>
+    </blockquote>
 
 {{/user.isFeideUser}}
-
-
-
-

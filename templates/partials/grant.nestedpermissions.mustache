@@ -1,33 +1,32 @@
-
 <div class="nestedpermissions list-group">
 {{#view}}
 
-	<div class="list-group-item">
+    <div class="list-group-item">
 
 
-		<p class="" style="margin-bottom: 0px">
-			{{#icon}}<span style="" class="fa fa-fw fa-{{.}}"></span> {{/icon}} 
-			{{title}}</p>
+        <p class="" style="margin-bottom: 0px">
+            {{#icon}}<span style="" class="fa fa-fw fa-{{.}}"></span> {{/icon}}
+            {{title}}</p>
 
-		{{#descr}}
-			<p class="" style="margin-bottom: 0px">{{.}}</p>
-		{{/descr}}
-	
+        {{#descr}}
+            <p class="" style="margin-bottom: 0px">{{.}}</p>
+        {{/descr}}
 
-		<div class="">
 
-			<ul class="grantItemList">
-			{{#items}}
-				<li class="">
-					{{#icon}}<span class="fa fa-fw fa-{{.}}"></span>{{/icon}}
-						{{title}} &nbsp; &nbsp;
-				</li>
-			{{/items}}
-			</ul>
+        <div class="">
 
-		</div>
+            <ul class="grantItemList">
+            {{#items}}
+                <li class="">
+                    {{#icon}}<span class="fa fa-fw fa-{{.}}"></span>{{/icon}}
+                        {{title}} &nbsp; &nbsp;
+                </li>
+            {{/items}}
+            </ul>
 
-	</div><!-- panel -->
+        </div>
+
+    </div><!-- panel -->
 
 {{/view}}
 </div>

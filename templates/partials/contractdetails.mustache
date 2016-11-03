@@ -1,24 +1,24 @@
 {{#user.isFeideUser}}
-	{{#needsAuthorization}}
+    {{#needsAuthorization}}
 
-		{{#validated}}
-			<div class="simpleSkip" style="margin-bottom: 2em">
-				<i style="color: #363" class="fa fa-check fa-3x pull-left"></i>
-				{{_.validated10}}
-			</div>
-		{{/validated}}
-		{{^validated}}
-			<div class="simpleSkip" style="margin-bottom: 2em">
-				<i style="color: #643" class="fa fa-exclamation-circle fa-3x pull-left"></i>
-				{{_.notvalidated10}}
-			</div>
-		{{/validated}}
+        {{#validated}}
+            <div class="simpleSkip" style="margin-bottom: 2em">
+                <i style="color: #363" class="fa fa-check fa-3x pull-left"></i>
+                {{_.validated10}}
+            </div>
+        {{/validated}}
+        {{^validated}}
+            <div class="simpleSkip" style="margin-bottom: 2em">
+                <i style="color: #643" class="fa fa-exclamation-circle fa-3x pull-left"></i>
+                {{_.notvalidated10}}
+            </div>
+        {{/validated}}
 
-	{{/needsAuthorization}}
-	{{^needsAuthorization}}
-			<div class="simpleSkip" style="margin-bottom: 2em">
-				<i style="color: #363" class="fa fa-check fa-3x pull-left"></i>
-				{{_.needsauthz10}}
-			</div>
-	{{/needsAuthorization}}
+    {{/needsAuthorization}}
+    {{^needsAuthorization}}
+            <div class="simpleSkip" style="margin-bottom: 2em">
+                <i style="color: #363" class="fa fa-check fa-3x pull-left"></i>
+                {{_.needsauthz10}}
+            </div>
+    {{/needsAuthorization}}
 {{/user.isFeideUser}}

@@ -1,24 +1,24 @@
 {{#user.isFeideUser}}
-	{{#needsAuthorization}}
+    {{#needsAuthorization}}
 
-		{{#validated}}
-			<div class="simpleSkip">
-				<i style="color: #363; margin-top: 4px" class="fa fa-certificate"></i>
-				{{_.validated10short}}
-			</div>
-		{{/validated}}
-		{{^validated}}
-			<div class="simpleSkip">
-				<i style="color: #643" class="fa fa-exclamation-circle" aria-hidden="true"></i>
-				{{_.notvalidated10short}}
-			</div>
-		{{/validated}}
+        {{#validated}}
+            <div class="simpleSkip">
+                <i style="color: #363; margin-top: 4px" class="fa fa-certificate"></i>
+                {{_.validated10short}}
+            </div>
+        {{/validated}}
+        {{^validated}}
+            <div class="simpleSkip">
+                <i style="color: #643" class="fa fa-exclamation-circle" aria-hidden="true"></i>
+                {{_.notvalidated10short}}
+            </div>
+        {{/validated}}
 
-	{{/needsAuthorization}}
-	{{^needsAuthorization}}
-			<div class="simpleSkip">
-				<i style="color: #363" class="fa fa-check pull-left; margin-bottom: -5px"></i>
-				{{_.needsauthz10short}}
-			</div>
-	{{/needsAuthorization}}
+    {{/needsAuthorization}}
+    {{^needsAuthorization}}
+            <div class="simpleSkip">
+                <i style="color: #363" class="fa fa-check pull-left; margin-bottom: -5px"></i>
+                {{_.needsauthz10short}}
+            </div>
+    {{/needsAuthorization}}
 {{/user.isFeideUser}}

@@ -1,39 +1,37 @@
-
-
 {{#perms.view}}
 
-	<div class="list-group-item  grantEntry {{#expanded}}grantEntryActive{{/expanded}}">
+    <div class="list-group-item  grantEntry {{#expanded}}grantEntryActive{{/expanded}}">
 
 
-		{{#expandable}}
-		<div class="pull-right grantDetails selectIndicator" style="font-size: 100%"><i class="glyphicon glyphicon-chevron-down "></i></div>
-		<div class="pull-right grantDetailsHide selectIndicator" style="font-size: 100%"><i class="glyphicon glyphicon-chevron-left "></i></div>
-		{{/expandable}}
+        {{#expandable}}
+        <div class="pull-right grantDetails selectIndicator" style="font-size: 100%"><i class="glyphicon glyphicon-chevron-down "></i></div>
+        <div class="pull-right grantDetailsHide selectIndicator" style="font-size: 100%"><i class="glyphicon glyphicon-chevron-left "></i></div>
+        {{/expandable}}
 
-		<p class="" style="margin-bottom: 0px">
-			{{#icon}}<span style="color: #565" class="fa fa-fw fa-{{.}}"></span> {{/icon}} 
-			{{title}}</p>
+        <p class="" style="margin-bottom: 0px">
+            {{#icon}}<span style="color: #565" class="fa fa-fw fa-{{.}}"></span> {{/icon}}
+            {{title}}</p>
 
-		{{#descr}}
-			<p class="grantDetails" style="margin-bottom: 0px">{{.}}</p>
-		{{/descr}}
-	
-		{{#expandable}}
-		<div class="grantDetails">
+        {{#descr}}
+            <p class="grantDetails" style="margin-bottom: 0px">{{.}}</p>
+        {{/descr}}
 
-			<ul class="grantItemList">
-			{{#items}}
-				<li class="">
-					{{#icon}}<span class="fa fa-fw fa-{{.}}"></span>{{/icon}}
-						{{title}} &nbsp; &nbsp;
-				</li>
-			{{/items}}
-			</ul>
+        {{#expandable}}
+        <div class="grantDetails">
 
-		</div>
-		{{/expandable}}
+            <ul class="grantItemList">
+            {{#items}}
+                <li class="">
+                    {{#icon}}<span class="fa fa-fw fa-{{.}}"></span>{{/icon}}
+                        {{title}} &nbsp; &nbsp;
+                </li>
+            {{/items}}
+            </ul>
 
-	</div><!-- panel -->
+        </div>
+        {{/expandable}}
+
+    </div><!-- panel -->
 
 {{/perms.view}}
 

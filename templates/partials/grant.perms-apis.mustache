@@ -1,122 +1,121 @@
-
 {{#perms.apis}}
 
-	<div class="list-group-item grantEntry apiEntry">
-		<div class="pull-right grantDetails selectIndicator" style="font-size: 100%"><i class="glyphicon glyphicon-chevron-down "></i></div>
-		<div class="pull-right grantDetailsHide selectIndicator" style="font-size: 100%"><i class="glyphicon glyphicon-chevron-left "></i></div>
+    <div class="list-group-item grantEntry apiEntry">
+        <div class="pull-right grantDetails selectIndicator" style="font-size: 100%"><i class="glyphicon glyphicon-chevron-down "></i></div>
+        <div class="pull-right grantDetailsHide selectIndicator" style="font-size: 100%"><i class="glyphicon glyphicon-chevron-left "></i></div>
 
-		<div class="media grantEntryContent" style="margin: 0px; padding: 0px">
-			<div class="media-left ">
-				<img class="media-object grantDetails" style="max-height: 32px; max-width: 32px" src="{{apigkadm}}/apigks/{{info.id}}/logo" alt="...">
-				<img class="media-object grantDetailsHide" style="max-height: 16px; max-width: 16px; margin-top: 5px" src="{{apigkadm}}/apigks/{{info.id}}/logo" alt="...">
-			</div>
-
-
-			<div class="media-body">
-
-				<div class="grantDetails">
-					<h4 class="media-heading" style="padding: 0px">{{info.name}}</h4>
-				</div>
-
-				<div class="grantDetailsHide">
-					<p class="media-heading" style="padding: 0px">{{info.name}} <span style="font-weight: normal; color: #888">{{_.provby}} {{ownerDisplay}}</span></p>
-				</div>
+        <div class="media grantEntryContent" style="margin: 0px; padding: 0px">
+            <div class="media-left ">
+                <img class="media-object grantDetails" style="max-height: 32px; max-width: 32px" src="{{apigkadm}}/apigks/{{info.id}}/logo" alt="...">
+                <img class="media-object grantDetailsHide" style="max-height: 16px; max-width: 16px; margin-top: 5px" src="{{apigkadm}}/apigks/{{info.id}}/logo" alt="...">
+            </div>
 
 
-				<!--
+            <div class="media-body">
 
-				<p class="grantDetailsHide" style="color: #555; font-size: 75%">
-					{{#scopes}}
-						<i class="fa fa-fw fa-check"></i>&nbsp;{{title}}&nbsp; 
-					{{/scopes}}
-				</p>
+                <div class="grantDetails">
+                    <h4 class="media-heading" style="padding: 0px">{{info.name}}</h4>
+                </div>
 
-				{{#nestedPermissions}}
-				<p class="grantDetailsHide" style="color: #555; font-size: 75%">
-					{{> grant.nestedpermissions-short }}
-				</p>
-				{{/nestedPermissions}}
+                <div class="grantDetailsHide">
+                    <p class="media-heading" style="padding: 0px">{{info.name}} <span style="font-weight: normal; color: #888">{{_.provby}} {{ownerDisplay}}</span></p>
+                </div>
+
+
+                <!--
+
+                <p class="grantDetailsHide" style="color: #555; font-size: 75%">
+                    {{#scopes}}
+                        <i class="fa fa-fw fa-check"></i>&nbsp;{{title}}&nbsp;
+                    {{/scopes}}
+                </p>
+
+                {{#nestedPermissions}}
+                <p class="grantDetailsHide" style="color: #555; font-size: 75%">
+                    {{> grant.nestedpermissions-short }}
+                </p>
+                {{/nestedPermissions}}
 
 -->
 
 
-			</div><!-- media body -->
-		</div><!-- media -->
+            </div><!-- media body -->
+        </div><!-- media -->
 
 
-		<div class="grantDetails">
+        <div class="grantDetails">
 
-			{{#info.descr}}
-				<p style="margin: 0px">{{.}}</p>
-			{{/info.descr}}
-
-
-			<p style="margin-top: 1em">{{_.withpermissions}}</p>
-
-			<ul class="uninett-ul" style="padding-top: 0px">
-			{{#scopes}}
-				<li class="uninett-ul-li">{{title}} – <span style="color: #555;">{{descr}}</span></li>
-			{{/scopes}}
-			</ul>
-
-			<p style="margin-top: 1em">{{_.willgetaccessto}}</p>
-
-			{{#nestedPermissions}}
-				{{> grant.nestedpermissions }}
-			{{/nestedPermissions}}
-
-		</div>
+            {{#info.descr}}
+                <p style="margin: 0px">{{.}}</p>
+            {{/info.descr}}
 
 
-		<div class="ownerboxnested grantDetails" style="margin: 8px">
+            <p style="margin-top: 1em">{{_.withpermissions}}</p>
 
-			<div class="row">
-				
-				<div class="col-md-5" style="text-align: left">
-					<ul class="uninett-ul simpleSkip" style="padding: 0px">
-						{{#info.privacypolicyurl}}
-							<li class="uninett-ul-li"><a target="_blank" href="{{.}}">{{_.serviceprivacy}}</a></li>
-						{{/info.privacypolicyurl}}
-					</ul>
-				</div>
-				<div class="col-md-7">
+            <ul class="uninett-ul" style="padding-top: 0px">
+            {{#scopes}}
+                <li class="uninett-ul-li">{{title}} – <span style="color: #555;">{{descr}}</span></li>
+            {{/scopes}}
+            </ul>
 
-					<div class="row">
-					{{#info.APIownerOrg}}
-						<div class="col-xs-8" style="text-align: right">
-							<p style="font-style: italic; font-size: 95%">{{_.providedby}}</p>
-							<p class=" ownerName" style=""><strong>{{org.name.nb}}</strong></p>
-						</div>
+            <p style="margin-top: 1em">{{_.willgetaccessto}}</p>
 
-						<div class="col-xs-4" style="text-align: left">
-							<img class="orglogo orglogoSmall" style="max-height: 64px; max-width: 64px" src="{{org.logoURL}}">
-						</div>
-					{{/info.APIownerOrg}}
+            {{#nestedPermissions}}
+                {{> grant.nestedpermissions }}
+            {{/nestedPermissions}}
 
-					{{^info.APIownerOrg}}
-						<div class="col-xs-8">
-							<p style="font-style: italic; font-size: 95%">{{_.providedby}}</p>
-							<p class="ownerName"><strong>{{owner.name}}</strong></p>
-							<p class="ownerMail">
-								<a href="mailto:{{owner.mail}}">{{owner.email}}</a>
-							</p>
+        </div>
 
 
-						</div>
-						<div class="col-xs-4">
-							<img class="orglogo orglogoSmall" style="max-height: 64px; max-width: 64px" src="/user/media/{{owner.profilephoto}}">
-						</div>
-					{{/info.APIownerOrg}}
-					</div>
+        <div class="ownerboxnested grantDetails" style="margin: 8px">
 
-				</div>
+            <div class="row">
 
-			</div>
+                <div class="col-md-5" style="text-align: left">
+                    <ul class="uninett-ul simpleSkip" style="padding: 0px">
+                        {{#info.privacypolicyurl}}
+                            <li class="uninett-ul-li"><a target="_blank" href="{{.}}">{{_.serviceprivacy}}</a></li>
+                        {{/info.privacypolicyurl}}
+                    </ul>
+                </div>
+                <div class="col-md-7">
 
-		</div>
+                    <div class="row">
+                    {{#info.APIownerOrg}}
+                        <div class="col-xs-8" style="text-align: right">
+                            <p style="font-style: italic; font-size: 95%">{{_.providedby}}</p>
+                            <p class=" ownerName" style=""><strong>{{org.name.nb}}</strong></p>
+                        </div>
+
+                        <div class="col-xs-4" style="text-align: left">
+                            <img class="orglogo orglogoSmall" style="max-height: 64px; max-width: 64px" src="{{org.logoURL}}">
+                        </div>
+                    {{/info.APIownerOrg}}
+
+                    {{^info.APIownerOrg}}
+                        <div class="col-xs-8">
+                            <p style="font-style: italic; font-size: 95%">{{_.providedby}}</p>
+                            <p class="ownerName"><strong>{{owner.name}}</strong></p>
+                            <p class="ownerMail">
+                                <a href="mailto:{{owner.mail}}">{{owner.email}}</a>
+                            </p>
 
 
-	</div><!-- Panel -->
+                        </div>
+                        <div class="col-xs-4">
+                            <img class="orglogo orglogoSmall" style="max-height: 64px; max-width: 64px" src="/user/media/{{owner.profilephoto}}">
+                        </div>
+                    {{/info.APIownerOrg}}
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+    </div><!-- Panel -->
 
 
 {{/perms.apis}}
