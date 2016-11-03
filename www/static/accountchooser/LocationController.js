@@ -39,7 +39,7 @@ define(function(require, exports, module) {
             $("#removelocation").on("click", function(e) {
                 that.deleteLocation();
                 that.fetchLocation();
-                that.executeCallback();         
+                that.executeCallback();
             });
 
         },

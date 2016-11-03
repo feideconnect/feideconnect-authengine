@@ -1,7 +1,7 @@
 define(function(require, exports, module) {
-    "use strict";   
+    "use strict";
 
-    var 
+    var
         Model = require('./Model'),
         Utils = require('../Utils')
         ;
@@ -46,7 +46,7 @@ define(function(require, exports, module) {
         },
 
         "getHTML": function() {
-            
+
             var txt = '';
             var datastr = 'data-id="' + Utils.quoteattr(this.entityID) + '" data-subid="' + Utils.quoteattr(this.entityID) + '" data-type="saml"';
             txt += '<a href="#" class="list-group-item idpentry" ' + datastr + '>' +
@@ -57,7 +57,7 @@ define(function(require, exports, module) {
             } else {
                 txt += '<div class="media-object" style="width: 200px; text-align: right">&nbsp;</div>';
             }
-            
+
 
             txt +=  '</div>' +
                     '<div class="media-body"><p style="margin-left: 10px">' + Utils.quoteattr(this.title) + '</p></div>' +
@@ -65,7 +65,7 @@ define(function(require, exports, module) {
             '</a>';
             return txt;
         }
-        
+
     });
 
     return Provider;

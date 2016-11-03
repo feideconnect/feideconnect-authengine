@@ -22,7 +22,7 @@ define(function(require, exports, module) {
         "has": function(key) {
             return this.hasOwnProperty(key) && typeof this[key] !== 'function';
         },
-        
+
         "getView": function() {
             var res = {};
             for(var key in this) {

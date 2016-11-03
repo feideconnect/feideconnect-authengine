@@ -8,7 +8,7 @@ define(function(require, exports, module) {
             "error": function() {},
         }
     }
-    
+
     var App = require('App');
     $(document).ready(function() {
         var app = new App();

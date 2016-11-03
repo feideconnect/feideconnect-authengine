@@ -12,10 +12,10 @@ define(function(require, exports, module) {
             .replace(/</g, '&lt;')
             .replace(/>/g, '&gt;')
             /*
-            You may add other replacements here for HTML only 
+            You may add other replacements here for HTML only
             (but it's not necessary).
             Or for XML, only if the named entities are defined in its DTD.
-            */ 
+            */
             .replace(/\r\n/g, preserveCR) /* Must be before the next replacement. */
             .replace(/[\r\n]/g, preserveCR);
     };
@@ -25,11 +25,11 @@ define(function(require, exports, module) {
     Utils.calculateDistance = function (lat1, lon1, lat2, lon2) {
         var R = 6371; // km
         var dLat = Utils.toRad(lat2-lat1);
-        var dLon = Utils.toRad(lon2-lon1); 
+        var dLon = Utils.toRad(lon2-lon1);
         var a = Math.sin(dLat/2) * Math.sin(dLat/2) +
-                Math.cos(Utils.toRad(lat1)) * Math.cos(Utils.toRad(lat2)) * 
-                Math.sin(dLon/2) * Math.sin(dLon/2); 
-        var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a)); 
+                Math.cos(Utils.toRad(lat1)) * Math.cos(Utils.toRad(lat2)) *
+                Math.sin(dLon/2) * Math.sin(dLon/2);
+        var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
         var d = R * c;
         return d;
     };

@@ -45,7 +45,7 @@ define(function(require, exports, module) {
             return false;
         },
         "getHTML": function(feideIdP) {
-            
+
             var classes = '';
             if (!this.isEnabled()) {
                 classes += ' disabled';
@@ -53,15 +53,15 @@ define(function(require, exports, module) {
             var txt = '';
             var datastr = 'data-id="' + Utils.quoteattr(feideIdP) + '" data-subid="' + Utils.quoteattr(this.id) + '" data-type="saml"';
             txt += '<a href="#" class="list-group-item idpentry' + classes + '" ' + datastr + '>' +
-                '<div class="media"><div class="media-left media-middle">' + 
-                        '<img class="media-object" style="width: 48px; height: 48px" src="https://api.dataporten.no/orgs/fc:org:' + this.id + '/logo" alt="...">' + 
+                '<div class="media"><div class="media-left media-middle">' +
+                        '<img class="media-object" style="width: 48px; height: 48px" src="https://api.dataporten.no/orgs/fc:org:' + this.id + '/logo" alt="...">' +
                     '</div>' +
                     '<div class="media-body"><p>' + Utils.quoteattr(this.title) + '</p></div>' +
                 '</div>' +
             '</a>';
             return txt;
         }
-        
+
     });
 
     return NorwegianOrg;

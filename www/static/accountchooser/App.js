@@ -16,13 +16,13 @@ define(function(require, exports, module) {
      *
      * It loads two panes, one with the accountchooser and one with the discovery and lets the user switch between them.
      * It activates the chooser if there exists some stored accounts
-     * If the user selets to go to an account that is representing Feide, the FeideWriter 
+     * If the user selets to go to an account that is representing Feide, the FeideWriter
      * will load a cookie writer that preselects oranization in Feide
      */
     var App = Controller.extend({
         "init": function() {
             var that = this;
-            
+
             that.config = null;
             this.client = null;
 
@@ -32,7 +32,7 @@ define(function(require, exports, module) {
             this.selector = new AccountSelector(this, this.accountstore);
 
             this.parseRequest();
-            this._super(undefined, true);            
+            this._super(undefined, true);
 
         },
 
@@ -122,7 +122,7 @@ define(function(require, exports, module) {
                     this.authproviders.push(['all']);
                 }
             }
-            
+
             if (this.authproviders.length === 0) {
                 this.authproviders.push(['all']);
             }
@@ -145,7 +145,7 @@ define(function(require, exports, module) {
             // console.log("Loading client info", this.request);
 
             // console.error("Draw");
-            // 
+            //
             if (!this.request.clientid) {
                 return Promise.resolve();
             }
@@ -158,7 +158,7 @@ define(function(require, exports, module) {
             }
 
             return new Promise(function(resolve, reject) {
-                
+
                 // console.error("About to load config");
                 var url = that.getClientsURL('/clients/') + that.request.clientid;
                 // console.log("Contacting url", url);
@@ -188,7 +188,7 @@ define(function(require, exports, module) {
             var that = this;
 
             return new Promise(function(resolve, reject) {
-                
+
                 // console.error("About to load config");
                 $.getJSON('/accountchooser/config',function(data) {
                     that.config = data;
@@ -206,7 +206,7 @@ define(function(require, exports, module) {
             var that = this;
 
             return new Promise(function(resolve, reject) {
-                
+
                 // console.error("About to load dictionary");
                 $.getJSON('/dictionary',function(data) {
                     that.dictionary = data;

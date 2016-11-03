@@ -1,19 +1,19 @@
 define(function(require, exports, module) {
-    "use strict";   
+    "use strict";
 
-    var 
+    var
         // $ = require('jquery'),
         Class = require('./Class'),
         EventEmitter = require('./EventEmitter')
         ;
-    
+
     var Controller = Class.extend({
 
         "init": function(el, load) {
             this.el = el || this.el || $('<div class=""></div>');
 
             this._loaderTimeout = 5000;
-            
+
             this.onLoadedCallbacks = [];
             this.isLoaded = false;
             if (load === true) {

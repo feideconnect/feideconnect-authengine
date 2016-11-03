@@ -12,13 +12,13 @@ define(function(require, exports, module) {
      * - Feide org API
      * - Extra feed
      *
-     * Will handle 
+     * Will handle
      * - selection of country,
      * - Incremental search
      * - Geo location changes  (LocationController)
      * - Selecting a provider.
      *  - including feide preselect org (FeideWriter)
-     * 
+     *
      */
 
 
@@ -82,7 +82,7 @@ define(function(require, exports, module) {
 
 
             this._super(undefined, false);
-            
+
             $('.dropdown-toggle').dropdown();
             $('[data-toggle="tooltip"]').tooltip();
 
@@ -106,7 +106,7 @@ define(function(require, exports, module) {
                 if (st !== that.searchTerm) {
                     that.searchTerm = st;
                     if (Utils.stok(st)) {
-                        that.searchWaiter.ping();   
+                        that.searchWaiter.ping();
                     }
                 }
 
@@ -134,9 +134,9 @@ define(function(require, exports, module) {
                 }
 
                 so.rememberme = $("#rememberme").is(":checked");
-                
+
                 if (!that.request.return) {
-                    console.error("Invalid return address"); 
+                    console.error("Invalid return address");
                     return;
                 }
 
@@ -161,7 +161,7 @@ define(function(require, exports, module) {
                 that.loadData();
                 that.updateLocationView();
             });
-            
+
             this.updateLocationView();
 
             return this.app.onLoaded()
@@ -281,7 +281,7 @@ define(function(require, exports, module) {
 
 
         "matchAuthProviderFilter": function(item) {
-            
+
             var providers = this.app.getAuthProviderDef();
 
             // console.log("---- MATCHING");
@@ -357,7 +357,7 @@ define(function(require, exports, module) {
             if (!item.hasOwnProperty("country")) {
                 return false;
             }
-            
+
             if (item.country.toLowerCase() === this.country) {
                 return true;
             }
@@ -382,13 +382,13 @@ define(function(require, exports, module) {
 
         "drawBasics": function() {
             var ct, cn, txt = '';
-            
+
             for(var i = 0; i < this.countrylist.length; i++) {
                 ct = 'c' + this.countrylist[i];
                 cn = this.app.dictionary[ct];
                 // console.error("Country is ", ct, cn );
-                txt += '<li><a class="selectcountry" data-country="' + this.countrylist[i] + '" href="#">' + 
-                    '<img style="margin-top: -4px; margin-right: 5px" src="/static/media/flag/' + this.countrylist[i] + '.png">' + 
+                txt += '<li><a class="selectcountry" data-country="' + this.countrylist[i] + '" href="#">' +
+                    '<img style="margin-top: -4px; margin-right: 5px" src="/static/media/flag/' + this.countrylist[i] + '.png">' +
                     ' ' + cn + '</a></li>';
             }
             $("#countryselector").empty().append(txt);
@@ -433,7 +433,7 @@ define(function(require, exports, module) {
                 showit.push(it[i]);
             }
 
-            if (this.country !== 'no') {            
+            if (this.country !== 'no') {
                 var sf = this.getCompareDistanceFunc();
                 showit.sort(sf);
             }
@@ -445,7 +445,7 @@ define(function(require, exports, module) {
 
                     if (remaining > 0) {
                         txt += '<a class="list-group-item" id="actshowall" href="#"><p style="text-align: center"><i class="fa fa-chevron-down"></i> ' +
-                          this.app.dictionary.showall + '  &nbsp;' + 
+                          this.app.dictionary.showall + '  &nbsp;' +
                             '('  + remaining + ' ' + this.app.dictionary.moreorgs +')</p></a>';
 
                     }
@@ -486,13 +486,13 @@ define(function(require, exports, module) {
 
                 var idtxt = '';
                 if (this.extra[i].id) {
-                    idtxt += ' data-id="' + Utils.quoteattr(this.extra[i].id) + '"';  
+                    idtxt += ' data-id="' + Utils.quoteattr(this.extra[i].id) + '"';
                 }
                 if (this.extra[i].type) {
-                    idtxt += ' data-type="' + Utils.quoteattr(this.extra[i].type) + '"';  
+                    idtxt += ' data-type="' + Utils.quoteattr(this.extra[i].type) + '"';
                 }
                 if (this.extra[i].subid) {
-                    idtxt += ' data-subid="' + Utils.quoteattr(this.extra[i].subid) + '"';  
+                    idtxt += ' data-subid="' + Utils.quoteattr(this.extra[i].subid) + '"';
                 }
 
                 c++;

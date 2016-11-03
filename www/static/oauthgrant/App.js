@@ -11,7 +11,7 @@ define(function(require, exports, module) {
     var App = Class.extend({
         "init": function() {
             var that = this;
-            
+
             this.accountstore = new AccountStore(visualTag);
             this.lang = new LanguageSelector($("#langselector"), true);
 
@@ -57,7 +57,7 @@ define(function(require, exports, module) {
             this.updateAcceptRequirement();
 
 
-            // Uncomment this to force "samtykkeerklæring" to show immediately. 
+            // Uncomment this to force "samtykkeerklæring" to show immediately.
             // Used for debugging.
             // $('#myModal').modal('show');
 
@@ -81,7 +81,7 @@ define(function(require, exports, module) {
                 }
             }
 
-            
+
 
         },
 
@@ -106,7 +106,7 @@ define(function(require, exports, module) {
             var that = this;
 
             return new Promise(function(resolve, reject) {
-                
+
                 // console.error("About to load dictionary");
                 $.getJSON('/dictionary',function(data) {
                     that.dictionary = data;
