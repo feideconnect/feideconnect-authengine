@@ -221,6 +221,9 @@ class Authenticator {
 
         if ($acr_values != null && $authconfig["idp"] === Config::getValue('feideIdP')) {
             $options['saml:AuthnContextClassRef'] = $acr_values;
+            $options['ErrorURL'] = \SimpleSAML_Utilities::addURLparameter(\SimpleSAML_Utilities::selfURL(), array(
+                "error" => 2,
+            ));
             Logger::info("added acr values", ['acr_values' => $acr_values ]);
         }
 

@@ -212,6 +212,23 @@ class OAuthAuthorization {
 
     }
 
+    protected function isTwoFactorError($errorState) {
+        if (!isset($errorState['saml:AuthnContextClassRef']) ||
+            !isset($errorState['SimpleSAML_Auth_State.exceptionData'])) {
+            return false;
+        }
+        $acr_2fa = ['urn:mace:feide.no:auth:level:fad08:3'];
+        $status_responder = 'urn:oasis:names:tc:SAML:2.0:status:Responder';
+        $subStatus_noAcr = 'urn:oasis:names:tc:SAML:2.0:status:NoAuthnContext';
+        $acr = $errorState['saml:AuthnContextClassRef'];
+        $excData = $errorState['SimpleSAML_Auth_State.exceptionData'];
+        if ($acr == $acr_2fa &&
+            $excData->getStatus() == $status_responder &&
+            $excData->getSubStatus() == $subStatus_noAcr) {
+            return true;
+        }
+        return false;
+    }
 
     protected function preProcess() {
         $this->checkClient();
@@ -239,8 +256,13 @@ class OAuthAuthorization {
         // If SimpleSAML_Auth_State_exceptionId query parameter is set, then something failed
         // while performing authentication.
         if (!empty($_REQUEST['SimpleSAML_Auth_State_exceptionId'])) {
-            // The most likely error is that we are not able to perform passive authentication.
-            throw new OAuthException('access_denied', 'Unable to perform passive authentication [1]', $state, $redirect_uri, $this->request->useHashFragment());
+            $errorState = \SimpleSAML_Auth_State::loadExceptionState();
+            if ($this->isTwoFactorError($errorState)) {
+                return (new LocalizedTemplatedHTMLResponse('twofactorproblem'))->setData([]);
+            } else {
+                // The most likely error is that we are not able to perform passive authentication.
+                throw new OAuthException('access_denied', 'Unable to perform passive authentication [1]', $state, $redirect_uri, $this->request->useHashFragment());
+            }
 
         } else if (isset($_REQUEST['error']) && $_REQUEST['error'] === '1') {
             // The most likely error is that we are not able to perform passive authentication.
