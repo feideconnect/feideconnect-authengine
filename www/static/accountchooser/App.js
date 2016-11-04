@@ -170,7 +170,11 @@ define(function(require, exports, module) {
 
                     // console.log("Loading client info", this.request);
                     resolve();
-                });
+                }).fail(function() {
+                  console.log("Error loading client info for client " + that.request.clientid);
+                  that.client = {};
+                  resolve();
+                })
 
             });
         },
