@@ -18,7 +18,15 @@
                 </div>
 
                 <div class="grantDetailsHide">
-                    <p class="media-heading" style="padding: 0px">{{info.name}} <span style="font-weight: normal; color: #888">{{_.provby}} {{ownerDisplay}}</span></p>
+                    <p class="media-heading" style="padding: 0px">{{info.name}} <span style="font-weight: normal; color: #888">
+                        {{#info.APIownerOrg}}
+                            {{_.provby}} {{org.name.nb}}
+                        {{/info.APIownerOrg}}
+
+                        {{^info.APIownerOrg}}
+                            {{_.provby}} {{owner.name}}
+                        {{/info.APIownerOrg}}
+                    </span></p>
                 </div>
 
             </div><!-- media body -->
