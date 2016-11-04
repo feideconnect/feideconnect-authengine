@@ -496,4 +496,7 @@ class Account {
         return $this->mail;
     }
 
+    public function getAcr() {
+        return $this->getValue('eduPersonAssurance');
+    }
 }

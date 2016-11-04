@@ -96,7 +96,7 @@ class Authenticator {
      *
      * @return void
      */
-    public function requireAuthentication($maxage = null) {
+    public function requireAuthentication($maxage = null, $acr_values = null) {
 
         $accountchooser = new Authentication\AccountChooserProtocol();
 
@@ -124,6 +124,7 @@ class Authenticator {
 
 
         $forceauthn = false;
+        $authGood = true;
 
         if ($as->isAuthenticated()) {
             $mismatchingAccounts = false;
@@ -158,11 +159,22 @@ class Authenticator {
 
             }
 
-            if ($this->verifyMaxAge($as->getAuthData("AuthnInstant"), $maxage)) {
-                return null;
+            if (!$this->verifyMaxAge($as->getAuthData("AuthnInstant"), $maxage)) {
+                Logger::debug('Forcing new login because of maxage requirement');
+                $forceauthn = true;
+                $authGood = false;
+            }
+            if (!empty($acr_values) && !in_array($account->getAcr(), $acr_values)) {
+                Logger::debug('Force login due to acr', [
+                    'requested_acrs' => $acr_values,
+                    'current_acr' => $account->getAcr(),
+                ]);
+                $authGood = false;
             }
 
-            $forceauthn = true;
+            if ($authGood) {
+                return null;
+            }
 
         }
 
@@ -207,13 +219,18 @@ class Authenticator {
 
         }
 
+        if ($acr_values != null && $authconfig["idp"] === Config::getValue('feideIdP')) {
+            $options['saml:AuthnContextClassRef'] = $acr_values;
+            $options['ErrorURL'] = \SimpleSAML_Utilities::addURLparameter(\SimpleSAML_Utilities::selfURL(), array(
+                "error" => 2,
+            ));
+            Logger::info("added acr values", ['acr_values' => $acr_values ]);
+        }
 
         if ($forceauthn) {
             $options['ForceAuthn'] = true;
-            $as->login($options);
-        } else {
-            $as->requireAuth($options);
         }
+        $as->login($options);
 
         return null;
 

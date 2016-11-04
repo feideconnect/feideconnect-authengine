@@ -24,7 +24,7 @@ class IDTokenTest extends \PHPUnit_Framework_TestCase {
 
         $iss = Config::getValue('connect.issuer');
         // TrustStore $trustStore, $iss, $sub, $aud, $expiresIn, $auth_time = null) {
-        $idtoken = IDToken::generate($this->truststore, $iss, 'http://sp.example.org', 3600, null);
+        $idtoken = IDToken::generate($this->truststore, $iss, 'http://sp.example.org', 3600, null, null);
         $idtxt = $idtoken->getEncoded();
 
         // echo "IDToken is " . $idtxt . "\n";
