@@ -29,6 +29,11 @@
 	"twofactorproblem": "Two factor problem",
 	"twofactorexplain": "Unable to perform two factor authentication. Is two factor enabled for your account?",
 
+	"badredirecthead": "Bad redirect URI",
+	"badredirectbody": "The requested redirect URI does not match any URI configured in the dashboard.",
+	"requestedlabel": "Requested",
+	"configuredlabel": "Configured",
+
 	"oranotheraccount": "or login with another account",
 	"removeacct": "remove accounts",
 	"remove": "Remove",

@@ -313,10 +313,7 @@ class AuthorizationEvaluator {
             'configuredRedirectURI' => $configuredRedirectURI,
             'requestedRedirectURI' => $requestedRedirectURI,
         ));
-        throw new Exceptions\OAuthException('invalid_request', 'Not able to resolve a valid redirect_uri for client');
-
-
+        throw new Exceptions\BadRedirectURIException('Not able to resolve a valid redirect_uri for client',
+                                                     $configuredRedirectURI, $requestedRedirectURI);
     }
-
-
 }
