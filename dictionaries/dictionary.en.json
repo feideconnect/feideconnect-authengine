@@ -29,7 +29,7 @@
 	"twofactorproblem": "Two factor problem",
 	"twofactorexplain": "Unable to perform two factor authentication. Is two factor enabled for your account?",
 
-	"badredirecthead": "Bad redirect URI",
+	"configerror": "Configuration Error",
 	"badredirectbody": "The requested redirect URI does not match any URI configured in the dashboard.",
 	"requestedlabel": "Requested",
 	"configuredlabel": "Configured",
