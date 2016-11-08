@@ -94,6 +94,7 @@
 	"feideid": "Feide ID",
 	"email": "Email address",
 	"nin": "National identity number",
+	"socialid": "Social network ID",
 
 	"perm-groups": "Groups",
 	"perm-groups-descr": "Access to your group memberships, organization, organization unit, courses, class, program, cohort, study and ad-hoc groups.",
