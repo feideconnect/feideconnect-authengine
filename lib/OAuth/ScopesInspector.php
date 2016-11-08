@@ -232,6 +232,11 @@ class ScopesInspector {
                 'icon' => 'key',
                 'score' => 100,
             ],
+            'userid-social' => [
+                'title' => Localization::getTerm('socialid'),
+                'icon' => 'key',
+                'score' => 100,
+            ],
             'email' => [
                 'title' => Localization::getTerm('email'),
                 'icon' => 'envelope-o',
@@ -306,6 +311,7 @@ class ScopesInspector {
             'profile' => ['name', 'photo'],
             'userid-feide' => ['userid-feide'],
             'userid-nin' => ['userid-nin'],
+            'userid-social' => ['userid-social'],
         ];
         $accesses = [];
         foreach ($scopes as $scope) {
