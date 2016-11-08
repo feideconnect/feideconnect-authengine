@@ -253,6 +253,11 @@ class User extends \FeideConnect\Data\Model {
         if (in_array('userid-nin', $accesses)) {
             $allowseckeys[] = 'nin';
         }
+        if (in_array('userid-social', $accesses)) {
+            $allowseckeys[] = 'facebook';
+            $allowseckeys[] = 'linkedin';
+            $allowseckeys[] = 'twitter';
+        }
         if (in_array('photo', $accesses)) {
             $allowseckeys[] = 'p';
         }

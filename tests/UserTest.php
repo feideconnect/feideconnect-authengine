@@ -138,6 +138,7 @@ class UserTest extends DBHelper {
         $user->name = ['feide:example.org' => 'Test User'];
         $user->userid_sec[] = 'p:abcde12345';
         $user->userid_sec[] = 'nin:01234567890';
+        $user->userid_sec[] = 'facebook:3141592653589793';
         $accesses = [];
         $this->assertEquals(['userid_sec' => []], $user->getAccessibleUserInfo($accesses));
         $accesses = ['userid'];
@@ -152,6 +153,8 @@ class UserTest extends DBHelper {
         $this->assertEquals(['userid_sec' => ['feide:testuser@example.org']], $user->getAccessibleUserInfo($accesses));
         $accesses = ['userid-nin'];
         $this->assertEquals(['userid_sec' => ['nin:01234567890']], $user->getAccessibleUserInfo($accesses));
+        $accesses = ['userid-social'];
+        $this->assertEquals(['userid_sec' => ['facebook:3141592653589793']], $user->getAccessibleUserInfo($accesses));
     }
     // public function testUsers() {
     //     // return;
