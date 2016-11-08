@@ -3,6 +3,7 @@ namespace tests;
 
 use FeideConnect\Router;
 use FeideConnect\HTTP\JSONResponse;
+use FeideConnect\HTTP\LocalizedTemplatedHTMLResponse;
 use FeideConnect\Authentication\AuthSource;
 
 class AuthorizationEndpointErrorsTest extends AuthorizationFlowHelper {
@@ -16,9 +17,8 @@ class AuthorizationEndpointErrorsTest extends AuthorizationFlowHelper {
 
     public function testBadRedirectURI() {
         $response = $this->doAuthorizationRequest(['redirect_uri' => 'http://evilhackers.com']);
-        $this->assertInstanceOf('FeideConnect\HTTP\JSONResponse', $response);
-        $this->assertEquals(400, $response->getStatus());
-        $this->assertEquals('invalid_request', $response->getData()['error']);
+        $this->assertInstanceOf('FeideConnect\HTTP\LocalizedTemplatedHTMLResponse', $response);
+        $this->assertEquals(200, $response->getStatus());
     }
     
     public function testBadClientID() {
