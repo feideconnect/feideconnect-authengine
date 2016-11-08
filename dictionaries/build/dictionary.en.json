@@ -61,6 +61,7 @@
   "perm-groups-orgadmin": "Groups for administrators of organizations",
   "logout": "Logout",
   "cnl": "Netherlands",
+  "socialid": "Social network ID",
   "permlong": "Access will be granted permanently, but may be {A1}manually revoked at minside.dataporten.no{A1_}.",
   "no": "No",
   "permshort": "Access will only be granted for 8 hours after each login. You can {A1}withdraw granted access at minside.dataporten.no{A1_}.",

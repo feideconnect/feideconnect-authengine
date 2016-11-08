@@ -61,6 +61,7 @@
   "perm-groups-orgadmin": "Grupper for Dataporten administratorer ved organisasjoner",
   "logout": "Logg ut",
   "cnl": "Nederland",
+  "socialid": "ID for sosiale nettverk",
   "permlong": "Tilgangene vil bli gitt permanent, men du kan {A1}når som helst trekke tilbake samtykket på minside.dataporten.no{A1_}.",
   "no": "Nei",
   "permshort": "Tilgangene vil bli gitt for 8 timer om gangen etter hver pålogging. Du kan {A1}når som helst trekke tilbake samtykket på minside.dataporten.no{A1_}.",
