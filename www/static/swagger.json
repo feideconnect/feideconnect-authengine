@@ -1,0 +1,199 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "version": "0.0.0",
+        "title": "Dataporten Authentication API"
+    },
+    "tags": [
+        {
+            "name": "authentication"
+        },
+        {
+            "name": "media"
+        }
+    ],
+    "host": "auth.dataporten.no",
+    "schemes": [
+        "https"
+    ],
+    "definitions": {
+        "UserinfoResponse": {
+            "title": "UserinfoResponse",
+            "properties": {
+                "audience": {
+                    "type": "string",
+                    "description": "Client ID of the client this response was intended for"
+                },
+                "user": {
+                    "properties": {
+                        "userid": {
+                            "type": "string",
+                            "description": "The Dataporten User ID of the authenticated user"
+                        },
+                        "userid_sec": {
+                            "type": "array",
+                            "description": "Additional User IDs of the authenticated user",
+                            "items": {
+                                "type": "string"
+                            }
+                        },
+                        "name": {
+                            "type": "string",
+                            "description": "Display name of the authenticated user"
+                        },
+                        "email": {
+                            "type": "string",
+                            "description": "E-mail address of the user"
+                        },
+                        "profilephoto": {
+                            "type": "string",
+                            "description": "An identifier that can be used to receive the users profile photo"
+                        }
+                    }
+                }
+            }
+        },
+        "OpenIDConnectUserinfoResponse": {
+            "title": "OpenIDConnectUserinfoResponse",
+            "properties": {
+                "sub": {
+                    "type": "string",
+                    "description": "The Dataporten User ID of the authenticated user"
+                },
+                "dataporten-userid_sec": {
+                    "type": "array",
+                    "description": "Additional User IDs of the authenticated user",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "name": {
+                    "type": "string",
+                    "description": "Display name of the authenticated user"
+                },
+                "email": {
+                    "type": "string",
+                    "description": "E-mail address of the user"
+                },
+                "email_verified": {
+                    "type": "boolean",
+                    "description": "Whether the users email is verified (always true)"
+                },
+                "picture": {
+                    "type": "string",
+                    "description": "URL to profile photo for the user"
+                }
+            }
+        }
+    },
+    "securityDefinitions": {
+        "dataporten_auth": {
+            "type": "oauth2",
+            "authorizationUrl": "https://auth.dataporten.no/oauth/authorization",
+            "flow": "implicit",
+            "scopes": {
+                "openid": "Scope to use OpenID Connect",
+                "userid": "Access to users ID",
+                "profile": "Access to name and profile photo",
+                "userid-feide": "Access to feide id",
+                "userid-nin": "Access to national identity number",
+                "email": "Access to e-mail address",
+                "userid-social": "Access to social network ID of the user"
+            }
+        }
+    },
+    "paths": {
+        "/userinfo": {
+            "get": {
+                "description": "Get information about the current user\n",
+                "tags": [
+                    "authentication"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [],
+                "security": [
+                    {
+                        "dataporten_auth": [
+                            "userid",
+                            "profile",
+                            "userid-feide",
+                            "userid-nin",
+                            "userid-social",
+                            "email"
+                        ]
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful response",
+                        "schema": {
+                            "$ref": "#/definitions/UserinfoResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/userinfo/v1/user/media/{image_handle}": {
+            "get": {
+                "description": "Returns the users profile photo",
+                "tags": [
+                    "media"
+                ],
+                "produces": [
+                    "image/jpeg"
+                ],
+                "parameters": [
+                    {
+                        "name": "image_handle",
+                        "in": "path",
+                        "type": "string",
+                        "required": true,
+                        "description": "Handle found in user.profilephoto of the /userinfo call"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Users profile photo",
+                        "schema": {
+                            "type": "file"
+                        }
+                    }
+                }
+            }
+        },
+        "/openid/userinfo": {
+            "get": {
+                "description": "Get information about the current user",
+                "tags": [
+                    "authentication"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [],
+                "security": [
+                    {
+                        "dataporten_auth": [
+                            "openid",
+                            "profile",
+                            "userid-feide",
+                            "userid-nin",
+                            "userid-social",
+                            "email"
+                        ]
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful response",
+                        "schema": {
+                            "$ref": "#/definitions/OpenIDConnectUserinfoResponse"
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
