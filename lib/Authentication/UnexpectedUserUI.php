@@ -14,7 +14,7 @@ use FeideConnect\Logger;
 /*
  * The user has authenticated with another account than the one he/she was supposed to.
  * We need to ask the user to confirm that he/she wants to logout and in again.
- * 
+ *
  */
 
 class UnexpectedUserUI {
