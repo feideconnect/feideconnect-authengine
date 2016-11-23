@@ -51,6 +51,9 @@ class UnexpectedUserUI {
         $data["current"]["photo"] = $this->authenticatedAccount->getPhoto();
 
         // var_dump($data);
+        if (!isset($data["expected"]["userids"])) {
+            $data["expected"]["userids"] = [];
+        }
 
         Logger::info('OAuth display dialog about conflicting requested and authenticated user.', array(
             'currentUserID' => $data["current"]["userids"],
