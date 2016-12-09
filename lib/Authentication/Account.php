@@ -112,9 +112,9 @@ class Account {
             return $accountTypes[$this->sourceID];
         }
 
-        if (preg_match("/^feide:(.*?)$/", $this->sourceID, $matches)) {
+        $org = $this->getRealm();
+        if ($org) {
             // A feide account.
-            $org = $matches[1];
             if ($org === 'spusers.feide.no') {
                 // The service provider organization in Feide.
                 return [ 'all', 'other|feidetest' ];
@@ -150,10 +150,10 @@ class Account {
     // TODO: Update this code to automatically
     public function getVisualTag() {
 
-        if (isset($this->sourceID) && preg_match("/^feide:(.*?)$/", $this->sourceID, $matches)) {
+        $org = $this->getRealm();
+        if ($org) {
             $feideidp = Config::getValue('feideIdP');
 
-            $org = $matches[1];
             $tag = [
                 "name" => $this->name,
                 "type" => "saml",
