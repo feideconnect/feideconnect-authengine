@@ -60,10 +60,10 @@
 	"permlong": "Access will be granted permanently, but may be {A1}manually revoked at minside.dataporten.no{A1_}.",
 
 	"_notvalidated10short": "This is not an official application at {ORG}.",
-	"notvalidated10short": "{ORG} does not have a contract with this service provider.",
+	"notvalidated10short": "{ORG} does not have an agreement with this service provider.",
 
 	"_notvalidated10": "The application has not been controlled nor accepted by {ORG}. You may still choose to use the application on your own risk.",
-	"notvalidated10": "{ORG} does not have a contract with this service provider. You may still choose to use the application on your own risk.",
+	"notvalidated10": "{ORG} does not have an agreement with this service provider. You may still choose to use the application on your own risk.",
 
 	"validated10short": "An official application at {ORG}",
 	"validated10": "{ORG} has accepted the use of this application on behalf of its users, and has made a contract with the application provider.",
