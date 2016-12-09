@@ -57,18 +57,16 @@ class AuthorizationUITest extends DBHelper {
             "jpegPhoto" => null,
             "mail" => ["ola.normann@uninett.no"],
             "displayName" => ["Ola Normann"],
-            "o" => ["UNINETT AS"],
             "feideYearOfBirth" => ["1980"],
             "idp" => "https://idp-test.feide.no",
             "authSource" => "default-sp",
-            "o" => ["UNINETT AS"]
         ];
         $attributeMapper = new AttributeMapper();
         $account = $attributeMapper->getAccount($attributes);
 
         $org = $account->getOrg();
 
-        $this->assertEquals($org, 'UNINETT AS', 'Organization is UNINETT');
+        $this->assertEquals('UNINETT', $org, 'Organization is UNINETT');
 
 
         $ae = new AuthorizationEvaluator($storage, $this->client, $request, $this->user);

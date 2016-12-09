@@ -75,6 +75,11 @@ class Organization extends \FeideConnect\Data\Model {
     }
 
 
+    public function getName() {
+        $lang = Misc::getBrowserLanguage(array_keys($this->name));
+        return $this->name[$lang];
+    }
+
     public function getOrgInfo($lat = null, $lon = null) {
 
         $res = [];
@@ -82,8 +87,7 @@ class Organization extends \FeideConnect\Data\Model {
         $res["id"] = $prepared["realm"];
         $res["type"] = $this->getTypes();
 
-        $lang = Misc::getBrowserLanguage(array_keys($prepared["name"]));
-        $res["title"] = $prepared["name"][$lang];
+        $res["title"] = $this->getName();
         if (isset($prepared["uiinfo"])) {
             $res["uiinfo"] = $prepared["uiinfo"];
         }
