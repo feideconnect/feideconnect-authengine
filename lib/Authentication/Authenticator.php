@@ -142,7 +142,7 @@ class Authenticator {
                     // Logout the user, before logging in again.
                     $mismatchingAccounts = true;
 
-                } else if (isset($authconfig['subid']) && isset($response["userids"]) && !$account->hasAnyOfUserIDs($response["userids"]) ) {
+                } else if (isset($response["userids"]) && !$account->hasAnyOfUserIDs($response["userids"]) ) {
                     // We are authenticated, but requested to authenticate with a specific userid...
                     $mismatchingAccounts = true;
                 }
