@@ -14,7 +14,7 @@ use FeideConnect\Logger;
 /*
  * The user has authenticated with another account than the one he/she was supposed to.
  * We need to ask the user to confirm that he/she wants to logout and in again.
- * 
+ *
  */
 
 class UnexpectedUserUI {
@@ -51,6 +51,9 @@ class UnexpectedUserUI {
         $data["current"]["photo"] = $this->authenticatedAccount->getPhoto();
 
         // var_dump($data);
+        if (!isset($data["expected"]["userids"])) {
+            $data["expected"]["userids"] = [];
+        }
 
         Logger::info('OAuth display dialog about conflicting requested and authenticated user.', array(
             'currentUserID' => $data["current"]["userids"],

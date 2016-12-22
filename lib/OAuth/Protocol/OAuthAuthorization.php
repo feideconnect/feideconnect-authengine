@@ -2,6 +2,7 @@
 
 namespace FeideConnect\OAuth\Protocol;
 
+use FeideConnect\OAuth\Exceptions\BadRedirectURIException;
 use FeideConnect\OAuth\Exceptions\OAuthException;
 use FeideConnect\OAuth\Messages;
 use FeideConnect\OAuth\AccessTokenPool;
@@ -237,7 +238,14 @@ class OAuthAuthorization {
             $this->aevaluator = new AuthorizationEvaluator($this->storage, $this->client, $this->request, $this->user);
         }
 
-        $redirect_uri = $this->aevaluator->getValidatedRedirectURI();
+        try {
+            $redirect_uri = $this->aevaluator->getValidatedRedirectURI();
+        } catch (BadRedirectURIException $b) {
+            return (new LocalizedTemplatedHTMLResponse('badredirect'))->setData([
+                "requested" => $b->requestedRedirectURI,
+                "configured" => $b->configuredRedirectURI
+            ]);
+        }
 
         // Validate request parameters only after validating redirect
         // url, as we might want to implement oauth compliant error

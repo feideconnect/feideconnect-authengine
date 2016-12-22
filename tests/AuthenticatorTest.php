@@ -36,7 +36,7 @@ class AuthenticatorRequireAuthenticationTest extends DBHelper {
         $_REQUEST['preselected'] = '1';
 
         $as = $this->prophesize('\tests\MockAuthSource');
-        $as->requireAuth(['saml:idp' => 'https://idp.feide.no'])->shouldBeCalled();
+        $as->login(['saml:idp' => 'https://idp.feide.no'])->shouldBeCalled();
         $as->isAuthenticated()->willReturn(false)->shouldBeCalled();
         MockAuthSource::set('default-sp', $as->reveal());
         $authenticator = new Authenticator();

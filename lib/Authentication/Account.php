@@ -10,11 +10,12 @@ use FeideConnect\Exceptions\AuthProviderNotAccepted;
 class Account {
 
     public $userids;
-    public $realm, $name, $mail, $org, $yob, $sourceID;
+    public $realm, $name, $mail, $yob, $sourceID;
     public $photo = null;
 
     public $attributes;
     protected $accountMapRules;
+    protected $orgInfo;
 
     public function __construct($attributes, $accountMapRules) {
 
@@ -32,7 +33,6 @@ class Account {
 
         $this->idp    = $this->attributes["idp"];
         $this->realm  = $this->obtainRealm();
-        $this->org    = $this->get("org");
         $this->name   = $this->get("name", '');
         $this->mail   = $this->get("mail", '');
         $this->yob    = $this->get("yob");
@@ -112,17 +112,16 @@ class Account {
             return $accountTypes[$this->sourceID];
         }
 
-        if (preg_match("/^feide:(.*?)$/", $this->sourceID, $matches)) {
+        $org = $this->getRealm();
+        if ($org) {
             // A feide account.
-            $org = $matches[1];
             if ($org === 'spusers.feide.no') {
                 // The service provider organization in Feide.
                 return [ 'all', 'other|feidetest' ];
             }
             // A normal Feide account.
             $ret = [ 'all', 'feide|all', 'feide|realm|' . $org];
-            $storage = StorageProvider::getStorage();
-            $orginfo = $storage->getOrg('fc:org:' . $org);
+            $orginfo = $this->getOrgInfo();
             if ($orginfo !== null) {
                 // Adds 'feide|uh', 'feide|vgs' and 'feide|go'.
                 foreach ($orginfo->getTypes() as $type) {
@@ -150,16 +149,16 @@ class Account {
     // TODO: Update this code to automatically
     public function getVisualTag() {
 
-        if (isset($this->sourceID) && preg_match("/^feide:(.*?)$/", $this->sourceID, $matches)) {
+        $org = $this->getRealm();
+        if ($org) {
             $feideidp = Config::getValue('feideIdP');
 
-            $org = $matches[1];
             $tag = [
                 "name" => $this->name,
                 "type" => "saml",
                 "id" => $feideidp,
                 "subid" => $org,
-                "title" => $this->org,
+                "title" => $this->getOrg(),
                 "userids" => $this->userids,
                 "def" => []
             ];
@@ -168,11 +167,9 @@ class Account {
                 $tag["def"][] = ["other", "feidetest"];
                 $tag["title"] = 'Feide testbruker';
             } else {
-                $storage = StorageProvider::getStorage();
-
                 $tag["def"][] = ["feide", "realm", $org];
 
-                $orginfo = $storage->getOrg('fc:org:' . $org);
+                $orginfo = $this->getOrgInfo();
                 if ($orginfo !== null) {
                     $types = $orginfo->getTypes();
                     foreach ($types as $type) {
@@ -462,13 +459,32 @@ class Account {
     public function getUserIDs() {
         return $this->userids;
     }
+
     public function getOrg() {
-        return $this->org;
+        $orgInfo = $this->getOrgInfo();
+        if ($orgInfo) {
+            return $orgInfo->getName();
+        }
+        return null;
+    }
+
+    protected function getOrgInfo() {
+        if (isset($this->orgInfo)) {
+            return $this->orgInfo;
+        }
+        $realm = $this->getRealm();
+        if (!$realm) {
+            return null;
+        }
+        $storage = StorageProvider::getStorage();
+        $this->orgInfo = $storage->getOrg('fc:org:' . $realm);
+        return $this->orgInfo;
     }
 
     public function getRealm() {
         return $this->realm;
     }
+
     public function getPhoto() {
         if ($this->photo === null) {
             return null;

@@ -39,7 +39,7 @@ class AuthorizationUITest extends DBHelper {
         $request = $this->getRequest();
         $this->aevaluator = new AuthorizationEvaluator($this->db, $this->client, $request);
         $redirect_uri = $this->aevaluator->getValidatedRedirectURI();
-        $this->assertEquals($redirect_uri, 'http://example.org', 'When request does not contain any redirect_uri, return first preconfigured one.');
+        $this->assertEquals('http://example.org', $redirect_uri, 'When request does not contain any redirect_uri, return first preconfigured one.');
 
         $storage = StorageProvider::getStorage();
 
@@ -57,18 +57,16 @@ class AuthorizationUITest extends DBHelper {
             "jpegPhoto" => null,
             "mail" => ["ola.normann@uninett.no"],
             "displayName" => ["Ola Normann"],
-            "o" => ["UNINETT AS"],
             "feideYearOfBirth" => ["1980"],
             "idp" => "https://idp-test.feide.no",
             "authSource" => "default-sp",
-            "o" => ["UNINETT AS"]
         ];
         $attributeMapper = new AttributeMapper();
         $account = $attributeMapper->getAccount($attributes);
 
         $org = $account->getOrg();
 
-        $this->assertEquals($org, 'UNINETT AS', 'Organization is UNINETT');
+        $this->assertEquals('UNINETT', $org, 'Organization is UNINETT');
 
 
         $ae = new AuthorizationEvaluator($storage, $this->client, $request, $this->user);
@@ -82,21 +80,21 @@ class AuthorizationUITest extends DBHelper {
             ->process();
 
 
-        $this->assertEquals($data['firsttime'], true, 'Evaluated to be first time');
-        $this->assertEquals($data['needsAuthorization'], true, 'Evaluated to need Authorization');
-        $this->assertEquals($data['client']['host'], 'example.org', 'Client host provided');
-        $this->assertEquals($data['rememberme'], false, 'Rememberme is false');
+        $this->assertTrue($data['firsttime'], 'Evaluated to be first time');
+        $this->assertTrue($data['needsAuthorization'], 'Evaluated to need Authorization');
+        $this->assertEquals('example.org', $data['client']['host'], 'Client host provided');
+        $this->assertFalse($data['rememberme'], 'Rememberme is false');
 
-        $this->assertEquals($data['simpleView'], false, 'simpleView is false');
-        $this->assertEquals($data['validated'], false, 'validated is false');
+        $this->assertFalse($data['simpleView'], 'simpleView is false');
+        $this->assertFalse($data['validated'], 'validated is false');
 
-        $this->assertEquals(strpos($data['bodyclass'], 'bypass') !== false, false, 'bodyclass does not contain bypass');
+        $this->assertFalse(strpos($data['bodyclass'], 'bypass') !== false, 'bodyclass does not contain bypass');
 
         $data2 = $aui
             ->setFixedBypass(true)
             ->process();
 
-        $this->assertEquals(strpos($data2['bodyclass'], 'bypass') !== false, true, 'bodyclass does  contain bypass');
+        $this->assertTrue(strpos($data2['bodyclass'], 'bypass') !== false, 'bodyclass does  contain bypass');
 
         // print_r($data2);
 

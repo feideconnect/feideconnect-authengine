@@ -142,7 +142,7 @@ class Authenticator {
                     // Logout the user, before logging in again.
                     $mismatchingAccounts = true;
 
-                } else if (isset($authconfig['subid']) && isset($response["userids"]) && !$account->hasAnyOfUserIDs($response["userids"]) ) {
+                } else if (isset($response["userids"]) && !$account->hasAnyOfUserIDs($response["userids"]) ) {
                     // We are authenticated, but requested to authenticate with a specific userid...
                     $mismatchingAccounts = true;
                 }
@@ -198,7 +198,7 @@ class Authenticator {
          * Make sure we handle preselet org with Feide.
          * Will only execute if not already authenticated, and if Feide is selected and a preselect endpoint is configured.
          */
-        if (!$as->isAuthenticated() && $authconfig["idp"] && $authconfig["idp"] === Config::getValue('feideIdP') && $preselectEndpoints[$authconfig["idp"]]) {
+        if (!$as->isAuthenticated() && !(empty($authconfig["idp"])) && $authconfig["idp"] === Config::getValue('feideIdP') && $preselectEndpoints[$authconfig["idp"]]) {
 
             $preselectEndpoint = $preselectEndpoints[$authconfig["idp"]];
 
@@ -219,7 +219,7 @@ class Authenticator {
 
         }
 
-        if ($acr_values != null && $authconfig["idp"] === Config::getValue('feideIdP')) {
+        if ($acr_values != null && !(empty($authconfig["idp"])) && $authconfig["idp"] === Config::getValue('feideIdP')) {
             $options['saml:AuthnContextClassRef'] = $acr_values;
             $options['ErrorURL'] = \SimpleSAML_Utilities::addURLparameter(\SimpleSAML_Utilities::selfURL(), array(
                 "error" => 2,

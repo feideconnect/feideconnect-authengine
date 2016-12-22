@@ -41,7 +41,6 @@ class AccountTest extends DBHelper {
             ),
         ),
         'mail' => 'mail',
-        'org' => 'o',
         'photo' => 'jpegPhoto',
         'yob' => 'feideYearOfBirth',
     );
@@ -69,7 +68,6 @@ class AccountTest extends DBHelper {
             'value' => 'IDporten user',
         ),
         'mail' => null,
-        'org' => null,
         'photo' => null,
         'yob' => null,
     );
@@ -101,7 +99,6 @@ class AccountTest extends DBHelper {
             ),
         ),
         'mail' => 'mail',
-        'org' => null,
         'photo' => 'jpegPhoto',
         'yob' => null,
     );
@@ -129,7 +126,6 @@ class AccountTest extends DBHelper {
             ),
         ),
         'mail' => null,
-        'org' => null,
         'photo' =>
         array (
             'type' => 'urlref',
@@ -161,7 +157,6 @@ class AccountTest extends DBHelper {
             ),
         ),
         'mail' => null,
-        'org' => null,
         'photo' =>
         array (
             'type' => 'urlref',
@@ -192,7 +187,6 @@ class AccountTest extends DBHelper {
             ),
         ),
         'mail' => null,
-        'org' => null,
         'photo' => null,
         'yob' => null,
     );
@@ -252,7 +246,7 @@ class AccountTest extends DBHelper {
             'type' => 'saml',
             'id' => self::$feideidp,
             'subid' => 'example.org',
-            'title' => null,
+            'title' => 'Testorganisasjon',
             'userids' => ['feide:test@example.org'],
             'def' => [
                 ['feide', 'realm', 'example.org'],
