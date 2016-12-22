@@ -7,17 +7,13 @@ define(function(require, exports, module) {
     var AccountSelector = require('./AccountSelector');
     var LanguageSelector = require('./LanguageSelector');
     var Controller = require('./Controller');
-
     var Utils = require('./Utils');
-
 
     /*
      *  This is the main App controlling the acountchooser and discovery
      *
      * It loads two panes, one with the accountchooser and one with the discovery and lets the user switch between them.
      * It activates the chooser if there exists some stored accounts
-     * If the user selets to go to an account that is representing Feide, the FeideWriter
-     * will load a cookie writer that preselects oranization in Feide
      */
     var App = Controller.extend({
         "init": function() {

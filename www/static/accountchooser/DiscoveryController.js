@@ -1,9 +1,5 @@
 define(function(require, exports, module) {
     "use strict";
-
-    var Utils = require('./Utils');
-
-
     /**
      * Functional description
      *
@@ -17,37 +13,25 @@ define(function(require, exports, module) {
      * - Incremental search
      * - Geo location changes  (LocationController)
      * - Selecting a provider.
-     *  - including feide preselect org (FeideWriter)
      *
      */
 
-
-
+    var Utils = require('./Utils');
     var Class = require('./Class');
-
     var Controller = require('./Controller');
-
-    // var FeideWriter = require('./FeideWriter');
     var LocationController = require('./LocationController');
     var DiscoveryFeedLoader = require('./DiscoveryFeedLoader');
-
     var Provider = require('./models/Provider');
     var NorwegianOrg = require('./models/NorwegianOrg');
-
     var Waiter = require('./Waiter');
-
-
 
     var DiscoveryController = Controller.extend({
         "init": function(app) {
             var that = this;
 
             this.app = app;
-
             this.feideid = null; // Will be set in initLoad, loading from app config.
-
             this.initialized = false;
-
             this.country = 'no';
             this.countrylist = ['no', 'dk', 'fi', 'se', 'is', 'nl'];
             // this.countries = {};
@@ -55,13 +39,10 @@ define(function(require, exports, module) {
             //  this.countries[countries[i].id] = countries[i].title;
             // }
 
-
             this.orgs = [];
             this.extra = [];
             this.providers = [];
-
             this.maxshow = 10;
-
             this.searchTerm = null;
 
             this.parseRequest();
@@ -70,7 +51,6 @@ define(function(require, exports, module) {
             });
 
             this.dfl = new DiscoveryFeedLoader();
-
             this.dfl.onLoaded()
                 .then(function() {
                     that.providers = that.dfl.getData();
@@ -78,8 +58,6 @@ define(function(require, exports, module) {
                         that.drawData();
                     }
                 });
-
-
 
             this._super(undefined, false);
 
@@ -109,7 +87,6 @@ define(function(require, exports, module) {
                         that.searchWaiter.ping();
                     }
                 }
-
                 // console.log("Search term is now ", st);
             });
 
@@ -161,9 +138,7 @@ define(function(require, exports, module) {
                 that.loadData();
                 that.updateLocationView();
             });
-
             this.updateLocationView();
-
             return this.app.onLoaded()
                 .then(function() {
                     that.updateCurrentCountry('no');
@@ -203,24 +178,17 @@ define(function(require, exports, module) {
             var url = that.request.return;
             var sep = (url.indexOf('?') > -1) ? '&' : '?';
             url += sep + 'acresponse=' + encodeURIComponent(JSON.stringify(so));
+
+            // console.log("Go to ", so);
+
             window.location = url;
 
-            // if (that.feideid === so.id) {
-
-            //  var f = (new FeideWriter(this.app, so.subid, that.feideid))
-            //      .onLoad( function() {
-            //          window.location = url;
-            //      })
-            //      .load();
-
-            // } else {
-            //  window.location = url;
-            // }
         },
 
 
         "updateLocationView": function() {
             var loc = this.location.getLocation();
+            console.log("updateLocationView", loc);
             $("#locationtitle").empty().append(loc.title);
             if (loc.stored) {
                 $("#removelocation").show();
@@ -287,7 +255,6 @@ define(function(require, exports, module) {
             // console.log("---- MATCHING");
             // console.log(item);
             // console.log(providers);
-
 
             for(var i = 0; i < providers.length; i++) {
                 // console.log("Compare", JSON.stringify(providers[i]), item);
@@ -395,6 +362,8 @@ define(function(require, exports, module) {
         },
 
         "drawData": function() {
+
+            console.log("Draw data");
 
             var that = this;
             var it = null;

@@ -2,9 +2,6 @@ define(function(require, exports, module) {
     "use strict";
 
     var Class = require('../accountchooser/Class');
-
-    // var FeideWriter = require('./FeideWriter');
-    // var LocationController = require('./LocationController');
     var LanguageSelector = require('../accountchooser/LanguageSelector');
     var AccountStore = require('./AccountStore');
 
