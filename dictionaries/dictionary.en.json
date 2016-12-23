@@ -44,7 +44,7 @@
 	"logout": "Logout",
 
 	"requestsperms": "This service requests the following accesses on behalf of you:",
-	
+
 
 	"readmoreconnect": "Read more about Dataporten",
 	"connectpersonvern": "Dataporten privacy policy",
@@ -114,10 +114,43 @@
 
 	"close": "Close",
 
-	"cno": "Norway",
-	"cdk": "Denmark",
-	"cfi": "Finland",
-	"cse": "Sweden",
-	"cis": "Iceland",
-	"cnl": "Netherlands"
+    "cgb": "United Kingdom",
+    "cit": "Italy",
+    "cfi": "Finland",
+    "cus": "United States",
+    "cse": "Sweden",
+    "cdk": "Denmark",
+    "cnl": "Netherlands",
+    "ces": "Spain",
+    "cie": "Ireland",
+    "cjp": "Japan",
+    "cbe": "Belgium",
+    "clu": "Luxembourg",
+    "chr": "Croatia",
+    "csi": "Slovenia",
+    "cca": "Canada",
+    "ccz": "Czech Republic",
+    "clt": "Lithuania",
+    "cpt": "Portugal",
+    "cam": "Armenia",
+    "cfr": "France",
+    "cbr": "Brazil",
+    "cde": "Germany",
+    "clv": "Latvia",
+    "cno": "Norway",
+    "cch": "Switzerland",
+    "chu": "Hungary",
+    "cgr": "Greece",
+    "cmd": "Moldova, Republic of",
+    "cge": "Georgia",
+    "cpl": "Poland",
+    "cil": "Israel",
+    "cua": "Ukraine",
+    "cau": "Australia",
+    "cat": "Austria",
+    "cee": "Estonia",
+    "ccl": "Chile",
+    "cec": "Ecuador",
+    "ckr": "Korea, Republic of",
+    "cmk": "Macedonia"
 }
