@@ -346,12 +346,20 @@ define(function(require, exports, module) {
             var searchTerm = this.searchTerm;
             // console.log("Searching for [" + searchTerm + "]");
 
-
-            if (item.title === null) {
-                return false;
-            }
-            if (item.title.toLowerCase().indexOf(searchTerm) !== -1) {
+            if (item.title && item.title.toLowerCase().indexOf(searchTerm) !== -1) {
                 return true;
+            }
+
+            if (item.descr && item.descr.toLowerCase().indexOf(searchTerm) !== -1) {
+                return true;
+            }
+
+            if (item.keywords) {
+                for(var k in item.keywords) {
+                    if (item.keywords[k].toLowerCase().indexOf(searchTerm) !== -1) {
+                        return true;
+                    }
+                }
             }
 
             return false;
