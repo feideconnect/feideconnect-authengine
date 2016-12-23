@@ -6,51 +6,56 @@ define(function(require, exports, module) {
 
     var DiscoveryFeedLoader = Controller.extend({
         "init": function() {
-            var that = this;
-
             this._callback = null;
-            this.providers = [];
-
+            this.providers = {};
             this._super(undefined, true);
         },
 
         "initLoad": function() {
-            var that = this;
-            return this.loadData()
-                .then(this.proxy("_initLoaded"));
+            // var that = this;
+            return this._initLoaded();
+            // return this.loadData()
+            //     .then(this.proxy("_initLoaded"));
         },
-        "loadData": function() {
+
+        "loadData": function(country) {
             var that = this;
 
-            return Promise.resolve([]);
-            
-            // return new Promise(function(resolve, reject) {
-            //  var url = 'https://api.discojuice.org/feed/edugain';
-            //  $.ajax({
-            //      dataType: "json",
-            //      url: url,
-            //      success: function(data) {
-            //          for(var i = 0; i < data.length; i++) {
-            //              that.providers.push(new Provider(data[i]));
-            //          }
-            //          // that.providers = data;
-            //          resolve(data);
-            //      },
-            //      error: function(err, a, b) {
-            //          console.error("error ", err, a, b);
-            //          reject(err);
-            //      }
-            //  });
-            // });
-
-        },
-        "executeCallback": function() {
-            if (this._callback !== null) {
-                this._callback(this.providers);
+            if (this.providers[country]) {
+                return Promise.resolve();
             }
+
+            // console.log("About to load " + country);
+
+            return new Promise(function(resolve, reject) {
+                var url = '/metadata/providers/' + country;
+                $.ajax({
+                    dataType: "json",
+                    url: url,
+                    success: function(data) {
+                        that.providers[country] = [];
+                        for(var i = 0; i < data.length; i++) {
+                            that.providers[country].push(new Provider(data[i]));
+                        }
+                        // that.providers = data;
+                        resolve(data);
+                    },
+                    error: function(err, a, b) {
+                        console.error("error ", err, a, b);
+                        reject(err);
+                    }
+                });
+            });
+
         },
-        "getData": function() {
-            return this.providers;
+
+        // "executeCallback": function() {
+        //     if (this._callback !== null) {
+        //         this._callback(this.providers);
+        //     }
+        // },
+        "getData": function(country) {
+            return this.providers[country];
         }
 
     });

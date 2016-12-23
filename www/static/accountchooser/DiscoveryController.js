@@ -33,15 +33,57 @@ define(function(require, exports, module) {
             this.feideid = null; // Will be set in initLoad, loading from app config.
             this.initialized = false;
             this.country = 'no';
-            this.countrylist = ['no', 'dk', 'fi', 'se', 'is', 'nl'];
+            this.countrylist = [
+                "gb",
+                "it",
+                "fi",
+                "us",
+                "se",
+                "dk",
+                "nl",
+                "es",
+                "ie",
+                "jp",
+                "be",
+                "lu",
+                "hr",
+                "si",
+                "ca",
+                "cz",
+                "lt",
+                "pt",
+                "am",
+                "fr",
+                "br",
+                "de",
+                "lv",
+                "no",
+                "ch",
+                "hu",
+                "gr",
+                "md",
+                "ge",
+                "pl",
+                "il",
+                "ua",
+                "au",
+                "at",
+                "ee",
+                "cl",
+                "ec",
+                "kr",
+                "mk"
+            ];
             // this.countries = {};
             // for(var i = 0; i < countries.length; i++) {
             //  this.countries[countries[i].id] = countries[i].title;
             // }
 
-            this.orgs = [];
-            this.extra = [];
-            this.providers = [];
+            this.orgs = [];             // Norwegian Feide organizations.
+            this.extra = [];            // Extra providers, such as IDporten and Guest IdPs
+                                        // EduGAIN / International providers. Prefixed with language code.
+                                        //  Will be loaded country by country by the DiscoveryFeedLoader.
+
             this.maxshow = 10;
             this.searchTerm = null;
 
@@ -53,10 +95,10 @@ define(function(require, exports, module) {
             this.dfl = new DiscoveryFeedLoader();
             this.dfl.onLoaded()
                 .then(function() {
-                    that.providers = that.dfl.getData();
-                    if (that.country !== "no") {
-                        that.drawData();
-                    }
+                    // that.providers = that.dfl.getData();
+                    // if (that.country !== "no") {
+                    //     that.drawData();
+                    // }
                 });
 
             this._super(undefined, false);
@@ -75,7 +117,17 @@ define(function(require, exports, module) {
                 // e.preventDefault(); e.stopPropagation();
                 var c = $(e.currentTarget).data("country");
                 that.updateCurrentCountry(c);
-                that.drawData();
+
+                if (c === 'no') {
+                    that.drawData();
+                } else {
+                    that.dfl.loadData(c)
+                        .then(function(data) {
+                            that.drawData();
+                        });
+
+                }
+
             });
 
             $("#usersearch").on("propertychange change click keyup input paste", function() {
@@ -164,13 +216,10 @@ define(function(require, exports, module) {
 
 
         "activate": function() {
-
             if (!this.isLoaded) {
                 this.initLoad();
             }
-
             $("#panedisco").show();
-
         },
 
         "go": function(so) {
@@ -188,7 +237,7 @@ define(function(require, exports, module) {
 
         "updateLocationView": function() {
             var loc = this.location.getLocation();
-            console.log("updateLocationView", loc);
+            // console.log("updateLocationView", loc);
             $("#locationtitle").empty().append(loc.title);
             if (loc.stored) {
                 $("#removelocation").show();
@@ -244,8 +293,6 @@ define(function(require, exports, module) {
             }
             return false;
         },
-
-
 
 
         "matchAuthProviderFilter": function(item) {
@@ -311,32 +358,14 @@ define(function(require, exports, module) {
 
         },
 
-        "matchCountry": function(item) {
-
-            if (this.country === 'no') {
-                return true;
-            }
-
-            if (this.country === null) {
-                return true;
-            }
-
-            if (!item.hasOwnProperty("country")) {
-                return false;
-            }
-
-            if (item.country.toLowerCase() === this.country) {
-                return true;
-            }
-            return false;
-
-        },
-
         "getCompareDistanceFunc": function() {
 
             var geo = this.location.getLocation();
+            // console.error("Location is ", geo);
 
             return function(a, b) {
+
+
 
                 var dista = a.getDistance(geo);
                 var distb = b.getDistance(geo);
@@ -362,17 +391,15 @@ define(function(require, exports, module) {
         },
 
         "drawData": function() {
-
-            console.log("Draw data");
-
             var that = this;
             var it = null;
 
-            // console.error("Draw data with ", this.country);
+
             if (this.country === 'no') {
                 it = this.orgs;
             } else {
-                it = this.providers;
+                // it = this.providers;
+                it = that.dfl.getData(this.country);
             }
 
             var i;
@@ -394,12 +421,8 @@ define(function(require, exports, module) {
                     continue;
                 }
 
-                if (!this.matchCountry(it[i])) {
-                    missed++;
-                    continue;
-                }
-
                 showit.push(it[i]);
+
             }
 
             if (this.country !== 'no') {
