@@ -10,14 +10,21 @@ define(function(require, exports, module) {
 
         "getDistance": function(loc) {
 
-            if (this.hasOwnProperty("geo") && this.geo.hasOwnProperty("lat") && this.geo.hasOwnProperty("lon")) {
-                // console.error("Compare ", loc.lat, loc.lon, this.geo.lat, this.geo.lon);
-                var dist = Utils.calculateDistance(loc.lat, loc.lon, this.geo.lat, this.geo.lon);
-                // console.error("Dist is ", dist);
-                return dist;
+            // We cache the distance, but only use the cache when we are sure that the distanceFrom is the same.
+            var cacheStr = (loc.lat ? (loc.lat + ',' + loc.lon) : 'na');
+            if (this.distance && this.distanceFrom && this.distanceFrom === cacheStr) {
+                return this.distance;
             }
 
-            return 9999;
+            // We calculate the distance only when the entity has a geo coordinate associated.
+            if (loc && this.hasOwnProperty("geo") && this.geo.hasOwnProperty("lat") && this.geo.hasOwnProperty("lon")) {
+                this.distance = Utils.calculateDistance(loc.lat, loc.lon, this.geo.lat, this.geo.lon);
+            } else {
+                this.distance = 9999;
+            }
+
+            this.distanceFrom = cacheStr;
+            return this.distance;
         },
 
         "matchType": function(type) {
@@ -46,7 +53,7 @@ define(function(require, exports, module) {
         },
 
         "getHTML": function() {
-
+            // console.log("This", this);
             var txt = '';
             var datastr = 'data-id="' + Utils.quoteattr(this.entityID) + '" data-subid="' + Utils.quoteattr(this.entityID) + '" data-type="saml"';
             txt += '<a href="#" class="list-group-item idpentry" ' + datastr + '>' +
@@ -58,9 +65,10 @@ define(function(require, exports, module) {
                 txt += '<div class="media-object" style="width: 200px; text-align: right">&nbsp;</div>';
             }
 
-
             txt +=  '</div>' +
-                    '<div class="media-body"><p style="margin-left: 10px">' + Utils.quoteattr(this.title) + '</p></div>' +
+                    '<div class="media-body"><p style="margin-left: 10px">' + Utils.quoteattr(this.title) + ' ' +
+                         '<br /><span style="color: red">' + this.distance + '</span> ' + this.distanceFrom + ' ' +
+                         '</p></div>' +
                 '</div>' +
             '</a>';
             return txt;
