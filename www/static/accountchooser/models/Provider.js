@@ -66,8 +66,8 @@ define(function(require, exports, module) {
             }
 
             txt +=  '</div>' +
-                    '<div class="media-body"><p style="margin-left: 10px">' + Utils.quoteattr(this.title) + ' ' +
-                         '<br /><span style="color: red">' + this.distance + '</span> ' + this.distanceFrom + ' ' +
+                    '<div class="media-body"><p style="margin-left: 10px">' + Utils.quoteattr(this.title) +
+                         // '<br /><span style="color: red">' + this.distance + '</span> ' + this.distanceFrom + ' ' +
                          '</p></div>' +
                 '</div>' +
             '</a>';
