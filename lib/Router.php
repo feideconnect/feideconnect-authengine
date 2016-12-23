@@ -12,19 +12,14 @@ class Router {
 
     public function __construct() {
 
-
         $this->router = new Phroute\RouteCollector();
-
-
 
         // Pages
         $this->router->get('/reject', ['FeideConnect\Controllers\Pages', 'reject']);
         $this->router->get('/loggedout', ['FeideConnect\Controllers\Pages', 'loggedout']);
 
-
         // Test
         $this->router->get('/test', ['FeideConnect\Controllers\TestController', 'test']);
-
 
         // Data APIs
         $this->router->get('/user/media/{userid:[a-zA-Z0-9_\-\.:]+ }', ['FeideConnect\Controllers\Data', 'getUserProfilephoto']);
@@ -32,13 +27,17 @@ class Router {
         $this->router->get('/orgs', ['FeideConnect\Controllers\Data', 'getOrgs']);
         $this->router->get('/dictionary', ['FeideConnect\Controllers\Data', 'getDictionary']);
 
+        // Metadata APIs
+        $this->router->get('/metadata/bootstrap', ['FeideConnect\Controllers\Metadata', 'getMetadataBootstrap']);
+        $this->router->get('/metadata/regauth', ['FeideConnect\Controllers\Metadata', 'getRegAuthorities']);
+        $this->router->get('/metadata/countrycodes', ['FeideConnect\Controllers\Metadata', 'getCountryCodes']);
+        $this->router->get('/metadata/providers/{country:[a-zA-Z0-9\-]+ }', ['FeideConnect\Controllers\Metadata', 'getProvidersByCountry']);
 
         // OAuth
         $this->router->get('/oauth/config', ['FeideConnect\Controllers\OAuth', 'providerconfig']);
         $this->router->get('/oauth/authorization', ['FeideConnect\Controllers\OAuth', 'authorization']);
         $this->router->post('/oauth/authorization', ['FeideConnect\Controllers\OAuth', 'authorization']);
         $this->router->post('/oauth/token', ['FeideConnect\Controllers\OAuth', 'token']);
-
 
         // $this->router->get('/oauth/authorizationui', ['FeideConnect\Controllers\GrantDebug', 'debug']);
         $this->router->get('/tou', ['FeideConnect\Controllers\TOU', 'showAuthenticated']);
@@ -48,8 +47,6 @@ class Router {
         $this->router->get('/auth', ['FeideConnect\Controllers\Auth', 'userdebug']);
         $this->router->get('/userinfo', ['FeideConnect\Controllers\Auth', 'userinfo']);
         $this->router->get('/logout', ['FeideConnect\Controllers\Auth', 'logout']);
-
-
 
         // Account chooser page
         $this->router->get('/accountchooser', ['FeideConnect\Controllers\AccountChooser', 'process']);
