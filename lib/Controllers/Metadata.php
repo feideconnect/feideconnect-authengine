@@ -361,8 +361,6 @@ class Metadata {
 
 
 
-
-
             // Get all languages
             $allLangauges = [];
             $lines = explode("\n", $langCodes);
@@ -374,10 +372,25 @@ class Metadata {
                 }
             }
 
+
+            $regauths = self::getRegAuthoritiesData();
+            // Make sure federations list are sorted by name of country in english
+            foreach($regauths['federations'] AS &$x) {
+                // echo $regauths['federations'][$k]; exit;
+                // $regauths['federations'][$k] = 1;
+                $x['sortableName'] = isset($allLangauges[$x['country']]) ? $allLangauges[$x['country']] : 'Unnamed country';
+            }
+            $sf = function($a, $b){
+                return strcmp($a["sortableName"], $b["sortableName"]);
+            };
+            usort($regauths['federations'], $sf);
+
+
+
             // Select only the ones that are in use, has metadata.
             $selectedLangauges = [];
             $selectedLangcodes = [];
-            $regauths = self::getRegAuthoritiesData();
+
             foreach($regauths['federations'] AS $f) {
                 if ($f['country'] === 'no' || $f['available']) {
                     $selectedLangauges['c' . $f['country']] = isset($allLangauges[$f['country']]) ? $allLangauges[$f['country']] : 'Unnamed country';
