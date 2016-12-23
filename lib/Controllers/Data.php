@@ -100,6 +100,7 @@ class Data {
         return new JSONResponse($data);
     }
 
+
     public static function getDictionary() {
 
         return new JSONResponse(Localization::getDictionary());

@@ -18,7 +18,6 @@ class AccountChooser {
 
     public static function process() {
 
-
         $auth = new Authenticator();
         $accounts = $auth->getAllAccountsVisualTags();
 
@@ -72,7 +71,6 @@ class AccountChooser {
 
         $l = new GeoLocation();
         $loc = $l->getLocation();
-
 
         $data["location"] = $loc;
         $data["locationJSON"] = json_encode($loc);

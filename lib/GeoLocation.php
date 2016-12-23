@@ -7,9 +7,6 @@ use FeideConnect\Exceptions\Exception;
 
 class GeoLocation {
 
-
-
-
     protected static $reader = null;
 
     public function __construct() {
@@ -31,7 +28,6 @@ class GeoLocation {
 
     }
 
-
     public function getLocation() {
 
         $ip = $_SERVER['REMOTE_ADDR'];
@@ -45,7 +41,7 @@ class GeoLocation {
             $code = null;
             $title = '';
             if (isset($record->country)) {
-                
+
                 if (isset($record->country->isoCode)) {
                     $code = strtolower($record->country->isoCode);
                 }
