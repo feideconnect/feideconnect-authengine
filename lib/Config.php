@@ -123,6 +123,9 @@ class Config {
         if (getenv('AE_SALT') !== false) {
             $envOverride["salt"] = getenv('AE_SALT');
         }
+        if (getenv('AE_DEBUG') !== false) {
+            $envOverride["debug"] = (getenv('AE_DEBUG') === "true");
+        }
         // TODO: allow to override test users. May be not suited for env variables
 
 
