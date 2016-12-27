@@ -14,7 +14,7 @@
 		"clientadm": "https://clientadmin.dataporten-api.no",
 		"groups": "https://groups-api.dataporten.no"
 	},
-	"debug": true,
+	"debug": false,
 	"logging": {
 		"file": false,
 		"errorlog": false,
