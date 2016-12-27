@@ -117,6 +117,10 @@ class Config {
         if (getenv('FC_CASSANDRA_KEYSPACE') !== false) {
             $envOverride["storage"]["keyspace"] = getenv('FC_CASSANDRA_KEYSPACE');
         }
+        if (getenv('FC_CASSANDRA_USESSL') !== false) {
+            $envOverride["storage"]["use_ssl"] = (getenv('FC_CASSANDRA_USESSL') !== "false");
+        }
+
         if (getenv('AE_SERVER_NAME') !== false) {
             $envOverride["endpoints"]["core"] = getenv('HTTPS_PROTO') . '://' . getenv('AE_SERVER_NAME');
         }
