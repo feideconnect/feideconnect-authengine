@@ -14,8 +14,6 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
   libuv-dev \
   locales \
   make \
-# nodejs \
-# nodejs-legacy \
   php5 \
   php5-cli \
   php5-curl \
@@ -56,15 +54,6 @@ COPY ./composer.json .
 RUN composer update --no-interaction --no-dev --no-progress
 
 
-
-# Install Auth engine
-# WORKDIR /feideconnect
-# COPY feideconnect-authengine feideconnect-authengine
-
-# Setup Auth engine
-# WORKDIR /feideconnect/feideconnect-authengine
-# RUN composer update --no-interaction --no-dev --no-progress
-
 COPY package.json .
 RUN npm install
 
@@ -81,14 +70,14 @@ RUN curl -o /authengine/www/static/components/uninett-bootstrap-theme/fonts/colf
 RUN curl -o /authengine/www/static/components/uninett-bootstrap-theme/fonts/colfaxThin.woff http://mal.uninett.no/uninett-theme/fonts/colfaxThin.woff
 RUN curl -o /authengine/www/static/components/uninett-bootstrap-theme/fonts/colfaxRegularItalic.woff http://mal.uninett.no/uninett-theme/fonts/colfaxRegularItalic.woff
 
-
-
+# === Copy auth engine ===
 COPY lib lib
 COPY etc/authengine etc
 COPY dictionaries dictionaries
 COPY templates templates
 COPY etc/simplesamlphp-config /authengine/vendor/simplesamlphp/simplesamlphp/config
 COPY etc/simplesamlphp-metadata /authengine/vendor/simplesamlphp/simplesamlphp/metadata
+# === === ===
 
 RUN curl -o /authengine/etc/GeoLite2-City.mmdb.gz http://geolite.maxmind.com/download/geoip/database/GeoLite2-City.mmdb.gz
 RUN gunzip /authengine/etc/GeoLite2-City.mmdb.gz
@@ -96,16 +85,9 @@ ENV AE_GEODB "etc/GeoLite2-City.mmdb"
 
 # Configuration files...
 # RUN ln -sf /conf/config.json /conf/disco.json /conf/cert/jwt-cert.pem /conf/cert/jwt-key.pem /conf/disco2.json /conf/GeoIP2-City.mmdb etc
-
-
 # RUN composer require --ignore-platform-reqs --update-no-dev --no-interaction --no-progress feideconnect/simplesamlphp-module-cassandrastore dev-master
-
-
-# RUN rm -rf config metadata
-# RUN echo "noop" # Force reloading config
-# COPY simplesamlphp-config config
-# RUN ln -s /conf/simplesamlphp-metadata metadata
 # RUN touch ./modules/authtwitter/enable ./modules/oauth/enable ./modules/authfacebook/enable ./modules/authlinkedin/enable
+
 RUN mkdir -p /var/log/simplesamlphp
 RUN touch /var/log/simplesamlphp/simplesamlphp.log
 RUN chown www-data /var/log/simplesamlphp/simplesamlphp.log
