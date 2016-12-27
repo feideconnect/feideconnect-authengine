@@ -88,5 +88,10 @@ class Pages {
 
     }
 
+    public static function frontpage() {
+        $txt = "Dataporten auth-engine. See https://docs.dataporten.no for more information.\n";
+        return new TextResponse($txt);
+    }
+
 
 }

@@ -15,11 +15,14 @@ class Router {
         $this->router = new Phroute\RouteCollector();
 
         // Pages
+        $this->router->get('/', ['FeideConnect\Controllers\Pages', 'frontpage']);
         $this->router->get('/reject', ['FeideConnect\Controllers\Pages', 'reject']);
         $this->router->get('/loggedout', ['FeideConnect\Controllers\Pages', 'loggedout']);
 
         // Test
         $this->router->get('/test', ['FeideConnect\Controllers\TestController', 'test']);
+
+
 
         // Data APIs
         $this->router->get('/user/media/{userid:[a-zA-Z0-9_\-\.:]+ }', ['FeideConnect\Controllers\Data', 'getUserProfilephoto']);
