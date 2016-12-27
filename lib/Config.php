@@ -118,7 +118,7 @@ class Config {
             $envOverride["storage"]["keyspace"] = getenv('FC_CASSANDRA_KEYSPACE');
         }
         if (getenv('AE_SERVER_NAME') !== false) {
-            $envOverride["endpoints"]["core"] = 'https://' . getenv('AE_SERVER_NAME');
+            $envOverride["endpoints"]["core"] = getenv('HTTPS_PROTO') . '://' . getenv('AE_SERVER_NAME');
         }
         if (getenv('AE_SALT') !== false) {
             $envOverride["salt"] = getenv('AE_SALT');
