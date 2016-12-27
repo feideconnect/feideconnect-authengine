@@ -107,6 +107,29 @@ class Config {
             throw new \Exception('Config file was not properly encoded JSON');
         }
 
+        $envOverride = [
+            "storage" => [],
+            "endpoints" => [],
+        ];
+        if (getenv('FC_CASSANDRA_CONTACTPOINTS') !== false) {
+            $envOverride["storage"]["nodes"] = explode(", ", getenv('FC_CASSANDRA_CONTACTPOINTS'));
+        }
+        if (getenv('FC_CASSANDRA_KEYSPACE') !== false) {
+            $envOverride["storage"]["keyspace"] = getenv('FC_CASSANDRA_KEYSPACE');
+        }
+        if (getenv('AE_SERVER_NAME') !== false) {
+            $envOverride["endpoints"]["core"] = 'https://' . getenv('AE_SERVER_NAME');
+        }
+        if (getenv('AE_SALT') !== false) {
+            $envOverride["salt"] = getenv('AE_SALT');
+        }
+        // TODO: allow to override test users. May be not suited for env variables
+
+
+        $config = array_replace_recursive($config, $envOverride);
+
+
+
         self::$instance = new Config($config);
         return self::$instance;
     }
