@@ -3,42 +3,70 @@
 [![Code Climate](https://codeclimate.com/github/feideconnect/feideconnect-authengine/badges/gpa.svg)](https://codeclimate.com/github/feideconnect/feideconnect-authengine)
 [![Test Coverage](https://codeclimate.com/github/feideconnect/feideconnect-authengine/badges/coverage.svg)](https://codeclimate.com/github/feideconnect/feideconnect-authengine)
 
-## Preparations
 
-	# Runtime environemnt
-	apt-get install apache2 php5 php5-cli php5-mcrypt php5-imagick php5-curl php5-gmp
-
-	a2enmod ssl
- 
-	# building environment. Using node.js package manager npm.
-	apt-get install nodejs nodejs-legacy
-	curl https://www.npmjs.com/install.sh | sh
-
-## Install
-
-Make parent folder for Feide Connect.
-
-	mkdir -p /var/feideconnect
+## Docker
 
 
-Install Connect Auth Engine
+Build docker image
 
-	cd /var/feideconnect
-	git clone https://github.com/feideconnect/feideconnect-authengine.git
+```
+docker build -t dataporten-authengine .
+```
 
-	cd feideconnect-authengine
-	composer update
+Runnning docker image
 
-Download SimpleSAMLphp
+```
+docker run -p 8080:80 --env-file ENV dataporten-authengine
+```
 
-	cd /var/feideconnect/feideconnect-authengine
-	wget https://simplesamlphp.org/res/downloads/simplesamlphp-1.13.2.tar.gz
-	tar zxf simplesamlphp-1.13.2.tar.gz
-	ln -s simplesamlphp-1.13.2 simplesamlphp 
+## configuration
 
-	cd simplesamlphp
-	composer require duoshuo/php-cassandra dev-master
-	composer require feideconnect/simplesamlphp-module-cassandrastore dev-master
+Main configuration of Auth engine:
+
+```
+etc/config.json   - Main configuration
+etc/disco2.json   - Auth providers options
+etc/scopedef.json -
+```
+
+SimpleSAMLphp configuration
+
+```
+etc/
+```
+
+**Enrivonment variables**
+
+```
+APACHE_LOCK_DIR=/var/
+AE_SERVER_NAME=auth.dataporten.no
+SERVER_ADMIN=kontakt@uninett.no
+AE_AS_TWITTER_KEY=xxx
+AE_AS_TWITTER_SECRET=xxx
+AE_AS_LINKEDIN_KEY=xxx
+AE_AS_LINKEDIN_SECRET=xxx
+AE_AS_FACEBOOK_KEY=xxx
+AE_AS_FACEBOOK_SECRET=xxx
+AE_SALT=xxx
+FC_ENDPOINT_GROUPS=https://groups-api.dataporten.no
+FC_ENDPOINT_CORE=https://api.dataporten.no
+AE_SAML_ADMINPASSWORD=1234
+AE_SAML_SECRETSALT=xxxx
+AE_SAML_TECHNICALCONTACT_NAME=UNINETT AS
+AE_SAML_TECHNICALCONTACT_EMAIL=kontakt@uninett.no
+FC_CASSANDRA_CONTACTPOINTS=cassandra
+FC_CASSANDRA_KEYSPACE=dataporten
+FC_CASSANDRA_USESSL=false
+FC_CASSANDRA_SESSION_KEYSPACE=sessionstore
+FC_CASSANDRA_SESSION_USESSL=false
+CASSANDRA_USERNAME=dataporten
+CASSANDRA_PASSWORD=xxx
+DEFAULT_IDP=https://idp.feide.no
+```
+
+
+
+## Old setup instructions...
 
 Setup configuration files:
 
@@ -65,57 +93,26 @@ Edit `feideconnect-authengine/etc/simplesamlphp-config/config.php`..
     'store.cassandra.nodes'    => ["..."],
     'store.cassandra.keyspace' => 'sessionstore',
 
+## For Developers
 
-NPM initialization
-
-installs: bower and grunt
-
-	cd /var/feideconnect/feideconnect-authengine
-	npm install
-
-Bower
-
-	node_modules/bower/bin/bower install --allow-root
-
-Post-bower, fill in licenced fonts.
-
-* Add fonts into `static/components/uninett-bootstrap-theme/fonts/`.
-
-
-
-## Managing translations
-
-
+### Managing translations
 
 To update main dictionary content, upload `dictionaries/dictionary.en.json` to transifex.
 
 To download translations run:
 
-	grunt lang
+```
+grunt lang
+```
 
+### Run test suite with ant
 
-## Run test suite with ant
+```
+ant
+```
 
+### Run phpunit
 
-	ant
-
-## Run phpunit
-
-
-	./vendor/bin/phpunit
-
-
-## Test with automated clients
-
-
-	casperjs test tests-casperjs/index.js
-	phantomjs tests-phantomjs/main.js
-	mocha --no-timeouts  tests-phantomjs-node/index.js
-
-
-
-
-
-
-
-
+```
+./vendor/bin/phpunit
+```
