@@ -1,0 +1,52 @@
+[
+    {
+        "type": "saml",
+        "id": "idporten.difi.no-v3",
+        "def": ["idporten"],
+        "title": "IDporten",
+        "descr": "Alle norske borgere skal kunne logge inn med IDporten.",
+        "iconImage": "idporten.png"
+    },
+    {
+        "type": "twitter",
+        "def": ["social", "twitter"],
+        "title": "Twitter",
+        "icon": "fa fa-2x fa-fw fa-twitter"
+    },
+    {
+        "type": "facebook",
+        "def": ["social", "facebook"],
+        "title": "Facebook",
+        "icon": "fa fa-2x fa-fw fa-facebook"
+    },
+    {
+        "type": "linkedin",
+        "def": ["social", "linkedin"],
+        "title": "LinkedIn",
+        "icon": "fa fa-2x fa-fw fa-linkedin"
+    },
+    {
+        "type": "saml",
+        "id": "https://openidp.feide.no",
+        "def": ["other", "openidp"],
+        "title": {
+            "nb": "Feide gjestebrukere",
+            "nn": "Feide gjestebrukerar",
+            "en": "Feide guest users"
+        },
+        "descr": "Gjestebrukere. Brukere som ikke har feidekonto kan registrere seg her.",
+        "iconImage": "openidp.png"
+    },
+    {
+        "type": "saml",
+        "id": "https://idp-test.feide.no",
+        "def": ["other", "feidetest"],
+        "subid": "spusers.feide.no",
+        "title": {
+            "nb": "Feide testbrukere",
+            "nn": "Feide testbrukerar",
+            "en": "Feide test users"
+        },
+        "iconImage": "feide.png"
+    }
+]
