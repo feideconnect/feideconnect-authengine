@@ -51,7 +51,7 @@ $config = array(
     'session.cookie.lifetime' => 0,
     'session.cookie.path' => '/',
     'session.cookie.domain' => null,
-    'session.cookie.secure' => true,
+    'session.cookie.secure' => (getenv('HTTPS_ON') !== 'off'),
     'session.disable_fallback' => false,
     'enable.http_post' => false,
     'session.phpsession.cookiename' => null,

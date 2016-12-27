@@ -105,6 +105,9 @@ RUN mkdir -p /var/log/simplesamlphp
 RUN touch /var/log/simplesamlphp/simplesamlphp.log
 RUN chown www-data /var/log/simplesamlphp/simplesamlphp.log
 
+ENV HTTPS_ON "off"
+ENV HTTPS_PROTO "http"
+ENV AE_DEBUG "false"
 
 # Setup apache
 COPY etc/apache/apache.conf /etc/apache2/apache2.conf
