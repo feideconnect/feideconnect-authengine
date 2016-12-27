@@ -82,12 +82,17 @@ RUN curl -o /authengine/www/static/components/uninett-bootstrap-theme/fonts/colf
 RUN curl -o /authengine/www/static/components/uninett-bootstrap-theme/fonts/colfaxRegularItalic.woff http://mal.uninett.no/uninett-theme/fonts/colfaxRegularItalic.woff
 
 
+
 COPY lib lib
 COPY etc/authengine etc
 COPY dictionaries dictionaries
 COPY templates templates
 COPY etc/simplesamlphp-config /authengine/vendor/simplesamlphp/simplesamlphp/config
 COPY etc/simplesamlphp-metadata /authengine/vendor/simplesamlphp/simplesamlphp/metadata
+
+RUN curl -o /authengine/etc/GeoLite2-City.mmdb.gz http://geolite.maxmind.com/download/geoip/database/GeoLite2-City.mmdb.gz
+RUN gunzip /authengine/etc/GeoLite2-City.mmdb.gz
+ENV AE_GEODB "etc/GeoLite2-City.mmdb"
 
 # Configuration files...
 # RUN ln -sf /conf/config.json /conf/disco.json /conf/cert/jwt-cert.pem /conf/cert/jwt-key.pem /conf/disco2.json /conf/GeoIP2-City.mmdb etc

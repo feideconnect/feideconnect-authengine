@@ -130,6 +130,11 @@ class Config {
         if (getenv('AE_DEBUG') !== false) {
             $envOverride["debug"] = (getenv('AE_DEBUG') === "true");
         }
+        if (getenv('AE_GEODB') !== false) {
+            $envOverride["geodb"] = getenv('AE_GEODB');
+        }
+
+
         // TODO: allow to override test users. May be not suited for env variables
 
 
