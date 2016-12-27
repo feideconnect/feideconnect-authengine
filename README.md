@@ -41,6 +41,7 @@ Used by both auth engine and apache
 
 ```
 AE_SERVER_NAME=auth.dataporten.no
+AE_SAML_TECHNICALCONTACT_EMAIL=kontakt@uninett.no
 FC_CASSANDRA_CONTACTPOINTS=cassandra
 FC_CASSANDRA_KEYSPACE=dataporten
 FC_CASSANDRA_USESSL=false
