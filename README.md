@@ -50,7 +50,6 @@ Used by apache only
 
 ```
 APACHE_LOCK_DIR=/var/
-SERVER_ADMIN=kontakt@uninett.no
 ```
 
 Used by auth engine
@@ -82,7 +81,6 @@ Used by SimpleSAMLphp config
 AE_SAML_ADMINPASSWORD=xxx
 AE_SAML_SECRETSALT=xxx
 AE_SAML_TECHNICALCONTACT_NAME=UNINETT AS
-AE_SAML_TECHNICALCONTACT_EMAIL=kontakt@uninett.no
 FC_CASSANDRA_SESSION_KEYSPACE=sessionstore
 FC_CASSANDRA_SESSION_USESSL=false
 ```
