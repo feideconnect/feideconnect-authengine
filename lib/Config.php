@@ -120,7 +120,6 @@ class Config {
         if (getenv('FC_CASSANDRA_USESSL') !== false) {
             $envOverride["storage"]["use_ssl"] = (getenv('FC_CASSANDRA_USESSL') !== "false");
         }
-
         if (getenv('AE_SERVER_NAME') !== false) {
             $envOverride["endpoints"]["core"] = getenv('HTTPS_PROTO') . '://' . getenv('AE_SERVER_NAME');
         }
@@ -134,13 +133,9 @@ class Config {
             $envOverride["geodb"] = getenv('AE_GEODB');
         }
 
-
         // TODO: allow to override test users. May be not suited for env variables
 
-
         $config = array_replace_recursive($config, $envOverride);
-
-
 
         self::$instance = new Config($config);
         return self::$instance;
