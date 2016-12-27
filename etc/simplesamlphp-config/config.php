@@ -12,7 +12,6 @@ $config = array(
     'datadir' => 'data/',
     'tempdir' => '/tmp/simplesaml',
 
-
     'debug' => true,
 
     'showerrors' => true,
