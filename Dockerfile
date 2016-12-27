@@ -83,23 +83,15 @@ RUN curl -o /authengine/www/static/components/uninett-bootstrap-theme/fonts/colf
 
 
 COPY lib lib
-COPY etc etc
+COPY etc/authengine etc
 COPY dictionaries dictionaries
 COPY templates templates
+COPY etc/simplesamlphp-config /authengine/vendor/simplesamlphp/simplesamlphp/config
+COPY etc/simplesamlphp-metadata /authengine/vendor/simplesamlphp/simplesamlphp/metadata
 
-
+# Configuration files...
 # RUN ln -sf /conf/config.json /conf/disco.json /conf/cert/jwt-cert.pem /conf/cert/jwt-key.pem /conf/disco2.json /conf/GeoIP2-City.mmdb etc
 
-# Install simplesamlphp in /feideconnect/feideconnect-authengine/simplesamlphp
-# WORKDIR /feideconnect/feideconnect-authengine
-#RUN curl -sSL https://github.com/simplesamlphp/simplesamlphp/releases/download/v1.14.11/simplesamlphp-1.14.11.tar.gz |tar zx
-#RUN rm -rf simplesamlphp && ln -s simplesamlphp-1.14.11 simplesamlphp
-# RUN curl -sSL -o master.zip https://github.com/simplesamlphp/simplesamlphp/archive/master.zip
-# RUN unzip master.zip
-# RUN ln -s simplesamlphp-master simplesamlphp
-
-# Setup Simplesamlphp
-# WORKDIR /feideconnect/feideconnect-authengine/simplesamlphp
 
 # RUN composer require --ignore-platform-reqs --update-no-dev --no-interaction --no-progress feideconnect/simplesamlphp-module-cassandrastore dev-master
 

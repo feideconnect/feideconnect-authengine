@@ -35,35 +35,57 @@ SimpleSAMLphp configuration
 etc/
 ```
 
-**Enrivonment variables**
+**Enrivonment variables Auth engine**
+
+Used by both auth engine and apache
+
+```
+AE_SERVER_NAME=auth.dataporten.no
+FC_CASSANDRA_CONTACTPOINTS=cassandra
+FC_CASSANDRA_KEYSPACE=dataporten
+FC_CASSANDRA_USESSL=false
+```
+
+Used by apache only
 
 ```
 APACHE_LOCK_DIR=/var/
-AE_SERVER_NAME=auth.dataporten.no
 SERVER_ADMIN=kontakt@uninett.no
+```
+
+Used by auth engine
+
+```
+CASSANDRA_USERNAME=dataporten
+CASSANDRA_PASSWORD=xxx
+DEFAULT_IDP=https://idp.feide.no
+AE_DEBUG=true
+AE_SALT=xxx
+FC_ENDPOINT_GROUPS=https://groups-api.dataporten.no
+FC_ENDPOINT_CORE=https://api.dataporten.no
+```
+
+Unspecified
+
+```
 AE_AS_TWITTER_KEY=xxx
 AE_AS_TWITTER_SECRET=xxx
 AE_AS_LINKEDIN_KEY=xxx
 AE_AS_LINKEDIN_SECRET=xxx
 AE_AS_FACEBOOK_KEY=xxx
 AE_AS_FACEBOOK_SECRET=xxx
-AE_SALT=xxx
-FC_ENDPOINT_GROUPS=https://groups-api.dataporten.no
-FC_ENDPOINT_CORE=https://api.dataporten.no
+```
+
+Used by SimpleSAMLphp config
+
+```
 AE_SAML_ADMINPASSWORD=1234
 AE_SAML_SECRETSALT=xxxx
 AE_SAML_TECHNICALCONTACT_NAME=UNINETT AS
 AE_SAML_TECHNICALCONTACT_EMAIL=kontakt@uninett.no
-FC_CASSANDRA_CONTACTPOINTS=cassandra
-FC_CASSANDRA_KEYSPACE=dataporten
-FC_CASSANDRA_USESSL=false
 FC_CASSANDRA_SESSION_KEYSPACE=sessionstore
 FC_CASSANDRA_SESSION_USESSL=false
-CASSANDRA_USERNAME=dataporten
-CASSANDRA_PASSWORD=xxx
-DEFAULT_IDP=https://idp.feide.no
 ```
-
 
 
 ## Old setup instructions...
