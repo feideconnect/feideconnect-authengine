@@ -117,6 +117,7 @@ ENV AE_DEBUG "false"
 # Setup apache
 COPY etc/apache/apache.conf /etc/apache2/apache2.conf
 COPY etc/apache/mpm_prefork.conf /etc/apache2/mods-enabled/mpm_prefork.conf
+ENV APACHE_LOCK_DIR "/var/"
 RUN a2enmod remoteip
 RUN rm /etc/localtime && ln -s /usr/share/zoneinfo/Europe/Oslo /etc/localtime
 RUN curl -sS https://vault.uninett.no:8200/v1/dpcassandra/ca/pem > /etc/ssl/certs/cassandraca.pem && c_rehash
