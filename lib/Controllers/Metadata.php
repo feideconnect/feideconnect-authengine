@@ -18,6 +18,9 @@ class Metadata {
     public static function getMetadataBootstrap() {
 
         $res = Config::getValue('federations');
+        if (empty($res)) {
+            throw new Exception('Missing configuration for federations');
+        }
         return new JSONResponse($res);
     }
 
@@ -26,6 +29,9 @@ class Metadata {
         $metastore = new \sspmod_cassandrastore_MetadataStore_CassandraMetadataStore([]);
         $data = $metastore->getFeed("edugain");
         $config = Config::getValue('federations');
+        if (empty($config)) {
+            throw new Exception('Missing configuration for federations');
+        }
         $configC = [];
         $configR = [];
         foreach($config AS &$c) {
@@ -73,6 +79,9 @@ class Metadata {
 
         $res = [];
         $config = Config::getValue('federations');
+        if (empty($config)) {
+            throw new Exception('Missing configuration for federations');
+        }
         $configC = [];
         $configR = [];
         foreach($config AS &$c) {
