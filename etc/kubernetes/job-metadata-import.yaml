@@ -1,0 +1,26 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: metadata-import
+  namespace: dataporten
+spec:
+  template:
+    metadata:
+      name: metadata-import
+    spec:
+      containers:
+      - name: metadata-import
+        image: eu.gcr.io/turnkey-cocoa-720/getmetadata:1.1.4
+        resources:
+          requests:
+            cpu: 20m
+            memory: 32Mi
+          limits:
+            cpu: 100m
+            memory: 500Mi
+        env:
+          - name: CASSANDRA_NODE
+            value: cassandra
+          - name: CASSANDRA_KEYSPACE
+            value: metadata
+      restartPolicy: Never

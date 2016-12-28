@@ -1,0 +1,123 @@
+---
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: dataporten-authengine
+spec:
+  replicas: 1
+  minReadySeconds: 5
+  strategy:
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        app: dataporten-authengine
+    spec:
+      containers:
+      - name: dataporten-authengine
+        image: eu.gcr.io/turnkey-cocoa-720/dataporten-authengine:1.0.3
+        resources:
+          requests:
+            cpu: 20m
+            memory: 64Mi
+          limits:
+            cpu: 250m
+            memory: 300Mi
+        env:
+          - name: AE_SERVER_NAME
+            value: auth.dataporten.no
+          - name: AE_AS_TWITTER_KEY
+            value: xxx
+          - name: AE_AS_TWITTER_SECRET
+            value: xxx
+          - name: AE_AS_LINKEDIN_KEY
+            value: xxx
+          - name: AE_AS_LINKEDIN_SECRET
+            value: xxx
+          - name: AE_AS_FACEBOOK_KEY
+            value: xxx
+          - name: AE_AS_FACEBOOK_SECRET
+            value: xxx
+          - name: AE_SALT
+            valueFrom:
+              secretKeyRef:
+                name: dataporten-authengine
+                key: AE_SALT
+          - name: FC_ENDPOINT_GROUPS
+            value: https://groups-api.dataporten.no
+          - name: FC_ENDPOINT_CORE
+            value: https://api.dataporten.no
+          - name: AE_SAML_ADMINPASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: dataporten-authengine
+                key: AE_SAML_ADMINPASSWORD
+          - name: AE_SAML_SECRETSALT
+            value: xxxx
+          - name: AE_SAML_TECHNICALCONTACT_NAME
+            value: UNINETT AS
+          - name: AE_SAML_TECHNICALCONTACT_EMAIL
+            value: kontakt@uninett.no
+          - name: FC_CASSANDRA_CONTACTPOINTS
+            value: cassandra
+          - name: FC_CASSANDRA_KEYSPACE
+            value: dataporten
+          - name: FC_CASSANDRA_USESSL
+            value: "false"
+          - name: FC_CASSANDRA_SESSION_KEYSPACE
+            value: sessionstore
+          - name: FC_CASSANDRA_SESSION_USESSL
+            value: "false"
+          - name: DEFAULT_IDP
+            value: https://idp-test.feide.no
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 80
+        volumeMounts:
+        - name: dataporten-secrets
+          mountPath: "/conf"
+          readOnly: true
+      volumes:
+      - name: dataporten-secrets
+        secret:
+          secretName: dataporten-authengine
+---
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: dataporten-cassandra
+spec:
+  replicas: 1
+  strategy:
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        app: dataporten-cassandra
+    spec:
+      containers:
+        - name: dataporten-cassandra
+          image: cassandra:2.2
+          resources:
+            requests:
+              cpu: 20m
+              memory: 128Mi
+            limits:
+              cpu: 250m
+              memory: 500Mi
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 7000
+              name: intra-node
+            - containerPort: 7001
+              name: tls-intra-node
+            - containerPort: 7199
+              name: jmx
+            - containerPort: 9042
+              name: cql
+          volumeMounts:
+            - mountPath: /var/lib/cassandra
+              name: data
+      volumes:
+        - name: data
+          emptyDir: {}

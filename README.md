@@ -4,6 +4,67 @@
 [![Test Coverage](https://codeclimate.com/github/feideconnect/feideconnect-authengine/badges/coverage.svg)](https://codeclimate.com/github/feideconnect/feideconnect-authengine)
 
 
+## Kubernetes
+
+```
+bin/build.sh publish        # Build docker image and upload to private gce repository
+
+kubectl create namespace dataporten
+kubectl --namespace dataporten apply -f etc/kubernetes/secrets.yaml
+kubectl --namespace dataporten apply -f etc/kubernetes/deployments.yaml
+kubectl --namespace dataporten apply -f etc/kubernetes/service.yaml
+kubectl --namespace dataporten apply -f etc/kubernetes/ingress.yaml
+```
+
+
+Initialize cassandra schema:
+
+```
+kubectl --namespace dataporten delete job cassandra-schema-main
+kubectl --namespace dataporten apply -f etc/kubernetes/job-schema.yaml
+kubectl --namespace dataporten exec -i dataporten-cassandra-3112224070-u98j9 cqlsh < ../metadata-import/etc/init.cql
+```
+
+Load eduGAIN metadata
+
+```
+kubectl --namespace dataporten delete job metadata-import
+kubectl --namespace dataporten apply -f etc/kubernetes/job-metadata-import.yaml
+```
+
+### Useful commands
+
+Access cassandra with CQLSH
+
+Through local client
+```
+kubectl --namespace dataporten port-forward dataporten-cassandra-3112224070-u98j9 9042:9042
+cqlsh
+```
+
+Directly on cassandra container:
+
+```
+kubectl --namespace dataporten exec -ti dataporten-cassandra-3112224070-u98j9 cqlsh
+```
+
+Inspect
+
+```
+kubectl --namespace dataporten get pods --show-all
+kubectl --namespace dataporten get secrets
+```
+
+
+
+
+
+
+
+
+
+
+
 ## Docker
 
 
@@ -18,17 +79,6 @@ Runnning docker image
 ```
 docker run -p 8080:80 --env-file ENV dataporten-authengine
 ```
-
-## configuration
-
-Build and publish cassandra-schema docker image to private registry.
-
-```
-cd cassandra-schema/
-docker build -t eu.gcr.io/turnkey-cocoa-720/cassandra-schema:1.0 .
-gcloud docker push eu.gcr.io/turnkey-cocoa-720/cassandra-schema:1.0
-```
-
 
 
 ## Configuration
@@ -59,7 +109,10 @@ FC_CASSANDRA_KEYSPACE=dataporten
 FC_CASSANDRA_USESSL=false
 ```
 
+
 Used by apache only
+
+(optional)
 
 ```
 APACHE_LOCK_DIR=/var/

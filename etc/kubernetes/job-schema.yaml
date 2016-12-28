@@ -1,0 +1,59 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: cassandra-schema-main
+  namespace: dataporten
+spec:
+  template:
+    metadata:
+      name: cassandra-schema-main
+    spec:
+      containers:
+      - name: cassandra-schema-main
+        image: uninett-docker-uninett.bintray.io/feideconnect/dataportenschemas
+        args: ["up"]
+        resources:
+          requests:
+            cpu: 20m
+            memory: 32Mi
+          limits:
+            cpu: 100m
+            memory: 500Mi
+        env:
+          - name: TESTDATA
+            value: "true"
+          - name: CASSANDRA_NODE
+            value: cassandra
+          - name: CASSANDRA_KEYSPACE
+            value: dataporten
+      restartPolicy: Never
+---
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: cassandra-schema-session
+  namespace: dataporten
+spec:
+  template:
+    metadata:
+      name: cassandra-schema-session
+    spec:
+      containers:
+      - name: cassandra-schema-session
+        image: uninett-docker-uninett.bintray.io/feideconnect/dataportenschemas
+        args: ["up"]
+        resources:
+          requests:
+            cpu: 20m
+            memory: 32Mi
+          limits:
+            cpu: 100m
+            memory: 500Mi
+        env:
+          - name: SCHEMA
+            value: simplesamlphp-session
+          - name: CASSANDRA_NODE
+            value: cassandra
+          - name: CASSANDRA_KEYSPACE
+            value: sessionstore
+      restartPolicy: Never

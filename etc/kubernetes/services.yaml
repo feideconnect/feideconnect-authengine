@@ -1,0 +1,26 @@
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: dataporten-authengine
+spec:
+  selector:
+    app: dataporten-authengine
+  ports:
+  - protocol: TCP
+    port: 80
+    targetPort: 80
+  type: NodePort
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: cassandra
+spec:
+  selector:
+    app: dataporten-cassandra
+  ports:
+  - protocol: TCP
+    port: 9042
+    targetPort: 9042
+  type: NodePort

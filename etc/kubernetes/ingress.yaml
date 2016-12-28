@@ -1,0 +1,18 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: dataporten
+  namespace: dataporten
+spec:
+  backend:
+    serviceName: dataporten-authengine
+    servicePort: 80
+  rules:
+  - host: auth.dataporten.no
+    http:
+      paths:
+      - backend:
+          serviceName: dataporten-authengine
+          servicePort: 80
+  tls:
+  - secretName: tls
