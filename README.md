@@ -21,6 +21,18 @@ docker run -p 8080:80 --env-file ENV dataporten-authengine
 
 ## configuration
 
+Build and publish cassandra-schema docker image to private registry.
+
+```
+cd cassandra-schema/
+docker build -t eu.gcr.io/turnkey-cocoa-720/cassandra-schema:1.0 .
+gcloud docker push eu.gcr.io/turnkey-cocoa-720/cassandra-schema:1.0
+```
+
+
+
+## Configuration
+
 Main configuration of Auth engine:
 
 ```
