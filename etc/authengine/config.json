@@ -35,6 +35,166 @@
 	"geodb": "etc/GeoIP2-City.mmdb",
 	"testUsers": {
 	},
+
+	"federations": [
+      {
+        "country": "gb",
+        "regauth": "http://ukfederation.org.uk"
+      },
+      {
+        "country": "it",
+        "regauth": "http://www.idem.garr.it/"
+      },
+      {
+        "country": "fi",
+        "regauth": "http://www.csc.fi/haka"
+      },
+      {
+        "country": "us",
+        "regauth": "https://incommon.org"
+      },
+      {
+        "country": "se",
+        "regauth": "http://www.swamid.se/"
+      },
+      {
+        "country": "dk",
+        "regauth": "https://www.wayf.dk"
+      },
+      {
+        "country": "nl",
+        "regauth": "http://www.surfconext.nl/"
+      },
+      {
+        "country": "es",
+        "regauth": "http://www.rediris.es/"
+      },
+      {
+        "country": "ie",
+        "regauth": "http://www.heanet.ie"
+      },
+      {
+        "country": "jp",
+        "regauth": "https://www.gakunin.jp"
+      },
+      {
+        "country": "be",
+        "regauth": "http://federation.belnet.be/"
+      },
+      {
+        "country": "lu",
+        "regauth": "http://eduid.lu"
+      },
+      {
+        "country": "hr",
+        "regauth": "http://www.srce.hr"
+      },
+      {
+        "country": "si",
+        "regauth": "http://aai.arnes.si"
+      },
+      {
+        "country": "ca",
+        "regauth": "http://www.canarie.ca"
+      },
+      {
+        "country": "cz",
+        "regauth": "http://www.eduid.cz/"
+      },
+      {
+        "country": "lt",
+        "regauth": "https://fedi.litnet.lt"
+      },
+      {
+        "country": "pt",
+        "regauth": "https://www.fccn.pt"
+      },
+      {
+        "country": "am",
+        "regauth": "https://aai.asnet.am"
+      },
+      {
+        "country": "fr",
+        "regauth": "https://federation.renater.fr/"
+      },
+      {
+        "country": "br",
+        "regauth": "http://cafe.rnp.br"
+      },
+      {
+        "country": "de",
+        "regauth": "https://www.aai.dfn.de"
+      },
+      {
+        "country": "lv",
+        "regauth": "http://laife.lanet.lv/"
+      },
+      {
+        "country": "no",
+        "regauth": "http://feide.no/"
+      },
+      {
+        "country": "ch",
+        "regauth": "http://rr.aai.switch.ch/"
+      },
+      {
+        "country": "hu",
+        "regauth": "http://eduid.hu"
+      },
+      {
+        "country": "gr",
+        "regauth": "http://aai.grnet.gr/"
+      },
+      {
+        "country": "md",
+        "regauth": "http://federations.renam.md/"
+      },
+      {
+        "country": "ge",
+        "regauth": "https://mtd.gif.grena.ge"
+      },
+      {
+        "country": "pl",
+        "regauth": "https://aai.pionier.net.pl"
+      },
+      {
+        "country": "il",
+        "regauth": "http://iif.iucc.ac.il"
+      },
+      {
+        "country": "ua",
+        "regauth": "https://peano.uran.ua"
+      },
+      {
+        "country": "au",
+        "regauth": "https://aaf.edu.au"
+      },
+      {
+        "country": "at",
+        "regauth": "http://eduid.at"
+      },
+      {
+        "country": "ee",
+        "regauth": "http://taat.edu.ee"
+      },
+      {
+        "country": "cl",
+        "regauth": "http://cofre.reuna.cl"
+      },
+      {
+        "country": "ec",
+        "regauth": "https://minga.cedia.org.ec"
+      },
+      {
+        "country": "kr",
+        "regauth": "http://kafe.kreonet.net"
+      },
+      {
+        "country": "mk",
+        "regauth": "https://rr.aaiedu.mk"
+      }
+    ],
+
 	"authTypes": {
 		"saml": {
 			"authSource": "default-sp"
