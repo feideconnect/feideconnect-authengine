@@ -99,20 +99,16 @@ $config = array(
         array('type' => 'cassandrastore:CassandraMetadataStore'),
     ),
 
-    'store.type'                    => 'cassandrastore:CassandraStore',
-    'store.cassandra.nodes' => explode(", ", getenv('FC_CASSANDRA_CONTACTPOINTS')),
-    'store.cassandra.keyspace' => getenv('FC_CASSANDRA_SESSION_KEYSPACE'),
-    'store.cassandra.use_ssl' => getenv('FC_CASSANDRA_SESSION_USESSL') !== 'false',
-    'store.cassandra.ssl_ca' => '/etc/ssl/certs/cassandraca.pem',
-    'store.cassandra.username' => getenv('CASSANDRA_USERNAME'),
-    'store.cassandra.password' => getenv('CASSANDRA_PASSWORD'),
+    'store.type'                => 'cassandrastore:CassandraStore',
+    'store.cassandra.nodes'     => explode(", ", getenv('FC_CASSANDRA_CONTACTPOINTS')),
+    'store.cassandra.keyspace'  => getenv('FC_CASSANDRA_SESSION_KEYSPACE'),
+    'store.cassandra.use_ssl'   => getenv('FC_CASSANDRA_SESSION_USESSL') !== 'false',
+    'store.cassandra.ssl_ca'    => '/etc/ssl/certs/cassandraca.pem',
 
     'metastore.cassandra.keyspace' => 'metadata',
-    'metastore.cassandra.nodes' => explode(", ", getenv('FC_CASSANDRA_CONTACTPOINTS')),
-    'metastore.cassandra.use_ssl' =>getenv('FC_CASSANDRA_SESSION_USESSL') !== 'false',
-    'metastore.cassandra.ssl_ca' => '/etc/ssl/certs/cassandraca.pem',
-    'metastore.cassandra.username' => getenv('CASSANDRA_USERNAME'),
-    'metastore.cassandra.password' => getenv('CASSANDRA_PASSWORD'),
+    'metastore.cassandra.nodes'    => explode(", ", getenv('FC_CASSANDRA_CONTACTPOINTS')),
+    'metastore.cassandra.use_ssl'  => getenv('FC_CASSANDRA_SESSION_USESSL') !== 'false',
+    'metastore.cassandra.ssl_ca'   => '/etc/ssl/certs/cassandraca.pem',
 
     'metadata.sign.enable' => false,
     'metadata.sign.privatekey' => null,
@@ -122,3 +118,12 @@ $config = array(
     'trusted.url.domains' => null,
 
 );
+
+if (!empty(getenv('CASSANDRA_USERNAME'))) {
+    $config['store.cassandra.username'] = getenv('CASSANDRA_USERNAME');
+    $config['metastore.cassandra.username'] = getenv('CASSANDRA_USERNAME');
+}
+if (!empty(getenv('CASSANDRA_PASSWORD'))) {
+    $config['store.cassandra.password'] = getenv('CASSANDRA_PASSWORD');
+    $config['metastore.cassandra.password'] = getenv('CASSANDRA_PASSWORD');
+}
