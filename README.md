@@ -56,11 +56,18 @@ kubectl --namespace dataporten get secrets
 ```
 
 
+## Run for development
 
+Run a local docker container with mounted directories for the content that you would like to work on.
 
+```
+bin/build.sh
+bin/rundev.sh
+```
 
+Access the service on:
 
-
+* <http://localhost:8080/auth>
 
 
 
@@ -161,32 +168,6 @@ HTTPS_PROTO=http
 ```
 
 
-## Old setup instructions...
-
-Setup configuration files:
-
-	cd /var/feideconnect
-
-	mv simplesamlphp/config feideconnect-authengine/etc/simplesamlphp-config
-	ln -s ../feideconnect-authengine/etc/simplesamlphp-config simplesamlphp/config
-
-	mv simplesamlphp/metadata feideconnect-authengine/etc/simplesamlphp-metadata
-	ln -s ../feideconnect-authengine/etc/simplesamlphp-metadata simplesamlphp/metadata
-
-
-Configuration of SimpleSAMLphp:
-
-
-Edit `feideconnect-authengine/etc/simplesamlphp-config/config.php`..
-
-
-    'auth.adminpassword'       => '...',
-    'secretsalt'               => '...',
-    'technicalcontact_name'    => 'Feide Connect',
-    'technicalcontact_email'   => 'support@feide.no',
-    'store.type'               => 'cassandrastore:CassandraStore',
-    'store.cassandra.nodes'    => ["..."],
-    'store.cassandra.keyspace' => 'sessionstore',
 
 ## For Developers
 
