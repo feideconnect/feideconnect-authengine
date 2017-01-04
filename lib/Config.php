@@ -53,6 +53,7 @@ class Config {
     }
 
 
+
     // ------ ------ ------ ------ Class methods
 
     // public static function getBaseURL($app = 'api') {
@@ -63,6 +64,14 @@ class Config {
         $config = self::getInstance();
         return $config->get($key, $default, $required);
     }
+
+    public static function getTemplateConfig() {
+        $data = [];
+        $data['cacheBust'] = (getenv('JENKINS_BUILD_NUMBER') !== false) ? getenv('JENKINS_BUILD_NUMBER') : 'noBuild';
+        return $data;
+    }
+
+
 
     /**
      * The way to load a global config object.

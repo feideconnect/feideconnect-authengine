@@ -5,6 +5,7 @@ namespace FeideConnect\HTTP;
 
 use FeideConnect\Localization;
 use FeideConnect\HTTP\HTTPResponse;
+use FeideConnect\Config;
 
 class LocalizedTemplatedHTMLResponse extends TemplatedHTMLResponse {
 
@@ -27,7 +28,7 @@ class LocalizedTemplatedHTMLResponse extends TemplatedHTMLResponse {
     }
 
     /*
-     * Needs to be called before setData. 
+     * Needs to be called before setData.
      * USe this to add replacedment set for in example:
      * {ORG}  => UNINETT
      * {LOCATION}  => Trondheim
@@ -55,6 +56,8 @@ class LocalizedTemplatedHTMLResponse extends TemplatedHTMLResponse {
             }
 
         }
+        $this->data = array_merge($this->data, Config::getTemplateConfig());
+
         return $this;
     }
 
