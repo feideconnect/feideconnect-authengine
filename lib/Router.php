@@ -35,6 +35,7 @@ class Router {
         $this->router->get('/metadata/regauth', ['FeideConnect\Controllers\Metadata', 'getRegAuthorities']);
         $this->router->get('/metadata/countrycodes', ['FeideConnect\Controllers\Metadata', 'getCountryCodes']);
         $this->router->get('/metadata/providers/{country:[a-zA-Z0-9\-]+ }', ['FeideConnect\Controllers\Metadata', 'getProvidersByCountry']);
+        $this->router->get('/metadata/logo', ['FeideConnect\Controllers\Metadata', 'getLogo']);
 
         // OAuth
         $this->router->get('/oauth/config', ['FeideConnect\Controllers\OAuth', 'providerconfig']);

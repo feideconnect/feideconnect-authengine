@@ -3,7 +3,7 @@
 
 namespace FeideConnect\Controllers;
 
-// use FeideConnect\HTTP\ImageResponse;
+use FeideConnect\HTTP\ImageResponse;
 use FeideConnect\HTTP\JSONResponse;
 use FeideConnect\Config;
 // use FeideConnect\Data\StorageProvider;
@@ -72,6 +72,27 @@ class Metadata {
 
 
         return new JSONResponse(self::getRegAuthoritiesData());
+    }
+
+    public static function getLogo() {
+        if (!isset($_GET['entityid'])) {
+            throw new \Exception('Required GET query string paramter entityid not provided');
+        }
+        $entityid = $_GET['entityid'];
+        $metastore = new \sspmod_cassandrastore_MetadataStore_CassandraMetadataStore([]);
+        $logoEntry = $metastore->getLogo("edugain", $entityid);
+
+        // echo '<pre>';
+        // print_r($logoEntry);
+        // echo (string)$logoEntry['logo'];
+        // //
+
+        $img = new ImageResponse();
+        $img->setImage($logoEntry['logo']->toBinaryString(), "png");
+        $img->setHeader('ETag', $logoEntry['logo_etag']);
+        $img->setHeader('Last-Modified', gmdate('D, d M Y H:i:s', ($logoEntry['logo_updated']->microtime(true))) );
+        return $img;
+
     }
 
 
