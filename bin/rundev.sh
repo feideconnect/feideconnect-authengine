@@ -13,7 +13,9 @@ docker run -d --name ${KUBERNETES_DEPLOYMENT} \
     --link devenv_cassandra_1:cassandra \
     --net devenv_default \
     -v ${PWD}/www:/authengine/www \
+    -v ${PWD}/templates:/authengine/templates \
     -v ${PWD}/lib:/authengine/lib \
+    -v ${PWD}/simplesamlphp-module-cassandrastore:/authengine/vendor/simplesamlphp/simplesamlphp/modules/cassandrastore \
     --env-file ENV ${IMAGE}
 docker logs -f ${KUBERNETES_DEPLOYMENT}
 
