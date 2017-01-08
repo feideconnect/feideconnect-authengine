@@ -59,11 +59,12 @@ define(function(require, exports, module) {
             txt += '<a href="#" class="list-group-item idpentry" ' + datastr + '>' +
                 '<div class="media"><div class="media-left media-middle" style="">';
 
-            if (this.icon) {
-                txt += '<div class="" style="width: 200px; align: right"><img class="media-object" style="float: right; max-height: 48px" src="https://api.discojuice.org/logo/' + this.icon + '" alt="..."></div>';
+            if (this.logo) {
+                txt += '<div class="" style="width: 64px; align: right"><img class="media-object" style="float: right; max-height: 64px" src="/metadata/logo/?entityid=' + Utils.quoteattr(this.entityID) + '" alt="Provider logo"></div>';
             } else {
-                txt += '<div class="media-object" style="width: 200px; text-align: right">&nbsp;</div>';
+                txt += '<div class="media-object" style="width: 64px; text-align: right">&nbsp;</div>';
             }
+            console.log("Print", this);
 
             txt +=  '</div>' +
                     '<div class="media-body"><p style="margin-left: 10px">' + Utils.quoteattr(this.title) +

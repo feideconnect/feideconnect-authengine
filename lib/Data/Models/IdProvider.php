@@ -54,6 +54,11 @@ class IdProvider {
         }
 
         $m['_'] = $ui;
+        if (isset($m['logo_etag'])) {
+            $ui['logo'] = true;
+        } else {
+            $ui['logo'] = false;
+        }
         return $ui;
 
     }
