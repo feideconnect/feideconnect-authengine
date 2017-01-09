@@ -66,10 +66,15 @@ define(function(require, exports, module) {
             }
             console.log("Print", this);
 
+            var dt = '';
+            if (this.descr) {
+                dt = '<p style="margin: 0px 0px 0px 10px; color: #888; font-size: 90%">' + Utils.quoteattr(this.descr) + '</p>';
+            }
             txt +=  '</div>' +
-                    '<div class="media-body"><p style="margin-left: 10px">' + Utils.quoteattr(this.title) +
-                         // '<br /><span style="color: red">' + this.distance + '</span> ' + this.distanceFrom + ' ' +
-                         '</p></div>' +
+                    '<div class="media-body">' +
+                        '<p style="margin: 0px 0px 0px 10px">' + Utils.quoteattr(this.title) + '</p>' +
+                        dt  +
+                     '</div>' +
                 '</div>' +
             '</a>';
             return txt;
