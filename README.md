@@ -21,8 +21,9 @@ Initialize cassandra schema:
 
 ```
 kubectl --namespace dataporten delete job cassandra-schema-main
+kubectl --namespace dataporten delete job cassandra-schema-session
 kubectl --namespace dataporten apply -f etc/kubernetes/job-schema.yaml
-kubectl --namespace dataporten exec -i dataporten-cassandra-3112224070-u98j9 cqlsh < ../metadata-import/etc/init.cql
+kubectl --namespace dataporten exec -i dataporten-cassandra-3112224070-njkaq cqlsh < ../metadata-import/etc/init.cql
 ```
 
 Load eduGAIN metadata
