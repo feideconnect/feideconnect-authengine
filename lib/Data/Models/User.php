@@ -350,6 +350,9 @@ class User extends \FeideConnect\Data\Model {
             // selected source to be the current sourceid
             if (empty($this->selectedsource)) {
                 $this->selectedsource = $sourceID;
+            } else if (Strings::startsWith($this->selectedsource, "ps:")) {
+                // User has been added by peoplesearch, and this is the first login. Set selected source
+                $this->selectedsource = $sourceID;
             }
 
             $this->_repo->updateUserInfo($this, $sourceID, ["name", "email"]);
