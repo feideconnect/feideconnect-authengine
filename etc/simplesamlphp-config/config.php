@@ -95,7 +95,7 @@ $config = array(
     ),
 
     'metadata.sources' => array(
-        array('type' => 'flatfile', 'directory' => '/conf/simplesamlphp-metadata'),
+        array('type' => 'flatfile', 'directory' => 'metadata'),
         array('type' => 'cassandrastore:CassandraMetadataStore'),
     ),
 
