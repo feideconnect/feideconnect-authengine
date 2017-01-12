@@ -16,3 +16,4 @@ www/static/media/travis.png
 .transifexrc
 ENV
 etc/kubernetes/secrets.yaml
+conf
