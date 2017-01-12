@@ -17,3 +17,4 @@ www/static/media/travis.png
 ENV
 etc/kubernetes/secrets.yaml
 conf
+etc/authengine/GeoLite2-City.mmdb
