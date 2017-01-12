@@ -300,6 +300,16 @@ class Authenticator {
         return $attributes;
     }
 
+    protected static function getCountryByReg($reg) {
+        $feds = Config::getValue('federations');
+        foreach($feds AS $fed) {
+            if ($fed['regauth'] === $reg) {
+                return $fed['country'];
+            }
+        }
+        return null;
+    }
+
     protected function getAccountFromAuthSource($activeAuthType) {
 
         $as = $this->authSources[$activeAuthType];
@@ -307,6 +317,24 @@ class Authenticator {
         $attributes['idp'] = $as->getAuthData('saml:sp:IdP');
         $attributes['authSource'] = $this->authTypes[$activeAuthType]["authSource"];
         $attributes['AuthnInstant'] = $as->getAuthData("AuthnInstant");
+
+        if (!empty($attributes['idp'])) {
+            try {
+                $metastore = new \sspmod_cassandrastore_MetadataStore_CassandraMetadataStore([]);
+                $entity = $metastore->getEntity('edugain', $attributes['idp']);
+                $attributes['idpMeta'] = $entity;
+                if (isset($entity['RegistrationInfo']) && isset($entity['RegistrationInfo']['registrationAuthority'])) {
+                    $regauth = $entity['RegistrationInfo']['registrationAuthority'];
+                    $attributes['country'] = self::getCountryByReg($regauth);
+                }
+
+            } catch (\Exception $e) {
+                Logger::error('Error fetching metadata for IdP in getAccountFromAuthSource().', array(
+                    'idp' => $attributes['idp']
+                ));
+            }
+
+        }
 
         $attributeMapper = new AttributeMapper();
         $account = $attributeMapper->getAccount($attributes);
