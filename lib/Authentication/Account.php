@@ -10,7 +10,7 @@ use FeideConnect\Exceptions\AuthProviderNotAccepted;
 class Account {
 
     public $userids;
-    public $realm, $name, $mail, $yob, $sourceID;
+    public $realm, $country, $name, $mail, $yob, $sourceID;
     public $photo = null;
 
     public $attributes;
@@ -33,12 +33,15 @@ class Account {
 
         $this->idp    = $this->attributes["idp"];
         $this->realm  = $this->obtainRealm();
+        $this->country= $this->attributes["country"];
         $this->name   = $this->get("name", '');
         $this->mail   = $this->get("mail", '');
         $this->yob    = $this->get("yob");
         $this->sourceID = $this->obtainSourceID();
 
         $this->photo  = $this->obtainPhoto();
+
+        // echo 'p<pre>'; print_r($this); exit;
 
     }
 
@@ -239,7 +242,6 @@ class Account {
 
     protected function getComplexRealm($attrname) {
 
-
         $value = $this->getValue($attrname, "");
         if (strpos($value, '@') === false) {
             return null;
@@ -364,8 +366,12 @@ class Account {
         if ($rule["realm"]) {
             $value .= ':' . $this->requireRealm();
         }
+        if ($rule["country"]) {
+            $value .= ':' . $this->requireCountry();
+        }
         return $value;
     }
+
 
     protected function obtainRealm() {
         $property = "realm";
@@ -485,6 +491,10 @@ class Account {
         return $this->realm;
     }
 
+    public function getCountry() {
+        return $this->country;
+    }
+
     public function getPhoto() {
         if ($this->photo === null) {
             return null;
@@ -498,6 +508,14 @@ class Account {
             throw new Exception('Could not obtain the realm part of this authenticated account.');
         }
         return $realm;
+    }
+
+    public function requireCountry() {
+        $country = $this->getCountry();
+        if ($country === null) {
+            throw new Exception('Could not obtain originating country from federated login.');
+        }
+        return $country;
     }
 
     public function getSourceID() {
