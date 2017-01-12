@@ -102,7 +102,15 @@ etc/scopedef.json -
 SimpleSAMLphp configuration
 
 ```
-etc/
+etc/simplesamlphp-config
+etc/simplesamlphp-metadata
+```
+
+Mount these additional configuration files:
+
+```
+/conf/saml.pem
+/conf/saml.crt
 ```
 
 **Enrivonment variables Auth engine**
