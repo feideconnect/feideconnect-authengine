@@ -23,8 +23,6 @@ class AttributeMapper {
         //     $this->photo = new AccountPhoto($this->attributes['jpegPhoto'][0]);
         // }
 
-
-
     }
 
 
@@ -45,7 +43,6 @@ class AttributeMapper {
 
 
     protected static function getAccountMapRules($authSource, $idp = null) {
-
 
         $accountMaps = Config::getValue("accountMaps");
 

@@ -34,23 +34,7 @@ class Auth {
 
     public static function userdebug() {
 
-
         $storage = StorageProvider::getStorage();
-
-        // $accountchooser = new Authentication\AccountChooserProtocol();
-        // // $accountchooser->debug();
-
-        // if (!$accountchooser->hasResponse()) {
-        //     $requestURL = $accountchooser->getRequest();
-        //     URL::redirect($requestURL);
-        // }
-
-        // $authconfig = [
-        //     "type" => "twitter"
-        // ];
-        // $authconfig = $accountchooser->getAuthConfig();
-        // echo '<pre>Auth config is '; print_r($authconfig); exit;
-//
         $auth = new Authentication\Authenticator();
 
         if (isset($_REQUEST['logout']) && $_REQUEST['logout'] === '1') {
@@ -61,15 +45,9 @@ class Auth {
             return $res;
         }
 
-
-
         $auth->requireAuthentication();
-
         $account = $auth->getAccount();
 
-        // $res = $auth->storeUser();
-        //
-        // $response = array('account' => $account->getAccountID());
         $response = [
             "account" => [
                 "userids" => $account->getUserIDs(),
@@ -78,18 +56,10 @@ class Auth {
                 "mail" => $account->getMail()
             ]
         ];
-        // echo '<pre>';
-        // print_r($response); exit;
-
 
         $usermapper = new Authentication\UserMapper($storage);
-
-
-
         $user = $usermapper->getUser($account, true, true, false);
 
-        // header('Content-type: text/plain');
-        // print_r($user); exit;
         if (isset($user)) {
             $response['user'] = $user->getAsArray();
             $response['userinfo'] = $user->getUserInfo();

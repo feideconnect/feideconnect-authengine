@@ -47,9 +47,9 @@ $config = array(
         // see http://developers.facebook.com/docs/authentication/permissions/ for the full list
         'req_perms' => 'public_profile',
     ),
-    
 
-    
+
+
     // LinkedIn OAuth Authentication API.
     // Register your application to get an API key here:
     //  https://www.linkedin.com/secure/developer

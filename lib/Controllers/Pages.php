@@ -43,8 +43,6 @@ class Pages {
 
     public static function debug() {
 
-
-
         $data = [];
         $data['endpoints'] = [
             "oauth.base" => URL::getBaseURL() . 'oauth/',

@@ -269,7 +269,7 @@ class Authenticator {
                 $acct = $this->getAccountFromAuthSource($authSourceType);
                 $accounts[] = $acct->getVisualTag();
             }
-        
+
         }
         return $accounts;
     }
