@@ -12,6 +12,9 @@ docker run -d --name ${KUBERNETES_DEPLOYMENT} \
     -p 8080:80 \
     --link devenv_cassandra_1:cassandra \
     --net devenv_default \
+    -v ${PWD}/conf:/conf/ \
+    -v ${PWD}/etc/authengine:/authengine/etc/ \
+    -v ${PWD}/etc/simplesamlphp-config:/authengine/vendor/simplesamlphp/simplesamlphp/config \
     -v ${PWD}/www:/authengine/www \
     -v ${PWD}/templates:/authengine/templates \
     -v ${PWD}/lib:/authengine/lib \
