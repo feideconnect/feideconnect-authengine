@@ -76,9 +76,44 @@ class Pages {
 
         $data['dir'] = ["base" => $baseDIR];
 
+        $checkEnvVariables = [
+            "AE_SERVER_NAME",
+            "AE_SAML_TECHNICALCONTACT_EMAIL",
+            "FC_CASSANDRA_CONTACTPOINTS",
+            "FC_CASSANDRA_KEYSPACE",
+            "FC_CASSANDRA_USESSL",
+            "CASSANDRA_USERNAME",
+            "CASSANDRA_PASSWORD",
+            "DEFAULT_IDP",
+            "AE_DEBUG",
+            "AE_SALT",
+            "FC_ENDPOINT_GROUPS",
+            "FC_ENDPOINT_CORE",
+            "AE_AS_TWITTER_KEY",
+            "AE_AS_TWITTER_SECRET",
+            "AE_AS_LINKEDIN_KEY",
+            "AE_AS_LINKEDIN_SECRET",
+            "AE_AS_FACEBOOK_KEY",
+            "AE_AS_FACEBOOK_SECRET",
+            "AE_SAML_ADMINPASSWORD",
+            "AE_SAML_SECRETSALT",
+            "AE_SAML_TECHNICALCONTACT_NAME",
+            "FC_CASSANDRA_SESSION_KEYSPACE",
+            "FC_CASSANDRA_SESSION_USESSL",
+        ];
+
+
+        $geofile = Config::filepath(Config::getValue('geodb'));
         $data["files"] = [
             "config.json" => file_exists($baseDIR . '/etc/config.json'),
+            "disco2.json" => file_exists($baseDIR . '/etc/disco2.json'),
+            $geofile => file_exists($geofile),
         ];
+        $data['envvars'] = [];
+        foreach($checkEnvVariables AS $ev) {
+            $x = getenv($ev);
+            $data['envvars'][$ev] = !empty($x);
+        }
 
         $res = new JSONResponse($data);
         $res->setCORS(false);
