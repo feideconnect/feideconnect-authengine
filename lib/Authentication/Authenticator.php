@@ -285,6 +285,20 @@ class Authenticator {
         return $this->getAccountFromAuthSource($this->activeAuthType);
     }
 
+    /*
+     * Used for debugging.
+     */
+    public function getRawAttributes() {
+
+        if (empty($this->activeAuthType) || !isset($this->authSources[$this->activeAuthType])) {
+            throw new \Exception("Attempting to getRawAttributes() when there is no active auth source");
+        }
+        $as = $this->authSources[$this->activeAuthType];
+        // echo '<pre>';
+        // print_r($this->authSources);
+        $attributes = $as->getAttributes();
+        return $attributes;
+    }
 
     protected function getAccountFromAuthSource($activeAuthType) {
 

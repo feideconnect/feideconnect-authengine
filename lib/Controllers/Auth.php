@@ -73,6 +73,8 @@ class Auth {
             $response["userinfo"]["profilephoto"] = base64_encode($response["userinfo"]["profilephoto"]);
         }
 
+        $response['attributes'] = $auth->getRawAttributes();
+
         // echo '<pre>'; print_r($response); exit;
 
         $res = new JSONResponse($response);
