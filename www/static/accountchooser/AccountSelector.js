@@ -186,6 +186,14 @@ define(function(require, exports, module) {
                 // console.log("Processing", a);
                 // console.log("Active accounts", window.activeAccounts);
 
+                var txtTitle = (a.title !== undefined ? '<p style="font-size: 100%; margin: 0px; margin-top: -6px">' + Utils.quoteattr(a.title) + '</p>' : '');
+                var txtCountry = '';
+
+                if (a.country) {
+                    var flag = '<img style="margin-top: -4px; margin-right: 5px" src="/static/media/flag/' + a.country.code + '.png">';
+                    txtCountry = '<p style="font-size: 100%; margin: 0px; margin-top: -6px">' + flag + '' + Utils.quoteattr(a.country.title) + '</p>';
+                }
+
                 txt += '<a href="#" class="' + classes.join(' ') + '" data-userid="' + Utils.quoteattr(userid) + '" style="">' +
                     '<div class="media"><div class="media-left media-middle">' +
                     '<img class="media-object" style="width: 64px; height: 64px" src="' + Utils.quoteattr(a.photo) + '" alt="...">' +
@@ -196,7 +204,8 @@ define(function(require, exports, module) {
                     '<i style="float: right; margin-top: 20px" class="fa fa-chevron-right fa-2x hideOnRemove"></i>' +
                     (isActive ? '<i style="color: #6a6; float: right; margin-top: 20px; margin-right: 12px" class="fa fa-circle fa-2x"></i>' : '') +
                     '<p style="font-size: 140%; margin: 0px">' + Utils.quoteattr(a.name) + '</p>' +
-                    (a.title !== null ? '<p style="font-size: 100%; margin: 0px; margin-top: -6px">' + Utils.quoteattr(a.title) + '</p>' : '') +
+                    txtTitle +
+                    txtCountry +
                     '<p style="font-size: 70%; color: #aaa; margin: 0px">' + Utils.quoteattr(userid) + '</p>' +
                     '</div>' +
                     '</div>' +
@@ -221,4 +230,3 @@ define(function(require, exports, module) {
 
 
 });
-
