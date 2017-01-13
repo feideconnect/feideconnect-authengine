@@ -25,6 +25,17 @@ define(function(require, exports, module) {
     var NorwegianOrg = require('./models/NorwegianOrg');
     var Waiter = require('./Waiter');
 
+    var sortByTitle  = function(a, b) {
+        if (a.title < b.title) {
+            return -1;
+        }
+        if (a.title > b.title) {
+            return 1;
+        }
+        return 0;
+    }
+
+
     var DiscoveryController = Controller.extend({
         "init": function(app) {
             var that = this;
@@ -389,13 +400,24 @@ define(function(require, exports, module) {
         "drawBasics": function() {
             var ct, cn, txt = '';
 
+            var preparedCountryList = [];
+
             for(var i = 0; i < this.countrylist.length; i++) {
-                ct = 'c' + this.countrylist[i];
-                cn = this.app.dictionary[ct];
-                // console.error("Country is ", ct, cn );
-                txt += '<li><a class="selectcountry" data-country="' + this.countrylist[i] + '" href="#">' +
-                    '<img style="margin-top: -4px; margin-right: 5px" src="/static/media/flag/' + this.countrylist[i] + '.png">' +
-                    ' ' + cn + '</a></li>';
+                preparedCountryList.push({
+                    "title":  this.app.dictionary['c' + this.countrylist[i]],
+                    "code": this.countrylist[i]
+                });
+            }
+            preparedCountryList.sort(sortByTitle);
+
+            console.log("Countrylist ", this.countrylist);
+            console.log("dictionary ", this.app.dictionary);
+            console.log("preparedCountryList ", preparedCountryList);
+
+            for(var i = 0; i < preparedCountryList.length; i++) {
+                txt += '<li><a class="selectcountry" data-country="' + preparedCountryList[i].code + '" href="#">' +
+                    '<img style="margin-top: -4px; margin-right: 5px" src="/static/media/flag/' + preparedCountryList[i].code + '.png">' +
+                    ' ' + preparedCountryList[i].title + '</a></li>';
             }
             $("#countryselector").empty().append(txt);
         },
