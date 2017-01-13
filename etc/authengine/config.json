@@ -9,10 +9,8 @@
 		"use_ssl": true
 	},
 	"endpoints": {
-		"core": null,
-		"apigkadm": "https://apigkadmin.dataporten-api.no",
-		"clientadm": "https://clientadmin.dataporten-api.no",
-		"groups": "https://groups-api.dataporten.no"
+		"core": "https://api.dataporten.no",
+		"clientadm": "https://clientadm.dataporten-api.no"
 	},
 	"debug": false,
 	"logging": {

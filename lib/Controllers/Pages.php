@@ -74,7 +74,10 @@ class Pages {
 
         $baseDIR = dirname(dirname(__DIR__));
 
-        $data['dir'] = ["base" => $baseDIR];
+        $data['dir'] = [];
+        $data['dir']['base'] = Config::dir();
+        $data['dir']['core'] = Config::dir('', '', 'core');
+        $data['dir']['clientadm'] = Config::dir('', '', 'clientadm');
 
         $checkEnvVariables = [
             "AE_SERVER_NAME",
@@ -87,8 +90,8 @@ class Pages {
             "DEFAULT_IDP",
             "AE_DEBUG",
             "AE_SALT",
-            "FC_ENDPOINT_GROUPS",
             "FC_ENDPOINT_CORE",
+            "FC_ENDPOINT_CLIENTADM",
             "AE_AS_TWITTER_KEY",
             "AE_AS_TWITTER_SECRET",
             "AE_AS_LINKEDIN_KEY",

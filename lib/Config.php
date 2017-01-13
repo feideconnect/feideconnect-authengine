@@ -129,6 +129,12 @@ class Config {
         if (getenv('FC_CASSANDRA_USESSL') !== false) {
             $envOverride["storage"]["use_ssl"] = (getenv('FC_CASSANDRA_USESSL') !== "false");
         }
+        if (getenv('FC_ENDPOINT_CORE') !== false) {
+            $envOverride["endpoints"]["core"] = getenv('FC_ENDPOINT_CORE');
+        }
+        if (getenv('FC_ENDPOINT_CLIENTADM') !== false) {
+            $envOverride["endpoints"]["clientadm"] = getenv('FC_ENDPOINT_CLIENTADM');
+        }
         if (getenv('AE_SALT') !== false) {
             $envOverride["salt"] = getenv('AE_SALT');
         }
