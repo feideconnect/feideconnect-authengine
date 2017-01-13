@@ -6,6 +6,7 @@ use FeideConnect\Config;
 use FeideConnect\Data\StorageProvider;
 use FeideConnect\Exceptions\Exception;
 use FeideConnect\Exceptions\AuthProviderNotAccepted;
+use FeideConnect\Controllers\Metadata;
 
 class Account {
 
@@ -30,7 +31,6 @@ class Account {
         }
 
         $this->userids = $this->obtainUserIDs();
-
         $this->idp    = $this->attributes["idp"];
         $this->realm  = $this->obtainRealm();
         $this->country= $this->attributes["country"];
@@ -38,10 +38,7 @@ class Account {
         $this->mail   = $this->get("mail", '');
         $this->yob    = $this->get("yob");
         $this->sourceID = $this->obtainSourceID();
-
         $this->photo  = $this->obtainPhoto();
-
-        // echo 'p<pre>'; print_r($this); exit;
 
     }
 
@@ -115,6 +112,11 @@ class Account {
             return $accountTypes[$this->sourceID];
         }
 
+        // Special handling of edugain source:
+        if (preg_match('/^edugain:(.+?)$/', $this->sourceID, $matches)) {
+            return ['all', 'edugain', 'edugain|' . $matches[1]];
+        }
+
         $org = $this->getRealm();
         if ($org) {
             // A feide account.
@@ -186,6 +188,28 @@ class Account {
             return $tag;
 
         }
+
+        /*
+         * Handling eduGain sourceID
+         */
+        if (preg_match('/^edugain:(.+?)$/', $this->sourceID, $matches)) {
+            $countryCode = $matches[1];
+            $allLangauges = Config::getCountryCodes();
+            $tag = [
+                "name" => $this->name,
+                "type" => "saml",
+                "id" => $this->idp,
+                "userids" => $this->userids,
+                "def" => ["edugain", $countryCode],
+                "country" => [
+                    "code" => $countryCode,
+                    "title" => isset($allLangauges[$countryCode]) ? $allLangauges[$countryCode] : 'Unknown',
+                ]
+            ];
+            return $tag;
+        }
+
+
         $sourceData = [
             'idporten' => [
                 "type" => "saml",
@@ -223,11 +247,14 @@ class Account {
         if (!isset($sourceData[$sourceID])) {
             $sourceID = '';
         }
-        $tag = [
-            "name" => $this->name,
-            "userids" => $this->maskNin($this->userids),
-        ];
-        return array_merge($sourceData[$sourceID], $tag);
+        $tag = $sourceData[$sourceID];
+        $tag["name"] = $this->name;
+        $tag["userids"] = $this->maskNin($this->userids);
+
+        // echo '<pre>'; print_r($tag);
+        // print_r($this->sourceID); exit;
+
+        return $tag;
     }
 
 
