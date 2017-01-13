@@ -74,6 +74,7 @@ class Auth {
         }
 
         $response['attributes'] = $auth->getRawAttributes();
+        $response['visualTag'] = $account->getVisualTag();
 
         // echo '<pre>'; print_r($response); exit;
 
