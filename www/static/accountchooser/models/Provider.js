@@ -55,7 +55,7 @@ define(function(require, exports, module) {
         "getHTML": function() {
             // console.log("This", this);
             var txt = '';
-            var datastr = 'data-id="' + Utils.quoteattr(this.entityID) + '" data-subid="' + Utils.quoteattr(this.entityID) + '" data-type="saml"';
+            var datastr = 'data-id="' + Utils.quoteattr(this.entityID) + '" data-type="saml"';
             txt += '<a href="#" class="list-group-item idpentry" ' + datastr + '>' +
                 '<div class="media"><div class="media-left media-middle" style="">';
 
