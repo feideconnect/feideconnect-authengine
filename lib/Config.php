@@ -129,9 +129,6 @@ class Config {
         if (getenv('FC_CASSANDRA_USESSL') !== false) {
             $envOverride["storage"]["use_ssl"] = (getenv('FC_CASSANDRA_USESSL') !== "false");
         }
-        if (getenv('AE_SERVER_NAME') !== false) {
-            $envOverride["endpoints"]["core"] = getenv('HTTPS_PROTO') . '://' . getenv('AE_SERVER_NAME');
-        }
         if (getenv('AE_SALT') !== false) {
             $envOverride["salt"] = getenv('AE_SALT');
         }
