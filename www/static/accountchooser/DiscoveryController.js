@@ -399,9 +399,7 @@ define(function(require, exports, module) {
 
         "drawBasics": function() {
             var ct, cn, txt = '';
-
             var preparedCountryList = [];
-
             for(var i = 0; i < this.countrylist.length; i++) {
                 preparedCountryList.push({
                     "title":  this.app.dictionary['c' + this.countrylist[i]],
@@ -409,11 +407,6 @@ define(function(require, exports, module) {
                 });
             }
             preparedCountryList.sort(sortByTitle);
-
-            console.log("Countrylist ", this.countrylist);
-            console.log("dictionary ", this.app.dictionary);
-            console.log("preparedCountryList ", preparedCountryList);
-
             for(var i = 0; i < preparedCountryList.length; i++) {
                 txt += '<li><a class="selectcountry" data-country="' + preparedCountryList[i].code + '" href="#">' +
                     '<img style="margin-top: -4px; margin-right: 5px" src="/static/media/flag/' + preparedCountryList[i].code + '.png">' +
