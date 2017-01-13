@@ -33,8 +33,14 @@ class UnexpectedUserUI {
         // $this->client = $client;
         $this->authenticatedAccount = $authenticatedAccount;
         $this->expected = $expected;
-
         $this->storage = StorageProvider::getStorage();
+
+        // echo '<pre>';
+        // echo "Authenticated";
+        // print_r($authenticatedAccount);
+        // echo "\n\nExpected:\n\n";
+        // print_r($expected);
+        // exit;
 
     }
 
