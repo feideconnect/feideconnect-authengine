@@ -10,7 +10,7 @@
 	},
 	"endpoints": {
 		"core": "https://api.dataporten.no",
-		"clientadm": "https://clientadm.dataporten-api.no"
+		"clientadm": "https://clientadmin.dataporten-api.no"
 	},
 	"debug": false,
 	"logging": {
