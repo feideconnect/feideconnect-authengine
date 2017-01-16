@@ -48,7 +48,8 @@ define(function(require, exports, module) {
                     ]);
                 })
                 .then(function() {
-                    if (that.accountstore.hasAny())  {
+                    // console.log("HAS ANY ACTIVE?", that.selector.hasAnyActive() );
+                    if (that.selector.hasAnyActive())  {
                         that.selector.activate();
                     } else {
                         that.disco.activate();

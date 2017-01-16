@@ -158,6 +158,23 @@ define(function(require, exports, module) {
             return false;
         },
 
+        "hasAnyActive": function() {
+            var def = this.app.getAuthProviderDef(),
+                allowed,
+                anyAllowed = false;
+
+            for (var userid in this.store.accts) {
+                var a = this.store.accts[userid];
+                allowed = true;
+                if (a.hasOwnProperty('def')) {
+                    allowed = this.matchAnyType(a.def);
+                }
+                if (allowed) {
+                    anyAllowed = true;
+                }
+            }
+            return anyAllowed;
+        },
 
         "draw": function() {
             var txt = '';
