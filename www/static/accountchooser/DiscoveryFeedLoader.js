@@ -33,6 +33,7 @@ define(function(require, exports, module) {
                     success: function(data) {
                         that.providers[country] = [];
                         for(var i = 0; i < data.length; i++) {
+                            data[i].country = country;
                             that.providers[country].push(new Provider(data[i]));
                         }
                         // that.providers = data;

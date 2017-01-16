@@ -10,6 +10,7 @@ define(function(require, exports, module) {
 
     var NorwegianOrg = Model.extend({
         "init": function(a) {
+            a.country = 'no';
             this._super(a);
         },
         "getDistance": function(loc) {
