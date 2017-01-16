@@ -323,7 +323,7 @@ define(function(require, exports, module) {
                 }
                 if (providers[i][0] === 'feide') {
 
-                    if (providers[i][1] === 'all') {
+                    if (providers[i][1] === 'all' && item.country === 'no') {
                         return true;
                     }
                     switch (providers[i][1]) {
@@ -340,9 +340,16 @@ define(function(require, exports, module) {
                                 return true;
                             }
                             break;
-
                     }
 
+                }
+                if (providers[i][0] === 'edugain' && item.country && item.country !== 'no') {
+                    if (providers[i].length === 1) {
+                        return true;
+                    }
+                    if (providers[i][1] === item.country) {
+                        return true;
+                    }
                 }
             }
 
@@ -471,11 +478,16 @@ define(function(require, exports, module) {
                 c++;
                 txt += showit[i].getHTML(that.app.config.feideIdP);
             }
-            $("#idplist").empty().append(txt);
+
             if (cc === 0 && this.country === 'no') {
                 $(".orgchoices").hide();
                 $(".altchoices").removeClass("col-md-4").addClass("col-md-12");
+            } else if (cc === 0) {
+                txt += '<a class="list-group-item" id="actshowall" href="#"><p style="text-align: center">' +
+                    'No login providers from this country is accepted by the requesting application';
+                    + '</p></a>';
             }
+            $("#idplist").empty().append(txt);
 
             $("#usersearch").focus();
 
