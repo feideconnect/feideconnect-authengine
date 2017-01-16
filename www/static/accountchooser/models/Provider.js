@@ -64,7 +64,6 @@ define(function(require, exports, module) {
             } else {
                 txt += '<div class="media-object" style="width: 64px; text-align: right">&nbsp;</div>';
             }
-            console.log("Print", this);
 
             var dt = '';
             if (this.descr) {

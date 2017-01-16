@@ -25,8 +25,6 @@ define(function(require, exports, module) {
                 return Promise.resolve();
             }
 
-            // console.log("About to load " + country);
-
             return new Promise(function(resolve, reject) {
                 var url = '/metadata/providers/' + country;
                 $.ajax({
