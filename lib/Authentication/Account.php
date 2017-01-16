@@ -200,7 +200,7 @@ class Account {
                 "type" => "saml",
                 "id" => $this->idp,
                 "userids" => $this->userids,
-                "def" => ["edugain", $countryCode],
+                "def" => [["edugain", $countryCode]],
                 "country" => [
                     "code" => $countryCode,
                     "title" => isset($allLangauges[$countryCode]) ? $allLangauges[$countryCode] : 'Unknown',
