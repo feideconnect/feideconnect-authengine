@@ -21,6 +21,9 @@ docker-compose run dataportenschemas
 echo "Done"
 
 mkdir -p etc/test
+mkdir -p build/logs/
+touch build/logs/jdepend.xml
+
 #sed "s/@@CASSANDRA@@/cassandra:9042/" <test-config/auth-engine-config.json >etc/test/config.json
 cp test-config/jwt-*.pem etc
 
