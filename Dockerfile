@@ -2,6 +2,7 @@ FROM uninett-docker-uninett.bintray.io/jessie/base
 
 # Install packages
 RUN apt-get update && apt-get install -y --no-install-recommends \
+  ant openjdk-7-jdk \
   apache2 \
   ca-certificates \
   curl \
@@ -20,8 +21,8 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
   php5-dev \
   php5-gmp \
   php5-imagick \
-  php5-mcrypt
-# && rm -rf /var/lib/apt/lists/*
+  php5-mcrypt \
+&& rm -rf /var/lib/apt/lists/*
 
 # Setup locales
 RUN sh -c 'echo "en_US.UTF-8 UTF-8" > /etc/locale.gen'
@@ -43,7 +44,8 @@ RUN git clone https://github.com/datastax/php-driver.git /tmp/php-driver && \
   ./install.sh && \
   cd / && \
   rm -rf /tmp/php-driver && \
-  echo 'extension=cassandra.so' >/etc/php5/apache2/conf.d/cassandra.ini
+  echo 'extension=cassandra.so' >/etc/php5/apache2/conf.d/cassandra.ini  && \
+  echo 'extension=cassandra.so' >/etc/php5/cli/conf.d/cassandra.ini
 
 # Start installing the app...
 RUN mkdir -p /authengine
@@ -51,7 +53,7 @@ WORKDIR /authengine
 RUN curl -sS https://getcomposer.org/installer | php
 RUN mv composer.phar /usr/local/bin/composer
 COPY ./composer.json .
-RUN composer update --no-interaction --no-dev --no-progress
+RUN composer update --no-interaction --dev --no-progress
 
 
 COPY package.json .
