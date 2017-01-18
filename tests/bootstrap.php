@@ -3,11 +3,6 @@ namespace tests;
 
 require_once(__DIR__ . '/../lib/_autoload.php');
 
-putenv("AEENV=test");
-if (getenv('AEENV') !== "test") {
-    throw new \Exception("Not able to set environmentvariable for test environment.");
-}
-
 spl_autoload_register(function ($class) {
 
     // project-specific namespace prefix
