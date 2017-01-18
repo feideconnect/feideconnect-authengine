@@ -177,11 +177,31 @@ HTTPS_ON=off
 HTTPS_PROTO=http
 ```
 
+## Running tests
+
+There is a shell script that simplifies automation of running tests. Used in CI.
+
+```
+./runtests.sh
+```
+
+If you would like to setup the test environment more manually, you can run:
+
+```
+docker-compose up -d cassandra
+# Wait some time, until cassandra is up.
+docker-compose run dataportenschemas
+docker-compose run testenv ant
+```
+
+For testing a specific unit test, you can run:
+
+```
+docker-compose run testenv vendor/phpunit/phpunit/phpunit tests/ConfigTest
+```
 
 
-## For Developers
-
-### Managing translations
+## Managing translations
 
 To update main dictionary content, upload `dictionaries/dictionary.en.json` to transifex.
 
@@ -189,16 +209,4 @@ To download translations run:
 
 ```
 grunt lang
-```
-
-### Run test suite with ant
-
-```
-ant
-```
-
-### Run phpunit
-
-```
-./vendor/bin/phpunit
 ```
