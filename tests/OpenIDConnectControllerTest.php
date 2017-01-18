@@ -21,7 +21,7 @@ class OpenIDConnectControllerTest extends DBHelper {
             'token_endpoint' => 'http://localhost/oauth/token',
             'userinfo_endpoint' => 'http://localhost/openid/userinfo',
             'jwks_uri' => 'http://localhost/openid/jwks',
-            'issuer' => 'https://sa-test-auth.feideconnect.no',
+            'issuer' => 'https://auth.dataporten.no',
             'service_documentation' => 'https://docs.dataporten.no',
             'token_endpoint_auth_methods_supported' => ['client_secret_basic', 'client_secret_post'],
             'token_endpoint_auth_signing_alg_values_supported' => ['RS256'],
@@ -108,7 +108,7 @@ class OpenIDConnectControllerTest extends DBHelper {
             'email' => 'test.user@example.org',
             'email_verified' => true,
             'name' => 'Test User',
-            'picture' => 'https://api.feideconnect.no/userinfo/v1/user/media/' . $this->user->getProfileAccess(),
+            'picture' => 'https://api.dataporten.no/userinfo/v1/user/media/' . $this->user->getProfileAccess(),
         ], $data);
     }
 
@@ -124,7 +124,7 @@ class OpenIDConnectControllerTest extends DBHelper {
             'connect-userid_sec' => [],
         ], $data);
     }
-    
+
     public function tearDown() {
         parent::tearDown();
         \FeideConnect\OAuth\APIProtector::$instance = null;
