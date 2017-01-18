@@ -18,7 +18,11 @@ services:
     links:
       - cassandra:cassandra
     volumes:
-      - .:/authengine
+      - ./build:/authengine/build
+      - ./lib:/authengine/lib
+      - ./tests:/authengine/tests
+      - ./test-config/jwt-cert.pem:/authengine/etc/jwt-cert.pem
+      - ./test-config/jwt-key.pem:/authengine/etc/jwt-key.pem
     environment:
       - FC_CASSANDRA_CONTACTPOINTS=cassandra:9042
       - FC_CASSANDRA_KEYSPACE=dataporten
