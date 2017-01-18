@@ -33,7 +33,7 @@ class Account {
         $this->userids = $this->obtainUserIDs();
         $this->idp    = $this->attributes["idp"];
         $this->realm  = $this->obtainRealm();
-        $this->country= $this->attributes["country"];
+        $this->country= isset($this->attributes["country"]) ? $this->attributes["country"] : null;
         $this->name   = $this->get("name", '');
         $this->mail   = $this->get("mail", '');
         $this->yob    = $this->get("yob");
@@ -390,10 +390,10 @@ class Account {
 
         $value .= $rule["prefix"];
 
-        if ($rule["realm"]) {
+        if (isset($rule["realm"])) {
             $value .= ':' . $this->requireRealm();
         }
-        if ($rule["country"]) {
+        if (isset($rule["country"])) {
             $value .= ':' . $this->requireCountry();
         }
         return $value;
