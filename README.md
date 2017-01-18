@@ -145,7 +145,11 @@ AE_DEBUG=true
 AE_SALT=xxx
 FC_ENDPOINT_GROUPS=https://groups-api.dataporten.no
 FC_ENDPOINT_CORE=https://api.dataporten.no
+AE_TESTUSERSFILE=testusers.json
 ```
+
+`AE_TESTUSERSFILE` points to a json file in `etc` that contains test users that will override config content.
+
 
 Unspecified
 

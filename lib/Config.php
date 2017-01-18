@@ -132,6 +132,12 @@ class Config {
             $envOverride["geodb"] = getenv('AE_GEODB');
         }
 
+        if (getenv('AE_TESTUSERSFILE') !== false) {
+            $testusersExternalFile = self::readJSONfile(getenv('AE_TESTUSERSFILE'));
+            $envOverride["testUsers"] = $testusersExternalFile;
+        }
+
+
         // TODO: allow to override test users. May be not suited for env variables
 
         $config = array_replace_recursive($config, $envOverride);

@@ -23,7 +23,9 @@ services:
       - ./tests:/authengine/tests
       - ./test-config/jwt-cert.pem:/authengine/etc/jwt-cert.pem
       - ./test-config/jwt-key.pem:/authengine/etc/jwt-key.pem
+      - ./test-config/testusers.json:/authengine/etc/testusers.json
     environment:
       - FC_CASSANDRA_CONTACTPOINTS=cassandra:9042
       - FC_CASSANDRA_KEYSPACE=dataporten
       - FC_CASSANDRA_USESSL=false
+      - AE_TESTUSERSFILE=testusers.json
