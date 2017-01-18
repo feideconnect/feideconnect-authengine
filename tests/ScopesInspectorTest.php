@@ -162,7 +162,7 @@ class ScopesInspectorTest extends DBHelper {
                 'en' => 'Test organization',
                 'nb' => 'Testorganisasjon',
             ),
-            'logoURL' => 'https://api.feideconnect.no/orgs/fc:org:example.org/logo',
+            'logoURL' => 'https://api.dataporten.no/orgs/fc:org:example.org/logo',
             'type' => ['higher_education'],
         ), $org);
     }
