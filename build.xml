@@ -105,7 +105,7 @@
   <target name="phpunit" depends="composer-install" description="Run unit tests with PHPUnit">
     <exec executable="./vendor/bin/phpunit" failonerror="true">
       <arg value="-c"/>
-      <arg value="phpunit-ci.xml"/>
+      <arg value="phpunit.xml"/>
     </exec>
   </target>
 
