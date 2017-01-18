@@ -20,13 +20,8 @@ echo "Running schema setup to complete"
 docker-compose run dataportenschemas
 echo "Done"
 
-if [ ! -d simplesamlphp ]; then
-    curl -sSL https://simplesamlphp.org/res/downloads/simplesamlphp-1.14.0.tar.gz | tar xz
-    mv simplesamlphp-1.14.0 simplesamlphp
-fi
-
 mkdir -p etc/test
-sed "s/@@CASSANDRA@@/cassandra:9042/" <test-config/auth-engine-config.json >etc/test/config.json
+#sed "s/@@CASSANDRA@@/cassandra:9042/" <test-config/auth-engine-config.json >etc/test/config.json
 cp test-config/jwt-*.pem etc
 
 rm -f unit-test.log
