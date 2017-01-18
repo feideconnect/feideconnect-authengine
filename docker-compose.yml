@@ -14,8 +14,12 @@ services:
       - TESTDATA=true
     command: up
   testenv:
-    build: testenv
+    build: .
     links:
       - cassandra:cassandra
     volumes:
       - .:/authengine
+    environment:
+      - FC_CASSANDRA_CONTACTPOINTS=cassandra:9042
+      - FC_CASSANDRA_KEYSPACE=dataporten
+      - FC_CASSANDRA_USESSL=false
