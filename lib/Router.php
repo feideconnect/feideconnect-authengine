@@ -22,8 +22,6 @@ class Router {
         // Test
         $this->router->get('/test', ['FeideConnect\Controllers\TestController', 'test']);
 
-
-
         // Data APIs
         $this->router->get('/user/media/{userid:[a-zA-Z0-9_\-\.:]+ }', ['FeideConnect\Controllers\Data', 'getUserProfilephoto']);
         $this->router->get('/client/media/{clientid:[a-fA-F0-9\-]+ }', ['FeideConnect\Controllers\Data', 'getClientLogo']);
@@ -35,6 +33,7 @@ class Router {
         $this->router->get('/metadata/regauth', ['FeideConnect\Controllers\Metadata', 'getRegAuthorities']);
         $this->router->get('/metadata/countrycodes', ['FeideConnect\Controllers\Metadata', 'getCountryCodes']);
         $this->router->get('/metadata/providers/{country:[a-zA-Z0-9\-]+ }', ['FeideConnect\Controllers\Metadata', 'getProvidersByCountry']);
+        $this->router->get('/metadata/providers/', ['FeideConnect\Controllers\Metadata', 'getProvidersQuery']);
         $this->router->get('/metadata/logo', ['FeideConnect\Controllers\Metadata', 'getLogo']);
 
         // OAuth
@@ -61,7 +60,6 @@ class Router {
         $this->router->get('/whereami', ['FeideConnect\Controllers\WhereAmI', 'process']);
 
         $this->router->get('/debug', ['FeideConnect\Controllers\Pages', 'debug']);
-
 
         // OpenID Connect
         $this->router->get('/.well-known/openid-configuration', ['FeideConnect\Controllers\OpenIDConnect', 'config']);

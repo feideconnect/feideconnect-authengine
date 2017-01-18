@@ -95,10 +95,7 @@ class Metadata {
 
     }
 
-
-    public static function getProvidersByCountry($country) {
-
-        $res = [];
+    private static function getCountryConfig($country) {
         $config = Config::getValue('federations');
         if (empty($config)) {
             throw new Exception('Missing configuration for federations');
@@ -109,32 +106,39 @@ class Metadata {
             $configC[$c["country"]] = &$c;
             $configR[$c["regauth"]] = &$c;
         }
+        if ($configC[$country]) {
+            return $configC[$country];
+        }
+        return null;
+    }
 
-        if (!$configC[$country]) {
+
+    public static function getProvidersByCountry($country) {
+
+        $res = [];
+        $config = self::getCountryConfig($country);
+        if ($config === null) {
             return new JSONResponse($res);
         }
-        $regauth = $configC[$country]['regauth'];
-
-        // $data = [
-        //     "country" => $country,
-        //     "reg" => $regauth,
-        // ];
-        // return new JSONResponse($data);
-
-
+        $regauth = $config['regauth'];
         $metastore = new \sspmod_cassandrastore_MetadataStore_CassandraMetadataStore([]);
-        // $metastore = new CassandraMetadataStore([]);
         $metadata = $metastore->getRegAuthUI("edugain", $regauth);
-
-
         foreach($metadata AS $entityid => $e) {
             $res[] = IdProvider::uiFromMeta($e);
         }
-
-
         return new JSONResponse($res);
-
     }
+
+    public static function getProvidersQuery() {
+        if (empty($_GET["entityid"])) {
+            throw new \Exception('missing query parameter entityid');
+        }
+        $entityid = $_GET["entityid"];
+        $metastore = new \sspmod_cassandrastore_MetadataStore_CassandraMetadataStore([]);
+        $metadata = $metastore->getEntity("edugain", $entityid);
+        return new JSONResponse($metadata);
+    }
+
 
     public static function getCountryCodes() {
         $allLangauges = Config::getCountryCodes();
@@ -150,8 +154,6 @@ class Metadata {
             return strcmp($a["sortableName"], $b["sortableName"]);
         };
         usort($regauths['federations'], $sf);
-
-
 
         // Select only the ones that are in use, has metadata.
         $selectedLangauges = [];
