@@ -137,9 +137,6 @@ class Config {
             $envOverride["testUsers"] = $testusersExternalFile;
         }
 
-
-        // TODO: allow to override test users. May be not suited for env variables
-
         $config = array_replace_recursive($config, $envOverride);
 
         self::$instance = new Config($config);
