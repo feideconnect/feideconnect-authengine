@@ -80,6 +80,14 @@ COPY templates templates
 COPY etc/simplesamlphp-config /authengine/vendor/simplesamlphp/simplesamlphp/config
 COPY etc/simplesamlphp-metadata /authengine/vendor/simplesamlphp/simplesamlphp/metadata
 # === === ===
+COPY build.xml build.xml
+COPY phpunit.xml phpunit.xml
+COPY phpcsrules.xml phpcsrules.xml
+COPY tests tests
+# === === ===
+
+
+
 
 RUN curl -o /authengine/etc/GeoLite2-City.mmdb.gz http://geolite.maxmind.com/download/geoip/database/GeoLite2-City.mmdb.gz
 RUN gunzip /authengine/etc/GeoLite2-City.mmdb.gz
