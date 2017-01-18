@@ -391,7 +391,10 @@ class Account {
         $value .= $rule["prefix"];
 
         if (isset($rule["realm"])) {
-            $value .= ':' . $this->requireRealm();
+            $v = $this->obtainRealm();
+            if (!empty($v)) {
+                $value .= ':' . $v;
+            }
         }
         if (isset($rule["country"])) {
             $value .= ':' . $this->requireCountry();
@@ -401,8 +404,8 @@ class Account {
 
 
     protected function obtainRealm() {
-        $property = "realm";
-        $rule = $this->getRule($property);
+        $rule = $this->getRule("realm");
+
         if (!isset($rule)) {
             return null;
         }
