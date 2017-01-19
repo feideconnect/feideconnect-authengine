@@ -65,6 +65,9 @@ RUN node_modules/bower/bin/bower install --allow-root
 
 COPY www www
 
+RUN ls -la /authengine/www/static/components/uninett-bootstrap-theme/
+RUN ls -la /authengine/www/static/components/uninett-bootstrap-theme/fonts/
+
 # Warning: Do not use these fonts unless you have a licence on your site.
 RUN curl -o /authengine/www/static/components/uninett-bootstrap-theme/fonts/colfaxLight.woff http://mal.uninett.no/uninett-theme/fonts/colfaxLight.woff
 RUN curl -o /authengine/www/static/components/uninett-bootstrap-theme/fonts/colfaxMedium.woff http://mal.uninett.no/uninett-theme/fonts/colfaxMedium.woff
