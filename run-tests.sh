@@ -12,21 +12,22 @@ then
     trap clean-docker EXIT
 fi
 
-CASSANDRA_PORT=$(docker-compose port cassandra 9042 | sed 's@.*:@@')
-CASSANDRA="localhost:${CASSANDRA_PORT}"
-
-echo "Cassandra available on ${CASSANDRA}"
+echo "Cassandra should now be available"
 echo "Running schema setup to complete"
 docker-compose run dataportenschemas
-echo "Done"
+echo "- Done"
 
-mkdir -p etc/test
+#mkdir -p etc/test
 mkdir -p build/logs/
-touch build/logs/jdepend.xml
+chmod -R a+rwX build/logs
+#touch build/logs/jdepend.xml
 
-#sed "s/@@CASSANDRA@@/cassandra:9042/" <test-config/auth-engine-config.json >etc/test/config.json
-cp test-config/jwt-*.pem etc
+# sed "s/@@CASSANDRA@@/cassandra:9042/" <test-config/auth-engine-config.json >etc/test/config.json
+# cp test-config/jwt-*.pem etc
 
-rm -f unit-test.log
-touch unit-test.log
+rm -f build/unit-test.log
+touch build/unit-test.log
+
+echo "Running docker-compose run testenv ant"
 docker-compose run testenv ant
+echo "- Done"
