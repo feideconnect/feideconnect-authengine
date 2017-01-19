@@ -28,6 +28,10 @@ chmod -R a+rwX build/logs
 rm -f build/unit-test.log
 touch build/unit-test.log
 
+echo "Running docker-compose build testenv"
+docker-compose build testenv
+echo "- Done"
+
 echo "Running docker-compose run testenv ant"
 docker-compose run testenv ant
 echo "- Done"
