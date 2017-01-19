@@ -65,6 +65,7 @@ RUN node_modules/bower/bin/bower install --allow-root
 
 COPY www www
 
+RUN ls -la /authengine/www/static/components/
 RUN ls -la /authengine/www/static/components/uninett-bootstrap-theme/
 RUN ls -la /authengine/www/static/components/uninett-bootstrap-theme/fonts/
 
