@@ -59,7 +59,7 @@ RUN composer update --no-interaction --dev --no-progress
 COPY package.json .
 RUN npm install
 
-COPY bower.json .
+COPY ["bower.json", ".bowerrc", "./"]
 RUN node_modules/bower/bin/bower install --allow-root
 # COPY fonts /feideconnect/feideconnect-authengine/www/static/components/uninett-bootstrap-theme/fonts
 
