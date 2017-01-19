@@ -3,14 +3,14 @@ set -e
 cd "$(dirname "${BASH_SOURCE[0]}")"
 
 docker-compose up -d cassandra
-function clean-docker() {
-    docker-compose kill
-    docker-compose rm --force --all
-}
-if test -z "${NOCLEAN}"
-then
-    trap clean-docker EXIT
-fi
+# function clean-docker() {
+#     docker-compose kill
+#     docker-compose rm --force --all
+# }
+# if test -z "${NOCLEAN}"
+# then
+#     trap clean-docker EXIT
+# fi
 
 echo "Cassandra should now be available"
 echo "Running schema setup to complete"
