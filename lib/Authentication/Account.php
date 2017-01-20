@@ -197,6 +197,7 @@ class Account {
             $allLangauges = Config::getCountryCodes();
             $tag = [
                 "name" => $this->name,
+                "title" => "eduGAIN",
                 "type" => "saml",
                 "id" => $this->idp,
                 "userids" => $this->userids,
