@@ -2,7 +2,7 @@
 namespace tests;
 
 use FeideConnect\Authentication\Account;
-
+use tests\EdugainMetadata;
 
 class AccountTest extends DBHelper {
     protected $org;
@@ -191,6 +191,32 @@ class AccountTest extends DBHelper {
         'yob' => null,
     );
 
+    public static $edugainAM = array (
+        '_title' => 'EduGAIN Account Mapper',
+        'authSource' => 'default-sp',
+        'idp' => NULL,
+        'sourceID' => array (
+            'type' => 'sourceID',
+            'prefix' => 'edugain',
+            'realm' => false,
+            'country' => true,
+        ),
+        'userid' => array (
+            'edugain' => 'urn:oid:1.3.6.1.4.1.5923.1.1.1.6',
+        ),
+        'realm' => NULL,
+        'name' => array (
+            'attrnames' => array (
+                0 => 'urn:oid:2.16.840.1.113730.3.1.241',
+                1 => 'urn:oid:2.5.4.3',
+            ),
+        ),
+        'mail' => 'urn:oid:0.9.2342.19200300.100.1.3',
+        'org' => NULL,
+        'photo' => 'jpegPhoto',
+        'yob' => NULL,
+    );
+
     public function setUp() {
         parent::setUp();
         $this->org = $this->org();
@@ -213,6 +239,47 @@ class AccountTest extends DBHelper {
                 ['feide', 'realm', 'example.net'],
             ]
         ], $tag);
+    }
+
+    public function testGetVisualTagEduGAINnoIdP() {
+        $this->setExpectedException('\FeideConnect\Exceptions\Exception');
+        $account = new Account([
+            'eduPersonPrincipalName' => ['test@example.net'],
+            'idp' => 'http://someidp.that.does.notexist.org',
+        ], self::$edugainAM);
+    }
+
+    public function testGetVisualTagEduGAIN() {
+
+        // We need to insert a metadata entry to be able to create an account
+        // representing an edugain user. The idp reference will be used to lookup information
+        // about the origin country.
+        $metastore = new \sspmod_cassandrastore_MetadataStore_CassandraMetadataStore([]);
+        $metastore->insert('edugain', EdugainMetadata::$mentityid, EdugainMetadata::$m,
+            EdugainMetadata::$mui, EdugainMetadata::$mreg
+        );
+
+        $account = new Account([
+            'urn:oid:1.3.6.1.4.1.5923.1.1.1.6' => ['test@example.net'],
+            'idp' => EdugainMetadata::$mentityid,
+            'country' => 'de'
+        ], self::$edugainAM);
+        $tag = $account->getVisualTag();
+        $this->assertEquals([
+            'name' => '',
+            'type' => 'saml',
+            'id' => EdugainMetadata::$mentityid,
+            'title' => "eduGAIN",
+            'userids' => ['edugain:test@example.net'],
+            'def' => [
+                ['edugain', 'de'],
+            ],
+            'country' => [
+                "code" => "de",
+                "title" => "Germany",
+            ]
+        ], $tag);
+        $metastore->delete('edugain', EdugainMetadata::$mentityid);
     }
 
     public function testUserIDs() {
