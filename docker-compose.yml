@@ -13,6 +13,15 @@ services:
       - CASSANDRA_KEYSPACE=dataporten
       - TESTDATA=true
     command: up
+  metadataschemas:
+    image: uninett-docker-uninett.bintray.io/feideconnect/dataportenschemas
+    links:
+      - cassandra:cassandra
+    environment:
+      - CASSANDRA_NODE=cassandra
+      - CASSANDRA_KEYSPACE=metadata
+      - SCHEMA=metadata
+    command: up
   testenv:
     build: .
     links:
@@ -21,11 +30,13 @@ services:
       - ./build:/authengine/build
       - ./lib:/authengine/lib
       - ./tests:/authengine/tests
+      - ./simplesamlphp-module-cassandrastore:/authengine/vendor/simplesamlphp/simplesamlphp/modules/cassandrastore
       - ./test-config/jwt-cert.pem:/authengine/etc/jwt-cert.pem
       - ./test-config/jwt-key.pem:/authengine/etc/jwt-key.pem
       - ./test-config/testusers.json:/authengine/etc/testusers.json
     environment:
-      - FC_CASSANDRA_CONTACTPOINTS=cassandra:9042
-      - FC_CASSANDRA_KEYSPACE=dataporten
+      - FC_CASSANDRA_CONTACTPOINTS=cassandra
       - FC_CASSANDRA_USESSL=false
+      - FC_CASSANDRA_KEYSPACE=dataporten
+      - FC_CASSANDRA_SESSION_KEYSPACE=session
       - AE_TESTUSERSFILE=testusers.json
