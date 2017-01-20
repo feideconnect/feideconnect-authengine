@@ -102,12 +102,12 @@ $config = array(
     'store.type'                => 'cassandrastore:CassandraStore',
     'store.cassandra.nodes'     => explode(", ", getenv('FC_CASSANDRA_CONTACTPOINTS')),
     'store.cassandra.keyspace'  => getenv('FC_CASSANDRA_SESSION_KEYSPACE'),
-    'store.cassandra.use_ssl'   => getenv('FC_CASSANDRA_SESSION_USESSL') !== 'false',
+    'store.cassandra.use_ssl'   => getenv('FC_CASSANDRA_USESSL') !== 'false',
     'store.cassandra.ssl_ca'    => '/etc/ssl/certs/cassandraca.pem',
 
     'metastore.cassandra.keyspace' => 'metadata',
     'metastore.cassandra.nodes'    => explode(", ", getenv('FC_CASSANDRA_CONTACTPOINTS')),
-    'metastore.cassandra.use_ssl'  => getenv('FC_CASSANDRA_SESSION_USESSL') !== 'false',
+    'metastore.cassandra.use_ssl'  => getenv('FC_CASSANDRA_USESSL') !== 'false',
     'metastore.cassandra.ssl_ca'   => '/etc/ssl/certs/cassandraca.pem',
 
     'metadata.sign.enable' => false,
