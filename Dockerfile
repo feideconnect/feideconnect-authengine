@@ -65,12 +65,12 @@ RUN node_modules/bower/bin/bower install --allow-root
 
 COPY www www
 
-RUN ls -la /authengine/
-RUN ls -la /authengine/www/
-RUN ls -la /authengine/www/static/
-RUN ls -la /authengine/www/static/components/
-RUN ls -la /authengine/www/static/components/uninett-bootstrap-theme/
-RUN ls -la /authengine/www/static/components/uninett-bootstrap-theme/fonts/
+# RUN ls -la /authengine/
+# RUN ls -la /authengine/www/
+# RUN ls -la /authengine/www/static/
+# RUN ls -la /authengine/www/static/components/
+# RUN ls -la /authengine/www/static/components/uninett-bootstrap-theme/
+# RUN ls -la /authengine/www/static/components/uninett-bootstrap-theme/fonts/
 
 # Warning: Do not use these fonts unless you have a licence on your site.
 RUN curl -o /authengine/www/static/components/uninett-bootstrap-theme/fonts/colfaxLight.woff http://mal.uninett.no/uninett-theme/fonts/colfaxLight.woff
@@ -108,6 +108,10 @@ ENV AE_GEODB "etc/GeoLite2-City.mmdb"
 RUN mkdir -p /var/log/simplesamlphp
 RUN touch /var/log/simplesamlphp/simplesamlphp.log
 RUN chown www-data /var/log/simplesamlphp/simplesamlphp.log
+RUN touch ./vendor/simplesamlphp/simplesamlphp/modules/authtwitter/enable \
+    ./vendor/simplesamlphp/simplesamlphp/modules/oauth/enable \
+    ./vendor/simplesamlphp/simplesamlphp/modules/authfacebook/enable \
+    ./vendor/simplesamlphp/simplesamlphp/modules/authlinkedin/enable
 
 ENV HTTPS_ON "on"
 ENV HTTPS_PROTO "https"
