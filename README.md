@@ -195,6 +195,7 @@ If you would like to setup the test environment more manually, you can run:
 docker-compose up -d cassandra
 # Wait some time, until cassandra is up.
 docker-compose run dataportenschemas
+docker-compose run metadataschemas
 docker-compose run testenv ant
 ```
 
