@@ -90,6 +90,39 @@ class Account {
 
     }
 
+    /*
+     * Check if any of the masked input userids if they match the userids of this account.
+     * Masking is currently replacing some of the NIN characters with '.'
+     * hasAnyOfMaskedUserIDs(['nin:1201.......']) will resolve true for the acccount with userid 'nin:12018812345'
+     */
+    public function hasAnyOfMaskedUserIDs($userids) {
+
+        if (empty($userids)) {
+            return false;
+        }
+        foreach ($userids as $u) {
+            $has = $this->hasMaskedUserID($u);
+            if ($has) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public function hasMaskedUserID($maskedUserID) {
+        $maskedUserIDs = $this->maskNin();
+        if (empty($maskedUserIDs)) {
+            return false;
+        }
+        foreach ($maskedUserIDs as $u) {
+            if ($maskedUserID === $u) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+
     /**
      * Get the account types for the current account.
      *

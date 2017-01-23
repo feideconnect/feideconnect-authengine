@@ -221,9 +221,11 @@ class AccountTest extends DBHelper {
             'idp' => self::$feideidp,
         ], self::$feideAM);
         $this->assertTrue($account->hasUserID('feide:test@example.net'));
+        $this->assertTrue($account->hasMaskedUserID('feide:test@example.net'));
         $this->assertFalse($account->hasUserID('feide:teST@example.net'));
         $this->assertFalse($account->hasUserID('feide:nobody@example.net'));
         $this->assertTrue($account->hasAnyOfUserIDs(['feide:anyone@example.net', 'feide:test@example.net']));
+        $this->assertTrue($account->hasAnyOfMaskedUserIDs(['feide:anyone@example.net', 'feide:test@example.net']));
         $this->assertFalse($account->hasAnyOfUserIDs(['feide:anyone@example.net', 'feide:nobody@example.net']));
 
         $fbaccount = new Account([
@@ -233,6 +235,24 @@ class AccountTest extends DBHelper {
         ], self::$facebookAM);
         $this->assertTrue($fbaccount->hasUserID('facebook:sdlkfjsdfX'));
         $this->assertFalse($fbaccount->hasUserID('facebook:sdlkfjsdfx'));
+
+
+        $idportenAccount = new Account([
+            'uid' => ['01020312345'],
+            'idp' => 'idporten.difi.no-v3',
+        ], self::$idportenAM);
+        // echo var_export($idportenAccount->userids, true);
+        $this->assertTrue($idportenAccount->hasUserID('nin:01020312345'));
+        $this->assertFalse($idportenAccount->hasUserID('nin:0102.......'));
+        $this->assertTrue($idportenAccount->hasAnyOfUserIDs(['nin:01020312345']));
+        $this->assertFalse($idportenAccount->hasAnyOfUserIDs(['nin:0102.......']));
+
+        $this->assertFalse($idportenAccount->hasMaskedUserID('nin:01020312345'));
+        $this->assertTrue($idportenAccount->hasMaskedUserID('nin:0102.......'));
+        $this->assertFalse($idportenAccount->hasAnyOfMaskedUserIDs(['feide:foo', 'nin:01020312345']));
+        $this->assertTrue($idportenAccount->hasAnyOfMaskedUserIDs(['feide:foo', 'nin:0102.......']));
+
+
     }
 
     public function testGetVisualTagFeideOrg() {
