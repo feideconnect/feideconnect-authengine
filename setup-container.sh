@@ -5,7 +5,7 @@ apt-get install -y nodejs
 curl -sS https://www.npmjs.com/install.sh | sh
 curl -sS https://getcomposer.org/installer | php
 mv composer.phar /usr/local/bin/composer
-composer update --no-interaction --dev --no-progress
+composer update --no-interaction --no-dev --no-progress
 npm install
 node_modules/bower/bin/bower install --allow-root
 

@@ -2,7 +2,6 @@ FROM uninett-docker-uninett.bintray.io/jessie/minbase
 
 # Install packages
 RUN install_packages.sh \
-  ant openjdk-7-jdk \
   apache2 \
   ca-certificates \
   locales \
@@ -47,12 +46,6 @@ COPY dictionaries dictionaries
 COPY templates templates
 COPY etc/simplesamlphp-config /authengine/vendor/simplesamlphp/simplesamlphp/config
 COPY etc/simplesamlphp-metadata /authengine/vendor/simplesamlphp/simplesamlphp/metadata
-# === === ===
-COPY build.xml build.xml
-COPY phpunit.xml phpunit.xml
-COPY phpcsrules.xml phpcsrules.xml
-COPY tests tests
-# === === ===
 
 ENV AE_GEODB "etc/GeoLite2-City.mmdb"
 ENV HTTPS_ON "on"

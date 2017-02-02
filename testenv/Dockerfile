@@ -10,6 +10,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
   libssl-dev \
   libuv-dev \
   make \
+  openjdk-7-jdk \
   php5-cli \
   php5-dev \
   php5-xdebug \
