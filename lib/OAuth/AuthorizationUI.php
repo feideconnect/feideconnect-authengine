@@ -270,7 +270,7 @@ class AuthorizationUI {
         $this->getClientOwnerInfo($data);
         $this->getAuthorizationInfo($data);
 
-        Logger::info('OAuth About to present authorization dialog.', array(
+        Logger::debug('OAuth About to present authorization dialog.', array(
             'client' => $this->client,
             'user' => $this->user,
             'scopes' => $this->scopesInQuestion,

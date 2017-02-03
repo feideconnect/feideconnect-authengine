@@ -165,7 +165,7 @@ class Authenticator {
                 $authGood = false;
             }
             if (!empty($acr_values) && !in_array($account->getAcr(), $acr_values)) {
-                Logger::debug('Force login due to acr', [
+                Logger::info('Force login due to acr', [
                     'requested_acrs' => $acr_values,
                     'current_acr' => $account->getAcr(),
                 ]);
