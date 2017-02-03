@@ -56,6 +56,8 @@ ENV AE_DEBUG "false"
 COPY etc/apache/apache.conf /etc/apache2/apache2.conf
 COPY etc/apache/mpm_prefork.conf /etc/apache2/mods-enabled/mpm_prefork.conf
 ENV APACHE_LOCK_DIR "/var/"
+COPY entrypoint.sh /
+ENTRYPOINT ["/entrypoint.sh"]
 CMD ["/usr/sbin/apache2", "-D", "FOREGROUND"]
 
 VOLUME /var/log
