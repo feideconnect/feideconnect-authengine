@@ -127,14 +127,6 @@ FC_CASSANDRA_USESSL=false
 ```
 
 
-Used by apache only
-
-(optional)
-
-```
-APACHE_LOCK_DIR=/var/
-```
-
 Used by auth engine
 
 ```
