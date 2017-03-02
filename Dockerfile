@@ -53,6 +53,11 @@ ENV HTTPS_PROTO "https"
 ENV AE_DEBUG "false"
 
 # Setup apache
+ENV APACHE_MPM_START_SERVERS 5
+ENV APACHE_MPM_MIN_SPARE_SERVERS 5
+ENV APACHE_MPM_MAX_SPARE_SERVERS 10
+ENV APACHE_MPM_MAX_REQUEST_WORKERS 150
+ENV APACHE_MPM_MAX_CONNECTIONS_PER_CHILD 100000
 COPY etc/apache/apache.conf /etc/apache2/apache2.conf
 COPY etc/apache/mpm_prefork.conf /etc/apache2/mods-enabled/mpm_prefork.conf
 COPY entrypoint.sh /
