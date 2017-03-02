@@ -329,6 +329,11 @@ class User extends \FeideConnect\Data\Model {
             $modified = true;
         }
 
+        if (Strings::startsWith($this->selectedsource, "ps:")) {
+            // User has been added by peoplesearch, and we have not yet set selectedsource.
+            $this->selectedsource = $sourceID;
+            $modified = true;
+        }
 
         if ($modified) {
             Logger::info('Updating userinfo', [

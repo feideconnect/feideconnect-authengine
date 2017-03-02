@@ -91,7 +91,7 @@ class AuthorizationEvaluator {
         if ($feideuser) {
             $logdata['user_realms'] = $realms;
         }
-        Logger::debug('Evaluated scopes', $logdata);
+        Logger::info('Evaluated scopes', $logdata);
         return $result;
     }
 

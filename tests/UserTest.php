@@ -156,143 +156,53 @@ class UserTest extends DBHelper {
         $accesses = ['userid-social'];
         $this->assertEquals(['userid_sec' => ['facebook:3141592653589793']], $user->getAccessibleUserInfo($accesses));
     }
-    // public function testUsers() {
-    //     // return;
-    //     $user = new Models\User();
 
-
-    //     // Test all cassandra db functions
-    //     // Test all Model\User functions.
-
-
-    //     $uuid = \FeideConnect\Data\Model::genUUID();
-    //     $feideid = 'feide:andreas@uninett.no';
-    //     $mail = 'mail:andreas.solberg@uninett.no';
-
-    //     $user->userid = $uuid;
-
-    //     $user->setUserInfo('feide:uninett.no','Andreas Åkre Solberg', 'andreas.solberg@uninett.no');
-    //     $user->selectedsource = 'feide:uninett.no';
-
-    //     $user->userid_sec = [$feideid, $mail];
-
-    //     $this->assertTrue($user->userid === $uuid, 'UUID is set and kept');
-
-    //     $this->db->saveUser($user);
-
-
-    //     $u2 = $this->db->getUserByUserID($uuid);
-
-    //     $this->assertTrue($u2 !== null, 'Should return match when looking up stored user object');
-    //     $this->assertInstanceOf('FeideConnect\Data\Models\User', $u2, 'Should return an user object of correct object type');
-
-    //     $this->assertEquals($user->userid, $u2->userid, 'UserID should match in returning entry');
-    //     $this->assertTrue(count($u2->userid_sec) === 2, 'User db entry should contain 2 userid sec keys');
-
-    //     // $u2->debug();
-    //     // print_r(json_encode($u2->getUserInfo(), JSON_PRETTY_PRINT));
-
-
-
-
-    //     $u3 = $this->db->getUserByUserIDsec($feideid);
-    //     $u4 = $this->db->getUserByUserIDsec($mail);
-
-
-    //     $this->assertTrue($u3 !== null, 'Should return match when looking up by usersecid ' . $feideid);
-    //     $this->assertInstanceOf('FeideConnect\Data\Models\User', $u3, 'Should return an user object of correct object type');
-    //     $this->assertTrue($u4 !== null, 'Should return match when looking up by mail ' . $mail);
-    //     $this->assertInstanceOf('FeideConnect\Data\Models\User', $u4, 'Should return an user object of correct object type');
-
-    //     $this->assertEquals($user->userid, $u3->userid, 'UserID should match in returning entry');
-    //     $this->assertEquals($user->userid, $u4->userid, 'UserID should match in returning entry');
-
-
-    //     $u5 = $this->db->getUserByUserID('919d0c79-c294-46df-83d3-1416dedab56b');
-    //     $u6 = $this->db->getUserByUserIDsec('dummy:919d0c79-c294-46df-83d3-1416dedab56b');
-
-    //     $this->assertEquals($u5, null, 'Should return null when not finding user by key');
-    //     $this->assertEquals($u6, null, 'Should return null when not finding user by seckey');
-
-
-
-    //     $ulist = $this->db->getUserByUserIDsecList(['feide:andreas@uninett.no', 'mail:foo']);
-    //     $this->assertTrue(count($ulist) >= 1, 'Should return at least one result with getUserByUserIDsecList()');
-
-
-
-
-
-    //     /*
-    //      * TODO: Fix. deleteUser does not work. Probably some issues with cassandra v2.0.11 running in CI
-
-    //     $this->db->deleteUser($user);
-
-
-    //     $u7 = $this->db->getUserByUserID($uuid);
-    //     $this->assertTrue($u7 === null, 'Should not find user after user is deleted by userid');
-
-
-
-
-
-    //     $u8 = $this->db->getUserByUserIDsec($feideid);
-    //     $u9 = $this->db->getUserByUserIDsec($mail);
-
-    //     $this->assertTrue($u8 === null, 'Should not find user after user is deleted by feideid');
-    //     $this->assertTrue($u9 === null, 'Should not find user after user is deleted by mail');
-
-    //      */
-    // }
-
-
-
-    // /*
-    //  * Performs some tests on cassandra user related functions...
-    //  */
-    // public function testUsers2() {
-
-
-
-    //     $uuid = \FeideConnect\Data\Model::genUUID();
-    //     $feideid = 'feide:test@test.org';
-    //     $mail = 'tester.test@test@org';
-
-
-    //     $photo = file_get_contents(dirname(dirname(__FILE__)) . '/www/static/media/default-profile.jpg');
-    //     $photohash = sha1($photo);
-    //     // echo $photo;
-    //     // echo $photohash;
-    //     // exit;
-
-    //     $user = new \FeideConnect\Data\Models\User();
-    //     $user->userid = $uuid;
-    //     $user->setUserInfo('test:test', 'Tester Test', $mail, $photo, $photohash);
-    //     $user->selectedsource = 'test:test';
-
-
-
-    //     $userinfo = $user->getBasicUserInfo(true);
-    //     // print_r($userinfo);
-    //     $this->assertTrue($userinfo['email'] === $mail, 'Check that mail is set correctly');
-
-    //     $this->db->saveUser($user);
-    //     $user->ensureProfileAccess(true);
-
-    //     $this->db->updateProfilePhoto($user, 'test:test');
-
-    //     $this->db->updateUserInfo($user, 'test:test', ['name', 'email']);
-
-    //     $this->db->addUserIDsec($uuid, $feideid);
-
-    //     // $this->db->deleteUser($user);
-
-
-
-
-    // }
-
-
-
-
+    public function testUpdateFromAccount() {
+        $user = $this->user();
+        $attributes = [
+            "name" => ["Test User"],
+            "mail" => ["test.user@example.org"],
+            "idp" => "feide",
+            "realm" => ["testuser@example.org"],
+        ];
+        $rules = [
+            "sourceID" => [
+                "type" => "sourceID",
+                "prefix" => "feide",
+                "realm" => true
+            ],
+            "userid" => [],
+            "name" => "name",
+            "mail" => "mail",
+            "yob" => "yob",
+            "realm" => [
+                "attrname" => "realm",
+            ],
+            "photo" => "photo",
+        ];
+        $account = new Account($attributes, $rules);
+        $user->updateFromAccount($account);
+        $user2 = $this->db->getUserByUserID($user->userid);
+        $this->assertEquals(["feide:example.org" => "Test User"], $user2->name);
+        $this->assertEquals(["feide:example.org" => "test.user@example.org"], $user2->email);
+        $this->assertEquals("feide:example.org", $user2->selectedsource);
+
+        # Test handling of users that has been "deleted"
+        $user = $this->user();
+        $user->selectedsource = null;
+        $user->updateFromAccount($account);
+        $user2 = $this->db->getUserByUserID($user->userid);
+        $this->assertEquals(["feide:example.org" => "Test User"], $user2->name);
+        $this->assertEquals(["feide:example.org" => "test.user@example.org"], $user2->email);
+        $this->assertEquals("feide:example.org", $user2->selectedsource);
+
+        # Test handling of users that has been added by peoplesearch
+        $user->selectedsource = "ps:example.org";
+        $user->updateFromAccount($account);
+        $user2 = $this->db->getUserByUserID($user->userid);
+        $this->assertEquals(["feide:example.org" => "Test User"], $user2->name);
+        $this->assertEquals(["feide:example.org" => "test.user@example.org"], $user2->email);
+        $this->assertEquals("feide:example.org", $user2->selectedsource);
+
+    }
 }
