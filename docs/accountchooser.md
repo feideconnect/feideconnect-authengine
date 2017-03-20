@@ -39,7 +39,7 @@ The AccountChooser fetches data from:
 * `api.feideconnect.no/clientadm/clients/{client id}` - Information about the requesting client.
 * `/accountchooser/config` - configuration of the account chooser
 * `/orgs` - a list of all Feide institutions
-* `/accountchooser/extra` - All extra providers, such as guest users, ID-porten and social networks (from the configuration file `etc/disco2.json`)
+* `/accountchooser/extra` - All extra providers, such as guest users, ID-porten and social networks (from the `disco` section in file `etc/config.json`)
 * `api.discojuice.org/feed/edugain` - a list of all eduGAIN providers (international identity providers). *Authentication with international providers is not yet enabled.*
 
 
@@ -95,7 +95,7 @@ If new auth source, add an entry in : `config.json` : `authTypes`.
 
 Make sure an account map is matching the new authentication source in the config.json: `accountMaps` map.
 
-If appropriate add a new entry in `disco2.json` to add an entry in the accountchooser selector dialog.
+If appropriate add a new entry in the `disco`-section in `config.json` to add an entry in the accountchooser selector dialog.
 
 Inspect the `getVisualTag()` function in `Account.php` to implement an appropriate visual tag for storing an representation of the authenticated accounts in the account chooser.
 

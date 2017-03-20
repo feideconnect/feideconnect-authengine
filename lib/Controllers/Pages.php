@@ -109,7 +109,6 @@ class Pages {
         $geofile = Config::filepath(Config::getValue('geodb'));
         $data["files"] = [
             "config.json" => file_exists($baseDIR . '/etc/config.json'),
-            "disco2.json" => file_exists($baseDIR . '/etc/disco2.json'),
             $geofile => file_exists($geofile),
         ];
         $data['envvars'] = [];

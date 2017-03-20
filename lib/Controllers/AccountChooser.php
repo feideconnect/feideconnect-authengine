@@ -21,8 +21,8 @@ class AccountChooser {
         $auth = new Authenticator();
         $accounts = $auth->getAllAccountsVisualTags();
 
-        $discoveryConfig = Config::readJSONfile("disco2.json");
         $config = Config::getInstance();
+        $discoveryConfig = $config->get('disco');
 
         $data = array();
 

@@ -122,8 +122,7 @@ class Data {
     public static function accountchooserExtra() {
 
 
-        $data = Config::readJSONfile("disco2.json");
-
+        $data = Config::getValue('disco');
         $ldata = Localization::localizeList($data, ['title', 'descr']);
         return new JSONResponse($ldata);
 

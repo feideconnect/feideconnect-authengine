@@ -96,7 +96,6 @@ Main configuration of Auth engine:
 
 ```
 etc/config.json   - Main configuration
-etc/disco2.json   - Auth providers options
 etc/scopedef.json -
 ```
 
