@@ -15,6 +15,7 @@ fi
 echo "Cassandra should now be available"
 echo "Running schema setup to complete"
 docker-compose run dataportenschemas
+docker-compose run metadataschemas
 echo "- Done"
 
 mkdir -p build/logs/

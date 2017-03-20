@@ -29,6 +29,7 @@ services:
     volumes:
       - .:/authengine
       - ./etc/authengine/config.json:/authengine/etc/config.json
+      - ./etc/simplesamlphp-config:/authengine/vendor/simplesamlphp/simplesamlphp/config
       - ./test-config/jwt-cert.pem:/conf/jwt-cert.pem
       - ./test-config/jwt-key.pem:/conf/jwt-key.pem
       - ./test-config/testusers.json:/authengine/etc/testusers.json
