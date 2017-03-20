@@ -30,7 +30,7 @@ $config = array(
 
     'timezone' => null,
 
-    'logging.level' => SimpleSAML_Logger::NOTICE,
+    'logging.level' => \SimpleSAML\Logger::NOTICE,
     'logging.handler' => 'errorlog',
 
     'logging.logfile' => 'simplesamlphp.log',
