@@ -39,7 +39,7 @@
     },
     {
         "type": "saml",
-        "id": "https://idp-test.feide.no",
+        "id": "https://idp.feide.no",
         "def": ["other", "feidetest"],
         "subid": "spusers.feide.no",
         "title": {
