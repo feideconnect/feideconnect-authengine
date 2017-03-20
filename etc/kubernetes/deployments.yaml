@@ -70,6 +70,8 @@ spec:
             value: "false"
           - name: DEFAULT_IDP
             value: https://idp-test.feide.no
+          - name: FEIDE_IDP
+            value: https://idp-test.feide.no
         imagePullPolicy: Always
         ports:
         - containerPort: 80

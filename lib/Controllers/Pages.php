@@ -103,6 +103,7 @@ class Pages {
             "AE_SAML_TECHNICALCONTACT_NAME",
             "FC_CASSANDRA_SESSION_KEYSPACE",
             "FC_CASSANDRA_SESSION_USESSL",
+            "FEIDE_IDP",
         ];
 
 

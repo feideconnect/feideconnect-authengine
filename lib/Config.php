@@ -135,6 +135,18 @@ class Config {
             $envOverride["defaultIdP"] = getenv('DEFAULT_IDP');
         }
 
+        if (getenv('FEIDE_IDP') !== false) {
+            $feideIdP = getenv('FEIDE_IDP');
+            $envOverride["feideIdP"] = $feideIdP;
+            /* Patch `disco`-entries in configuration to make sure that Feide IdP is used here as well. */
+            foreach ($config['disco'] as &$discoEntry) {
+                if ($discoEntry['type'] === 'saml' && $discoEntry['id'] === 'https://idp.feide.no') {
+                    $discoEntry['id'] = $feideIdP;
+                }
+            }
+            unset($discoEntry); // Clear the reference, so that no following code can access last entry by reference.
+        }
+
         if (getenv('AE_TESTUSERSFILE') !== false) {
             $testusersExternalFile = self::readJSONfile(getenv('AE_TESTUSERSFILE'));
             $envOverride["testUsers"] = $testusersExternalFile;
