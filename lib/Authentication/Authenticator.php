@@ -84,7 +84,7 @@ class Authenticator {
         $as = $this->authSources['saml'];
         $as->login([
             'isPassive' => true,
-            'saml:idp' => Config::getValue("defaultIdP"),
+            'saml:idp' => Config::getValue("feideIdP"),
             'ErrorURL' => \SimpleSAML_Utilities::addURLparameter(\SimpleSAML_Utilities::selfURL(), array(
                 "error" => 1,
             )),

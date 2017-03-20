@@ -87,7 +87,6 @@ class Pages {
             "FC_CASSANDRA_USESSL",
             "CASSANDRA_USERNAME",
             "CASSANDRA_PASSWORD",
-            "DEFAULT_IDP",
             "AE_DEBUG",
             "AE_SALT",
             "FC_ENDPOINT_CORE",

@@ -131,9 +131,6 @@ class Config {
         if (getenv('AE_GEODB') !== false) {
             $envOverride["geodb"] = getenv('AE_GEODB');
         }
-        if (getenv('DEFAULT_IDP') !== false) {
-            $envOverride["defaultIdP"] = getenv('DEFAULT_IDP');
-        }
 
         if (getenv('FEIDE_IDP') !== false) {
             $feideIdP = getenv('FEIDE_IDP');

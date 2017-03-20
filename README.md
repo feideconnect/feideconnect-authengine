@@ -131,7 +131,6 @@ Used by auth engine
 ```
 CASSANDRA_USERNAME=dataporten
 CASSANDRA_PASSWORD=xxx
-DEFAULT_IDP=https://idp.feide.no
 AE_DEBUG=true
 AE_SALT=xxx
 FC_ENDPOINT_GROUPS=https://groups-api.dataporten.no

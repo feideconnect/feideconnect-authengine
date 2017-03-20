@@ -68,8 +68,6 @@ spec:
             value: sessionstore
           - name: FC_CASSANDRA_SESSION_USESSL
             value: "false"
-          - name: DEFAULT_IDP
-            value: https://idp-test.feide.no
           - name: FEIDE_IDP
             value: https://idp-test.feide.no
         imagePullPolicy: Always

@@ -4,7 +4,6 @@
 			"lo": 3
 		}
 	},
-    "defaultIdP": "https://idp.feide.no",
     "feideIdP": "https://idp.feide.no",
     "storage": {
         "type": "cassandra",
