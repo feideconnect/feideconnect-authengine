@@ -11,8 +11,8 @@ class TrustStore {
 
     public function __construct() {
 
-        $keyfile = Config::dir('etc', '/jwt-key.pem');
-        $crtfile = Config::dir('etc', '/jwt-cert.pem');
+        $keyfile = '/conf/jwt-key.pem';
+        $crtfile = '/conf/jwt-cert.pem';
 
         $this->key = file_get_contents($keyfile);
         $this->crt = file_get_contents($crtfile);
