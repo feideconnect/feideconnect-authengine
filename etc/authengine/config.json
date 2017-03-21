@@ -12,6 +12,7 @@
 	},
 	"debug": false,
 	"logging": {
+		"level": "info",
 		"file": false,
 		"errorlog": false,
 		"syslog": {

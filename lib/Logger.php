@@ -24,19 +24,21 @@ class Logger {
 
     private function __construct() {
         $this->log = new \Monolog\Logger('feideconnect');
+        $level = Config::getValue('logging.level', 'info');
+        $level = \Monolog\Logger::toMonologLevel($level);
         $filename = Config::getValue('logging.filename', '/var/log/feideconnect-authengine.log');
         if (Config::getValue('logging.file', false) && file_exists($filename) && is_writable($filename)) {
-            $this->log->pushHandler(new StreamHandler($filename, \Monolog\Logger::DEBUG));
+            $this->log->pushHandler(new StreamHandler($filename, $level));
         }
         $syslog_ident = Config::getValue('logging.syslog.ident', null);
         $syslog_facility = Config::getValue('logging.syslog.facility', 'local0');
         if ($syslog_ident && $syslog_facility) {
-            $syslog = new SyslogHandler($syslog_ident, $syslog_facility);
+            $syslog = new SyslogHandler($syslog_ident, $syslog_facility, $level);
             $syslog->setFormatter(new LineFormatter(null, 'Y-m-d H:i:s.u'));
             $this->log->pushHandler($syslog);
         }
         if (Config::getValue('logging.errorlog', true)) {
-            $this->log->pushHandler(new ErrorLogHandler());
+            $this->log->pushHandler(new ErrorLogHandler(ErrorLogHandler::OPERATING_SYSTEM, $level));
         }
         foreach (['DOCKER_SERVICE', 'DOCKER_HOST', 'DOCKER_INSTANCE'] as $var) {
             $val = getenv($var);
