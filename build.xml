@@ -34,6 +34,11 @@
       <arg value="install"/>
       <arg value="--ignore-platform-reqs"/>
     </exec>
+    <exec executable="cp" failonerror="true">
+      <arg value="etc/simplesamlphp-config/authsources.php"/>
+      <arg value="etc/simplesamlphp-config/config.php"/>
+      <arg value="vendor/simplesamlphp/simplesamlphp/config/"/>
+    </exec>
   </target>
 
   <target name="lint" description="Perform syntax check of sourcecode files">
