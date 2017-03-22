@@ -137,6 +137,12 @@ class Config {
         if (getenv('AE_LOG_ERRORLOG') !== false) {
             $envOverride["logging"]["errorlog"] = (getenv('AE_LOG_ERRORLOG') === "true");
         }
+        if (getenv('AE_STATSD_SERVER') !== false) {
+            $envOverride["statsd"]["server"] = getenv('AE_STATSD_SERVER');
+        }
+        if (getenv('AE_STATSD_NAMESPACE') !== false) {
+            $envOverride["statsd"]["namespace"] = getenv('AE_STATSD_NAMESPACE');
+        }
 
         if (getenv('FEIDE_IDP') !== false) {
             $feideIdP = getenv('FEIDE_IDP');

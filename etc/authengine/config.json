@@ -20,6 +20,10 @@
 			"facility": "local0"
 		}
 	},
+	"statsd": {
+		"server": null,
+		"namespace": "dataporten.authengine"
+	},
 	"salt": null,
 	"connect": {
 		"issuer": "https://auth.dataporten.no"

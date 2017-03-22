@@ -21,6 +21,7 @@
 		"phroute/phroute": "~2.0.0",
 		"spomky-labs/base64url": "~1.0.0",
 		"jwage/purl": "^0.0.6",
+		"domnikl/statsd": "^2.4.1",
 
 		"simplesamlphp/simplesamlphp": "dev-master",
 		"feideconnect/simplesamlphp-module-cassandrastore": "dev-master"
