@@ -304,6 +304,15 @@ class OAuthAuthorization {
         ]);
 
         $this->storage->updateLoginStats($this->client, $this->account->getSourceID());
+
+        $authCountType = $this->account->getSourceID();
+        $authCountType = explode(':', $authCountType)[0];
+        if ($authCountType === 'feide') {
+            $authCountType .= '.' . str_replace('.', '_', $this->account->getRealm());
+        }
+        $statsd = \FeideConnect\Utils\Statsd::getInstance();
+        $statsd->increment('auth_completed.' . $authCountType);
+        $statsd->increment('auth_completed.total');
     }
 
     protected function getIDToken() {
