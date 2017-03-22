@@ -17,9 +17,6 @@ RUN sh -c 'echo "en_US.UTF-8 UTF-8" > /etc/locale.gen'
 RUN locale-gen
 ENV LC_ALL=en_US.UTF-8
 
-# Warning: Do not use these fonts unless you have a licence on your site.
-ADD ["http://mal.uninett.no/uninett-theme/fonts/colfaxLight.woff", "http://mal.uninett.no/uninett-theme/fonts/colfaxMedium.woff", "http://mal.uninett.no/uninett-theme/fonts/colfaxRegular.woff", "http://mal.uninett.no/uninett-theme/fonts/colfaxThin.woff", "http://mal.uninett.no/uninett-theme/fonts/colfaxRegularItalic.woff", " /authengine/www/static/components/uninett-bootstrap-theme/fonts/"]
-
 RUN with_packages.sh "php5-dev cmake g++ git libgmp-dev libpcre3-dev libssl-dev libuv-dev make" "git clone https://github.com/datastax/php-driver.git /tmp/php-driver && \
   cd /tmp/php-driver && \
   git checkout v1.2.2 && \
@@ -37,6 +34,9 @@ WORKDIR /authengine
 
 COPY ["composer.json", "package.json", "bower.json", ".bowerrc", "setup-container.sh", "./"]
 RUN with_packages.sh "git curl" ./setup-container.sh
+# Warning: Do not use these fonts unless you have a licence on your site.
+ADD ["http://mal.uninett.no/uninett-theme/fonts/colfaxLight.woff", "http://mal.uninett.no/uninett-theme/fonts/colfaxMedium.woff", "http://mal.uninett.no/uninett-theme/fonts/colfaxRegular.woff", "http://mal.uninett.no/uninett-theme/fonts/colfaxThin.woff", "http://mal.uninett.no/uninett-theme/fonts/colfaxRegularItalic.woff", "/authengine/www/static/components/uninett-bootstrap-theme/fonts/"]
+RUN chmod -R +r /authengine/www/static/components/uninett-bootstrap-theme/fonts/
 COPY www www
 
 # === Copy auth engine ===
