@@ -17,12 +17,10 @@ class APIProtector {
     protected $client = null;
     protected $user = null;
 
-    public function __construct($headers = null) {
-        if ($headers===null) {
-            $headers = getallheaders();
+    public function __construct() {
+        if (isset($_SERVER['HTTP_AUTHORIZATION'])) {
+            $this->tokenvalue = $this->getBearerToken($_SERVER['HTTP_AUTHORIZATION']);
         }
-        $this->found_in = null;
-        $this->tokenvalue = $this->getBearerToken($headers);
         $this->storage = StorageProvider::getStorage();
 
     }
@@ -39,20 +37,9 @@ class APIProtector {
      * if present. If not present, return null.
      * @return [type] [description]
      */
-    protected function getBearerToken($hdrs) {
-        foreach ($hdrs as $h => $v) {
-            if (strtolower($h) === 'authorization') {
-                if (preg_match('/^Bearer\s(.*?)$/i', $v, $matches)) {
-                    $this->found_in = 'header';
-                    return trim($matches[1]);
-                }
-            }
-        }
-
-        // Optionally, but not reccomended access token may be provided as an query string parameter
-        if (isset($_REQUEST['access_token']) && !empty($_REQUEST['access_token'])) {
-            $this->found_in = 'query_parameter';
-            return trim($_REQUEST['access_token']);
+    protected function getBearerToken($header) {
+        if (preg_match('/^Bearer\s(.*?)$/i', $header, $matches)) {
+            return trim($matches[1]);
         }
 
         return null;
@@ -86,7 +73,6 @@ class APIProtector {
 
         Logger::info('Authenticated request using an Access Token', array(
             'accesstoken' => $this->accesstoken,
-            'found_in' => $this->found_in,
             'clientid' => $this->accesstoken->clientid,
         ));
 

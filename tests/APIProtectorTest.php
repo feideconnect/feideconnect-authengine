@@ -19,7 +19,7 @@ class APIProtectorTest extends DBHelper {
             '\FeideConnect\OAuth\Exceptions\APIAuthorizationException',
             '/not present in request/'
         );
-        $apiprotector = new APIProtector([]);
+        $apiprotector = new APIProtector();
         $apiprotector->requireToken();
     }
 
@@ -28,7 +28,8 @@ class APIProtectorTest extends DBHelper {
             '\FeideConnect\OAuth\Exceptions\APIAuthorizationException',
             '/invalid format/'
         );
-        $apiprotector = new APIProtector(['Authorization' => 'Bearer øgle']);
+        $_SERVER["HTTP_AUTHORIZATION"] = 'Bearer øgle';
+        $apiprotector = new APIProtector();
         $apiprotector->requireToken();
     }
 
@@ -37,7 +38,8 @@ class APIProtectorTest extends DBHelper {
             '\FeideConnect\OAuth\Exceptions\APIAuthorizationException',
             '/invalid format/'
         );
-        $apiprotector = new APIProtector(['Authorization' => 'Bearer f6773b2a-94af-4019-a54b-150a50c5ff']);
+        $_SERVER["HTTP_AUTHORIZATION"] = 'Bearer f6773b2a-94af-4019-a54b-150a50c5ff';
+        $apiprotector = new APIProtector();
         $apiprotector->requireToken();
     }
 
@@ -46,7 +48,8 @@ class APIProtectorTest extends DBHelper {
             '\FeideConnect\OAuth\Exceptions\APIAuthorizationException',
             '/not valid/'
         );
-        $apiprotector = new APIProtector(['Authorization' => 'Bearer ac868d52-139e-43c1-975a-075e8dc93746']);
+        $_SERVER["HTTP_AUTHORIZATION"] = 'Bearer ac868d52-139e-43c1-975a-075e8dc93746';
+        $apiprotector = new APIProtector();
         $apiprotector->requireToken();
     }
 
@@ -59,7 +62,8 @@ class APIProtectorTest extends DBHelper {
         $token = $pool->getToken(['userinfo'], null, 100);
         $token->validuntil->addSeconds(-1000);
         $this->db->rawSaveToken($token);
-        $apiprotector = new APIProtector(['Authorization' => 'Bearer ' . $token->access_token]);
+        $_SERVER["HTTP_AUTHORIZATION"] = 'Bearer ' . $token->access_token;
+        $apiprotector = new APIProtector();
         $apiprotector->requireToken();
         
     }
@@ -67,21 +71,24 @@ class APIProtectorTest extends DBHelper {
     public function testRequireTokenOK() {
         $pool = new AccessTokenPool($this->client, $this->user);
         $token = $pool->getToken(['userinfo'], null, 100);
-        $apiprotector = new APIProtector(['Authorization' => 'Bearer ' . $token->access_token]);
+        $_SERVER["HTTP_AUTHORIZATION"] = 'Bearer ' . $token->access_token;
+        $apiprotector = new APIProtector();
         $this->assertEquals($apiprotector, $apiprotector->requireToken());
     }
 
     public function testGetScopes() {
         $pool = new AccessTokenPool($this->client, $this->user);
         $token = $pool->getToken(['userinfo'], null, 100);
-        $apiprotector = new APIProtector(['Authorization' => 'Bearer ' . $token->access_token]);
+        $_SERVER["HTTP_AUTHORIZATION"] = 'Bearer ' . $token->access_token;
+        $apiprotector = new APIProtector();
         $this->assertEquals(['userinfo'], $apiprotector->getScopes());
     }
 
     public function testRequireScopesOK() {
         $pool = new AccessTokenPool($this->client, $this->user);
         $token = $pool->getToken(['scope1', 'scope2', 'scope3'], null, 100);
-        $apiprotector = new APIProtector(['Authorization' => 'Bearer ' . $token->access_token]);
+        $_SERVER["HTTP_AUTHORIZATION"] = 'Bearer ' . $token->access_token;
+        $apiprotector = new APIProtector();
         $this->assertEquals($apiprotector, $apiprotector->requireScopes(['scope1', 'scope3']));
     }
 
@@ -92,14 +99,16 @@ class APIProtectorTest extends DBHelper {
         );
         $pool = new AccessTokenPool($this->client, $this->user);
         $token = $pool->getToken(['scope1', 'scope2', 'scope3'], null, 100);
-        $apiprotector = new APIProtector(['Authorization' => 'Bearer ' . $token->access_token]);
+        $_SERVER["HTTP_AUTHORIZATION"] = 'Bearer ' . $token->access_token;
+        $apiprotector = new APIProtector();
         $this->assertEquals($apiprotector, $apiprotector->requireScopes(['scope1', 'scope4']));
     }
 
     public function testRequireUserOK() {
         $pool = new AccessTokenPool($this->client, $this->user);
         $token = $pool->getToken(['userinfo'], null, 100);
-        $apiprotector = new APIProtector(['Authorization' => 'Bearer ' . $token->access_token]);
+        $_SERVER["HTTP_AUTHORIZATION"] = 'Bearer ' . $token->access_token;
+        $apiprotector = new APIProtector();
         $this->assertEquals($apiprotector, $apiprotector->requireUser());
     }
 
@@ -110,14 +119,16 @@ class APIProtectorTest extends DBHelper {
         );
         $pool = new AccessTokenPool($this->client, null);
         $token = $pool->getToken(['userinfo'], null, 100);
-        $apiprotector = new APIProtector(['Authorization' => 'Bearer ' . $token->access_token]);
+        $_SERVER["HTTP_AUTHORIZATION"] = 'Bearer ' . $token->access_token;
+        $apiprotector = new APIProtector();
         $apiprotector->requireUser();
     }
 
     public function testGetUser() {
         $pool = new AccessTokenPool($this->client, $this->user);
         $token = $pool->getToken(['userinfo'], null, 100);
-        $apiprotector = new APIProtector(['Authorization' => 'Bearer ' . $token->access_token]);
+        $_SERVER["HTTP_AUTHORIZATION"] = 'Bearer ' . $token->access_token;
+        $apiprotector = new APIProtector();
         $user = $apiprotector->getUser();
         $this->assertEquals($this->user->getBasicUserInfo(), $user->getBasicUserInfo());
     }
@@ -125,14 +136,16 @@ class APIProtectorTest extends DBHelper {
     public function testGetUserNoUser() {
         $pool = new AccessTokenPool($this->client, null);
         $token = $pool->getToken(['userinfo'], null, 100);
-        $apiprotector = new APIProtector(['Authorization' => 'Bearer ' . $token->access_token]);
+        $_SERVER["HTTP_AUTHORIZATION"] = 'Bearer ' . $token->access_token;
+        $apiprotector = new APIProtector();
         $this->assertNull($apiprotector->getUser());
     }
 
     public function testGetClient() {
         $pool = new AccessTokenPool($this->client, $this->user);
         $token = $pool->getToken(['userinfo'], null, 100);
-        $apiprotector = new APIProtector(['Authorization' => 'Bearer ' . $token->access_token]);
+        $_SERVER["HTTP_AUTHORIZATION"] = 'Bearer ' . $token->access_token;
+        $apiprotector = new APIProtector();
         $client = $apiprotector->getClient();
         $this->assertEquals($this->client->id, $client->id);
     }
