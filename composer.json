@@ -11,19 +11,19 @@
 			"email": "andreas.solberg@uninett.no"
 		}
 	],
-    "minimum-stability": "dev",
+	"minimum-stability": "dev",
 	"require": {
 		"php": ">=5.4",
 		"mustache/mustache": "~2.6",
-        "geoip2/geoip2": "0.6.*",
+		"geoip2/geoip2": "0.6.*",
 		"firebase/php-jwt": "~3.0.0",
 		"monolog/monolog": "~1.11.0",
 		"phroute/phroute": "~2.0.0",
 		"spomky-labs/base64url": "~1.0.0",
 		"jwage/purl": "^0.0.6",
 
-        "simplesamlphp/simplesamlphp": "dev-master",
-        "feideconnect/simplesamlphp-module-cassandrastore": "dev-master"
+		"simplesamlphp/simplesamlphp": "dev-master",
+		"feideconnect/simplesamlphp-module-cassandrastore": "dev-master"
 	},
 	"require-dev": {
 		"codeclimate/php-test-reporter": "dev-master",
