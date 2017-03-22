@@ -16,12 +16,22 @@ function profiler_status($method) {
     global $rustart;
     $ru = getrusage();
 
+    $utime = rutime($ru, $rustart, "utime");
+    $stime = rutime($ru, $rustart, "stime");
+
     \FeideConnect\Logger::info('Profiler stats', array(
         'method' => $method,
         'profiler' => [
-            'computation_duration' => rutime($ru, $rustart, "utime"),
-            'system_call_duration' => rutime($ru, $rustart, "stime"),
+            'computation_duration' => $utime,
+            'system_call_duration' => $stime,
         ]
     ));
 
+    $path = \FeideConnect\Utils\URL::selfPathNoQuery();
+    $path = substr($path, 1); // Remove leading `/`
+    $path = preg_replace('/[^A-Za-z0-9-_]+/', '_', $path); // Replace all special characters with `_`.
+
+    $statsd = \FeideConnect\Utils\Statsd::getInstance();
+    $statsd->timing('profiler.' . $path . '.utime', $utime);
+    $statsd->timing('profiler.' . $path . '.stime', $stime);
 }
