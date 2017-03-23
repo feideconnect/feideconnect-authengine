@@ -1,7 +1,7 @@
 <?php
 use FeideConnect\Logger;
 
-function getStrackTrace() {
+function getStackTrace() {
 
 
     // Credits to http://makandracards.com/magento/8123-pretty-backtrace-stack-trace
@@ -76,7 +76,7 @@ function Connect_error_handler($errno, $errstr, $errfile = null, $errline = 0, $
         return false;
     }
 
-    // echo "<pre>" . getStrackTrace(); exit;
+    // echo "<pre>" . getStackTrace(); exit;
     switch ($errno) {
         case E_USER_ERROR:
 
@@ -85,7 +85,7 @@ function Connect_error_handler($errno, $errstr, $errfile = null, $errline = 0, $
                 "line" => $errline,
                 "file" => $errfile,
                 "context" => $errcontext,
-                "stacktrace" => getStrackTrace()
+                "stacktrace" => getStackTrace()
             ]);
 
             exit(1);
@@ -98,7 +98,7 @@ function Connect_error_handler($errno, $errstr, $errfile = null, $errline = 0, $
                 "line" => $errline,
                 "file" => $errfile,
                 "context" => $errcontext,
-                "stacktrace" => getStrackTrace()
+                "stacktrace" => getStackTrace()
             ]);
             break;
 
@@ -109,7 +109,7 @@ function Connect_error_handler($errno, $errstr, $errfile = null, $errline = 0, $
                 "line" => $errline,
                 "file" => $errfile,
                 "context" => $errcontext,
-                "stacktrace" => getStrackTrace()
+                "stacktrace" => getStackTrace()
             ]);
             break;
 
@@ -121,7 +121,7 @@ function Connect_error_handler($errno, $errstr, $errfile = null, $errline = 0, $
                 "line" => $errline,
                 "file" => $errfile,
                 "context" => $errcontext,
-                "stacktrace" => getStrackTrace()
+                "stacktrace" => getStackTrace()
             ]);
             break;
     }
