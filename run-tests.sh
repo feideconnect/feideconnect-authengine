@@ -28,6 +28,5 @@ docker-compose run metadataschemas
 echo "- Done"
 
 echo "Running docker-compose run testenv ant"
-docker-compose run testenv ls -la /authengine
 docker-compose run testenv ant
 echo "- Done"
