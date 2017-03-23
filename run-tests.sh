@@ -12,12 +12,6 @@ then
     trap clean-docker EXIT
 fi
 
-echo "Cassandra should now be available"
-echo "Running schema setup to complete"
-docker-compose run dataportenschemas
-docker-compose run metadataschemas
-echo "- Done"
-
 mkdir -p build/logs/
 
 rm -f build/unit-test.log
@@ -25,6 +19,12 @@ touch build/unit-test.log
 
 echo "Running docker-compose build testenv"
 docker-compose build testenv
+echo "- Done"
+
+echo "Cassandra should now be available"
+echo "Running schema setup to complete"
+docker-compose run dataportenschemas
+docker-compose run metadataschemas
 echo "- Done"
 
 echo "Running docker-compose run testenv ant"
