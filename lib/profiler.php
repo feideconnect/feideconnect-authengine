@@ -9,21 +9,24 @@ function rutime($ru, $rus, $index) {
 
 // Script start
 $rustart = getrusage();
+$profiler_start = microtime(true);
 
 
 
 function profiler_status($method) {
-    global $rustart;
+    global $rustart, $profiler_start;
     $ru = getrusage();
 
     $utime = rutime($ru, $rustart, "utime");
     $stime = rutime($ru, $rustart, "stime");
+    $walltime = intval((microtime(true) - $profiler_start) * 1000);
 
     \FeideConnect\Logger::info('Profiler stats', array(
         'method' => $method,
         'profiler' => [
             'computation_duration' => $utime,
             'system_call_duration' => $stime,
+            'walltime_duration' => $walltime,
         ]
     ));
 
@@ -34,4 +37,5 @@ function profiler_status($method) {
     $statsd = \FeideConnect\Utils\Statsd::getInstance();
     $statsd->timing('profiler.' . $path . '.utime', $utime);
     $statsd->timing('profiler.' . $path . '.stime', $stime);
+    $statsd->timing('profiler.' . $path . '.walltime', $walltime);
 }
