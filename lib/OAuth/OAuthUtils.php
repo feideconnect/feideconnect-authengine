@@ -29,6 +29,10 @@ class OAuthUtils {
         }
         Logger::info('OAuth Access Token is now issued.', $logdata);
 
+        $statsd = \FeideConnect\Utils\Statsd::getInstance();
+        $stats_flow = str_replace(' ', '_', strtolower($flow));
+        $statsd->increment('token_issued.' . $stats_flow);
+
         return $tokenresponse;
     }
 }
