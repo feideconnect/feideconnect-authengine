@@ -230,6 +230,20 @@ class Authenticator {
         if ($forceauthn) {
             $options['ForceAuthn'] = true;
         }
+
+        $authSource = $this->authTypes[$authconfig['type']]['authSource'];
+        $idp = isset($authconfig['idp']) ? $authconfig['idp'] : null;
+        $authCountType = AttributeMapper::getSourcePrefix($authSource, $idp);
+        if ($authCountType === 'feide') {
+            if (isset($authconfig['subid'])) {
+                $authCountType = 'feide.' . str_replace('.', '_', $authconfig['subid']);
+            } else {
+                $authCountType = 'feide.any';
+            }
+        }
+        $statsd = \FeideConnect\Utils\Statsd::getInstance();
+        $statsd->increment('auth_sent.' . $authCountType);
+
         $as->login($options);
 
         return null;

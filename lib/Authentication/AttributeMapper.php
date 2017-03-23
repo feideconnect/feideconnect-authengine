@@ -68,4 +68,9 @@ class AttributeMapper {
 
     }
 
+    public static function getSourcePrefix($authSource, $idp) {
+        $accountMapRules = self::getAccountMapRules($authSource, $idp);
+        return $accountMapRules['sourceID']['prefix'];
+    }
+
 }
