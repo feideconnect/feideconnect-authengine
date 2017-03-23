@@ -81,7 +81,7 @@ function Connect_error_handler($errno, $errstr, $errfile = null, $errline = 0, $
         case E_USER_ERROR:
 
             Logger::error($errstr, [
-                "type" => "phperror",
+                "errortype" => "phperror",
                 "line" => $errline,
                 "file" => $errfile,
                 "context" => $errcontext,
@@ -94,7 +94,7 @@ function Connect_error_handler($errno, $errstr, $errfile = null, $errline = 0, $
         case E_USER_WARNING:
 
             Logger::warning($errstr, [
-                "type" => "phperror",
+                "errortype" => "phperror",
                 "line" => $errline,
                 "file" => $errfile,
                 "context" => $errcontext,
@@ -105,7 +105,7 @@ function Connect_error_handler($errno, $errstr, $errfile = null, $errline = 0, $
         case E_USER_NOTICE:
 
             Logger::info($errstr, [
-                "type" => "phperror",
+                "errortype" => "phperror",
                 "line" => $errline,
                 "file" => $errfile,
                 "context" => $errcontext,
@@ -117,7 +117,7 @@ function Connect_error_handler($errno, $errstr, $errfile = null, $errline = 0, $
 
             Logger::info($errstr, [
                 "errno" => $errno,
-                "type" => "phperror",
+                "errortype" => "phperror",
                 "line" => $errline,
                 "file" => $errfile,
                 "context" => $errcontext,
