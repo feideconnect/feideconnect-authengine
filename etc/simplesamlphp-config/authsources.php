@@ -77,6 +77,7 @@ $config = array(
         // Forces the user to enter their credentials to ensure the correct users account is authorized.
         // Details: https://dev.twitter.com/docs/api/1/get/oauth/authenticate
         'force_login' => FALSE,
+        'include_email' => TRUE,
     ),
 
 );

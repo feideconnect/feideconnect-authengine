@@ -311,7 +311,7 @@
 			"name": {
 				"attrnames": ["twitter.name", "twitter_at_screen_name"]
 			},
-			"mail": null,
+			"mail": "twitter.email",
 			"org": null,
 			"photo": {
 				"type" : "urlref",
