@@ -64,12 +64,11 @@ class APIAuthorizationException extends Exceptions\Exception {
         }
 
         Logger::error('Error processing request: ' . $this->getMessage(), array(
-            'stacktrace' => $this->getTrace(),
+            'stacktrace' => $this->formatStackTrace($this->getTrace()),
             'errordetails' => $this->getData(),
         ));
 
         return $response;
     }
-
 
 }

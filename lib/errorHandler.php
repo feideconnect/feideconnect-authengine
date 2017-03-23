@@ -4,65 +4,11 @@ use FeideConnect\Logger;
 function getStackTrace() {
 
 
-    // Credits to http://makandracards.com/magento/8123-pretty-backtrace-stack-trace
     $d = debug_backtrace();
     array_shift($d);
     array_shift($d);
 
-    // echo '<pre>'; print_r($d);
-
-    $out = '';
-    $c1width = strlen(count($d) + 1);
-    $c2width = 0;
-    foreach ($d as &$f) {
-        if (!isset($f['file'])) {
-            $f['file'] = '';
-        }
-        if (!isset($f['line'])) {
-            $f['line'] = '';
-        }
-        if (!isset($f['class'])) {
-            $f['class'] = '';
-        }
-        if (!isset($f['type'])) {
-            $f['type'] = '';
-        }
-        // $f['file_rel'] = str_replace(BP . DS, '', $f['file']);
-        $thisLen = strlen($f['file'] . ':' . $f['line']);
-        if ($c2width < $thisLen) {
-            $c2width = $thisLen;
-        }
-    }
-    foreach ($d as $i => $f) {
-        $args = '';
-        if (isset($f['args'])) {
-            $args = array();
-            foreach ($f['args'] as $arg) {
-                if (is_object($arg)) {
-                    $str = get_class($arg);
-                } elseif (is_array($arg)) {
-                    $str = 'Array';
-                } elseif (is_numeric($arg)) {
-                    $str = $arg;
-                } else {
-                    $str = "'$arg'";
-                }
-                $args[] = $str;
-            }
-            $args = implode(', ', $args);
-        }
-        $out .= sprintf(
-            "[%{$c1width}s] %-{$c2width}s %s%s%s(%s)\n",
-            $i,
-            $f['file'] . ':' . $f['line'],
-            $f['class'],
-            $f['type'],
-            $f['function'],
-            $args
-        );
-    }
-    return $out;
-
+    return \FeideConnect\Exceptions\Exception::formatStackTrace($d);
 }
 
 
