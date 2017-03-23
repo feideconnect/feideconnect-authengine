@@ -134,6 +134,9 @@ class Config {
         if (getenv('AE_LOGLEVEL') !== false) {
             $envOverride["logging"]["level"] = getenv('AE_LOGLEVEL');
         }
+        if (getenv('AE_LOG_ERRORLOG') !== false) {
+            $envOverride["logging"]["errorlog"] = (getenv('AE_LOG_ERRORLOG') === "true");
+        }
 
         if (getenv('FEIDE_IDP') !== false) {
             $feideIdP = getenv('FEIDE_IDP');
