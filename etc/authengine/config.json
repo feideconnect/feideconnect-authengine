@@ -334,7 +334,7 @@
 			"name": {
 				"joinattrnames": ["linkedin.firstName", "linkedin.lastName"]
 			},
-			"mail": null,
+			"mail": "linkedin.emailAddress",
 			"org": null,
 			"photo": {
 				"type" : "urlref",
