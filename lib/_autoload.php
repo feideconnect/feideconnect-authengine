@@ -59,4 +59,4 @@ require_once(dirname(__DIR__) . '/vendor/autoload.php');
 
 
 require_once(__DIR__ . '/errorHandler.php');
-set_error_handler('Connect_error_handler');
+set_error_handler('errorHandler');

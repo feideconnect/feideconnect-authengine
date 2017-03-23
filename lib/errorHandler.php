@@ -13,7 +13,7 @@ function getStackTrace() {
 
 
 /* Log full backtrace on errors and warnings. */
-function Connect_error_handler($errno, $errstr, $errfile = null, $errline = 0, $errcontext = null) {
+function errorHandler($errno, $errstr, $errfile = null, $errline = 0, $errcontext = null) {
 
     static $limit = 5;
     $limit -= 1;
