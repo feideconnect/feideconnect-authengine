@@ -45,7 +45,8 @@ $config = array(
         'secret' => getenv('AE_AS_FACEBOOK_SECRET'),
         // which additional data permissions to request from user
         // see http://developers.facebook.com/docs/authentication/permissions/ for the full list
-        'req_perms' => 'public_profile',
+        'req_perms' => 'public_profile email',
+        'user_fields' => 'email,name',
     ),
 
 

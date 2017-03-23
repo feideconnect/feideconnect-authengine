@@ -357,7 +357,7 @@
 			"name": {
 				"attrnames": ["facebook.name"]
 			},
-			"mail": null,
+			"mail": "facebook.email",
 			"org": null,
 			"photo": null,
 			"yob": null
