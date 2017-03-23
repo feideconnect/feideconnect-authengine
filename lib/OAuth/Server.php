@@ -221,7 +221,7 @@ class Server {
             $idtoken = $code->idtoken;
         }
 
-        $tokenresponse = OAuthUtils::generateTokenResponse($client, $user, $code->scope, $code->apigk_scopes, "authorization code", null, $idtoken);
+        $tokenresponse = OAuthUtils::generateTokenResponse($client, $user, $code->scope, $code->apigk_scopes, "authorization code", null, $idtoken, $code->acr);
 
         return $tokenresponse->getJSONResponse();
     }

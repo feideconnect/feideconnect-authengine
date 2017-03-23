@@ -44,20 +44,22 @@ class AccessTokenPool {
         return $this->tokens;
     }
 
-    private function getCandidates($scopesInQuestion) {
+    private function getCandidates($scopesInQuestion, $acr) {
         $candidates = [];
 
         foreach ($this->tokens as $token) {
             if ($token->hasExactScopes($scopesInQuestion)) {
-                $candidates[] = $token;
+                if ($token->acr == $acr) {
+                    $candidates[] = $token;
+                }
             }
         }
         return $candidates;
     }
 
 
-    private function getSelectedCandidate($scopesInQuestion, $apigkScopes, $expires_in) {
-        $candidates = $this->getCandidates($scopesInQuestion);
+    private function getSelectedCandidate($scopesInQuestion, $apigkScopes, $expires_in, $acr) {
+        $candidates = $this->getCandidates($scopesInQuestion, $acr);
         if (empty($candidates)) {
             return null;
         }
@@ -86,8 +88,8 @@ class AccessTokenPool {
     }
 
 
-    public function getToken($scopesInQuestion, $apigkScopes, $expires_in) {
-        $candidate = $this->getSelectedCandidate($scopesInQuestion, $apigkScopes, $expires_in);
+    public function getToken($scopesInQuestion, $apigkScopes, $expires_in, $acr = null) {
+        $candidate = $this->getSelectedCandidate($scopesInQuestion, $apigkScopes, $expires_in, $acr);
 
         if ($candidate !== null) {
             return $candidate;
@@ -95,6 +97,7 @@ class AccessTokenPool {
 
         $validUntil = (new Timestamp())->addSeconds($expires_in);
         $accesstoken = Models\AccessToken::generate($this->client, $this->user, null, $scopesInQuestion, $validUntil);
+        $accesstoken->acr = $acr;
 
         if (!empty($apigkScopes)) {
             $subtokens = [];

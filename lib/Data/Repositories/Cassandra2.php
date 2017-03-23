@@ -576,14 +576,14 @@ class Cassandra2 extends \FeideConnect\Data\Repository {
      * --- Database handling of the 'accesstoken' column family
      */
     public function getAccessToken($accesstoken) {
-        $query = 'SELECT access_token, apigkid, clientid, issued, lastuse, scope, subtokens, token_type, userid, validuntil FROM "oauth_tokens" WHERE "access_token" = :access_token';
+        $query = 'SELECT access_token, apigkid, clientid, issued, lastuse, scope, subtokens, token_type, userid, validuntil, acr FROM "oauth_tokens" WHERE "access_token" = :access_token';
         $params = ['access_token' => new \Cassandra\Uuid($accesstoken)];
         return $this->query($query, $params, __FUNCTION__, 'FeideConnect\Data\Models\AccessToken', false);
     }
 
     public function getAccessTokens($userid, $clientid) {
 
-        $query = 'SELECT access_token, apigkid, clientid, issued, lastuse, scope, subtokens, token_type, userid, validuntil FROM "oauth_tokens" WHERE "userid" = :userid AND "clientid" = :clientid  AND "apigkid" = :apigkid ALLOW FILTERING';
+        $query = 'SELECT access_token, apigkid, clientid, issued, lastuse, scope, subtokens, token_type, userid, validuntil, acr FROM "oauth_tokens" WHERE "userid" = :userid AND "clientid" = :clientid  AND "apigkid" = :apigkid ALLOW FILTERING';
         $params = [
             'userid' => new \Cassandra\Uuid($userid),
             'clientid' => new \Cassandra\Uuid($clientid),

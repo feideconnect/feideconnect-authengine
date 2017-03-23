@@ -384,7 +384,8 @@ class OAuthAuthorization {
             $apigkScopes,
             $flow,
             $this->request->state,
-            $idtokenEnc
+            $idtokenEnc,
+            $this->acr
         );
 
         return $tokenresponse->getRedirectResponse($redirect_uri, true);
@@ -404,6 +405,7 @@ class OAuthAuthorization {
         }
 
         $code = Models\AuthorizationCode::generate($this->client, $this->user, $redirectURI, $scopesInQuestion, $apigkScopes, $idtoken);
+        $code->acr = $this->acr;
         $this->storage->saveAuthorizationCode($code);
 
         $authorizationresponse = Messages\AuthorizationResponse::generate($this->request, $code);

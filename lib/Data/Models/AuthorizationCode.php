@@ -7,7 +7,7 @@ use FeideConnect\OpenIDConnect\IDToken;
 
 class AuthorizationCode extends \FeideConnect\Data\Model {
 
-    public $code, $clientid, $userid, $scope, $token_type, $redirect_uri, $idtoken, $issued, $validuntil, $apigk_scopes;
+    public $code, $clientid, $userid, $scope, $token_type, $redirect_uri, $idtoken, $issued, $validuntil, $apigk_scopes, $acr;
 
     protected static $_properties = [
         'code' => 'uuid',
@@ -20,6 +20,7 @@ class AuthorizationCode extends \FeideConnect\Data\Model {
         'issued' => 'timestamp',
         'validuntil' => 'timestamp',
         'apigk_scopes' => 'map<text,set<text>>',
+        'acr' => 'text',
     ];
 
     public function stillValid() {
