@@ -21,7 +21,7 @@ node {
     }
     if (image_name != "") {
         stage 'Build'
-        args = "--build-arg JENKINS_BUILD_NUMBER='${env.BUILD_NUMBER}' ."
+        args = "--pull --no-cache --build-arg JENKINS_BUILD_NUMBER='${env.BUILD_NUMBER}' ."
         image = docker.build image_name, args
         image.push()
         image.push "latest"
