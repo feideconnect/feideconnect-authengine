@@ -8,7 +8,7 @@ use FeideConnect\Utils\Misc;
 
 class AccessToken extends \FeideConnect\Data\Model {
 
-    public $access_token, $clientid, $userid, $issued, $scope, $token_type, $validuntil, $lastuse, $apigkid, $subtokens;
+    public $access_token, $clientid, $userid, $issued, $scope, $token_type, $validuntil, $lastuse, $apigkid, $subtokens, $acr;
 
     protected static $_properties = [
         'access_token' => 'uuid',
@@ -21,6 +21,7 @@ class AccessToken extends \FeideConnect\Data\Model {
         'lastuse' => 'timestamp',
         'apigkid' => 'text',
         'subtokens' => 'map<text,uuid>',
+        'acr' => 'text',
     ];
 
     public static function lifetimeCmp($a, $b) {

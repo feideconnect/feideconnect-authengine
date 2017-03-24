@@ -8,11 +8,12 @@ use FeideConnect\Data\Types\Timestamp;
 use FeideConnect\Logger;
 
 class OAuthUtils {
-    public static function generateToken($client, $user, $scopes, $apigkScopes, $expires_in) {
+    public static function generateToken($client, $user, $scopes, $apigkScopes, $expires_in, $acr = null) {
         $storage = StorageProvider::getStorage();
 
         $validUntil = (new Timestamp())->addSeconds($expires_in);
         $accesstoken = Models\AccessToken::generate($client, $user, null, $scopes, $validUntil);
+        $accesstoken->acr = $acr;
 
         if (!empty($apigkScopes)) {
             $subtokens = [];
@@ -29,14 +30,14 @@ class OAuthUtils {
         return $accesstoken;
     }
 
-    public static function generateTokenResponse($client, $user, $scopes, $apigkScopes, $flow, $state = null, $idtoken = null) {
+    public static function generateTokenResponse($client, $user, $scopes, $apigkScopes, $flow, $state = null, $idtoken = null, $acr = null) {
 
         $expires_in = 3600*8; // 8 hours
         if (in_array('longterm', $scopes, true)) {
             $expires_in = 3600*24*680; // 680 days
         }
 
-        $accesstoken = self::generateToken($client, $user, $scopes, $apigkScopes, $expires_in);
+        $accesstoken = self::generateToken($client, $user, $scopes, $apigkScopes, $expires_in, $acr);
 
         $tokenresponse = Messages\TokenResponse::generate($accesstoken, $state, $idtoken);
 
