@@ -2,7 +2,7 @@
 namespace tests;
 
 use FeideConnect\OAuth\APIProtector;
-use FeideConnect\OAuth\AccessTokenPool;
+use FeideConnect\OAuth\OAuthUtils;
 
 
 class APIProtectorTest extends DBHelper {
@@ -58,8 +58,7 @@ class APIProtectorTest extends DBHelper {
             '\FeideConnect\OAuth\Exceptions\APIAuthorizationException',
             '/expired/'
         );
-        $pool = new AccessTokenPool($this->client, $this->user);
-        $token = $pool->getToken(['userinfo'], null, 100);
+        $token = OAuthUtils::generateToken($this->client, $this->user, ['userinfo'], null, 100);
         $token->validuntil->addSeconds(-1000);
         $this->db->rawSaveToken($token);
         $_SERVER["HTTP_AUTHORIZATION"] = 'Bearer ' . $token->access_token;
@@ -69,24 +68,21 @@ class APIProtectorTest extends DBHelper {
     }
 
     public function testRequireTokenOK() {
-        $pool = new AccessTokenPool($this->client, $this->user);
-        $token = $pool->getToken(['userinfo'], null, 100);
+        $token = OAuthUtils::generateToken($this->client, $this->user, ['userinfo'], null, 100);
         $_SERVER["HTTP_AUTHORIZATION"] = 'Bearer ' . $token->access_token;
         $apiprotector = new APIProtector();
         $this->assertEquals($apiprotector, $apiprotector->requireToken());
     }
 
     public function testGetScopes() {
-        $pool = new AccessTokenPool($this->client, $this->user);
-        $token = $pool->getToken(['userinfo'], null, 100);
+        $token = OAuthUtils::generateToken($this->client, $this->user, ['userinfo'], null, 100);
         $_SERVER["HTTP_AUTHORIZATION"] = 'Bearer ' . $token->access_token;
         $apiprotector = new APIProtector();
         $this->assertEquals(['userinfo'], $apiprotector->getScopes());
     }
 
     public function testRequireScopesOK() {
-        $pool = new AccessTokenPool($this->client, $this->user);
-        $token = $pool->getToken(['scope1', 'scope2', 'scope3'], null, 100);
+        $token = OAuthUtils::generateToken($this->client, $this->user, ['scope1', 'scope2', 'scope3'], null, 100);
         $_SERVER["HTTP_AUTHORIZATION"] = 'Bearer ' . $token->access_token;
         $apiprotector = new APIProtector();
         $this->assertEquals($apiprotector, $apiprotector->requireScopes(['scope1', 'scope3']));
@@ -97,16 +93,14 @@ class APIProtectorTest extends DBHelper {
             '\FeideConnect\OAuth\Exceptions\APIAuthorizationException',
             '/does not have sufficient scope/'
         );
-        $pool = new AccessTokenPool($this->client, $this->user);
-        $token = $pool->getToken(['scope1', 'scope2', 'scope3'], null, 100);
+        $token = OAuthUtils::generateToken($this->client, $this->user, ['scope1', 'scope2', 'scope3'], null, 100);
         $_SERVER["HTTP_AUTHORIZATION"] = 'Bearer ' . $token->access_token;
         $apiprotector = new APIProtector();
         $this->assertEquals($apiprotector, $apiprotector->requireScopes(['scope1', 'scope4']));
     }
 
     public function testRequireUserOK() {
-        $pool = new AccessTokenPool($this->client, $this->user);
-        $token = $pool->getToken(['userinfo'], null, 100);
+        $token = OAuthUtils::generateToken($this->client, $this->user, ['userinfo'], null, 100);
         $_SERVER["HTTP_AUTHORIZATION"] = 'Bearer ' . $token->access_token;
         $apiprotector = new APIProtector();
         $this->assertEquals($apiprotector, $apiprotector->requireUser());
@@ -117,16 +111,14 @@ class APIProtectorTest extends DBHelper {
             '\FeideConnect\OAuth\Exceptions\APIAuthorizationException',
             '/not associated with an authenticated user/'
         );
-        $pool = new AccessTokenPool($this->client, null);
-        $token = $pool->getToken(['userinfo'], null, 100);
+        $token = OAuthUtils::generateToken($this->client, null, ['userinfo'], null, 100);
         $_SERVER["HTTP_AUTHORIZATION"] = 'Bearer ' . $token->access_token;
         $apiprotector = new APIProtector();
         $apiprotector->requireUser();
     }
 
     public function testGetUser() {
-        $pool = new AccessTokenPool($this->client, $this->user);
-        $token = $pool->getToken(['userinfo'], null, 100);
+        $token = OAuthUtils::generateToken($this->client, $this->user, ['userinfo'], null, 100);
         $_SERVER["HTTP_AUTHORIZATION"] = 'Bearer ' . $token->access_token;
         $apiprotector = new APIProtector();
         $user = $apiprotector->getUser();
@@ -134,16 +126,14 @@ class APIProtectorTest extends DBHelper {
     }
 
     public function testGetUserNoUser() {
-        $pool = new AccessTokenPool($this->client, null);
-        $token = $pool->getToken(['userinfo'], null, 100);
+        $token = OAuthUtils::generateToken($this->client, null, ['userinfo'], null, 100);
         $_SERVER["HTTP_AUTHORIZATION"] = 'Bearer ' . $token->access_token;
         $apiprotector = new APIProtector();
         $this->assertNull($apiprotector->getUser());
     }
 
     public function testGetClient() {
-        $pool = new AccessTokenPool($this->client, $this->user);
-        $token = $pool->getToken(['userinfo'], null, 100);
+        $token = OAuthUtils::generateToken($this->client, $this->user, ['userinfo'], null, 100);
         $_SERVER["HTTP_AUTHORIZATION"] = 'Bearer ' . $token->access_token;
         $apiprotector = new APIProtector();
         $client = $apiprotector->getClient();

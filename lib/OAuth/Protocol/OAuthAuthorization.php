@@ -5,7 +5,6 @@ namespace FeideConnect\OAuth\Protocol;
 use FeideConnect\OAuth\Exceptions\BadRedirectURIException;
 use FeideConnect\OAuth\Exceptions\OAuthException;
 use FeideConnect\OAuth\Messages;
-use FeideConnect\OAuth\AccessTokenPool;
 use FeideConnect\OAuth\AuthorizationUI;
 use FeideConnect\OAuth\AuthorizationEvaluator;
 use FeideConnect\OAuth\OAuthUtils;
