@@ -13,10 +13,10 @@ node {
     publishHTML([allowMissing: false, alwaysLinkToLastBuild: false, keepAll: false, reportDir: 'build/coverage', reportFiles: 'index.html', reportName: 'Code coverage'])
 
     image_name = ""
-    if (${env.BRANCH_NAME} == "master") {
+    if (env.BRANCH_NAME == "master") {
         image_name = "registry.uninett.no/public/dataporten-auth-engine-dev"
     }
-    if (${env.BRANCH_NAME} == "stable") {
+    if (env.BRANCH_NAME == "stable") {
         image_name = "registry.uninett.no/public/dataporten-auth-engine"
     }
     if (image_name != "") {
@@ -25,7 +25,7 @@ node {
         image.push()
         image.push "latest"
     }
-    if (${env.BRANCH_NAME} == "master") {
+    if (env.BRANCH_NAME == "master") {
         stage "Deploy"
         sh "ssh jenkins@vltrd086.web.uninett.no update"
     }
