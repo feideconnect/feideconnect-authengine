@@ -27,6 +27,6 @@ node {
     }
     if (env.BRANCH_NAME == "master") {
         stage "Deploy"
-        sh "ssh jenkins@vltrd086.web.uninett.no update"
+        sh "ssh jenkins@vltrd086.web.uninett.no auth-engine"
     }
 }
