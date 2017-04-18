@@ -24,7 +24,7 @@ module.exports = function(grunt) {
 		grunt.log.writeln('Build dictionary files...');
 
 		var mainlang = "en";
-		var maindictFile = "dictionaries/transifex/dictionary." + mainlang + ".json";
+		var maindictFile = "dictionaries/dictionary." + mainlang + ".json";
 		var maindict = grunt.file.readJSON(maindictFile);
 
 		var lang, langdict, key;
@@ -32,7 +32,7 @@ module.exports = function(grunt) {
 		// Iterate over all languages...
 		for(var i = 0; i < cfg.availableLanguages.length; i++) {
 			lang = cfg.availableLanguages[i];
-			if (lang === mainlang) { continue; }
+			// if (lang === mainlang) { continue; }
 			langdict = grunt.file.readJSON("dictionaries/transifex/dictionary." + lang + ".json");
 
 			for(key in maindict) {
