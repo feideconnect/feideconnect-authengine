@@ -43,7 +43,6 @@ class AccountChooserProtocol {
         if (isset($this->response["type"])) {
             $ac["type"] = $this->response["type"];
         }
-
         if (isset($this->response["id"])) {
             $ac["idp"] = $this->response["id"];
         }

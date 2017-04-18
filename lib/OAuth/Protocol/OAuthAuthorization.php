@@ -207,7 +207,6 @@ class OAuthAuthorization {
 
     protected function validateAuthProvider() {
 
-
         $this->account->validateAuthProvider($this->client->getAuthProviders());
 
     }
