@@ -143,6 +143,9 @@ class Config {
         if (getenv('AE_STATSD_NAMESPACE') !== false) {
             $envOverride["statsd"]["namespace"] = getenv('AE_STATSD_NAMESPACE');
         }
+        if (getenv('LANG_COOKIE_DOMAIN') !== false) {
+            $envOverride["langCookieDomain"] = getenv('LANG_COOKIE_DOMAIN');
+        }
 
         if (getenv('FEIDE_IDP') !== false) {
             $feideIdP = getenv('FEIDE_IDP');
