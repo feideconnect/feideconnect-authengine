@@ -20,6 +20,7 @@ use FeideConnect\Authentication\UserMapper;
 use FeideConnect\Logger;
 use FeideConnect\Exceptions\AuthProviderNotAccepted;
 use FeideConnect\Utils\Validator;
+use FeideConnect\Utils\RedirectLoopProtector;
 
 class OAuthAuthorization {
 
@@ -295,9 +296,25 @@ class OAuthAuthorization {
             return $res;
         }
 
+
+        if (!$this->client->requireInteraction()) {
+            if (!RedirectLoopProtector::protect()) {
+                $pattr = $_POST;
+                $pattr['resetrpl'] = '1';
+                $rlpContinue = \SimpleSAML_Utilities::addURLparameter(\SimpleSAML_Utilities::selfURL(), $pattr);
+                Logger::error("Redirectloop detected", [
+                    'client' => $this->client,
+                    'user'   => $this->user,
+                    'source' => $this->account->getSourceID(),
+                ]);
+                return (new LocalizedTemplatedHTMLResponse('redirectloop'))->setData(["url" => $rlpContinue]);
+
+            }
+        }
+
         Logger::info("User authenticated", [
             'client' => $this->client,
-            'user' => $this->user,
+            'user'   => $this->user,
             'source' => $this->account->getSourceID(),
         ]);
 
