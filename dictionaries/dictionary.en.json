@@ -112,7 +112,7 @@
 	"no": "No",
 
 	"redirectloopheader": "Ooops, too fast...",
-	"redirectloopbody": "Dataporten detected that you are sent multiple login requests in a very short time. This could mean that the application you are trying to access is misconfigured. You may click continue, to try again.",
+	"redirectloopbody": "Dataporten detected that you have sent multiple login requests in a very short time. This could mean that the application you are trying to access is misconfigured. You may click continue, to try again.",
 	"continue": "Continue",
 
 	"close": "Close",

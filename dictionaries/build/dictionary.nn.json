@@ -127,5 +127,8 @@
   "cmk": "Makedonia",
   "sharedcomputer": "Fjern krysset viss du bruker ei delt datamaskin.",
   "doesnotmatch": "Dette passar ikkje med den aktuelle brukarkontoen, og du må logge ut før du kan bytte konto.",
+  "redirectloopheader": "Ooops, too fast...",
+  "redirectloopbody": "Dataporten detected that you have sent multiple login requests in a very short time. This could mean that the application you are trying to access is misconfigured. You may click continue, to try again.",
+  "continue": "Continue",
   "_lang": "nn"
 }
