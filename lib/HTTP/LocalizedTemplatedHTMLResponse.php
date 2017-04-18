@@ -38,7 +38,7 @@ class LocalizedTemplatedHTMLResponse extends TemplatedHTMLResponse {
     public function setReplacements($indexes, $data) {
         $this->replacementIndexes = $indexes;
         $this->replacementData = $data;
-
+        return $this;
     }
 
 

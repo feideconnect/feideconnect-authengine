@@ -80,9 +80,12 @@ class AccountChooser {
         $data["activeAccounts"] = $accounts;
         $data["activeAccountsJSON"] = json_encode($accounts);
 
+        $replacements = [
+            "CLIENT" => '<strong><span class="clientname"></span></strong>',
+        ];
         // echo '<pre>'; print_r($data); exit;
 
-        return (new LocalizedTemplatedHTMLResponse('accountchooser'))->setData($data);
+        return (new LocalizedTemplatedHTMLResponse('accountchooser'))->setReplacements(['tologin'], $replacements)->setData($data);
 
     }
 
