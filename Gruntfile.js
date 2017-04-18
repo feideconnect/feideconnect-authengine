@@ -6,7 +6,7 @@ module.exports = function(grunt) {
 	// Project configuration.
 	grunt.initConfig({
 		pkg: grunt.file.readJSON('package.json'),
-		config: grunt.file.readJSON('etc/config.json'),
+		config: grunt.file.readJSON('etc/authengine/config.json'),
 		transifex: {
 			"feide-connect": {
 				options: {
