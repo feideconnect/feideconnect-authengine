@@ -46,6 +46,7 @@ The AccountChooser fetches data from:
 The `authproviders` property from the client configuration is used to filter the allowed providers.
 
 
+The AccountChooser uses HTML5 geo location and IP-based geo location to sort the available entries by an estimated physical distance to the user.
 
 
 When the user selects a provider, the user is redirected back to the `return` URL with an **AccountChooser Response**.
