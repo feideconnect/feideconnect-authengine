@@ -98,10 +98,15 @@ class OAuthAuthorization {
             return null;
         }
 
+        $login_hint = null;
+        if ($this->openidConnect && !$this->client->requireInteraction()) {
+            $login_hint = $this->request->login_hint;
+        }
+
         if ($this->isPassive) {
             $this->auth->passiveAuthentication($this->client, $this->maxage);
         } else {
-            $response = $this->auth->requireAuthentication($this->maxage, $this->acr_values);
+            $response = $this->auth->requireAuthentication($this->maxage, $this->acr_values, $login_hint);
             if ($response !== null) {
                 return $response;
             }

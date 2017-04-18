@@ -96,22 +96,18 @@ class Authenticator {
      *
      * @return void
      */
-    public function requireAuthentication($maxage = null, $acr_values = null) {
+    public function requireAuthentication($maxage = null, $acr_values = null, $login_hint = null) {
 
         $accountchooser = new Authentication\AccountChooserProtocol();
-
         $accountchooser->setClientID($this->clientid);
-        // $accountchooser->debug();
-
+        $accountchooser->setLoginHint($login_hint);
 
         if (!$accountchooser->hasResponse()) {
             $requestURL = $accountchooser->getRequest();
             throw new RedirectException($requestURL);
         }
         $authconfig = $accountchooser->getAuthConfig();
-
         $response = $accountchooser->getResponse();
-
 
         if (!isset($this->authSources[$authconfig["type"]])) {
             throw new \Exception("Attempting to authenticate using an authentication source that is not initialized.");

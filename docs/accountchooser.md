@@ -9,6 +9,24 @@ You can access the Account chooser directly without any specified incoming reque
 The account chooser takes an incomming **AccountChooser Request**, requests the user to select which Identity Provider to use for authentication, and then redirects back to the requestor with a **AccountChooser Response**.
 
 
+## Login_hints
+
+
+Valid options for the OpenID Connect authentication request `login_hints` option:
+
+* `feide|realm|uninett.no|andreas@uninett.no`
+* `feide|realm|uninett.no`
+* `feide|all`
+* `edugain|https://someidp.example.org/`
+
+Not yet supported, but reserved values:
+
+* `idporten`
+* `other|openidp`
+* `social|twitter`
+* `social|linkedin`
+* `social|facebook`
+* `other|feidetest`
 
 
 ## The AccountChooser Request
