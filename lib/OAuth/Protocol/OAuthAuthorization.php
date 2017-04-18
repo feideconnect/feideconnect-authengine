@@ -55,8 +55,6 @@ class OAuthAuthorization {
         }
         $this->auth = new Authenticator();
 
-        // echo 'About to require authentication'; var_dump($this->request); Exit;
-
         if ($this->request->client_id) {
             $this->auth->setClientID($request->client_id);
         }
@@ -129,8 +127,6 @@ class OAuthAuthorization {
         $usermapper = new UserMapper($this->storage);
         $this->user = $usermapper->getUser($this->account, true, true, false);
 
-        // echo '<pre>'; print_r($user); exit;
-
         Logger::debug('OAuth Processing Authorization request, user is authenticated', array(
             'user' => $this->user
         ));
@@ -168,8 +164,6 @@ class OAuthAuthorization {
                 throw new \Exception("Invalid verifier code.");
             }
 
-            // echo '<pre>'; print_r($_REQUEST); exit;
-
             if (!isset($_REQUEST['bruksvilkar'])) {
                 throw new \Exception('Bruksvilkår not accepted.');
             }
@@ -186,9 +180,6 @@ class OAuthAuthorization {
             }
             $authorization = $this->aevaluator->getUpdatedAuthorization($scopes_approved, $apigkScopesApproved);
 
-            // echo "<pre>";
-            // print_r($user->getBasicUserInfo());
-            // print_r($authorization->getAsArray()); exit;
 
             $this->user->usageterms = true;
             $this->user->updateUserBasics($this->account);
@@ -338,7 +329,6 @@ class OAuthAuthorization {
     protected function getIDToken() {
         $openid = new \FeideConnect\OpenIDConnect\OpenIDConnect();
         $iat = $this->account->getAuthInstant();
-        // echo '<pre>iat'; print_r($iat); exit;
         $idtoken = $openid->getIDtoken($this->user->userid, $this->client->id, $this->acr, $iat);
         if (isset($this->request->nonce)) {
             $idtoken->set('nonce', $this->request->nonce);
