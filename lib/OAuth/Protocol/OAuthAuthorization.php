@@ -41,6 +41,8 @@ class OAuthAuthorization {
     protected $acr_values;
     protected $acr;
 
+    const PROTECTED_POST_ATTRS = ['verifier'];
+
     public function __construct(Messages\Message $request, $openidConnect) {
 
         $this->storage = StorageProvider::getStorage();
@@ -297,6 +299,7 @@ class OAuthAuthorization {
             if (!RedirectLoopProtector::protect()) {
                 $pattr = $_POST;
                 $pattr['resetrpl'] = '1';
+                $pattr = array_diff_key($pattr, array_flip(self::PROTECTED_POST_ATTRS));
                 $rlpContinue = \SimpleSAML_Utilities::addURLparameter(\SimpleSAML_Utilities::selfURL(), $pattr);
                 Logger::error("Redirectloop detected", [
                     'client' => $this->client,
