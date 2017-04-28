@@ -8,7 +8,8 @@
 	},
 	"endpoints": {
 		"core": "https://api.dataporten.no",
-		"clientadm": "https://clientadmin.dataporten-api.no"
+		"clientadm": "https://clientadmin.dataporten-api.no",
+		"apigkadm": "https://apigkadmin.dataporten-api.no"
 	},
 	"debug": false,
 	"logging": {
