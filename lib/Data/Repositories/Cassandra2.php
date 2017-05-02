@@ -648,7 +648,7 @@ class Cassandra2 extends \FeideConnect\Data\Repository {
      * --- Database handling of the 'oauth_codes' column family
      */
     public function getAuthorizationCode($code) {
-        $query = 'SELECT code, apigk_scopes, clientid, idtoken, issued, redirect_uri, scope, token_type, userid, validuntil FROM "oauth_codes" WHERE "code" = :code';
+        $query = 'SELECT code, apigk_scopes, clientid, idtoken, issued, redirect_uri, scope, token_type, userid, validuntil, acr FROM "oauth_codes" WHERE "code" = :code';
         $params = ['code' => new \Cassandra\Uuid($code)];
         return $this->query($query, $params, __FUNCTION__, 'FeideConnect\Data\Models\AuthorizationCode', false);
     }
