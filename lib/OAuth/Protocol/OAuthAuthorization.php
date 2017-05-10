@@ -41,8 +41,6 @@ class OAuthAuthorization {
     protected $acr_values;
     protected $acr;
 
-    const PROTECTED_POST_ATTRS = ['verifier'];
-
     public function __construct(Messages\Message $request, $openidConnect) {
 
         $this->storage = StorageProvider::getStorage();
@@ -297,16 +295,30 @@ class OAuthAuthorization {
 
         if (!$this->client->requireInteraction()) {
             if (!RedirectLoopProtector::protect()) {
-                $pattr = $_POST;
-                $pattr['resetrpl'] = '1';
-                $pattr = array_diff_key($pattr, array_flip(self::PROTECTED_POST_ATTRS));
-                $rlpContinue = \SimpleSAML_Utilities::addURLparameter(\SimpleSAML_Utilities::selfURL(), $pattr);
+
+                $data = [];
+                $data["url"] = \SimpleSAML_Utilities::selfURLNoQuery();
+                $data["method"] = ($_SERVER['REQUEST_METHOD'] === 'POST') ? 'POST' : 'GET';
+                $parameters = null;
+                if ($data["method"] === 'POST') {
+                    $parameters = $_POST;
+                } else {
+                    $parameters = $_GET;
+                }
+                $parameters['resetrlp'] = time();
+                $data["parameters"] = [];
+                foreach($parameters AS $k => $v) {
+                    array_push($data["parameters"], [
+                        "name" => $k,
+                        "value" => $v,
+                    ]);
+                }
                 Logger::error("Redirectloop detected", [
                     'client' => $this->client,
                     'user'   => $this->user,
                     'source' => $this->account->getSourceID(),
                 ]);
-                return (new LocalizedTemplatedHTMLResponse('redirectloop'))->setData(["url" => $rlpContinue]);
+                return (new LocalizedTemplatedHTMLResponse('redirectloop'))->setData($data);
 
             }
         }

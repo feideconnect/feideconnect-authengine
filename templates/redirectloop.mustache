@@ -4,7 +4,6 @@
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="">
   <meta name="author" content="UNINETT AS" />
   <title>Dataporten</title>
 
@@ -31,16 +30,15 @@
         <div class="jumbotron uninett-color-lightGreen">
             <h1>{{_.redirectloopheader}}</h1>
             <p>{{_.redirectloopbody}}</p>
-            <div class="">
-                <a class="btn btn-primary" href="{{url}}">{{_.continue}}</a>
-            </div>
-
-
+            <form action="{{ url }}" method="{{ method }}">
+                {{#parameters}}
+                    <input type="hidden" name="{{ name }}" value="{{ value }}">
+                {{/parameters}}
+                <input type="submit" class="btn btn-primary" name="_submit" value="{{_.continue}}">
+            </form>
         </div>
       </div>
     </div>
-
-
 
   </div>
   <!-- /container -->
