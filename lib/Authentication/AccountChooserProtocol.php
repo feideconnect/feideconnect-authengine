@@ -48,6 +48,11 @@ class AccountChooserProtocol {
                 "subid"   => $matches[1],
                 "userids" => ['feide:' . $matches[2]],
             ];
+        } else if (preg_match('/^idporten$/', $login_hint, $matches)) {
+            return [
+                "type" => "saml",
+                "id" => "idporten.difi.no-v3"
+            ];
         }
 
         return null;
