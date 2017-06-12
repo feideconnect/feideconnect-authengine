@@ -6,7 +6,7 @@ module.exports = function(grunt) {
 	// Project configuration.
 	grunt.initConfig({
 		pkg: grunt.file.readJSON('package.json'),
-		config: grunt.file.readJSON('etc/config.json'),
+		config: grunt.file.readJSON('etc/authengine/config.json'),
 		transifex: {
 			"feide-connect": {
 				options: {
@@ -24,7 +24,7 @@ module.exports = function(grunt) {
 		grunt.log.writeln('Build dictionary files...');
 
 		var mainlang = "en";
-		var maindictFile = "dictionaries/transifex/dictionary." + mainlang + ".json";
+		var maindictFile = "dictionaries/dictionary." + mainlang + ".json";
 		var maindict = grunt.file.readJSON(maindictFile);
 
 		var lang, langdict, key;
@@ -32,7 +32,7 @@ module.exports = function(grunt) {
 		// Iterate over all languages...
 		for(var i = 0; i < cfg.availableLanguages.length; i++) {
 			lang = cfg.availableLanguages[i];
-			if (lang === mainlang) { continue; }
+			// if (lang === mainlang) { continue; }
 			langdict = grunt.file.readJSON("dictionaries/transifex/dictionary." + lang + ".json");
 
 			for(key in maindict) {
@@ -63,7 +63,7 @@ module.exports = function(grunt) {
 	// 	lang = cfg.languages[i];
 	// 	shell.rjs.command.push("node_modules/requirejs/bin/r.js -o build.js paths.dict=../dictionaries/build/dictionary." + lang + ".json out=dist/app.min.js." + lang + "");
 	// }
-	// // We comment out this, because it overrides the langauge negotiation 
+	// // We comment out this, because it overrides the langauge negotiation
 	// // when enabled.
 	// // shell.rjs.command.push("cp dist/app.min.js.en dist/app.min.js");
 
@@ -80,7 +80,7 @@ module.exports = function(grunt) {
 	transifex["feide-connect"].options.languages = cfg.availableLanguages;
 	grunt.config.set("transifex", transifex);
 	// ---- Section on building locale based app builds.
-	
+
 	// console.log(transifex);
 	console.log(transifex["feide-connect"].options);
 	// exit;
@@ -91,7 +91,7 @@ module.exports = function(grunt) {
 	// grunt.loadNpmTasks('grunt-requirejs');
 	grunt.loadNpmTasks('grunt-shell');
 	grunt.loadNpmTasks('grunt-transifex');
-	
+
 	// Tasks
 	grunt.registerTask('default', ['transifex', 'langbuild']);
 	// grunt.registerTask('jshint', ['jshint']);
@@ -101,5 +101,5 @@ module.exports = function(grunt) {
 	// grunt.registerTask('test', ['jshint']);
 
 	grunt.registerTask('lang', ['transifex', 'langbuild']);
-	
+
 };

@@ -1,4 +1,4 @@
-FROM uninett-docker-uninett.bintray.io/jessie/minbase
+FROM registry.uninett.no/public/jessie:minbase
 
 # Install packages
 RUN install_packages.sh \

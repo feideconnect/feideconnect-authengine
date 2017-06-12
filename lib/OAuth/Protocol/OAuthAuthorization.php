@@ -20,6 +20,7 @@ use FeideConnect\Authentication\UserMapper;
 use FeideConnect\Logger;
 use FeideConnect\Exceptions\AuthProviderNotAccepted;
 use FeideConnect\Utils\Validator;
+use FeideConnect\Utils\RedirectLoopProtector;
 
 class OAuthAuthorization {
 
@@ -53,8 +54,6 @@ class OAuthAuthorization {
             throw new OAuthException('invalid_request', 'Invalid client_id parameter');
         }
         $this->auth = new Authenticator();
-
-        // echo 'About to require authentication'; var_dump($this->request); Exit;
 
         if ($this->request->client_id) {
             $this->auth->setClientID($request->client_id);
@@ -97,10 +96,15 @@ class OAuthAuthorization {
             return null;
         }
 
+        $login_hint = null;
+        if ($this->openidConnect && !$this->client->requireInteraction()) {
+            $login_hint = $this->request->login_hint;
+        }
+
         if ($this->isPassive) {
             $this->auth->passiveAuthentication($this->client, $this->maxage);
         } else {
-            $response = $this->auth->requireAuthentication($this->maxage, $this->acr_values);
+            $response = $this->auth->requireAuthentication($this->maxage, $this->acr_values, $login_hint);
             if ($response !== null) {
                 return $response;
             }
@@ -122,8 +126,6 @@ class OAuthAuthorization {
 
         $usermapper = new UserMapper($this->storage);
         $this->user = $usermapper->getUser($this->account, true, true, false);
-
-        // echo '<pre>'; print_r($user); exit;
 
         Logger::debug('OAuth Processing Authorization request, user is authenticated', array(
             'user' => $this->user
@@ -162,8 +164,6 @@ class OAuthAuthorization {
                 throw new \Exception("Invalid verifier code.");
             }
 
-            // echo '<pre>'; print_r($_REQUEST); exit;
-
             if (!isset($_REQUEST['bruksvilkar'])) {
                 throw new \Exception('Bruksvilkår not accepted.');
             }
@@ -180,9 +180,6 @@ class OAuthAuthorization {
             }
             $authorization = $this->aevaluator->getUpdatedAuthorization($scopes_approved, $apigkScopesApproved);
 
-            // echo "<pre>";
-            // print_r($user->getBasicUserInfo());
-            // print_r($authorization->getAsArray()); exit;
 
             $this->user->usageterms = true;
             $this->user->updateUserBasics($this->account);
@@ -206,7 +203,6 @@ class OAuthAuthorization {
 
 
     protected function validateAuthProvider() {
-
 
         $this->account->validateAuthProvider($this->client->getAuthProviders());
 
@@ -296,9 +292,40 @@ class OAuthAuthorization {
             return $res;
         }
 
+
+        if (!$this->client->requireInteraction()) {
+            if (!RedirectLoopProtector::protect()) {
+
+                $data = [];
+                $data["url"] = \SimpleSAML_Utilities::selfURLNoQuery();
+                $data["method"] = ($_SERVER['REQUEST_METHOD'] === 'POST') ? 'POST' : 'GET';
+                $parameters = null;
+                if ($data["method"] === 'POST') {
+                    $parameters = $_POST;
+                } else {
+                    $parameters = $_GET;
+                }
+                $parameters['resetrlp'] = time();
+                $data["parameters"] = [];
+                foreach($parameters AS $k => $v) {
+                    array_push($data["parameters"], [
+                        "name" => $k,
+                        "value" => $v,
+                    ]);
+                }
+                Logger::error("Redirectloop detected", [
+                    'client' => $this->client,
+                    'user'   => $this->user,
+                    'source' => $this->account->getSourceID(),
+                ]);
+                return (new LocalizedTemplatedHTMLResponse('redirectloop'))->setData($data);
+
+            }
+        }
+
         Logger::info("User authenticated", [
             'client' => $this->client,
-            'user' => $this->user,
+            'user'   => $this->user,
             'source' => $this->account->getSourceID(),
         ]);
 
@@ -317,7 +344,6 @@ class OAuthAuthorization {
     protected function getIDToken() {
         $openid = new \FeideConnect\OpenIDConnect\OpenIDConnect();
         $iat = $this->account->getAuthInstant();
-        // echo '<pre>iat'; print_r($iat); exit;
         $idtoken = $openid->getIDtoken($this->user->userid, $this->client->id, $this->acr, $iat);
         if (isset($this->request->nonce)) {
             $idtoken->set('nonce', $this->request->nonce);

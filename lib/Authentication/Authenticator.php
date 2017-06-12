@@ -28,7 +28,6 @@ class Authenticator {
 
         foreach ($this->authTypes as $authtype => $authTypeConfig) {
             $this->authSources[$authtype] = AuthSource::create($authTypeConfig["authSource"]);
-            // echo "Creating auth source [" . $authtype . "] using [" . $authTypeConfig["authSource"] . "] ";
         }
     }
 
@@ -96,22 +95,18 @@ class Authenticator {
      *
      * @return void
      */
-    public function requireAuthentication($maxage = null, $acr_values = null) {
+    public function requireAuthentication($maxage = null, $acr_values = null, $login_hint = null) {
 
         $accountchooser = new Authentication\AccountChooserProtocol();
-
         $accountchooser->setClientID($this->clientid);
-        // $accountchooser->debug();
-
+        $accountchooser->setLoginHint($login_hint);
 
         if (!$accountchooser->hasResponse()) {
             $requestURL = $accountchooser->getRequest();
             throw new RedirectException($requestURL);
         }
         $authconfig = $accountchooser->getAuthConfig();
-
         $response = $accountchooser->getResponse();
-
 
         if (!isset($this->authSources[$authconfig["type"]])) {
             throw new \Exception("Attempting to authenticate using an authentication source that is not initialized.");
@@ -119,9 +114,6 @@ class Authenticator {
 
         $this->activeAuthType = $authconfig["type"];
         $as = $this->authSources[$this->activeAuthType];
-
-        // echo '<pre>About to authenticate using ' . $this->activeAuthType . "\n\n"; print_r($authconfig); exit;
-
 
         $forceauthn = false;
         $authGood = true;
@@ -183,10 +175,6 @@ class Authenticator {
         if (isset($authconfig["idp"])) {
             $options["saml:idp"] = $authconfig["idp"];
         }
-
-        // echo '<pre>Options:' ; print_r($options); exit;
-        // echo "about to auth " . var_export($options, true); exit;
-
 
         $preselectEndpoints = [
             'https://idp-test.feide.no' => 'https://idp-test.feide.no/simplesaml/module.php/feide/preselectOrg.php',
@@ -308,8 +296,6 @@ class Authenticator {
             throw new \Exception("Attempting to getRawAttributes() when there is no active auth source");
         }
         $as = $this->authSources[$this->activeAuthType];
-        // echo '<pre>';
-        // print_r($this->authSources);
         $attributes = $as->getAttributes();
         return $attributes;
     }

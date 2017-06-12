@@ -11,6 +11,7 @@ class AccountChooserProtocol {
     protected $selfURL;
     protected $baseURL;
     protected $response = null;
+    protected $login_hint = null;
 
     public function __construct() {
 
@@ -28,12 +29,53 @@ class AccountChooserProtocol {
 
     }
 
+    public static function getResponseFromHint($login_hint) {
+        if (preg_match('/^feide\|all$/', $login_hint, $matches)) {
+            return [
+                "type" => "saml",
+                "id"  => Config::getValue('feideIdP'),
+            ];
+        } else if (preg_match('/^feide\|realm\|([^|]+)$/', $login_hint, $matches)) {
+            return [
+                "type" => "saml",
+                "id"  => Config::getValue('feideIdP'),
+                "subid"   => $matches[1],
+            ];
+        } else if (preg_match('/^feide\|realm\|([^|]+)\|([^|]+)$/', $login_hint, $matches)) {
+            return [
+                "type" => "saml",
+                "id"  => Config::getValue('feideIdP'),
+                "subid"   => $matches[1],
+                "userids" => ['feide:' . $matches[2]],
+            ];
+        } else if (preg_match('/^idporten$/', $login_hint, $matches)) {
+            return [
+                "type" => "saml",
+                "id" => "idporten.difi.no-v3"
+            ];
+        }
+
+        return null;
+
+    }
+
     public function getResponse() {
         return $this->response;
     }
 
     public function setClientID($clientid) {
         $this->clientid = $clientid;
+    }
+
+    public function setLoginHint($login_hint) {
+        $this->login_hint = $login_hint;
+
+        $resp = self::getResponseFromHint($login_hint);
+
+        // echo "Set loginhint <pre>"; echo $login_hint . " "; echo(var_export($resp)); exit;
+        if ($resp !== null) {
+            $this->response = $resp;
+        }
     }
 
     public function getAuthConfig() {
@@ -43,7 +85,6 @@ class AccountChooserProtocol {
         if (isset($this->response["type"])) {
             $ac["type"] = $this->response["type"];
         }
-
         if (isset($this->response["id"])) {
             $ac["idp"] = $this->response["id"];
         }

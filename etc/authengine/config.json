@@ -8,7 +8,8 @@
 	},
 	"endpoints": {
 		"core": "https://api.dataporten.no",
-		"clientadm": "https://clientadmin.dataporten-api.no"
+		"clientadm": "https://clientadmin.dataporten-api.no",
+		"apigkadm": "https://apigkadmin.dataporten-api.no"
 	},
 	"debug": false,
 	"logging": {
@@ -31,7 +32,7 @@
 	"pocEndpoint": {
 		"enable": false
 	},
-	"availableLanguages": ["nb", "en"],
+	"availableLanguages": ["nb", "nn", "en"],
 	"enableLocalization": true,
 	"geodb": "etc/GeoIP2-City.mmdb",
 	"testUsers": {

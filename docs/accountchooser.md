@@ -9,6 +9,24 @@ You can access the Account chooser directly without any specified incoming reque
 The account chooser takes an incomming **AccountChooser Request**, requests the user to select which Identity Provider to use for authentication, and then redirects back to the requestor with a **AccountChooser Response**.
 
 
+## Login_hints
+
+
+Valid options for the OpenID Connect authentication request `login_hints` option:
+
+* `feide|realm|uninett.no|andreas@uninett.no`
+* `feide|realm|uninett.no`
+* `feide|all`
+* `edugain|https://someidp.example.org/`
+
+Not yet supported, but reserved values:
+
+* `idporten`
+* `other|openidp`
+* `social|twitter`
+* `social|linkedin`
+* `social|facebook`
+* `other|feidetest`
 
 
 ## The AccountChooser Request
@@ -21,7 +39,7 @@ The request object have two defined parameters:
 * `clientid` is the identifier of the client asking for authentication through Feide Connect.
 
 
-Here is an example of a request:	
+Here is an example of a request:
 
 	{
 	    "return": "https://auth.feideconnect.no/oauth/authorization?response_type=token&state=....",
@@ -46,7 +64,7 @@ The AccountChooser fetches data from:
 The `authproviders` property from the client configuration is used to filter the allowed providers.
 
 
-The AccountChooser uses HTML5 geo location and IP-based geo location to sort the available entries by an estimated physical distance to the user. 
+The AccountChooser uses HTML5 geo location and IP-based geo location to sort the available entries by an estimated physical distance to the user.
 
 
 When the user selects a provider, the user is redirected back to the `return` URL with an **AccountChooser Response**.
@@ -98,15 +116,3 @@ Make sure an account map is matching the new authentication source in the config
 If appropriate add a new entry in the `disco`-section in `config.json` to add an entry in the accountchooser selector dialog.
 
 Inspect the `getVisualTag()` function in `Account.php` to implement an appropriate visual tag for storing an representation of the authenticated accounts in the account chooser.
-
-
-
-
-
-
-
-
-
-
-
-

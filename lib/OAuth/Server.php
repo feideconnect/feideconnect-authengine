@@ -58,12 +58,6 @@ class Server {
 
 
         try {
-            /**
-             * --- We've now dealted with all error responses that is returned from other systems..
-             * Lets move on to processing the OAuth authorization request.
-             *
-             */
-
             // Parse the incoming Authorization Request.
             $request = new Messages\AuthorizationRequest($_REQUEST);
             $openidConnect = false;
