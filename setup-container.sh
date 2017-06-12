@@ -2,7 +2,7 @@
 set -e
 curl -sL https://deb.nodesource.com/setup_6.x | bash
 apt-get install -y nodejs
-curl -sS https://www.npmjs.com/install.sh | sh
+npm install npm@latest -g
 curl -sS https://getcomposer.org/installer | php
 mv composer.phar /usr/local/bin/composer
 composer update --no-interaction --no-dev --no-progress
