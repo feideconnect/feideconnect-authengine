@@ -78,4 +78,4 @@ echo $response->send();
 
 
 
-profiler_status($_SERVER['REQUEST_METHOD']);
+profiler_status($_SERVER['REQUEST_METHOD'], $response);

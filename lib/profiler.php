@@ -13,7 +13,7 @@ $profiler_start = microtime(true);
 
 
 
-function profiler_status($method) {
+function profiler_status($method, $response) {
     global $rustart, $profiler_start;
     $ru = getrusage();
 
@@ -30,9 +30,14 @@ function profiler_status($method) {
         ]
     ));
 
-    $path = \FeideConnect\Utils\URL::selfPathNoQuery();
-    $path = substr($path, 1); // Remove leading `/`
-    $path = preg_replace('/[^A-Za-z0-9-_]+/', '_', $path); // Replace all special characters with `_`.
+    $status = $response->getStatus();
+    if ($status >= 200 && $status < 300) {
+        $path = \FeideConnect\Utils\URL::selfPathNoQuery();
+        $path = substr($path, 1); // Remove leading `/`
+        $path = preg_replace('/[^A-Za-z0-9-_]+/', '_', $path); // Replace all special characters with `_`.
+    } else {
+        $path = "__status." . $status;
+    }
 
     $statsd = \FeideConnect\Utils\Statsd::getInstance();
     $statsd->timing('profiler.' . $path . '.utime', $utime);
