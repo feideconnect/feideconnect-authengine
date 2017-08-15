@@ -27,7 +27,7 @@
 		"feideconnect/simplesamlphp-module-cassandrastore": "dev-master"
 	},
 	"require-dev": {
-		"codeclimate/php-test-reporter": "dev-master",
+		"codeclimate/php-test-reporter": "~0.4.4",
 		"pdepend/pdepend" : "~2.0.4",
 		"phpunit/phpunit" : "^4.8.0",
 		"sebastian/phpcpd": "~2.0.0",
