@@ -115,7 +115,6 @@ $config = array(
     'metadata.sign.privatekey_pass' => null,
     'metadata.sign.certificate' => null,
     'proxy' => null,
-    'trusted.url.domains' => null,
 
 );
 
