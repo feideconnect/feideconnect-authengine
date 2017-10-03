@@ -241,8 +241,9 @@ class Authenticator {
 
 
     public function logoutAS($as) {
-        //$as->logout('/loggedout');
-        $as->logout();
+        // The strict paramter indicates that we will logout without asking the user if the discovery response
+        // Does not match the authenticated account. However this needs to be reset when we actually perform logout.
+        $as->logout(URL::selfURLfilterQuery(['strict']));
     }
 
     public function logout() {
