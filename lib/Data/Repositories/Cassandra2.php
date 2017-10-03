@@ -548,8 +548,13 @@ class Cassandra2 extends \FeideConnect\Data\Repository {
         $query = 'SELECT id,name,realm,type,uiinfo,services FROM "organizations"';
         $result = $this->query($query, [], __FUNCTION__, 'FeideConnect\Data\Models\Organization', true);
         // We manually filter on the requested service here, to reduce the cost of running the query on Cassandra.
-        $result = array_filter($result, function ($org) use ($service) { return in_array($service, $org->services, true); });
-        return $result;
+        $ret = [];
+        foreach ($result as $org) {
+            if (in_array($service, $org->services, true)) {
+                $ret[] = $org;
+            }
+        }
+        return $ret;
     }
 
     public function getOrg($orgid) {
