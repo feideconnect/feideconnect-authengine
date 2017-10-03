@@ -545,10 +545,11 @@ class Cassandra2 extends \FeideConnect\Data\Repository {
      * --- Database handling of the 'organization' column family
      */
     public function getOrgsByService($service = 'auth') {
-        $count = 500;
-        $query = 'SELECT id,name,realm,type,uiinfo,services FROM "organizations" WHERE (services CONTAINS :service) LIMIT :count';
-        $params = ['count' => $count, 'service' => $service];
-        return $this->query($query, $params, __FUNCTION__, 'FeideConnect\Data\Models\Organization', true);
+        $query = 'SELECT id,name,realm,type,uiinfo,services FROM "organizations"';
+        $result = $this->query($query, [], __FUNCTION__, 'FeideConnect\Data\Models\Organization', true);
+        // We manually filter on the requested service here, to reduce the cost of running the query on Cassandra.
+        $result = array_filter($result, function ($org) use ($service) { return in_array($service, $org->services, true); });
+        return $result;
     }
 
     public function getOrg($orgid) {
