@@ -181,6 +181,31 @@ class URL {
         return $selfURLhost . $requestURI;
     }
 
+    /*
+     * This function returns the selfURL() but filters out an array of query string keys.
+     * In example:   selfURLfilterQuery(['strict', 'debug'])
+     * will turn   https://acme.org/blah?debug=1&strict=true&error=23 into
+     *             https://acme.org/blah?error=23
+     * and will turn  https://acme.org/blah?debug=1&strict=true into
+     *                https://acme.org/blah
+     */
+    public static function selfURLfilterQuery(array $filter = []) {
+        echo '<pre>';
+        $url = self::selfURLNoQuery();
+        if ($_SERVER['REQUEST_METHOD'] === 'GET') {
+            $params = $_GET;
+            foreach($params AS $key => $value) {
+                if (in_array($key, $filter)) {
+                    unset($params[$key]);
+                }
+            }
+            if (!empty($params)) {
+                $url .= '?' . http_build_query($params);
+            }
+        }
+        return $url;
+    }
+
 
     public static function compareHost($url1, $url2 = null) {
 
