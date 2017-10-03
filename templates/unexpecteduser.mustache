@@ -32,25 +32,48 @@
                 <div class="row ">
                     <div class="col-md-6 col-md-offset-3" style=" ">
 
-                        <p>{{_.loggedinas}} <strong>{{current.name}}</strong>. {{_.doesnotmatch}}.</p>
+                        <p>
+                            {{_.doesnotmatch2}}
+                        </p>
 
                         <div id="accounts" style="margin-top: 1.2em" class="list-group">
-                            <a href="{{urllogout}}" class="list-group-item accountentry" style="padding-top: 30px; padding-bottom: 30px" >
+                            <!-- <a href="{{urllogout}}" class="list-group-item accountentry" style="padding-top: 30px; padding-bottom: 30px" >
                                 <p style="font-size: 120%; margin: 0px"><i class="fa fa-sign-out"></i> {{_.logoutandswitch}}</p>
+                            </a> -->
+                            <a href="{{urllogout}}" class="list-group-item accountentry">
+                                <div class="media">
+                                    <div class="media-left media-middle">
+                                        <img class="media-object" style="width: 64px; height: 64px" src="{{expected.photo}}" alt="profile photo">
+                                    </div>
+                                    <div class="media-body">
+                                        <i style="float: right; margin-top: 30px" class="fa fa-chevron-right fa-2x hideOnRemove"></i>
+                                        <!-- <i style="color: #6a6; float: right; margin-top: 30px; margin-right: 12px" class="fa fa-circle fa-2x"></i> -->
+                                        <p style="font-size: 85%; color: #933; margin: 0px"><i class="fa fa-sign-out"></i> {{_.logoutandinagain}}</p>
+                                        <p style="font-size: 140%; margin: 0px">{{expected.name}}</p>
+                                        <p style="font-size: 100%; margin: 0px; margin-top: -6px">{{expected.title}}</p>
+                                        <p style="font-size: 70%; color: #aaa; margin: 0px">{{expected.userids.0}}</p>
+                                    </div>
+                                </div>
                             </a>
                             <a href="{{urlcontinue}}" class="list-group-item accountentry">
-                                <i style="float: right; margin-top: 30px" class="fa fa-chevron-right fa-2x hideOnRemove"></i>
-                                <i style="color: #6a6; float: right; margin-top: 30px; margin-right: 12px" class="fa fa-circle fa-2x"></i>
-                                <p style="font-size: 85%; color: #393; margin: 0px">{{_.continueas}}</p>
-                                <p style="font-size: 140%; margin: 0px">{{current.name}}</p>
-                                <p style="font-size: 100%; margin: 0px; margin-top: -6px">{{current.title}}</p>
-                                <p style="font-size: 70%; color: #aaa; margin: 0px">{{current.userids.0}}</p>
+                                <div class="media">
+                                    <div class="media-left media-middle">
+                                        <img class="media-object" style="width: 64px; height: 64px" src="{{current.photo}}" alt="profile photo">
+                                    </div>
+                                    <div class="media-body">
+                                        <i style="float: right; margin-top: 30px" class="fa fa-chevron-right fa-2x hideOnRemove"></i>
+                                        <i style="color: #6a6; float: right; margin-top: 30px; margin-right: 12px" class="fa fa-circle fa-2x"></i>
+                                        <p style="font-size: 85%; color: #393; margin: 0px"> {{_.continueasloggedin}}</p>
+                                        <p style="font-size: 140%; margin: 0px">{{current.name}}</p>
+                                        <p style="font-size: 100%; margin: 0px; margin-top: -6px">{{current.title}}</p>
+                                        <p style="font-size: 70%; color: #aaa; margin: 0px">{{current.userids.0}}</p>
+                                    </div>
+                                </div>
                             </a>
                         </div>
-
                     </div><!-- column -->
-
                 </div><!-- row -->
+
 
             </div><!-- container -->
 
