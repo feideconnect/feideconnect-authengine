@@ -57,16 +57,6 @@ class Data {
         return $response;
     }
 
-    public static function scmp($a, $b) {
-
-
-        $ax = ($a["distance"] === null ? 9999 : $a["distance"]);
-        $bx = ($b["distance"] === null ? 9999 : $b["distance"]);
-
-
-        return ($ax < $bx) ? -1 : 1;
-    }
-
     public static function getOrgs() {
 
         $storage = StorageProvider::getStorage();
@@ -81,9 +71,6 @@ class Data {
             $di = $org->getOrgInfo();
             $data[] = $di;
         }
-
-        usort($data, ["\FeideConnect\Controllers\Data", "scmp"]);
-
 
         // echo '<pre>';
         // foreach($data as $d) {
