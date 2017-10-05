@@ -70,8 +70,6 @@ class Organization extends \FeideConnect\Data\Model {
         }
         $res["services"] = $prepared["services"];
 
-        $res["distance"] = null;
-
         return $res;
     }
 
