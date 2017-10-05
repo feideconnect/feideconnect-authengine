@@ -69,12 +69,6 @@ class Data {
 
     public static function getOrgs() {
 
-        $lat = $lon = null;
-        if (isset($_REQUEST['lat']) && is_numeric($_REQUEST['lat']) && isset($_REQUEST['lon']) && is_numeric($_REQUEST['lon'])) {
-            $lat = floatval($_REQUEST['lat']);
-            $lon = floatval($_REQUEST['lon']);
-        }
-
         $storage = StorageProvider::getStorage();
         $orgs = $storage->getOrgsByService('auth');
         $data = [];
@@ -84,7 +78,7 @@ class Data {
                 continue;
             }
             // if (!in_array($org->realm, $subscribers)) { continue; }
-            $di = $org->getOrgInfo($lat, $lon);
+            $di = $org->getOrgInfo();
             $data[] = $di;
         }
 
