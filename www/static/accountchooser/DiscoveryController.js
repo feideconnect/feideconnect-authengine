@@ -33,7 +33,7 @@ define(function(require, exports, module) {
             return 1;
         }
         return 0;
-    }
+    };
 
 
     var DiscoveryController = Controller.extend({
