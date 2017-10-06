@@ -14,14 +14,17 @@ define(function(require, exports, module) {
             this._super(a);
         },
         "getDistance": function(loc) {
-
-            if (this.hasOwnProperty("geo") && this.geo.hasOwnProperty("lat") && this.geo.hasOwnProperty("lon")) {
-                var dist = Utils.calculateDistance(loc.lat, loc.lon, this.geo.lat, this.geo.lon);
-                return dist;
+            var minDistance = 9999;
+            if (this.hasOwnProperty("uiinfo") && this.uiinfo.hasOwnProperty("geo")) {
+                for (var i = 0; i < this.uiinfo.geo.length; i++) {
+                    var geo = this.uiinfo.geo[i];
+                    var dist = Utils.calculateDistance(loc.lat, loc.lon, geo.lat, geo.lon);
+                    if (dist < minDistance) {
+                        minDistance = dist;
+                    }
+                }
             }
-
-            return 9999;
-
+            return minDistance;
         },
         "isType": function(type) {
             if (!this.type) {
