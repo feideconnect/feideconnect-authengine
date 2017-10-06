@@ -27,16 +27,6 @@ class URL {
     }
 
     /**
-     * Will return sp.example.org
-     */
-    public static function getSelfHost() {
-        $url = self::getBaseURL();
-        $start = strpos($url, '://') + 3;
-        $length = strcspn($url, '/:', $start);
-        return substr($url, $start, $length);
-    }
-
-    /**
      * Retrieve Host value from $_SERVER environment variables
      */
     private static function getServerHost() {
@@ -58,31 +48,21 @@ class URL {
         }
         return $currenthost;
     }
+
     /**
      * Will return https://sp.example.org[:PORT]
      */
     public static function selfURLhost() {
-        $url = self::getBaseURL();
-        $start = strpos($url, '://') + 3;
-        $length = strcspn($url, '/', $start) + $start;
-        return substr($url, 0, $length);
+        if (self::getServerHTTPS()) {
+            $protocol = 'https://';
+        } else {
+            $protocol = 'http://';
+        }
+        $hostname = self::getServerHost();
+        $port = self::getServerPort();
+        return $protocol.$hostname.$port;
     }
 
-    /**
-     * This function checks if we should set a secure cookie.
-     *
-     * @return TRUE if the cookie should be secure, FALSE otherwise.
-     */
-    public static function isHTTPS() {
-        $url = self::getBaseURL();
-        $end = strpos($url, '://');
-        $protocol = substr($url, 0, $end);
-        if ($protocol === 'https') {
-            return true;
-        } else {
-            return false;
-        }
-    }
     /**
      * retrieve HTTPS status from $_SERVER environment variables
      */
@@ -98,6 +78,7 @@ class URL {
         /* Otherwise, HTTPS will be a non-empty string. */
         return $_SERVER['HTTPS'] !== '';
     }
+
     /**
      * Retrieve port number from $_SERVER environment variables
      * return it as a string such as ":80" if different from
@@ -131,42 +112,6 @@ class URL {
             $path .= $_SERVER['PATH_INFO'];
         }
         return $path;
-    }
-
-    /**
-     * Will return https://sp.example.org/universities/ruc/baz/simplesaml/saml2/SSOService.php
-     */
-    public static function selfURLNoQuery() {
-
-        $selfURLhost = self::selfURLhost();
-        $selfURLhost .= self::selfPathNoQuery();
-        return $selfURLhost;
-
-    }
-    /**
-     * Will return sp.example.org/ssp/sp1
-     *
-     * Please note this function will return the base URL for the current
-     * SP, as defined in the global configuration.
-     */
-    public static function getSelfHostWithPath() {
-
-        $baseurl = explode("/", self::getBaseURL());
-        $elements = array_slice($baseurl, 3 - count($baseurl), count($baseurl) - 4);
-        $path = implode("/", $elements);
-        $selfhostwithpath = self::getSelfHost();
-        return $selfhostwithpath . "/" . $path;
-    }
-
-    /**
-     * Will return foo
-     */
-    public static function getFirstPathElement($trailingslash = true) {
-
-        if (preg_match('|^/(.*?)/|', $_SERVER['SCRIPT_NAME'], $matches)) {
-            return ($trailingslash ? '/' : '') . $matches[1];
-        }
-        return '';
     }
 
     public static function selfURL() {
@@ -210,42 +155,10 @@ class URL {
         return true;
     }
 
-    /**
-     * Retrieve and return the absolute base URL for the simpleSAMLphp installation.
-     *
-     * For example: https://idp.example.org/simplesaml/
-     *
-     * The URL will always end with a '/'.
-     *
-     * @return string  The absolute base URL for the simpleSAMLphp installation.
-     */
     public static function getBaseURL() {
-        // $globalConfig = SimpleSAML_Configuration::getInstance();
-        $baseURL = '/';
-
-        if (preg_match('#^https?://.*/$#D', $baseURL, $matches)) {
-            /* full URL in baseurlpath, override local server values */
-            return $baseURL;
-        } elseif (
-            (preg_match('#^/?([^/]?.*/)$#D', $baseURL, $matches)) ||
-            (preg_match('#^\*(.*)/$#D', $baseURL, $matches)) ||
-            ($baseURL === '')) {
-            /* get server values */
-            if (self::getServerHTTPS()) {
-                $protocol = 'https://';
-            } else {
-                $protocol = 'http://';
-            }
-            $hostname = self::getServerHost();
-            $port = self::getServerPort();
-            $path = '/';
-            return $protocol.$hostname.$port.$path;
-        } else {
-            throw new Exception('Invalid value of \'baseurl\' in '.
-                'config.php. Valid format is in the form: '.
-                '[(http|https)://(hostname|fqdn)[:port]]/[path/to/simplesaml/]. '.
-                'It must end with a \'/\'.');
-        }
+        $base = self::selfURLhost();
+        $path = '/';
+        return $base.$path;
     }
 
 
