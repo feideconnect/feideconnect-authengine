@@ -2,7 +2,6 @@
 
 namespace FeideConnect\Authentication;
 
-use FeideConnect\Exceptions\Exception;
 use \Imagick;
 
 /**
@@ -66,7 +65,7 @@ class AccountPhoto {
             $image->destroy();
 
             return $result;
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             return null;
         }
 
