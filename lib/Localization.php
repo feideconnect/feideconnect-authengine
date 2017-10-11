@@ -22,6 +22,7 @@ class Localization {
             $lang = Misc::getBrowserLanguage($availableLanguages);
             $dictionaryFile = Config::filepath('dictionaries/build/dictionary.' . $lang . '.json');
         } else {
+            $lang = 'en';
             $dictionaryFile = Config::filepath('dictionaries/dictionary.en.json');
         }
 
@@ -33,6 +34,7 @@ class Localization {
         if (empty(self::$dict)) {
             throw new \Exception('Dictionary file was empty or not properly formatted JSON');
         }
+        self::$dict['_lang'] = $lang;
         return self::$dict;
     }
 

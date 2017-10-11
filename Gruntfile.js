@@ -41,11 +41,9 @@ module.exports = function(grunt) {
 					langdict[key] = maindict[key];
 				}
 			}
-			langdict._lang = lang;
 			grunt.file.write("dictionaries/build/dictionary." + lang + ".json", JSON.stringify(langdict, undefined, 2));
 
 		}
-		maindict._lang = mainlang;
 		grunt.file.write("dictionaries/build/dictionary." + mainlang + ".json", JSON.stringify(maindict, undefined, 2));
 
 	});
