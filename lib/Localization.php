@@ -20,7 +20,7 @@ class Localization {
         if (Config::getValue('enableLocalization', false)) {
             $availableLanguages = Config::getValue('availableLanguages', ['en']);
             $lang = Misc::getBrowserLanguage($availableLanguages);
-            $dictionaryFile = Config::filepath('dictionaries/build/dictionary.' . $lang . '.json');
+            $dictionaryFile = Config::filepath('dictionaries/dictionary.' . $lang . '.json');
         } else {
             $lang = 'en';
             $dictionaryFile = Config::filepath('dictionaries/dictionary.en.json');
