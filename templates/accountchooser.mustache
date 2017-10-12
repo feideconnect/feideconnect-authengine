@@ -18,6 +18,7 @@
         <script type="text/javascript" src="/static/components/jquery/dist/jquery.min.js"></script>
         <script type="text/javascript" src="/static/components/bootstrap/dist/js/bootstrap.min.js"></script>
         <script type="text/javascript" src="/static/components/bootstrap/js/tooltip.js"></script>
+        <script type="text/javascript" src="/static/components/dustjs-linkedin/dist/dust-full.min.js"></script>
 
         <script type="text/javascript">
             var acrequest = {{{requestJSON}}};
@@ -33,15 +34,37 @@
         </script>
         <script data-main="static/accountchooser/main" src="/static/components/requirejs/require.js"></script>
 
+        <script type="text/dust" id="providerlist-template">
+        {#providers}
+            <a href="#" class="list-group-item idpentry {classes}" data-id="{id}" data-subid="{subid}" data-type="saml">
+                <div class="media"><div class="media-left media-middle">
+                        <img class="media-object" style="width: 48px; height: 48px" src="{logo}" alt="...">
+                    </div>
+                    <div class="media-body"><p>{title}</p></div>
+                </div>
+            </a>
+        {/providers}
+        {^providers}
+            <a class="list-group-item" id="noproviders" href="#"><p style="text-align: center">
+                No login providers from this country is accepted by the requesting application
+            </p></a>
+        {/providers}
+        {#hasMore}
+            <a class="list-group-item" id="actshowall" href="#">
+                <p style="text-align: center"><i class="fa fa-chevron-down"></i> {dict.showall} &nbsp; ({remaining} {dict.moreorgs})</p>
+            </a>
+        {/hasMore}
+
+        </script>
+
     </head>
 
     <body>
 
-
         <noscript>
             <div style="padding: 3em">
                 <h1>{{_.selectprovider}}</h1>
-                <p>(By turning on javascript support in your browser, you will gain an improved user experience)</p>
+                <p>(By turning on javascript support in your browser, you will get an improved user experience)</p>
 
                 <ul>
                     {{#noscriptentries}}
@@ -52,20 +75,15 @@
             </div>
         </noscript>
 
-
         <div class="container" style="margin-top: 1em" >
             <div id="langselector" style="float: right; font-size: 95%"></div>
             <div id="errorcontainer"></div>
         </div>
 
-
         {{>accounts}}
         {{>disco }}
 
-
-
         <input type="button" style="display: none" id="iloaded" />
-
 
     </body>
 

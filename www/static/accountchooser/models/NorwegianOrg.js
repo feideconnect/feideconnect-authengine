@@ -45,6 +45,16 @@ define(function(require, exports, module) {
             }
             return false;
         },
+        "getView": function(feideIdP) {
+            var view = {
+                id: feideIdP,
+                subid: this.id,
+                classes: "",
+                logo: "https://api.dataporten.no/orgs/fc:org:" + this.id + "/logo",
+                title: this.title
+            };
+            return view;
+        },
         "getHTML": function(feideIdP) {
 
             var classes = '';

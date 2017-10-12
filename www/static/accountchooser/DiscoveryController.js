@@ -23,6 +23,7 @@ define(function(require, exports, module) {
     var DiscoveryFeedLoader = require('./DiscoveryFeedLoader');
     var Provider = require('./models/Provider');
     var NorwegianOrg = require('./models/NorwegianOrg');
+    var ProviderListView = require('./views/ProviderListView');
     var Waiter = require('./Waiter');
 
     var sortByTitle  = function(a, b) {
@@ -39,6 +40,8 @@ define(function(require, exports, module) {
     var DiscoveryController = Controller.extend({
         "init": function(app) {
             var that = this;
+            console.log("App", app)
+            this.providerListView = new ProviderListView(app);
 
             this.app = app;
             this.feideid = null; // Will be set in initLoad, loading from app config.
@@ -121,6 +124,7 @@ define(function(require, exports, module) {
 
             $("body").on("click", "#actshowall", function(e) {
                 e.preventDefault(); e.stopPropagation();
+                console.error("YAY, Draw all")
 
                 that.maxshow = 9999;
                 that.drawData();
@@ -226,7 +230,6 @@ define(function(require, exports, module) {
             // console.log(this.countries);
             $("#selectedcountry").empty().append('<img style="margin-top: -3px; margin-right: 5px" src="/static/media/flag/' + c + '.png"> ' + this.app.dictionary['c' + c] +' <span class="caret"></span>');
         },
-
 
         "activate": function() {
             if (!this.isLoaded) {
@@ -462,32 +465,20 @@ define(function(require, exports, module) {
                 showit.sort(sf);
             }
 
-            for (i = 0; i < showit.length; i++) {
+            this.providerListView.update(showit, this.maxshow)
+                .then(function(html) {
+                    console.log("output html is ", html)
+                    $("#idplist").empty().append(html);
+                })
+                .catch(function(err) {
+                    console.error("Error processing template for providerListView", err);
+                })
 
-                if (c > (this.maxshow - 1)) {
-                    var remaining = it.length - missed - c;
-
-                    if (remaining > 0) {
-                        txt += '<a class="list-group-item" id="actshowall" href="#"><p style="text-align: center"><i class="fa fa-chevron-down"></i> ' +
-                          this.app.dictionary.showall + '  &nbsp;' +
-                            '('  + remaining + ' ' + this.app.dictionary.moreorgs +')</p></a>';
-
-                    }
-                    break;
-                }
-                c++;
-                txt += showit[i].getHTML(that.app.config.feideIdP);
-            }
-
-            if (cc === 0 && this.country === 'no') {
+            if (showit.length === 0 && this.country === 'no') {
                 $(".orgchoices").hide();
                 $(".altchoices").removeClass("col-md-4").addClass("col-md-12");
-            } else if (cc === 0) {
-                txt += '<a class="list-group-item" id="actshowall" href="#"><p style="text-align: center">' +
-                    'No login providers from this country is accepted by the requesting application';
-                    + '</p></a>';
             }
-            $("#idplist").empty().append(txt);
+            // $("#idplist").empty().append(txt);
 
             $("#usersearch").focus();
 

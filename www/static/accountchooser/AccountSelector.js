@@ -31,7 +31,6 @@ define(function(require, exports, module) {
                     return;
                 }
 
-
                 // console.log("Selected to login using", userid, that.store.accts[userid]);
                 that.app.disco.go(that.store.accts[userid]);
 
