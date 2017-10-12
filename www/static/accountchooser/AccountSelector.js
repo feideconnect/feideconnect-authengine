@@ -8,7 +8,7 @@ define(function(require, exports, module) {
 
     var Utils = require('./Utils');
 
-
+    var AccountListView = require('./views/AccountListView');
 
     var AccountSelector = Class.extend({
 
@@ -16,11 +16,11 @@ define(function(require, exports, module) {
             var that = this;
             this.store = store;
             this.app = app;
+            this.accountListView = new AccountListView(app);
 
             $("#accounts").on("click", ".accountentry", function(e) {
                 e.preventDefault();
                 var userid = $(e.currentTarget).data("userid");
-
 
                 if ($(e.currentTarget).hasClass("disabled")) {
                     return;
@@ -33,12 +33,12 @@ define(function(require, exports, module) {
 
                 // console.log("Selected to login using", userid, that.store.accts[userid]);
                 that.app.disco.go(that.store.accts[userid]);
-
             });
             $("#accounts").on("click", ".actRemove", function(e) {
                 e.preventDefault();
                 e.stopPropagation();
                 var userid = $(e.currentTarget).closest('.accountentry').data("userid");
+                // console.log("About to remove", userid);
                 that.store.removeAccountTag(userid);
                 if (that.store.hasAny()) {
                     that.draw();
@@ -46,10 +46,6 @@ define(function(require, exports, module) {
                     $("#paneselector").hide();
                     that.app.disco.activate();
                 }
-
-
-                // that.app.disco.go(that.store.accts[userid]);
-                // console.log("About to remove", userid);
             });
 
 
@@ -177,14 +173,17 @@ define(function(require, exports, module) {
 
         "draw": function() {
             var txt = '';
-
             var def = this.app.getAuthProviderDef();
             var allowed;
+
+            var data = {
+                dict: this.app.dictionary,
+                accounts: []
+            }
 
             for (var userid in this.store.accts) {
 
                 var a = this.store.accts[userid];
-
                 allowed = true;
                 if (a.hasOwnProperty('def')) {
                     // console.error("accounts draw", a);
@@ -197,46 +196,24 @@ define(function(require, exports, module) {
                     classes.push('disabled');
                 }
 
-                var isActive = this.isActiveAccount(a);
+                var dataEntry = $.extend({}, a);
+                dataEntry.isActive = this.isActiveAccount(a);
+                dataEntry.classes = classes.join(' ');
+                dataEntry.userid = userid;
+                data.accounts.push(dataEntry);
 
-                // console.log("Processing", a);
-                // console.log("Active accounts", window.activeAccounts);
-
-                var txtTitle = (a.title !== undefined ? '<p style="font-size: 100%; margin: 0px; margin-top: -6px">' + Utils.quoteattr(a.title) + '</p>' : '');
-                var txtCountry = '';
-
-                if (a.country) {
-                    var flag = '<img style="margin-top: -4px; margin-right: 5px" src="/static/media/flag/' + a.country.code + '.png">';
-                    txtCountry = '<p style="font-size: 100%; margin: 0px; margin-top: -6px">' + flag + '' + Utils.quoteattr(a.country.title) + '</p>';
-                }
-
-                txt += '<a href="#" class="' + classes.join(' ') + '" data-userid="' + Utils.quoteattr(userid) + '" style="">' +
-                    '<div class="media"><div class="media-left media-middle">' +
-                    '<img class="media-object" style="width: 64px; height: 64px" src="' + Utils.quoteattr(a.photo) + '" alt="...">' +
-                    '</div>' +
-                    '<div class="media-body">' +
-                    '<p class="showOnRemove" style=""><button class="btn btn-danger actRemove" style="float: right">' + this.app.dictionary.remove + '</button></p>' +
-
-                    '<i style="float: right; margin-top: 20px" class="fa fa-chevron-right fa-2x hideOnRemove"></i>' +
-                    (isActive ? '<i style="color: #6a6; float: right; margin-top: 20px; margin-right: 12px" class="fa fa-circle fa-2x"></i>' : '') +
-                    '<p style="font-size: 140%; margin: 0px">' + Utils.quoteattr(a.name) + '</p>' +
-                    txtTitle +
-                    txtCountry +
-                    '<p style="font-size: 70%; color: #aaa; margin: 0px">' + Utils.quoteattr(userid) + '</p>' +
-                    '</div>' +
-                    '</div>' +
-                    '</a>';
             }
 
-            txt += '<div class="list-group-item">' +
-                '<p style="text-align: right; font-size: 80%; marging-top: 2em">' +
-                '   <a id="removeacct" class="hideOnRemove" href="" style="color: #888; "><i class="fa fa-times"></i>' + this.app.dictionary.removeacct + ' </a>' +
-                '   <a class="showOnRemove" id="removedone" href="" style="color: #888"><i class="fa fa-check"></i> ' + this.app.dictionary.done + '</a>' +
-                '</p>' +
-                '<p style="text-align: center; marging-top: 1em"><a id="altlogin" href="">' + this.app.dictionary.oranotheraccount + '</a></p>' +
-                '</div>';
+            this.accountListView.update(data)
+                .then(function(html) {
+                    console.log("output html is ", html)
+                    $("#accounts").empty().append(html);
+                })
+                .catch(function(err) {
+                    console.error("Error processing template for accountListView", err);
+                })
 
-            $("#accounts").empty().append(txt);
+            // $("#accounts").empty().append(txt);
 
         }
 
