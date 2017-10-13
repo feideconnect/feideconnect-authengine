@@ -56,7 +56,7 @@ class UnexpectedUserUI {
         ];
         $data["current"]["photo"] = $this->authenticatedAccount->getPhoto();
 
-        // var_dump($data);
+
         if (!isset($data["expected"]["userids"])) {
             $data["expected"]["userids"] = [];
         }

@@ -17,7 +17,6 @@ class Authenticator {
 
     protected $authSources, $authTypes, $clientid, $activeAuthType;
 
-
     public function __construct() {
 
         $this->authTypes = Config::getValue("authTypes");

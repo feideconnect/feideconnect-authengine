@@ -150,8 +150,8 @@ define(function(require, exports, module) {
             var UUIDregex = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
 
             if (!UUIDregex.test(this.request.clientid)) {
-                console.error("Invalid Client ID. (Must be an  UUID format)");
-                throw new Error("Invalid Client ID. (Must be an  UUID format)");
+                console.error("Invalid Client ID. (Must be using UUID format)");
+                throw new Error("Invalid Client ID. (Must be using UUID format)");
             }
 
             return new Promise(function(resolve, reject) {
@@ -177,9 +177,7 @@ define(function(require, exports, module) {
         },
 
         "drawClientInfo": function() {
-            // console.error("Draw");
             var logourl = this.getClientsURL('/clients/' + this.client.id + '/logo');
-
             $(".clientinfo").show();
             $(".clientname").text(this.client.name);
             $(".clientlogo").empty().append('<img style="max-height: 64px; max-width: 64px" src="' + logourl + '" />');
@@ -189,7 +187,6 @@ define(function(require, exports, module) {
             var that = this;
 
             return new Promise(function(resolve, reject) {
-
                 // console.error("About to load config");
                 $.getJSON('/accountchooser/config',function(data) {
                     that.config = data;
@@ -199,7 +196,6 @@ define(function(require, exports, module) {
                 });
 
             });
-
         },
 
 
@@ -208,7 +204,6 @@ define(function(require, exports, module) {
 
             return new Promise(function(resolve, reject) {
 
-                // console.error("About to load dictionary");
                 $.getJSON('/dictionary',function(data) {
                     that.dictionary = data;
                     // console.error("Dictionary was loaded", that.dictionary);

@@ -40,7 +40,6 @@ define(function(require, exports, module) {
     var DiscoveryController = Controller.extend({
         "init": function(app) {
             var that = this;
-            console.log("App", app)
             this.providerListView = new ProviderListView(app);
 
             this.app = app;
@@ -395,8 +394,6 @@ define(function(require, exports, module) {
             // console.error("Location is ", geo);
 
             return function(a, b) {
-
-
 
                 var dista = a.getDistance(geo);
                 var distb = b.getDistance(geo);
