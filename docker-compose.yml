@@ -5,7 +5,7 @@ services:
     ports:
       - "9042"
   dataportenschemas:
-    image: uninett-docker-uninett.bintray.io/feideconnect/dataportenschemas
+    image: registry.uninett.no/public/dataporten-cassandra-schemas
     links:
       - cassandra:cassandra
     environment:
@@ -14,7 +14,7 @@ services:
       - TESTDATA=true
     command: up
   metadataschemas:
-    image: uninett-docker-uninett.bintray.io/feideconnect/dataportenschemas
+    image: registry.uninett.no/public/dataporten-cassandra-schemas
     links:
       - cassandra:cassandra
     environment:

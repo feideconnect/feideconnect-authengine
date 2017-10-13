@@ -2,7 +2,6 @@
 
 namespace FeideConnect\Authentication;
 
-use FeideConnect\Exceptions\Exception;
 use \Imagick;
 
 /**
@@ -10,7 +9,6 @@ use \Imagick;
  * You will be able to get a raw hash and a generated resized profile photo on request.
  */
 class AccountPhoto {
-
 
     public $raw = null;
     protected $hash = null;
@@ -28,15 +26,7 @@ class AccountPhoto {
     }
 
     public function getPhoto() {
-
-
         try {
-            // $fileraw = tempnam(sys_get_temp_dir(), 'FeideConnect-PP-Raw');
-            // $filegen = tempnam(sys_get_temp_dir(), 'FeideConnect-PP-Gen');
-            // file_put_contents($fileraw, base64_decode($this->raw));
-            // $image = new \Imagick($fileraw);
-
-
             $image = new Imagick();
             $image->readImageBlob(base64_decode($this->raw));
 
@@ -57,8 +47,6 @@ class AccountPhoto {
             $image->setImageCompressionQuality(80);
             // Strip out unneeded meta data
             $image->stripImage();
-            // Writes resultant image to output directory
-            // $image->writeImage('output_image_filename_and_location');
 
             $result = (string)$image;
 
@@ -66,12 +54,8 @@ class AccountPhoto {
             $image->destroy();
 
             return $result;
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             return null;
         }
-
-
     }
-
-
 }

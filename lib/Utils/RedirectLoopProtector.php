@@ -26,7 +26,7 @@ class RedirectLoopProtector {
         }
         $trail = array_slice($trail, 1-(self::$length));
         array_push($trail, time());
-        setcookie("RLPTRAIL", json_encode($trail), time()+180);
+        setcookie("RLPTRAIL", json_encode($trail), time()+180, "", "", true, true);
 
         // The resetrlp parameter is set to be an timestamp of when user manually accepted redirect warning
         if (isset($_REQUEST['resetrlp'])) {

@@ -270,8 +270,7 @@ define(function(require, exports, module) {
 
         "loadData": function() {
             var that = this;
-            var loc = this.location.getLocation();
-            $.getJSON('/orgs?lat=' + loc.lat + '&lon=' + loc.lon + '', function(orgs) {
+            $.getJSON('/orgs', function(orgs) {
 
                 that.orgs = [];
                 for(var i = 0; i < orgs.length; i++) {
@@ -457,10 +456,8 @@ define(function(require, exports, module) {
 
             }
 
-            if (this.country !== 'no') {
-                var sf = this.getCompareDistanceFunc();
-                showit.sort(sf);
-            }
+            var sf = this.getCompareDistanceFunc();
+            showit.sort(sf);
 
             this.providerListView.update(showit, this.maxshow)
                 .then(function(html) {

@@ -23,7 +23,7 @@ class GeoLocation {
 
 
         if (self::$reader === null) {
-            self::$reader = new \GeoIp2\Database\Reader($geoipfile); // 'var/GeoIP2-City.mmdb');
+            self::$reader = new \GeoIp2\Database\Reader($geoipfile);
         }
 
     }
@@ -62,24 +62,12 @@ class GeoLocation {
                 'title' => $title,
                 'country' => $code,
             );
-            // return $record;
             return $geo;
-            // print_r($record->country->isoCode); exit;
-
-            // $obj = array();
-            // $obj['lat'] = $record->location->latitude;
-            // $obj['lon'] = $record->location->longitude;
-            // $obj['tz'] = $record->location->timeZone;
-            // $tz = $obj['tz'];
 
         } catch (\Exception $e) {
-            // $tz = 'Europe/Amsterdam';
             error_log("Error looking up GeoIP for address: " . $ip);
         }
         return null;
-
-
-        return ["file" => $this->file];
     }
 
 }

@@ -57,23 +57,7 @@ class Data {
         return $response;
     }
 
-    public static function scmp($a, $b) {
-
-
-        $ax = ($a["distance"] === null ? 9999 : $a["distance"]);
-        $bx = ($b["distance"] === null ? 9999 : $b["distance"]);
-
-
-        return ($ax < $bx) ? -1 : 1;
-    }
-
     public static function getOrgs() {
-
-        $lat = $lon = null;
-        if (isset($_REQUEST['lat']) && is_numeric($_REQUEST['lat']) && isset($_REQUEST['lon']) && is_numeric($_REQUEST['lon'])) {
-            $lat = floatval($_REQUEST['lat']);
-            $lon = floatval($_REQUEST['lon']);
-        }
 
         $storage = StorageProvider::getStorage();
         $orgs = $storage->getOrgsByService('auth');
@@ -84,12 +68,9 @@ class Data {
                 continue;
             }
             // if (!in_array($org->realm, $subscribers)) { continue; }
-            $di = $org->getOrgInfo($lat, $lon);
+            $di = $org->getOrgInfo();
             $data[] = $di;
         }
-
-        usort($data, ["\FeideConnect\Controllers\Data", "scmp"]);
-
 
         // echo '<pre>';
         // foreach($data as $d) {

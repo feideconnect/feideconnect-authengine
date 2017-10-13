@@ -52,35 +52,12 @@ class Organization extends \FeideConnect\Data\Model {
 
     }
 
-    public function distance($lat, $lon) {
-
-        if (!isset($this->uiinfo)) {
-            return null;
-        }
-        if (!isset($this->uiinfo["geo"])) {
-            return null;
-        }
-        if (!is_array($this->uiinfo["geo"])) {
-            return null;
-        }
-
-        $distance = 9999;
-        foreach ($this->uiinfo["geo"] as $geoitem) {
-            $dc = Misc::distance($lat, $lon, $geoitem["lat"], $geoitem["lon"]);
-            if ($dc < $distance) {
-                $distance = $dc;
-            }
-        }
-        return $distance;
-    }
-
-
     public function getName() {
         $lang = Misc::getBrowserLanguage(array_keys($this->name));
         return $this->name[$lang];
     }
 
-    public function getOrgInfo($lat = null, $lon = null) {
+    public function getOrgInfo() {
 
         $res = [];
         $prepared = parent::getAsArray();
@@ -92,12 +69,6 @@ class Organization extends \FeideConnect\Data\Model {
             $res["uiinfo"] = $prepared["uiinfo"];
         }
         $res["services"] = $prepared["services"];
-
-        if ($lat !== null && $lon !== null) {
-            $res["distance"] = $this->distance($lat, $lon);
-        } else {
-            $res["distance"] = null;
-        }
 
         return $res;
     }
