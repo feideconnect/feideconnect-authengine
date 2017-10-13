@@ -17,13 +17,20 @@ define(function(require, exports, module) {
      */
     var App = Controller.extend({
         "init": function() {
-            var that = this;
 
-            that.config = null;
+            this.dictionary = window.dictionary;
+            this.config = window.config;
+            if (!this.config) {
+                console.error("Could not get configuration. Was missing from mustache tempalte by a mistake.");
+            }
             this.client = null;
-
             this.lang = new LanguageSelector($("#langselector"), true);
+            this.lang.setConfig(this.config);
+            this.lang.initLoad(this.dictionary._lang);
+
+
             this.disco = new DiscoveryController(this);
+            this.disco.setFeideIdP(this.config.feideIdP);
             this.accountstore = new AccountStore();
             this.selector = new AccountSelector(this, this.accountstore);
 
@@ -35,20 +42,10 @@ define(function(require, exports, module) {
         "initLoad": function() {
 
             var that = this;
-            return Promise.resolve()
-                .then(function() {
-                    return that.loadConfig();
-                })
-                .then(function() {
-                    that.disco.setFeideIdP(that.config.feideIdP);
-                    that.lang.setConfig(that.config);
-                    return Promise.all([
-                        that.loadClientInfo(),
-                        that.loadDictionary()
-                    ]);
-                })
+            return that.loadClientInfo()
                 .then(function() {
                     // console.log("HAS ANY ACTIVE?", that.selector.hasAnyActive() );
+                    // return that.disco.activate();
                     if (that.selector.hasAnyActive())  {
                         that.selector.activate();
                     } else {
@@ -181,41 +178,7 @@ define(function(require, exports, module) {
             $(".clientinfo").show();
             $(".clientname").text(this.client.name);
             $(".clientlogo").empty().append('<img style="max-height: 64px; max-width: 64px" src="' + logourl + '" />');
-        },
-
-        "loadConfig": function() {
-            var that = this;
-
-            return new Promise(function(resolve, reject) {
-                // console.error("About to load config");
-                $.getJSON('/accountchooser/config',function(data) {
-                    that.config = data;
-                    // console.error("Config was loaded", that.config);
-                    // that.initAfterLoad();
-                    resolve();
-                });
-
-            });
-        },
-
-
-        "loadDictionary": function() {
-            var that = this;
-
-            return new Promise(function(resolve, reject) {
-
-                $.getJSON('/dictionary',function(data) {
-                    that.dictionary = data;
-                    // console.error("Dictionary was loaded", that.dictionary);
-                    // that.initAfterLoad();
-                    that.lang.initLoad(data._lang);
-                    resolve();
-                });
-
-            });
-
         }
-
 
     });
     return App;

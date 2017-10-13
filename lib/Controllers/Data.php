@@ -24,7 +24,6 @@ class Data {
         }
 
         $user = $storage->getUserByUserIDsec($useridstr);
-
         $response = new ImageResponse();
 
         if (!empty($user)) {
@@ -38,7 +37,6 @@ class Data {
         } else {
             $response->setImageFile('www/static/media/default-profile.jpg', 'jpeg');
         }
-
 
         return $response;
     }
@@ -81,35 +79,27 @@ class Data {
         return new JSONResponse($data);
     }
 
-
     public static function getDictionary() {
-
+        // @deprecated This endpoint was introduced as deprecated in the branch topic-improved-userflow
+        // in October 2017, when the config was preloaded in the HTML template rather than loaded through XHR.
         return new JSONResponse(Localization::getDictionary());
-
     }
 
     public static function accountchooserConfig() {
-
+        // @deprecated This endpoint was introduced as deprecated in the branch topic-improved-userflow
+        // in October 2017, when the config was preloaded in the HTML template rather than loaded through XHR.
         $config = [];
         $config['feideIdP'] = Config::getValue('feideIdP');
         $config['endpoints'] = Config::getValue('endpoints');
         $config['langCookieDomain'] = Config::getValue('langCookieDomain', '.dataporten.no');
-
-        // $ldata = Localization::localizeList($data, ['title', 'descr']);
         return new JSONResponse($config);
     }
 
-
     public static function accountchooserExtra() {
-
-
         $data = Config::getValue('disco');
         $ldata = Localization::localizeList($data, ['title', 'descr']);
         return new JSONResponse($ldata);
-
     }
-
-
 
 
 }

@@ -15,6 +15,15 @@ use FeideConnect\Exceptions\Exception;
 
 class AccountChooser {
 
+    public static function getConfig() {
+        $config = [];
+        $config['feideIdP'] = Config::getValue('feideIdP');
+        $config['endpoints'] = Config::getValue('endpoints');
+        $config['langCookieDomain'] = Config::getValue('langCookieDomain', '.dataporten.no');
+        return $config;
+    }
+
+
 
     public static function process() {
 
@@ -79,6 +88,8 @@ class AccountChooser {
         $data["noscriptentries"] = $noscriptdata;
         $data["activeAccounts"] = $accounts;
         $data["activeAccountsJSON"] = json_encode($accounts);
+        $data["configuration"] = json_encode(self::getConfig());
+        $data["dictionary"] = json_encode(Localization::getDictionary());
 
         $replacements = [
             "CLIENT" => '<strong><span class="clientname"></span></strong>',
