@@ -7,10 +7,12 @@ use FeideConnect\HTTP\Redirect;
 use FeideConnect\HTTP\TemplatedHTMLResponse;
 use FeideConnect\HTTP\LocalizedTemplatedHTMLResponse;
 use FeideConnect\Authentication\Authenticator;
+use FeideConnect\Data\StorageProvider;
 use FeideConnect\Config;
 use FeideConnect\GeoLocation;
 use FeideConnect\Localization;
 use FeideConnect\Utils\URL;
+use FeideConnect\Utils\Validator;
 use FeideConnect\Exceptions\Exception;
 
 class AccountChooser {
@@ -27,6 +29,7 @@ class AccountChooser {
 
     public static function process() {
 
+        $storage = StorageProvider::getStorage();
         $auth = new Authenticator();
         $accounts = $auth->getAllAccountsVisualTags();
 
@@ -90,6 +93,14 @@ class AccountChooser {
         $data["activeAccountsJSON"] = json_encode($accounts);
         $data["configuration"] = json_encode(self::getConfig());
         $data["dictionary"] = json_encode(Localization::getDictionary());
+        $data["client"] = json_encode(null);
+
+        $clientid = null;
+        if (isset($request['clientid']) && Validator::validateUUID($request['clientid'])) {
+            $clientid = $request['clientid'];
+            $client = $storage->getClient($clientid);
+            $data["client"] = json_encode($client->getSimpleView());
+        }
 
         $replacements = [
             "CLIENT" => '<strong><span class="clientname"></span></strong>',

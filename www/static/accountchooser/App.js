@@ -20,14 +20,17 @@ define(function(require, exports, module) {
 
             this.dictionary = window.dictionary;
             this.config = window.config;
+            this.client = window.client;
             if (!this.config) {
                 console.error("Could not get configuration. Was missing from mustache tempalte by a mistake.");
             }
-            this.client = null;
             this.lang = new LanguageSelector($("#langselector"), true);
             this.lang.setConfig(this.config);
             this.lang.initLoad(this.dictionary._lang);
 
+            if (this.client) {
+                this.drawClientInfo();
+            }
 
             this.disco = new DiscoveryController(this);
             this.disco.setFeideIdP(this.config.feideIdP);
@@ -42,7 +45,7 @@ define(function(require, exports, module) {
         "initLoad": function() {
 
             var that = this;
-            return that.loadClientInfo()
+            return Promise.resolve()
                 .then(function() {
                     // console.log("HAS ANY ACTIVE?", that.selector.hasAnyActive() );
                     // return that.disco.activate();
@@ -132,45 +135,6 @@ define(function(require, exports, module) {
 
         "getClientsURL": function(url) {
             return this.config.endpoints.clientadm + url;
-        },
-
-        "loadClientInfo": function() {
-            var that = this;
-            // console.log("Loading client info", this.request);
-
-            // console.error("Draw");
-            //
-            if (!this.request.clientid) {
-                return Promise.resolve();
-            }
-
-            var UUIDregex = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
-
-            if (!UUIDregex.test(this.request.clientid)) {
-                console.error("Invalid Client ID. (Must be using UUID format)");
-                throw new Error("Invalid Client ID. (Must be using UUID format)");
-            }
-
-            return new Promise(function(resolve, reject) {
-
-                // console.error("About to load config");
-                var url = that.getClientsURL('/clients/') + that.request.clientid;
-                // console.log("Contacting url", url);
-                $.getJSON(url,function(data) {
-
-                    // console.error("Got clientinfo data:", data);
-                    that.client = data;
-                    that.drawClientInfo();
-
-                    // console.log("Loading client info", this.request);
-                    resolve();
-                }).fail(function() {
-                  console.log("Error loading client info for client " + that.request.clientid);
-                  that.client = {};
-                  resolve();
-                })
-
-            });
         },
 
         "drawClientInfo": function() {
