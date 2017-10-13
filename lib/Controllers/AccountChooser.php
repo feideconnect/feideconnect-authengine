@@ -83,7 +83,10 @@ class AccountChooser {
         $replacements = [
             "CLIENT" => '<strong><span class="clientname"></span></strong>',
         ];
-        // echo '<pre>'; print_r($data); exit;
+
+        if (isset($_REQUEST['debug'])) {
+            return (new \FeideConnect\HTTP\JSONResponse($data))->setCORS(false);
+        }
 
         return (new LocalizedTemplatedHTMLResponse('accountchooser'))->setReplacements(['tologin'], $replacements)->setData($data);
 
