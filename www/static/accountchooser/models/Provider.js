@@ -53,7 +53,7 @@ define(function(require, exports, module) {
         },
 
         "getHTML": function() {
-            // console.log("This", this);
+            console.error("Provider.getHTML() DEPRECATED");
             var txt = '';
             var datastr = 'data-id="' + Utils.quoteattr(this.entityID) + '" data-type="saml"';
             txt += '<a href="#" class="list-group-item idpentry" ' + datastr + '>' +

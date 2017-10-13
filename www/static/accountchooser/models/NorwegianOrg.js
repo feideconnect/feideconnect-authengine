@@ -60,6 +60,8 @@ define(function(require, exports, module) {
         },
         "getHTML": function(feideIdP) {
 
+            alert("getHTML() in use. This is deprecated");
+            return '';
             var classes = '';
             if (!this.isEnabled()) {
                 classes += ' disabled';
