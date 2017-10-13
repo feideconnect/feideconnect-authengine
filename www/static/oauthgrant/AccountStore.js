@@ -72,6 +72,7 @@ define(function(require, exports, module) {
         }
 
     });
+    window.store = new AccountStore();
     return AccountStore;
 
 
