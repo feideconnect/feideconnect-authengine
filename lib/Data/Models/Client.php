@@ -85,4 +85,16 @@ class Client extends \FeideConnect\Data\Model {
     public function toLog() {
         return $this->getAsArrayLimited(["id", "name"]);
     }
+
+    // The simple view returns the most important properties as an assoc array,
+    // as needed by in example the accountchooser page.
+    public function getSimpleView() {
+        $data = [
+            "id" => $this->id,
+            "name" => $this->name,
+            "authproviders" => $this->authproviders,
+        ];
+        return $data;
+    }
+
 }
