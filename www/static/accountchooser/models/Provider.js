@@ -8,6 +8,11 @@ define(function(require, exports, module) {
 
     var Provider = Model.extend({
 
+        "init": function(a) {
+            // console.log("New SAML provider");
+            // console.log(JSON.stringify(a, undefined, 2));
+            this._super(a);
+        },
         "getDistance": function(loc) {
 
             // We cache the distance, but only use the cache when we are sure that the distanceFrom is the same.
@@ -23,8 +28,22 @@ define(function(require, exports, module) {
                 this.distance = 9999;
             }
 
+            var minDistance = 9999;
+            if (this.hasOwnProperty("geo") && this.geo.length) {
+                for (var i = 0; i < this.geo.length; i++) {
+                    var geo = this.geo[i];
+                    var dist = Utils.calculateDistance(loc.lat, loc.lon, geo.lat, geo.lon);
+                    if (dist < minDistance) {
+                        minDistance = dist;
+                    }
+                }
+            }
+            this.distance = minDistance;
             this.distanceFrom = cacheStr;
             return this.distance;
+        },
+        "matchesActiveAccount": function(a) {
+            return false;
         },
 
         "matchType": function(type) {

@@ -2,30 +2,28 @@ define(function(require, exports, module) {
     "use strict";
 
     var
-        Model = require('./Model'),
+        Provider = require('./Provider'),
         Utils = require('../Utils')
         ;
 
-
-
-    var NorwegianOrg = Model.extend({
-        "init": function(a) {
+    var NorwegianOrg = Provider.extend({
+        "init": function(a, feideIdP) {
             a.country = 'no';
+
+            // console.log("New Feide organization");
+            // console.log(JSON.stringify(a, undefined, 2));
+
+            if (a.uiinfo && a.uiinfo.geo) {
+                a.geo = a.uiinfo.geo;
+                delete a.uiinfo;
+            }
+
+            a.subid = a.id;
+            a.id = feideIdP;
+
             this._super(a);
         },
-        "getDistance": function(loc) {
-            var minDistance = 9999;
-            if (this.hasOwnProperty("uiinfo") && this.uiinfo.hasOwnProperty("geo")) {
-                for (var i = 0; i < this.uiinfo.geo.length; i++) {
-                    var geo = this.uiinfo.geo[i];
-                    var dist = Utils.calculateDistance(loc.lat, loc.lon, geo.lat, geo.lon);
-                    if (dist < minDistance) {
-                        minDistance = dist;
-                    }
-                }
-            }
-            return minDistance;
-        },
+
         "isType": function(type) {
             if (!this.type) {
                 return false;
@@ -48,13 +46,14 @@ define(function(require, exports, module) {
             }
             return false;
         },
-        "getView": function(feideIdP) {
+        "getView": function() {
             var view = {
-                id: feideIdP,
-                subid: this.id,
+                id: this.id,
+                subid: this.subid,
                 classes: "",
-                logo: "https://api.dataporten.no/orgs/fc:org:" + this.id + "/logo",
-                title: this.title
+                logo: "https://api.dataporten.no/orgs/fc:org:" + this.subid + "/logo",
+                title: this.title,
+                distance: this.distance,
             };
             return view;
         },
