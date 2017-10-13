@@ -33,7 +33,6 @@ define(function(require, exports, module) {
             }
 
             this.disco = new DiscoveryController(this);
-            this.disco.setFeideIdP(this.config.feideIdP);
             this.accountstore = new AccountStore();
             this.selector = new AccountSelector(this, this.accountstore);
 

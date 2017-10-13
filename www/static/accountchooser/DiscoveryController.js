@@ -43,7 +43,7 @@ define(function(require, exports, module) {
             this.providerListView = new ProviderListView(app);
 
             this.app = app;
-            this.feideid = null; // Will be set in initLoad, loading from app config.
+            this.feideid = app.config.feideIdP; // Will be set in initLoad, loading from app config.
             this.initialized = false;
             this.country = 'no';
             this.countrylist = [
@@ -218,11 +218,6 @@ define(function(require, exports, module) {
 
         },
 
-
-        "setFeideIdP": function(idp) {
-            this.feideid = idp;
-        },
-
         "updateCurrentCountry": function(c) {
             // console.log("Selected country is " + c);
             this.country = c;
@@ -274,7 +269,7 @@ define(function(require, exports, module) {
 
                 that.orgs = [];
                 for(var i = 0; i < orgs.length; i++) {
-                    that.orgs.push(new NorwegianOrg(orgs[i]));
+                    that.orgs.push(new NorwegianOrg(orgs[i], that.feideid));
                 }
 
                 that.drawData();
