@@ -108,7 +108,6 @@ define(function(require, exports, module) {
                 if (this.client.authproviders && this.client.authproviders !== null) {
 
                     p = this.client.authproviders;
-                    // console.log("P is ", p);
                     for(var i = 0; i < p.length; i++) {
                         pp = p[i].split('|');
                         this.authproviders.push(pp);

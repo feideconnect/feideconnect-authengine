@@ -45,6 +45,7 @@ define(function(require, exports, module) {
             this.app = app;
             this.feideid = app.config.feideIdP; // Will be set in initLoad, loading from app config.
             this.initialized = false;
+            this.activeTypes = null;
             this.country = 'no';
             this.countrylist = [
                 "am",
@@ -123,8 +124,6 @@ define(function(require, exports, module) {
 
             $("body").on("click", "#actshowall", function(e) {
                 e.preventDefault(); e.stopPropagation();
-                console.error("YAY, Draw all")
-
                 that.maxshow = 9999;
                 that.drawData();
             });
@@ -167,6 +166,14 @@ define(function(require, exports, module) {
                 var type = t.data("type");
                 var id = t.data("id");
                 var subid = t.data("subid");
+                var userid = t.data("userid");
+                var logout = t.data("logout");
+
+                // console.error("Classes", t.hasClass("hasactive"), t)
+                if (t.hasClass("hasactive")) {
+                    t.closest(".idplist").toggleClass("active");
+                    return;
+                }
 
                 if (id) {
                     so.id = id;
@@ -176,6 +183,9 @@ define(function(require, exports, module) {
                 }
                 if (type) {
                     so.type = type;
+                }
+                if (logout) {
+                    so.logout = 1;
                 }
 
                 so.rememberme = $("#rememberme").is(":checked");
@@ -189,8 +199,7 @@ define(function(require, exports, module) {
                     alert("This provider is not yet enabled on Dataporten.");
                     return;
                 }
-
-                that.go(so);
+                that.go(so, !!logout);
 
             });
 
@@ -232,11 +241,14 @@ define(function(require, exports, module) {
             $("#panedisco").show();
         },
 
-        "go": function(so) {
+        "go": function(so, strict) {
             var that = this;
             var url = that.request.return;
             var sep = (url.indexOf('?') > -1) ? '&' : '?';
             url += sep + 'acresponse=' + encodeURIComponent(JSON.stringify(so));
+            if (strict) {
+                url += '&strict=1';
+            }
 
             // console.log("Go to ", so);
 
@@ -416,10 +428,44 @@ define(function(require, exports, module) {
             $("#countryselector").empty().append(txt);
         },
 
+        "hasActiveSessionOnAuthsource": function(type) {
+
+            if (this.activeTypes === null) {
+                this.activeTypes = {};
+                for (var i = 0; i < window.activeAccounts.length; i++) {
+                    this.activeTypes[window.activeAccounts[i].type] = true;
+                }
+            }
+            console.error("this.activeTypes", this.activeTypes, type, this.activeTypes[type]);
+            return !!(type && this.activeTypes[type]);
+        },
+
+        "getMatchingActiveAccount": function(a) {
+            if (!window.activeAccounts) {
+                return null;
+            }
+
+            for (var i = 0; i < window.activeAccounts.length; i++) {
+                var x = window.activeAccounts[i];
+
+                if (x.id === a.id && x.subid && x.subid === a.subid) {
+                    x.userid = x.userids[0];
+                    return x;
+                }
+
+                console.log("Comparing ", a, "with", x);
+                // if (a.matchesActiveAccount(x)) {
+                //     return x;
+                // }
+            }
+            return null;
+
+        },
+
+
         "drawData": function() {
             var that = this;
             var it = null;
-
 
             if (this.country === 'no') {
                 it = this.orgs;
@@ -446,6 +492,13 @@ define(function(require, exports, module) {
                     missed++;
                     continue;
                 }
+                // console.log("Searching for ", it[i]);
+                // console.log(this.app.accountstore);
+
+                it[i].activeAccounts = this.getMatchingActiveAccount(it[i]);
+                it[i].enforceLogout = this.hasActiveSessionOnAuthsource("saml");
+
+                console.error("NorwegianOrg Provider debug", it[i])
 
                 showit.push(it[i]);
 
@@ -456,7 +509,7 @@ define(function(require, exports, module) {
 
             this.providerListView.update(showit, this.maxshow)
                 .then(function(html) {
-                    console.log("output html is ", html)
+                    // console.log("output html is ", html)
                     $("#idplist").empty().append(html);
                 })
                 .catch(function(err) {
@@ -467,10 +520,7 @@ define(function(require, exports, module) {
                 $(".orgchoices").hide();
                 $(".altchoices").removeClass("col-md-4").addClass("col-md-12");
             }
-            // $("#idplist").empty().append(txt);
-
             $("#usersearch").focus();
-
         },
 
 
@@ -478,6 +528,7 @@ define(function(require, exports, module) {
 
             var txt = '';
             var c = 0;
+            var showit = [];
 
             for(var i = 0; i < this.extra.length; i++) {
 
@@ -485,40 +536,27 @@ define(function(require, exports, module) {
                     continue;
                 }
 
+                this.extra[i].activeAccounts = this.getMatchingActiveAccount(this.extra[i]);
+                this.extra[i].enforceLogout = this.hasActiveSessionOnAuthsource(this.extra[i].type);
 
-                var iconImage = '';
-                if (this.extra[i].iconImage) {
-                    iconImage = '<img class="media-object" style="width: 48px; height: 48px" src="/static/media/disco/' + this.extra[i].iconImage + '" alt="...">';
-                } else if (this.extra[i].icon) {
-                    iconImage = '<i style="margin-left: 6px" class="' + this.extra[i].icon + '"></i>';
-                }
-
-                var idtxt = '';
-                if (this.extra[i].id) {
-                    idtxt += ' data-id="' + Utils.quoteattr(this.extra[i].id) + '"';
-                }
-                if (this.extra[i].type) {
-                    idtxt += ' data-type="' + Utils.quoteattr(this.extra[i].type) + '"';
-                }
-                if (this.extra[i].subid) {
-                    idtxt += ' data-subid="' + Utils.quoteattr(this.extra[i].subid) + '"';
-                }
-
+                showit.push(this.extra[i]);
                 c++;
-                txt += '<a href="#" class="list-group-item idpentry" ' + idtxt + '>' +
-                    '<div class="media"><div class="media-left media-middle">' + iconImage + '</div>' +
-                        '<div class="media-body"><p>' + this.extra[i].title + '</p></div>' +
-                    '</div>' +
-                '</a>';
-
             }
+
+            this.providerListView.update(showit, 99999)
+                .then(function(html) {
+                    // console.log("output html is ", html)
+                    $("#idplistextra").empty().append(html);
+                })
+                .catch(function(err) {
+                    console.error("Error processing template for providerListView", err);
+                })
 
             if (c === 0) {
                 $(".altchoices").hide();
                 $(".orgchoices").removeClass("col-md-8").addClass("col-md-12");
 
             }
-            $("#idplistextra").empty().append(txt);
 
         }
 

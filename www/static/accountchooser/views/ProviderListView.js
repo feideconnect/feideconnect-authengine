@@ -21,14 +21,14 @@ define(function(require, exports, module) {
         "update": function(items, maxentries) {
             var that = this;
             return new Promise(function(resolve, reject) {
-                // console.log("UPDATE YAY", items)
+                console.log("UPDATE YAY", items)
                 var data = {
                     dict: that.app.dictionary
                 }
 
                 if (items.length > 0) {
                     data.providers = items.slice(0, maxentries).map(function(p) {
-                        return p.getView(that.app.config.feideIdP);
+                        return p.getView();
                     });
                 }
                 data.hasMore = (items.length > maxentries);

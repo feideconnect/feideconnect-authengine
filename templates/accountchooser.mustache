@@ -41,28 +41,29 @@
 
             {#accounts}
 
-                <a href="#" class="{classes}" data-userid="{userid}" style="">
-                    <div class="media"><div class="media-left media-middle">
-                        <img class="media-object" style="width: 64px; height: 64px" src="{photo}" alt="...">
-                    </div>
-                    <div class="media-body">
-                        <p class="showOnRemove" style=""><button class="btn btn-danger actRemove" style="float: right"> {dict.remove} </button></p>
-                        <i style="float: right; margin-top: 20px" class="fa fa-chevron-right fa-2x hideOnRemove"></i>
-                        {#isActive}
-                            <i style="color: #6a6; float: right; margin-top: 20px; margin-right: 12px" class="fa fa-circle fa-2x"></i>
-                        {/isActive}
-                        <p style="font-size: 140%; margin: 0px">{name}</p>
-                        {#title}
-                            <p style="font-size: 100%; margin: 0px; margin-top: -6px">{.}</p>
-                        {/title}
+            <a href="#" class="{classes}" data-userid="{userid}" style="">
 
-                        {#country}
-                            <p style="font-size: 100%; margin: 0px; margin-top: -6px">
-                                <img style="margin-top: -4px; margin-right: 5px" src="/static/media/flag/{code}.png"> {title}
-                            </p>
-                        {/country}
-                        <p style="font-size: 70%; color: #aaa; margin: 0px">{userid}</p>
+                    <div class="media-left media-middle">
+                        <img class="media-object" style="width: 64px; height: 64px" src="{photo}" alt="..." />
                     </div>
+
+                <div class="media-body">
+                    <p class="showOnRemove" style=""><button class="btn btn-danger actRemove" style="float: right"> {dict.remove} </button></p>
+                    <i style="float: right; margin-top: 20px" class="fa fa-chevron-right fa-2x hideOnRemove"></i>
+                    {#isActive}
+                        <i style="color: #6a6; float: right; margin-top: 20px; margin-right: 12px" class="fa fa-circle fa-2x"></i>
+                    {/isActive}
+                    <p style="font-size: 140%; margin: 0px">{name}</p>
+                    {#title}
+                        <p style="font-size: 100%; margin: 0px; margin-top: -6px">{.}</p>
+                    {/title}
+
+                    {#country}
+                        <p style="font-size: 100%; margin: 0px; margin-top: -6px">
+                            <img style="margin-top: -4px; margin-right: 5px" src="/static/media/flag/{code}.png"> {title}
+                        </p>
+                    {/country}
+                    <p style="font-size: 70%; color: #aaa; margin: 0px">{userid}</p>
                 </div>
             </a>
 
@@ -82,18 +83,52 @@
 
         <script type="text/dust" id="providerlist-template">
         {#providers}
-            <a href="#" class="list-group-item idpentry {classes}" data-id="{id}" data-subid="{subid}" data-type="saml">
-                <div class="media"><div class="media-left media-middle">
-                        <img class="media-object" style="width: 48px; height: 48px" src="{logo}" alt="...">
+            <a href="#" class="list-group-item idpentry mainentry {classes}" data-id="{id}" data-subid="{subid}" data-type="saml" {#enforceLogout}data-logout="1"{/enforceLogout}>
+                <div class="media">
+                    <div class="media-left media-middle">
+                        {#activeAccounts}
+                            <i style="color: #ccc; float: left; margin-top: 0px; margin-right: 0px" class="fa fa-chevron-right fa-fw fa-2x"></i>
+                            <i style="color: #ccc; display: none;  float: left; margin-top: 0px; margin-right: 0px" class="fa fa-fw fa-chevron-down fa-2x"></i>
+                        {/activeAccounts}
+                        {^activeAccounts}
+                            {#logo}
+                                <img class="media-object" style="width: 48px; height: 48px" src="{.}" alt="..." />
+                            {/logo}
+                            {#icon}
+                                <i style="margin-left: 6px" class="{.}"></i>
+                            {/icon}
+                        {/activeAccounts}
                     </div>
-                    <div class="media-body"><p>{title}</p></div>
+                    <div class="media-body">
+                        {#activeAccounts}
+                            <i style="color: #6a6; float: right; margin-top: 0px; margin-right: 12px" class="activeaccounticon fa fa-circle fa-2x"></i>
+                        {/activeAccounts}
+                        <p>{title}</p>
+                    </div>
                 </div>
             </a>
+            {#activeAccounts}
+                <a href="#" class="list-group-item idpentry activeaccount" data-id="{id}" data-subid="{subid}" data-type="saml" data-userid="{userid}">
+                    <div class="media-left media-middle">
+                        <img class="media-object" style="width: 64px; height: 64px" src="{photo}" alt="...">
+                    </div>
+                    <div class="media-body">
+                        <i style="color: #6a6; float: right; margin-top: 0px; margin-right: 12px" class="fa fa-circle fa-2x"></i>
+                        <p style="font-size: 100%; margin: 0px">Logg inn som {name}, {title}</p>
+                        <p style="font-size: 70%; color: #aaa; margin: 0px">{userid}</p>
+                    </div>
+                </a>
+                <a href="#" class="list-group-item idpentry activeaccount nomedia"  data-id="{id}" data-subid="{subid}" data-logout="1" data-type="saml" style="">
+                    <p>Logg ut for å logge inn igjen med en annen brukerkonto ved {title}</p>
+                </a>
+            {/activeAccounts}
         {/providers}
         {^providers}
-            <a class="list-group-item" id="noproviders" href="#"><p style="text-align: center">
-                No login providers from this country is accepted by the requesting application
-            </p></a>
+            <a class="list-group-item" id="noproviders" href="#">
+                <p style="text-align: center">
+                    No login providers from this country is accepted by the requesting application
+                </p>
+            </a>
         {/providers}
         {#hasMore}
             <a class="list-group-item" id="actshowall" href="#">

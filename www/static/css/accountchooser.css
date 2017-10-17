@@ -9,21 +9,21 @@
 
 
 a {
-	color: #228;	
+	color: #228;
 }
 
 
 
 
 #panedisco {
-	margin-top: 3em; 
+	margin-top: 3em;
 }
 
 #panedisco .clientcontainer {
 	padding-top: 2em
 }
 #panedisco .clientinfo {
-	margin-top: 1em; 
+	margin-top: 1em;
 	margin-bottom: 2em;
 }
 
@@ -72,15 +72,37 @@ a {
 }
 
 
+#idplist .activeaccount {
+    display: none;
+    padding-left: 48px !important;
+}
+
+#idplist .hasactive .media-body  {
+    padding-left: 5px;
+}
+
+#idplist.active .mainentry .media-body i {
+    display: none !important
+}
+#idplist.active .hasactive i.fa-chevron-right {
+    display: none;
+}
+#idplist.active .hasactive i.fa-chevron-down {
+    display: inline !important;
+}
+#idplist.active  a.activeaccount {
+    display: block;
+}
+
+#idplist .activeaccount {
+
+}
+#idplist .activeaccount.nomedia p {
+    padding-left: 74px;
+}
 
 
 
 #usersearch {
 	border-left: 0px;
 }
-
-
-
-
-
-

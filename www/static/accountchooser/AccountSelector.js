@@ -206,7 +206,7 @@ define(function(require, exports, module) {
 
             this.accountListView.update(data)
                 .then(function(html) {
-                    console.log("output html is ", html)
+                    // console.log("output html is ", html)
                     $("#accounts").empty().append(html);
                 })
                 .catch(function(err) {
