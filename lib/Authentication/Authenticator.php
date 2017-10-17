@@ -138,7 +138,11 @@ class Authenticator {
                     $mismatchingAccounts = true;
                 }
 
-                if ($mismatchingAccounts) {
+                // If the discovery user interactiuon ends up with enforcing a logout even if the account does not match
+                if (isset($response['logout']) && $_REQUEST['strict'] === '1') {
+                    $this->logoutAS($as);
+
+                } else if ($mismatchingAccounts) {
                     if (!isset($_REQUEST['strict'])) {
                         $unexpectedUser = new UnexpectedUserUI($account, $response);
                         return $unexpectedUser->show();
