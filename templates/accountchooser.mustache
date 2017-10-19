@@ -83,7 +83,7 @@
 
         <script type="text/dust" id="providerlist-template">
         {#providers}
-            <a href="#" class="list-group-item idpentry mainentry {classes}" data-id="{id}" data-subid="{subid}" data-type="saml" {#enforceLogout}data-logout="1"{/enforceLogout}>
+            <a href="#" class="list-group-item idpentry mainentry {classes}" data-id="{id}" data-subid="{subid}" data-type="{type}" {#enforceLogout}data-logout="1"{/enforceLogout}>
                 <div class="media">
                     <div class="media-left media-middle">
                         {#activeAccounts}
@@ -100,10 +100,15 @@
                         {/activeAccounts}
                     </div>
                     <div class="media-body">
-                        {#activeAccounts}
-                            <i style="color: #6a6; float: right; margin-top: 0px; margin-right: 12px" class="activeaccounticon fa fa-circle fa-2x"></i>
-                        {/activeAccounts}
-                        <p>{title}</p>
+                        {#showActive}
+                            <i style="color: #6a6; float: right; margin-top: 0px; margin-right: 12px" class="{#activeAccounts}activeaccounticon {/activeAccounts}fa fa-circle fa-2x"></i>
+                        {/showActive}
+                        <p style="padding-bottom: 0px">{title}
+                        {#directAccount}
+                            <br />
+                                {name}
+                        {/directAccount}
+                        </p>
                     </div>
                 </div>
             </a>

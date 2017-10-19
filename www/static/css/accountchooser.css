@@ -72,32 +72,32 @@ a {
 }
 
 
-#idplist .activeaccount {
+.idplist .activeaccount {
     display: none;
     padding-left: 48px !important;
 }
 
-#idplist .hasactive .media-body  {
+.idplist .hasactive .media-body  {
     padding-left: 5px;
 }
 
-#idplist.active .mainentry .media-body i {
+.idplist.active .mainentry .media-body i.activeaccounticon {
     display: none !important
 }
-#idplist.active .hasactive i.fa-chevron-right {
+.idplist.active .hasactive i.fa-chevron-right {
     display: none;
 }
-#idplist.active .hasactive i.fa-chevron-down {
+.idplist.active .hasactive i.fa-chevron-down {
     display: inline !important;
 }
-#idplist.active  a.activeaccount {
+.idplist.active  a.activeaccount {
     display: block;
 }
 
-#idplist .activeaccount {
+.idplist .activeaccount {
 
 }
-#idplist .activeaccount.nomedia p {
+.idplist .activeaccount.nomedia p {
     padding-left: 74px;
 }
 

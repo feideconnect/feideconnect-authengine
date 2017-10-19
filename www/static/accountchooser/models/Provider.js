@@ -76,18 +76,26 @@ define(function(require, exports, module) {
         "getView": function() {
             var view = {
                 id: this.id,
+                type: this.type,
                 subid: this.subid,
                 classes: "",
                 title: this.title,
                 distance: this.distance,
                 activeAccounts: this.activeAccounts,
+                directAccount: this.directAccount,
                 enforceLogout: this.enforceLogout,
+                logout: true,
+                showActive: this.activeAccounts || this.directAccount
             };
+            if (this.hasOwnProperty("logout")) {
+                view.logout = this.logout;
+            }
             if (this.iconImage) {
                 view.logo = '/static/media/disco/' + this.iconImage;
             } else if (this.icon) {
                 view.icon = this.icon;
             }
+            console.error("View", view, this)
 
             if (this.activeAccounts) {
                 view.classes = 'hasactive';

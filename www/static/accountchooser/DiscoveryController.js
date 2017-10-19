@@ -169,7 +169,6 @@ define(function(require, exports, module) {
                 var userid = t.data("userid");
                 var logout = t.data("logout");
 
-                // console.error("Classes", t.hasClass("hasactive"), t)
                 if (t.hasClass("hasactive")) {
                     t.closest(".idplist").toggleClass("active");
                     return;
@@ -444,13 +443,16 @@ define(function(require, exports, module) {
 
             for (var i = 0; i < window.activeAccounts.length; i++) {
                 var x = window.activeAccounts[i];
+                x.userid = x.userids[0];
 
-                if (x.id === a.id && x.subid && x.subid === a.subid) {
-                    x.userid = x.userids[0];
+                if (x.type === a.type && x.id === a.id && x.subid && x.subid === a.subid) {
+                    return x;
+                } else if (x.type === a.type && x.id === a.id && !x.hasOwnProperty("subid")) {
+                    console.log("Returning X as x does not have subid", x)
                     return x;
                 }
 
-                console.log("Comparing ", a, "with", x);
+                // console.log("Comparing ", a, "with", x);
                 // if (a.matchesActiveAccount(x)) {
                 //     return x;
                 // }
@@ -473,6 +475,10 @@ define(function(require, exports, module) {
 
             var i;
             var showit = [];
+
+            // console.log(" --- ")
+            // console.log(window.activeAccounts);
+            // console.log("-----")
 
             var txt = '';
             var c = 0; var missed = 0;
@@ -535,6 +541,13 @@ define(function(require, exports, module) {
 
                 this.extra[i].activeAccounts = this.getMatchingActiveAccount(this.extra[i]);
                 this.extra[i].enforceLogout = this.hasActiveSessionOnAuthsource(this.extra[i].type);
+
+                if (!this.extra[i].logout && this.extra[i].activeAccounts !== null) {
+                    console.error("Does not support logout", this.extra[i]);
+                    this.extra[i].directAccount = this.extra[i].activeAccounts;
+                    this.extra[i].enforceLogout = false;
+                    delete this.extra[i].activeAccounts;
+                }
 
                 showit.push(this.extra[i]);
                 c++;

@@ -33,7 +33,7 @@
 		"enable": false
 	},
 	"availableLanguages": ["nb", "nn", "en"],
-	"enableLocalization": true,
+	"enableLocalization": false,
 	"geodb": "etc/GeoIP2-City.mmdb",
 	"testUsers": {
 	},
@@ -398,25 +398,29 @@
 			"def": ["idporten"],
 			"title": "IDporten",
 			"descr": "Alle norske borgere skal kunne logge inn med IDporten.",
-			"iconImage": "idporten.png"
+			"iconImage": "idporten.png",
+            "logout": true
 		},
 		{
 			"type": "twitter",
 			"def": ["social", "twitter"],
 			"title": "Twitter",
-			"icon": "fa fa-2x fa-fw fa-twitter"
+			"icon": "fa fa-2x fa-fw fa-twitter",
+            "logout": false
 		},
 		{
 			"type": "facebook",
 			"def": ["social", "facebook"],
 			"title": "Facebook",
-			"icon": "fa fa-2x fa-fw fa-facebook"
+			"icon": "fa fa-2x fa-fw fa-facebook",
+            "logout": false
 		},
 		{
 			"type": "linkedin",
 			"def": ["social", "linkedin"],
 			"title": "LinkedIn",
-			"icon": "fa fa-2x fa-fw fa-linkedin"
+			"icon": "fa fa-2x fa-fw fa-linkedin",
+            "logout": false
 		},
 		{
 			"type": "saml",
@@ -428,7 +432,8 @@
 				"en": "Feide guest users"
 			},
 			"descr": "Gjestebrukere. Brukere som ikke har feidekonto kan registrere seg her.",
-			"iconImage": "openidp.png"
+			"iconImage": "openidp.png",
+            "logout": true
 		},
 		{
 			"type": "saml",
@@ -440,7 +445,8 @@
 				"nn": "Feide testbrukerar",
 				"en": "Feide test users"
 			},
-			"iconImage": "feide.png"
+			"iconImage": "feide.png",
+            "logout": true
 		}
 	]
 }

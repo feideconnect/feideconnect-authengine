@@ -50,13 +50,19 @@ define(function(require, exports, module) {
             var view = {
                 id: this.id,
                 subid: this.subid,
+                type: "saml",
                 classes: "",
                 logo: "https://api.dataporten.no/orgs/fc:org:" + this.subid + "/logo",
                 title: this.title,
                 distance: this.distance,
                 activeAccounts: this.activeAccounts,
                 enforceLogout: this.enforceLogout,
+                logout: true,
+                showActive: !!this.activeAccounts
             };
+            if (this.hasOwnProperty("logout")) {
+                view.logout = this.logout;
+            }
             if (this.activeAccounts) {
                 view.classes = 'hasactive';
             }
