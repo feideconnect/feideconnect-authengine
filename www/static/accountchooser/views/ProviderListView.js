@@ -21,7 +21,7 @@ define(function(require, exports, module) {
         "update": function(items, maxentries) {
             var that = this;
             return new Promise(function(resolve, reject) {
-                console.log("UPDATE YAY", items)
+                // console.log("UPDATE YAY", items)
                 var data = {
                     dict: that.app.dictionary
                 }

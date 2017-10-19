@@ -249,11 +249,8 @@ define(function(require, exports, module) {
             if (strict) {
                 url += '&strict=1';
             }
-
-            // console.log("Go to ", so);
-
+            // console.log("Go to ", so); return;
             window.location = url;
-
         },
 
 
@@ -436,7 +433,7 @@ define(function(require, exports, module) {
                     this.activeTypes[window.activeAccounts[i].type] = true;
                 }
             }
-            console.error("this.activeTypes", this.activeTypes, type, this.activeTypes[type]);
+            // console.error("this.activeTypes", this.activeTypes, type, this.activeTypes[type]);
             return !!(type && this.activeTypes[type]);
         },
 
@@ -498,7 +495,7 @@ define(function(require, exports, module) {
                 it[i].activeAccounts = this.getMatchingActiveAccount(it[i]);
                 it[i].enforceLogout = this.hasActiveSessionOnAuthsource("saml");
 
-                console.error("NorwegianOrg Provider debug", it[i])
+                // console.error("NorwegianOrg Provider debug", it[i])
 
                 showit.push(it[i]);
 
