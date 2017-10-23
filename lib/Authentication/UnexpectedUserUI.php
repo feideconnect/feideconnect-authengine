@@ -23,30 +23,67 @@ class UnexpectedUserUI {
     protected $expected;
     protected $storage;
 
-
     /**
      * @param [type] $authenticatedAccount Authenticated Account
-     * @param [type] $expected             Expected user (visual Tag format)
+     * @param [type] $response             Expected user
      */
-    public function __construct($authenticatedAccount, $expected) {
+    public function __construct($authenticatedAccount, $response) {
 
-        // $this->client = $client;
-        $this->authenticatedAccount = $authenticatedAccount;
-        $this->expected = $expected;
         $this->storage = StorageProvider::getStorage();
-
-        // echo '<pre>';
-        // echo "Authenticated";
-        // print_r($authenticatedAccount);
-        // echo "\n\nExpected:\n\n";
-        // print_r($expected);
-        // exit;
+        $this->authenticatedAccount = $authenticatedAccount;
+        $this->expected = $this->parseResponse($response);
 
     }
 
 
-    public function show() {
+/*
+Example input:
+$response = {
+     "type": "saml",
+     "id": "https:\/\/idp-test.feide.no",
+     "subid": "spusers.feide.no",
+     "logout": 1,
+     "rememberme": true
+ },
+*/
+    private function parseResponse($response) {
+        $view = [];
+        if (isset($response['userids']) && is_array($response['userids'])) {
+            $view["userids"] = $response["userids"];
+        } else {
+            $view["userids"] = [];
+        }
+        if ($response['id'] === Config::getValue('feideIdP') && isset($response['subid'])) {
+            $realm = filter_var($response['subid'], FILTER_SANITIZE_URL);
+            $orgid = 'fc:org:' . $realm;
+            $org = $this->storage->getOrg($orgid);
+            if ($org) {
+                $view["org"] = $org->getOrgInfo();
+            } else {
+                $view['showDefaultTitle'] = true;
+            }
 
+        } else {
+            $view['showDefaultTitle'] = true;
+        }
+        return $view;
+    }
+
+
+    private function getDiscoResponeProvider($response) {
+        $data = Config::getValue('disco');
+        $ldata = Localization::localizeList($data, ['title', 'descr']);
+        foreach($ldata AS $entry) {
+            echo '<pre>';
+            print_r($entry);
+            echo '</pre>';
+        }
+
+    }
+
+//             $x = $this->getDiscoResponeProvider($response);
+
+    public function show() {
 
         $data = [
             "current" => $this->authenticatedAccount->getVisualTag(),
@@ -54,12 +91,14 @@ class UnexpectedUserUI {
             "urlcontinue" =>  Utils\URL::selfURL() . '&strict=0',
             "urllogout" =>  Utils\URL::selfURL() . '&strict=1',
         ];
-        $data["current"]["photo"] = $this->authenticatedAccount->getPhoto();
+        // $data["current"]["photo"] = $this->authenticatedAccount->getPhoto();
 
 
-        if (!isset($data["expected"]["userids"])) {
-            $data["expected"]["userids"] = [];
-        }
+        // if (!isset($data["expected"]["userids"])) {
+        //     $data["expected"]["userids"] = [];
+        // }
+
+        // echo '<pre>'; print_r($data); exit;
 
         Logger::info('OAuth display dialog about conflicting requested and authenticated user.', array(
             'currentUserID' => $data["current"]["userids"],
@@ -67,8 +106,12 @@ class UnexpectedUserUI {
         ));
 
         if (isset($_REQUEST['debug'])) {
+            // echo "yay";
+            // print_r($data);
+            // exit;
             return (new JSONResponse($data))->setCORS(false);
         }
+        // echo "yay"; exit;
 
         $response = new LocalizedTemplatedHTMLResponse('unexpecteduser');
         $response->setData($data);
