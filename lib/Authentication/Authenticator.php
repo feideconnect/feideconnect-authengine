@@ -139,7 +139,7 @@ class Authenticator {
                 }
 
                 // If the discovery user interactiuon ends up with enforcing a logout even if the account does not match
-                if (isset($response['logout']) && $_REQUEST['strict'] === '1') {
+                if (isset($response['logout']) && isset($_REQUEST['strict']) && $_REQUEST['strict'] === '1') {
                     $this->logoutAS($as);
 
                 } else if ($mismatchingAccounts) {
