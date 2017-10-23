@@ -5,7 +5,7 @@ namespace FeideConnect\Authentication;
 use FeideConnect\Data\StorageProvider;
 use FeideConnect\HTTP\LocalizedTemplatedHTMLResponse;
 use FeideConnect\HTTP\JSONResponse;
-
+use FeideConnect\Localization;
 use FeideConnect\Utils;
 use FeideConnect\Config;
 use FeideConnect\Logger;
@@ -53,7 +53,10 @@ $response = {
         } else {
             $view["userids"] = [];
         }
-        if ($response['id'] === Config::getValue('feideIdP') && isset($response['subid'])) {
+        $x = $this->getDiscoResponseProvider($response);
+        if ($x) {
+            $view["title"] = $x["title"];
+        } else if ($response['id'] === Config::getValue('feideIdP') && isset($response['subid'])) {
             $realm = filter_var($response['subid'], FILTER_SANITIZE_URL);
             $orgid = 'fc:org:' . $realm;
             $org = $this->storage->getOrg($orgid);
@@ -70,18 +73,21 @@ $response = {
     }
 
 
-    private function getDiscoResponeProvider($response) {
+    private function getDiscoResponseProvider($response) {
         $data = Config::getValue('disco');
         $ldata = Localization::localizeList($data, ['title', 'descr']);
         foreach($ldata AS $entry) {
-            echo '<pre>';
-            print_r($entry);
-            echo '</pre>';
+            if (isset($entry['id']) && $entry['id'] !== $response['id']) {
+                continue;
+            }
+            if (isset($entry['type']) && $entry['type'] !== $response['type']) {
+                continue;
+            }
+            return $entry;
         }
-
+        return null;
     }
 
-//             $x = $this->getDiscoResponeProvider($response);
 
     public function show() {
 
@@ -94,31 +100,19 @@ $response = {
         // $data["current"]["photo"] = $this->authenticatedAccount->getPhoto();
 
 
-        // if (!isset($data["expected"]["userids"])) {
-        //     $data["expected"]["userids"] = [];
-        // }
-
-        // echo '<pre>'; print_r($data); exit;
-
         Logger::info('OAuth display dialog about conflicting requested and authenticated user.', array(
             'currentUserID' => $data["current"]["userids"],
             'expectedUserID' => $data["expected"]["userids"]
         ));
 
         if (isset($_REQUEST['debug'])) {
-            // echo "yay";
-            // print_r($data);
-            // exit;
             return (new JSONResponse($data))->setCORS(false);
         }
-        // echo "yay"; exit;
 
         $response = new LocalizedTemplatedHTMLResponse('unexpecteduser');
         $response->setData($data);
         return $response;
 
     }
-
-
 
 }
