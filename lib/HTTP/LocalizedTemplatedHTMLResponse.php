@@ -1,6 +1,4 @@
 <?php
-
-
 namespace FeideConnect\HTTP;
 
 use FeideConnect\Localization;
@@ -9,22 +7,17 @@ use FeideConnect\Config;
 
 class LocalizedTemplatedHTMLResponse extends TemplatedHTMLResponse {
 
-
     protected $template;
     protected $data;
-
     protected $dictionary;
-
     protected $replacementIndexes, $replacementData;
-
 
     public function __construct($templateName) {
         parent::__construct($templateName);
-
         $this->replacementIndexes = [];
         $this->replacementData = [];
-        // Localization::debug();
         $this->dictionary = Localization::getDictionary();
+        $this->setHeader('Vary', 'Accept-Encoding,Accept-Language');
     }
 
     /*
@@ -41,7 +34,6 @@ class LocalizedTemplatedHTMLResponse extends TemplatedHTMLResponse {
         return $this;
     }
 
-
     public function setData($data) {
         parent::setData($data);
 
@@ -57,7 +49,6 @@ class LocalizedTemplatedHTMLResponse extends TemplatedHTMLResponse {
 
         }
         $this->data = array_merge($this->data, Config::getTemplateConfig());
-
         return $this;
     }
 
