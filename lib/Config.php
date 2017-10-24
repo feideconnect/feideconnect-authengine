@@ -21,11 +21,9 @@ class Config {
 
     protected static function arrayPick($arr, $pick) {
 
-        // echo "about to pick "; print_r($arr); print_r($pick);
         $ref =& $arr;
         for ($i = 0; $i < count($pick); $i++) {
             if (array_key_exists($pick[$i], $ref)) {
-                // echo "picking " . $pick[$i] . "\n"; print_r($ref); print_r($ref[$pick[$i]]);
                 $ref =& $ref[$pick[$i]];
             } else {
                 throw new \UnexpectedValueException();
@@ -68,9 +66,9 @@ class Config {
     public static function getTemplateConfig() {
         $data = [];
         $data['cacheBust'] = (getenv('JENKINS_BUILD_NUMBER') !== false) ? getenv('JENKINS_BUILD_NUMBER') : 'noBuild';
+        $data['isDevelopment'] = (getenv('NODE_ENV') === "development");
         return $data;
     }
-
 
 
     /**
