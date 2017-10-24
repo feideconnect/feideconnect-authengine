@@ -77,7 +77,7 @@ body.simpleGrant .simpleOnly {
 .grantEntry.grantEntryActive .grantDetailsHide { display: none }
 
 .grantEntry .grantEntryContent {
-	margin-top: 0px; 
+	margin-top: 0px;
 	padding: 8px 16px;
 
 }
@@ -215,6 +215,5 @@ img.profileImage {
 }
 
 a {
-	color: #228;	
+	color: #228;
 }
-

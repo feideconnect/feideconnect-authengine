@@ -3,7 +3,6 @@ define(function(require, exports, module) {
 
     var Class = require('../accountchooser/Class');
 
-
     var AccountStore = Class.extend({
         "init": function(visualTag) {
             var that = this;
