@@ -1,5 +1,5 @@
-@import url('./style.css');
-
+/*@import url('./style.css');
+*/
 
 /* Small devices (tablets, 768px and up) */
 @media (min-width: 992px) {
@@ -86,8 +86,8 @@ body.simpleGrant .simpleOnly {
 
 }
 
-div.grantEntry:hover { 
-	background-color: #fafafa; 
+div.grantEntry:hover {
+	background-color: #fafafa;
 }
 
 .selectIndicator {
@@ -137,23 +137,23 @@ div.grantEntry:hover {
 	color: inherit;
 }
 .grantEntry .ownerbox .ownerlogo img {
-	max-width: 48px; 
-	max-height: 48px; 
-	border: 1px solid #aaa; 
+	max-width: 48px;
+	max-height: 48px;
+	border: 1px solid #aaa;
 	border-radius: 3px;
 	margin-left: 5px
 }
 
 .grantEntry .ownerbox .orglogo img {
-	max-width: 128px; 
-	max-height: 128px; 
+	max-width: 128px;
+	max-height: 128px;
 	border: none;
 	border-radius: 0px;
 	margin-left: 5px;
 }
 .grantEntry .ownerbox .orglogo.orglogoSmall img {
-	max-width: 64px; 
-	max-height: 64px; 
+	max-width: 64px;
+	max-height: 64px;
 }
 
 .grantEntry .grantEntryContent.media .media-body {
@@ -162,7 +162,7 @@ div.grantEntry:hover {
 /*  */
 
 ul.grantItemList {
-	list-style-position: inside; list-style-type: none; 
+	list-style-position: inside; list-style-type: none;
 }
 ul.grantItemList li {
 	list-style-position: inside; list-style-type: none; display: inline; margin-right: .3em;
@@ -177,9 +177,9 @@ ul.grantItemList li {
 
 
 img.profileImage {
-	max-width: 96px; 
-	max-height: 94px; 
-	border: 0px solid #aaa; 
+	max-width: 96px;
+	max-height: 94px;
+	border: 0px solid #aaa;
 	border-radius: 3px
 }
 .grantUserLine img.profileImage {
@@ -191,21 +191,21 @@ img.profileImage {
 }
 .grantUserLine h4 {
 	margin-bottom: 0px;
-	padding-bottom: 0px;	
+	padding-bottom: 0px;
 }
 .grantUserLine .org {
-	color: #444; 
+	color: #444;
 	margin:0px
 }
 .grantUserLine .userChange {
-	color: #444; 
+	color: #444;
 	font-size: 80%;
 	margin:0px
 }
 
 .userExtraBox {
-	
-	
+
+
 }
 .userExtraBox p {
 	margin: 0px;

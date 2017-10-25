@@ -2,9 +2,7 @@ define(function(require, exports, module) {
     "use strict";
 
     var Class = require('../Class');
-    // var dust = require('components/dustjs-linkedin/dist/dust-full.min');
-
-    // console.log("DUST", dust)
+    require('../../components/dustjs-linkedin/dist/dust-full.min');
 
     var ProviderListView = Class.extend({
         "init": function(app) {

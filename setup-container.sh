@@ -23,6 +23,8 @@ touch ./vendor/simplesamlphp/simplesamlphp/modules/authtwitter/enable \
       ./vendor/simplesamlphp/simplesamlphp/modules/authfacebook/enable \
       ./vendor/simplesamlphp/simplesamlphp/modules/authlinkedin/enable
 
+bin/build.sh
+
 # Cleanup
 apt-get remove -y --purge --auto-remove nodejs lsb-release
 rm -rf node_modules

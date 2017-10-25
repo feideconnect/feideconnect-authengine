@@ -3,7 +3,7 @@ define(function(require, exports, module) {
 
     var Class = require('../Class');
 
-    // var dust = require('components/dustjs-linkedin/dist/dust-full.min');
+    require('../../components/dustjs-linkedin/dist/dust-full.min');
     // console.log("DUST", dust)
 
     var AccountListView = Class.extend({

@@ -25,7 +25,7 @@
 		"grunt-contrib-jshint": "*",
 		"grunt-shell": "*",
 		"grunt-transifex": "*",
-
+		"requirejs": "~2.1.15",
 		"node-phantom-simple": "~1.2.0",
 		"promise": "*"
 	},

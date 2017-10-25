@@ -1,6 +1,11 @@
 define(function(require, exports, module) {
     "use strict";
 
+    define.amd.dust = true;
+
+    var jquery = require('jquery');
+    var bootstrap = require('bootstrap');
+
     if (typeof Promise !== "function") {
         require('../components/es6-promise/es6-promise.min').polyfill();
     }

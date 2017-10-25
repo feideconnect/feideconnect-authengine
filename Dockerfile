@@ -32,12 +32,14 @@ RUN with_packages.sh "php5-dev cmake g++ git libgmp-dev libpcre3-dev libssl-dev 
 RUN mkdir -p /authengine
 WORKDIR /authengine
 
+COPY www www
+COPY bin bin
+
 COPY ["composer.json", "package.json", "bower.json", ".bowerrc", "setup-container.sh", "./"]
 RUN with_packages.sh "git curl" ./setup-container.sh
 # Warning: Do not use these fonts unless you have a licence on your site.
 ADD ["http://mal.uninett.no/uninett-theme/fonts/colfaxLight.woff", "http://mal.uninett.no/uninett-theme/fonts/colfaxMedium.woff", "http://mal.uninett.no/uninett-theme/fonts/colfaxRegular.woff", "http://mal.uninett.no/uninett-theme/fonts/colfaxThin.woff", "http://mal.uninett.no/uninett-theme/fonts/colfaxRegularItalic.woff", "/authengine/www/static/components/uninett-bootstrap-theme/fonts/"]
 RUN chmod -R +r /authengine/www/static/components/uninett-bootstrap-theme/fonts/
-COPY www www
 
 # === Copy auth engine ===
 COPY lib lib
@@ -46,6 +48,8 @@ COPY dictionaries dictionaries
 COPY templates templates
 COPY etc/simplesamlphp-config /authengine/vendor/simplesamlphp/simplesamlphp/config
 COPY etc/simplesamlphp-metadata /authengine/vendor/simplesamlphp/simplesamlphp/metadata
+
+
 
 ENV AE_GEODB "etc/GeoLite2-City.mmdb"
 ENV HTTPS_ON "on"

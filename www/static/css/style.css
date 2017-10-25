@@ -1,8 +1,12 @@
+@import url('../components/bootstrap/dist/css/bootstrap.min.css');
+@import url('../components/uninett-bootstrap-theme/css/uninett.css');
+@import url('../components/font-awsome/css/font-awesome.min.css');
+@import url('./accountchooser.css');
+@import url('./grant.css');
 
 body {
 	padding-top: 0px;
 }
-
 
 .container.mainContainer {
 	max-width: 860px;

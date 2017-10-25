@@ -1,24 +1,12 @@
 <!DOCTYPE html>
 <html lang="en">
     <head>
-        <meta charset="utf-8">
+        {{>commonhead }}
+
         <title>{{_.selectprovider}}</title>
-
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <meta name="description" content="{{_.selectprovider}}" />
-        <meta name="author" content="UNINETT AS" />
 
-        <link rel="shortcut icon" href="/static/components/uninett-bootstrap-theme/ico/favicon.ico" />
-
-        <link href="/static/components/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet" />
-        <link href="/static/components/uninett-bootstrap-theme/css/uninett.css" rel="stylesheet" />
-        <link href="/static/components/font-awsome/css/font-awesome.min.css" rel="stylesheet"  />
-        <link href="/static/css/accountchooser.css" rel="stylesheet" />
-
-        <script type="text/javascript" src="/static/components/jquery/dist/jquery.min.js"></script>
-        <script type="text/javascript" src="/static/components/bootstrap/dist/js/bootstrap.min.js"></script>
-        <script type="text/javascript" src="/static/components/bootstrap/js/tooltip.js"></script>
-        <script type="text/javascript" src="/static/components/dustjs-linkedin/dist/dust-full.min.js"></script>
+        <!-- <script type="text/javascript" src="/static/components/dustjs-linkedin/dist/dust-full.min.js"></script> -->
 
         <script type="text/javascript">
             var acrequest = {{{requestJSON}}};
@@ -28,19 +16,33 @@
             window.dictionary = {{{dictionary}}};
             window.client = {{{client}}};
             var require = {
-                // baseUrl: "/another/path",
-                paths: {
-                    "components": "../components"
+                "paths": {
+                  "jquery": "../components/jquery/dist/jquery.min",
+                  "bootstrap": "../components/bootstrap/dist/js/bootstrap.min",
+                  "tooltip": "../components/bootstrap/js/tooltip"
                 },
-                urlArgs: "bust={{cacheBust}}"
+                "shim": {
+                    "bootstrap": ["jquery"],
+                    "tooltip": ["jquery"]
+                },
+                "urlArgs": "bust={{cacheBust}}"
             };
         </script>
-        <script data-main="static/accountchooser/main" src="/static/components/requirejs/require.js"></script>
+
+        {{#isDevelopment}}
+            <link href="/static/css/style.css" rel="stylesheet" />
+            <script data-main="static/accountchooser/main" src="/static/components/requirejs/require.js"></script>
+        {{/isDevelopment}}
+        {{^isDevelopment}}
+            <link href="/static/build/style.min.css?bust={{cacheBust}}" rel="stylesheet" />
+            <script type="text/javascript" src="/static/build/accountchooser.min.js?bust={{cacheBust}}"></script>
+        {{/isDevelopment}}
+
+        <!-- <script type="text/javascript" src="/static/components/bootstrap/dist/js/bootstrap.min.js"></script> -->
+        <!-- <script type="text/javascript" src="/static/components/bootstrap/js/tooltip.js"></script> -->
 
         <script type="text/dust" id="accountlist-template">
-
-            {#accounts}
-
+        {#accounts}
             <a href="#" class="{classes}" data-userid="{userid}" style="">
 
                     <div class="media-left media-middle">
@@ -66,18 +68,14 @@
                     <p style="font-size: 70%; color: #aaa; margin: 0px">{userid}</p>
                 </div>
             </a>
-
-            {/accounts}
-
-
-            <div class="list-group-item">
-                <p style="text-align: right; font-size: 80%; marging-top: 2em">
-                   <a id="removeacct" class="hideOnRemove" href="" style="color: #888"><i class="fa fa-times"></i> {dict.removeacct} </a>
-                   <a class="showOnRemove" id="removedone" href="" style="color: #888"><i class="fa fa-check"></i> {dict.done} </a>
-                </p>
-                <p style="text-align: center; marging-top: 1em"><a id="altlogin" href=""> {dict.oranotheraccount} </a></p>
-            </div>
-
+        {/accounts}
+        <div class="list-group-item">
+            <p style="text-align: right; font-size: 80%; marging-top: 2em">
+               <a id="removeacct" class="hideOnRemove" href="" style="color: #888"><i class="fa fa-times"></i> {dict.removeacct} </a>
+               <a class="showOnRemove" id="removedone" href="" style="color: #888"><i class="fa fa-check"></i> {dict.done} </a>
+            </p>
+            <p style="text-align: center; marging-top: 1em"><a id="altlogin" href=""> {dict.oranotheraccount} </a></p>
+        </div>
         </script>
 
 
@@ -146,7 +144,6 @@
     </head>
 
     <body>
-
         <noscript>
             <div style="padding: 3em">
                 <h1>{{_.selectprovider}}</h1>
