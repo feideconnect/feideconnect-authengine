@@ -1,47 +1,42 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="author" content="UNINETT AS" />
-  <title>Dataporten</title>
 
+    {{>commonhead }}
 
-  <link rel="shortcut icon" href="/static/components/uninett-bootstrap-theme/ico/favicon.ico">
+    <title>{{_.redirectloopheader}}</title>
 
+    <!-- Bootstrap core CSS -->
+    <link href="/static/components/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
 
-  <!-- Bootstrap core CSS -->
-  <link href="/static/components/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
-
-  <!-- Custom styles for this template -->
-  <link href="/static/components/uninett-bootstrap-theme/css/uninett.css" rel="stylesheet">
+    <!-- Custom styles for this template -->
+    <link href="/static/components/uninett-bootstrap-theme/css/uninett.css" rel="stylesheet">
 
 </head>
 
 <body>
 
 
-  <div class="container">
+    <div class="container">
 
-    <div class="row">
-      <div class="col-lg-12">
-        <!-- Main component for a primary marketing message or call to action -->
-        <div class="jumbotron uninett-color-lightGreen">
-            <h1>{{_.redirectloopheader}}</h1>
-            <p>{{_.redirectloopbody}}</p>
-            <form action="{{ url }}" method="{{ method }}">
-                {{#parameters}}
-                    <input type="hidden" name="{{ name }}" value="{{ value }}">
-                {{/parameters}}
-                <input type="submit" class="btn btn-primary" name="_submit" value="{{_.continue}}">
-            </form>
+        <div class="row">
+            <div class="col-lg-12">
+                <!-- Main component for a primary marketing message or call to action -->
+                <div class="jumbotron uninett-color-lightGreen">
+                    <h1>{{_.redirectloopheader}}</h1>
+                    <p>{{_.redirectloopbody}}</p>
+                    <form action="{{ url }}" method="{{ method }}">
+                        {{#parameters}}
+                        <input type="hidden" name="{{ name }}" value="{{ value }}">
+                        {{/parameters}}
+                        <input type="submit" class="btn btn-primary" name="_submit" value="{{_.continue}}">
+                    </form>
+                </div>
+            </div>
         </div>
-      </div>
-    </div>
 
-  </div>
-  <!-- /container -->
+    </div>
+    <!-- /container -->
 
 </body>
 </html>

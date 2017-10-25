@@ -23,6 +23,8 @@
     "alreadyselectedprovider": "The preselected provider",
 	"logoutandswitch": "Logout and switch to the requested user",
     "logoutandinagain": " Log out to be able to log in as",
+    "logoutdetails": "You have now been logged out from the specific application you were using, and you have been logged out from Feide,
+    however there may still be other Dataporten web or mobile applications where you are logged in.",
     "continueasloggedin": "Continue as this already logged in user",
 	"continueas": "Continue as",
 
@@ -58,6 +60,8 @@
 	"userterms": "Dataporten Privacy Policy",
 	"showmore": "Show more information",
 	"okcontinue": "OK, continue to the application",
+    "rejectdetails": "We may not take you to the application, because you rejected the request for authorization.
+      You may contact the application owners to tell them about your concern for authorizing this request.",
 
 	"permshort": "Access will only be granted for 8 hours after each login. You can {A1}withdraw granted access at minside.dataporten.no{A1_}.",
 	"permlong": "Access will be granted permanently, but may be {A1}manually revoked at minside.dataporten.no{A1_}.",

@@ -1,48 +1,41 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="">
-  <meta name="author" content="UNINETT AS" />
-  <title>Dataporten Logout</title>
+
+    {{>commonhead }}
+
+    <title>{_.logout}</title>
 
 
-  <link rel="shortcut icon" href="/static/components/uninett-bootstrap-theme/ico/favicon.ico">
+    <!-- Bootstrap core CSS -->
+    <link href="/static/components/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
 
-
-  <!-- Bootstrap core CSS -->
-  <link href="/static/components/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
-
-  <!-- Custom styles for this template -->
-  <link href="/static/components/uninett-bootstrap-theme/css/uninett.css" rel="stylesheet">
+    <!-- Custom styles for this template -->
+    <link href="/static/components/uninett-bootstrap-theme/css/uninett.css" rel="stylesheet">
 
 </head>
 
 <body>
 
 
-  <div class="container">
+    <div class="container">
 
-    <div class="row">
-      <div class="col-lg-12"> 
-        <!-- Main component for a primary marketing message or call to action -->
-        <div class="jumbotron uninett-color-success">
-          <h1><span style="position: relative; top: 9px" class="glyphicon glyphicon-log-out"></span> {{head}}</h1>
-          <p>You have now been logged out from the specific application you were using, and you have been logged out from Feide,
-          however there may still be other Dataporten web or mobile applications where you are logged in. 
-          </p>
+        <div class="row">
+            <div class="col-lg-12">
+                <!-- Main component for a primary marketing message or call to action -->
+                <div class="jumbotron uninett-color-success">
+                    <h1><span style="position: relative; top: 9px" class="glyphicon glyphicon-log-out"></span> {{head}}</h1>
+                    <p>{_.logoutdetails}</p>
 
 
+                </div>
+            </div>
         </div>
-      </div>
+
+
+
     </div>
-    
-
-
-  </div>
-  <!-- /container --> 
+    <!-- /container -->
 
 </body>
 </html>
