@@ -6,8 +6,6 @@
         <title>{{_.selectprovider}}</title>
         <meta name="description" content="{{_.selectprovider}}" />
 
-        <!-- <script type="text/javascript" src="/static/components/dustjs-linkedin/dist/dust-full.min.js"></script> -->
-
         <script type="text/javascript">
             var acrequest = {{{requestJSON}}};
             window.activeAccounts = {{{activeAccountsJSON}}};
@@ -37,9 +35,6 @@
             <link href="/static/build/style.min.css?bust={{cacheBust}}" rel="stylesheet" />
             <script type="text/javascript" src="/static/build/accountchooser.min.js?bust={{cacheBust}}"></script>
         {{/isDevelopment}}
-
-        <!-- <script type="text/javascript" src="/static/components/bootstrap/dist/js/bootstrap.min.js"></script> -->
-        <!-- <script type="text/javascript" src="/static/components/bootstrap/js/tooltip.js"></script> -->
 
         <script type="text/dust" id="accountlist-template">
         {#accounts}

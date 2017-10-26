@@ -95,39 +95,11 @@ define(function(require, exports, module) {
             } else if (this.icon) {
                 view.icon = this.icon;
             }
-            console.error("View", view, this)
 
             if (this.activeAccounts) {
                 view.classes = 'hasactive';
             }
             return view;
-        },
-
-        "getHTML": function() {
-            console.error("Provider.getHTML() DEPRECATED");
-            var txt = '';
-            var datastr = 'data-id="' + Utils.quoteattr(this.entityID) + '" data-type="saml"';
-            txt += '<a href="#" class="list-group-item idpentry" ' + datastr + '>' +
-                '<div class="media"><div class="media-left media-middle" style="">';
-
-            if (this.logo) {
-                txt += '<div class="" style="width: 64px; align: right"><img class="media-object" style="float: right; max-height: 64px" src="/metadata/logo/?entityid=' + Utils.quoteattr(this.entityID) + '" alt="Provider logo"></div>';
-            } else {
-                txt += '<div class="media-object" style="width: 64px; text-align: right">&nbsp;</div>';
-            }
-
-            var dt = '';
-            if (this.descr) {
-                dt = '<p style="margin: 0px 0px 0px 10px; color: #888; font-size: 90%">' + Utils.quoteattr(this.descr) + '</p>';
-            }
-            txt +=  '</div>' +
-                    '<div class="media-body">' +
-                        '<p style="margin: 0px 0px 0px 10px">' + Utils.quoteattr(this.title) + '</p>' +
-                        dt  +
-                     '</div>' +
-                '</div>' +
-            '</a>';
-            return txt;
         }
 
     });
