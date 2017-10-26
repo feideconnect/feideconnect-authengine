@@ -33,16 +33,22 @@ class IdProvider {
 
         if (isset($m['uimeta']['DiscoHints']) && isset($m['uimeta']['DiscoHints']['GeolocationHint'])) {
 
+            $geoList = [];
+
             if (
                 is_array($m['uimeta']['DiscoHints']['GeolocationHint']) &&
-                !empty($m['uimeta']['DiscoHints']['GeolocationHint']) &&
-                preg_match('^geo:(.+),(.*)^', $m['uimeta']['DiscoHints']['GeolocationHint'][0])
+                !empty($m['uimeta']['DiscoHints']['GeolocationHint'])
             ) {
-                $geostr = explode(',', substr($m['uimeta']['DiscoHints']['GeolocationHint'][0], 4));
-                $ui['geo'] = [
-                    'lat' => floatval($geostr[0]),
-                    'lon' => floatval($geostr[1]),
-                ];
+                foreach($m['uimeta']['DiscoHints']['GeolocationHint'] AS $geohint) {
+                    if (preg_match('^geo:(.+),(.*)^', $geohint)) {
+                        $geostr = explode(',', substr($geohint, 4));
+                        $geoList[] = [
+                            'lat' => floatval($geostr[0]),
+                            'lon' => floatval($geostr[1]),
+                        ];
+                    }
+                }
+                $ui['geo'] = $geoList;
             } else {
                 // error_log(json_encode($m['uimeta']['DiscoHints']['GeolocationHint']));
             }
