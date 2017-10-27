@@ -86,7 +86,24 @@ class Localization {
     }
 
 
+    /**
+     * This is the translation function used by the Twig internationalization function. It allows you to translate
+     * a string in singular, and perform substitutions of placeholders.
+     *
+     * @param string $original The ID of the string to translate.
+     *
+     * @return string The translated text.
+     */
+    public static function translateSingular($original)
+    {
+        $text = self::localizeEntry(self::getTerm($original));
 
+        if (func_num_args() === 1) {
+            return $text;
+        }
 
+        $args = array_slice(func_get_args(), 1);
 
+        return strtr($text, is_array($args[0]) ? $args[0] : $args);
+    }
 }

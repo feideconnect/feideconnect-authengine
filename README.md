@@ -71,7 +71,22 @@ Access the service on:
 * <http://localhost:8080/auth>
 
 
+## Twig
 
+If you want to use the Twig templating system instead of Mustache, just set the configuration accordingly in
+`etc/authengine/config.json`:
+
+```
+    "twig": {
+        "use": true,
+        "cacheDir": "/tmp",
+        "autoReload": true
+    },
+```
+
+* `use`: set to `true` to use Twig instead of Mustache. Set to `false` to disable it.
+* `cacheDir`: the path to the directory where Twig should compile and keep a cache of templates.
+* `autoReload`: whether Twig should reload templates automatically when they are modified, or not.
 
 
 ## Docker

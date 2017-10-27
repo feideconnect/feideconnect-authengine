@@ -4,7 +4,8 @@
 namespace FeideConnect\HTTP;
 
 use FeideConnect\Config;
-use FeideConnect\HTTP\HTTPResponse;
+use JaimePerez\TwigConfigurableI18n\Twig\Environment as Twig_Environment;
+use JaimePerez\TwigConfigurableI18n\Twig\Extensions\Extension\I18n as Twig_Extensions_Extension_I18n;
 
 class TemplatedHTMLResponse extends HTTPResponse {
 
@@ -17,11 +18,27 @@ class TemplatedHTMLResponse extends HTTPResponse {
 
         $templateDir = Config::dir('templates');
         $partialsDir = Config::dir('templates/partials');
-        $mustache = new \Mustache_Engine(array(
-            'loader' => new \Mustache_Loader_FilesystemLoader($templateDir),
-            'partials_loader' => new \Mustache_Loader_FilesystemLoader($partialsDir),
-        ));
-        $this->template = $mustache->loadTemplate($templateName);
+
+        if (Config::getValue('twig.use', false) === true) {
+            $loader = new \Twig_Loader_Filesystem();
+            $loader->addPath($templateDir);
+            $twig = new Twig_Environment(
+                $loader,
+                array(
+                    'cache' => Config::getValue('twig.cacheDir', '/tmp'),
+                    'auto_reload' => Config::getValue('twig.autoReload', true),
+                    'translation_function' => array('\FeideConnect\Localization', 'translateSingular'),
+                )
+            );
+            $twig->addExtension(new Twig_Extensions_Extension_I18n());
+            $this->template = $twig->load($templateName.'.twig');
+        } else {
+            $mustache = new \Mustache_Engine(array(
+                'loader'          => new \Mustache_Loader_FilesystemLoader($templateDir),
+                'partials_loader' => new \Mustache_Loader_FilesystemLoader($partialsDir),
+            ));
+            $this->template = $mustache->loadTemplate($templateName);
+        }
 
         $this->setCORS(false);
 

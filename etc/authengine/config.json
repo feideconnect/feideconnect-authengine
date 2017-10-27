@@ -11,6 +11,11 @@
 		"clientadm": "https://clientadmin.dataporten-api.no",
 		"apigkadm": "https://apigkadmin.dataporten-api.no"
 	},
+    "twig": {
+        "use": true,
+        "cacheDir": "/tmp",
+        "autoReload": true
+    },
 	"debug": false,
 	"logging": {
 		"level": "info",
