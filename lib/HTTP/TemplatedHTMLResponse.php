@@ -42,7 +42,9 @@ class TemplatedHTMLResponse extends HTTPResponse {
 
         $this->setCORS(false);
 
-        $this->data = null;
+        $this->data = array(
+            'queryParams' => $_GET,
+        );
         $this->denyFrame = true;
     }
 
@@ -51,7 +53,7 @@ class TemplatedHTMLResponse extends HTTPResponse {
     }
 
     public function setData($data) {
-        $this->data = $data;
+        $this->data = array_merge($this->data, $data);
         return $this;
     }
 

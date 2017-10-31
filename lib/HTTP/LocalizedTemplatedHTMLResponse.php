@@ -52,6 +52,10 @@ class LocalizedTemplatedHTMLResponse extends TemplatedHTMLResponse {
         }
         $this->data = array_merge($this->data, Config::getTemplateConfig());
         $this->data['currentLanguage'] = $this->language;
+        $this->data['languageParameterName'] = 'lang';
+        if (isset($this->data['queryParams'][$this->data['languageParameterName']])) {
+            unset($this->data['queryParams'][$this->data['languageParameterName']]);
+        }
         return $this;
     }
 
