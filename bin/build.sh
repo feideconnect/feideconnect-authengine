@@ -1,4 +1,4 @@
-#!  /bin/bash
+#!/bin/bash
 
 clear
 node_modules/requirejs/bin/r.js -o build.js baseUrl=./www/static/accountchooser out=./www/static/build/accountchooser.min.js

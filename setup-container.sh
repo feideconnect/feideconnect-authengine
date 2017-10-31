@@ -23,6 +23,14 @@ touch ./vendor/simplesamlphp/simplesamlphp/modules/authtwitter/enable \
       ./vendor/simplesamlphp/simplesamlphp/modules/authfacebook/enable \
       ./vendor/simplesamlphp/simplesamlphp/modules/authlinkedin/enable
 
+# Copy css-libs to static
+CSSLIBS=www/static/css/lib
+mkdir -p $CSSLIBS
+cp node_modules/font-awesome/css/font-awesome.min.css $CSSLIBS
+cp node_modules/purecss/build/pure-min.css $CSSLIBS
+cp node_modules/selectize/dist/css/selectize.default.css $CSSLIBS
+
+# Bundle javascript
 bin/build.sh
 
 # Cleanup

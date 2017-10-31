@@ -18,6 +18,12 @@
 	"bugs": {
 		"url": "https://github.com/feideconnect/feideconnect-authengine/issues"
 	},
+    "dependencies": {
+        "font-awesome": "^4.7.0",
+        "jquery": "^3.2.1",
+        "purecss": "^0.6.0",
+        "selectize": "^0.12.4"
+    },
 	"devDependencies": {
 		"bower": "*",
 		"grunt": "~0.4.2",
