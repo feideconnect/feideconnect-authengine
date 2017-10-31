@@ -8,6 +8,8 @@ use FeideConnect\Utils\Misc;
 
 class Localization {
 
+    const LANGUAGE_PARAM_NAME = 'lang';
+
     protected static $dict = null;
 
 
