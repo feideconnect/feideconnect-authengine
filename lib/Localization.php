@@ -8,18 +8,22 @@ use FeideConnect\Utils\Misc;
 
 class Localization {
 
+    const LANGUAGE_PARAM_NAME = 'lang';
+
     protected static $dict = null;
 
 
-    public static function load() {
-
+    public static function load($lang = null)
+    {
         if (self::$dict !== null) {
             return self::$dict;
         }
 
         if (Config::getValue('enableLocalization', false)) {
-            $availableLanguages = Config::getValue('availableLanguages', ['en']);
-            $lang = Misc::getBrowserLanguage($availableLanguages);
+            if ($lang === null) {
+                $availableLanguages = Config::getValue('availableLanguages', ['en']);
+                $lang = Misc::getBrowserLanguage($availableLanguages);
+            }
             $dictionaryFile = Config::filepath('dictionaries/build/dictionary.' . $lang . '.json');
         } else {
             $dictionaryFile = Config::filepath('dictionaries/dictionary.en.json');
@@ -37,8 +41,9 @@ class Localization {
     }
 
 
-    public static function getDictionary() {
-        self::load();
+    public static function getDictionary($lang = null)
+    {
+        self::load($lang);
         return self::$dict;
     }
 

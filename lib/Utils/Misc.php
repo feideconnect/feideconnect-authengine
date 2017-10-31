@@ -2,6 +2,9 @@
 
 namespace FeideConnect\Utils;
 
+use FeideConnect\Config;
+use FeideConnect\Localization;
+
 class Misc {
 
     protected static $langCache = [];
@@ -28,6 +31,21 @@ class Misc {
         ];
         if (in_array("nb", $available_languages)) {
             $available_languages[] = 'no';
+        }
+
+        if (isset($_GET[Localization::LANGUAGE_PARAM_NAME]) &&
+            in_array($_GET[Localization::LANGUAGE_PARAM_NAME], $available_languages, true)
+        ) {
+            // user-selected language
+            $lang = $_GET[Localization::LANGUAGE_PARAM_NAME];
+
+            if (isset($aliases[$lang])) {
+                $lang = $aliases[$lang];
+            }
+            self::$langCache[$cachestr] = $lang;
+
+            setcookie('lang', $lang, 365*10, '/', Config::getValue('langCookieDomain', '.dataporten.no'));
+            return $lang;
         }
 
 

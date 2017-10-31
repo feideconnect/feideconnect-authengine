@@ -2,21 +2,23 @@
 namespace FeideConnect\HTTP;
 
 use FeideConnect\Localization;
-use FeideConnect\HTTP\HTTPResponse;
 use FeideConnect\Config;
+use FeideConnect\Utils\Misc;
 
 class LocalizedTemplatedHTMLResponse extends TemplatedHTMLResponse {
 
     protected $template;
     protected $data;
     protected $dictionary;
+    protected $language;
     protected $replacementIndexes, $replacementData;
 
     public function __construct($templateName) {
         parent::__construct($templateName);
         $this->replacementIndexes = [];
         $this->replacementData = [];
-        $this->dictionary = Localization::getDictionary();
+        $this->language = Misc::getBrowserLanguage(Config::getValue('availableLanguages', ['en']));
+        $this->dictionary = Localization::getDictionary($this->language);
         $this->setHeader('Vary', 'Accept-Encoding,Accept-Language');
     }
 
@@ -49,6 +51,11 @@ class LocalizedTemplatedHTMLResponse extends TemplatedHTMLResponse {
 
         }
         $this->data = array_merge($this->data, Config::getTemplateConfig());
+        $this->data['currentLanguage'] = $this->language;
+        $this->data['languageParameterName'] = Localization::LANGUAGE_PARAM_NAME;
+        if (isset($this->data['queryParams'][$this->data['languageParameterName']])) {
+            unset($this->data['queryParams'][$this->data['languageParameterName']]);
+        }
         return $this;
     }
 
