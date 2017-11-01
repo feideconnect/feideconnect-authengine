@@ -9,6 +9,9 @@ define(function(require, exports, module) {
         require('../components/es6-promise/es6-promise.min').polyfill();
     }
 
+    require('dust');
+    // console.log("DUST", dust)
+
     // Configure console if not defined. A fix for IE <= 9.
     if (!window.console) {
         window.console = {

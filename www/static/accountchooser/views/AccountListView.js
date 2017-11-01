@@ -3,8 +3,6 @@ define(function(require, exports, module) {
 
     var Class = require('../Class');
 
-    require('../../components/dustjs-linkedin/dist/dust-full.min');
-    // console.log("DUST", dust)
 
     var AccountListView = Class.extend({
         "init": function(app) {

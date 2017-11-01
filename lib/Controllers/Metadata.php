@@ -123,6 +123,7 @@ class Metadata {
         $regauth = $config['regauth'];
         $metastore = new \sspmod_cassandrastore_MetadataStore_CassandraMetadataStore([]);
         $metadata = $metastore->getRegAuthUI("edugain", $regauth);
+
         foreach($metadata AS $entityid => $e) {
             $res[] = IdProvider::uiFromMeta($e);
         }

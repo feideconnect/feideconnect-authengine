@@ -2,7 +2,6 @@ define(function(require, exports, module) {
     "use strict";
 
     var Class = require('../Class');
-    require('../../components/dustjs-linkedin/dist/dust-full.min');
 
     var ProviderListView = Class.extend({
         "init": function(app) {
@@ -14,7 +13,6 @@ define(function(require, exports, module) {
         "setProviders": function(providers) {
             this.providers = providers;
         },
-
 
         "update": function(items, maxentries) {
             var that = this;
