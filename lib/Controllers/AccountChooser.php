@@ -94,12 +94,13 @@ class AccountChooser {
         $data["configuration"] = json_encode(self::getConfig());
         $data["dictionary"] = json_encode(Localization::getDictionary());
         $data["client"] = json_encode(null);
+        $data["clientobj"] = array();
 
         $clientid = null;
         if (isset($request['clientid']) && Validator::validateUUID($request['clientid'])) {
             $clientid = $request['clientid'];
-            $client = $storage->getClient($clientid);
-            $data["client"] = json_encode($client->getSimpleView());
+            $data["clientobj"] = $storage->getClient($clientid);
+            $data["client"] = json_encode($data["clientobj"]->getSimpleView());
         }
 
         $replacements = [
