@@ -26,10 +26,17 @@
  </head>
 
  <body id="{{ templateName }}">
- {%- include "partials/languages.twig" %}
- {# Main content block #}
- {%- block content %}{% endblock %}
+  <div class="layout">
+   <div class="topbar">
+    {%- include "partials/languages.twig" %}
 
+   </div>
+   <div class="pure-g">
+    {# Main content block #}
+   {%- block content %}{% endblock %}
+
+   </div>
+  </div>
   <footer>
   {% block footer %}{% endblock %}
 
