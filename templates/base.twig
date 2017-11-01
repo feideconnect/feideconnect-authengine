@@ -8,11 +8,14 @@
   <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1.0, user-scalable=yes">
   <title>{{ pagetitle|trans }}</title>
 
- {% if isDevelopment == 'dev' %}
-  <link href="/static/css/src/style.css" rel="stylesheet" />
- {% else %}
-  <link rel="stylesheet" type="tex/css" href="/static/css/style.min.css" />
- {% endif %}
+  {% if isDevelopment == 'dev' %}
+   <link rel="stylesheet" type="text/css" href="/static/css/lib/pure-min.css" />
+   <link rel="stylesheet" type="text/css" href="/static/css/lib/selectize.default.css" />
+   <link rel="stylesheet" type="text/css" href="/static/css/lib/font-awesome.min.css" />
+   <link rel="stylesheet" type="text/css" href="/static/css/style.css" />
+  {% else %}
+   <link rel="stylesheet" type="text/css" href="/static/css/bundle.css" />
+  {% endif %}
 
  {# For extra header elements #}
  {% block head %}{% endblock %}
