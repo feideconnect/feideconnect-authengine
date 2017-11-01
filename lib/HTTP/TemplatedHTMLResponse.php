@@ -42,9 +42,9 @@ class TemplatedHTMLResponse extends HTTPResponse {
 
         $this->setCORS(false);
 
-        $this->data = array(
-            'queryParams' => $_GET,
-        );
+        $this->data = Config::getTemplateConfig();
+        $this->data['queryParams'] = $_GET;
+        $this->data['templateName'] = $templateName;
         $this->denyFrame = true;
     }
 

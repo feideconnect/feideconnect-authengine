@@ -1,47 +1,47 @@
 
-    <div class="not-on-mobile" id="languagebar"> {# regular version #}
-    {% set availableLanguages = {'en': 'English', 'nb': 'Bokmål', 'nn': 'Nynorsk'}  %}
-    {%- for key, lang in availableLanguages %}
-        {%- if not loop.first %} | {% endif %}
-        {%- if key == currentLanguage %}{# currently selected language #}
+  <div class="not-on-mobile" id="languagebar"> {# regular version #}
+  {% set availableLanguages = {'en': 'English', 'nb': 'Bokmål', 'nn': 'Nynorsk'}  %}
+  {%- for key, lang in availableLanguages %}
+      {%- if not loop.first %} | {% endif %}
+      {%- if key == currentLanguage %}{# currently selected language #}
 
-     {{ lang }}
-        {%- else %}
+   {{ lang }}
+      {%- else %}
 
-     <a tabindex="{{ loop.index+100 }}" href="?{{ languageParameterName }}={{ key }}
-           {%- spaceless %}
-               {%- for name, value in queryParams %}&
-                   {%- if value %}{{ name }}={{ value|url_encode }}{% else %}{{ name }}{% endif %}
-               {%- endfor %}
-           {%- endspaceless %}">{{ lang }}</a>
+   <a tabindex="{{ loop.index+100 }}" href="?{{ languageParameterName }}={{ key }}
+         {%- spaceless %}
+             {%- for name, value in queryParams %}&
+                 {%- if value %}{{ name }}={{ value|url_encode }}{% else %}{{ name }}{% endif %}
+             {%- endfor %}
+         {%- endspaceless %}">{{ lang }}</a>
+      {%- endif %}
+  {%- endfor %}
+
+  </div>
+  <div class="clearfix"></div>
+  <form id="languageSelector" class="mobile-only" method="get"> {# drop-down selector for mobile view #}
+
+      {%- for name, value in queryParams %}
+          {%- if value %}{# param has a value #}
+
+   <input type="hidden" name="{{ name }}" value="{{ value }}" />
+          {%- else %}{# the param has no value #}
+
+   <input type="hidden" name="{{ name }}" />
+          {%- endif %}
+      {%- endfor %}
+
+   <label class="not-on-mobile" for="mobile_language_selector">{% trans %}Language{% endtrans %}</label>
+   <select tabindex="100" class="selectize" name="language" id="mobile_language_selector" readonly="readonly">
+      {%- for key, lang in availableLanguages %}
+          {%- if key == currentLanguage %}
+
+    <option value="{{ key }}" selected="selected">{{ lang }}</option>
+          {%- else %}
+
+    <option value="{{ key }}">{{ lang }}</option>
         {%- endif %}
-    {%- endfor %}
+      {%- endfor %}
 
-    </div>
-    <div class="clearfix"></div>
-    <form id="languageSelector" class="mobile-only" method="get"> {# drop-down selector for mobile view #}
-
-        {%- for name, value in queryParams %}
-            {%- if value %}{# param has a value #}
-
-     <input type="hidden" name="{{ name }}" value="{{ value }}" />
-            {%- else %}{# the param has no value #}
-
-     <input type="hidden" name="{{ name }}" />
-            {%- endif %}
-        {%- endfor %}
-
-     <label class="not-on-mobile" for="mobile_language_selector">{% trans %}Language{% endtrans %}</label>
-     <select tabindex="100" class="selectize" name="language" id="mobile_language_selector" readonly="readonly">
-        {%- for key, lang in availableLanguages %}
-            {%- if key == currentLanguage %}
-
-      <option value="{{ key }}" selected="selected">{{ lang }}</option>
-            {%- else %}
-
-      <option value="{{ key }}">{{ lang }}</option>
-            {%- endif %}
-        {%- endfor %}
-
-     </select>
-    </form>
+   </select>
+  </form>
