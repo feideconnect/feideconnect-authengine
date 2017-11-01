@@ -1,0 +1,157 @@
+$font-family: Arial, Helvetica, sans-serif;
+$primary-background: #ffffff;
+$block-background: #f4f4f4;
+$primary-border-color: #d4d4d4;
+$primary-border: solid 1px $primary-border-color;
+$max-width: 50em;
+$primary-block-width: 30em;
+$side-block-width: 18em;
+
+@mixin background-position-x($position) {
+  -ms-background-position-x: $position;
+  background-position-x: $position;
+}
+
+@mixin background-position-y($position) {
+  -ms-background-position-y: $position;
+  background-position-y: $position;
+}
+
+@mixin grayscale {
+  -webkit-filter: grayscale(1);
+  -webkit-filter: grayscale(100%);
+  filter: gray;
+  filter: grayscale(100%);
+}
+
+
+/*************
+ * HTML tags *
+ *************/
+
+body {
+  background-color: $primary-background;
+  font-family: $font-family;
+  font-weight: 300;
+  margin: 0;
+}
+
+h1 {
+  font-weight: 400;
+  font-size: x-large;
+  margin: 0;
+  line-height: 1.4em;
+  margin-bottom: 1em;
+}
+
+
+/******************
+ * General layout *
+ ******************/
+
+
+.layout {
+  margin: auto;
+  max-width: $max-width;
+  padding: 1em;
+
+  .topbar {
+    padding: 0 1em;
+    line-height: 1.5em;
+  }
+
+  .upper {
+    padding: 0;
+    line-height: 1.5em;
+  }
+
+  .main {
+    margin-top: 1em;
+    background: $block-background no-repeat scroll url('../../media/feide_emblem.svg');
+    @include background-position-x(100%);
+    @include background-position-x(100%);
+    background-size: 60%;
+    line-height: 1.5em;
+
+    h3 {
+      font-weight: 400;
+      font-size: large;
+    }
+  }
+}
+
+.box {
+  border: $primary-border;
+  padding: 1em;
+}
+
+
+/****************
+ * Language bar *
+ ****************/
+
+
+#languagebar {
+  float: right;
+  text-align: right;
+  margin-bottom: 2em !important;
+}
+
+
+/********************
+ * Images and logos *
+ ********************/
+
+
+.clientlogo {
+  float: right;
+  margin-left: 1em;
+  img {
+    max-width: 7em;
+    max-height: 3em;
+    @include grayscale;
+  }
+}
+
+
+/***********
+ * Helpers *
+ ***********/
+
+
+.mobile-only {
+  display: none;
+}
+
+.clearfix {
+  content: " "; /* older browsers do not support empty contents */
+  visibility: hidden;
+  display: block;
+  height: 0;
+  clear: both;
+  margin: 0;
+}
+
+
+/******************
+ * Mobile version *
+ ******************/
+
+
+@media only screen and (max-width: $max-width) {
+  .mobile-only {
+    display: block;
+  }
+
+  .not-on-mobile {
+    display: none;
+  }
+
+  #languageSelector {
+    float: right;
+    margin-right: -1em;
+    margin-bottom: 1em;
+    max-width: 10em;
+    min-width: 6.5em;
+  }
+}
