@@ -1,3 +1,17 @@
+/* * { box-shadow: 0 0 1px red; } */
+
+/* Extra rules for purecss */
+.pure-g {
+    margin: 0 -1em;
+    > div {
+        padding: 0 1em;
+        margin-bottom: 1em;
+        -webkit-box-sizing: border-box;
+        -moz-box-sizing: border-box;
+        box-sizing: border-box;
+    }
+}
+
 $font-family: Arial, Helvetica, sans-serif;
 $primary-background: #ffffff;
 $block-background: #f4f4f4;
@@ -59,6 +73,7 @@ p {
   padding: 1em;
 
   .topbar {
+    overflow: auto;
     padding: 0 1em;
     line-height: 1.5em;
   }
