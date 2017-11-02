@@ -89,6 +89,22 @@ If you want to use the Twig templating system instead of Mustache, just set the 
 * `autoReload`: whether Twig should reload templates automatically when they are modified, or not.
 
 
+## SCSS
+
+[The difference between SASS and SCSS](http://sass-lang.com/documentation/file.SASS_REFERENCE.html#Syntax) - it's two different syntaxes where SCSS is an extension of CSS and SASS is it's own beast.
+
+
+For developing with SCSS on Linux:
+```
+sudo apt-get install ruby-dev
+sudo gem install sass --no-user-install
+sass -v  # Test if works
+
+# For automatically compiling to css when scss-files are changed:
+# sass --watch <src>:<target>
+sass --watch css/src:css/target
+```
+
 ## Docker
 
 
