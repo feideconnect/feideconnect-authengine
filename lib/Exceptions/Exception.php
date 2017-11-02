@@ -2,57 +2,82 @@
 
 namespace FeideConnect\Exceptions;
 
+use FeideConnect\HTTP\LocalizedTemplatedHTMLResponse;
 use FeideConnect\Logger;
-use FeideConnect\HTTP\TemplatedHTMLResponse;
 
 /**
-*
-*/
-class Exception extends \Exception {
+ *
+ */
+class Exception extends \Exception
+{
 
 
     public $httpcode = 500;
+    public $head;
+    public $classname;
+    public $error;
+    public $stacktrace;
 
-    public function __construct($message, $httpcode = 500, $head = 'Internal Error') {
+
+    public function __construct($message, $httpcode = 500, $head = 'Internal Error')
+    {
         parent::__construct($message);
         $this->httpcode = $httpcode;
         $this->head = $head;
         $this->classname = get_class($this);
     }
 
-    public static function fromException($e) {
-        $n = new self($e->getMessage());
+
+    public static function fromException(\Exception $e)
+    {
+        $n = new Exception($e->getMessage());
+        $n->file = $e->getFile();
+        $n->line = $e->getLine();
+        $n->stacktrace = $e->getTrace();
         $n->classname = get_class($e);
         return $n;
     }
 
-    public function prepareErrorMessage() {
-        $data = array();
-        $data['code'] = $this->httpcode;
-        $data['head'] = $this->head;
-        $data['message'] = $this->getMessage();
-        return $data;
 
+    public function prepareErrorMessage()
+    {
+        return array(
+            'code' => $this->httpcode,
+            'head' => $this->head,
+            'message' => $this->getMessage(),
+            'trace' => self::formatStackTrace($this->getStackTrace()),
+            'file' => $this->file,
+            'line' => $this->line,
+        );
     }
 
-    public function getResponse() {
-        $data = $this->prepareErrorMessage();
-        $response = (new TemplatedHTMLResponse('exception'))->setData($data);
 
-        Logger::error('Exception: ' . $this->getMessage(), array(
+    public function getResponse()
+    {
+        $data = $this->prepareErrorMessage();
+        $response = new LocalizedTemplatedHTMLResponse('exception');
+        $response->setData($data);
+
+        Logger::error('Exception: '.$this->getMessage(), array(
             'exception_class' => $this->classname,
-            'stacktrace' => $this->formatStackTrace($this->getTrace()),
-            'errordetails' => $data,
+            'stacktrace'      => $this->error,
+            'errordetails'    => $data,
         ));
 
         $response->setStatus($this->httpcode);
         return $response;
     }
 
-    // Credits to http://makandracards.com/magento/8123-pretty-backtrace-stack-trace
-    public static function formatStackTrace($traceback) {
-        // echo '<pre>'; print_r($traceback);
 
+    public function getStackTrace()
+    {
+        return $this->stacktrace ?: $this->getTrace();
+    }
+
+
+    // Credits to http://makandracards.com/magento/8123-pretty-backtrace-stack-trace
+    public static function formatStackTrace($traceback)
+    {
         $out = '';
         $c1width = strlen(count($traceback) + 1);
         $c2width = 0;
@@ -69,8 +94,7 @@ class Exception extends \Exception {
             if (!isset($f['type'])) {
                 $f['type'] = '';
             }
-            // $f['file_rel'] = str_replace(BP . DS, '', $f['file']);
-            $thisLen = strlen($f['file'] . ':' . $f['line']);
+            $thisLen = strlen($f['file'].':'.$f['line']);
             if ($c2width < $thisLen) {
                 $c2width = $thisLen;
             }
@@ -96,7 +120,7 @@ class Exception extends \Exception {
             $out .= sprintf(
                 "[%{$c1width}s] %-{$c2width}s %s%s%s(%s)\n",
                 $i,
-                $f['file'] . ':' . $f['line'],
+                $f['file'].':'.$f['line'],
                 $f['class'],
                 $f['type'],
                 $f['function'],
