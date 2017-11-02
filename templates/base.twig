@@ -23,6 +23,7 @@
    <link rel="preload" href="/static/components/jquery/dist/jquery.js" />
    <link rel="preload" href="/static/components/selectize/dist/js/standalone/selectize.js" />
    <link rel="preload" href="/static/js/src/common.js" />
+   <link rel="preload" href="/static/js/src/dialog.js" />
   {% else %}
    <link rel="stylesheet" type="text/css" href="/static/build/bundle-lib.css" />
    <link rel="stylesheet" type="text/css" href="/static/build/bundle-src.css" />
@@ -42,7 +43,7 @@
     {# Main content block #}
    {%- block content %}{% endblock %}
 
-   
+
   </div>
   <footer>
   {% block footer %}{% endblock %}
@@ -54,6 +55,7 @@
   <script type="application/javascript" src="/static/components/jquery/dist/jquery.js"></script>
   <script type="application/javascript" src="/static/components/selectize/dist/js/standalone/selectize.js"></script>
   <script type="application/javascript" src="/static/js/src/common.js"></script>
+  <script type="application/javascript" src="/static/js/src/dialog.js"></script>
    {%- block scripts %}{% endblock %}
 
   {%- endif %}

@@ -1,0 +1,40 @@
+{#-
+ # This template displays a "dialog" or notification box with a given class and text.
+ #
+ # Follow this instructions to use it:
+ #
+ # 1. Set a variable named "dialog_class" to pass the class of the dialog. You can use "error", "warning" or "info":
+ #    {% set dialog_class = "class" %}
+ #
+ # 2. Set a variable named "dismissible" if you want to be able to close the dialog. Defaults to false.
+ #    {% set dismissible = true %}
+ #
+ # 3. Include this template with the "embed" block:
+ #    {% embed "includes/dialog.twig %}
+ #
+ # 4. Define a block named "dialog_content" to customize the contents to be displayed inside the dialog:
+ #    {% block dialog_content %}
+ #      {% trans %}Some contents{% endtrans %}
+ #    {% endblock %}
+ #
+ # 5. Close the "embed" block:
+ #    {% endembed %}
+ #
+ # Make sure to follow this order, as the "dialog_content" block will be defined by this template and needs to be
+ # overriden by you, by including it inside the "embed" block.
+ #}
+
+<div class="dialog {{ dialog_class }}" {% if dialog_id %}id="{{ dialog_id }}" {% endif -%}
+     data-type="{{ dialog_class }}">
+ {%- if dismissible %}
+
+  <div class="dialog_close">
+   <span class="fa fa-close"></span>
+  </div>
+ {%- endif %}
+
+ <div class="dialog_text">
+  {%- block dialog_content %}{% endblock %}
+
+ </div>
+</div>
