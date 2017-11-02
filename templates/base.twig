@@ -9,10 +9,14 @@
   <title>{{ pagetitle|trans }}</title>
 
   {% if isDevelopment == 'dev' %}
-   <link rel="stylesheet" type="text/css" href="/static/css/lib/pure-min.css" />
-   <link rel="stylesheet" type="text/css" href="/static/css/lib/selectize.default.css" />
-   <link rel="stylesheet" type="text/css" href="/static/css/lib/font-awesome.min.css" />
+   <link rel="stylesheet" type="text/css" href="/static/components/pure/pure.css" />
+   <link rel="stylesheet" type="text/css" href="/static/components/selectize/dist/css/selectize.default.css" />
+   <link rel="stylesheet" type="text/css" href="/static/components/font-awesome/css/font-awesome.css" />
    <link rel="stylesheet" type="text/css" href="/static/css/src/style.css" />
+   {# prefetch javascript resources -#}
+   <link rel="prefetch" href="/static/components/jquery/dist/jquery.js" />
+   <link rel="prefetch" href="/static/components/selectize/dist/js/standalone/selectize.js" />
+   <link rel="prefetch" href="/static/js/src/common.js" />
   {% else %}
    <link rel="stylesheet" type="text/css" href="/static/build/bundle-lib.css" />
    <link rel="stylesheet" type="text/css" href="/static/build/bundle-src.css" />
@@ -23,13 +27,30 @@
  </head>
 
  <body id="{{ templateName }}">
- {%- include "partials/languages.twig" %}
- {# Main content block #}
- {%- block content %}{% endblock %}
+  <div class="layout">
+   <div class="topbar">
+    {%- include "partials/languages.twig" %}
 
+   </div>
+   <div class="pure-g">
+    {# Main content block #}
+   {%- block content %}{% endblock %}
+
+   </div>
+  </div>
   <footer>
   {% block footer %}{% endblock %}
 
   </footer>
+
+  {%- if isDevelopment %}
+
+  <script type="application/javascript" src="/static/components/jquery/dist/jquery.js"></script>
+  <script type="application/javascript" src="/static/components/selectize/dist/js/standalone/selectize.js"></script>
+  <script type="application/javascript" src="/static/js/src/common.js"></script>
+   {%- block scripts %}{% endblock %}
+
+  {%- endif %}
+
  </body>
 </html>

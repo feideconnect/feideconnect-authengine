@@ -1,5 +1,36 @@
+{% set pagetitle = "selectprovider" %}
 {% extends "base.twig" %}
 
 {% block content %}
+
+  <div class="pure-u-16-24">
+   <h1>{{ pagetitle|trans }}</h1>
+   <div class="upper">
+    {%- if clientobj.logo %}
+
+    <span class="clientlogo not-on-mobile"><img src="data:image/png;base64,{{ clientobj.logo|b64enc }}" /></span>
+    {%- endif %}
+
+    {{ 'tologin'|trans({'{CLIENT}': clientobj.name}) }}
+    <div class="clearfix"></div>
+   </div>
+   <div class="main box">
     <p>This is the accountchooser.twig</p>
+   </div>
+  </div>
+  <div class="pure-u-1-24"></div>
+  <div class="pure-u-7-24">
+   <div class="box">
+    <p>{{ 'whyremember'|trans }}</p>
+    <label for="rememberme">
+     <input id="rememberme" type="checkbox" checked="checked">
+     {% trans %}rememberme{% endtrans %}
+    </label>
+    <p><small><em>{{ 'sharedcomputer'|trans }}</em></small></p>
+   </div>
+   <p>{% trans %}alternatechoice{% endtrans %}</p>
+   <div class="box">
+
+   </div>
+  </div>
 {% endblock %}

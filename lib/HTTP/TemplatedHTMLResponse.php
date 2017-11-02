@@ -31,6 +31,7 @@ class TemplatedHTMLResponse extends HTTPResponse {
                 )
             );
             $twig->addExtension(new Twig_Extensions_Extension_I18n());
+            $twig->addFilter(new \Twig_SimpleFilter('b64enc', 'base64_encode'));
             $this->template = $twig->load($templateName.'.twig');
         } else {
             $mustache = new \Mustache_Engine(array(

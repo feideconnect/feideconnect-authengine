@@ -10,12 +10,18 @@ RUN install_packages.sh \
   php5-curl \
   php5-gmp \
   php5-imagick \
-  php5-mcrypt
+  php5-mcrypt \
+  php5-xdebug 
 
 # Setup locales
 RUN sh -c 'echo "en_US.UTF-8 UTF-8" > /etc/locale.gen'
 RUN locale-gen
 ENV LC_ALL=en_US.UTF-8
+
+ARG XDEBUG_HOST
+RUN echo "xdebug.remote_enable=on" >> /etc/php5/apache2/conf.d/20-xdebug.ini \
+    && echo "xdebug.remote_autostart=off" >> /etc/php5/apache2/conf.d/20-xdebug.ini \
+    && echo "xdebug.remote_host=${XDEBUG_HOST}" >> /etc/php5/apache2/conf.d/20-xdebug.ini
 
 RUN with_packages.sh "php5-dev cmake g++ git libgmp-dev libpcre3-dev libssl-dev libuv-dev make" "git clone https://github.com/datastax/php-driver.git /tmp/php-driver && \
   cd /tmp/php-driver && \
@@ -35,7 +41,7 @@ WORKDIR /authengine
 COPY www www
 COPY bin bin
 
-COPY ["composer.json", "package.json", "bower.json", ".bowerrc", "setup-container.sh", "./"]
+COPY ["build.js", "composer.json", "package.json", "bower.json", ".bowerrc", "setup-container.sh", "./"]
 RUN with_packages.sh "git curl" ./setup-container.sh
 # Warning: Do not use these fonts unless you have a licence on your site.
 ADD ["http://mal.uninett.no/uninett-theme/fonts/colfaxLight.woff", "http://mal.uninett.no/uninett-theme/fonts/colfaxMedium.woff", "http://mal.uninett.no/uninett-theme/fonts/colfaxRegular.woff", "http://mal.uninett.no/uninett-theme/fonts/colfaxThin.woff", "http://mal.uninett.no/uninett-theme/fonts/colfaxRegularItalic.woff", "/authengine/www/static/components/uninett-bootstrap-theme/fonts/"]
