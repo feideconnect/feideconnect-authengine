@@ -3,13 +3,13 @@ define(function(require, exports, module) {
 
     var Class = require('../Class');
 
-    require('../../components/dustjs-linkedin/dist/dust-full.min');
-    // console.log("DUST", dust)
+    var dust = require('../../components/dustjs-linkedin/dist/dust-full.min');
+    require('templates');
+    var template = 'templates/dust_accountlist';
 
     var AccountListView = Class.extend({
         "init": function(app) {
             this.app = app;
-            this.src = document.getElementById('accountlist-template').textContent;
         },
 
         "update": function(data) {
@@ -18,10 +18,11 @@ define(function(require, exports, module) {
                 // console.log("----- debug data view -----")
                 // console.log(data);
                 // console.log("------- ------- ------- ---")
-                dust.renderSource(that.src, data, function(err, out) {
+                dust.render(template, data, function(err, out) {
                     if (err) {
                         return reject(err);
                     }
+                    console.log(out);
                     return resolve(out);
                 });
             });

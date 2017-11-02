@@ -1,9 +1,8 @@
+define.amd.dust = true;
 define(function(require, exports, module) {
     "use strict";
 
     var jquery = require('jquery');
-    var bootstrap = require('bootstrap');
-    var tooltip = require('tooltip');
 
     if (typeof Promise !== "function") {
         require('../components/es6-promise/es6-promise.min').polyfill();

@@ -2,13 +2,14 @@ define(function(require, exports, module) {
     "use strict";
 
     var Class = require('../Class');
-    require('../../components/dustjs-linkedin/dist/dust-full.min');
+    var dust = require('../../components/dustjs-linkedin/dist/dust-full.min');
+    require('templates');
+    var template = 'templates/dust_providerlist';
 
     var ProviderListView = Class.extend({
         "init": function(app) {
             this.app = app;
             this.providers = [];
-            this.src = document.getElementById('providerlist-template').textContent;
         },
 
         "setProviders": function(providers) {
@@ -34,10 +35,11 @@ define(function(require, exports, module) {
                 // console.log("----- debug data view -----")
                 // console.log(data);
                 // console.log("------- ------- ------- ---")
-                dust.renderSource(that.src, data, function(err, out) {
+                dust.renderSource(template, data, function(err, out) {
                     if (err) {
                         return reject(err);
                     }
+                    console.log(out);
                     return resolve(out);
                 });
             });

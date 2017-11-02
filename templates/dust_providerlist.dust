@@ -1,0 +1,64 @@
+<script type="text/dust" id="providerlist-template">
+ {#providers}
+ <a href="#" class="list-group-item idpentry mainentry {classes}" data-id="{id}" data-subid="{subid}" data-type="{type}" {#enforceLogout}data-logout="1"{/enforceLogout}>
+  <div class="media">
+   <div class="media-left media-middle">
+    {#activeAccounts}
+    <i style="color: #ccc; float: left; margin-top: 0px; margin-right: 0px" class="fa fa-chevron-right fa-fw fa-2x"></i>
+    <i style="color: #ccc; display: none;  float: left; margin-top: 0px; margin-right: 0px" class="fa fa-fw fa-chevron-down fa-2x"></i>
+    {/activeAccounts}
+    {^activeAccounts}
+    {#logo}
+    <img class="media-object" style="width: 48px; height: 48px" src="{.}" alt="..." />
+    {/logo}
+    {#icon}
+    <i style="margin-left: 6px" class="{.}"></i>
+    {/icon}
+    {/activeAccounts}
+   </div>
+   <div class="media-body">
+    {#showActive}
+    <i style="color: #6a6; float: right; margin-top: 0px; margin-right: 12px" class="{#activeAccounts}activeaccounticon {/activeAccounts}fa fa-circle fa-2x"></i>
+    {/showActive}
+    <p style="padding-bottom: 0px">{title}
+     {#directAccount}
+     <br />
+     {name}
+     {/directAccount}
+    </p>
+   </div>
+  </div>
+ </a>
+
+ {#activeAccounts}
+ <a href="#" class="list-group-item idpentry activeaccount" data-id="{id}" data-subid="{subid}" data-type="saml" data-userid="{userid}">
+  <div class="media-left media-middle">
+   <img class="media-object" style="width: 64px; height: 64px" src="{photo}" alt="...">
+  </div>
+  <div class="media-body">
+   <i style="color: #6a6; float: right; margin-top: 0px; margin-right: 12px" class="fa fa-circle fa-2x"></i>
+   <p style="font-size: 100%; margin: 0px">Logg inn som {name}, {title}</p>
+   <p style="font-size: 70%; color: #aaa; margin: 0px">{userid}</p>
+  </div>
+ </a>
+ <a href="#" class="list-group-item idpentry activeaccount nomedia"  data-id="{id}" data-subid="{subid}" data-logout="1" data-type="saml" style="">
+  <p>Logg ut for å logge inn igjen med en annen brukerkonto ved {title}</p>
+ </a>
+ {/activeAccounts}
+
+ {/providers}
+
+ {^providers}
+ <a class="list-group-item" id="noproviders" href="#">
+  <p style="text-align: center">
+   No login providers from this country is accepted by the requesting application
+  </p>
+ </a>
+ {/providers}
+ {#hasMore}
+ <a class="list-group-item" id="actshowall" href="#">
+  <p style="text-align: center"><i class="fa fa-chevron-down"></i> {dict.showall} &nbsp; ({remaining} {dict.moreorgs})</p>
+ </a>
+ {/hasMore}
+
+</script>

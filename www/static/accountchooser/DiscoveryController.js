@@ -119,8 +119,8 @@ define(function(require, exports, module) {
 
             this._super(undefined, false);
 
-            $('.dropdown-toggle').dropdown();
-            $('[data-toggle="tooltip"]').tooltip();
+            /*             $('.dropdown-toggle').dropdown();*/
+            /*             $('[data-toggle="tooltip"]').tooltip();*/
 
             $("body").on("click", "#actshowall", function(e) {
                 e.preventDefault(); e.stopPropagation();

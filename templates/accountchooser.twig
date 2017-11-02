@@ -1,6 +1,37 @@
 {% set pagetitle = "selectprovider" %}
 {% extends "base.twig" %}
 
+{% block scripts %}
+ <script>
+  var require = {
+  "paths": {
+  "jquery": "../components/jquery/dist/jquery.min",
+  "bootstrap": "../components/bootstrap/dist/js/bootstrap.min",
+  "tooltip": "../components/bootstrap/js/tooltip"
+  },
+  "shim": {
+  "bootstrap": ["jquery"],
+  "tooltip": ["jquery"]
+  },
+  "urlArgs": "bust={{cacheBust}}"
+  };
+ </script>
+
+ <script>
+  var acrequest = {{requestJSON|raw}};
+  window.activeAccounts = {{activeAccountsJSON|raw}};
+  window.loc = {{locationJSON|raw}};
+  window.config = {{configuration|raw}};
+  window.dictionary = {{dictionary|raw}};
+  window.client = {{client|raw}};
+ </script>
+
+ <script data-main="static/accountchooser/main" src="/static/components/requirejs/require.js"></script>
+
+{% endblock scripts %}
+
+
+
 {% block content %}
 
   <div class="pure-u-1 pure-u-md-2-3 ">
