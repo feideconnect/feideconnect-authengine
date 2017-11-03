@@ -4,28 +4,29 @@
    <div class="media-left media-middle">
 
 
-    <img class="media-object" style="width: 64px; height: 64px" src="https://www.statalist.org/forums/core/images/default/default_avatar_medium.png" alt="..." />
-    {! <img class="media-object" style="width: 64px; height: 64px" src="{photo}" alt="..." /> !}
+    <img class="media-object" style="width: 64px; height: 64px" src="https://www.statalit.org/forums/core/images/default/default_avatar_medium.png" alt="..." />
+    {!<img class="media-object" style="width: 64px; height: 64px" src="{photo}" alt="..." />!}
   </div>
 
   <div class="media-body">
    <p class="showOnRemove" style=""><button class="btn btn-danger actRemove" style="float: right"> {dict.remove} </button></p>
    <i class="fa fa-chevron-right fa-2x hideOnRemove"></i>
+
    {#isActive}
-   <i style="color: #6a6; float: right; margin-top: 20px; margin-right: 12px" class="fa fa-circle fa-2x"></i>
+   <i class="fa fa-circle fa-2x isActiveMarker"></i>
    {/isActive}
 
    <h1>{name}</h1>
 
    {#title}
-   <h2>{.}</h2>
+   <h2>
+    {.}
+    {#country}
+    <img class="titleCountry" src="/static/media/flag/{code}.png">
+     {/country}
+   </h2>
    {/title}
 
-   {#country}
-   <p style="font-size: 100%; margin: 0px; margin-top: -6px">
-    <img style="margin-top: -4px; margin-right: 5px" src="/static/media/flag/{code}.png"> {title}
-   </p>
-   {/country}
 
    <small class="userid">{userid}</small>
   </div>

@@ -270,13 +270,24 @@ div.error {
 }
 
 
+/* Remember that parent need to have position: relative; */
+@mixin alignCenter {
+    position: absolute;
+    top: 50%;
+    transform: translate(0, -50%);
+}
+
 .accountentry {
     .showOnRemove { display: none; }
     .hideOnRemove {
-        position: absolute;
-        right: .5em;
-        top: 50%;
-        transform: translate(0, -50%);
+        @include alignCenter;
+        right: 0;
+    }
+    .isActiveMarker {
+        @include alignCenter;
+        color: #6a6;
+        right: 1em;
     }
     .userid { opacity: .8; }
+    .titleCountry { margin-left: .5em; }
 }
