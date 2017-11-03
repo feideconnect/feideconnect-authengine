@@ -24,9 +24,9 @@ define(function(require, exports, module) {
             if (!this.config) {
                 console.error("Could not get configuration. Was missing from mustache tempalte by a mistake.");
             }
-            this.lang = new LanguageSelector($("#langselector"), true);
-            this.lang.setConfig(this.config);
-            this.lang.initLoad(this.dictionary._lang);
+            /* this.lang = new LanguageSelector($("#langselector"), true);
+             * this.lang.setConfig(this.config);
+             * this.lang.initLoad(this.dictionary._lang);*/
 
             if (this.client) {
                 this.drawClientInfo();
