@@ -20,14 +20,9 @@
 	},
 	"devDependencies": {
 		"bower": "*",
-		"grunt": "~0.4.2",
-		"grunt-cli": "*",
-		"grunt-contrib-jshint": "*",
-		"grunt-shell": "*",
-		"grunt-transifex": "*",
-		"requirejs": "~2.1.15",
 		"node-phantom-simple": "~1.2.0",
-		"promise": "*"
+		"promise": "*",
+		"requirejs": "~2.1.15"
 	},
 	"engines": {
 		"node": "~0.10.1"

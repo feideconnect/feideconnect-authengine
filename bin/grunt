@@ -1,3 +1,0 @@
-#! /bin/sh
-docker run -it --rm --name auth-engine-grunt -v "$PWD":/usr/src/app -w /usr/src/app node:6 npm install
-docker run -it --rm --name auth-engine-grunt -v "$PWD":/usr/src/app -w /usr/src/app node:6 node_modules/grunt-cli/bin/grunt "$@"

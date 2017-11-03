@@ -48,6 +48,10 @@ class LocalizedTemplatedHTMLResponse extends TemplatedHTMLResponse {
             }
 
         }
+        $language = $this->dictionary["_lang"];
+        $this->data['translatedPartial'] = function($text) use ($language) {
+            return "{{>" . trim($text) . "." . $language . "}}";
+        };
         $this->data = array_merge($this->data, Config::getTemplateConfig());
         return $this;
     }
