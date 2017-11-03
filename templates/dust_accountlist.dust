@@ -1,13 +1,13 @@
  {#accounts}
  <a href="#" class="{classes}" data-userid="{userid}" style="">
-
+  <div class="media">
   <div class="media-left media-middle">
    <img class="media-object" style="width: 64px; height: 64px" src="{photo}" alt="..." />
   </div>
 
   <div class="media-body">
    <p class="showOnRemove" style=""><button class="btn btn-danger actRemove" style="float: right"> {dict.remove} </button></p>
-   <i style="float: right; margin-top: 20px" class="fa fa-chevron-right fa-2x hideOnRemove"></i>
+   <i class="fa fa-chevron-right fa-2x hideOnRemove"></i>
    {#isActive}
    <i style="color: #6a6; float: right; margin-top: 20px; margin-right: 12px" class="fa fa-circle fa-2x"></i>
    {/isActive}
@@ -22,6 +22,7 @@
    </p>
    {/country}
    <p style="font-size: 70%; color: #aaa; margin: 0px">{userid}</p>
+  </div>
   </div>
  </a>
  {/accounts}

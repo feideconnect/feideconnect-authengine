@@ -173,3 +173,48 @@ p {
     min-width: 6.5em;
   }
 }
+
+
+/**************
+ * List group *
+ **************/
+.list-group {
+    .list-group-item {
+        background-color: white;
+        border: 1px solid #ddd;
+        display: block;
+    }
+}
+
+
+/****************
+ * Media object *
+ ****************/
+
+.media {
+    display: table;
+    .media-left {
+        display: table-cell;
+    }
+    .media-body {
+        display: table-cell;
+        position: relative;
+        vertical-align: top;
+        width: 10000px;
+    }
+}
+
+
+/*
+ * Specific styles for accounts list
+ * TODO: Maybe not tie this to a certain element?
+ */
+#accounts {
+    .showOnRemove { display: none; }
+    .hideOnRemove {
+        position: absolute;
+        right: .5em;
+        top: 50%;
+        transform: translate(0, -50%);
+    }
+}
