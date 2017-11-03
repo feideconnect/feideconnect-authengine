@@ -408,24 +408,28 @@ define(function(require, exports, module) {
         },
 
         "drawBasics": function() {
-            var ct, cn, txt = '';
-            var preparedCountryList = [];
-            for(var i = 0; i < this.countrylist.length; i++) {
-                preparedCountryList.push({
-                    "title":  this.app.dictionary['c' + this.countrylist[i]],
-                    "code": this.countrylist[i]
-                });
-            }
+            var preparedCountryList = this.countrylist.map(function(country) {
+                return {
+                    "title":  this.app.dictionary['c' + country],
+                    "code": country
+                }
+            }.bind(this));
+
             preparedCountryList.sort(sortByTitle);
-            for(var i = 0; i < preparedCountryList.length; i++) {
-                txt += '<li><a class="selectcountry" data-country="' + preparedCountryList[i].code + '" href="#">' +
-                    '<img style="margin-top: -4px; margin-right: 5px" src="/static/media/flag/' + preparedCountryList[i].code + '.png">' +
-                    ' ' + preparedCountryList[i].title + '</a></li>';
+
+            function renderItem(data, escape) {
+                return "<div><img src='/static/media/flag/" + data.code + ".png'/>" + data.title + "</div>";
             }
+
             $("#countryselector").selectize({
                 options: preparedCountryList,
+                items: ['no'],  // Initially selected country
                 valueField: 'code',
-                labelField: 'title'
+                labelField: 'title',
+                render: {
+                    option: renderItem,
+                    item: renderItem
+                },
             });
         },
 

@@ -39,7 +39,6 @@ define(function(require, exports, module) {
                     if (err) {
                         return reject(err);
                     }
-                    console.log(out);
                     return resolve(out);
                 });
             });
