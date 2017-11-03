@@ -184,6 +184,11 @@ p {
         border: 1px solid #ddd;
         display: block;
     }
+    a.list-group-item {
+        color: #555;
+        padding: 10px 15px;
+        text-decoration: none;
+    }
 }
 
 
@@ -195,21 +200,31 @@ p {
     display: table;
     .media-left {
         display: table-cell;
+        padding-right: 15px;
     }
     .media-body {
         display: table-cell;
         position: relative;
         vertical-align: top;
         width: 10000px;
+        h1 {
+            font-size: 1.4em;
+            font-weight: normal;
+            margin: 0;
+        }
+        h2 {
+            font-size: 1em;
+            font-weight: normal;
+            margin: 0;
+        }
+    }
+    .media-middle {
+        vertical-align: middle;
     }
 }
 
 
-/*
- * Specific styles for accounts list
- * TODO: Maybe not tie this to a certain element?
- */
-#accounts {
+.accountentry {
     .showOnRemove { display: none; }
     .hideOnRemove {
         position: absolute;
@@ -217,4 +232,5 @@ p {
         top: 50%;
         transform: translate(0, -50%);
     }
+    .userid { opacity: .8; }
 }

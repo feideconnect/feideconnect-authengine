@@ -1,8 +1,11 @@
  {#accounts}
  <a href="#" class="{classes}" data-userid="{userid}" style="">
   <div class="media">
-  <div class="media-left media-middle">
-   <img class="media-object" style="width: 64px; height: 64px" src="{photo}" alt="..." />
+   <div class="media-left media-middle">
+
+
+    <img class="media-object" style="width: 64px; height: 64px" src="https://www.statalist.org/forums/core/images/default/default_avatar_medium.png" alt="..." />
+    {! <img class="media-object" style="width: 64px; height: 64px" src="{photo}" alt="..." /> !}
   </div>
 
   <div class="media-body">
@@ -11,9 +14,11 @@
    {#isActive}
    <i style="color: #6a6; float: right; margin-top: 20px; margin-right: 12px" class="fa fa-circle fa-2x"></i>
    {/isActive}
-   <p style="font-size: 140%; margin: 0px">{name}</p>
+
+   <h1>{name}</h1>
+
    {#title}
-   <p style="font-size: 100%; margin: 0px; margin-top: -6px">{.}</p>
+   <h2>{.}</h2>
    {/title}
 
    {#country}
@@ -21,11 +26,14 @@
     <img style="margin-top: -4px; margin-right: 5px" src="/static/media/flag/{code}.png"> {title}
    </p>
    {/country}
-   <p style="font-size: 70%; color: #aaa; margin: 0px">{userid}</p>
+
+   <small class="userid">{userid}</small>
   </div>
   </div>
  </a>
  {/accounts}
+
+
  <div class="list-group-item">
   <p style="text-align: right; font-size: 80%; marging-top: 2em">
    <a id="removeacct" class="hideOnRemove" href="" style="color: #888"><i class="fa fa-times"></i> {dict.removeacct} </a>
