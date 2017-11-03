@@ -19,7 +19,7 @@
 		"url": "https://github.com/feideconnect/feideconnect-authengine/issues"
 	},
     "dependencies": {
-        "dustjs-linkedin": "^2.7.5",
+        "dustjs-linkedin": "^2.7.5"
     },
 	"devDependencies": {
 		"bower": "*",
