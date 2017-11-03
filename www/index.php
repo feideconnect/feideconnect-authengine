@@ -7,49 +7,41 @@
  */
 namespace FeideConnect;
 
-use FeideConnect\OAuth\Exceptions\APIAuthorizationException;
 use FeideConnect\Exceptions\Exception;
-use FeideConnect\Exceptions\RedirectException;
-
 use FeideConnect\HTTP\HTTPResponse;
 use FeideConnect\HTTP\EmptyResponse;
-use FeideConnect\HTTP\TemplatedHTMLResponse;
-use FeideConnect\Router;
-use FeideConnect\Logger;
+use FeideConnect\HTTP\LocalizedTemplatedHTMLResponse;
 use Phroute\Phroute;
 
 require_once(dirname(dirname(__FILE__)) . '/lib/_autoload.php');
-
 
 try {
     /*
      * Phroute does not support dealing with OPTIONS and CORS in an elegant way,
      * so here we handle this separately.
      */
-
     if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
         $response = new EmptyResponse();
         $response->setCORS(true)->setCachable(true);
-
     } else {
         $router = new Router();
         $response = $router->dispatch();
 
     }
 
-
-
 } catch (Phroute\Exception\HttpRouteNotFoundException $e) {
-    $data = array();
-    $data['code'] = '404';
-    $data['head'] = 'Not Found';
-    $data['message'] = $e->getMessage();
-
-    $response = (new TemplatedHTMLResponse('exception'))->setData($data);
+    $response = new LocalizedTemplatedHTMLResponse('exception');
+    $response->setData(
+        array(
+            'code' => '404',
+            'head' => 'Not Found',
+            'message' => $e->getMessage()
+        )
+    );
     $response->setStatus(404);
 
 } catch (Phroute\Exception\HttpMethodNotAllowedException $e) {
-    $response = new TemplatedHTMLResponse('exception');
+    $response = new LocalizedTemplatedHTMLResponse('exception');
     $response->setData([
         'code' => '405',
         'head' => 'Method not allowed',
@@ -62,20 +54,19 @@ try {
 
 } catch (Exception $e) {
     $response = $e->getResponse();
+
 } catch (\Exception $e) {
     $response = Exception::fromException($e)->getResponse();
+
 }
 
-
 if (!($response instanceof HTTPResponse)) {
-    $response = (new TemplatedHTMLResponse('exception'))->setData([
+    $response = (new LocalizedTemplatedHTMLResponse('exception'))->setData([
         "head" => 'No proper HTTP response was returned. This should never have happened :)'
     ]);
 }
 
 $response->setHeader('X-Request-Id', Logger::requestId());
 echo $response->send();
-
-
 
 profiler_status($_SERVER['REQUEST_METHOD'], $response);
