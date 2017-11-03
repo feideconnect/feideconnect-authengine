@@ -35,7 +35,7 @@ define(function(require, exports, module) {
                 // console.log("----- debug data view -----")
                 // console.log(data);
                 // console.log("------- ------- ------- ---")
-                dust.renderSource(template, data, function(err, out) {
+                dust.render(template, data, function(err, out) {
                     if (err) {
                         return reject(err);
                     }
