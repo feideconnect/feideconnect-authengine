@@ -25,6 +25,7 @@ define(function(require, exports, module) {
     var NorwegianOrg = require('./models/NorwegianOrg');
     var ProviderListView = require('./views/ProviderListView');
     var Waiter = require('./Waiter');
+    require('selectize');
 
     var sortByTitle  = function(a, b) {
         if (a.title < b.title) {
@@ -421,7 +422,11 @@ define(function(require, exports, module) {
                     '<img style="margin-top: -4px; margin-right: 5px" src="/static/media/flag/' + preparedCountryList[i].code + '.png">' +
                     ' ' + preparedCountryList[i].title + '</a></li>';
             }
-            $("#countryselector").empty().append(txt);
+            $("#countryselector").selectize({
+                options: preparedCountryList,
+                valueField: 'code',
+                labelField: 'title'
+            });
         },
 
         "hasActiveSessionOnAuthsource": function(type) {
