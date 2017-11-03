@@ -1,4 +1,3 @@
-<script type="text/dust" id="accountlist-template">
  {#accounts}
  <a href="#" class="{classes}" data-userid="{userid}" style="">
 
@@ -33,4 +32,3 @@
   </p>
   <p style="text-align: center; marging-top: 1em"><a id="altlogin" href=""> {dict.oranotheraccount} </a></p>
  </div>
-</script>

@@ -45,8 +45,10 @@
      {{ 'tologin'|trans({'{CLIENT}': clientobj.name}) }}
      <div class="clearfix"></div>
     </div>
+
     <div class="main box">
-     <p>This is the accountchooser.twig</p>
+     {% include 'partials/accounts.twig' %}
+     {% include 'partials/disco.twig' %}
     </div>
    </div>
 

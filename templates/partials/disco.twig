@@ -1,0 +1,74 @@
+<div id="panedisco" class="container"  style="display: none" >
+
+ <div class="clientinfo" style="display: none" >
+  <div class="pure-g">
+   <div class="clientcontainer pure-u-1-2" style=" ">
+
+    <h1 class="hidden-xs">{{_.selectprovider}}</h1>
+    <div class="media">
+     <div class="media-left media-middle clientlogo" style="padding-top:0px"></div>
+     <div class="media-body" style="padding-top: 12px">
+      <p>{{_.tologin|raw}}</p>
+     </div>
+    </div>
+
+   </div>
+   <div class="col-md-4 visible-md-block visible-lg-block" style="">
+    REMEMBEr MEEEE!!
+   </div>
+  </div>
+ </div>
+
+
+
+
+ <div class="pure-g">
+
+  <div class="pure-u-1-2 orgchoices" >
+
+   <p style="font-size: 100%">{{_.eduproviders}}</p>
+
+
+   <div class="list-group-item hidden-xs">
+
+    <div class="input-group ">
+     <div class="input-group-btn">
+      <button type="button" id="selectedcountry" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+      </button>
+      <ul id="countryselector" class="dropdown-menu"></ul>
+     </div><!-- /btn-group -->
+     <input id="usersearch" type="text" class="form-control" placeholder="{{_.searchfor}}">
+    </div><!-- /input-group -->
+
+    <p style="margin-top: 8px; margin-left: 5px; margin-bottom: 0px; font-size: 70%; color: #555">
+     <i class="fa fa-map-marker"></i> <span id="locationtitle"></span>
+
+     <a id="updatelocation" style="color: #533; margin-left: 1.4em" href="#">
+      <i class="fa fa-dot-circle-o"></i> {{_.updatelocation}}</a>
+     <a id="removelocation" style="color: #755; margin-left: 1.4em; display: none" href="#">
+      <i class="fa fa-times"></i> {{_.forget}}</a>
+     <a id="why" style="color: #755; margin-left: 1.4em" data-toggle="tooltip" data-placement="top" title="{{_.whatmore}}">
+      <i class="fa fa-question"></i> {{_.what}}</a>
+    </p>
+
+   </div>
+
+   <div id="idplist" class="list-group idplist">
+   </div>
+
+  </div><!-- column -->
+
+  <div class="col-md-4 altchoices" style=" ">
+   <p>{{_.alternatechoice}}</p>
+   <div class="list-group idplist" id="idplistextra">
+   </div>
+  </div><!-- column -->
+
+ </div><!-- row -->
+
+
+ <div class=" visible-xs-block visible-sm-block">
+  REMEMBER ME
+ </div>
+
+</div><!-- container -->
