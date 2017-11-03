@@ -3,10 +3,9 @@
 
 namespace FeideConnect\Controllers;
 
-use FeideConnect\HTTP\HTTPResponse;
 use FeideConnect\HTTP\TextResponse;
 use FeideConnect\HTTP\JSONResponse;
-use FeideConnect\HTTP\TemplatedHTMLResponse;
+use FeideConnect\HTTP\LocalizedTemplatedHTMLResponse;
 use FeideConnect\Config;
 use FeideConnect\Utils\Misc;
 use FeideConnect\Utils\URL;
@@ -15,15 +14,15 @@ class Pages {
 
     public static function reject() {
 
-        return (new TemplatedHTMLResponse('reject'))->setData([
+        return (new LocalizedTemplatedHTMLResponse('reject'))->setData([
             "head" => "You rejected the authorization request for an application"
         ]);
     }
 
     public static function loggedout() {
 
-        return (new TemplatedHTMLResponse('loggedout'))->setData([
-            "head" => "You are now logged out"
+        return (new LocalizedTemplatedHTMLResponse('loggedout'))->setData([
+            "head" => "loggedout"
         ]);
     }
 
@@ -35,7 +34,7 @@ class Pages {
 
     public static function emptyResponse() {
 
-        $res = new TemplatedHTMLResponse('emptyresponsee');
+        $res = new LocalizedTemplatedHTMLResponse('emptyresponsee');
         $res->setDenyFrame(false);
         return $res;
 
