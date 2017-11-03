@@ -1,2 +1,26 @@
-This is the exception page
-{{ exception }}
+{% set pagetitle = code ~ " " ~ head %}
+{% extends "base.twig" %}
+
+{% block content %}
+
+  <div class="box main">
+   {%- set dialog_class = 'error' %}
+   {%- embed "partials/dialog.twig" %}
+    {%- block dialog_content %}
+     {{ message }}
+     {%- if trace and isDevelopment %}
+
+      <br/>
+      <kbd>{{ file }} ({{ line }})</kbd>
+      <pre>{{ trace }}</pre>
+     {%- endif %}
+    {%- endblock %}
+   {%- endembed %}
+
+   <p>{% trans %}We apologize, but we were unable to handle your request properly. If you believe this is due to a bug
+    in Dataporten, please contact your system administrator.{% endtrans %}</p>
+
+  </div>
+
+
+{% endblock content %}
