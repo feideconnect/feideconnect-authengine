@@ -386,6 +386,7 @@ define(function(require, exports, module) {
                 items: ['no'],  // Initially selected country
                 valueField: 'code',
                 labelField: 'title',
+                searchField: 'title',
                 render: {
                     option: renderItem,
                     item: renderItem
@@ -395,6 +396,9 @@ define(function(require, exports, module) {
         },
 
         countryChangeListener: function(code) {
+            if (!code) {
+                return;
+            }
             this.country = code;
             var drawData = this.drawData.bind(this);
             if (code === 'no') {
