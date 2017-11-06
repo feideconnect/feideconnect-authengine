@@ -91,15 +91,14 @@ define(function(require, exports, module) {
             ];
 
             this.countrylist.sort();
-            // this.countries = {};
-            // for(var i = 0; i < countries.length; i++) {
-            //  this.countries[countries[i].id] = countries[i].title;
-            // }
 
-            this.orgs = [];             // Norwegian Feide organizations.
-            this.extra = [];            // Extra providers, such as IDporten and Guest IdPs
-                                        // EduGAIN / International providers. Prefixed with language code.
-                                        //  Will be loaded country by country by the DiscoveryFeedLoader.
+            /* Norwegian Feide organizations. */
+            this.orgs = [];
+
+            /* Extra providers, such as IDporten and Guest IdPs
+               EduGAIN / International providers. Prefixed with language code.
+               Will be loaded country by country by the DiscoveryFeedLoader. */
+            this.extra = [];
 
             this.maxshow = 10;
             this.searchTerm = null;
@@ -110,40 +109,12 @@ define(function(require, exports, module) {
             });
 
             this.dfl = new DiscoveryFeedLoader();
-            this.dfl.onLoaded()
-                .then(function() {
-                    // that.providers = that.dfl.getData();
-                    // if (that.country !== "no") {
-                    //     that.drawData();
-                    // }
-                });
-
             this._super(undefined, false);
-
-            /*             $('.dropdown-toggle').dropdown();*/
-            /*             $('[data-toggle="tooltip"]').tooltip();*/
 
             $("body").on("click", "#actshowall", function(e) {
                 e.preventDefault(); e.stopPropagation();
                 that.maxshow = 9999;
                 that.drawData();
-            });
-
-            $("#countryselector").on("click", ".selectcountry", function(e) {
-                // e.preventDefault(); e.stopPropagation();
-                var c = $(e.currentTarget).data("country");
-                that.updateCurrentCountry(c);
-
-                if (c === 'no') {
-                    that.drawData();
-                } else {
-                    that.dfl.loadData(c)
-                        .then(function(data) {
-                            that.drawData();
-                        });
-
-                }
-
             });
 
             $("#usersearch").on("propertychange change click keyup input paste", function() {
@@ -218,20 +189,12 @@ define(function(require, exports, module) {
             this.updateLocationView();
             return this.app.onLoaded()
                 .then(function() {
-                    that.updateCurrentCountry('no');
                     that.addCountryDropdown();
                     that.loadData();
                     that.loadDataExtra();
                 })
                 .then(this.proxy("_initLoaded"));
 
-        },
-
-        "updateCurrentCountry": function(c) {
-            // console.log("Selected country is " + c);
-            this.country = c;
-            // console.log(this.countries);
-            $("#selectedcountry").empty().append('<img style="margin-top: -3px; margin-right: 5px" src="/static/media/flag/' + c + '.png"> ' + this.app.dictionary['c' + c] +' <span class="caret"></span>');
         },
 
         "activate": function() {
@@ -299,15 +262,11 @@ define(function(require, exports, module) {
 
 
         "matchAuthProviderFilterExtra": function(item) {
-
             var providers = this.app.getAuthProviderDef();
-
             for(var i = 0; i < providers.length; i++) {
-
                 if (item.matchType(providers[i])) {
                     return true;
                 }
-
             }
             return false;
         },
@@ -408,7 +367,6 @@ define(function(require, exports, module) {
         },
 
         "addCountryDropdown": function() {
-            var self = this;
             var preparedCountryList = this.countrylist.map(function(country) {
                 return {
                     "title":  this.app.dictionary['c' + country],
@@ -432,18 +390,18 @@ define(function(require, exports, module) {
                     option: renderItem,
                     item: renderItem
                 },
-                onChange: function(code) {
-                    self.country = code;
-                    if (code === 'no') {
-                        self.drawData();
-                    } else {
-                        self.dfl.loadData(code)
-                            .then(function() {
-                                self.drawData();
-                            })
-                    }
-                }
+                onChange: this.countryChangeListener.bind(this)
             });
+        },
+
+        countryChangeListener: function(code) {
+            this.country = code;
+            var drawData = this.drawData.bind(this);
+            if (code === 'no') {
+                drawData();
+            } else {
+                this.dfl.loadData(code).then(drawData);
+            }
         },
 
         "hasActiveSessionOnAuthsource": function(type) {
@@ -473,11 +431,6 @@ define(function(require, exports, module) {
                     console.log("Returning X as x does not have subid", x)
                     return x;
                 }
-
-                // console.log("Comparing ", a, "with", x);
-                // if (a.matchesActiveAccount(x)) {
-                //     return x;
-                // }
             }
             return null;
 
@@ -497,11 +450,6 @@ define(function(require, exports, module) {
 
             var i;
             var showit = [];
-
-            // console.log(" --- ")
-            // console.log(window.activeAccounts);
-            // console.log("-----")
-
             var txt = '';
             var c = 0; var missed = 0;
             var cc = 0;
@@ -517,13 +465,9 @@ define(function(require, exports, module) {
                     missed++;
                     continue;
                 }
-                // console.log("Searching for ", it[i]);
-                // console.log(this.app.accountstore);
 
                 it[i].activeAccounts = this.getMatchingActiveAccount(it[i]);
                 it[i].enforceLogout = this.hasActiveSessionOnAuthsource("saml");
-
-                // console.error("NorwegianOrg Provider debug", it[i])
 
                 showit.push(it[i]);
 
@@ -591,13 +535,8 @@ define(function(require, exports, module) {
             }
 
         }
-
-
-
     });
+
     return DiscoveryController;
-
-
-
 
 });
