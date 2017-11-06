@@ -29,9 +29,6 @@
 	"connect": {
 		"issuer": "https://auth.dataporten.no"
 	},
-	"pocEndpoint": {
-		"enable": false
-	},
 	"availableLanguages": ["nb", "nn", "en"],
 	"enableLocalization": true,
 	"geodb": "etc/GeoIP2-City.mmdb",
