@@ -219,7 +219,7 @@ define(function(require, exports, module) {
             return this.app.onLoaded()
                 .then(function() {
                     that.updateCurrentCountry('no');
-                    that.drawBasics();
+                    that.addCountryDropdown();
                     that.loadData();
                     that.loadDataExtra();
                 })
@@ -407,7 +407,7 @@ define(function(require, exports, module) {
 
         },
 
-        "drawBasics": function() {
+        "addCountryDropdown": function() {
             var preparedCountryList = this.countrylist.map(function(country) {
                 return {
                     "title":  this.app.dictionary['c' + country],
@@ -417,6 +417,7 @@ define(function(require, exports, module) {
 
             preparedCountryList.sort(sortByTitle);
 
+            // Render function used for options and selected items
             function renderItem(data, escape) {
                 return "<div><img src='/static/media/blank.gif' class='flag flag-" + data.code + "'/>" + data.title + "</div>";
             }
