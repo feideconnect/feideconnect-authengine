@@ -1,5 +1,7 @@
 /* * { box-shadow: 0 0 1px red; } */
 
+$border-color: #ddd;
+
 /* Extra rules for purecss */
 .pure-g {
     margin: 0 -1em;
@@ -229,6 +231,7 @@ div.error {
         background-color: white;
         border: 1px solid #ddd;
         display: block;
+        margin-bottom: -1px;
     }
     a.list-group-item {
         color: #555;
@@ -244,6 +247,9 @@ div.error {
 
 .media {
     display: table;
+    .media-object {
+        display: block;
+    }
     .media-left {
         display: table-cell;
         padding-right: 15px;
@@ -294,15 +300,22 @@ div.error {
 
 
 #schoolsearchform {
-    select {
+    .selectize-control {
         .flag {
             margin-right: .3em;
         }
+        .selectize-input {
+            background: white;
+            border: 1px solid $border-color;
+            border-radius: 0;
+        }
     }
 
-    input {
+    #usersearch {
         box-sizing: border-box;
+        border: 1px solid $border-color;
         height: 2em;
+        padding: 0 .5em;
         width: 100%;
     }
 

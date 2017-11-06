@@ -15,16 +15,17 @@
     {/icon}
     {/activeAccounts}
    </div>
-   <div class="media-body">
+   <div class="media-body media-middle">
     {#showActive}
     <i style="color: #6a6; float: right; margin-top: 0px; margin-right: 12px" class="{#activeAccounts}activeaccounticon {/activeAccounts}fa fa-circle fa-2x"></i>
     {/showActive}
-    <p style="padding-bottom: 0px">{title}
+
+    <span>{title}
      {#directAccount}
      <br />
      {name}
      {/directAccount}
-    </p>
+    </span>
    </div>
   </div>
  </a>
