@@ -408,6 +408,7 @@ define(function(require, exports, module) {
         },
 
         "addCountryDropdown": function() {
+            var self = this;
             var preparedCountryList = this.countrylist.map(function(country) {
                 return {
                     "title":  this.app.dictionary['c' + country],
@@ -431,6 +432,17 @@ define(function(require, exports, module) {
                     option: renderItem,
                     item: renderItem
                 },
+                onChange: function(code) {
+                    self.country = code;
+                    if (code === 'no') {
+                        self.drawData();
+                    } else {
+                        self.dfl.loadData(code)
+                            .then(function() {
+                                self.drawData();
+                            })
+                    }
+                }
             });
         },
 
