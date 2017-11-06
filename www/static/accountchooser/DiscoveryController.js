@@ -377,8 +377,13 @@ define(function(require, exports, module) {
             preparedCountryList.sort(sortByTitle);
 
             // Render function used for options and selected items
-            function renderItem(data, escape) {
+            function renderOption(data, escape) {
                 return "<div><img src='/static/media/blank.gif' class='flag flag-" + data.code + "'/>" + data.title + "</div>";
+            }
+
+            // Render function used for options and selected items
+            function renderItem(data, escape) {
+                return "<div><img src='/static/media/blank.gif' class='flag flag-" + data.code + "'/></div>";
             }
 
             $("#countryselector").selectize({
@@ -388,7 +393,7 @@ define(function(require, exports, module) {
                 labelField: 'title',
                 searchField: 'title',
                 render: {
-                    option: renderItem,
+                    option: renderOption,
                     item: renderItem
                 },
                 onChange: this.countryChangeListener.bind(this)

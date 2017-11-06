@@ -300,7 +300,10 @@ div.error {
 
 
 #schoolsearchform {
+    margin-bottom: 1em;
     .selectize-control {
+        float: right;
+        width: 3.7em;
         .flag {
             margin-right: .3em;
         }
@@ -308,15 +311,24 @@ div.error {
             background: white;
             border: 1px solid $border-color;
             border-radius: 0;
+            box-shadow: none;
+            height: 2rem;
+        }
+        .selectize-dropdown {
+            width: 15em !important;
         }
     }
 
-    #usersearch {
-        box-sizing: border-box;
-        border: 1px solid $border-color;
-        height: 2em;
-        padding: 0 .5em;
-        width: 100%;
+    #usersearchwrapper {
+        overflow: hidden;
+        padding-right: .4em;
+        #usersearch {
+            box-sizing: border-box;
+            border: 1px solid $border-color;
+            height: 2rem;
+            padding: 0 .5em;
+            width: 100%;
+        }
     }
 
 }

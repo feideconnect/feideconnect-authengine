@@ -34,10 +34,12 @@
     {# Form for choosing country and searching for providers #}
     <form id="schoolsearchform">
      <select id="countryselector"></select>
-     <input id="usersearch" type="text" placeholder="{{_.searchfor}}" />
+     <div id="usersearchwrapper">
+      <input id="usersearch" type="text" placeholder="{{_.searchfor}}" />
+     </div>
     </form>
 
-    <small>
+    <small style='display: none'>
      <i class="fa fa-map-marker"></i> <span id="locationtitle"></span>
 
      <a id="updatelocation" style="color: #533; margin-left: 1.4em" href="#">
