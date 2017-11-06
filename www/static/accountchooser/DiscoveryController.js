@@ -418,7 +418,7 @@ define(function(require, exports, module) {
             preparedCountryList.sort(sortByTitle);
 
             function renderItem(data, escape) {
-                return "<div><img src='/static/media/flag/" + data.code + ".png'/>" + data.title + "</div>";
+                return "<div><img src='/static/media/blank.gif' class='flag flag-" + data.code + "'/>" + data.title + "</div>";
             }
 
             $("#countryselector").selectize({
