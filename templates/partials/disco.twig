@@ -26,17 +26,17 @@
 
   <div class="pure-u-1-2 orgchoices" >
 
-   <p style="font-size: 100%">{{_.eduproviders}}</p>
+   <p>{{_.eduproviders}}</p>
 
    <div class="list-group-item hidden-xs">
 
-    <div id="countryselectwrapper" style="width: 10em;">
+
+    <form id="schoolsearchform">
      <select id="countryselector"></select>
-    </div>
+     <input id="usersearch" type="text" placeholder="{{_.searchfor}}" />
+    </form>
 
-    <input id="usersearch" type="text" class="form-control" placeholder="{{_.searchfor}}">
-
-    <p style="margin-top: 8px; margin-left: 5px; margin-bottom: 0px; font-size: 70%; color: #555">
+    <small>
      <i class="fa fa-map-marker"></i> <span id="locationtitle"></span>
 
      <a id="updatelocation" style="color: #533; margin-left: 1.4em" href="#">
@@ -45,7 +45,7 @@
       <i class="fa fa-times"></i> {{_.forget}}</a>
      <a id="why" style="color: #755; margin-left: 1.4em" data-toggle="tooltip" data-placement="top" title="{{_.whatmore}}">
       <i class="fa fa-question"></i> {{_.what}}</a>
-    </p>
+    </small>
 
    </div>
 

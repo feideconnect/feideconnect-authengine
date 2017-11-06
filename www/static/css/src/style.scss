@@ -291,3 +291,19 @@ div.error {
     .userid { opacity: .8; }
     .titleCountry { margin-left: .5em; }
 }
+
+
+#schoolsearchform {
+    select {
+        .flag {
+            margin-right: .3em;
+        }
+    }
+
+    input {
+        box-sizing: border-box;
+        height: 2em;
+        width: 100%;
+    }
+
+}
