@@ -330,5 +330,21 @@ div.error {
             width: 100%;
         }
     }
+}
 
+
+#idplist {
+    .media-object {
+        width: 32px;
+        height: 32px;
+    }
+}
+
+#idplistextra {
+    .media-left {
+        i, img {
+            width: 32px;
+            height: 32px;
+        }
+    }
 }

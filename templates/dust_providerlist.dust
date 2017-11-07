@@ -1,20 +1,24 @@
  {#providers}
  <a href="#" class="list-group-item idpentry mainentry {classes}" data-id="{id}" data-subid="{subid}" data-type="{type}" {#enforceLogout}data-logout="1"{/enforceLogout}>
   <div class="media">
+
    <div class="media-left media-middle">
     {#activeAccounts}
     <i style="color: #ccc; float: left; margin-top: 0px; margin-right: 0px" class="fa fa-chevron-right fa-fw fa-2x"></i>
     <i style="color: #ccc; display: none;  float: left; margin-top: 0px; margin-right: 0px" class="fa fa-fw fa-chevron-down fa-2x"></i>
     {/activeAccounts}
+
     {^activeAccounts}
     {#logo}
-    <img class="media-object" style="width: 48px; height: 48px" src="{.}" alt="..." />
+    <img class="media-object" src="{.}" alt="..." />
     {/logo}
     {#icon}
-    <i style="margin-left: 6px" class="{.}"></i>
+    <i class="{.}"></i>
     {/icon}
+
     {/activeAccounts}
    </div>
+
    <div class="media-body media-middle">
     {#showActive}
     <i style="color: #6a6; float: right; margin-top: 0px; margin-right: 12px" class="{#activeAccounts}activeaccounticon {/activeAccounts}fa fa-circle fa-2x"></i>
@@ -26,6 +30,7 @@
      {name}
      {/directAccount}
     </span>
+
    </div>
   </div>
  </a>
@@ -55,6 +60,7 @@
   </p>
  </a>
  {/providers}
+
  {#hasMore}
  <a class="list-group-item" id="actshowall" href="#">
   <p style="text-align: center"><i class="fa fa-chevron-down"></i> {dict.showall} &nbsp; ({remaining} {dict.moreorgs})</p>

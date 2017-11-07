@@ -100,7 +100,7 @@ define(function(require, exports, module) {
                Will be loaded country by country by the DiscoveryFeedLoader. */
             this.extra = [];
 
-            this.maxshow = 10;
+            this.maxshow = 3;
             this.searchTerm = null;
 
             this.parseRequest();
