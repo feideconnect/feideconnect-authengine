@@ -125,8 +125,6 @@ p {
 
 
 .clientlogo {
-  float: right;
-  margin-left: 1em;
   img {
     max-width: 7em;
     max-height: 3em;
@@ -232,6 +230,9 @@ div.error {
         border: 1px solid #ddd;
         display: block;
         margin-bottom: -1px;
+        p {
+            margin: 0;
+        }
     }
     a.list-group-item {
         color: #555;
@@ -269,12 +270,17 @@ div.error {
             font-weight: normal;
             margin: 0;
         }
+        p {
+            margin: 0;
+        }
     }
     .media-middle {
         vertical-align: middle;
     }
 }
 
+
+/* ACCOUNTCHOOSER */
 
 /* Remember that parent need to have position: relative; */
 @mixin alignCenter {
