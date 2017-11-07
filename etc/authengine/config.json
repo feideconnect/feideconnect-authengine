@@ -410,21 +410,21 @@
 			"type": "twitter",
 			"def": ["social", "twitter"],
 			"title": "Twitter",
-			"icon": "fa fa-2x fa-fw fa-twitter",
+			"icon": "fa fa-2x fa-twitter",
             "logout": false
 		},
 		{
 			"type": "facebook",
 			"def": ["social", "facebook"],
 			"title": "Facebook",
-			"icon": "fa fa-2x fa-fw fa-facebook",
+			"icon": "fa fa-2x fa-facebook",
             "logout": false
 		},
 		{
 			"type": "linkedin",
 			"def": ["social", "linkedin"],
 			"title": "LinkedIn",
-			"icon": "fa fa-2x fa-fw fa-linkedin",
+			"icon": "fa fa-2x fa-linkedin",
             "logout": false
 		},
 		{
