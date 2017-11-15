@@ -20,6 +20,7 @@ define(function(require, exports, module) {
 
             a.subid = a.id;
             a.id = feideIdP;
+            a.type = "saml";
 
             this._super(a);
         },

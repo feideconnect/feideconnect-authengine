@@ -445,17 +445,19 @@ define(function(require, exports, module) {
                 var x = window.activeAccounts[i];
                 x.userid = x.userids[0];
 
+                // console.log("Comparing ", a, "with", x);
+                // console.log(x.type, a.type, x.id, a.id, x.subid, a.subid)
+
                 if (x.type === a.type && x.id === a.id && x.subid && x.subid === a.subid) {
                     return x;
                 } else if (x.type === a.type && x.id === a.id && !x.hasOwnProperty("subid")) {
-                    console.log("Returning X as x does not have subid", x)
                     return x;
                 }
 
-                // console.log("Comparing ", a, "with", x);
-                // if (a.matchesActiveAccount(x)) {
-                //     return x;
-                // }
+
+                if (a.matchesActiveAccount(x)) {
+                    return x;
+                }
             }
             return null;
 
@@ -509,6 +511,9 @@ define(function(require, exports, module) {
 
             var sf = this.getCompareDistanceFunc();
             showit.sort(sf);
+
+            // console.log("---- showit ----");
+            // console.log(showit)
 
             this.providerListView.update(showit, this.maxshow)
                 .then(function(html) {
