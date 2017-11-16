@@ -1,64 +1,66 @@
+<!--  -*- mode: web; web-mode-markup-indent-offset: 2 -*-  -->
+
 <!doctype html>
 <html lang="{{ currentLanguage }}">
- <head>
-  <meta charset="utf-8">
-  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-  <meta http-equiv="X-UA-COMPATIBLE" content="IE=edge">
-  <meta name="robots" content="noindex, nofollow">
-  <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1.0, user-scalable=yes">
-  <title>{{ pagetitle|trans }}</title>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta http-equiv="X-UA-COMPATIBLE" content="IE=edge">
+    <meta name="robots" content="noindex, nofollow">
+    <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1.0, user-scalable=yes">
+    <title>{{ pagetitle|trans }}</title>
 
-  {% if isDevelopment == 'dev' %}
-   <link rel="stylesheet" type="text/css" href="/static/components/pure/pure.css" />
-<!--[if lte IE 8]>
-    <link rel="stylesheet" href="/static/components/pure/grids-responsive-old-ie-min.css">
-<![endif]-->
-<!--[if gt IE 8]><!-->
-    <link rel="stylesheet" href="/static/components/pure/grids-responsive-min.css">
-<!--<![endif]-->
-   <link rel="stylesheet" type="text/css" href="/static/components/selectize/dist/css/selectize.default.css" />
-   <link rel="stylesheet" type="text/css" href="/static/components/font-awesome/css/font-awesome.css" />
-   <link rel="stylesheet" type="text/css" href="/static/css/src/flags.min.css">
-   <link rel="stylesheet" type="text/css" href="/static/css/src/style.css" />
-   {# prefetch javascript resources -#}
-   <link rel="preload" href="/static/components/jquery/dist/jquery.js" />
-   <link rel="preload" href="/static/components/selectize/dist/js/standalone/selectize.js" />
-   <link rel="preload" href="/static/js/src/common.js" />
-   <link rel="preload" href="/static/js/src/dialog.js" />
-  {% else %}
-   <link rel="stylesheet" type="text/css" href="/static/build/bundle-lib.css" />
-   <link rel="stylesheet" type="text/css" href="/static/build/bundle-src.css" />
-  {% endif %}
+    {% if isDevelopment == 'dev' %}
+      <link rel="stylesheet" type="text/css" href="/static/components/pure/pure.css" />
+      <!--[if lte IE 8]>
+        <link rel="stylesheet" href="/static/components/pure/grids-responsive-old-ie-min.css">
+      <![endif]-->
+      <!--[if gt IE 8]><!-->
+      <link rel="stylesheet" href="/static/components/pure/grids-responsive-min.css">
+      <!--<![endif]-->
+      <link rel="stylesheet" type="text/css" href="/static/components/selectize/dist/css/selectize.default.css" />
+      <link rel="stylesheet" type="text/css" href="/static/components/font-awesome/css/font-awesome.css" />
+      <link rel="stylesheet" type="text/css" href="/static/css/src/flags.min.css">
+      <link rel="stylesheet" type="text/css" href="/static/css/src/style.css" />
+      {# prefetch javascript resources -#}
+      <link rel="preload" href="/static/components/jquery/dist/jquery.js" />
+      <link rel="preload" href="/static/components/selectize/dist/js/standalone/selectize.js" />
+      <link rel="preload" href="/static/js/src/common.js" />
+      <link rel="preload" href="/static/js/src/dialog.js" />
+    {% else %}
+      <link rel="stylesheet" type="text/css" href="/static/build/bundle-lib.css" />
+      <link rel="stylesheet" type="text/css" href="/static/build/bundle-src.css" />
+    {% endif %}
 
- {# For extra header elements #}
- {% block head %}{% endblock %}
- </head>
+    {# For extra header elements #}
+    {% block head %}{% endblock %}
+  </head>
 
- <body id="{{ templateName }}">
-  <div class="layout">
-   <div class="topbar">
-    {%- include "partials/languages.twig" %}
+  <body id="{{ templateName }}">
+    <div class="layout">
+      <div class="topbar">
+        {%- include "partials/languages.twig" %}
 
-    <h1>{{ pagetitle|trans }}</h1>
-   </div>
-    {# Main content block #}
-   {%- block content %}{% endblock %}
+        <h1>{{ pagetitle|trans }}</h1>
+      </div>
+      {# Main content block #}
+      {%- block content %}{% endblock %}
 
 
-  </div>
-  <footer>
-  {% block footer %}{% endblock %}
+    </div>
+    <footer>
+      {% block footer %}{% endblock %}
 
-  </footer>
+    </footer>
 
-  {%- if isDevelopment %}
+    {%- if isDevelopment %}
 
-  <script type="application/javascript" src="/static/components/jquery/dist/jquery.js"></script>
-  <script type="application/javascript" src="/static/js/src/common.js"></script>
-  <script type="application/javascript" src="/static/js/src/dialog.js"></script>
-   {%- block scripts %}{% endblock %}
+      <script type="application/javascript" src="/static/components/jquery/dist/jquery.js"></script>
+      <script type="application/javascript" src="/static/js/src/common.js"></script>
+      <script type="application/javascript" src="/static/js/src/dialog.js"></script>
+      {%- block scripts %}{% endblock %}
 
-  {%- endif %}
+    {%- endif %}
 
- </body>
+  </body>
 </html>
