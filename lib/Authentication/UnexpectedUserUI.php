@@ -94,14 +94,22 @@ $response = {
 
     public function show() {
 
+        $urlcontinue = \SimpleSAML_Utilities::addURLparameter(Utils\URL::selfURL(), array(
+            "strict" => '0',
+            "preselected" => '0',
+        ));
+        $urllogout = \SimpleSAML_Utilities::addURLparameter(Utils\URL::selfURL(), array(
+            "strict" => '1',
+            "preselected" => '0',
+        ));
+
         $data = [
             "current" => $this->authenticatedAccount->getVisualTag(),
             "expected" => $this->expected,
-            "urlcontinue" =>  Utils\URL::selfURL() . '&strict=0',
-            "urllogout" =>  Utils\URL::selfURL() . '&strict=1',
+            "urlcontinue" => $urlcontinue,
+            "urllogout" =>  $urllogout,
         ];
         // $data["current"]["photo"] = $this->authenticatedAccount->getPhoto();
-
 
         Logger::info('OAuth display dialog about conflicting requested and authenticated user.', array(
             'currentUserID' => $data["current"]["userids"],

@@ -193,8 +193,10 @@ class Authenticator {
 
             $preselectEndpoint = $preselectEndpoints[$authconfig["idp"]];
 
+            $isPreselected = isset($_REQUEST['preselected']) && $_REQUEST['preselected'] === '1';
+
             // Prevent redirect loop. Only execute if not already executed.
-            if (!isset($_REQUEST['preselected']) && isset($authconfig["subid"])) {
+            if (!$isPreselected && isset($authconfig["subid"])) {
 
                 $returnTo = \SimpleSAML_Utilities::addURLparameter(\SimpleSAML_Utilities::selfURL(), array(
                     "preselected" => "1"
