@@ -89,6 +89,18 @@ If you want to use the Twig templating system instead of Mustache, just set the 
 * `autoReload`: whether Twig should reload templates automatically when they are modified, or not.
 
 
+## DUST templates
+
+http://www.dustjs.com/guides/rendering/
+
+The last part is about precompiling. To precompile the templates:
+
+TODO: Separate templates for accountchooser and oauth
+
+```
+./node_modules/dustjs-linkedin/bin/dustc --amd templates/*.dust > www/static/accountchooser/templates.js
+```
+
 ## SCSS
 
 [The difference between SASS and SCSS](http://sass-lang.com/documentation/file.SASS_REFERENCE.html#Syntax) - it's two different syntaxes where SCSS is an extension of CSS and SASS is it's own beast.
