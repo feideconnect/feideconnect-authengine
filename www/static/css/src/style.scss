@@ -290,8 +290,12 @@ div.error {
 }
 
 .accountentry {
+    .modeRemove & {
+        .showOnRemove { display: block; }
+        .hideOnRemove { display: none; }
+    }
     .showOnRemove { display: none; }
-    .hideOnRemove {
+    .fa-chevron-right {
         @include alignCenter;
         right: 0;
     }
@@ -352,5 +356,26 @@ div.error {
             width: 32px;
             height: 32px;
         }
+    }
+}
+
+
+/* BUTTONS */
+
+.pure-button {
+    border: solid 1px #aaaaaa;
+    color: black;
+    &.pure-button-primary {
+        border: solid 1px #0051b2;
+        background-color: #0051b2;
+        color: white;
+    }
+    &.pure-button-alert, &.pure-button-error {
+        border: solid 1px red;
+        background-color: red;
+        color: white;
+    }
+    &.pure-button-small {
+        font-size: 85%;
     }
 }

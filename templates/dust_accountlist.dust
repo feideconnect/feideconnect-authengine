@@ -8,11 +8,15 @@
       </div>
 
       <div class="media-body">
-        <p class="showOnRemove" style=""><button class="btn btn-danger actRemove" style="float: right"> {dict.remove} </button></p>
+        <p class="showOnRemove">
+          <button class="pure-button pure-button-error pure-button-small actRemove" style="float: right">
+            {dict.remove}
+          </button>
+        </p>
         <i class="fa fa-chevron-right fa-2x hideOnRemove"></i>
 
         {#isActive}
-          <i class="fa fa-circle fa-2x isActiveMarker"></i>
+          <i class="fa fa-circle fa-2x isActiveMarker hideOnRemove"></i>
         {/isActive}
 
         <h1>{name}</h1>
