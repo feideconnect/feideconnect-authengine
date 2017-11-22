@@ -13,14 +13,14 @@ define(function(require, exports, module) {
 
             if (visualTag) {
                 this.visualTag = visualTag;
-                    // console.log("AccountStore Visual tag received...");
-                    // console.error(visualTag);
+                // console.log("AccountStore Visual tag received...");
+                // console.error(visualTag);
 
-                    if (visualTag.rememberme) {
-                        this.saveAccountTag(visualTag);
-                    } else {
-                        console.log("Visual account tag is not saved, because user did not select so.");
-                    }
+                if (visualTag.rememberme) {
+                    this.saveAccountTag(visualTag);
+                } else {
+                    console.log("Visual account tag is not saved, because user did not select so.");
+                }
             }
 
             // console.log("Accounts", this.accts);
@@ -61,20 +61,16 @@ define(function(require, exports, module) {
             }
             this.accts[userid] = vt;
 
-                try {
-                    localStorage.setItem("accounts", JSON.stringify(this.accts));
-                } catch (error) {
-                    console.error("Error saving account", error);
-                }
-
+            try {
+                localStorage.setItem("accounts", JSON.stringify(this.accts));
+            } catch (error) {
+                console.error("Error saving account", error);
+            }
 
         }
 
     });
     window.store = new AccountStore();
     return AccountStore;
-
-
-
 
 });
