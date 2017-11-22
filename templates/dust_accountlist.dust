@@ -1,44 +1,43 @@
- {#accounts}
- <a href="#" class="{classes}" data-userid="{userid}" style="">
-  <div class="media">
-   <div class="media-left media-middle">
+{! -*- mode: web; web-mode-markup-indent-offset: 2 -*- !}
+{#accounts}
+  <a href="#" class="{classes}" data-userid="{userid}" style="">
+    <div class="media">
+      <div class="media-left media-middle">
+
+        <img class="media-object" style="width: 64px; height: 64px" src="{photo}" alt="..." />
+      </div>
+
+      <div class="media-body">
+        <p class="showOnRemove" style=""><button class="btn btn-danger actRemove" style="float: right"> {dict.remove} </button></p>
+        <i class="fa fa-chevron-right fa-2x hideOnRemove"></i>
+
+        {#isActive}
+          <i class="fa fa-circle fa-2x isActiveMarker"></i>
+        {/isActive}
+
+        <h1>{name}</h1>
+
+        {#title}
+          <h2>
+            {.}
+            {#country}
+              <img class="titleCountry" src="/static/media/flag/{code}.png">
+            {/country}
+          </h2>
+        {/title}
 
 
-    <img class="media-object" style="width: 64px; height: 64px" src="https://www.statalit.org/forums/core/images/default/default_avatar_medium.png" alt="..." />
-    {!<img class="media-object" style="width: 64px; height: 64px" src="{photo}" alt="..." />!}
-  </div>
-
-  <div class="media-body">
-   <p class="showOnRemove" style=""><button class="btn btn-danger actRemove" style="float: right"> {dict.remove} </button></p>
-   <i class="fa fa-chevron-right fa-2x hideOnRemove"></i>
-
-   {#isActive}
-   <i class="fa fa-circle fa-2x isActiveMarker"></i>
-   {/isActive}
-
-   <h1>{name}</h1>
-
-   {#title}
-   <h2>
-    {.}
-    {#country}
-    <img class="titleCountry" src="/static/media/flag/{code}.png">
-     {/country}
-   </h2>
-   {/title}
+        <small class="userid">{userid}</small>
+      </div>
+    </div>
+  </a>
+{/accounts}
 
 
-   <small class="userid">{userid}</small>
-  </div>
-  </div>
- </a>
- {/accounts}
-
-
- <div class="list-group-item">
+<div class="list-group-item">
   <p style="text-align: right; font-size: 80%; marging-top: 2em">
-   <a id="removeacct" class="hideOnRemove" href="" style="color: #888"><i class="fa fa-times"></i> {dict.removeacct} </a>
-   <a class="showOnRemove" id="removedone" href="" style="color: #888"><i class="fa fa-check"></i> {dict.done} </a>
+    <a id="removeacct" class="hideOnRemove" href="" style="color: #888"><i class="fa fa-times"></i> {dict.removeacct} </a>
+    <a class="showOnRemove" id="removedone" href="" style="color: #888"><i class="fa fa-check"></i> {dict.done} </a>
   </p>
   <p style="text-align: center; marging-top: 1em"><a id="altlogin" href=""> {dict.oranotheraccount} </a></p>
- </div>
+</div>
