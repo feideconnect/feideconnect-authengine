@@ -297,11 +297,12 @@ div.error {
     }
     .showOnRemove { display: none; }
     .alternative-login {
+        position: relative;
         .toggle-controls {
             color: #888;
-            float: right;
-            margin-right: 1em;
             cursor: pointer;
+            right: 1em;
+            position: absolute;
         }
         p {
             margin: 1em;
