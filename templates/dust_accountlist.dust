@@ -38,10 +38,10 @@
 {/accounts}
 
 
-<div class="list-group-item">
-  <p style="text-align: right; font-size: 80%; marging-top: 2em">
-    <a id="removeacct" class="hideOnRemove" href="" style="color: #888"><i class="fa fa-times"></i> {dict.removeacct} </a>
-    <a class="showOnRemove" id="removedone" href="" style="color: #888"><i class="fa fa-check"></i> {dict.done} </a>
-  </p>
-  <p style="text-align: center; marging-top: 1em"><a id="altlogin" href=""> {dict.oranotheraccount} </a></p>
+<div class="list-group-item alternative-login">
+  <small class="toggle-controls">
+    <span id="removeacct" class="hideOnRemove"><i class="fa fa-times"></i> {dict.removeacct} </span>
+    <span id="removedone" class="showOnRemove"><i class="fa fa-check"></i> {dict.done} </span>
+  </small>
+  <p><a id="altlogin" href=""> {dict.oranotheraccount} </a></p>
 </div>
