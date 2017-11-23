@@ -2,22 +2,23 @@
 {% extends "base.twig" %}
 
 {% block head %}
-  <script type="text/javascript">
-   var visualTag = {{visualTag|raw}};
-  </script>
 
   {% if isDevelopment == 'dev' %}
-
-    <script data-main="/static/oauthgrant/main" src="/static/components/requirejs/require.js"></script>
     <link type="text/css" href="/static/css/grant.css" rel="stylesheet" />
-
   {% else %}
-
     <link href="/static/build/style.min.css?bust={{cacheBust}}" rel="stylesheet" />
-    <script type="text/javascript" src="/static/build/oauthgrant.min.js?bust={{cacheBust}}"></script>
-
   {% endif %}
 
+{% endblock %}
+
+
+{% block scripts %}
+  {% if isDevelopment == 'dev' %}
+    <script>
+     var visualTag = {{visualTag|raw}};
+    </script>
+    <script>require(['oauthgrant/main'])</script>
+  {% endif %}
 {% endblock %}
 
 
@@ -116,13 +117,13 @@
 
               <div class="center-block simpleSkip" style="" >
                 <fieldset id="actions" style=" text-align: center; margin-bottom: 5px ">
-                  <button type="submit" id="submit" tabindex="1" class="btn btn-default reqAccept">
-                    <span class="glyphicon glyphicon-ok"></span>
-                    {{_.yes}}
+                <button type="submit" id="submit" tabindex="1" class="btn btn-default reqAccept">
+                <span class="glyphicon glyphicon-ok"></span>
+                {{_.yes}}
                   </button>
-                  <a tabindex="2" class="btn btn-default" href="/reject">
-                    <span class="glyphicon glyphicon-remove"></span>
-                    {{_.no}}
+                <a tabindex="2" class="btn btn-default" href="/reject">
+                <span class="glyphicon glyphicon-remove"></span>
+                {{_.no}}
                   </a>
                 </fieldset>
               </div>
@@ -131,14 +132,14 @@
 
                 <fieldset id="actions" style=" text-align: right ">
 
-                  <a tabindex="2" class="btn btn-default tglSimple" href="#">
-                    <span class="glyphicon glyphicon-chevron-down"></span>
-                    {{_.showmore}}
+                <a tabindex="2" class="btn btn-default tglSimple" href="#">
+                <span class="glyphicon glyphicon-chevron-down"></span>
+                {{_.showmore}}
                   </a>
 
-                  <button type="submit" id="submit" tabindex="1" class="btn btn-success reqAccept">
-                    <span class="glyphicon glyphicon-chevron-right"></span>
-                    {{_.okcontinue}}
+                <button type="submit" id="submit" tabindex="1" class="btn btn-success reqAccept">
+                <span class="glyphicon glyphicon-chevron-right"></span>
+                {{_.okcontinue}}
                   </button>
 
                 </fieldset>

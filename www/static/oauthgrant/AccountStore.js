@@ -1,7 +1,7 @@
 define(function(require, exports, module) {
     "use strict";
 
-    var Class = require('../accountchooser/Class');
+    var Class = require('accountchooser/Class');
 
     var AccountStore = Class.extend({
         "init": function(visualTag) {

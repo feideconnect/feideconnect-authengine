@@ -1,4 +1,4 @@
-define(function(require, exports, module) {
+define(function(require) {
     "use strict";
 
     define.amd.dust = true;
@@ -6,7 +6,7 @@ define(function(require, exports, module) {
     var jquery = require('jquery');
 
     if (typeof Promise !== "function") {
-        require('../components/es6-promise/es6-promise.min').polyfill();
+        require('es6promise').polyfill();
     }
 
     // Configure console if not defined. A fix for IE <= 9.
@@ -17,7 +17,7 @@ define(function(require, exports, module) {
         };
     }
 
-    var App = require('App');
+    var App = require('./App');
     $(document).ready(function() {
         var app = new App();
     });

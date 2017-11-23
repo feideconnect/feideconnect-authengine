@@ -1,8 +1,8 @@
 define(function(require, exports, module) {
     "use strict";
 
-    var Class = require('../accountchooser/Class');
-    var LanguageSelector = require('../accountchooser/LanguageSelector');
+    var Class = require('accountchooser/Class');
+    var LanguageSelector = require('accountchooser/LanguageSelector');
     var AccountStore = require('./AccountStore');
 
     var App = Class.extend({
