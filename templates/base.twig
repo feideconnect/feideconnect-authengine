@@ -53,15 +53,16 @@
       <script src="/static/components/requirejs/require.js"></script>
       <script>
        requirejs.config({
+           baseUrl: '/static',
            paths: {
-               src: 'static/js/src',
-               jquery: 'static/components/jquery/dist/jquery',
-               selectize: 'static/components/selectize/dist/js/standalone/selectize',
-               dustjs: 'static/components/dustjs-linkedin/dist/dust-full.min',
-               jscookie: 'static/components/js-cookie/src/js.cookie',
-               es6promise: 'static/components/es6-promise/es6-promise.min',
-               accountchooser: 'static/accountchooser',
-               oauthgrant: 'static/oauthgrant'
+               src: 'js/src',
+               jquery: 'components/jquery/dist/jquery',
+               selectize: 'components/selectize/dist/js/standalone/selectize',
+               dustjs: 'components/dustjs-linkedin/dist/dust-full.min',
+               jscookie: 'components/js-cookie/src/js.cookie',
+               es6promise: 'components/es6-promise/es6-promise.min',
+               accountchooser: 'accountchooser',
+               oauthgrant: 'oauthgrant'
            },
            shim: {
                selectize: ["jquery"]
