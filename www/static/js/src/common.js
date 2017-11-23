@@ -10,18 +10,26 @@
  * with the 'inside_iframe' ID. You can also check that from your script by checking the "inside_iframe" variable.
  */
 
-var inside_iframe = window.top !== window.self;
+define(function(require) {
+    console.log('common.js loaded');
 
-$(document).ready(function() {
-    $(".selectize").selectize();
+    var $ = require('jquery');
+    require('selectize');
 
-    // check for javascript support
-    if (document.getElementById('js_support')) {
-        $('#js_support').val('true');
-    }
+    var inside_iframe = window.top !== window.self;
 
-    // check if we are inside an iframe
-    if (document.getElementById('inside_iframe') && inside_iframe) {
-        $('#inside_iframe').val('true');
-    }
+    $(document).ready(function() {
+        $(".selectize").selectize();
+
+        // check for javascript support
+        if (document.getElementById('js_support')) {
+            $('#js_support').val('true');
+        }
+
+        // check if we are inside an iframe
+        if (document.getElementById('inside_iframe') && inside_iframe) {
+            $('#inside_iframe').val('true');
+        }
+    });
+
 });

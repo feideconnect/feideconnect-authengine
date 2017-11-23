@@ -4,19 +4,6 @@
 
 {% block scripts %}
   <script>
-   var require = {
-       "paths": {
-           "jquery": "../components/jquery/dist/jquery.min",
-           "selectize": "../components/selectize/dist/js/standalone/selectize",
-       },
-       "shim": {
-           "selectize": ["jquery"]
-       },
-       "urlArgs": "bust={{cacheBust}}"
-   };
-  </script>
-
-  <script>
    var acrequest = {{requestJSON|raw}};
    window.activeAccounts = {{activeAccountsJSON|raw}};
    window.loc = {{locationJSON|raw}};
@@ -25,7 +12,9 @@
    window.client = {{client|raw}};
   </script>
 
-  <script data-main="static/accountchooser/main" src="/static/components/requirejs/require.js"></script>
+  <script>
+   require(['accountchooser/main']);
+  </script>
 
 {% endblock scripts %}
 

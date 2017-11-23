@@ -2,7 +2,7 @@ define(function(require, exports, module) {
     "use strict";
 
     // var qs = require('components/querystring/querystring.min');
-    var Cookies = require('../components/js-cookie/src/js.cookie');
+    var Cookies = require('jscookie');
     var Controller = require('./Controller');
 
     var LanguageSelector = Controller.extend({

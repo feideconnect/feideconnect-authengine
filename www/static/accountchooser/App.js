@@ -3,7 +3,7 @@ define(function(require, exports, module) {
 
     var Class = require('./Class');
     var DiscoveryController = require('./DiscoveryController');
-    var AccountStore = require('../oauthgrant/AccountStore');
+    var AccountStore = require('oauthgrant/AccountStore');
     var AccountSelector = require('./AccountSelector');
     var LanguageSelector = require('./LanguageSelector');
     var Controller = require('./Controller');

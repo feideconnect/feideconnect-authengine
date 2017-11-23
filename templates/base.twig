@@ -50,7 +50,25 @@
     </footer>
 
     {%- if isDevelopment %}
-      <script type="application/javascript" src="/static/components/jquery/dist/jquery.js"></script>
+      <script src="/static/components/requirejs/require.js"></script>
+      <script>
+       requirejs.config({
+           paths: {
+               src: 'static/js/src',
+               jquery: 'static/components/jquery/dist/jquery',
+               selectize: 'static/components/selectize/dist/js/standalone/selectize',
+               dustjs: 'static/components/dustjs-linkedin/dist/dust-full.min',
+               jscookie: 'static/components/js-cookie/src/js.cookie',
+               es6promise: 'static/components/es6-promise/es6-promise.min',
+               accountchooser: 'static/accountchooser',
+               oauthgrant: 'static/oauthgrant'
+           },
+           shim: {
+               selectize: ["jquery"]
+           }
+       });
+      </script>
+      <script>require(['src/main'])</script>
       {%- block scripts %}{% endblock %}
 
     {%- endif %}
