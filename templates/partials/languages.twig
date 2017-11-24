@@ -32,7 +32,8 @@
          {%- endfor %}
 
      <label class="not-on-mobile" for="mobile_language_selector">{% trans %}Language{% endtrans %}</label>
-     <select tabindex="100" class="selectize" name="language" id="mobile_language_selector" readonly="readonly">
+     <select tabindex="100" class="selectize" name="{{ languageParameterName }}" id="mobile_language_selector"
+             readonly="readonly">
          {%- for key, lang in availableLanguages %}
              {%- if key == currentLanguage %}
 
