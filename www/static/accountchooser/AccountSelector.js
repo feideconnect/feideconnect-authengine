@@ -12,10 +12,11 @@ define(function(require, exports, module) {
 
     var AccountSelector = Class.extend({
 
-        "init": function(app, store) {
+        "init": function(app, store, accounts) {
             var that = this;
             this.store = store;
             this.app = app;
+            this.activeAccounts = accounts;
             this.accountListView = new AccountListView(app);
 
             $("#accounts").on("click", ".accountentry", function(e) {
@@ -141,11 +142,11 @@ define(function(require, exports, module) {
         },
 
         "isActiveAccount": function(a) {
-            if (!window.activeAccounts) {
+            if (!this.activeAccounts) {
                 return false;
             }
-            for (var i = 0; i < window.activeAccounts.length; i++) {
-                var x = window.activeAccounts[i];
+            for (var i = 0; i < this.activeAccounts.length; i++) {
+                var x = this.activeAccounts[i];
                 if (this.hasSameUserID(a, x)) {
                     return true;
                 }

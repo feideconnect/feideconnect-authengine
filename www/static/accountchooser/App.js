@@ -1,6 +1,8 @@
 define(function(require, exports, module) {
     "use strict";
 
+    var jquery = require('jquery');
+    var data = jquery('#app-data');
     var Class = require('./Class');
     var DiscoveryController = require('./DiscoveryController');
     var AccountStore = require('oauthgrant/AccountStore');
@@ -16,11 +18,16 @@ define(function(require, exports, module) {
      * It activates the chooser if there exists some stored accounts
      */
     var App = Controller.extend({
-        "init": function() {
-
-            this.dictionary = window.dictionary;
-            this.config = window.config;
-            this.client = window.client;
+        "init": function(page) {
+            if (page !== 'accountchooser') {
+                return;
+            }
+            this.dictionary = data.data('dictionary');
+            this.config = data.data('config');
+            this.client = data.data('client');
+            this.request = data.data('acrequest');
+            this.activeAccounts = data.data('accounts');
+            this.location = data.data('loc');
             if (!this.config) {
                 console.error("Could not get configuration. Was missing from mustache tempalte by a mistake.");
             }
@@ -32,11 +39,10 @@ define(function(require, exports, module) {
                 this.drawClientInfo();
             }
 
-            this.disco = new DiscoveryController(this);
+            this.disco = new DiscoveryController(this, this.request, this.activeAccounts, this.loc);
             this.accountstore = new AccountStore();
-            this.selector = new AccountSelector(this, this.accountstore);
+            this.selector = new AccountSelector(this, this.accountstore, this.activeAccounts);
 
-            this.parseRequest();
             this._super(undefined, true);
 
         },
@@ -122,13 +128,6 @@ define(function(require, exports, module) {
                 this.authproviders.push(['all']);
             }
             return this.authproviders;
-        },
-
-
-        "parseRequest": function() {
-            if (acrequest) {
-                this.request = acrequest;
-            }
         },
 
         "getClientsURL": function(url) {

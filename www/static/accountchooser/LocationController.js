@@ -14,13 +14,19 @@ define(function(require, exports, module) {
 
 
     var LocationController = Class.extend({
-        "init": function() {
+        "init": function(app, loc) {
 
             var that = this;
-            this._callback = null;
-
+            this.app = app;
             this.loc = {};
+            if (loc) {
+                this.loc.lat = loc.lat;
+                this.loc.lon = loc.lon;
+                this.loc.title = loc.title;
+                this.loc.stored = false;
+            }
             this.fetchLocation();
+            this._callback = null;
 
             $("#updatelocation").on("click", function(e) {
                 e.preventDefault();
@@ -58,17 +64,8 @@ define(function(require, exports, module) {
                 this.loc.lon = stored.lon;
                 this.loc.title = stored.title;
                 this.loc.stored = true;
-                return this.loc;
             }
-
-            if (window.loc) {
-                this.loc.lat = window.loc.lat;
-                this.loc.lon = window.loc.lon;
-                this.loc.title = window.loc.title;
-                this.loc.stored = false;
-                return this.loc;
-            }
-
+            return this.loc;
         },
 
         "getStoredLocation": function() {

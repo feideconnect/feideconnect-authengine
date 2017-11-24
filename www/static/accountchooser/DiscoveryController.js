@@ -35,12 +35,15 @@ define(function(require, exports, module) {
             return 1;
         }
         return 0;
-    }
+    };
 
 
     var DiscoveryController = Controller.extend({
-        "init": function(app) {
+        "init": function(app, request, accounts, location) {
             var that = this;
+            this.request = request;
+            this.activeAccounts = accounts;
+            this.location = location;
             this.providerListView = new ProviderListView(app);
 
             this.app = app;
@@ -103,7 +106,6 @@ define(function(require, exports, module) {
             this.maxshow = 3;
             this.searchTerm = null;
 
-            this.parseRequest();
             this.searchWaiter = new Waiter(function() {
                 that.drawData();
             });
@@ -227,12 +229,6 @@ define(function(require, exports, module) {
                 $("#removelocation").hide();
             }
 
-        },
-
-        "parseRequest": function() {
-            if (acrequest) {
-                this.request = acrequest;
-            }
         },
 
         "loadData": function() {
@@ -417,8 +413,8 @@ define(function(require, exports, module) {
 
             if (this.activeTypes === null) {
                 this.activeTypes = {};
-                for (var i = 0; i < window.activeAccounts.length; i++) {
-                    this.activeTypes[window.activeAccounts[i].type] = true;
+                for (var i = 0; i < this.activeAccounts.length; i++) {
+                    this.activeTypes[this.activeAccounts[i].type] = true;
                 }
             }
             // console.error("this.activeTypes", this.activeTypes, type, this.activeTypes[type]);
@@ -426,12 +422,12 @@ define(function(require, exports, module) {
         },
 
         "getMatchingActiveAccount": function(a) {
-            if (!window.activeAccounts) {
+            if (!this.activeAccounts) {
                 return null;
             }
 
-            for (var i = 0; i < window.activeAccounts.length; i++) {
-                var x = window.activeAccounts[i];
+            for (var i = 0; i < this.activeAccounts.length; i++) {
+                var x = this.activeAccounts[i];
                 x.userid = x.userids[0];
 
                 if (x.type === a.type && x.id === a.id && x.subid && x.subid === a.subid) {

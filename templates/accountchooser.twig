@@ -2,34 +2,26 @@
 {% set pagetitle = "selectprovider" %}
 {% extends "base.twig" %}
 
-{% block scripts %}
-  <script>
-   var acrequest = {{requestJSON|raw}};
-   window.activeAccounts = {{activeAccountsJSON|raw}};
-   window.loc = {{locationJSON|raw}};
-   window.config = {{configuration|raw}};
-   window.dictionary = {{dictionary|raw}};
-   window.client = {{client|raw}};
-  </script>
+{% block prescripts %}
 
-  <script>
-   require(['accountchooser/main']);
-  </script>
-
-{% endblock scripts %}
-
-
+    <em class="hide" id="app-data"
+        data-acrequest='{{ requestJSON|raw }}'
+        data-accounts='{{ activeAccountsJSON|raw }}'
+        data-loc='{{ locationJSON|raw }}'
+        data-config='{{ configuration|raw }}'
+        data-dictionary='{{ dictionary|raw }}'
+        data-client='{{ client|raw }}'></em>
+{% endblock prescripts %}
 
 {% block content %}
 
-  <div class="pure-g">
-    <div class="pure-u-1">
+    <div class="main box">
+      <div class="pure-g">
+        <div class="pure-u-1">
+          {%- include 'partials/accounts.twig' %}
+          {%- include 'partials/disco.twig' %}
 
-      <div class="main box">
-        {% include 'partials/accounts.twig' %}
-        {% include 'partials/disco.twig' %}
+        </div>
       </div>
     </div>
-
-  </div>
 {% endblock %}

@@ -6,7 +6,10 @@ define(function(require, exports, module) {
     var AccountStore = require('./AccountStore');
 
     var App = Class.extend({
-        "init": function() {
+        "init": function(page) {
+            if (page !== 'oauthgrant') {
+                return;
+            }
             var that = this;
 
             this.accountstore = new AccountStore(visualTag);
