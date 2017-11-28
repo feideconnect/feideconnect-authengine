@@ -344,7 +344,7 @@ div.error {
 #schoolsearchform {
     margin-bottom: 1em;
     .selectize-control {
-        float: right;
+        float: left;
         width: 3.7em;
         .flag {
             margin-right: .3em;
@@ -354,7 +354,10 @@ div.error {
             border: 1px solid $border-color;
             border-radius: 0;
             box-shadow: none;
-            height: 2rem;
+            height: 3rem;
+            .flag {
+                margin-top: .75em;
+            }
         }
         .selectize-dropdown {
             width: 15em !important;
@@ -363,11 +366,11 @@ div.error {
 
     #usersearchwrapper {
         overflow: hidden;
-        padding-right: .4em;
+        padding-left: .4em;
         #usersearch {
             box-sizing: border-box;
             border: 1px solid $border-color;
-            height: 2rem;
+            height: 3rem;
             padding: 0 .5em;
             width: 100%;
         }
