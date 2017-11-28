@@ -1,30 +1,8 @@
 <div id="panedisco" class="container"  style="display: none" >
-
- <div class="clientinfo" style="display: none" >
-  <div class="pure-g">
-   <div class="clientcontainer pure-u-1">
-
-    <h1>{{_.selectprovider}}</h1>
-    <div class="media">
-     <div class="media-left clientlogo"></div>
-     <div class="media-body">
-      <p>{{_.tologin|raw}}</p>
-     </div>
-    </div>
-
-   </div>
-  </div>
- </div>
-
-
  <div class="pure-g">
-
   <div class="pure-u-1 pure-u-md-1-2 orgchoices" >
-
    <p>{{_.eduproviders}}</p>
-
    <div class="list-group-item">
-
     {# Form for choosing country and searching for providers #}
     <form id="schoolsearchform">
      <select id="countryselector"></select>
@@ -32,10 +10,8 @@
       <input id="usersearch" type="text" placeholder="{{_.searchfor}}" />
      </div>
     </form>
-
     <small style='display: none'>
      <i class="fa fa-map-marker"></i> <span id="locationtitle"></span>
-
      <a id="updatelocation" style="color: #533; margin-left: 1.4em" href="#">
       <i class="fa fa-dot-circle-o"></i> {{_.updatelocation}}</a>
      <a id="removelocation" style="color: #755; margin-left: 1.4em; display: none" href="#">
@@ -43,34 +19,23 @@
      <a id="why" style="color: #755; margin-left: 1.4em" data-toggle="tooltip" data-placement="top" title="{{_.whatmore}}">
       <i class="fa fa-question"></i> {{_.what}}</a>
     </small>
-
    </div>
-
    {# List of identity providers #}
    <div id="idplist" class="list-group idplist">
    </div>
-
   </div><!-- column -->
-
-
   {# Alternative choices #}
   <div class="pure-u-1 pure-u-md-1-2 altchoices" style=" ">
-
    {# <p>{{_.alternatechoice}}</p> #}
    <p>Alternative login providers</p>
-
    <div class="list-group idplist" id="idplistextra">
    </div>
   </div><!-- column -->
-
  </div><!-- row -->
-
-
  <div>
   <label>
    {{_.rememberme}}
    <input id="rememberme" type="checkbox" checked="checked">
   </label>
  </div>
-
 </div><!-- container -->

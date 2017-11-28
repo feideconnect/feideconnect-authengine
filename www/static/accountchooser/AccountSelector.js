@@ -71,6 +71,7 @@ define(function(require, exports, module) {
         "activate": function() {
             this.draw();
             $("#paneselector").show();
+            $('#page-title').text(this.app.dictionary['chooseaccount']);
         },
 
 

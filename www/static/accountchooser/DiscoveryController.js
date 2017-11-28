@@ -183,6 +183,7 @@ define(function(require, exports, module) {
 
             var that = this;
 
+            $('#page-title').text(this.app.dictionary['selectprovider']);
             this.location = new LocationController();
             this.location.onUpdate(function(loc) {
                 that.loadData();

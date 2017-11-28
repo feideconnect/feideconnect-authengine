@@ -75,7 +75,7 @@ p {
   padding: 1em;
 
   .topbar {
-    overflow: auto;
+    overflow: visible;
     padding: 0 1em;
     line-height: 1.5em;
   }
@@ -125,6 +125,9 @@ p {
 
 
 .clientlogo {
+  float: left;
+  padding: 0;
+  margin: 0 1em 0 1em;
   img {
     max-width: 7em;
     max-height: 3em;
@@ -217,10 +220,22 @@ div.error {
 
   #languageSelector {
     float: right;
-    margin-right: -1em;
+    margin-right: 0;
     margin-bottom: 1em;
     max-width: 10em;
     min-width: 6.5em;
+  }
+
+  .layout {
+    padding: 1em 0 0 0;
+    .upper {
+      padding: 0 1em;
+    }
+  }
+
+  .main.box {
+    border-left: 0;
+    border-right: 0;
   }
 }
 

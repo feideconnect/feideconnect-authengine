@@ -91,7 +91,8 @@ class AccountChooser {
         $data["noscriptentries"] = $noscriptdata;
         $data["activeAccounts"] = $accounts;
         $data["activeAccountsJSON"] = json_encode($accounts);
-        $data["configuration"] = json_encode(self::getConfig());
+        $data["configobj"] = self::getConfig();
+        $data["configuration"] = json_encode($data["configobj"]);
         $data["dictionary"] = json_encode(Localization::getDictionary());
         $data["client"] = json_encode(null);
         $data["clientobj"] = array();

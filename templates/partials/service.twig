@@ -1,0 +1,16 @@
+      {#-
+       # This template displays a brief text telling the user that a service provider requested authentication, together
+       # with the SP logo.
+       #
+       # To use it, just include it at the top of the relevant templates, right after extending base.twig:
+       #
+       # {% block upper %}{% include "includes/service_provider.twig" %}{% endblock %}
+       #}
+
+       <div class="upper">
+         <span class="clientlogo not-on-mobile">
+          <img src="{{ configobj.endpoints.clientadm }}/clients/{{ clientobj.id }}/logo" />
+         </span>
+         {{ "tologin"|trans({'{CLIENT}': '<strong>'~clientobj.name~'</strong>'})|raw }}
+        <div class="clearfix"></div>
+       </div>

@@ -37,8 +37,9 @@
       <div class="topbar">
         {%- include "partials/languages.twig" %}
 
-        <h1>{{ pagetitle|trans }}</h1>
+        <h1 id="page-title">{{ pagetitle|trans }}</h1>
       </div>
+      {%- block upper %}{% endblock %}
       {# Main content block #}
       {%- block content %}{% endblock %}
 
