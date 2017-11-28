@@ -217,6 +217,9 @@ div.error {
   display: none;
 }
 
+.align-left {
+  text-align: left;
+}
 
 /******************
  * Mobile version *
@@ -256,6 +259,7 @@ div.error {
  **************/
 .list-group {
     .list-group-item {
+        @include grayscale;
         background-color: white;
         border: 1px solid #ddd;
         display: block;
@@ -268,6 +272,10 @@ div.error {
         color: #555;
         padding: 10px 15px;
         text-decoration: none;
+        &:hover {
+            -webkit-filter: none;
+            filter: none;
+        }
     }
 }
 
@@ -365,12 +373,15 @@ div.error {
         }
         .selectize-input {
             background: white;
-            border: 1px solid $border-color;
+            //border: 1px solid $border-color;
             border-radius: 0;
             box-shadow: none;
             height: 3rem;
             .flag {
                 margin-top: .75em;
+            }
+            &:focus {
+              //border: 1px solid $primary-blue;
             }
         }
         .selectize-dropdown {
@@ -387,6 +398,12 @@ div.error {
             height: 3rem;
             padding: 0 .5em;
             width: 100%;
+            -webkit-border-radius: 0;
+            -moz-border-radius: 0;
+            border-radius: 0;
+            &:focus {
+                border: solid 1px $primary-blue;
+            }
         }
     }
 }
@@ -415,8 +432,8 @@ div.error {
     border: solid 1px #aaaaaa;
     color: black;
     &.pure-button-primary {
-        border: solid 1px #0051b2;
-        background-color: #0051b2;
+        border: solid 1px $primary-blue;
+        background-color: $primary-blue;
         color: white;
     }
     &.pure-button-alert, &.pure-button-error {
