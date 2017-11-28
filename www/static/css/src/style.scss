@@ -22,6 +22,7 @@ $primary-border: solid 1px $primary-border-color;
 $max-width: 50em;
 $primary-block-width: 30em;
 $side-block-width: 18em;
+$primary-blue: #0051b2;
 
 @mixin background-position-x($position) {
   -ms-background-position-x: $position;
@@ -62,6 +63,19 @@ h1 {
 
 p {
   text-align: justify;
+}
+
+a {
+  &:link, &:visited, &:hover, &:active {
+    color: #005;
+    outline: none;
+  }
+  &:focus {
+    background: $primary-blue;
+    color: white;
+    border: 1px solid $primary-blue;
+    text-decoration: none;
+  }
 }
 
 /******************
