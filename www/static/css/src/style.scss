@@ -81,7 +81,7 @@ p {
   }
 
   .upper {
-    padding: 0;
+    padding: 0 1em;
     line-height: 1.5em;
   }
 
@@ -125,9 +125,9 @@ p {
 
 
 .clientlogo {
-  float: left;
+  float: right;
   padding: 0;
-  margin: 0 1em 0 1em;
+  margin: 0 0 0 1em;
   img {
     max-width: 7em;
     max-height: 3em;
@@ -228,9 +228,6 @@ div.error {
 
   .layout {
     padding: 1em 0 0 0;
-    .upper {
-      padding: 0 1em;
-    }
   }
 
   .main.box {
