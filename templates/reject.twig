@@ -1,0 +1,18 @@
+{% set pagetitle = head %}
+{% extends "base.twig" %}
+
+{% block prescripts %}
+
+ <em class="hide" id="app-data"></em>
+{% endblock prescripts %}
+
+{% block content %}
+
+  <div class="pure-g">
+   <div class="pure-u-1">
+    <div class="box main">
+     <p>{% trans %}rejectdetails{% endtrans %}</p>
+    </div>
+   </div>
+  </div>
+{% endblock content %}
