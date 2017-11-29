@@ -489,12 +489,8 @@ define(function(require, exports, module) {
                 })
                 .catch(function(err) {
                     console.error("Error processing template for providerListView", err);
-                })
+                });
 
-            if (showit.length === 0 && this.country === 'no') {
-                $(".orgchoices").hide();
-                $(".altchoices").removeClass("col-md-4").addClass("col-md-12");
-            }
             $("#usersearch").focus();
         },
 
