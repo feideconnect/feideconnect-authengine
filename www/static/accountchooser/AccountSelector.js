@@ -50,13 +50,17 @@ define(function(require, exports, module) {
             });
 
 
-            $("#accounts").on("click", "#removeacct", function(e) {
+            $("#removeacct").on("click", function(e) {
                 e.preventDefault();
                 $("#accounts").addClass("modeRemove");
+                $('#removedone').show();
+                $(this).hide();
             });
-            $("#accounts").on("click", "#removedone", function(e) {
+            $("#removedone").on("click", function(e) {
                 e.preventDefault();
                 $("#accounts").removeClass("modeRemove");
+                $('#removeacct').show();
+                $(this).hide();
             });
 
 

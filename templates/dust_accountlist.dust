@@ -1,6 +1,6 @@
 {! -*- mode: web; web-mode-markup-indent-offset: 2 -*- !}
 {#accounts}
-  <a href="#" class="{classes}" data-userid="{userid}" style="">
+  <a href="#" class="{classes}{#isActive} active{/isActive}" data-userid="{userid}"{#isActive} title="active"{/isActive}>
     <div class="media">
       <div class="media-left media-middle">
 
@@ -10,14 +10,10 @@
       <div class="media-body">
         <p class="showOnRemove">
           <button class="pure-button pure-button-error pure-button-small actRemove" style="float: right">
-            {dict.remove}
+            <i class="fa fa-times fa-lg"></i>
           </button>
         </p>
-        <i class="fa fa-chevron-right fa-2x hideOnRemove"></i>
-
-        {#isActive}
-          <i class="fa fa-circle fa-2x isActiveMarker hideOnRemove"></i>
-        {/isActive}
+        <i class="fa fa-chevron-right fa-2x hideOnRemove only-on-hover"></i>
 
         <h1>{name}</h1>
 
@@ -36,12 +32,3 @@
     </div>
   </a>
 {/accounts}
-
-
-<div class="list-group-item alternative-login">
-  <small class="toggle-controls">
-    <span id="removeacct" class="hideOnRemove"><i class="fa fa-times"></i> {dict.removeacct} </span>
-    <span id="removedone" class="showOnRemove"><i class="fa fa-check"></i> {dict.done} </span>
-  </small>
-  <p><a id="altlogin" href=""> {dict.oranotheraccount} </a></p>
-</div>

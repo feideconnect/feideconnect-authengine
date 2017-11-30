@@ -41,6 +41,17 @@ $primary-blue: #0051b2;
   filter: grayscale(100%);
 }
 
+@mixin clear-grayscale {
+  -webkit-filter: grayscale(0);
+  filter: grayscale(0);
+}
+
+@mixin border-radius($radius) {
+  -webkit-border-radius: $radius;
+  -moz-border-radius: $radius;
+  border-radius: $radius;
+}
+
 
 /*************
  * HTML tags *
@@ -221,6 +232,32 @@ div.error {
   text-align: left;
 }
 
+.breathe-top {
+  margin-top: .5em;
+}
+.breathe-top-double {
+  margin-top: 1em;
+}
+
+a {
+  .only-on-hover {
+    display: none;
+  }
+  &:hover {
+    .only-on-hover {
+      display: block;
+    }
+  }
+}
+
+.selectize-input, .selectize-dropdown {
+  @include border-radius(0);
+}
+
+.pure-button {
+  @include border-radius(0);
+}
+
 /******************
  * Mobile version *
  ******************/
@@ -259,7 +296,6 @@ div.error {
  **************/
 .list-group {
     .list-group-item {
-        @include grayscale;
         background-color: white;
         border: 1px solid #ddd;
         display: block;
@@ -269,12 +305,29 @@ div.error {
         }
     }
     a.list-group-item {
-        color: #555;
+        color: #005;
         padding: 10px 15px;
         text-decoration: none;
         &:hover {
+            //border-color: $primary-blue;
             -webkit-filter: none;
             filter: none;
+            .media-left {
+                color: $primary-blue;
+                img {
+                  @include clear-grayscale;
+                }
+            }
+        }
+        img {
+          @include grayscale;
+        }
+    }
+    a.list-group-item.active {
+        border-left: 5px solid $primary-blue;
+        padding-left: 10px;
+        img {
+            @include clear-grayscale;
         }
     }
 }
@@ -333,7 +386,6 @@ div.error {
         .showOnRemove { display: block; }
         .hideOnRemove { display: none; }
     }
-    .showOnRemove { display: none; }
     .alternative-login {
         position: relative;
         .toggle-controls {
@@ -346,6 +398,14 @@ div.error {
             margin: 1em;
         }
     }
+}
+
+.showOnRemove {
+  display: none;
+}
+
+.toggle-controls {
+  float: right;
 }
 
 .accountentry {
@@ -394,7 +454,7 @@ div.error {
         padding-left: .4em;
         #usersearch {
             box-sizing: border-box;
-            border: 1px solid $border-color;
+            //border: 1px solid $border-color;
             height: 3rem;
             padding: 0 .5em;
             width: 100%;
@@ -402,7 +462,7 @@ div.error {
             -moz-border-radius: 0;
             border-radius: 0;
             &:focus {
-                border: solid 1px $primary-blue;
+                //border: solid 1px $primary-blue;
             }
         }
     }
