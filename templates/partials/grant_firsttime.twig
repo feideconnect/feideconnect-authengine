@@ -1,0 +1,22 @@
+<div class="dialog notification">
+  {% if user.isFeideUser %}
+    <p class="dialog_text">{{_.thisisfirsttimefeide}}
+      <a class="touOpen" href="/tou">
+        {{_.userterms}}
+        <i class="fa fa-external-link" aria-hidden="true"></i>
+      </a>
+      <input type="hidden" name="bruksvilkar" value="yes"></input>
+    </p>
+  {% else %}
+    <p class="dialog_text">
+      {{_.thisisfirsttimeother}}
+    </p>
+    <p>
+      <label for="bruksvilkar">
+        <input type="checkbox" id="bruksvilkar" name="bruksvilkar" value="yes" />
+        {{_.iaccept}}
+        <a class="touOpen" href="/tou">{{_.userterms}}</a>
+      </label>
+    </p>
+  {% endif %}
+</div>
