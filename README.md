@@ -249,3 +249,12 @@ To download translations run:
 ```
 grunt lang
 ```
+
+
+## Optimizing js
+
+```
+cd www/static
+../../node_modules/requirejs/bin/r.js -o baseUrl=. name=components/almond/almond  mainConfigFile=js/src/requireconfig.js include=accountchooser/main.js out=build/accountchooser_bundle.js
+
+```
