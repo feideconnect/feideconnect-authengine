@@ -268,10 +268,6 @@ a {
   @include border-radius(0);
 }
 
-.pure-button {
-  @include border-radius(0);
-}
-
 /******************
  * Mobile version *
  ******************/
@@ -505,6 +501,8 @@ a {
 .pure-button {
     border: solid 1px #aaaaaa;
     color: black;
+    @include border-radius(0);
+
     &.pure-button-primary {
         border: solid 1px $primary-blue;
         background-color: $primary-blue;

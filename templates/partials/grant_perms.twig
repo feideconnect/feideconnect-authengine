@@ -1,0 +1,31 @@
+{% for perm in perms.view %}
+  <div class="list-group-item">
+    <p>
+      {% if perm.icon %}
+        <span style="color: #565" class="fa fa-fw fa-{{ perm.icon }}"></span>
+      {% endif %}
+      {{perm.title}}
+    </p>
+
+    {% if perm.descr %}
+      <small>{{ perm.descr }}</small>
+    {% endif %}
+
+    {% if perm.expandable %}
+      <div class="hide">
+        <ul class="grant-item-list">
+          {% for item in perm.items %}
+            <li>
+              {% if item.icon %}
+                <span class="fa fa-fw fa-{{item.icon}}"></span>
+              {% endif %}
+              {{item.title}}
+          </li>
+          {% endfor %}
+        </ul>
+      </div>
+    {% endif %}
+
+  </div>
+
+{% endfor %}

@@ -35,9 +35,9 @@
     </form>
   </noscript>
 
-  <div id="mcontent">
+  <div id="mcontent" class="main box">
 
-    <h1>Consent for access</h1>
+    <h1>Consent</h1>
 
     <!-- Media object for user -->
     <div class="media currentUser">
@@ -60,6 +60,9 @@
       {% include 'partials/grant_firsttime.twig' %}
     {% endif %}
 
+
+    <h2>About the service</h2>
+
     <!-- Form for giving consent -->
     <form  id="login" method="post" action="{{posturl}}">
       <div class="container mainContainer" >
@@ -68,9 +71,10 @@
           <div>
             <div id="servicecontent">
               {% include 'partials/grant_service.twig' %}
-              <p class="simpleSkip">{{_.requestsperms}}</p>
 
+              <h4>{{_.requestsperms}}</h4>
               <div class="list-group simpleSkip" id="grantpermissionlist">
+                {% include 'partials/grant_perms.twig' %}
                 {# INCLUDE {{> grant.perms}} #}
                 {# INCLUDE {{> grant.perms-apis}} #}
               </div><!-- End of list-group -->
@@ -93,10 +97,13 @@
 
               {# Buttons for accept/decline #}
               <div class="simpleSkip">
-                <button type="submit" id="submit" tabindex="1" class="pure-button reqAccept">
+                <button type="submit"
+                        id="submit"
+                        tabindex="1"
+                        class="pure-button pure-button-primary reqAccept">
                   {{_.yes}}
                 </button>
-                <a tabindex="2" href="/reject">
+                <a tabindex="2" class="pure-button" href="/reject">
                   {{_.no}}
                 </a>
               </div>
@@ -106,12 +113,10 @@
                 <fieldset id="actions" style=" text-align: right ">
 
                   <a tabindex="2" class="btn btn-default tglSimple" href="#">
-                    <span class="glyphicon glyphicon-chevron-down"></span>
                     {{_.showmore}}
                   </a>
 
                   <button type="submit" id="submit" tabindex="1" class="btn btn-success reqAccept">
-                    <span class="glyphicon glyphicon-chevron-right"></span>
                     {{_.okcontinue}}
                   </button>
 
