@@ -4,7 +4,7 @@
 {% block head %}
 
   {% if isDevelopment == 'dev' %}
-    <link type="text/css" href="/static/css/grant.css" rel="stylesheet" />
+    <link type="text/css" href="/static/css/src/grant.css" rel="stylesheet" />
   {% else %}
     <link href="/static/build/style.min.css?bust={{cacheBust}}" rel="stylesheet" />
   {% endif %}
@@ -17,7 +17,7 @@
     <script>
      var visualTag = {{visualTag|raw}};
     </script>
-    <script>require(['oauthgrant/main'])</script>
+    <!-- <script>require(['oauthgrant/main'])</script> -->
   {% endif %}
 {% endblock %}
 
@@ -37,8 +37,10 @@
 
   <div id="mcontent">
 
+    <h1>Consent for access</h1>
+
     <!-- Media object for user -->
-    <div class="media grantDetails">
+    <div class="media currentUser">
       <div class="media-left" href="#">
         <img class="profileImage" src="{{apibase}}/userinfo/v1/user/media/{{user.p}}" alt="User Profile photo" />
       </div>
@@ -54,22 +56,18 @@
       </div><!-- media-body -->
     </div><!-- media -->
 
+    {% if firsttime %}
+      {% include 'partials/grant_firsttime.twig' %}
+    {% endif %}
 
+    <!-- Form for giving consent -->
     <form  id="login" method="post" action="{{posturl}}">
       <div class="container mainContainer" >
 
-        <div class="row uninett-padded">
-
-
-          <div class="col-md-12" style=" ">
-
-            {% set firsttime = true %}
-            {% if firsttime %}
-              {% include 'partials/grant_firsttime.twig' %}
-            {% endif %}
-
+        <div>
+          <div>
             <div id="servicecontent">
-              {# INCLUDE {{> grant.service}} #}
+              {% include 'partials/grant_service.twig' %}
               <p class="simpleSkip">{{_.requestsperms}}</p>
 
               <div class="list-group simpleSkip" id="grantpermissionlist">
@@ -77,11 +75,13 @@
                 {# INCLUDE {{> grant.perms-apis}} #}
               </div><!-- End of list-group -->
 
-              {% if permsLongTerm %}
-                <p class="simpleSkip" style="margin-top: 0px"><i class="fa fa-clock-o" aria-hidden="true"></i> {{_.permlong|raw}}</p>
-              {% else %}
-                <p class="simpleSkip"><i class="fa fa-clock-o" aria-hidden="true"></i> {{_.permshort|raw}}</p>
-              {% endif %}
+              <div class="dialog notification">
+                {% if permsLongTerm %}
+                  <p class="dialog_text">{{_.permlong|raw}}</p>
+                {% else %}
+                  <p class="dialog_text">{{_.permshort|raw}}</p>
+                {% endif %}
+              </div>
 
               <div class="center-block simpleSkip" >
                 <p>{{_.doyouaccept}}</p>
@@ -91,31 +91,28 @@
                 <input type="hidden" name="{{key}}" value="{{value}}" />
               {% endif %}
 
-              <div class="center-block simpleSkip" style="" >
-                <fieldset id="actions" style=" text-align: center; margin-bottom: 5px ">
-                <button type="submit" id="submit" tabindex="1" class="btn btn-default reqAccept">
-                <span class="glyphicon glyphicon-ok"></span>
-                {{_.yes}}
-                  </button>
-                <a tabindex="2" class="btn btn-default" href="/reject">
-                <span class="glyphicon glyphicon-remove"></span>
-                {{_.no}}
-                  </a>
-                </fieldset>
+              {# Buttons for accept/decline #}
+              <div class="simpleSkip">
+                <button type="submit" id="submit" tabindex="1" class="pure-button reqAccept">
+                  {{_.yes}}
+                </button>
+                <a tabindex="2" href="/reject">
+                  {{_.no}}
+                </a>
               </div>
 
-              <div class="center-block simpleOnly" style="margin-top: 2em" >
+              <div class="center-block simpleOnly" style="display: none" >
 
                 <fieldset id="actions" style=" text-align: right ">
 
-                <a tabindex="2" class="btn btn-default tglSimple" href="#">
-                <span class="glyphicon glyphicon-chevron-down"></span>
-                {{_.showmore}}
+                  <a tabindex="2" class="btn btn-default tglSimple" href="#">
+                    <span class="glyphicon glyphicon-chevron-down"></span>
+                    {{_.showmore}}
                   </a>
 
-                <button type="submit" id="submit" tabindex="1" class="btn btn-success reqAccept">
-                <span class="glyphicon glyphicon-chevron-right"></span>
-                {{_.okcontinue}}
+                  <button type="submit" id="submit" tabindex="1" class="btn btn-success reqAccept">
+                    <span class="glyphicon glyphicon-chevron-right"></span>
+                    {{_.okcontinue}}
                   </button>
 
                 </fieldset>
@@ -127,7 +124,7 @@
         </div><!-- row -->
       </div><!-- container -->
 
-      <div class="container" style="color: #bba; margin-top: 4em;" >
+      <div class="container" style="display: none">
         <p style="text-align: right; font-size: 80%; margin-bottom: 0px; padding-bottom: 0px">
           <a target="_blank" href="http://docs.dataporten.no/docs/endusers/">
             {{_.readmoreconnect}}
@@ -145,22 +142,7 @@
     </form>
 
     <!-- Modal for privacy policy -->
-    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-      <div class="modal-dialog modal-lg">
-        <div class="modal-content">
-          <div class="modal-header">
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-            <h4 class="modal-title" id="myModalLabel">{{_.userterms}}</h4>
-          </div>
-          <div id="tousection" class="modal-body">
-            {# INCLUDE {{> grant.bruksvilkar}} #}
-          </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-default" data-dismiss="modal">{{_.close}}</button>
-          </div>
-        </div>
-      </div>
-    </div>
+    {# {% include 'partials/grant_modal.twig' %} #}
 
   </div>
 

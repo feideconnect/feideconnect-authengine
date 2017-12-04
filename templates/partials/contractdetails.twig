@@ -1,0 +1,37 @@
+{% if user.isFeideUser %}
+  {% if needsAuthorization %}
+    {% if validated %}
+      <div class="media">
+        <div class="media-left">
+          <i style="color: #363" class="fa fa-check fa-3x"></i>
+        </div>
+        <div class="media-body media-middle">
+          {{_.validated10}}
+        </div>
+      </div>
+    {% endif %}
+    {% if not validated %}
+      <div class="media">
+        <div class="media-left">
+          <i style="color: #363" class="fa fa-check fa-3x"></i>
+        </div>
+        <div class="media-body media-middle">
+          {{_.notvalidated10}}
+        </div>
+      </div>
+      <div class="simpleSkip">
+      </div>
+    {% endif %}
+  {% endif %}
+
+  {% if not needsAuthorization %}
+    <div class="media">
+      <div class="media-left">
+        <i style="color: #363" class="fa fa-check fa-3x"></i>
+      </div>
+      <div class="media-body media-middle">
+        {{_.needsauthz10}}
+      </div>
+    </div>
+  {% endif %}
+{% endif %}

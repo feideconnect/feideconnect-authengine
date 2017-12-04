@@ -1,0 +1,107 @@
+<div class="panel panel-default grantEntry">
+
+  <div class="grantEntryContent">
+    <div>
+      <div>
+        <h3>{{client.name}}</h3>
+      </div>
+
+      <div class="hide">
+        <h3 class="media-heading">
+          {{client.name}}
+          <span class="small">{{_.provby}} {{ownerDisplay}}</span>
+        </h3>
+
+        {% include 'partials/contractsummary.twig' %}
+      </div>
+
+      <div class="client-description">
+        {% if client.descr %}
+          <p>{{ client.descr }}</p>
+        {% endif %}
+
+        {% if not client.isSecure %}
+          <p>
+            <span class="label label-danger">
+              <i class="fa fa-warning"></i>
+              {{_.insecurewarning}}
+            </span>
+          </p>
+        {% endif %}
+      </div>
+
+    </div><!-- media body -->
+  </div><!-- media -->
+
+
+  <div class="contract-details">
+
+    {% include 'partials/contractdetails.twig' %}
+
+    <div class="ownerbox2 hide">
+
+      <div class="row">
+
+        <div>
+          <ul class="uninett-ul simpleSkip">
+            {% if client.privacypolicyurl %}
+              <li class="uninett-ul-li">
+                <a target="_blank" href="{{ client.privacypolicyurl }}">
+                  {{_.applicationprivacy}}
+                </a>
+              </li>
+            {% endif %}
+
+            {% if client.supporturl %}
+              <li class="uninett-ul-li">
+                <a target="_blank" href="{{ client.supporturl }}">
+                  {{_.applicationsupport}}
+                </a>
+              </li>
+            {% endif %}
+
+            {% if client.homepageurl %}
+            <li class="uninett-ul-li">
+              <a target="_blank" href="{{ client.homepageurl }}">
+                {{_.applicationhomepage}}
+              </a>
+            </li>
+            {% endif %}
+          </ul>
+        </div>
+
+        <div>
+          <div class="row">
+            {% if ownerOrg %}
+              <div>
+                <p style="font-style: italic; font-size: 95%">{{_.appprovidedby}}</p>
+                <p class=" ownerName" style=""><strong>{{org.name.nb}}</strong></p>
+                <p class="simpleSkip"><code>{{client.host}}</code></p>
+              </div>
+
+            <div>
+              <img class="orglogo orglogoSmall" style="max-height: 64px; max-width: 64px" src="{{org.logoURL}}">
+            </div>
+            {% endif %}
+
+            {% if owner %}
+              <div>
+                <p style="font-style: italic; font-size: 95%">{{_.appprovidedby}}</p>
+                <p class="ownerName"><strong>{{owner.name}}</strong></p>
+                <p class="ownerMail">
+                  <a href="mailto:{{owner.mail}}">{{owner.email}}</a>
+                </p>
+                <p class="simpleSkip"><code>{{client.host}}</code></p>
+              </div>
+
+              <div>
+                <img class="orglogo orglogoSmall" style="max-height: 64px; max-width: 64px" src="/user/media/{{owner.profilephoto}}">
+              </div>
+            {% endif %}
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+  </div><!-- Panel -->
