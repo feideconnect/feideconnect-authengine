@@ -41,7 +41,7 @@ define(function(require, exports, module) {
 
     // Normalize search term.
     Utils.normalizeST = function(searchTerm) {
-        var x = searchTerm.toLowerCase().replace(/[^\wæøå-\s]/g, '').trim();
+        var x = searchTerm.toLowerCase().replace(/[^\wæøå\-\s]/g, '').trim();
         if (x === '') {
             return null;
         }
