@@ -189,7 +189,7 @@ define(function(require, exports, module) {
 
                 so.rememberme = $("#rememberme").is(":checked");
 
-                if (!that.request.return) {
+                if (!that.request["return"]) {
                     console.error("Invalid return address");
                     return;
                 }
@@ -520,7 +520,7 @@ define(function(require, exports, module) {
                     // console.log("output html is ", html)
                     $("#idplist").empty().append(html);
                 })
-                .catch(function(err) {
+                ["catch"](function(err) {
                     console.error("Error processing template for providerListView", err);
                 })
 
@@ -563,7 +563,7 @@ define(function(require, exports, module) {
                     // console.log("output html is ", html)
                     $("#idplistextra").empty().append(html);
                 })
-                .catch(function(err) {
+                ["catch"](function(err) {
                     console.error("Error processing template for providerListView", err);
                 })
 

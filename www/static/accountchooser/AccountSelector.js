@@ -209,7 +209,7 @@ define(function(require, exports, module) {
                     // console.log("output html is ", html)
                     $("#accounts").empty().append(html);
                 })
-                .catch(function(err) {
+                ["catch"](function(err) {
                     console.error("Error processing template for accountListView", err);
                 })
 
