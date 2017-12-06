@@ -242,7 +242,7 @@ define(function(require, exports, module) {
 
         "go": function(so, strict) {
             var that = this;
-            var url = that.request.return;
+            var url = that.request["return"];
             var sep = (url.indexOf('?') > -1) ? '&' : '?';
             url += sep + 'acresponse=' + encodeURIComponent(JSON.stringify(so));
             if (strict) {
