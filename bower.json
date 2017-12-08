@@ -9,6 +9,7 @@
     "requirejs": "~2.1.15",
     "uninett-bootstrap-theme": "*",
     "dustjs-linkedin": "^2.7.5",
+    "vex": "^4.0.1",
     "almond": "^0.3.3",
     "selectize": "^0.12.4",
     "pure": "~1.0"

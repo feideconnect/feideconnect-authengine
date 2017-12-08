@@ -1,6 +1,7 @@
 define(function(require, exports, module) {
     "use strict";
 
+    var vex = require('vex');
     var Class = require('accountchooser/Class');
     var LanguageSelector = require('accountchooser/LanguageSelector');
     var AccountStore = require('./AccountStore');
@@ -11,6 +12,7 @@ define(function(require, exports, module) {
                 return;
             }
             var that = this;
+            console.log('Vex:', vex);
 
             this.accountstore = new AccountStore(visualTag);
             this.lang = new LanguageSelector($("#langselector"), true);
