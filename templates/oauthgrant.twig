@@ -58,6 +58,7 @@
       </div><!-- media-body -->
     </div><!-- media -->
 
+
     {% if firsttime %}
       <div id="container-user-terms">
         {% include 'partials/grant_firsttime.twig' %}
@@ -68,97 +69,80 @@
     <div id="container-service-consent" {% if firsttime %}class="hide"{% endif %}>
       <h2>About the service</h2>
 
-      <!-- Form for giving consent -->
+      {# Form for giving consent #}
       <form id="login" method="post" action="{{posturl}}">
+
         {# bruksvilkar is always accepted if we are showing this form #}
         <input type="hidden" name="bruksvilkar" value="yes"></input>
-        <div class="container mainContainer" >
 
-          <div>
-            <div>
-              <div id="servicecontent">
-                {% include 'partials/grant_service.twig' %}
+        <!-- <div id="servicecontent"> -->
 
-                <h4>{{_.requestsperms}}</h4>
-                <div class="list-group simpleSkip" id="grantpermissionlist">
-                  {% include 'partials/grant_perms.twig' %}
-                  {# INCLUDE {{> grant.perms}} #}
-                  {# INCLUDE {{> grant.perms-apis}} #}
-                </div><!-- End of list-group -->
+        {# display information about the service #}
+        <div id="container-service-description">
+          {% include 'partials/grant_service.twig' %}
 
-                <div class="dialog notification">
-                  {% if permsLongTerm %}
-                    <p class="dialog_text">{{_.permlong|raw}}</p>
-                  {% else %}
-                    <p class="dialog_text">{{_.permshort|raw}}</p>
-                  {% endif %}
-                </div>
+          <h4>{{_.requestsperms}}</h4>
+          <div class="list-group" id="grantpermissionlist">
+            {% include 'partials/grant_perms.twig' %}
+            {# INCLUDE {{> grant.perms}} #}
+            {# INCLUDE {{> grant.perms-apis}} #}
+          </div><!-- End of list-group -->
+        </div>
 
-                <div class="center-block simpleSkip" >
-                  <p>{{_.doyouaccept}}</p>
-                </div>
 
-                {% if postdata %}
-                  <input type="hidden" name="{{key}}" value="{{value}}" />
-                {% endif %}
+        {# display how long the access will be granted #}
+        <div id="container-grant-duration" class="dialog notification">
+          {% if permsLongTerm %}
+            <p class="dialog_text">{{_.permlong|raw}}</p>
+          {% else %}
+            <p class="dialog_text">{{_.permshort|raw}}</p>
+          {% endif %}
+        </div>
 
-                {# Buttons for accept/decline #}
-                <div class="simpleSkip">
-                  <button type="submit"
-                          id="submit"
-                          tabindex="1"
-                          class="pure-button pure-button-primary reqAccept">
-                    {{_.yes}}
-                  </button>
-                  <a tabindex="2" class="pure-button" href="/reject">
-                    {{_.no}}
-                  </a>
-                </div>
 
-                <div class="center-block simpleOnly" style="display: none" >
+        {# part where the user gives consent #}
+        <div id="container-consent-action">
+          <p>{{_.doyouaccept}}</p>
 
-                  <fieldset id="actions" style=" text-align: right ">
+          {% if postdata %}
+            <input type="hidden" name="{{key}}" value="{{value}}" />
+          {% endif %}
 
-                    <a tabindex="2" class="btn btn-default tglSimple" href="#">
-                      {{_.showmore}}
-                    </a>
-
-                    <button type="submit" id="submit" tabindex="1" class="btn btn-success reqAccept">
-                      {{_.okcontinue}}
-                    </button>
-
-                  </fieldset>
-                </div>
-
-              </div>
-
-            </div><!-- column -->
-          </div><!-- row -->
-        </div><!-- container -->
-
-        <div class="container" style="display: none">
-          <p style="text-align: right; font-size: 80%; margin-bottom: 0px; padding-bottom: 0px">
-            <a target="_blank" href="http://docs.dataporten.no/docs/endusers/">
-              {{_.readmoreconnect}}
-              <i class="fa fa-chevron-left"></i>
-            </a>
-          </p>
-          <p style="text-align: right; font-size: 80%; margin-top: 0px; padding-top: 0px">
-            <a target="_blank" href="https://auth.dataporten.no/tou/generic">
-              {{_.connectpersonvern}}
-              <i class="fa fa-chevron-left"></i>
-            </a>
-          </p>
+          {# Buttons for accept/decline #}
+          <button type="submit" id="submit" class="pure-button pure-button-primary reqAccept">
+            {{_.yes}}
+          </button>
+          <a class="pure-button" href="/reject">
+            {{_.no}}
+          </a>
         </div>
 
       </form>
 
     </div>
 
-    <!-- Modal for privacy policy -->
-    <div id="privacy-policy" aria-hidden="true">
+    {# privacy policy - content used in dialog #}
+    <div id="privacy-policy" class="hide" aria-hidden="true">
       {% include 'partials/grant_bruksvilkar.twig' %}
     </div>
+
+
+    {# Helpful links and stuff - not displayed yet #}
+    <div class="container" style="display: none">
+      <p style="text-align: right; font-size: 80%; margin-bottom: 0px; padding-bottom: 0px">
+        <a target="_blank" href="http://docs.dataporten.no/docs/endusers/">
+          {{_.readmoreconnect}}
+          <i class="fa fa-chevron-left"></i>
+        </a>
+      </p>
+      <p style="text-align: right; font-size: 80%; margin-top: 0px; padding-top: 0px">
+        <a target="_blank" href="https://auth.dataporten.no/tou/generic">
+          {{_.connectpersonvern}}
+          <i class="fa fa-chevron-left"></i>
+        </a>
+      </p>
+    </div>
+
 
   </div>
 
