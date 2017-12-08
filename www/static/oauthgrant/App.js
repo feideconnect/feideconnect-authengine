@@ -12,6 +12,8 @@ define(function(require, exports, module) {
                 return;
             }
             var that = this;
+            var containerUserTerms = $('#container-user-terms');
+            var containerServiceConsent = $('#container-service-consent');
 
             this.accountstore = new AccountStore(visualTag);
             this.lang = new LanguageSelector($("#langselector"), true);
@@ -21,11 +23,9 @@ define(function(require, exports, module) {
                 $(item.currentTarget).toggleClass("grantEntryActive");
             });
 
-            $("body").on("click", "#actAcceptBrVilk", function(item) {
-                // console.log("Click");
-                $('#myModal').modal('hide');
-                $('#bruksvilkar').prop('checked', true);
-                that.updateAcceptRequirement();
+            $("body").on("click", ".accept-user-terms", function() {
+                containerUserTerms.addClass('hide');
+                containerServiceConsent.removeClass('hide');
             });
 
             $("body").on("click", ".tglSimple", function(e) {
@@ -55,17 +55,6 @@ define(function(require, exports, module) {
             }
 
 
-            $("body").on("change", "#bruksvilkar", function(e) {
-                // e.preventDefault();
-                that.updateAcceptRequirement();
-
-                // $("body").toggleCl
-                // ass("simpleGrant");
-            });
-
-            this.updateAcceptRequirement();
-
-
             // Uncomment this to force "samtykkeerklæring" to show immediately.
             // Used for debugging.
             // $('#myModal').modal('show');
@@ -75,25 +64,6 @@ define(function(require, exports, module) {
             });
 
         },
-
-        "updateAcceptRequirement": function() {
-
-
-            if ($("input#bruksvilkar").length === 1) {
-                var val = $("input#bruksvilkar").is(":checked");
-                if (val) {
-                    $(".reqAccept").removeAttr("disabled");
-                    $("#servicecontent").show();
-                } else {
-                    $(".reqAccept").attr("disabled", "disabled");
-                    $("#servicecontent").hide();
-                }
-            }
-
-
-
-        },
-
 
         "loadConfig": function() {
             var that = this;

@@ -59,15 +59,17 @@
     </div><!-- media -->
 
     {% if firsttime %}
-      {% include 'partials/grant_firsttime.twig' %}
+      <div id="container-user-terms">
+        {% include 'partials/grant_firsttime.twig' %}
+      </div>
     {% endif %}
 
 
-    <div id="consent-for-service" {% if firsttime %}class="hide"{% endif %}>
+    <div id="container-service-consent" {% if firsttime %}class="hide"{% endif %}>
       <h2>About the service</h2>
 
       <!-- Form for giving consent -->
-      <form  id="login" method="post" action="{{posturl}}">
+      <form id="login" method="post" action="{{posturl}}">
         {# bruksvilkar is always accepted if we are showing this form #}
         <input type="hidden" name="bruksvilkar" value="yes"></input>
         <div class="container mainContainer" >
