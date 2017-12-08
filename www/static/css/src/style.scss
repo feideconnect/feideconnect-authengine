@@ -93,7 +93,6 @@ a {
  * General layout *
  ******************/
 
-
 .layout {
   margin: auto;
   max-width: $max-width;
@@ -224,6 +223,7 @@ div.error {
  * Helpers *
  ***********/
 
+.full-width { width: 100%; }
 
 .mobile-only {
   display: none;

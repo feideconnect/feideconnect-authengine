@@ -1,9 +1,22 @@
-.currentUser {
-    .profileImage {
-        max-height: 64px;
-    }
-}
+#oauthgrant {
 
-.list-group-item {
-    padding: .5em;
+    .currentUser {
+        .profileImage {
+            max-height: 64px;
+        }
+    }
+
+    .list-group-item {
+        padding: .5em;
+    }
+
+    .vex {
+        padding-top: 2em;
+        padding-bottom: 2em;
+        .vex-content {
+            width: 90%;
+            font-size: 1rem;
+        }
+    }
+
 }

@@ -12,7 +12,6 @@ define(function(require, exports, module) {
                 return;
             }
             var that = this;
-            console.log('Vex:', vex);
 
             this.accountstore = new AccountStore(visualTag);
             this.lang = new LanguageSelector($("#langselector"), true);
@@ -35,8 +34,16 @@ define(function(require, exports, module) {
             });
 
             $(".touOpen").on("click", function(e) {
-                e.preventDefault(); e.stopPropagation();
-                $('#myModal').modal('show');
+                e.preventDefault();
+                vex.defaultOptions.className = 'vex-theme-os';
+                var policyInfo = vex.open({
+                    unsafeContent: $('#privacy-policy').html()
+                });
+            });
+
+            $("body").on("click", ".touClose", function(e) {
+                e.preventDefault();
+                vex.closeAll();
             });
 
             if ($("body").hasClass("bypass")) {

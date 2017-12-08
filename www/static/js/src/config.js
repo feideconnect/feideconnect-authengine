@@ -8,7 +8,7 @@ var requirecfg = {
         dustjs: 'components/dustjs-linkedin/dist/dust-full.min',
         jscookie: 'components/js-cookie/src/js.cookie',
         es6promise: 'components/es6-promise/es6-promise.min',
-        vex: 'components/vex/dist/js/vex',
+        vex: 'components/vex/dist/js/vex.combined',
         accountchooser: 'accountchooser',
         oauthgrant: 'oauthgrant',
     },

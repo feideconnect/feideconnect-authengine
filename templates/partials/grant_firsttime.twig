@@ -1,23 +1,23 @@
 <div class="dialog notification">
-  {% if user.isFeideUser %}
-    <p class="dialog_text">
+  <p class="dialog_text">
+    {% if user.isFeideUser %}
       {{_.thisisfirsttimefeide}}
-      <a class="touOpen" href="/tou">
-        {{_.userterms}}
-        <i class="fa fa-external-link" aria-hidden="true"></i>
-      </a>
-      <input type="hidden" name="bruksvilkar" value="yes"></input>
-    </p>
-  {% else %}
-    <p class="dialog_text">
+    {% else %}
       {{_.thisisfirsttimeother}}
-    </p>
-    <p>
-      <label for="bruksvilkar">
-        <input type="checkbox" id="bruksvilkar" name="bruksvilkar" value="yes" />
-        {{_.iaccept}}
-        <a class="touOpen" href="/tou">{{_.userterms}}</a>
-      </label>
-    </p>
-  {% endif %}
+    {% endif %}
+    <a class="touOpen" href="">
+      {{_.userterms}}
+      <i class="fa fa-external-link" aria-hidden="true"></i>
+    </a>
+  </p>
+</div>
+
+<p>{{_.iaccept}} privacy policy</p>
+<div class="pure-g">
+  <div class="pure-u-1-2">
+    <div class="pure-button full-width pure-button-primary">I accept</div>
+  </div>
+  <div class="pure-u-1-2">
+    <a class="pure-button full-width" href="/reject">I do not accept</a>
+  </div>
 </div>
