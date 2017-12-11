@@ -1,40 +1,55 @@
 {# -*- mode: web; web-mode-markup-indent-offset: 2 -*- #}
-<div>
 
-  <div class="grantEntryContent">
-    <h3>{{client.name}}</h3>
-    <div id="service-details" class="hide">
+<div id="container-service-description">
 
-      <span class="small">{{_.provby}} {{ownerDisplay}}</span>
+  <h3>{{client.name}}</h3>
 
-      {% include 'partials/contractsummary.twig' %}
+  {% if client.descr %}
+    <p>{{ client.descr }}</p>
+  {% endif %}
 
-      <div class="client-description">
-        {% if client.descr %}
-          <p>{{ client.descr }}</p>
-        {% endif %}
+  {% if not client.isSecure %}
+    <p>
+      <i class="fa fa-warning"></i>
+      {{_.insecurewarning}}
+    </p>
+  {% endif %}
 
-        {% if not client.isSecure %}
-          <p>
-            <span class="label label-danger">
-              <i class="fa fa-warning"></i>
-              {{_.insecurewarning}}
-            </span>
-          </p>
-        {% endif %}
+
+  {# Button for toggling the extra information #}
+  <button class="pure-button pure-button-xsmall more-information">More information</button>
+
+
+  {# All the extra information #}
+  <div id="container-service-details" style="display: none">
+
+
+    {# Contract details #}
+    {% if user.isFeideUser %}
+      <div id="container-contract-details">
+        <h4>Contract</h4>
+        <p>
+          {% if needsAuthorization %}
+
+            {% if validated %}
+              {{_.validated10}}
+            {% else %}
+              <i class="fa fa-warning">&nbsp;</i>{{_.notvalidated10}}
+            {% endif %}
+
+          {% else %}
+            {{_.needsauthz10}}
+          {% endif %}
+        </p>
       </div>
-
-    </div>
-  </div>
+    {% endif %}
 
 
-  <div class="contract-details">
+    {# Urls to client pages with more info #}
+    {% if client.privacypolicyurl or client.supporturl or client.homepageurl %}
+      <h4>More information</h4>
 
-    {% include 'partials/contractdetails.twig' %}
-
-    <div>
-
-      <ul>
+      <ul class="service-url-list">
         {% if client.privacypolicyurl %}
           <li>
             <a target="_blank" href="{{ client.privacypolicyurl }}">
@@ -59,9 +74,13 @@
           </li>
         {% endif %}
       </ul>
+    {% endif %}
 
+
+    {# 'App provided by' information #}
+    {% if ownerOrg or owner %}
       <div id="app-provided-by">
-        {{_.appprovidedby}}:
+        <h4>{{_.appprovidedby}}</h4>
 
         {% if ownerOrg %}
 
@@ -90,7 +109,8 @@
 
         {% endif %}
       </div>
-
-    </div>
+    {% endif %}
 
   </div>
+
+</div>

@@ -1,5 +1,17 @@
 #oauthgrant {
 
+    #container-service-description {
+        border: 1px solid #ccc;
+        background-color: #eee;
+        padding: 1em;
+        h3 {
+            margin-top: 0;
+        }
+        h4 {
+            margin-bottom: 0;
+        }
+    }
+
     .currentUser {
         .profileImage {
             max-height: 64px;

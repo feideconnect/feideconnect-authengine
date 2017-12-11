@@ -75,18 +75,18 @@
         {# bruksvilkar is always accepted if we are showing this form #}
         <input type="hidden" name="bruksvilkar" value="yes"></input>
 
-        <!-- <div id="servicecontent"> -->
-
         {# display information about the service #}
-        <div id="container-service-description">
+        <div id="container-service-info">
           {% include 'partials/grant_service.twig' %}
 
-          <h4>{{_.requestsperms}}</h4>
-          <div class="list-group" id="grantpermissionlist">
-            {% include 'partials/grant_perms.twig' %}
-            {# INCLUDE {{> grant.perms}} #}
-            {# INCLUDE {{> grant.perms-apis}} #}
-          </div><!-- End of list-group -->
+          <div id="container-service-permissions">
+            <h4>{{_.requestsperms}}</h4>
+            <div class="list-group" id="grantpermissionlist">
+              {% include 'partials/grant_perms.twig' %}
+              {# INCLUDE {{> grant.perms}} #}
+              {# INCLUDE {{> grant.perms-apis}} #}
+            </div><!-- End of list-group -->
+          </div>
         </div>
 
 

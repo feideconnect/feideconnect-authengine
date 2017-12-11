@@ -14,14 +14,36 @@ define(function(require, exports, module) {
             var that = this;
             var containerUserTerms = $('#container-user-terms');
             var containerServiceConsent = $('#container-service-consent');
+            var containerServiceDetails = $('#container-service-details');
 
             this.accountstore = new AccountStore(visualTag);
             this.lang = new LanguageSelector($("#langselector"), true);
 
-            $(".grantEntry").on("click", function(item) {
-                // console.log("Click");
-                $(item.currentTarget).toggleClass("grantEntryActive");
+            /* Listeners for the privacy policy dialog */
+
+            // Open privacy policy dialog
+            $(".touOpen").on("click", function(e) {
+                e.preventDefault();
+                vex.defaultOptions.className = 'vex-theme-os';
+                var policyInfo = vex.open({
+                    unsafeContent: $('#privacy-policy').html()
+                });
             });
+
+            // Close privacy policy dialog
+            $("body").on("click", ".touClose", function(e) {
+                e.preventDefault();
+                vex.closeAll();
+            });
+
+
+            /* Listener for expanding more information about the service */
+            $(".more-information").on("click", function(e) {
+                e.preventDefault();
+                containerServiceDetails.slideToggle();
+            });
+
+
 
             $("body").on("click", ".accept-user-terms", function() {
                 containerUserTerms.addClass('hide');
@@ -33,18 +55,7 @@ define(function(require, exports, module) {
                 $("body").toggleClass("simpleGrant");
             });
 
-            $(".touOpen").on("click", function(e) {
-                e.preventDefault();
-                vex.defaultOptions.className = 'vex-theme-os';
-                var policyInfo = vex.open({
-                    unsafeContent: $('#privacy-policy').html()
-                });
-            });
 
-            $("body").on("click", ".touClose", function(e) {
-                e.preventDefault();
-                vex.closeAll();
-            });
 
             if ($("body").hasClass("bypass")) {
                 $("#submit").click();
