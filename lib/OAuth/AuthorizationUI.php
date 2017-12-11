@@ -209,7 +209,10 @@ class AuthorizationUI {
 
     public function getAuthorizationInfo(&$data) {
 
-        $scopesInspector = new ScopesInspector($this->scopesInQuestion, $this->authorizationEvaluator);
+        $scopesInspector = new ScopesInspector(
+            $this->scopesInQuestion,
+            $this->authorizationEvaluator,
+            $this->storage->getOrg($this->client->organization));
         $isMandatory = MandatoryClientInspector::isClientMandatory($this->account, $this->client);
 
         if ($this->fixedMandatory !== null) {

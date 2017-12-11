@@ -27,13 +27,14 @@ class ScopesInspector {
 
     protected $apis = [], $owners = [], $orgs = [];
 
-    public function __construct($scopes, $authorizationEvaluator) {
+    public function __construct($scopes, $authorizationEvaluator, $organization=null) {
         $this->scopes = $scopes;
 
         $this->storage = StorageProvider::getStorage();
 
         $this->apis = [];
         $this->authorizationEvaluator = $authorizationEvaluator;
+        $this->organization = $organization;
     }
 
     public static function sortByScore($a, $b) {
@@ -298,8 +299,50 @@ class ScopesInspector {
 
         usort($info["view"], ['FeideConnect\OAuth\ScopesInspector', 'sortByScore']);
 
+        $info['viewsByOrg'] = $this->getViewsByOrg($info);
+
         return $info;
 
+    }
+
+    /* Structure info with organization as key */
+    public function getViewsByOrg($data) {
+        $viewsByOrg = [];
+        $viewsByOrg['orgs'][$this->organization->id]['view'] = $data['view'];
+
+        // Find the other orgs
+        foreach ($data['apis'] as $key => $value) {
+            $orgid = $value['info']['organization'];
+
+            // Add nestedpermissions new and old orgs
+            // TODO: Make this recursive
+            if (array_key_exists('view', $viewsByOrg['orgs'][$orgid])) {
+                $viewsByOrg['orgs'][$orgid]['view'] = array_merge(
+                    $viewsByOrg['orgs'][$orgid]['view'],
+                    $value['nestedPermissions']['view']);
+            } else {
+                $viewsByOrg['orgs'][$orgid]['view'] = $value['nestedPermissions']['view'];
+            }
+        }
+
+        /* Stinking way of getting unique values */
+        foreach ($viewsByOrg['orgs'] as $orgid => $views) {
+            $keys = [];
+            $unique = [];
+
+            foreach ($views['view'] as $key => $view) {
+                if (! array_key_exists($view['title'], $keys)) {
+                    $keys[$view['title']] = 1;
+                    $unique[] = $view;
+                }
+            }
+
+            $viewsByOrg['orgs'][$orgid] = $unique;
+        }
+
+        /* TODO: Sort by score */
+
+        return $viewsByOrg;
     }
 
 
