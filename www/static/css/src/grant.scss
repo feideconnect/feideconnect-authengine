@@ -2,13 +2,16 @@
 
     #container-service-description {
         border: 1px solid #ccc;
-        background-color: #eee;
+        background-color: white;
         padding: 1em;
         h3 {
             margin-top: 0;
         }
         h4 {
-            margin-bottom: 0;
+            margin-bottom: 0.5em;
+        }
+        p, ul {
+            margin-top: 0;
         }
     }
 

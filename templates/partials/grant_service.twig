@@ -45,6 +45,41 @@
     {% endif %}
 
 
+    {# 'App provided by' information #}
+    {% if ownerOrg or owner %}
+      <div id="app-provided-by">
+        <h4>{{_.appprovidedby}}</h4>
+
+        {% if ownerOrg %}
+
+          <div class="media">
+            <div class="media-left media-middle">
+              <img src="{{org.logoURL}}" style="max-height: 32px">
+            </div>
+            <div class="media-body">
+              <h3>{{org.name.nb}}</h3>
+              <p>URL: <a href="{{client.host}}" target="_blank">{{client.host}}</a></p>
+            </div>
+          </div>
+
+        {% elseif owner %}
+
+          <div class="media">
+            <div class="media-left media-middle">
+              <img src="/user/media/{{owner.profilephoto}}" style="max-height: 64px">
+            </div>
+            <div class="media-body">
+              <h3>{{owner.name}}</h3>
+              <p>Email: <a href="mailto:{{owner.mail}}">{{owner.email}}</a></p>
+              <p>URL: <a href="{{client.host}}" target="_blank">{{client.host}}</a></p>
+            </div>
+          </div>
+
+        {% endif %}
+      </div>
+    {% endif %}
+
+
     {# Urls to client pages with more info #}
     {% if client.privacypolicyurl or client.supporturl or client.homepageurl %}
       <h4>More information</h4>
@@ -76,40 +111,6 @@
       </ul>
     {% endif %}
 
-
-    {# 'App provided by' information #}
-    {% if ownerOrg or owner %}
-      <div id="app-provided-by">
-        <h4>{{_.appprovidedby}}</h4>
-
-        {% if ownerOrg %}
-
-          <div class="media">
-            <div class="media-left media-middle">
-              <img src="{{org.logoURL}}" style="max-height: 32px">
-            </div>
-            <div class="media-body">
-              <h3>{{org.name.nb}}</h3>
-              <code>{{client.host}}</code>
-            </div>
-          </div>
-
-        {% elseif owner %}
-
-          <div class="media">
-            <div class="media-left media-middle">
-              <img src="/user/media/{{owner.profilephoto}}" style="max-height: 32px">
-            </div>
-            <div class="media-body">
-              <h3>{{owner.name}}</h3>
-              <a href="mailto:{{owner.mail}}">{{owner.email}}</a>
-              <code>{{client.host}}</code>
-            </div>
-          </div>
-
-        {% endif %}
-      </div>
-    {% endif %}
 
   </div>
 
