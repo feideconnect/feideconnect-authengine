@@ -1,17 +1,17 @@
 {% if user.isFeideUser %}
   {% if needsAuthorization %}
     {% if validated %}
-      <div class="simpleSkip">
+      <div>
         <i style="color: #363; margin-top: 4px" class="fa fa-certificate"></i>
         {{_.validated10short}}
       </div>
     {% else %}
-      <div class="simpleSkip">
+      <div>
         {{_.notvalidated10short}}
       </div>
     {% endif %}
   {% else %}
-    <div class="simpleSkip">
+    <div>
       <i style="color: #363" class="fa fa-check pull-left; margin-bottom: -5px"></i>
       {{_.needsauthz10short}}
     </div>

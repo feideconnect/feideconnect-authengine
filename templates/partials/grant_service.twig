@@ -1,17 +1,13 @@
-<div class="dialog">
+{# -*- mode: web; web-mode-markup-indent-offset: 2 -*- #}
+<div>
 
   <div class="grantEntryContent">
-    <div>
-      <h3>{{client.name}}</h3>
+    <h3>{{client.name}}</h3>
+    <div id="service-details" class="hide">
 
-      <div class="hide">
-        <h3 class="media-heading">
-          {{client.name}}
-          <span class="small">{{_.provby}} {{ownerDisplay}}</span>
-        </h3>
+      <span class="small">{{_.provby}} {{ownerDisplay}}</span>
 
-        {% include 'partials/contractsummary.twig' %}
-      </div>
+      {% include 'partials/contractsummary.twig' %}
 
       <div class="client-description">
         {% if client.descr %}
@@ -28,78 +24,73 @@
         {% endif %}
       </div>
 
-    </div><!-- media body -->
-  </div><!-- media -->
+    </div>
+  </div>
 
 
   <div class="contract-details">
 
     {% include 'partials/contractdetails.twig' %}
 
-    <div class="ownerbox2 hide">
+    <div>
 
-      <div class="row">
+      <ul>
+        {% if client.privacypolicyurl %}
+          <li>
+            <a target="_blank" href="{{ client.privacypolicyurl }}">
+              {{_.applicationprivacy}}
+            </a>
+          </li>
+        {% endif %}
 
-        <div>
-          <ul class="uninett-ul simpleSkip">
-            {% if client.privacypolicyurl %}
-              <li class="uninett-ul-li">
-                <a target="_blank" href="{{ client.privacypolicyurl }}">
-                  {{_.applicationprivacy}}
-                </a>
-              </li>
-            {% endif %}
+        {% if client.supporturl %}
+          <li>
+            <a target="_blank" href="{{ client.supporturl }}">
+              {{_.applicationsupport}}
+            </a>
+          </li>
+        {% endif %}
 
-            {% if client.supporturl %}
-              <li class="uninett-ul-li">
-                <a target="_blank" href="{{ client.supporturl }}">
-                  {{_.applicationsupport}}
-                </a>
-              </li>
-            {% endif %}
+        {% if client.homepageurl %}
+          <li>
+            <a target="_blank" href="{{ client.homepageurl }}">
+              {{_.applicationhomepage}}
+            </a>
+          </li>
+        {% endif %}
+      </ul>
 
-            {% if client.homepageurl %}
-            <li class="uninett-ul-li">
-              <a target="_blank" href="{{ client.homepageurl }}">
-                {{_.applicationhomepage}}
-              </a>
-            </li>
-            {% endif %}
-          </ul>
-        </div>
+      <div id="app-provided-by">
+        {{_.appprovidedby}}:
 
-        <div>
-          <div class="row">
-            {% if ownerOrg %}
-              <div>
-                <p style="font-style: italic; font-size: 95%">{{_.appprovidedby}}</p>
-                <p class=" ownerName" style=""><strong>{{org.name.nb}}</strong></p>
-                <p class="simpleSkip"><code>{{client.host}}</code></p>
-              </div>
+        {% if ownerOrg %}
 
-            <div>
-              <img class="orglogo orglogoSmall" style="max-height: 64px; max-width: 64px" src="{{org.logoURL}}">
+          <div class="media">
+            <div class="media-left media-middle">
+              <img src="{{org.logoURL}}" style="max-height: 32px">
             </div>
-            {% endif %}
-
-            {% if owner %}
-              <div>
-                <p style="font-style: italic; font-size: 95%">{{_.appprovidedby}}</p>
-                <p class="ownerName"><strong>{{owner.name}}</strong></p>
-                <p class="ownerMail">
-                  <a href="mailto:{{owner.mail}}">{{owner.email}}</a>
-                </p>
-                <p class="simpleSkip"><code>{{client.host}}</code></p>
-              </div>
-
-              <div>
-                <img class="orglogo orglogoSmall" style="max-height: 64px; max-width: 64px" src="/user/media/{{owner.profilephoto}}">
-              </div>
-            {% endif %}
+            <div class="media-body">
+              <h3>{{org.name.nb}}</h3>
+              <code>{{client.host}}</code>
+            </div>
           </div>
 
-        </div>
+        {% elseif owner %}
+
+          <div class="media">
+            <div class="media-left media-middle">
+              <img src="/user/media/{{owner.profilephoto}}" style="max-height: 32px">
+            </div>
+            <div class="media-body">
+              <h3>{{owner.name}}</h3>
+              <a href="mailto:{{owner.mail}}">{{owner.email}}</a>
+              <code>{{client.host}}</code>
+            </div>
+          </div>
+
+        {% endif %}
       </div>
+
     </div>
 
-  </div><!-- Panel -->
+  </div>
