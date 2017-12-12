@@ -52,7 +52,7 @@ class AuthorizationUI {
         $this->apigkScopes = $ae->getAPIGKscopes();
 
         $this->organization = $account->getOrg();
-        
+
     }
 
     public function setFixedBypass($en) {
@@ -94,7 +94,7 @@ class AuthorizationUI {
 
 
     /*
-     * Post data is a set of key -> value pairs that will be parmaeters to the HTML form that 
+     * Post data is a set of key -> value pairs that will be parmaeters to the HTML form that
      * represent the Grant dialog.
      */
     public function getPostData(&$data) {
@@ -168,18 +168,17 @@ class AuthorizationUI {
 
 
     /*
-     * Get all information related to the client that needs to be displayed 
+     * Get all information related to the client that needs to be displayed
      */
     public function getClientInfo(&$data) {
         $data['client'] = $this->client->getAsArrayLimited(["id", "name", "descr", "redirect_uri", "scopes", "supporturl", "privacypolicyurl", "homepageurl"]);
         $data['client']['host'] = Utils\URL::getURLhostPart($this->redirect_uri);
         $data['client']['isSecure'] = Utils\URL::isSecure($this->redirect_uri); // $oauthclient->isRedirectURISecured();
-
     }
 
 
     /*
-     * Get all information related to the client owner that needs to be displayed 
+     * Get all information related to the client owner that needs to be displayed
      */
     public function getClientOwnerInfo(&$data) {
 
@@ -259,7 +258,7 @@ class AuthorizationUI {
 
 
     public function process() {
-               
+
         $data = [];
         $data['rememberme'] = false;
         $data['HOST'] = Utils\URL::selfURLhost();
