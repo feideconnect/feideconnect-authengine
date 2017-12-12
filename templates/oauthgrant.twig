@@ -83,14 +83,13 @@
             <h4>{{_.requestsperms}}</h4>
             <div class="list-group" id="grantpermissionlist">
               {% include 'partials/grant_perms.twig' %}
-              {# INCLUDE {{> grant.perms}} #}
-              {# INCLUDE {{> grant.perms-apis}} #}
             </div><!-- End of list-group -->
           </div>
         </div>
 
 
         {# display how long the access will be granted #}
+        <h4>Access duration</h4>
         <div id="container-grant-duration" class="dialog notification">
           {% if permsLongTerm %}
             <p class="dialog_text">{{_.permlong|raw}}</p>
