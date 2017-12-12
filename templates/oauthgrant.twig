@@ -75,6 +75,11 @@
         {# bruksvilkar is always accepted if we are showing this form #}
         <input type="hidden" name="bruksvilkar" value="yes"></input>
 
+        {# Magic variables #}
+        {% for data in postdata %}
+          <input type="hidden" name="{{data.key}}" value="{{data.value}}" />
+        {% endfor %}
+
         {# display information about the service #}
         <div id="container-service-info">
           {% include 'partials/grant_service.twig' %}
