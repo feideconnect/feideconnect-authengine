@@ -349,12 +349,18 @@ a {
 
 .media {
     display: table;
+    line-height: normal;
+    &.with-logo img {
+        max-width: 32px;
+        max-height: 32px;
+    }
     .media-object {
         display: block;
     }
     .media-left {
         display: table-cell;
-        padding-right: 15px;
+        padding-right: 10px;
+        vertical-align: top;
     }
     .media-body {
         display: table-cell;
