@@ -80,7 +80,7 @@ class ScopesInspector {
 
 
         $nsi = new ScopesInspector($apigk->getScopeList(), $this->authorizationEvaluator);
-        $apiInfo['nestedPermissions'] = $nsi->getView();
+        $apiInfo['nestedPermissions'] = $nsi->getView(false);
 
         try {
             if ($apigk->has('organization')) {
@@ -156,7 +156,7 @@ class ScopesInspector {
             } else if (APIGK::isApiScope($access)) {
                 $data['unknownAPI'][$access] = true;
             } else {
-                $data['global'][$access] = true; 
+                $data['global'][$access] = true;
             }
         }
 
@@ -208,10 +208,10 @@ class ScopesInspector {
     /*
      * Generates a complete view (with translations) for permissions.
      * Based upon the info array returned by getInfo().
-     * 
+     *
      * The api list is not handled here.
      */
-    public function getView() {
+    public function getView($getByOrg = true) {
 
 
         $info = $this->getInfo();
@@ -277,7 +277,7 @@ class ScopesInspector {
             ]
         ];
 
-        
+
 
         foreach ($info['global'] as $globalperm => $globalpermdata) {
 
@@ -289,7 +289,7 @@ class ScopesInspector {
                 $info['view'][] = [
                     'title' => 'Unknown permission [' . htmlspecialchars($globalperm) . ']',
                 ];
-            } 
+            }
         }
 
 
@@ -299,50 +299,66 @@ class ScopesInspector {
 
         usort($info["view"], ['FeideConnect\OAuth\ScopesInspector', 'sortByScore']);
 
-        $info['viewsByOrg'] = $this->getViewsByOrg($info);
+        if ($getByOrg) {
+            $info['viewsByOrg'] = $this->getViewsByOrg($info);
+            $info['orgsWithViews'] = $this->getOrgsWithViews($info);
+        }
 
         return $info;
 
     }
 
     /* Structure info with organization as key */
-    public function getViewsByOrg($data) {
+    private function getViewsByOrg($data) {
         $viewsByOrg = [];
-        $viewsByOrg['orgs'][$this->organization->id]['view'] = $data['view'];
+        $viewsByOrg[$this->organization->id] = $data['view'];
 
         // Find the other orgs
         foreach ($data['apis'] as $key => $value) {
-            $orgid = $value['info']['organization'];
+            $orgid = $value['org']['id'];
 
             // Add nestedpermissions new and old orgs
             // TODO: Make this recursive
-            if (array_key_exists('view', $viewsByOrg['orgs'][$orgid])) {
-                $viewsByOrg['orgs'][$orgid]['view'] = array_merge(
-                    $viewsByOrg['orgs'][$orgid]['view'],
+            if (array_key_exists($orgid, $viewsByOrg)) {
+                $viewsByOrg[$orgid] = array_merge(
+                    $viewsByOrg[$orgid],
                     $value['nestedPermissions']['view']);
             } else {
-                $viewsByOrg['orgs'][$orgid]['view'] = $value['nestedPermissions']['view'];
+                $viewsByOrg[$orgid] = $value['nestedPermissions']['view'];
             }
         }
 
         /* Stinking way of getting unique values */
-        foreach ($viewsByOrg['orgs'] as $orgid => $views) {
+        foreach ($viewsByOrg as $orgid => $views) {
             $keys = [];
             $unique = [];
 
-            foreach ($views['view'] as $key => $view) {
+            foreach ($views as $key => $view) {
                 if (! array_key_exists($view['title'], $keys)) {
                     $keys[$view['title']] = 1;
                     $unique[] = $view;
                 }
             }
 
-            $viewsByOrg['orgs'][$orgid] = $unique;
+            $viewsByOrg[$orgid] = $unique;
         }
 
         /* TODO: Sort by score */
 
         return $viewsByOrg;
+    }
+
+    private function getOrgsWithViews($data) {
+        if ($this->hasOrg) {
+            $orgs = [];
+            $orgs[$this->org->id] = $this->org;
+        }
+
+        foreach ($data['apis'] as $key => $value) {
+            $orgs[$value['org']['id']] = $value['org'];
+        }
+
+        return $orgs;
     }
 
 

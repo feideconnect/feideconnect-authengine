@@ -1,32 +1,46 @@
 {# -*- mode: web; web-mode-markup-indent-offset: 2 -*- #}
-{% for perm in perms.view %}
-  <div class="list-group-item">
-    <p>
-      {% if perm.icon %}
-        <span style="color: #565" class="fa fa-fw fa-{{ perm.icon }}"></span>
-      {% endif %}
-      {{perm.title}}
-    </p>
+{% for org, permlist in perms.viewsByOrg %}
 
-    {% if perm.descr %}
-      <small>{{ perm.descr }}</small>
-    {% endif %}
-
-    {% if perm.expandable %}
-      <div class="hide">
-        <ul class="grant-item-list">
-          {% for item in perm.items %}
-            <li>
-              {% if item.icon %}
-                <span class="fa fa-fw fa-{{item.icon}}"></span>
-              {% endif %}
-              {{item.title}}
-          </li>
-          {% endfor %}
-        </ul>
-      </div>
-    {% endif %}
-
+  <div class="media with-logo">
+    <div class="media-left">
+      <img src="{{ attribute(perms.orgsWithViews, org).logoURL }}" />
+    </div>
+    <div class="media-body media-middle">
+      <h1>
+        {{ attribute(perms.orgsWithViews, org).name.nb }}
+      </h1>
+    </div>
   </div>
 
+  {% for perm in permlist %}
+    <div class="list-group-item">
+      <p>
+        {% if perm.icon %}
+          <span style="color: #565" class="fa fa-fw fa-{{ perm.icon }}"></span>
+        {% endif %}
+        {{ perm.title }}
+      </p>
+
+      {% if perm.descr %}
+        <small>{{ perm.descr }}</small>
+      {% endif %}
+
+      {% if perm.expandable %}
+        <div class="hide">
+          <ul class="grant-item-list">
+            {% for item in perm.items %}
+              <li>
+                {% if item.icon %}
+                  <span class="fa fa-fw fa-{{ item.icon }}"></span>
+                {% endif %}
+                {{ item.title }}
+              </li>
+            {% endfor %}
+          </ul>
+        </div>
+      {% endif %}
+
+    </div>
+
+  {% endfor %}
 {% endfor %}
