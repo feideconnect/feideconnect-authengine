@@ -29,11 +29,11 @@
   <!-- NOSCRIPT -->
   <noscript>
     <form id="login2" method="post" action="{{posturl}}" style="padding: 3em">
-      {% if postdata %}
-        <input type="hidden" name="{{key}}" value="{{value}}" />
-      {% endif %}
+      {% for data in postdata %}
+        <input type="hidden" name="{{data.key}}" value="{{data.value}}" />
+      {% endfor %}
       <p>Turn on javascript to review terms of use.</p>
-      <button type="submit" id="actAcceptBrVilk2" class="btn btn-primary">Accept Dataporten terms of use and authorize application</button>
+      <input type="submit" id="actAcceptBrVilk2" class="pure-button" value="Accept Dataporten terms of use and authorize application" />
     </form>
   </noscript>
 
