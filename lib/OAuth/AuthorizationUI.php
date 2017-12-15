@@ -208,10 +208,20 @@ class AuthorizationUI {
 
     public function getAuthorizationInfo(&$data) {
 
+        $org = null;
+        if ($this->client->has('organization')) {
+            $org = $this->storage->getOrg($this->client->organization);
+        }
+
+        $owner = null;
+        if ($this->client->has('owner')) {
+            $owner = $this->storage->getUserByUserID($this->client->owner);
+        }
+
         $scopesInspector = new ScopesInspector(
             $this->scopesInQuestion,
             $this->authorizationEvaluator,
-            $this->storage->getOrg($this->client->organization));
+            $org, $owner);
         $isMandatory = MandatoryClientInspector::isClientMandatory($this->account, $this->client);
 
         if ($this->fixedMandatory !== null) {

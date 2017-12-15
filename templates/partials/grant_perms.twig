@@ -1,16 +1,31 @@
 {# -*- mode: web; web-mode-markup-indent-offset: 2 -*- #}
-{% for org, permlist in perms.viewsByOrg %}
+{% for requestor, permlist in perms.views %}
 
-  <div class="media with-logo">
-    <div class="media-left">
-      <img src="{{ attribute(perms.orgsWithViews, org).logoURL }}" />
+  {% if attribute(perms.requestorInfo, requestor).userid %}
+    <div class="media with-logo">
+      <div class="media-left">
+        <img src="{{apibase}}/userinfo/v1/user/media/{{ attribute(perms.requestorInfo, requestor).profilephoto }}" />
+      </div>
+      <div class="media-body media-middle">
+        <h1>
+          {{ attribute(perms.requestorInfo, requestor).name }}
+        </h1>
+      </div>
     </div>
-    <div class="media-body media-middle">
-      <h1>
-        {{ attribute(perms.orgsWithViews, org).name.nb }}
-      </h1>
+  {% endif %}
+
+  {% if attribute(perms.requestorInfo, requestor).id %}
+    <div class="media with-logo">
+      <div class="media-left">
+        <img src="{{ attribute(perms.requestorInfo, requestor).logoURL }}" />
+      </div>
+      <div class="media-body media-middle">
+        <h1>
+          {{ attribute(perms.requestorInfo, requestor).name.nb }}
+        </h1>
+      </div>
     </div>
-  </div>
+  {% endif %}
 
   {% for perm in permlist %}
     <div class="list-group-item">

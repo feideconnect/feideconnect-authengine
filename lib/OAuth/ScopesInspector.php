@@ -27,7 +27,7 @@ class ScopesInspector {
 
     protected $apis = [], $owners = [], $orgs = [];
 
-    public function __construct($scopes, $authorizationEvaluator, $organization=null) {
+    public function __construct($scopes, $authorizationEvaluator, $organization=null, $user=null) {
         $this->scopes = $scopes;
 
         $this->storage = StorageProvider::getStorage();
@@ -35,6 +35,7 @@ class ScopesInspector {
         $this->apis = [];
         $this->authorizationEvaluator = $authorizationEvaluator;
         $this->organization = $organization;
+        $this->user = $user;
     }
 
     public static function sortByScore($a, $b) {
@@ -80,7 +81,7 @@ class ScopesInspector {
 
 
         $nsi = new ScopesInspector($apigk->getScopeList(), $this->authorizationEvaluator);
-        $apiInfo['nestedPermissions'] = $nsi->getView(false);
+        $apiInfo['nestedPermissions'] = $nsi->getInfo();
 
         try {
             if ($apigk->has('organization')) {
@@ -130,7 +131,6 @@ class ScopesInspector {
     }
 
 
-
     /*
      * Returns a list of access rather than scopes.
      * And also obtains all neccessary info about scopes to Gatekeepers and subscopes.
@@ -154,9 +154,9 @@ class ScopesInspector {
                 $apis[$apiInfo['apigk']->id] = $apiInfo;
 
             } else if (APIGK::isApiScope($access)) {
-                $data['unknownAPI'][$access] = true;
+                $data['unknownAPI'][] = $access;
             } else {
-                $data['global'][$access] = true;
+                $data['global'][] = $access;
             }
         }
 
@@ -204,19 +204,22 @@ class ScopesInspector {
     }
 
 
-
     /*
      * Generates a complete view (with translations) for permissions.
-     * Based upon the info array returned by getInfo().
-     *
-     * The api list is not handled here.
      */
-    public function getView($getByOrg = true) {
-
-
+    public function getView() {
         $info = $this->getInfo();
-        $info['view'] = [];
+        list($requestors, $requestorInfo) = $this->getRequestors($info);
+        $info['views'] = $this->createViews($requestors);
+        $info['requestorInfo'] = $requestorInfo;
+        return $info;
+    }
 
+
+    /*
+     * create views based on all requestors and their requested permissions
+     */
+    private function createViews($requestors) {
         $permissionInfo = [
             'userid' => [
                 'title' => Localization::getTerm('userid'),
@@ -263,7 +266,7 @@ class ScopesInspector {
             'orgadmin' => [
                 'title' => Localization::getTerm('perm-orgadmin'),
                 'descr' => Localization::getTerm('perm-orgadmin-descr'),
-                'icon' => 'cog'
+                'icon' => 'cog',
             ],
             'groups-orgadmin' => [
                 'title' => Localization::getTerm('perm-groups-orgadmin'),
@@ -273,92 +276,116 @@ class ScopesInspector {
             'peoplesearch' => [
                 'title' => Localization::getTerm('perm-peoplesearch'),
                 'descr' => Localization::getTerm('perm-peoplesearch-descr'),
-                'icon' => 'search'
+                'icon' => 'search',
             ]
         ];
 
 
+        $views = [];
 
-        foreach ($info['global'] as $globalperm => $globalpermdata) {
-
-            if (isset($permissionInfo[$globalperm])) {
-                $info['view'][] = $permissionInfo[$globalperm];
-
-            } else if (!in_array($globalperm, self::$specialScopes)) {
-
-                $info['view'][] = [
-                    'title' => 'Unknown permission [' . htmlspecialchars($globalperm) . ']',
-                ];
-            }
-        }
-
-
-        foreach($info["view"] AS $key => $item) {
-            $info["view"][$key]["expandable"] = !empty($item["descr"]);
-        }
-
-        usort($info["view"], ['FeideConnect\OAuth\ScopesInspector', 'sortByScore']);
-
-        if ($getByOrg) {
-            $info['viewsByOrg'] = $this->getViewsByOrg($info);
-            $info['orgsWithViews'] = $this->getOrgsWithViews($info);
-        }
-
-        return $info;
-
-    }
-
-    /* Structure info with organization as key */
-    private function getViewsByOrg($data) {
-        $viewsByOrg = [];
-        $viewsByOrg[$this->organization->id] = $data['view'];
-
-        // Find the other orgs
-        foreach ($data['apis'] as $key => $value) {
-            $orgid = $value['org']['id'];
-
-            // Add nestedpermissions new and old orgs
-            // TODO: Make this recursive
-            if (array_key_exists($orgid, $viewsByOrg)) {
-                $viewsByOrg[$orgid] = array_merge(
-                    $viewsByOrg[$orgid],
-                    $value['nestedPermissions']['view']);
-            } else {
-                $viewsByOrg[$orgid] = $value['nestedPermissions']['view'];
-            }
-        }
-
-        /* Stinking way of getting unique values */
-        foreach ($viewsByOrg as $orgid => $views) {
-            $keys = [];
-            $unique = [];
-
-            foreach ($views as $key => $view) {
-                if (! array_key_exists($view['title'], $keys)) {
-                    $keys[$view['title']] = 1;
-                    $unique[] = $view;
+        foreach ($requestors as $requestor => $scopes) {
+            foreach ($scopes as $k => $scope) {
+                if (isset($permissionInfo[$scope])) {
+                    $views[$requestor][] = $permissionInfo[$scope];
+                } else if (!in_array($scope, self::$specialScopes)) {
+                    $views[$requestor][] = [
+                        'title' => 'Unknown permission [' . htmlspecialchars($scope) . ']',
+                        'score' => -1
+                    ];
                 }
             }
-
-            $viewsByOrg[$orgid] = $unique;
+            usort($views[$requestor], ['FeideConnect\OAuth\ScopesInspector', 'sortByScore']);
         }
 
-        /* TODO: Sort by score */
-
-        return $viewsByOrg;
+        return $views;
     }
 
-    private function getOrgsWithViews($data) {
-        if ($this->hasOrg) {
-            $orgs = [];
-            $orgs[$this->org->id] = $this->org;
+
+    /* Add all api requestors */
+    private function getApiRequestors($api) {
+        $requestors = [];
+        $requestorInfo = [];
+
+        // Find key for this org or owner
+        // Store org or owner information in info array
+        if (array_key_exists('org', $api)) {
+            $key = $api['org']['id'];
+            $requestorInfo[] = array($key => $api['org']);
+        } else if (array_key_exists('owner', $api)) {
+            $key = $api['owner']['userid'];
+            $requestorInfo[] = array($key => $api['owner']);
         }
 
-        foreach ($data['apis'] as $key => $value) {
-            $orgs[$value['org']['id']] = $value['org'];
+        // Store requested permissions for this api
+        $permissions = $api['nestedPermissions'];
+        $perms = $permissions['global'];
+        $requestors[] = array($key => $perms);
+
+        // Find children apis and store permissions and org|owner information
+        // about those aswell
+        foreach ($permissions['apis'] as $key => $nestedApi) {
+            list($apiRequestors, $apiRequestorInfo) = $this->getApiRequestors($nestedApi);
+            $requestors = array_merge($requestors, $apiRequestors);
+            $requestorInfo = array_merge($requestorInfo, $apiRequestorInfo);
         }
 
-        return $orgs;
+        // Returns the list of all requestors with their permissions,
+        // and the information about each requestor
+        // Each has id as key
+        // $requestors = [{key: [permissions]}, {key: [permissions]}, ...]
+        // $requestorInfo = [{key: [permissions]}, ...]
+        return [$requestors, $requestorInfo];
+    }
+
+
+    /*
+     * Structure info based on organization or owner
+     * An org or owner is here called a requestor
+     */
+    private function getRequestors($data) {
+        if ($this->organization) {
+            $key = $this->organization->id;
+            $orginfo = $this->getOrg($key)->getAsArray();
+            $orginfo["logoURL"] = Config::dir("orgs/" . $key . "/logo", "", "core");
+            $requestorInfo[] = array($key => $orginfo);
+        } else if ($this->user) {
+            $ownerinfo = $this->user->getBasicUserInfo(true);
+            $key = $ownerinfo['userid'];
+            $requestorInfo[] = array($key => $ownerinfo);
+        }
+
+        $requestors = [];
+        $requestors[] = array($key => $data['global']);
+
+        // Fetch all requestors with their scopes
+        // Also collect all the info about the org or owner
+        foreach ($data['apis'] as $key => $api) {
+            list($apiRequestors, $apiRequestorInfo) = $this->getApiRequestors($api, $requestors, $requestorInfo);
+            $requestors = array_merge($requestors, $apiRequestors);
+            $requestorInfo = array_merge($requestorInfo, $apiRequestorInfo);
+        }
+
+        return [$this->createUnique($requestors), $this->createUnique($requestorInfo)];
+    }
+
+
+    /*
+     * Convert [{key1: [values1]}, {key1: [values2]}] to
+     * [{key1: unique[values1 + values2]}, {key2: [values]}, ...]
+     */
+    private function createUnique($someArrayofArray) {
+        $toReturn = [];
+        foreach ($someArrayofArray as $someArray) {
+            foreach ($someArray as $key => $values) {
+                if (array_key_exists($key, $toReturn)) {
+                    $toReturn[$key] = array_unique(
+                        array_merge($toReturn[$key], $values));
+                } else {
+                    $toReturn[$key] = $values;
+                }
+            }
+        }
+        return $toReturn;
     }
 
 
@@ -376,12 +403,13 @@ class ScopesInspector {
         foreach ($scopes as $scope) {
             if (isset($lookuptable[$scope])) {
                 foreach ($lookuptable[$scope] as $access) {
-                    $accesses[$access] = true;
+                    $accesses[] = $access;
                 }
             } else {
-                $accesses[$scope] = true;
+                $accesses[] = $scope;
             }
         }
-        return array_keys($accesses);
+        return array_unique($accesses);
     }
+
 }
