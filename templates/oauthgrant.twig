@@ -37,26 +37,28 @@
     </form>
   </noscript>
 
+  <!-- Media object for user -->
+  <div class="media currentUser">
+    <div class="media-left" href="#">
+      <img class="profileImage" src="{{apibase}}/userinfo/v1/user/media/{{user.p}}" alt="User Profile photo" />
+    </div>
+    <div class="media-body media-middle">
+      <h1 class="media-heading">
+        {{user.name}}
+      </h1>
+
+      <p class="org">
+        {{organization}}
+      </p>
+
+    </div><!-- media-body -->
+  </div><!-- media -->
+
+
   <div id="mcontent" class="main box">
 
     <h1>Consent</h1>
 
-    <!-- Media object for user -->
-    <div class="media currentUser">
-      <div class="media-left" href="#">
-        <img class="profileImage" src="{{apibase}}/userinfo/v1/user/media/{{user.p}}" alt="User Profile photo" />
-      </div>
-      <div class="media-body media-middle">
-        <h1 class="media-heading">
-          {{user.name}}
-        </h1>
-
-        <p class="org">
-          {{organization}}
-        </p>
-
-      </div><!-- media-body -->
-    </div><!-- media -->
 
     {% if firsttime %}
       <div id="container-user-terms">
