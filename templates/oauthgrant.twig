@@ -70,44 +70,45 @@
     <div id="container-service-consent" {% if firsttime %}class="hide"{% endif %}>
       <h2>About the service</h2>
 
-      {# Form for giving consent #}
-      <form id="login" method="post" action="{{posturl}}">
 
-        {# bruksvilkar is always accepted if we are showing this form #}
-        <input type="hidden" name="bruksvilkar" value="yes"></input>
+      {# display information about the service #}
+      <div id="container-service-info">
+        {% include 'partials/grant_service.twig' %}
 
-        {# Magic variables #}
-        {% for data in postdata %}
-          <input type="hidden" name="{{data.key}}" value="{{data.value}}" />
-        {% endfor %}
-
-        {# display information about the service #}
-        <div id="container-service-info">
-          {% include 'partials/grant_service.twig' %}
-
-          <div id="container-service-permissions">
-            <h4>{{_.requestsperms}}</h4>
-            <div class="list-group" id="grantpermissionlist">
-              {% include 'partials/grant_perms.twig' %}
-            </div><!-- End of list-group -->
-          </div>
+        <div id="container-service-permissions">
+          <h4>{{_.requestsperms}}</h4>
+          <div class="list-group" id="grantpermissionlist">
+            {% include 'partials/grant_perms.twig' %}
+          </div><!-- End of list-group -->
         </div>
+      </div>
 
 
-        {# display how long the access will be granted #}
-        <h4>Access duration</h4>
-        <div id="container-grant-duration" class="dialog notification">
-          {% if permsLongTerm %}
-            <p class="dialog_text">{{_.permlong|raw}}</p>
-          {% else %}
-            <p class="dialog_text">{{_.permshort|raw}}</p>
-          {% endif %}
-        </div>
+      {# display how long the access will be granted #}
+      <h4>Access duration</h4>
+      <div id="container-grant-duration" class="dialog notification">
+        {% if permsLongTerm %}
+          <p class="dialog_text">{{_.permlong|raw}}</p>
+        {% else %}
+          <p class="dialog_text">{{_.permshort|raw}}</p>
+        {% endif %}
+      </div>
 
 
-        {# part where the user gives consent #}
-        <div id="container-consent-action">
-          <p>{{_.doyouaccept}}</p>
+      {# part where the user gives consent #}
+      <div id="container-consent-action">
+        <p>{{_.doyouaccept}}</p>
+
+        {# Form for giving consent #}
+        <form id="login" method="post" action="{{posturl}}">
+
+          {# bruksvilkar is always accepted if we are showing this form #}
+          <input type="hidden" name="bruksvilkar" value="yes"></input>
+
+          {# Magic variables #}
+          {% for data in postdata %}
+            <input type="hidden" name="{{data.key}}" value="{{data.value}}" />
+          {% endfor %}
 
           {% if postdata %}
             <input type="hidden" name="{{key}}" value="{{value}}" />
@@ -117,12 +118,14 @@
           <button type="submit" id="submit" class="pure-button pure-button-primary reqAccept">
             {{_.yes}}
           </button>
+
           <a class="pure-button" href="/reject">
             {{_.no}}
           </a>
-        </div>
 
-      </form>
+        </form>
+
+      </div>
 
     </div>
 
