@@ -210,6 +210,7 @@ class ScopesInspector {
     public function getView() {
         $info = $this->getInfo();
         list($requestors, $requestorInfo) = $this->getRequestors($info);
+        $info['apiInfo'] = $this->getApiInfoFromPerms($info['apis']);
         $info['views'] = $this->createViews($requestors);
         $info['requestorInfo'] = $requestorInfo;
         return $info;
@@ -366,6 +367,30 @@ class ScopesInspector {
         }
 
         return [$this->createUnique($requestors), $this->createUnique($requestorInfo)];
+    }
+
+    /*
+     * Use the already constructed perms-list to construct a unique list of apis
+     * for each org/owner
+     */
+    private function getApiInfoFromPerms($apis) {
+        $apiInfo = [];
+        foreach ($apis as $key => $api) {
+            $apiid = $api['info']['id'];
+            $key = '';
+            if (array_key_exists('org', $api)) {
+                $key = $api['org']['id'];
+            } else if (array_key_exists('owner', $api)) {
+                $key = $api['owner']['userid'];
+            }
+            $apiInfo[$key][$apiid] = $api['info'];
+
+            $nestedApis = $api['nestedPermissions']['apis'];
+            if ($nestedApis) {
+                $apiInfo = array_merge($apiInfo, $this->getApiInfoFromPerms($nestedApis));
+            }
+        }
+        return $apiInfo;
     }
 
 

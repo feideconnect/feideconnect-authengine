@@ -56,6 +56,14 @@
       {% endif %}
 
     </div>
-
   {% endfor %}
+
+  {# List API info #}
+  <h3>APIs owned by {{ requestor }}</h3>
+  {% for api in attribute(perms.apiInfo, requestor) %}
+    <div class="list-group-item">
+      {{ api.name }}
+    </div>
+  {% endfor %}
+
 {% endfor %}
