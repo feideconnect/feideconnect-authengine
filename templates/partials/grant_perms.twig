@@ -1,8 +1,14 @@
 {# -*- mode: web; web-mode-markup-indent-offset: 2 -*- #}
+
+
+{# For every requestor (grouped by org and owner if not org) list information
+about the requestor and all permissions requested #}
+
 {% for requestor, permlist in perms.views %}
 
   {% set requestorInfo = attribute(perms.requestorInfo, requestor) %}
 
+  {# If the requestor is a user #}
   {% if requestorInfo.userid %}
     <div class="media with-logo">
       <div class="media-left">
@@ -16,6 +22,7 @@
     </div>
   {% endif %}
 
+  {# If the requestor is an organization #}
   {% if requestorInfo.id %}
     <div class="media with-logo">
       <div class="media-left">
@@ -29,6 +36,7 @@
     </div>
   {% endif %}
 
+  {# List all permissions requested #}
   {% for perm in permlist %}
     <div class="list-group-item">
       <p>
