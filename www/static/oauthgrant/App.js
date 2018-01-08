@@ -40,7 +40,10 @@ define(function(require, exports, module) {
             /* Listener for expanding more information about the service */
             $(".more-information").on("click", function(e) {
                 e.preventDefault();
-                containerServiceDetails.slideToggle();
+                var $button = $(this);
+                containerServiceDetails.slideToggle(function() {
+                    $button.toggleClass('more-information less-information');
+                });
             });
 
 
