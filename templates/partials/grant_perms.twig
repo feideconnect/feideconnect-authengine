@@ -1,27 +1,29 @@
 {# -*- mode: web; web-mode-markup-indent-offset: 2 -*- #}
 {% for requestor, permlist in perms.views %}
 
-  {% if attribute(perms.requestorInfo, requestor).userid %}
+  {% set requestorInfo = attribute(perms.requestorInfo, requestor) %}
+
+  {% if requestorInfo.userid %}
     <div class="media with-logo">
       <div class="media-left">
-        <img src="{{apibase}}/userinfo/v1/user/media/{{ attribute(perms.requestorInfo, requestor).profilephoto }}" />
+        <img src="{{apibase}}/userinfo/v1/user/media/{{ requestorInfo.profilephoto }}" />
       </div>
       <div class="media-body media-middle">
         <h1>
-          {{ attribute(perms.requestorInfo, requestor).name }}
+          {{ requestorInfo.name }}
         </h1>
       </div>
     </div>
   {% endif %}
 
-  {% if attribute(perms.requestorInfo, requestor).id %}
+  {% if requestorInfo.id %}
     <div class="media with-logo">
       <div class="media-left">
-        <img src="{{ attribute(perms.requestorInfo, requestor).logoURL }}" />
+        <img src="{{ requestorInfo.logoURL }}" />
       </div>
       <div class="media-body media-middle">
         <h1>
-          {{ attribute(perms.requestorInfo, requestor).name.nb }}
+          {{ requestorInfo.name.nb }}
         </h1>
       </div>
     </div>
