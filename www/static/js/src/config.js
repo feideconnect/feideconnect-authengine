@@ -1,4 +1,4 @@
-var cachebuster = document.body.getAttribute('data-cachebuster');
+
 var requirecfg = {
     baseUrl: '/static',
     paths: {
@@ -14,6 +14,5 @@ var requirecfg = {
     },
     shim: {
         selectize: ['jquery']
-    },
-    urlArgs: 'bust='+cachebuster
+    }
 };
