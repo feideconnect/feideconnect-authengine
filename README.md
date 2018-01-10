@@ -112,9 +112,13 @@ sudo apt-get install ruby-dev
 sudo gem install sass --no-user-install
 sass -v  # Test if works
 
+
+
 # For automatically compiling to css when scss-files are changed:
 # sass --watch <src>:<target>
-sass --watch css/src:css/target
+
+
+sass --watch www/static/css/src/base.scss:www/static/css/src/base.css
 ```
 
 ## Docker

@@ -1,28 +1,11 @@
 {# -*- mode: web; web-mode-markup-indent-offset: 2 -*- #}
 {% extends "base.twig" %}
 
-{% block head %}
-
-  {% if isDevelopment == 'dev' %}
-    <link rel="stylesheet" href="/static/css/src/grant.css" />
-    <link rel="stylesheet" href="/static/components/vex/dist/css/vex.css" />
-    <link rel="stylesheet" href="/static/components/vex/dist/css/vex-theme-os.css" />
-  {% else %}
-    <link href="/static/build/style.min.css?bust={{cacheBust}}" rel="stylesheet" />
-  {% endif %}
-
-{% endblock %}
-
-
 {% block scripts %}
-  {% if isDevelopment == 'dev' %}
-    <script>
-     var visualTag = {{visualTag|raw}};
-    </script>
-    <!-- <script>require(['oauthgrant/main'])</script> -->
-  {% endif %}
+  <script>
+   var visualTag = {{visualTag|raw}};
+  </script>
 {% endblock %}
-
 
 {% block content %}
 

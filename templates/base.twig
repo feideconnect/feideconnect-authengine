@@ -11,21 +11,23 @@
     <title>{{ pagetitle|trans }}</title>
 
     {% if isDevelopment == 'dev' %}
-      <link rel="stylesheet" type="text/css" href="/static/components/pure/pure.css" />
+      <!-- <link rel="stylesheet" type="text/css" href="/static/components/pure/pure.css" /> -->
       <!--[if lte IE 8]>
         <link rel="stylesheet" href="/static/components/pure/grids-responsive-old-ie-min.css">
       <![endif]-->
       <!--[if gt IE 8]><!-->
-      <link rel="stylesheet" href="/static/components/pure/grids-responsive-min.css">
+      <!-- <link rel="stylesheet" href="/static/components/pure/grids-responsive-min.css"> -->
       <!--<![endif]-->
-      <link rel="stylesheet" type="text/css" href="/static/components/selectize/dist/css/selectize.default.css" />
+      <!-- <link rel="stylesheet" type="text/css" href="/static/components/selectize/dist/css/selectize.default.css" />
       <link rel="stylesheet" type="text/css" href="/static/components/font-awesome/css/font-awesome.css" />
       <link rel="stylesheet" type="text/css" href="/static/css/src/flags.min.css">
       <link rel="stylesheet" type="text/css" href="/static/css/src/style.css" />
+-->
+      <link rel="stylesheet" type="text/css" href="/static/css/src/base.css" />
+
       {# prefetch javascript resources -#}
     {% else %}
-      <link rel="stylesheet" type="text/css" href="/static/build/bundle-lib.css" />
-      <link rel="stylesheet" type="text/css" href="/static/build/bundle-src.css" />
+      <link rel="stylesheet" type="text/css" href="/static/css/build/styles.min.css?cacheId={{ cacheBust }}" />
     {% endif %}
 
     {# For extra header elements #}
@@ -33,7 +35,9 @@
   </head>
 
   <body id="{{ templateName }}" data-cachebuster="{{ cacheBust }}">
+
     <div class="layout">
+
       <div class="topbar">
         {%- include "partials/languages.twig" %}
 
