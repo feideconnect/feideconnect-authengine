@@ -1,6 +1,34 @@
+
+
+var requirecfg = {
+    // baseUrl: '/static',
+    paths: {
+        // src: 'js/src',
+        jquery: '../../components/jquery/dist/jquery',
+        selectize: '../../components/selectize/dist/js/standalone/selectize',
+        dust: '../../components/dustjs-linkedin/dist/dust-core.min',
+        jscookie: '../../components/js-cookie/src/js.cookie',
+        es6promise: '../../components/es6-promise/es6-promise.min',
+        vex: '../../components/vex/dist/js/vex.combined',
+        accountchooser: '../../accountchooser',
+        oauthgrant: '../../oauthgrant',
+        templates: '../../build'
+    },
+    shim: {
+        selectize: ['jquery']
+    }
+}
+
 define.amd.dust = true;
 requirejs.config(requirecfg);
+
 define(function (require) {
+
+    require('dust');
+
+    require('templates/dust_accountlist.dust')
+    require('templates/dust_providerlist.dust')
+
 
     var $ = require('jquery');
     require('selectize');
@@ -31,7 +59,7 @@ define(function (require) {
         $('#inside_iframe').val('true');
     }
 
-    require('src/dialog');
+    require('dialog');
 
     if (typeof Promise !== "function") {
         require ('es6promise').polyfill();

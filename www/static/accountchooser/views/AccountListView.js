@@ -2,10 +2,9 @@ define(function(require, exports, module) {
     "use strict";
 
     var Class = require('../Class');
-
-    var dust = require('dustjs');
-    require('../templates');
-    var template = 'templates/dust_accountlist';
+    // require('dustjs');
+    // require('../templates');
+    var template = 'templates/dust_accountlist.dust';
 
     var AccountListView = Class.extend({
         "init": function(app) {
@@ -18,6 +17,8 @@ define(function(require, exports, module) {
                 // console.log("----- debug data view -----")
                 // console.log(data);
                 // console.log("------- ------- ------- ---")
+                // console.log("ABout to render")
+                // console.log(dust)
                 dust.render(template, data, function(err, out) {
                     if (err) {
                         return reject(err);

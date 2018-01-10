@@ -18,9 +18,8 @@
 	"bugs": {
 		"url": "https://github.com/feideconnect/feideconnect-authengine/issues"
 	},
-    "dependencies": {
-        "dustjs-linkedin": "^2.7.5"
-    },
+	"dependencies": {
+	},
 	"devDependencies": {
 		"bower": "*",
 		"grunt": "~0.4.2",

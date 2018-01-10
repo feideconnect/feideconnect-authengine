@@ -2,9 +2,9 @@ define(function(require, exports, module) {
     "use strict";
 
     var Class = require('../Class');
-    var dust = require('dustjs');
-    require('../templates');
-    var template = 'templates/dust_providerlist';
+    // var dust = require('dustjs');
+    // require('../templates');
+    var template = 'templates/dust_providerlist.dust';
 
     var ProviderListView = Class.extend({
         "init": function(app) {
