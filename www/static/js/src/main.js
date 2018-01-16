@@ -1,5 +1,4 @@
 
-
 var requirecfg = {
     // baseUrl: '/static',
     paths: {
@@ -22,13 +21,28 @@ var requirecfg = {
 define.amd.dust = true;
 requirejs.config(requirecfg);
 
+
+
 define(function (require) {
 
-    require('dust');
 
-    require('templates/dust_accountlist.dust')
-    require('templates/dust_providerlist.dust')
+    require("dust");
+    require('templates/dust_templates')
+    // require('templates/dust_providerlist.dust')
 
+
+    // require(["dust"], function() {
+    //     console.log("Dust is loaded?", dust)
+    //     require('templates/dust_accountlist.dust')
+    //     require('templates/dust_providerlist.dust')
+    // });
+
+    // require('templates/dust_accountlist.dust')
+    // require('templates/dust_providerlist.dust')
+
+
+    // require('templates/dust_accountlist.dust')
+    // require('templates/dust_providerlist.dust')
 
     var $ = require('jquery');
     require('selectize');
