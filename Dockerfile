@@ -11,7 +11,7 @@ RUN install_packages.sh \
   php5-gmp \
   php5-imagick \
   php5-mcrypt \
-  php5-xdebug 
+  php5-xdebug
 
 # Setup locales
 RUN sh -c 'echo "en_US.UTF-8 UTF-8" > /etc/locale.gen'
@@ -40,6 +40,7 @@ WORKDIR /authengine
 
 COPY www www
 COPY bin bin
+COPY templates templates
 
 COPY ["build.js", "composer.json", "package.json", "bower.json", ".bowerrc", "setup-container.sh", "./"]
 RUN with_packages.sh "git curl" ./setup-container.sh
@@ -51,7 +52,7 @@ RUN chmod -R +r /authengine/www/static/components/uninett-bootstrap-theme/fonts/
 COPY lib lib
 COPY etc/authengine etc
 COPY dictionaries dictionaries
-COPY templates templates
+
 COPY etc/simplesamlphp-config /authengine/vendor/simplesamlphp/simplesamlphp/config
 COPY etc/simplesamlphp-metadata /authengine/vendor/simplesamlphp/simplesamlphp/metadata
 
