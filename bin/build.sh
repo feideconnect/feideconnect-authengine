@@ -17,7 +17,7 @@ www/static/components/dustjs-linkedin/bin/dustc templates/dust_accountlist.dust 
 
 echo -n 'define(["dust"], function() { ' > www/static/build/dust_templates.js
 cat www/static/build/*.dust.js >> www/static/build/dust_templates.js
-echo '})' >> www/static/build/dust_templates.jsc
+echo '})' >> www/static/build/dust_templates.js
 
 
 # Javascript
