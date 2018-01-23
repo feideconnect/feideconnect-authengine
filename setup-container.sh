@@ -10,6 +10,8 @@ composer update --no-interaction --no-dev --no-progress
 npm install
 node_modules/bower/bin/bower install --allow-root
 
+gem install sass -v 3.2.19
+
 a2enmod remoteip
 rm /etc/localtime && ln -s /usr/share/zoneinfo/Europe/Oslo /etc/localtime
 curl -sS https://vault.uninett.no:8200/v1/dpcassandra/ca/pem > /etc/ssl/certs/cassandraca.pem && c_rehash
