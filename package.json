@@ -1,53 +1,27 @@
 {
-	"name": "dataporten-authengine",
-	"description": "Dataporten Auth Engine",
-	"version": "1.0.0",
-	"keywords": [
-		"groups",
-		"authorization"
-	],
-	"homepage": "https://www.uninett.no/tjenester/dataporten",
-	"author": "Andreas Åkre Solberg",
-	"scripts": {
-		"test": "phpunit --bootstrap lib/_autoload.php tests"
-	},
-	"repository": {
-		"type": "git",
-		"url": "https://github.com/feideconnect/feideconnect-authengine.git"
-	},
-	"bugs": {
-		"url": "https://github.com/feideconnect/feideconnect-authengine/issues"
-	},
-	"dependencies": {
-	},
-	"devDependencies": {
-		"bower": "*",
-		"grunt": "~0.4.2",
-		"grunt-cli": "*",
-		"grunt-contrib-jshint": "*",
-		"grunt-shell": "*",
-		"grunt-transifex": "*",
-		"requirejs": "~2.1.15",
-		"node-phantom-simple": "~1.2.0",
-		"promise": "*"
-	},
-	"engines": {
-		"node": "~0.10.1"
-	},
-	"jspm": {
-		"main": "js/bootstrap",
-		"directories": {
-			"example": "examples",
-			"lib": "dist"
-		},
-		"shim": {
-			"js/bootstrap": {
-				"imports": "jquery",
-				"exports": "$"
-			}
-		},
-		"buildConfig": {
-			"uglify": true
-		}
-	}
+    "name": "dataporten-authengine",
+    "description": "Dataporten Auth Engine",
+    "version": "2.0.0",
+    "homepage": "https://www.uninett.no/tjenester/dataporten",
+    "scripts": {
+        "test": "phpunit --bootstrap lib/_autoload.php tests"
+    },
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/feideconnect/feideconnect-authengine.git"
+    },
+    "bugs": {
+        "url": "https://github.com/feideconnect/feideconnect-authengine/issues"
+    },
+    "dependencies": {
+        "dustjs-linkedin": "^2.5",
+        "es6-promise": "^4.0.5",
+        "jquery": "^3.2.1",
+        "js-cookie": "^2.0.3",
+        "purecss": "^1.0.0",
+        "selectize": "^0.12.4",
+        "vex-js": "^4.0.1"
+    },
+    "devDependencies": {
+    }
 }
