@@ -1,24 +1,5 @@
-define.amd.dust = true;
-define(function(require, exports, module) {
-    "use strict";
-
-    var jquery = require('jquery');
-
-    if (typeof Promise !== "function") {
-        require('es6promise').polyfill();
-    }
-
-    // Configure console if not defined. A fix for IE <= 9.
-    if (!window.console) {
-        window.console = {
-            "log": function() {},
-            "error": function() {}
-        };
-    }
-
-    var App = require('./App');
-    $(document).ready(function() {
-        var app = new App();
-    });
-
+const jquery = require('jquery');
+const App = require('./App');
+$(document).ready(function() {
+    var app = new App();
 });

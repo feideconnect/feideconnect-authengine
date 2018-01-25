@@ -1,51 +1,44 @@
-define(function(require, exports, module) {
-    "use strict";
+const Class = require('../Class');
+const dust = require('dustjs-linkedin');
+const template = 'templates/dust_providerlist.dust';
 
-    var Class = require('../Class');
-    // var dust = require('dustjs');
-    // require('../templates');
-    var template = 'templates/dust_providerlist.dust';
+const ProviderListView = Class.extend({
+    "init": function(app) {
+        this.app = app;
+        this.providers = [];
+    },
 
-    var ProviderListView = Class.extend({
-        "init": function(app) {
-            this.app = app;
-            this.providers = [];
-        },
-
-        "setProviders": function(providers) {
-            this.providers = providers;
-        },
+    "setProviders": function(providers) {
+        this.providers = providers;
+    },
 
 
-        "update": function(items, maxentries) {
-            var that = this;
-            return new Promise(function(resolve, reject) {
-                // console.log("UPDATE YAY", items)
-                var data = {
-                    dict: that.app.dictionary
-                }
+    "update": function(items, maxentries) {
+        var that = this;
+        return new Promise(function(resolve, reject) {
+            // console.log("UPDATE YAY", items)
+            var data = {
+                dict: that.app.dictionary
+            }
 
-                if (items.length > 0) {
-                    data.providers = items.slice(0, maxentries).map(function(p) {
-                        return p.getView();
-                    });
-                }
-                data.hasMore = (items.length > maxentries);
-                data.remaining = items.length - maxentries;
-                // console.log("----- debug data view -----")
-                // console.log(data);
-                // console.log("------- ------- ------- ---")
-                dust.render(template, data, function(err, out) {
-                    if (err) {
-                        return reject(err);
-                    }
-                    return resolve(out);
+            if (items.length > 0) {
+                data.providers = items.slice(0, maxentries).map(function(p) {
+                    return p.getView();
                 });
+            }
+            data.hasMore = (items.length > maxentries);
+            data.remaining = items.length - maxentries;
+            // console.log("----- debug data view -----")
+            // console.log(data);
+            // console.log("------- ------- ------- ---")
+            dust.render(template, data, function(err, out) {
+                if (err) {
+                    return reject(err);
+                }
+                return resolve(out);
             });
-
-        }
-    });
-
-
-    return ProviderListView;
+        });
+    }
 });
+
+module.exports = ProviderListView;

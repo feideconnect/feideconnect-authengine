@@ -1,11 +1,20 @@
+var dust = require('dustjs-linkedin');
+var $ = require('jquery');
+require('selectize');
+require('./dialog');
 
+if (typeof Promise !== "function") {
+    require ('es6-promise').polyfill();
+}
 
-define(function (require) {
-
-
-const dust = require("dust");
-    const $ = require('jquery');
-    require('selectize');
+function dilldall() {
+    // Configure console if not defined. A fix for IE <= 9.
+    if (!window.console) {
+        window.console = {
+            "log": function() {},
+            "error": function() {}
+        };
+    }
 
     // get available languages
     var languages = $.map($('#mobile_language_selector option'), function (option) {
@@ -13,9 +22,9 @@ const dust = require("dust");
     });
     $('#languageSelector').on("change", function (e) {
         if (-1 !== $.inArray(
-                $('#mobile_language_selector-selectized').prev().text().toLowerCase(),
-                languages
-            )
+            $('#mobile_language_selector-selectized').prev().text().toLowerCase(),
+            languages
+        )
         ) {
             e.currentTarget.submit();
         }
@@ -33,12 +42,6 @@ const dust = require("dust");
         $('#inside_iframe').val('true');
     }
 
-    require('dialog');
-
-    if (typeof Promise !== "function") {
-        require ('es6promise').polyfill();
-    }
-
     // Configure console if not defined. A fix for IE <= 9.
     if (!window.console) {
         window.console = {
@@ -50,8 +53,9 @@ const dust = require("dust");
     // require and load the apps we have, passing the current page so that they can determine
     // if they need to run or not
     var curpage = $('body').attr('id');
-    var AccountChooser = require('accountchooser/App');
-    var ac = new AccountChooser(curpage);
-    var OauthGrant = require('oauthgrant/App');
-    var og = new OauthGrant(curpage);
-});
+    /*     var AccountChooser = require('accountchooser/App');*/
+    /*     var ac = new AccountChooser(curpage);*/
+    /*     var OauthGrant = require('oauthgrant/App');*/
+    /*     var og = new OauthGrant(curpage);*/
+
+}

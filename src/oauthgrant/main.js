@@ -1,25 +1,18 @@
-define(function(require) {
-    "use strict";
+const jquery = require('jquery');
 
-    define.amd.dust = true;
+if (typeof Promise !== "function") {
+    require('es6-promise').polyfill();
+}
 
-    var jquery = require('jquery');
+// Configure console if not defined. A fix for IE <= 9.
+if (!window.console) {
+    window.console = {
+        "log": function() {},
+        "error": function() {}
+    };
+}
 
-    if (typeof Promise !== "function") {
-        require('es6promise').polyfill();
-    }
-
-    // Configure console if not defined. A fix for IE <= 9.
-    if (!window.console) {
-        window.console = {
-            "log": function() {},
-            "error": function() {}
-        };
-    }
-
-    var App = require('./App');
-    $(document).ready(function() {
-        var app = new App();
-    });
-
+const App = require('./App');
+$(document).ready(function() {
+    const app = new App();
 });
