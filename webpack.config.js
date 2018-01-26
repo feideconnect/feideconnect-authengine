@@ -17,9 +17,11 @@ module.exports = {
         new webpack.optimize.CommonsChunkPlugin({
             name: 'common'
         }),
+        // Bundles css
         new ExtractTextPlugin({
             filename: 'bundle.css'
         }),
+        // Provider for Dust-templates
         new webpack.ProvidePlugin({
             dust: 'dustjs-linkedin'
         })
@@ -27,12 +29,14 @@ module.exports = {
     module: {
         rules: [
             {
+                // Finds and bundles scss and css files
                 test: /\.s?css$/,
                 use: ExtractTextPlugin.extract({
                     use: ['css-loader', 'sass-loader']
                 })
             },
             {
+                // Finds and bundles images
                 test: /\.(png|jp(e*)g|svg)$/,
                 use: [{
                         loader: 'file-loader',
@@ -40,10 +44,13 @@ module.exports = {
                     }]
             },
             {
+                // Finds and compiles dust templates
                 test: /\.dust$/,
                 loader: 'dust-loader'
             },
             {
+                // Makes sure we everything works for ES5 browsers
+                // Should work down to IE 9
                 test: /\.js$/,
                 exclude: /node_modules/,
                 use: {
@@ -55,5 +62,4 @@ module.exports = {
             }
         ]
     }
-
 }
