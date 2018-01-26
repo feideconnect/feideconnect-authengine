@@ -8,11 +8,7 @@ cert
 var
 etc/ci/simplesamlphp-config/simplesamlphp-config
 etc/ci/simplesamlphp-metadata/simplesamlphp-metadata
-www/static/media/default-profile.png
-www/static/media/disco/surfnet-lg.png
-www/static/media/peoplesearch.jpg
-www/static/media/peoplesearch.png
-www/static/media/travis.png
+www/static/
 .transifexrc
 ENV
 etc/kubernetes/secrets.yaml
