@@ -5,12 +5,11 @@ curl -sL https://deb.nodesource.com/setup_6.x | bash
 apt-get install -y nodejs
 npm install npm@latest -g
 npm install
-npm run build
 curl -sS https://getcomposer.org/installer | php
 mv composer.phar /usr/local/bin/composer
 composer update --no-interaction --no-dev --no-progress
 
-gem install sass -v 3.2.19
+# gem install sass -v 3.2.19
 
 a2enmod remoteip
 rm /etc/localtime && ln -s /usr/share/zoneinfo/Europe/Oslo /etc/localtime

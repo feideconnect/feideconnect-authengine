@@ -1,5 +1,7 @@
-const jquery = require('jquery');
+const $ = require('jquery');
 const App = require('./App');
 $(document).ready(function() {
-    var app = new App();
+    if ($('body').attr('id') === 'accountchooser') {
+        var app = new App('accountchooser');
+    }
 });

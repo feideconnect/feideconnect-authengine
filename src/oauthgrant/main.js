@@ -1,4 +1,4 @@
-const jquery = require('jquery');
+const $ = require('jquery');
 
 if (typeof Promise !== "function") {
     require('es6-promise').polyfill();
@@ -14,5 +14,7 @@ if (!window.console) {
 
 const App = require('./App');
 $(document).ready(function() {
-    const app = new App();
+    if ($('body').attr('id') === 'oauthgrant') {
+        new App();
+    }
 });

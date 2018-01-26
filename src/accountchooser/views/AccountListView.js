@@ -1,13 +1,12 @@
-const Class = require('../Class');
 const dust = require('dustjs-linkedin');
-const template = 'templates/dust_accountlist.dust';
+const template = require('./dust_accountlist.dust');
 
-const AccountListView = Class.extend({
-    "init": function(app) {
+class AccountListView {
+    constructor(app) {
         this.app = app;
-    },
+    }
 
-    "update": function(data) {
+    update(data) {
         var that = this;
         return new Promise(function(resolve, reject) {
             dust.render(template, data, function(err, out) {
@@ -19,6 +18,6 @@ const AccountListView = Class.extend({
         });
 
     }
-});
+};
 
 module.exports = AccountListView;

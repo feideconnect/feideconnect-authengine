@@ -3,6 +3,8 @@ var $ = require('jquery');
 require('selectize');
 require('./dialog');
 
+require('./base.scss');
+
 if (typeof Promise !== "function") {
     require ('es6-promise').polyfill();
 }

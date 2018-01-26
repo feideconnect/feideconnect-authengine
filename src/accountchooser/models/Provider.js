@@ -1,15 +1,15 @@
 const Model = require('./Model');
 const Utils = require('../Utils');
 
-const Provider = Model.extend({
+class Provider extends Model {
 
-    "init": function(a) {
+    constructor(a) {
         // console.log("New SAML provider");
         // console.log(JSON.stringify(a, undefined, 2));
-        this._super(a);
-    },
+        super(a);
+    }
 
-    "getDistance": function(loc) {
+    getDistance(loc) {
 
         // We cache the distance, but only use the cache when we are sure that the distanceFrom is the same.
         var cacheStr = (loc.lat ? (loc.lat + ',' + loc.lon) : 'na');
@@ -37,13 +37,13 @@ const Provider = Model.extend({
         this.distance = minDistance;
         this.distanceFrom = cacheStr;
         return this.distance;
-    },
+    }
 
-    "matchesActiveAccount": function(a) {
+    matchesActiveAccount(a) {
         return false;
-    },
+    }
 
-    "matchType": function(type) {
+    matchType(type) {
 
         // console.error("MATCH TYPE", type, this.def);
 
@@ -66,9 +66,9 @@ const Provider = Model.extend({
             }
         }
         return true;
-    },
+    }
 
-    "getView": function() {
+    getView() {
         var view = {
             id: this.id,
             type: this.type,
@@ -97,6 +97,6 @@ const Provider = Model.extend({
         return view;
     }
 
-});
+};
 
 module.exports = Provider;

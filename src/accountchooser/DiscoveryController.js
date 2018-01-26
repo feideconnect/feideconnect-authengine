@@ -14,8 +14,8 @@
  *
  */
 
+const $ = require('jquery');
 const Utils = require('./Utils');
-const Class = require('./Class');
 const Controller = require('./Controller');
 const LocationController = require('./LocationController');
 const DiscoveryFeedLoader = require('./DiscoveryFeedLoader');
@@ -36,8 +36,10 @@ var sortByTitle  = function(a, b) {
 };
 
 
-var DiscoveryController = Controller.extend({
-    "init": function(app, request, accounts, location) {
+class DiscoveryController extends Controller {
+    constructor(app, request, accounts, location) {
+        super(undefined, false);
+
         var that = this;
         this.request = request;
         this.activeAccounts = accounts;
@@ -50,45 +52,7 @@ var DiscoveryController = Controller.extend({
         this.activeTypes = null;
         this.country = 'no';
         this.countrylist = [
-            "am",
-            "au",
-            "at",
-            "be",
-            "br",
-            "ca",
-            "cl",
-            "hr",
-            "cz",
-            "dk",
-            "ec",
-            "ee",
-            "fi",
-            "fr",
-            "ge",
-            "de",
-            "gr",
-            "hu",
-            "ie",
-            "il",
-            "it",
-            "jp",
-            "kr",
-            "lv",
-            "lt",
-            "lu",
-            "mk",
-            "md",
-            "nl",
-            "no",
-            "pl",
-            "pt",
-            "si",
-            "es",
-            "se",
-            "ch",
-            "ua",
-            "gb",
-            "us"
+            "am", "au", "at", "be", "br", "ca", "cl", "hr", "cz", "dk", "ec", "ee", "fi", "fr", "ge", "de", "gr", "hu", "ie", "il", "it", "jp", "kr", "lv", "lt", "lu", "mk", "md", "nl", "no", "pl", "pt", "si", "es", "se", "ch", "ua", "gb", "us"
         ];
 
         this.countrylist.sort();
@@ -109,7 +73,6 @@ var DiscoveryController = Controller.extend({
         });
 
         this.dfl = new DiscoveryFeedLoader();
-        this._super(undefined, false);
 
         $("body").on("click", "#actshowall", function(e) {
             e.preventDefault(); e.stopPropagation();
@@ -174,10 +137,10 @@ var DiscoveryController = Controller.extend({
 
         });
 
-    },
+    }
 
 
-    "initLoad": function() {
+    initLoad() {
 
         var that = this;
 
@@ -196,16 +159,16 @@ var DiscoveryController = Controller.extend({
                    })
                    .then(this.proxy("_initLoaded"));
 
-    },
+    }
 
-    "activate": function() {
+    activate() {
         if (!this.isLoaded) {
             this.initLoad();
         }
         $("#panedisco").show();
-    },
+    }
 
-    "go": function(so, strict) {
+    go(so, strict) {
         var that = this;
         var url = that.request.return;
         var sep = (url.indexOf('?') > -1) ? '&' : '?';
@@ -215,10 +178,10 @@ var DiscoveryController = Controller.extend({
         }
         // console.log("Go to ", so); return;
         window.location = url;
-    },
+    }
 
 
-    "updateLocationView": function() {
+    updateLocationView() {
         var loc = this.location.getLocation();
         // console.log("updateLocationView", loc);
         $("#locationtitle").empty().append(loc.title);
@@ -228,9 +191,9 @@ var DiscoveryController = Controller.extend({
             $("#removelocation").hide();
         }
 
-    },
+    }
 
-    "loadData": function() {
+    loadData() {
         var that = this;
         $.getJSON('/orgs', function(orgs) {
 
@@ -241,9 +204,9 @@ var DiscoveryController = Controller.extend({
 
             that.drawData();
         });
-    },
+    }
 
-    "loadDataExtra": function() {
+    loadDataExtra() {
         var that = this;
         $.getJSON('/accountchooser/extra', function(extra) {
             that.extra = [];
@@ -253,10 +216,10 @@ var DiscoveryController = Controller.extend({
             that.drawDataExtra();
         });
 
-    },
+    }
 
 
-    "matchAuthProviderFilterExtra": function(item) {
+    matchAuthProviderFilterExtra(item) {
         var providers = this.app.getAuthProviderDef();
         for(var i = 0; i < providers.length; i++) {
             if (item.matchType(providers[i])) {
@@ -264,10 +227,10 @@ var DiscoveryController = Controller.extend({
             }
         }
         return false;
-    },
+    }
 
 
-    "matchAuthProviderFilter": function(item) {
+    matchAuthProviderFilter(item) {
 
         var providers = this.app.getAuthProviderDef();
 
@@ -313,10 +276,10 @@ var DiscoveryController = Controller.extend({
         }
 
         return false;
-    },
+    }
 
 
-    "matchSearchTerm": function(item) {
+    matchSearchTerm(item) {
 
         if (this.searchTerm === null) {
             return true;
@@ -343,9 +306,9 @@ var DiscoveryController = Controller.extend({
 
         return false;
 
-    },
+    }
 
-    "getCompareDistanceFunc": function() {
+    getCompareDistanceFunc() {
 
         var geo = this.location.getLocation();
         // console.error("Location is ", geo);
@@ -359,9 +322,9 @@ var DiscoveryController = Controller.extend({
             return ((dista < distb) ? -1 : 1);
         };
 
-    },
+    }
 
-    "addCountryDropdown": function() {
+    addCountryDropdown() {
         var preparedCountryList = this.countrylist.map(function(country) {
             return {
                 "title":  this.app.dictionary['c' + country],
@@ -393,9 +356,9 @@ var DiscoveryController = Controller.extend({
             },
             onChange: this.countryChangeListener.bind(this)
         });
-    },
+    }
 
-    countryChangeListener: function(code) {
+    countryChangeListener(code) {
         if (!code) {
             return;
         }
@@ -406,9 +369,9 @@ var DiscoveryController = Controller.extend({
         } else {
             this.dfl.loadData(code).then(drawData);
         }
-    },
+    }
 
-    "hasActiveSessionOnAuthsource": function(type) {
+    hasActiveSessionOnAuthsource(type) {
 
         if (this.activeTypes === null) {
             this.activeTypes = {};
@@ -418,9 +381,9 @@ var DiscoveryController = Controller.extend({
         }
         // console.error("this.activeTypes", this.activeTypes, type, this.activeTypes[type]);
         return !!(type && this.activeTypes[type]);
-    },
+    }
 
-    "getMatchingActiveAccount": function(a) {
+    getMatchingActiveAccount(a) {
         if (!this.activeAccounts) {
             return null;
         }
@@ -438,10 +401,10 @@ var DiscoveryController = Controller.extend({
         }
         return null;
 
-    },
+    }
 
 
-    "drawData": function() {
+    drawData() {
         var that = this;
         var it = null;
 
@@ -490,10 +453,10 @@ var DiscoveryController = Controller.extend({
             });
 
         $("#usersearch").focus();
-    },
+    }
 
 
-    "drawDataExtra": function() {
+    drawDataExtra() {
 
         var txt = '';
         var c = 0;
@@ -535,6 +498,6 @@ var DiscoveryController = Controller.extend({
         }
 
     }
-});
+};
 
 module.exports = DiscoveryController;

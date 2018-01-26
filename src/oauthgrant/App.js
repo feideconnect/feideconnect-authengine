@@ -1,13 +1,9 @@
 const vex = require('vex-js');
-const Class = require('../accountchooser/Class');
 const LanguageSelector = require('../accountchooser/LanguageSelector');
 const AccountStore = require('./AccountStore');
 
-module.exports = Class.extend({
-    "init": function(page) {
-        if (page !== 'oauthgrant') {
-            return;
-        }
+class App {
+    constructor() {
         var that = this;
         var containerUserTerms = $('#container-user-terms');
         var containerServiceConsent = $('#container-service-consent');
@@ -74,9 +70,9 @@ module.exports = Class.extend({
             that.loadDictionary();
         });
 
-    },
+    }
 
-    "loadConfig": function() {
+    loadConfig() {
         var that = this;
 
         return new Promise(function(resolve, reject) {
@@ -89,10 +85,9 @@ module.exports = Class.extend({
 
         });
 
-    },
+    }
 
-
-    "loadDictionary": function() {
+    loadDictionary() {
         var that = this;
 
         return new Promise(function(resolve, reject) {
@@ -109,5 +104,6 @@ module.exports = Class.extend({
         });
 
     }
+};
 
-});
+module.exports = App;

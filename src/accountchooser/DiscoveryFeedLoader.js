@@ -1,21 +1,18 @@
 const Controller = require('./Controller');
 const Provider = require('./models/Provider');
 
-const DiscoveryFeedLoader = Controller.extend({
-    "init": function() {
+class DiscoveryFeedLoader extends Controller {
+    constructor() {
+        super(undefined, true);
         this._callback = null;
         this.providers = {};
-        this._super(undefined, true);
-    },
+    }
 
-    "initLoad": function() {
-        // var that = this;
+    initLoad() {
         return this._initLoaded();
-        // return this.loadData()
-        //     .then(this.proxy("_initLoaded"));
-    },
+    }
 
-    "loadData": function(country) {
+    loadData(country) {
         var that = this;
 
         if (this.providers[country]) {
@@ -43,17 +40,12 @@ const DiscoveryFeedLoader = Controller.extend({
             });
         });
 
-    },
+    }
 
-    // "executeCallback": function() {
-    //     if (this._callback !== null) {
-    //         this._callback(this.providers);
-    //     }
-    // },
-    "getData": function(country) {
+    getData(country) {
         return this.providers[country];
     }
 
-});
+};
 
 module.exports = DiscoveryFeedLoader;

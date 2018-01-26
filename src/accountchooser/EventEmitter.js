@@ -1,13 +1,13 @@
-const EventEmitter = {
+class EventEmitter {
 
-    "on": function(type, callback) {
+    on(type, callback) {
         if (!this._callbacks) {this._callbacks = {};}
         if (!this._callbacks[type]) {this._callbacks[type] = [];}
 
         this._callbacks[type].push(callback);
-    },
+    }
 
-    "emit": function(type) {
+    emit(type) {
         if (!this._callbacks) {this._callbacks = {};}
         if (!this._callbacks[type]) {this._callbacks[type] = [];}
 
@@ -16,6 +16,7 @@ const EventEmitter = {
             this._callbacks[type][i].apply(this, args);
         }
     }
+
 };
 
 module.exports = EventEmitter;

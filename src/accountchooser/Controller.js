@@ -1,9 +1,11 @@
-const Class = require('./Class');
+const $ = require('jquery');
 const EventEmitter = require('./EventEmitter');
 
-const Controller = Class.extend({
+class Controller extends EventEmitter {
 
-    "init": function(el, load) {
+    constructor(el, load) {
+        super(el, load);
+
         this.el = el || this.el || $('<div class=""></div>');
 
         this._loaderTimeout = 5000;
@@ -13,11 +15,13 @@ const Controller = Class.extend({
         if (load === true) {
             this.initLoad();
         }
-    },
-    "registerOnLoaded": function(func) {
+    }
+
+    registerOnLoaded(func) {
         this.onLoadedCallbacks.push(func);
-    },
-    "onLoaded": function() {
+    }
+
+    onLoaded() {
 
         var that = this;
         if (this.isLoaded) {
@@ -35,8 +39,9 @@ const Controller = Class.extend({
             }, that._loaderTimeout);
         });
 
-    },
-    "_initLoaded": function() {
+    }
+
+    _initLoaded() {
         var i;
         // console.error("_initloaded", this.onLoadedCallbacks);
         if (!this.isLoaded) {
@@ -46,30 +51,35 @@ const Controller = Class.extend({
             }
             this.onLoadedCallbacks = [];
         }
-    },
-    "initLoad": function() {
+    }
+
+    initLoad() {
         var that = this;
         return new Promise(function(resolve, reject) {
             that._initLoaded();
             resolve();
         });
-    },
-    "show": function() {
+    }
+
+    show() {
         this.el.show();
-    },
-    "hide": function() {
+    }
+
+    hide() {
         this.el.hide();
-    },
-    "ebind": function(type, filter, func) {
+    }
+
+    ebind(type, filter, func) {
         this.el.on(type, filter, $.proxy(this[func], this));
-    },
-    "proxy": function(func) {
+    }
+
+    proxy(func) {
         var that = this;
         var args = Array.prototype.splice.call(arguments, 1);
         return function() {
             return that[func].apply(that, args);
         };
     }
-}).extend(EventEmitter);
+};
 
 module.exports = Controller;

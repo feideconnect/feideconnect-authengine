@@ -1,4 +1,4 @@
-const Class = require('./Class');
+const $ = require('jquery');
 
 const getLocation = function(callback) {
     if (navigator.geolocation) {
@@ -9,8 +9,8 @@ const getLocation = function(callback) {
 };
 
 
-const LocationController = Class.extend({
-    "init": function(app, loc) {
+class LocationController {
+    constructor(app, loc) {
 
         var that = this;
         this.app = app;
@@ -44,16 +44,16 @@ const LocationController = Class.extend({
             that.executeCallback();
         });
 
-    },
+    }
 
-    "executeCallback": function() {
+    executeCallback() {
         var loc = this.getLocation();
         if (this._callback !== null) {
             this._callback(loc);
         }
-    },
+    }
 
-    "fetchLocation": function() {
+    fetchLocation() {
         var stored = this.getStoredLocation();
         if (stored !== null) {
             this.loc.lat = stored.lat;
@@ -62,37 +62,38 @@ const LocationController = Class.extend({
             this.loc.stored = true;
         }
         return this.loc;
-    },
+    }
 
-    "getStoredLocation": function() {
+    getStoredLocation() {
         if (!window.localStorage) {
             return null;
         }
         var locraw = localStorage.getItem("location");
         var loc = JSON.parse(locraw);
         return loc;
-    },
+    }
 
-    "saveLocation": function(loc) {
+    saveLocation(loc) {
         if (!window.localStorage) {
             return;
         }
 
         this.loc.stored = true;
         localStorage.setItem("location", JSON.stringify(loc));
-    },
+    }
 
-    "deleteLocation": function() {
+    deleteLocation() {
         localStorage.removeItem("location");
         this.loc.stored = false;
-    },
+    }
 
-    "getLocation": function() {
+    getLocation() {
         return this.loc;
-    },
-    "onUpdate": function(callback) {
+    }
+
+    onUpdate(callback) {
         this._callback = callback;
     }
-});
+};
 
 module.exports = LocationController;

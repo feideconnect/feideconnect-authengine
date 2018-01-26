@@ -1,6 +1,4 @@
-const jquery = require('jquery');
-const data = jquery('#app-data');
-const Class = require('./Class');
+const $ = require('jquery');
 const DiscoveryController = require('./DiscoveryController');
 const AccountStore = require('../oauthgrant/AccountStore');
 const AccountSelector = require('./AccountSelector');
@@ -14,11 +12,12 @@ const Utils = require('./Utils');
  * It loads two panes, one with the accountchooser and one with the discovery and lets the user switch between them.
  * It activates the chooser if there exists some stored accounts
  */
-module.exports = Controller.extend({
-    "init": function(page) {
-        if (page !== 'accountchooser') {
-            return;
-        }
+class App extends Controller {
+    constructor() {
+        super(undefined, true);
+
+        const data = $('#app-data');
+        console.log(data);
         this.dictionary = data.data('dictionary');
         this.config = data.data('config');
         this.client = data.data('client');
@@ -28,6 +27,9 @@ module.exports = Controller.extend({
         if (!this.config) {
             console.error("Could not get configuration. Was missing from mustache tempalte by a mistake.");
         }
+
+        console.log(this.config);
+
         /* this.lang = new LanguageSelector($("#langselector"), true);
          * this.lang.setConfig(this.config);
          * this.lang.initLoad(this.dictionary._lang);*/
@@ -40,11 +42,9 @@ module.exports = Controller.extend({
         this.accountstore = new AccountStore();
         this.selector = new AccountSelector(this, this.accountstore, this.activeAccounts);
 
-        this._super(undefined, true);
+    }
 
-    },
-
-    "initLoad": function() {
+    initLoad() {
 
         var that = this;
         return Promise.resolve()
@@ -65,9 +65,9 @@ module.exports = Controller.extend({
                           that.setErrorMessage("Error loading AccountChooser", "danger", err);
                       });
 
-    },
+    }
 
-    "setErrorMessage": function(title, type, msg) {
+    setErrorMessage(title, type, msg) {
 
         var that = this;
         type = (type ? type : "danger");
@@ -95,10 +95,10 @@ module.exports = Controller.extend({
 
         $("#errorcontainer").empty().append(str);
 
-    },
+    }
 
 
-    "getAuthProviderDef": function() {
+    getAuthProviderDef() {
 
         var p, pp;
         if (this.authproviders) {
@@ -125,17 +125,18 @@ module.exports = Controller.extend({
             this.authproviders.push(['all']);
         }
         return this.authproviders;
-    },
+    }
 
-    "getClientsURL": function(url) {
+    getClientsURL(url) {
         return this.config.endpoints.clientadm + url;
-    },
+    }
 
-    "drawClientInfo": function() {
+    drawClientInfo() {
         var logourl = this.getClientsURL('/clients/' + this.client.id + '/logo');
         $(".clientinfo").show();
         $(".clientname").text(this.client.name);
         $(".clientlogo").empty().append('<img src="' + logourl + '" />');
     }
+};
 
-});
+module.exports = App;

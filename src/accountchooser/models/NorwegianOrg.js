@@ -1,8 +1,8 @@
 const Provider = require('./Provider');
 const Utils = require('../Utils');
 
-const NorwegianOrg = Provider.extend({
-    "init": function(a, feideIdP) {
+class NorwegianOrg extends Provider {
+    constructor(a, feideIdP) {
         a.country = 'no';
 
         // console.log("New Feide organization");
@@ -15,11 +15,10 @@ const NorwegianOrg = Provider.extend({
 
         a.subid = a.id;
         a.id = feideIdP;
+        super(a);
+    }
 
-        this._super(a);
-    },
-
-    "isType": function(type) {
+    isType(type) {
         if (!this.type) {
             return false;
         }
@@ -29,8 +28,8 @@ const NorwegianOrg = Provider.extend({
             }
         }
         return false;
-    },
-    "isEnabled": function() {
+    }
+    isEnabled() {
         if (!this.services) {
             return false;
         }
@@ -40,8 +39,8 @@ const NorwegianOrg = Provider.extend({
             }
         }
         return false;
-    },
-    "getView": function() {
+    }
+    getView() {
         var view = {
             id: this.id,
             subid: this.subid,
@@ -64,6 +63,6 @@ const NorwegianOrg = Provider.extend({
         return view;
     }
 
-});
+};
 
 module.exports = NorwegianOrg;

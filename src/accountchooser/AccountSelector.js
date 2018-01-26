@@ -1,12 +1,12 @@
-const Class = require('./Class');
+const $ = require('jquery');
 const DiscoveryController = require('./DiscoveryController');
 const AccountStore = require('../oauthgrant/AccountStore');
 const Utils = require('./Utils');
 const AccountListView = require('./views/AccountListView');
 
-const AccountSelector = Class.extend({
+class AccountSelector {
 
-    "init": function(app, store, accounts) {
+    constructor(app, store, accounts) {
         var that = this;
         this.store = store;
         this.app = app;
@@ -64,16 +64,16 @@ const AccountSelector = Class.extend({
             that.app.disco.activate();
         });
 
-    },
+    }
 
-    "activate": function() {
+    activate() {
         this.draw();
         $("#paneselector").show();
         $('#page-title').text(this.app.dictionary['chooseaccount']);
-    },
+    }
 
 
-    "matchOneDefType": function(accepteddef, accountdef) {
+    matchOneDefType(accepteddef, accountdef) {
         for (var i = 0; i < accepteddef.length; i++) {
 
             // console.error("  >>>>  CHECK if " + accepteddef[i] + ' matches ' + accountdef[i] );
@@ -91,10 +91,10 @@ const AccountSelector = Class.extend({
 
         }
         return true;
-    },
+    }
 
 
-    "matchType": function(accountdef) {
+    matchType(accountdef) {
 
         var accepteddefs = this.app.getAuthProviderDef();
         for (var i = 0; i < accepteddefs.length; i++) {
@@ -106,11 +106,11 @@ const AccountSelector = Class.extend({
 
         }
         return false;
-    },
+    }
 
 
 
-    "matchAnyType": function(types) {
+    matchAnyType(types) {
         var accepteddefs = this.app.getAuthProviderDef();
         // console.error("  ›  CHECK if \n" + JSON.stringify(types) + ' does match the legal ' + "\n" + JSON.stringify(accepteddefs));
         for (var i = 0; i < types.length; i++) {
@@ -120,10 +120,10 @@ const AccountSelector = Class.extend({
             }
         }
         return false;
-    },
+    }
 
 
-    "hasSameUserID": function(a, b) {
+    hasSameUserID(a, b) {
         if (!a.userids) {
             return false;
         }
@@ -138,9 +138,9 @@ const AccountSelector = Class.extend({
             }
         }
         return false;
-    },
+    }
 
-    "isActiveAccount": function(a) {
+    isActiveAccount(a) {
         if (!this.activeAccounts) {
             return false;
         }
@@ -151,9 +151,9 @@ const AccountSelector = Class.extend({
             }
         }
         return false;
-    },
+    }
 
-    "hasAnyActive": function() {
+    hasAnyActive() {
         var def = this.app.getAuthProviderDef(),
             allowed,
             anyAllowed = false;
@@ -169,9 +169,9 @@ const AccountSelector = Class.extend({
             }
         }
         return anyAllowed;
-    },
+    }
 
-    "draw": function() {
+    draw() {
         var txt = '';
         var def = this.app.getAuthProviderDef();
         var allowed;
@@ -216,7 +216,6 @@ const AccountSelector = Class.extend({
         // $("#accounts").empty().append(txt);
 
     }
-
-});
+};
 
 module.exports = AccountSelector;

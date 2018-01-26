@@ -1,8 +1,9 @@
 const Cookies = require('js-cookie');
 const Controller = require('./Controller');
 
-const LanguageSelector = Controller.extend({
-    "init": function(el) {
+class LanguageSelector extends Controller {
+    constructor(el) {
+        super(el, false);
 
         var that = this;
         this.languages = {
@@ -14,20 +15,19 @@ const LanguageSelector = Controller.extend({
 
         this.config = {};
 
-        // console.error("Lang setup");
-        this._super(el, false);
-
         this.el.on('click', '.ls', function(e) {
             e.preventDefault();
             var s = $(e.currentTarget).data('lang');
             // console.log("Selected ", s);
             that.setLang(s);
         });
-    },
-    "setConfig": function(config) {
+    }
+
+    setConfig(config) {
         this.config = config;
-    },
-    "setLang": function(lang) {
+    }
+
+    setLang(lang) {
 
         var langCookieDomain = '.dataporten.no';
         if (this.config.hasOwnProperty('langCookieDomain')) {
@@ -37,10 +37,9 @@ const LanguageSelector = Controller.extend({
         Cookies.set('lang', lang, {'path': '/', 'domain': langCookieDomain, 'expires': (365*10)});
         window.location.reload();
 
-    },
+    }
 
-
-    "initLoad": function(lang) {
+    initLoad(lang) {
         // console.log("initload");
         var that = this;
         this.selected = lang;
@@ -50,8 +49,9 @@ const LanguageSelector = Controller.extend({
                       .then(that.proxy("draw"))
                       .then(that.proxy("_initLoaded"));
 
-    },
-    "draw": function() {
+    }
+
+    draw() {
         var txt = '';
 
         for(var key in this.languages) {
@@ -65,7 +65,6 @@ const LanguageSelector = Controller.extend({
 
         this.el.empty().append(txt);
     }
-
-});
+};
 
 module.exports = LanguageSelector;

@@ -1,15 +1,11 @@
-const Class = require('./Class');
-
-const Waiter = Class.extend({
-    "init": function(callback, waitms) {
+class Waiter {
+    constructor(callback, waitms) {
         this.callback = callback;
         this.counter = 0;
         this.waitms = waitms || 300;
+    }
 
-
-
-    },
-    "ping": function() {
+    ping() {
         var that = this;
         this.counter++;
         setTimeout(function() {
@@ -21,6 +17,6 @@ const Waiter = Class.extend({
         }, this.waitms);
     }
 
-});
+};
 
 module.exports = Waiter;

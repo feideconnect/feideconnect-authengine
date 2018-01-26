@@ -1,13 +1,9 @@
-@import '../../components/pure/pure.css';
-@import '../../components/pure/grids-responsive-min.css';
-@import '../../components/selectize/dist/css/selectize.default.css';
-@import '../../components/font-awsome/css/font-awesome.css';
+@import '~purecss/build/pure.css';
+@import '~purecss/build/grids-responsive-min.css';
+@import '~selectize/dist/css/selectize.default.css';
 
-/* Used on grant page (only) */
-@import '../../components/vex/dist/css/vex.css';
-@import '../../components/vex/dist/css/vex-theme-os.css';
-@import 'grant';
-/* ----- */
+@import '~vex-js/dist/css/vex.css';
+@import '~vex-js/dist/css/vex-theme-os.css';
 
 @import 'flags.min.css';
 @import 'style';
