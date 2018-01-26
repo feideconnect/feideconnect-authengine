@@ -1,6 +1,12 @@
 const Model = require('./Model');
 const Utils = require('../Utils');
 
+const images = {
+    'idporten.png': require('../images/idporten.png'),
+    'feide.png': require('../images/feide.png'),
+    'openidp.png': require('../images/openidp.png'),
+}
+
 class Provider extends Model {
 
     constructor(a) {
@@ -86,7 +92,7 @@ class Provider extends Model {
             view.logout = this.logout;
         }
         if (this.iconImage) {
-            view.logo = '/static/media/disco/' + this.iconImage;
+            view.logo = '/static/' + images[this.iconImage];
         } else if (this.icon) {
             view.icon = this.icon;
         }
