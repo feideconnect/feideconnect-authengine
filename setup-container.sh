@@ -4,11 +4,11 @@ set -x
 curl -sL https://deb.nodesource.com/setup_6.x | bash
 apt-get install -y nodejs
 npm install npm@latest -g
+npm install
+npm run build
 curl -sS https://getcomposer.org/installer | php
 mv composer.phar /usr/local/bin/composer
 composer update --no-interaction --no-dev --no-progress
-npm install
-node_modules/bower/bin/bower install --allow-root
 
 gem install sass -v 3.2.19
 
@@ -26,10 +26,7 @@ touch ./vendor/simplesamlphp/simplesamlphp/modules/authtwitter/enable \
       ./vendor/simplesamlphp/simplesamlphp/modules/authfacebook/enable \
       ./vendor/simplesamlphp/simplesamlphp/modules/authlinkedin/enable
 
-# Bundle javascript
-bin/build.sh
-
 # Cleanup
-apt-get remove -y --purge --auto-remove nodejs lsb-release
-rm -rf node_modules
-rm -rf /root/.npm /root/.cache /root/.composer
+#apt-get remove -y --purge --auto-remove nodejs lsb-release
+#rm -rf node_modules
+#rm -rf /root/.npm /root/.cache /root/.composer

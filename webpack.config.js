@@ -8,7 +8,7 @@ module.exports = {
         oauth: './src/oauthgrant/main',
     },
     output: {
-        path: path.resolve(__dirname, 'dist'),
+        path: path.resolve(__dirname, 'www/static/js'),
         filename: '[name].bundle.js'
     },
     plugins: [

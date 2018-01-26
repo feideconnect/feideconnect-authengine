@@ -41,12 +41,13 @@ WORKDIR /authengine
 COPY www www
 COPY bin bin
 COPY templates templates
+COPY src src
 
-COPY ["build.js", "composer.json", "package.json", "bower.json", ".bowerrc", "setup-container.sh", "./"]
+COPY ["webpack.config.js", "composer.json", "package.json", "package-lock.json", "setup-container.sh", "./"]
 RUN with_packages.sh "git curl ruby-full rubygems-integration" ./setup-container.sh
 # Warning: Do not use these fonts unless you have a licence on your site.
-ADD ["http://mal.uninett.no/uninett-theme/fonts/colfaxLight.woff", "http://mal.uninett.no/uninett-theme/fonts/colfaxMedium.woff", "http://mal.uninett.no/uninett-theme/fonts/colfaxRegular.woff", "http://mal.uninett.no/uninett-theme/fonts/colfaxThin.woff", "http://mal.uninett.no/uninett-theme/fonts/colfaxRegularItalic.woff", "/authengine/www/static/components/uninett-bootstrap-theme/fonts/"]
-RUN chmod -R +r /authengine/www/static/components/uninett-bootstrap-theme/fonts/
+# ADD ["http://mal.uninett.no/uninett-theme/fonts/colfaxLight.woff", "http://mal.uninett.no/uninett-theme/fonts/colfaxMedium.woff", "http://mal.uninett.no/uninett-theme/fonts/colfaxRegular.woff", "http://mal.uninett.no/uninett-theme/fonts/colfaxThin.woff", "http://mal.uninett.no/uninett-theme/fonts/colfaxRegularItalic.woff", "/authengine/www/static/components/uninett-bootstrap-theme/fonts/"]
+# RUN chmod -R +r /authengine/www/static/components/uninett-bootstrap-theme/fonts/
 
 # === Copy auth engine ===
 COPY lib lib
@@ -55,8 +56,6 @@ COPY dictionaries dictionaries
 
 COPY etc/simplesamlphp-config /authengine/vendor/simplesamlphp/simplesamlphp/config
 COPY etc/simplesamlphp-metadata /authengine/vendor/simplesamlphp/simplesamlphp/metadata
-
-
 
 ENV AE_GEODB "etc/GeoLite2-City.mmdb"
 ENV HTTPS_ON "on"
