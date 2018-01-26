@@ -1,3 +1,4 @@
+const $ = require('jquery');
 const Controller = require('./Controller');
 const Provider = require('./models/Provider');
 
@@ -30,7 +31,6 @@ class DiscoveryFeedLoader extends Controller {
                         data[i].country = country;
                         that.providers[country].push(new Provider(data[i]));
                     }
-                    // that.providers = data;
                     resolve(data);
                 },
                 error: function(err, a, b) {
