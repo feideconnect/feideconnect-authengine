@@ -23,6 +23,8 @@ const Provider = require('./models/Provider');
 const NorwegianOrg = require('./models/NorwegianOrg');
 const ProviderListView = require('./views/ProviderListView');
 const Waiter = require('./Waiter');
+const blank = require('../app/images/blank.png');
+
 require('selectize');
 
 var sortByTitle  = function(a, b) {
@@ -336,12 +338,12 @@ class DiscoveryController extends Controller {
 
         // Render function used for options and selected items
         function renderOption(data, escape) {
-            return "<div><img src='/static/media/blank.gif' class='flag flag-" + data.code + "'/>" + data.title + "</div>";
+            return `<div><img src='static/${blank}' class='flag flag-${data.code}'/>${data.title}</div>`;
         }
 
         // Render function used for options and selected items
         function renderItem(data, escape) {
-            return "<div><img src='/static/media/blank.gif' class='flag flag-" + data.code + "'/></div>";
+            return `<div><img src='static/${blank}' class='flag flag-${data.code}'/></div>`;
         }
 
         $("#countryselector").selectize({
