@@ -1,3 +1,4 @@
+const $ = require('jquery');
 const vex = require('vex-js');
 const LanguageSelector = require('../accountchooser/LanguageSelector');
 const AccountStore = require('./AccountStore');
