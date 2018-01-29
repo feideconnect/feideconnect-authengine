@@ -254,11 +254,25 @@ To download translations run:
 grunt lang
 ```
 
+## Development
 
-## Optimizing js
+Webpack is used to bundle css and js. To start development:
 
-```
-cd www/static
-../../node_modules/requirejs/bin/r.js -o baseUrl=. name=components/almond/almond  mainConfigFile=js/src/requireconfig.js include=accountchooser/main.js out=build/accountchooser_bundle.js
+- `cd git/devenv` or whatever is your path
+- `docker-compose exec authengine bash`
+- `npm run start`
 
-```
+Editing the files in `src` will now trigger creation of a new bundle. You need
+to refresh the browser to see changes.
+
+It's important to let the process run in the foreground to see compile-errors.
+
+*Note:* Images and css need to be imported into respective js-files for them to be
+bundled.
+
+
+## Production
+
+A bundle is automatically created for production.
+
+TODO: Insert production bundles into `base.twig` based on `webpack-assets.json`.
