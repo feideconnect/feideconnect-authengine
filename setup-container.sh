@@ -26,8 +26,3 @@ touch ./vendor/simplesamlphp/simplesamlphp/modules/authtwitter/enable \
       ./vendor/simplesamlphp/simplesamlphp/modules/oauth/enable \
       ./vendor/simplesamlphp/simplesamlphp/modules/authfacebook/enable \
       ./vendor/simplesamlphp/simplesamlphp/modules/authlinkedin/enable
-
-# Cleanup
-#apt-get remove -y --purge --auto-remove nodejs lsb-release
-#rm -rf node_modules
-#rm -rf /root/.npm /root/.cache /root/.composer
