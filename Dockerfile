@@ -43,7 +43,7 @@ COPY bin bin
 COPY templates templates
 COPY src src
 
-COPY ["webpack.config.js", "composer.json", "package.json", "package-lock.json", "setup-container.sh", "./"]
+COPY ["webpack.common.js", "webpack.dev.js", "webpack.prod.js", "composer.json", "package.json", "package-lock.json", "setup-container.sh", "./"]
 RUN with_packages.sh "git curl" ./setup-container.sh
 
 # === Copy auth engine ===
