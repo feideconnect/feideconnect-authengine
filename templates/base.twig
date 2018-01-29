@@ -10,25 +10,7 @@
     <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1.0, user-scalable=yes">
     <title>{{ pagetitle|trans }}</title>
 
-    {% if isDevelopment == 'dev' %}
-      <!-- <link rel="stylesheet" type="text/css" href="/static/components/pure/pure.css" /> -->
-      <!--[if lte IE 8]>
-        <link rel="stylesheet" href="/static/components/pure/grids-responsive-old-ie-min.css">
-      <![endif]-->
-      <!--[if gt IE 8]><!-->
-      <!-- <link rel="stylesheet" href="/static/components/pure/grids-responsive-min.css"> -->
-      <!--<![endif]-->
-      <!-- <link rel="stylesheet" type="text/css" href="/static/components/selectize/dist/css/selectize.default.css" />
-      <link rel="stylesheet" type="text/css" href="/static/components/font-awesome/css/font-awesome.css" />
-      <link rel="stylesheet" type="text/css" href="/static/css/src/flags.min.css">
-      <link rel="stylesheet" type="text/css" href="/static/css/src/style.css" />
--->
-      <link rel="stylesheet" type="text/css" href="/static/bundle.css" />
-
-      {# prefetch javascript resources -#}
-    {% else %}
-      <link rel="stylesheet" type="text/css" href="/static/css/build/styles.min.css?cacheId={{ cacheBust }}" />
-    {% endif %}
+    <link rel="stylesheet" href="/static/bundle.css">
 
     {# For extra header elements #}
     {% block head %}{% endblock %}
@@ -54,15 +36,10 @@
     </footer>
 
     {%- block prescripts %}{% endblock %}
-    {%- if isDevelopment %}
-      <!-- <script type="application/javascript" src="/static/js/src/config.js"></script> -->
-      <script type="application/javascript" src="/static/common.bundle.js"></script>
-      <script type="application/javascript" src="/static/main.bundle.js"></script>
-      <script type="application/javascript" src="/static/accountchooser.bundle.js"></script>
-      <script type="application/javascript" src="/static/oauth.bundle.js"></script>
-    {% else %}
-      <script type="application/javascript" src="/static/build/script.min.js?cacheId={{ cacheBust }}"></script>
-    {%- endif %}
+    <script src="/static/common.bundle.js"></script>
+    <script src="/static/main.bundle.js"></script>
+    <script src="/static/accountchooser.bundle.js"></script>
+    <script src="/static/oauth.bundle.js"></script>
     {%- block scripts %}{% endblock %}
 
   </body>
