@@ -18,6 +18,7 @@
     "dependencies": {
         "dustjs-linkedin": "^2.5",
         "es6-promise": "^4.0.5",
+        "font-awesome": "^4.7.0",
         "jquery": "^3.2.1",
         "js-cookie": "^2.0.3",
         "purecss": "^1.0.0",

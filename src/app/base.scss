@@ -5,5 +5,9 @@
 @import '~vex-js/dist/css/vex.css';
 @import '~vex-js/dist/css/vex-theme-os.css';
 
+
+$fa-font-path: "~font-awesome/fonts";
+@import "~font-awesome/scss/font-awesome.scss";
+
 @import 'flags.min.css';
 @import 'style';
