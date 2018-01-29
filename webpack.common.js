@@ -19,7 +19,7 @@ module.exports = {
         }),
         // Bundles css
         new ExtractTextPlugin({
-            filename: 'bundle.css'
+            filename: '[name].css'
         }),
         // Provider for Dust-templates
         new webpack.ProvidePlugin({
