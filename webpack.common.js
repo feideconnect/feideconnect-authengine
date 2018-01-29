@@ -36,12 +36,12 @@ module.exports = {
                 })
             },
             {
-                // Finds and bundles images
+                // Finds and copies images and hashes names
                 test: /\.(png|jp(e*)g|svg)$/,
                 use: [{
-                        loader: 'file-loader',
-                        options: {}
-                    }]
+                    loader: 'file-loader',
+                    options: {}
+                }]
             },
             {
                 // Finds and compiles dust templates
@@ -50,6 +50,7 @@ module.exports = {
             },
             {
                 // Makes sure we everything works for ES5 browsers
+                // Also enables us to write ES6+
                 // Should work down to IE 9
                 test: /\.js$/,
                 exclude: /node_modules/,
@@ -61,6 +62,7 @@ module.exports = {
                 }
             },
             {
+                // font-awesome
                 test: /.(ttf|otf|eot|svg|woff(2)?)(\?[a-z0-9]+)?$/,
                 use: [{
                     loader: 'file-loader',

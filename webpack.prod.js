@@ -9,10 +9,13 @@ module.exports = merge(common, {
         filename: '[name].[chunkhash].js'
     },
     plugins: [
+        // Minify
         new UglifyJSPlugin(),
+        // Make NODE_ENV available for the scripts
         new webpack.DefinePlugin({
             'process.env.NODE_ENV': JSON.stringify('production')
         }),
+        // Creates webpack-assets.json which maps entries to correct filenames
         new AssetsPlugin()
     ]
 })
