@@ -518,7 +518,7 @@ class Account {
         } elseif ($age >= 0) {
             $res = false;
         } else {
-            throw new InvalidArgumentException("Year of birth in user account is in the future: $year");
+            throw new Exception("Year of birth in user account is in the future: $year");
         }
 
         return $res;
