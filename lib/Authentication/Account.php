@@ -515,8 +515,10 @@ class Account {
 
         if ($age >= $requiredAge) {
             $res = true;
-        } else {
+        } elseif ($age >= 0) {
             $res = false;
+        } else {
+            throw new Exception("Year of birth in user account is in the future: $year");
         }
 
         return $res;

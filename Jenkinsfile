@@ -28,6 +28,6 @@ node {
     }
     if (env.BRANCH_NAME == "master") {
         stage "Deploy"
-        sh "ssh jenkins@vltrd086.web.uninett.no auth-engine-dev"
+        sh "ssh jenkins@vltrd114.web.uninett.no auth-engine-dev"
     }
 }

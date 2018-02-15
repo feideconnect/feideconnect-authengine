@@ -15,7 +15,6 @@ composer update --no-interaction --no-dev --no-progress
 
 a2enmod remoteip
 rm /etc/localtime && ln -s /usr/share/zoneinfo/Europe/Oslo /etc/localtime
-curl -sS https://vault.uninett.no:8200/v1/dpcassandra/ca/pem > /etc/ssl/certs/cassandraca.pem && c_rehash
 
 mkdir -p /authengine/etc
 curl -sS http://geolite.maxmind.com/download/geoip/database/GeoLite2-City.mmdb.gz|gunzip > /authengine/etc/GeoLite2-City.mmdb

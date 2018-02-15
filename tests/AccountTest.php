@@ -2,6 +2,7 @@
 namespace tests;
 
 use FeideConnect\Authentication\Account;
+use FeideConnect\Exceptions\Exception;
 use tests\EdugainMetadata;
 
 class AccountTest extends DBHelper {
@@ -481,5 +482,8 @@ class AccountTest extends DBHelper {
         $this->assertTrue(Account::checkAgeLimit(1950, 13, mktime(0, 0, 0, 9, 1, 2063)));
         $this->assertFalse(Account::checkAgeLimit(1950, 13, mktime(0, 0, 0, 9, 1, 1953)));
         $this->assertFalse(Account::checkAgeLimit(1950, 13, mktime(0, 0, 0, 1, 1, 1963)));
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessage('Year of birth in user account is in the future');
+        Account::checkAgeLimit(1950, 13, mktime(0, 0, 0, 1, 1, 1943));
     }
 }
