@@ -35,7 +35,7 @@ WORKDIR /authengine
 COPY ["composer.json", "package.json", "bower.json", ".bowerrc", "setup-container.sh", "./"]
 RUN with_packages.sh "git curl" ./setup-container.sh
 # Warning: Do not use these fonts unless you have a licence on your site.
-ADD ["http://mal.uninett.no/uninett-theme/fonts/colfaxLight.woff", "http://mal.uninett.no/uninett-theme/fonts/colfaxMedium.woff", "http://mal.uninett.no/uninett-theme/fonts/colfaxRegular.woff", "http://mal.uninett.no/uninett-theme/fonts/colfaxThin.woff", "http://mal.uninett.no/uninett-theme/fonts/colfaxRegularItalic.woff", "/authengine/www/static/components/uninett-bootstrap-theme/fonts/"]
+ADD ["http://mal.uninett.no/uninett-theme/fonts/colfaxLight.woff", "http://mal.uninett.no/uninett-theme/fonts/colfaxMedium.woff", "http://mal.uninett.no/uninett-theme/fonts/colfaxRegular.woff", "http://mal.uninett.no/uninett-theme/fonts/colfaxThin.woff", "http://mal.uninett.no/uninett-theme/fonts/colfaxRegularItalic.woff", "http://mal.uninett.no/uninett-theme/fonts/colfaxBold.woff", "/authengine/www/static/components/uninett-bootstrap-theme/fonts/"]
 RUN chmod -R +r /authengine/www/static/components/uninett-bootstrap-theme/fonts/
 COPY www www
 
