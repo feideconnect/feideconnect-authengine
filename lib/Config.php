@@ -64,10 +64,11 @@ class Config {
     }
 
     public static function getTemplateConfig() {
-        $data = [];
-        $data['cacheBust'] = (getenv('JENKINS_BUILD_NUMBER') !== false) ? getenv('JENKINS_BUILD_NUMBER') : 'noBuild';
-        $data['isDevelopment'] = (getenv('NODE_ENV') === "development");
-        return $data;
+        return [
+            'cacheBust' => (getenv('JENKINS_BUILD_NUMBER') !== false) ? getenv('JENKINS_BUILD_NUMBER') : 'noBuild',
+            'isDevelopment' => (getenv('NODE_ENV') === 'development'),
+            'assets' => self::getValue('assets', [], false),
+        ];
     }
 
 
@@ -160,6 +161,14 @@ class Config {
         if (getenv('AE_TESTUSERSFILE') !== false) {
             $testusersExternalFile = self::readJSONfile(getenv('AE_TESTUSERSFILE'));
             $envOverride["testUsers"] = $testusersExternalFile;
+        }
+
+        // get dynamic assets config
+        try {
+            $config['assets'] = self::readJSONfile('assets.json');
+        } catch (\Exception $e) {
+            // couldn't find built assets
+            $config['assets'] = [];
         }
 
         $config = array_replace_recursive($config, $envOverride);

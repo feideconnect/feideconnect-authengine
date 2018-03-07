@@ -16,6 +16,6 @@ module.exports = merge(common, {
             'process.env.NODE_ENV': JSON.stringify('production')
         }),
         // Creates webpack-assets.json which maps entries to correct filenames
-        new AssetsPlugin()
+        new AssetsPlugin({filename: 'etc/assets.json'})
     ]
 })
