@@ -2,9 +2,17 @@
 {% extends "base.twig" %}
 
 {% block scripts %}
-  <script>
-   var visualTag = {{visualTag|raw}};
-  </script>
+
+    <script>
+      var visualTag = {{visualTag|raw}};
+    </script>
+    {%- if isDevelopment %}
+
+    <script src="/static/oauth.bundle.js#{{ cacheBust }}"></script>
+    {%- else %}
+
+    <script src="/static/{{ assets.oauth.js }}"></script>
+    {%- endif  %}
 {% endblock %}
 
 {% block head %}

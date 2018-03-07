@@ -14,6 +14,7 @@
 
     {# For extra header elements #}
     {% block head %}{% endblock %}
+
   </head>
 
   <body id="{{ templateName }}" data-cachebuster="{{ cacheBust }}">
@@ -33,13 +34,19 @@
 
     <footer>
       {% block footer %}{% endblock %}
+
     </footer>
 
     {%- block prescripts %}{% endblock %}
-    <script src="/static/common.bundle.js"></script>
-    <script src="/static/main.bundle.js"></script>
-    <script src="/static/accountchooser.bundle.js"></script>
-    <script src="/static/oauth.bundle.js"></script>
+    {%- if isDevelopment %}
+
+    <script src="/static/common.bundle.js#{{ cacheBust }}"></script>
+    <script src="/static/main.bundle.js#{{ cacheBust }}"></script>
+    {%- else %}
+
+    <script src="/static/{{ assets.common.js }}"></script>
+    <script src="/static/{{ assets.main.js }}"></script>
+    {%- endif  %}
     {%- block scripts %}{% endblock %}
 
   </body>

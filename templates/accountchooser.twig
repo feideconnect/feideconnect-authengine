@@ -12,6 +12,15 @@
         data-dictionary='{{ dictionary|raw }}'
         data-client='{{ client|raw }}'></em>
 {% endblock prescripts %}
+{% block scripts %}
+    {%- if isDevelopment %}
+
+    <script src="/static/accountchooser.bundle.js{{ cacheBust }}"></script>
+    {%- else %}
+
+    <script src="/static/{{ assets.accountchooser.js }}"></script>
+    {%- endif %}
+{% endblock scripts %}
 
 {% block content %}
 
