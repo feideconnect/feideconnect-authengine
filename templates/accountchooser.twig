@@ -15,7 +15,7 @@
 {% block scripts %}
     {%- if isDevelopment %}
 
-    <script src="/static/accountchooser.bundle.js{{ cacheBust }}"></script>
+    <script src="/static/accountchooser.bundle.js#{{ cacheBust }}"></script>
     {%- else %}
 
     <script src="/static/{{ assets.accountchooser.js }}"></script>
