@@ -38,7 +38,7 @@
 		"enable": false
 	},
 	"availableLanguages": ["nb", "nn", "en"],
-	"enableLocalization": false,
+	"enableLocalization": true,
 	"geodb": "etc/GeoIP2-City.mmdb",
 	"testUsers": {
 	},
