@@ -13,7 +13,7 @@ class AuthSource {
 
     protected function __construct() {
         $this->factory = function($type) {
-            return new \SimpleSAML_Auth_Simple($type);
+            return new \SimpleSAML\Auth\Simple($type);
         };
     }
 
