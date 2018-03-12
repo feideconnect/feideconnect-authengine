@@ -44,7 +44,13 @@ class Misc {
             }
             self::$langCache[$cachestr] = $lang;
 
-            setcookie('lang', $lang, 365*10, '/', Config::getValue('langCookieDomain', '.dataporten.no'));
+            setcookie(
+                'lang',
+                $lang,
+                time() + 60*60*24*365*10,
+                '/',
+                Config::getValue('langCookieDomain', '.dataporten.no')
+            );
             return $lang;
         }
 
