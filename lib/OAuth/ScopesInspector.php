@@ -68,7 +68,7 @@ class ScopesInspector {
 
         if (isset($this->apis[$apigk->id])) {
             if ($this->apis[$apigk->id] === null) {
-                throw new \Exception("APIGK not found " . $apigkid);
+                throw new \Exception("APIGK not found " . $apigk->id);
             }
             return $this->apis[$apigk->id];
         }
