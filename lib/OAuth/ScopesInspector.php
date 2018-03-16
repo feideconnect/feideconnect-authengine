@@ -99,7 +99,7 @@ class ScopesInspector {
             }
         } catch (\Exception $e) {
             $this->apis[$apigk->id] = null;
-            throw new \Exception("APIGK owner/org not found " . $apigkid);
+            throw new \Exception("APIGK owner/org not found " . $apigk->id);
         }
         $this->apis[$apigk->id] = $apiInfo;
         return $apiInfo;
