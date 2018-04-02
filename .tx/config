@@ -1,0 +1,18 @@
+[main]
+host = https://www.transifex.com
+
+[dataporten-auth-engine.strings]
+source_file = dictionaries/dictionary.nb.json
+source_lang = nb
+trans.en = dictionaries/dictionary.en.json
+trans.nn = dictionaries/dictionary.nn.json
+trans.se = dictionaries/dictionary.se.json
+type = KEYVALUEJSON
+
+[dataporten-auth-engine.tou]
+source_file = templates/partials/grant.bruksvilkar.nb.mustache
+source_lang = nb
+type = HTML
+trans.en = templates/partials/grant.bruksvilkar.en.mustache
+trans.nn = templates/partials/grant.bruksvilkar.nn.mustache
+trans.se = templates/partials/grant.bruksvilkar.se.mustache

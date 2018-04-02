@@ -199,10 +199,12 @@ docker-compose run testenv vendor/phpunit/phpunit/phpunit tests/ConfigTest
 
 ## Managing translations
 
-To update main dictionary content, upload `dictionaries/dictionary.en.json` to transifex.
+To update translations (if strings are added/changed) use `tx push -s` then run `tx pull` to download translation files with the new entries added in (transifex will insert the original strings where translations are missing).
 
-To download translations run:
+To just download new translations run:
 
 ```
-grunt lang
+tx pull
 ```
+
+The tx utility can be installed using `pip install transifex-client`
