@@ -15,12 +15,12 @@
 	"require": {
 		"php": ">=5.4",
 		"mustache/mustache": "~2.6",
-		"geoip2/geoip2": "0.6.*",
-		"firebase/php-jwt": "~3.0.0",
-		"monolog/monolog": "~1.11.0",
-		"phroute/phroute": "~2.0.0",
-		"spomky-labs/base64url": "~1.0.0",
-		"jwage/purl": "^0.0.6",
+		"geoip2/geoip2": "~2.5.0",
+		"firebase/php-jwt": "~4.0.0",
+		"monolog/monolog": "~1.22.1",
+		"phroute/phroute": "~2.1.0",
+		"spomky-labs/base64url": "~1.0.2",
+		"jwage/purl": "^0.0.7",
 		"domnikl/statsd": "^2.4.1",
 
 		"simplesamlphp/simplesamlphp": "dev-master",
