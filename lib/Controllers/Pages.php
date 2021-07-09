@@ -47,7 +47,6 @@ class Pages {
         $data['endpoints'] = [
             "oauth.base" => URL::getBaseURL() . 'oauth/',
             "this" => URL::selfURL(),
-            "this.noquery" => URL::selfURLNoQuery(),
             "this.host" =>  URL::selfURLhost(),
         ];
         $data['client'] = $_SERVER['REMOTE_ADDR'];
